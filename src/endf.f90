@@ -16,7 +16,8 @@ module endf
    public a11
 
    !--Public variables
-   integer,public::npage,iverf
+   integer,public::npage = 306
+   integer,public::iverf
    real(kr),public::c1h,c2h
    integer,public::l1h,l2h,n1h,n2h,math,mfh,mth,nsh,nsp,nsc
    real(kr),public::thr6
