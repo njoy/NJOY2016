@@ -458,8 +458,8 @@ contains
    itype=matype
    call press(0,nout,cf,2,ixmax)
   190 continue
-   deallocate(x)
-   deallocate(y)
+   if (allocated(x))deallocate(x)
+   if (allocated(y))deallocate(y)
    if (allocated(rsdx)) deallocate(rsdx)
    if (allocated(rsdy)) deallocate(rsdy)
    if (allocated(xig)) deallocate(xig)

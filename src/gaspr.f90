@@ -471,6 +471,10 @@ contains
    en=0
    call gety1(en,enext,idis,y,nscr1,a(1))
    maxg=nint(a(6))
+    if (allocated(egas)) then
+       deallocate(egas)
+       deallocate(sgas)
+    endif
    allocate (egas(maxg))
    allocate (sgas(5,maxg))
    enext=thrg

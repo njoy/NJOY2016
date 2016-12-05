@@ -338,14 +338,15 @@ contains
    real(kr)::time,zz1,zz2,flag
    real(kr)::factx,facty
    real(kr)::xx,yy,zz
-   real(kr)::z(15),aa(200000)
-   real(kr)::x(10000),y(10000),b(10000)
-   real(kr)::dxm(10000),dxp(10000),dym(10000),dyp(10000)
-   equivalence (x(1),aa(1)),(y(1),aa(10001)),(b(1),aa(20001))
-   equivalence (dxm(1),aa(30001)),(dxp(1),aa(40001)),&
-     (dym(1),aa(50001)),(dyp(1),aa(60001))
    character(80)::text
+   integer,parameter::mmax=20000   !same in plotr and viewr
    integer,parameter::maxaa=200000
+   real(kr),dimension(15)::z
+   real(kr),dimension(maxaa)::aa
+   real(kr),dimension(mmax)::x,y,b,dxm,dxp,dym,dyp
+   equivalence (x(1),aa(1)),(y(1),aa(mmax+1)),(b(1),aa(2*mmax+1))
+   equivalence (dxm(1),aa(3*mmax+1)),(dxp(1),aa(4*mmax+1))
+   equivalence (dym(1),aa(5*mmax+1)),(dyp(1),aa(6*mmax+1))
    real(kr),parameter::zero=0
    integer,parameter::mxc=80
 

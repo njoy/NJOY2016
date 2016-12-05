@@ -5,6 +5,13 @@ module mixm
    private
    public mixr
 
+   ! global variables
+   integer::ntape
+   integer,parameter::nninmx=10
+   integer,parameter::nmtmx=20
+   integer,parameter::nmatmx=nninmx
+   integer,dimension(nninmx)::jtape,nrt,npt,irt,ipt,ip1t,ip2t,nbt,nwt
+
 contains
 
    subroutine mixr
@@ -27,15 +34,15 @@ contains
    !     nout      output unit for mixed cross sections
    !     nin1      first input unit (endf or pendf)
    !     nin2      second input unit
-   !      ...       continue for nnin<=10 input units
+   !      ...      continue for nnin<=nninmx (=10) input units
    !
    !  card 2  --  reaction list
-   !      mtn       list of nmt<=20 mt numbers for
-   !                   the output reactions
+   !      mtn      list of nmt<=nmtmx (=20) mt numbers for
+   !               the output reactions
    !
    !  card 3  --  material list
-   !     matn,     list of nmat<=10 pairs (matn,wtn) of mat
-   !      wtn       numbers and associated weight factors
+   !     matn,     list of nmat<=nmatmx (=nninmx=10) pairs (matn,wtn)
+   !      wtn      of material numbers and associated weighting factors
    !
    !  card 4  --  temperature
    !     temp      temperature (use zero except for pendf tapes)
@@ -46,25 +53,32 @@ contains
    !     awr       awr value
    !
    !  card 6  --  file 1 comment card
-   !     des      description (60 char max)
+   !     des       description (66 char max)
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsysi,nsyso
    use util ! provides timer,openz,error,mess,closz,sigfig
    use endf ! provides endf routines and variables
    ! internals
+   integer,parameter::mxlna=300000
    integer::nscr,nbuf,nc,i,nout,nnin,nmt,nmat,matd
    integer::ndes,ibuf,iscr,nb,nw,idone,nx,inow,imt
-   integer::mtd,je,ne,jend,idis,mxlna
+   integer::mtd,je,ne,jend,idis
+   integer,parameter::lrp=-1
+   integer::nsub
    real(kr)::temp,za,awr,t,test,enext,reset,enxt,e,sig
    real(kr)::time,y
-   character(60)::strng
-   integer::nin(10),mtn(20),matn(10)
-   real(kr)::wtn(10)
-   real(kr)::a(300000)
-   integer::jscr(10)
+   real(kr)::awi,emax
+   character(66)::strng
+   character(4)::str(17)
+   integer,dimension(nninmx)::nin
+   integer,dimension(nmtmx)::mtn
+   integer,dimension(nmatmx)::matn,jscr
+   real(kr),dimension(nmatmx)::wtn
+   real(kr),dimension(mxlna)::a
    real(kr)::c(2)
    real(kr)::des(17)
+   equivalence(str(1),des(1))
    real(kr),parameter::big=1.e10_kr
 
    !--initialize
@@ -75,37 +89,36 @@ contains
    write(nsyse,'(/'' mixr...'',61x,f8.1,''s'')') time
    nscr=10
    nbuf=5000
-   mxlna=300000
    nc=2
    call openz(-nscr,0)
 
    !--read user input
-   do i=1,10
+   do i=1,nninmx
       nin(i)=0
    enddo
-   read(nsysi,*) nout,(nin(i),i=1,10)
-   do i=1,10
+   read(nsysi,*) nout,(nin(i),i=1,nninmx)
+   do i=1,nninmx
       if (nin(i).ne.0) nnin=i
    enddo
-   do i=1,20
+   do i=1,nmtmx
       mtn(i)=0
    enddo
-   read(nsysi,*) (mtn(i),i=1,20)
-   do i=1,20
+   read(nsysi,*) (mtn(i),i=1,nmtmx)
+   do i=1,nmtmx
       if (mtn(i).ne.0) nmt=i
    enddo
-   do i=1,10
+   do i=1,nmatmx
       matn(i)=0
    enddo
-   read(nsysi,*) (matn(i),wtn(i),i=1,10)
-   do i=1,10
+   read(nsysi,*) (matn(i),wtn(i),i=1,nmatmx)
+   do i=1,nmatmx
       if (matn(i).ne.0) nmat=i
    enddo
    read(nsysi,*) temp
    read(nsysi,*) matd,za,awr
    strng=' '
    read(nsysi,*) strng
-   read(strng,'(16a4,a2)') (des(i),i=1,17)
+   read(strng,'(16a4,a2)') (str(i),i=1,17)
    ndes=17
    write(nsyso,&
      '(/'' unit for output tape ................. '',i10)') nout
@@ -131,6 +144,9 @@ contains
    !--open the output and input units
    !--and locate the desired materials and temperature.
    call openz(nout,1)
+   awi=1
+   emax=20.e6_kr
+   nsub=10
    do i=1,nmat
       call openz(nin(i),0)
       call tpidio(nin(i),0,0,a(iscr),nb,nw)
@@ -150,7 +166,19 @@ contains
             endif
             call skiprz(nin(i),-1)
             if (iverf.gt.4) call contio(nin(i),0,0,a(iscr),nb,nw)
-            if (iverf.gt.5) call contio(nin(i),0,0,a(iscr),nb,nw)
+            if (iverf.gt.5) then
+               call contio(nin(i),0,0,a(iscr),nb,nw)
+               if (a(iscr+1).gt.emax) emax=a(iscr+1)
+               if (i.eq.1) then
+                  awi=a(iscr)
+                  if (awi.lt.0.1) nsub=0
+                  if (awi.gt.0.9980.and.awi.lt.0.9990) nsub=10010
+                  if (awi.gt.1.9950.and.awi.lt.1.9970) nsub=10020
+                  if (awi.gt.2.9895.and.awi.lt.2.9897) nsub=10030
+                  if (awi.gt.2.9890.and.awi.lt.2.9891) nsub=20030
+                  if (awi.gt.3.9670.and.awi.lt.3.9680) nsub=20040
+               endif
+            endif
             call hdatio(nin(i),0,0,a(iscr),nb,nw)
             t=a(iscr)
             test=1
@@ -175,7 +203,7 @@ contains
    nx=nmt
    a(iscr)=za
    a(iscr+1)=awr
-   a(iscr+2)=0
+   a(iscr+2)=lrp
    a(iscr+3)=0
    a(iscr+4)=0
    a(iscr+5)=0
@@ -191,11 +219,11 @@ contains
       if (iverf.eq.6) a(iscr+5)=6
       call contio(0,nout,0,a(iscr),nb,nw)
       if (iverf.ge.6) then
-         a(iscr)=0
-         a(iscr+1)=0
+         a(iscr)=awi
+         a(iscr+1)=emax
          a(iscr+2)=0
          a(iscr+3)=0
-         a(iscr+4)=0
+         a(iscr+4)=nsub
          a(iscr+5)=0
          call contio(0,nout,0,a(iscr),nb,nw)
       endif
@@ -368,7 +396,7 @@ contains
    ! or block of data and initialize pointers.  Routine assumes
    ! values will be called in ascending order.  Here, xnext is the
    ! first data grid point greater than x unless x is the last point.
-   ! This version will keep track of pointers for up to 10 units.
+   ! This version will keep track of pointers for up to nninmx units.
    ! Call with x=-1 to clear the pointers before each group of files.
    !-------------------------------------------------------------------
    use util ! provides error
@@ -377,11 +405,9 @@ contains
    integer::idis,itape
    real(kr)::x,xnext,y,a(*)
    ! internals
-   integer::ntape,nwtot,nr,np,ip1,ip2,ir,ip,i,ktape,ln
+   integer::nwtot,nr,np,ip1,ip2,ir,ip,i,ktape,ln
    integer::nbx,int,nb,nw,lt
    real(kr)::xn
-   integer::jtape(10),nrt(10),npt(10),irt(10),ipt(10),&
-     ip1t(10),ip2t(10),nbt(10),nwt(10)
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::zero=0
    save lt

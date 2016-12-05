@@ -35,6 +35,7 @@ module errorm
 
    ! weight function
    integer::iwt
+   integer::mwtf
    real(kr) eb,tb,ab,ec,tc,ac
    real(kr),dimension(:),allocatable::wght
 
@@ -449,6 +450,7 @@ contains
    iwt=6
    iprint=1
    irelco=1
+   mwtf=0
    read(nsysi,*) matd,ign,iwt,iprint,irelco
    if (iwt.le.0) then
       call mess ('errorj','input weighting function not supported',&
@@ -716,15 +718,18 @@ contains
       if (mfcov.eq.35.and.mf.eq.35) icov=icov+1
       if (mfcov.eq.40.and.mf.eq.40) icov=icov+1
       if (mf.eq.mfcov) then
-         if (mt.gt.870) cycle
-         if (mt.gt.850) go to 121
+         if (mt.eq.850.or.(mt.gt.870.and.mt.lt.875).or.mt.gt.891) then
+            write(strng,'(''ignoring unknown mt = '',i5)')mt
+            call mess('errorr',strng,'')
+            cycle
+         endif
+         if (mt.gt.850.and.mt.le.870) go to 121
          if (ngout.ne.0.and.mfcov.ne.34) go to 125
          nga=nga+1
          if (nga.gt.nwi) call error('errorr','too many reactions for mf34.',' ')
          iga(nga)=mt
          go to 125
      121 continue
-         if (mt.gt.870) call error('errorr','illegal mt gt 870.',' ')
          nlump=nlump+1
          if (nlump.gt.nlmt)&
            call error('errorr','too many lumped reaction types',' ')
@@ -3073,6 +3078,17 @@ contains
          lcomp=l2h
          if (lrf.ne.7) then
             nls=nlspepi(indx)
+            if (n1h.gt.nls) then
+               call error('resprx',&
+                          'mf2/mf32 l-state mis-match',&
+                          'probable evaluation file error')
+            else if (n1h.lt.nls) then
+               write(strng1,'(''mf2 nls='',i1,'', but mf32 nls='',i1)')&
+                                           nls,                   n1h
+               call mess('resprx',strng1,&
+                         'continue with partial urr covariance data')
+               nls=n1h
+            endif
          else
             nls=n1h
          endif
@@ -3244,8 +3260,13 @@ contains
    call ppsammy(1,ncoef,nresp)
 
    !--read the parameter covariances
-   allocate(sdev(nresp))
-   allocate(cov(nresp,nresp))
+   if (lrf.ne.7.or.lcomp.ne.2) then
+      allocate(sdev(nresp))
+      allocate(cov(nresp,nresp))
+   else
+      allocate(sdev(2*nresp))
+      allocate(cov(2*nresp,2*nresp))
+   endif
    cov=0
 
    !--lrf=3 and lcomp=1
@@ -4031,6 +4052,7 @@ contains
    real(kr)::sens(4,mxnpar,2501)
    real(kr)::cov(mxnpar,mxnpar)
    real(kr)::pneorg(10000)
+   real(kr)::time
    integer::llmat(5)
    character(60)::strng1,strng2
    real(kr),parameter::rc1=.123e0_kr
@@ -4415,6 +4437,9 @@ contains
             enddo
          enddo
       endif
+      call timer(time)
+      write(strng1,'("resonance parameter loop done",13x,f8.1,"s")')time
+      call mess('rpxlc12',strng1,'')
 
       igind=0
       do ig=1,ieed
@@ -4442,6 +4467,9 @@ contains
          enddo
          if (ig.gt.nresg) nresg=ig
       enddo
+      call timer(time)
+      write(strng1,'("sensitivity calculation continues",9x,f8.1,"s")')time
+      call mess('rpxlc12',strng1,'')
 
       igind=0
       do ig=1,ieed
@@ -4466,6 +4494,9 @@ contains
             endif
          enddo
       enddo
+      call timer(time)
+      write(strng1,'("sensitivity calculation completed",9x,f8.1,"s")')time
+      call mess('rpxlc12',strng1,'')
 
    enddo
    !--end of "sections of covariance matrix" from ENDF File32
@@ -4507,7 +4538,9 @@ contains
    ! internals
    integer::nb,nw,i1,i2,nind,lbg,l1,l2,l3,n1,n2,n3
    integer::nn1,nn2,nnn,nx,nn2p,nm,i,m,ii,mm,mmm,ndigit,mbase
-   integer::mpid(6)=(/1,3,4,5,6,0/)
+   integer,dimension(6)::mpid
+   integer,dimension(6),parameter::mpidbw=(/1,4,5,6,0,0/)
+   integer,dimension(6),parameter::mpidrm=(/1,3,4,5,6,0/)
    real(kr)::aw,awri,fd,std1,std2
    character(60)::strng2
    real(kr),parameter::rc1=.123e0_kr
@@ -4516,6 +4549,14 @@ contains
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zero=0
 
+   if (lrf.eq.1.or.lrf.eq.2) then
+      mpid=mpidbw
+   elseif (lrf.eq.3) then
+      mpid=mpidrm
+   else
+      write(strng2,'(''not ready for lrf='',i1,'', lcomp=2'')')lrf
+      call error('rpxlc2',strng2,'')
+   endif
    do i1=1,mxnpar
       do i2=1,mxnpar
          cov(i1,i2)=0
@@ -4759,7 +4800,7 @@ contains
          enddo
       endif
       ii=ii+1
-      if (ii.gt.maxe) call error('resprx',&
+      if (ii.gt.maxe) call error('rpxunr',&
         'number of pointwise xsec of resonance exceeded.',&
         'please increase the maxe parameter.')
       do i=1,4
@@ -4888,7 +4929,7 @@ contains
    endif
 
    ii=ii+1
-   if (ii.gt.maxe) call error('resprx',&
+   if (ii.gt.maxe) call error('rpendf',&
      'number of pointwise xsec of resonance exceeded.',&
      'please increase the maxe parameter.')
 
@@ -6896,7 +6937,7 @@ contains
 
    !--allocate storage.
    nmts=nmt1
-   nwds=1500000
+   nwds=10000000
    nngn=ngn*(ngn+1)/2
    ngn2=ngn*ngn
    allocate(scr(nwds))
@@ -8661,7 +8702,7 @@ contains
    equivalence(tz(1),z(1))
    integer::nt=1
    integer::nz=1
-   integer::ngg=1
+   integer::ngg=0
    real(kr),dimension(:),allocatable::scr
    real(kr),parameter::eps=1.e-9_kr
    real(kr),parameter::big=1.e10_kr
@@ -8746,8 +8787,8 @@ contains
    enddo
    nw=nw+np1
    ! add a zero for the ngg+1 entry, redefine nwds for listio
-   scr(np1+nw+1)=0
-   nwds=nunion+4
+   scr(nw+1)=0
+   nwds=nt+nz+nunion+1+ngg+1
    nl=1
    scr(5)=nw
    indx=1
@@ -8848,7 +8889,11 @@ contains
 
                   !--write this group on gout tape.
                   nw=nl*nz*ng2
-                  ans(1,1,2)=ans(1,1,2)/ans(1,1,1)
+                  if (ans(1,1,1).ne.zero) then
+                     ans(1,1,2)=ans(1,1,2)/ans(1,1,1)
+                  else
+                     ans(1,1,2)=zero
+                  endif
                   if (mprint.ne.0) write(nsyso,&
                     '(14x,i4,5x,1p,e11.4)') ig,ans(1,1,2)
                   mfh=mfd
@@ -8953,6 +8998,7 @@ contains
    else
       nwscr=max(17,3*n1h+13,nunion+10)
    endif
+   if (nwscr.lt.npage+50) nwscr=npage+50
    allocate(scr(nwscr))
    nsh=0
    call tpidio(ngout,ntp,0,scr,nb,nw)
@@ -9982,6 +10028,8 @@ contains
    !--vitamin-e 174- and vitamin-j 175-group structures (ornl-5510)
    else if (ign.eq.16.or.ign.eq.17) then
       ngn=174
+      if(ign.eq.16)allocate(egn(ngn+1))
+      if(ign.eq.17)allocate(egn(ngn+2))
       do ig=1,175
          egn(ig)=gl15(ig)
       enddo
@@ -9996,6 +10044,7 @@ contains
    !--xmas 172-group structure
    else if (ign.eq.18) then
       ngn=172
+      allocate(egn(ngn+1))
       do ig=1,173
          egn(ig)=gl18(174-ig)
       enddo
@@ -10064,7 +10113,9 @@ contains
          if (ew.lt.ewmin) ewmin=ew
       endif
    enddo
-   eskip4=ewmin*0.99e0_kr
+   if (ewmin.lt.1.05e0_kr) then
+      eskip4=1.0e0_kr+0.5e0_kr*(ewmin-1.0e0_kr)
+   endif
 
    !--prepare union of users grid with endf covariance grid.
    ngp=ngn+1
@@ -10494,6 +10545,16 @@ contains
       else
          wtf=con6/e
       endif
+   endif
+
+   !--warn User when the weight function is zero; it most likely means
+   !  the xs energy range extends beyond the weight function energy
+   !  range.
+   if (wtf.eq.zero.and.mwtf.eq.0) then
+      mwtf=1
+      call mess('egtwtf',&
+                'xs energy range exceeds weight function range',&
+                'some multgroup data may be suspect')
    endif
 
    !--return enext on an even grid

@@ -1346,6 +1346,7 @@ contains
          ej(ix)=ex(ix)
       enddo
       ej(nj)=terp(esi,xie,nne,ex(1),3)
+      if (iex.eq.ne) ej(nj)=0
       iet=iex
       if (iex.eq.ne) iet=-iet
       call loada(iet,ej,nj,inew,bufn,nbuf)
@@ -1650,7 +1651,7 @@ contains
    beta(ib)=b
   120 continue
    t=scr(loc)
-   do while (abs(t-temp).gt.temp/50)
+   do while (abs(t-temp).gt.temp/500)
       if (t.gt.temp)&
         call error('calcem','desired temperature not found.',' ')
       it=it+1

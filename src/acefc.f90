@@ -40,6 +40,7 @@ module acefc
    real(kr)::elim
    integer::ngmt,nned
    integer::mt16,mt455
+   integer::mt5n,mt5p,mt5d,mt5t,mt5he3,mt5a
    integer::mt103,mt104,mt105,mt106,mt107
    integer::mpmin,mpmax,mdmin,mdmax,mtmin,mtmax,m3min,m3max,m4min,m4max
 
@@ -222,6 +223,7 @@ contains
    integer::mf,mt,izr,ln,mtt,nc2,jethr,isix,nk,ik
    integer::izap,law,ll,nn,jj,ii,j,isort1,isort2,isave1
    integer::isave2,isave3,isave4,idis
+   integer::nwtst,newnw
    real(kr)::delta,temp,y201,y203,y204,y205,y206,y207
    real(kr)::e,enext,y,xsthr,e201,e203,e204,e205,e206,e207
    real(kr)::b(350)
@@ -233,7 +235,7 @@ contains
    real(kr),parameter::elo=1.e-5_kr
    real(kr),parameter::ehi=2.e7_kr
    real(kr),parameter::zero=0
-   real(kr),parameter::ttol=5
+   real(kr),parameter::ttol=1
    real(kr),parameter::err=.01e0_kr
 
    !--copy tape id and descriptive data from pendf tape.
@@ -309,6 +311,12 @@ contains
    ! read dictionary.
    nw=nx*6
    allocate(dict(nw))
+   mt5n=1   !default is no neutron production in mt5
+   mt5p=1   !  "           proton
+   mt5d=1   !  "           deuteron
+   mt5t=1   !  "           triton
+   mt5he3=1 !  "           3He
+   mt5a=1   !  "           alpha
    mt16=0
    mt455=0
    mt19=0
@@ -568,7 +576,43 @@ contains
 
       !--check particle productions in mf6.
       nprod3=nprod
-      if (nsix.gt.0) call findf(matd,6,0,nendf)
+      if (nsix.gt.0) then
+         call findf(matd,6,0,nendf)
+         isix=0
+         newnw=0
+         do while (isix.lt.nsix)
+            isix=isix+1
+            call contio(nendf,0,0,scr,nb,nw)
+            nk=n1h
+            do ik=1,nk
+               call tab1io(nendf,0,0,scr,nb,nw)
+               if (mth.eq.5) then
+                  !--test for light particle production; 0=yes
+                  if (abs(c1h-1).lt.0.0001) mt5n=0
+                  if (abs(c1h-1001).lt.0.0001) mt5p=0
+                  if (abs(c1h-1002).lt.0.0001) mt5d=0
+                  if (abs(c1h-1003).lt.0.0001) mt5t=0
+                  if (abs(c1h-2003).lt.0.0001) mt5he3=0
+                  if (abs(c1h-2004).lt.0.0001) mt5a=0
+               endif
+               law=l2h
+               nwtst=6+2*(nint(scr(5))+nint(scr(6)))
+               newnw=max(nwscr,nwtst,newnw)
+               do while (nb.ne.0)
+                  call moreio(nendf,0,0,scr,nb,nw)
+               enddo
+               call skip6(nendf,0,0,scr,law)
+            enddo
+            call contio(nendf,0,0,scr,nb,nw) !read eos record
+         enddo
+         if (newnw.gt.nwscr) then
+            deallocate(scr)
+            nwscr=newnw
+            allocate(scr(nwscr))
+         endif
+         call repoz(nendf)
+         call findf(matd,6,0,nendf)
+      endif
       isix=0
       do while (isix.lt.nsix)
          isix=isix+1
@@ -1764,6 +1808,10 @@ contains
    deallocate(bufn)
    deallocate(scr2)
    call closz(nscr)
+   if (ngmt.eq.0) then  !will close these in gamsum when ngmt != 0
+      call closz(iold)
+      call closz(inew)
+   endif
    return
    end subroutine unionx
 
@@ -1826,7 +1874,7 @@ contains
    integer::no7=1
 
    !--initialize and compute coefficients.
-   nt1w=2500
+   nt1w=4200
    allocate(tab1(nt1w))
    nsix=19
    nin0=0
@@ -4719,7 +4767,7 @@ contains
    aw0=awr
    write(hm,'(''   mat'',i4)') matd
    tz=tempd*bk/emev
-   zaid=za+suff
+   zaid=iza+suff
    if (mcnpx.eq.0) then
       if (izai.eq.1) then
          write(hz,'(f9.2,''c'')') zaid
@@ -4779,7 +4827,8 @@ contains
       if (mf.eq.1.and.mt.eq.455) kfis=2
       if (izai.eq.1) then
          if (mf.eq.3) then
-            if (mt.ne.1.and.mt.ne.2.and.mt.ne.301) then
+            if (mt.ne.1.and.mt.ne.2.and.mt.ne.301.and.&
+                (mt.ne.5.or.(mt.eq.5.and.mt5n.eq.0))) then
                ntr=ntr+1
                if ((mt.ge.5.and.mt.le.91).or.&
                  (mt.ge.152.and.mt.le.154).or.&
@@ -4797,7 +4846,8 @@ contains
          endif
       else if (izai.eq.1001) then
          if (mf.eq.3) then
-            if (mt.ne.1.and.mt.ne.2) then
+            if (mt.ne.1.and.mt.ne.2.and.&
+                (mt.ne.5.or.(mt.eq.5.and.mt5p.eq.0))) then
                ntr=ntr+1
                if (mt.eq.5.or.mt.eq.28.or.mt.eq.41.or.&
                  mt.eq.42.or.mt.eq.44.or.mt.eq.45.or.&
@@ -4818,7 +4868,8 @@ contains
          endif
       else if (izai.eq.1002) then
          if (mf.eq.3) then
-            if (mt.ne.1.and.mt.ne.2) then
+            if (mt.ne.1.and.mt.ne.2.and.&
+                (mt.ne.5.or.(mt.eq.5.and.mt5d.eq.0))) then
                ntr=ntr+1
                if (mt.eq.5.or.mt.eq.11.or.mt.eq.32.or.mt.eq.35.or.&
                  mt.eq.104.or.mt.eq.114.or.mt.eq.115.or.mt.eq.117.or.&
@@ -4835,7 +4886,8 @@ contains
          endif
       else if (izai.eq.1003) then
          if (mf.eq.3) then
-            if (mt.ne.1.and.mt.ne.2) then
+            if (mt.ne.1.and.mt.ne.2.and.&
+                (mt.ne.5.or.(mt.eq.5.and.mt5t.eq.0))) then
                ntr=ntr+1
                if (mt.eq.5.or.mt.eq.33.or.mt.eq.36.or.&
                  mt.eq.105.or.mt.eq.113.or.mt.eq.116.or.&
@@ -4852,7 +4904,8 @@ contains
          endif
       else if (izai.eq.2003) then
          if (mf.eq.3) then
-            if (mt.ne.1.and.mt.ne.2) then
+            if (mt.ne.1.and.mt.ne.2.and.&
+                (mt.ne.5.or.(mt.eq.5.and.mt5he3.eq.0))) then
                ntr=ntr+1
                if (mt.eq.5.or.mt.eq.34.or.mt.eq.106.or.&
                   mt.eq.176.or.mt.eq.177.or.mt.eq.178.or.&
@@ -4867,7 +4920,8 @@ contains
          endif
       else if (izai.eq.2004) then
          if (mf.eq.3) then
-            if (mt.ne.1.and.mt.ne.2) then
+            if (mt.ne.1.and.mt.ne.2.and.&
+                (mt.ne.5.or.(mt.eq.5.and.mt5a.eq.0))) then
                ntr=ntr+1
                if (mt.eq.5.or.(mt.ge.22.and.mt.le.25).or.&
                  mt.eq.29.or.mt.eq.30.or.&
@@ -5151,6 +5205,7 @@ contains
       if (izai.eq.1) then
          iskip=0
          if (mt.eq.3.or.mt.eq.4) iskip=1
+         if (mt.eq.5.and.mt5n.eq.1) iskip=1
          if (mt.gt.91.and.mt.le.151) iskip=1
          if (mt.eq.155.or.mt.eq.182.or.mt.eq.191) iskip=1
          if (mt.eq.192.or.mt.eq.193.or.mt.eq.197) iskip=1
@@ -5158,7 +5213,7 @@ contains
          if (mt16.gt.0.and.mt.eq.16) iskip=1
       else if (izai.eq.1001) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.5.or.mt.eq.28.or.mt.eq.41.or.&
+         if (mt.eq.2.or.mt.eq.28.or.mt.eq.41.or.&
            mt.eq.42.or.mt.eq.44.or.mt.eq.45.or.&
            mt.eq.103.or.mt.eq.111.or.&
            mt.eq.112.or.mt.eq.115.or.mt.eq.116.or.&
@@ -5169,34 +5224,38 @@ contains
            mt.eq.194.or.mt.eq.196.or.mt.eq.197.or.&
            mt.eq.198.or.mt.eq.199.or.mt.eq.200.or.&
            (mt.ge.600.and.mt.le.649)) iskip=0
+         if (mt.eq.5.and.mt5p.eq.0) iskip=0
       else if (izai.eq.1002) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.5.or.mt.eq.32.or.mt.eq.35.or.&
+         if (mt.eq.2.or.mt.eq.32.or.mt.eq.35.or.&
            mt.eq.104.or.mt.eq.114.or.mt.eq.115.or.mt.eq.117.or.&
            mt.eq.157.or.mt.eq.158.or.mt.eq.169.or.&
            mt.eq.170.or.mt.eq.171.or.mt.eq.182.or.&
            mt.eq.183.or.mt.eq.185.or.mt.eq.187.or.&
            mt.eq.192.or.&
            (mt.ge.650.and.mt.le.699)) iskip=0
+         if (mt.eq.5.and.mt5d.eq.0) iskip=0
       else if (izai.eq.1003) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.5.or.mt.eq.33.or.mt.eq.36.or.&
+         if (mt.eq.2.or.mt.eq.33.or.mt.eq.36.or.&
            mt.eq.105.or.mt.eq.113.or.mt.eq.116.or.&
            mt.eq.154.or.mt.eq.155.or.mt.eq.172.or.&
            mt.eq.173.or.mt.eq.174.or.mt.eq.175.or.&
            mt.eq.182.or.mt.eq.184.or.mt.eq.185.or.&
            mt.eq.188.or.mt.eq.189.or.&
            (mt.ge.700.and.mt.le.749)) iskip=0
+         if (mt.eq.5.and.mt5t.eq.0) iskip=0
       else if (izai.eq.2003) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.5.or.mt.eq.34.or.mt.eq.106.or.&
+         if (mt.eq.2.or.mt.eq.34.or.mt.eq.106.or.&
            mt.eq.176.or.mt.eq.177.or.mt.eq.178.or.&
            mt.eq.186.or.mt.eq.187.or.mt.eq.188.or.&
            mt.eq.191.or.mt.eq.192.or.mt.eq.193.or.&
            (mt.ge.750.and.mt.le.799)) iskip=0
+         if (mt.eq.5.and.mt5he3.eq.0) iskip=0
       else if (izai.eq.2004) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.5.or.(mt.ge.22.and.mt.le.25).or.&
+         if (mt.eq.2.or.(mt.ge.22.and.mt.le.25).or.&
            mt.eq.29.or.mt.eq.30.or.&
            mt.eq.35.or.mt.eq.36.and.mt.eq.45.or.&
            mt.eq.107.or.mt.eq.108.or.mt.eq.109.or.&
@@ -5208,6 +5267,7 @@ contains
            mt.eq.189.or.mt.eq.193.or.mt.eq.195.or.&
            mt.eq.196.or.mt.eq.199.or.&
            (mt.ge.800.and.mt.le.849)) iskip=0
+         if (mt.eq.5.and.mt5a.eq.0) iskip=0
       endif
       if (iskip.eq.0) then
          e=0
@@ -7842,7 +7902,7 @@ contains
    real(kr),dimension(:),allocatable::phot
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::rmin=1.e-30_kr
-   real(kr),parameter::eps=1.e-5_kr
+   real(kr),parameter::eps=4.e-6_kr
    real(kr),parameter::zero=0
 
    !--initialize
@@ -8310,7 +8370,7 @@ contains
                      endif
                      do m=1,nd0
                         r=abs(ep/dise(m)-1)
-                        if (r.le.0.001*eps) go to 111
+                        if (r.le.eps) go to 111
                      enddo
                      !--found a new discrete energy.  insert it into
                      !--the existing dise array, making sure to
@@ -8764,7 +8824,7 @@ contains
    real(kr)::eav,suml,chkl,ebar,ad,amuu,amulst,chklst,heat,g
    real(kr)::epl,gl,gammsq,amun,eavlst
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwscr=150000
+   integer,parameter::nwscr=800000
    real(kr),parameter::awr1=.99862e0_kr
    real(kr),parameter::awr2=1.99626e0_kr
    real(kr),parameter::awr3=2.98960e0_kr
@@ -13180,11 +13240,11 @@ contains
       lnu=nint(xss(l))
       call typen(l,nout,1)
       l=l+1
-      nr=nint(xss(l))
+      nrr=nint(xss(l))
       call typen(l,nout,1)
       l=l+1
-      if (nr.ne.0) then
-         n=2*nr
+      if (nrr.ne.0) then
+         n=2*nrr
          do j=1,n
             call typen(l,nout,1)
             l=l+1
@@ -13203,11 +13263,11 @@ contains
       do i=1,ndnf
          call typen(l,nout,2)
          l=l+1
-         nr=nint(xss(l))
+      nrr=nint(xss(l))
          call typen(l,nout,1)
          l=l+1
-         if (nr.ne.0) then
-            n=2*nr
+      if (nrr.ne.0) then
+         n=2*nrr
             do j=1,n
                call typen(l,nout,1)
                l=l+1
@@ -13235,11 +13295,11 @@ contains
          l=l+1
          call typen(l,nout,1)
          l=l+1
-         nr=nint(xss(l))
+      nrr=nint(xss(l))
          call typen(l,nout,1)
          l=l+1
-         if (nr.ne.0) then
-            n=2*nr
+      if (nrr.ne.0) then
+         n=2*nrr
             do j=1,n
                call typen(l,nout,1)
                l=l+1
@@ -13254,11 +13314,11 @@ contains
             l=l+1
          enddo
          !--law=4 data
-         nr=nint(xss(l))
+      nrr=nint(xss(l))
          call typen(l,nout,1)
          l=l+1
-         if (nr.gt.0) then
-            n=2*nr
+      if (nrr.ne.0) then
+         n=2*nrr
             do j=1,n
                call typen(l,nout,1)
                l=l+1

@@ -87,7 +87,7 @@ contains
    temp=0
    do while (abs(temp-tempd).ge.tempd/100+1)
       call contio(nin,0,0,scr,nb,nw)
-      if (mfh.lt.0)&
+      if (math.lt.0)&
         call error('acedos','desired mat and temp not found.',' ')
       za=nint(scr(1))
       awr=scr(2)
@@ -117,7 +117,7 @@ contains
    enddo
 
    !--define locators for dosimetry data
-   nmax=100
+   nmax=350
    lone=1
    mtr=lone
    lsig=mtr+nmax
@@ -158,8 +158,8 @@ contains
                xss(l)=nr
                l=l+1
                do i=1,nr
-                  xss(l+2*i-2)=scr(5+2*i)
-                  xss(l+2*i-1)=scr(6+2*i)
+                  xss(l+i-1)=scr(5+2*i)
+                  xss(l+nr+i-1)=scr(6+2*i)
                enddo
                l=l+2*nr
             else
@@ -177,6 +177,8 @@ contains
             enddo
             l=l+ne
             j=j+1
+            if (j.gt.nmax) call error('acedos','too many reactions',&
+                                      'need larger nmax')
          endif
          call tosend(nin,0,0,scr)
          call contio(nin,0,0,scr,nb,nw)
@@ -247,6 +249,10 @@ contains
                   enddo
                   l=l+ne
                   j=j+1
+                  if (j.gt.nmax)&
+                     call error('acedos','too many reactions',&
+                                         'need larger nmax')
+                  if (is.ne.ns) xss(lsig-1+j)=l
                enddo
             endif
             call tosend(nin,0,0,scr)

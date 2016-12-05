@@ -227,8 +227,6 @@ contains
 
    nun=iabs(lun)
    if (nun.lt.10) return
-   nun=iabs(lun)
-   if (nun.lt.10) return
    if (nun.gt.99) call error('closz','illegal unit number.',' ')
    close(nun)
    return

@@ -383,16 +383,15 @@ contains
    real(kr)::st1,st2,st3,st4,stmax,stmin,ststp,temp,dleth,dener
    real(kr)::sigig,flag,factx1,facty1,temper2,reset,enxt,zz,z2,itypx
    real(kr)::z(15)
-   real(kr)::a(30000)
-   integer,parameter::nwamax=30000
-   real(kr)::aa(100000)
-   integer,parameter::maxaa=100000
-   real(kr)::x(10000),y(10000),b(10000)
-   integer::max=10000
-   real(kr)::dxm(10000),dxp(10000),dym(10000),dyp(10000)
-   equivalence (x(1),aa(1)),(y(1),aa(10001)),(b(1),aa(20001))
-   equivalence (dxm(1),aa(30001)),(dxp(1),aa(40001))
-   equivalence (dym(1),aa(50001)),(dyp(1),aa(60001))
+   integer,parameter::mmax=20000   !same in plotr and viewr
+   integer,parameter::nwamax=45000
+   integer,parameter::maxaa=200000
+   real(kr),dimension(nwamax)::a
+   real(kr),dimension(maxaa)::aa
+   real(kr),dimension(mmax)::x,y,b,dxm,dxp,dym,dyp
+   equivalence (x(1),aa(1)),(y(1),aa(mmax+1)),(b(1),aa(2*mmax+1))
+   equivalence (dxm(1),aa(3*mmax+1)),(dxp(1),aa(4*mmax+1))
+   equivalence (dym(1),aa(5*mmax+1)),(dyp(1),aa(6*mmax+1))
    character(60)::t1,t2,xl,yl,rl
    character(60)::aleg
    character(60)::strng
@@ -1200,9 +1199,9 @@ contains
    if (elt.eq.zero) elt=enext
    if (elt.gt.enow) enow=elt
    if (itype.ne.3.and.itype.ne.4) then
-      thin=(eht-elt)/(max-500)
+      thin=(eht-elt)/(mmax-500)
    else
-      thin=ten**(log10(eht/elt)/(max-500))
+      thin=ten**(log10(eht/elt)/(mmax-500))
    endif
    if (mmf.eq.4) then
       call gety4(enow,enext,idis,yf,nth,nin,a)
@@ -1320,7 +1319,7 @@ contains
    if (enow.lt.thin*elast) go to 370
   380 continue
    n=n+1
-   if (n.gt.max) call error('plotr','storage exceeded.',' ')
+   if (n.gt.mmax) call error('plotr','storage exceeded1',' ')
    x(n)=enow*factx
    y(n)=yf*facty
    if (enext.gt.delta*enow) enext=delta*enow
@@ -1376,7 +1375,7 @@ contains
    if (mfd.eq.4) go to 2410
    if (mfd.eq.5) go to 2510
    if (mfd.eq.7) go to 2610
-   if (mfd.eq.6.and.mtd.ge.201.and.mtd.lt.250) go to 2520
+   if (mfd.eq.6.and.mtd.ge.221.and.mtd.le.250) go to 2520
    nsk=nkh-1
    if (nsk.ne.0) then
       do i=1,nsk
@@ -1564,7 +1563,7 @@ contains
       call moreio(nin,0,0,a(nwa),nb,nw)
       nwa=nwa+nw
       if (nw+npage+12.gt.nwamax)&
-           call error('plotr','storage exceeded.',' ')
+          call error('plotr','storage exceeded2',' ')
    enddo
    if (nin2.eq.0) go to 467
    loc2=nwa+nw
@@ -1575,7 +1574,7 @@ contains
       call moreio(nin2,0,0,a(nwa),nb,nw)
       nwa=nwa+nw
       if (nw+npage+12.gt.nwamax)&
-           call error('plotr','storage exceeded.',' ')
+          call error('plotr','storage exceeded3',' ')
    enddo
   467 continue
 
@@ -2035,6 +2034,11 @@ contains
    real(kr),parameter::zero=0
    real(kr),parameter::ten=10
 
+   !--this tab1io call should be commented out in the unlikely
+   !  event that an njoy99/thermr, or earlier, file is being processed.
+   if (mfd.eq.6.and.mtd.ge.221.and.mtd.le.250) &
+                                            call tab1io(nin,0,0,a,nb,nw)
+   !
    call tab2io(nin,0,0,a,nb,nw)
    ne=n2h
    i1=0
@@ -2047,7 +2051,7 @@ contains
    emax=etop
    ymin=xleft
    ymax=xright
-   if (mth.lt.200.or.mth.gt.250) then
+   if (mth.lt.221.or.mth.gt.250) then
       if (ymax.eq.zero) ymax=20*emev
       if (ymin.eq.zero) ymin=1
    else
@@ -2804,7 +2808,7 @@ contains
       if (law.eq.7) call fixl7(itape,aa,maa,a,nb,nw)
       if (law.ne.7) call listio(itape,0,0,a,nb,nw)
       nwtot=nw
-      if (mth.lt.221.or.mth.ge.250) then
+      if (mth.lt.221.or.mth.gt.250) then
          na=l2h
          nwp=n1h
          nep=n2h

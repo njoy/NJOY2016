@@ -9,6 +9,7 @@ module purm
    integer::nendf,nin,nout
 
    ! control parameters
+   integer::init
    integer::nunr,lssf,iinel,iabso
    integer::iprint,nermax,nladr,nmode
 
@@ -51,6 +52,9 @@ module purm
    ! random number generator
    integer::kk
    real(kr)::rr
+
+   ! message flags
+   integer::mflg1,mflg2
 
 contains
 
@@ -127,7 +131,7 @@ contains
    ipl=0
    nmode=0
    nermax=1000
-   nsamp=5000
+   nsamp=10000
    nsh=0
    call timer(time)
    write(nsyso,'(/'' purr...'',&
@@ -168,12 +172,15 @@ contains
    nunx=0
    ntemp=1
    nsigz=1
+   init=0
    read(nsysi,*) matd,ntemp,nsigz,nbin,nladr,iprint,nunx
    if (matd.eq.0) go to 400
+   call repoz(-nscr)
    if (allocated(temp)) then
       deallocate(temp)
       deallocate(sigz)
       deallocate(sigu)
+      deallocate(sigpl)
    endif
    allocate(temp(ntemp))
    allocate(sigz(nsigz))
@@ -198,16 +205,23 @@ contains
    if (nbin.lt.15) call error('purr','nbin should be 15 or more',' ')
 
    !--allocate storage for ladders and tables
+   if (allocated(tabl)) then
+      deallocate(tabl)
+      deallocate(tval)
+      deallocate(fis)
+      deallocate(cap)
+      deallocate(els)
+   endif
    allocate(tabl(nbin,5,ntemp))
    allocate(tval(nbin,ntemp))
-   allocate(er(nermax))
-   allocate(gnr(nermax))
-   allocate(gfr(nermax))
-   allocate(ggr(nermax))
-   allocate(gxr(nermax))
-   allocate(gt(nermax))
-   allocate(es(nsamp))
-   allocate(xs(nsamp))
+   if (.not.allocated(er)) allocate(er(nermax))
+   if (.not.allocated(gnr)) allocate(gnr(nermax))
+   if (.not.allocated(gfr)) allocate(gfr(nermax))
+   if (.not.allocated(ggr)) allocate(ggr(nermax))
+   if (.not.allocated(gxr)) allocate(gxr(nermax))
+   if (.not.allocated(gt)) allocate(gt(nermax))
+   if (.not.allocated(es)) allocate(es(nsamp))
+   if (.not.allocated(xs)) allocate(xs(nsamp))
    allocate(fis(ntemp,nsamp))
    allocate(cap(ntemp,nsamp))
    allocate(els(ntemp,nsamp))
@@ -258,6 +272,7 @@ contains
    endif
 
    !--read in the total and partial heating cross sections
+   if (allocated(heat)) deallocate(heat)
    allocate(heat(4,nunr,ntemp))
    call rdheat(a,heat,eunr,temp,ntemp,nunr,ihave,matd)
    if (ihave.eq.0) call mess('purr',&
@@ -273,6 +288,8 @@ contains
    nstep=nunr/(nunx-1)
    if (nstep.lt.1) nstep=1
    ie=1-nstep
+   mflg1=0
+   mflg2=0
    do while (ie.lt.nunr)
       ie=ie+nstep
       if (ie.gt.nunr) ie=nunr
@@ -340,8 +357,10 @@ contains
    nw=nx
    if (nw.eq.0) go to 250
    nc=6*nx+6
+   if (allocated(c)) deallocate(c)
    allocate(c(nc))
    nd=6*nx
+   if (allocated(d)) deallocate(d)
    allocate(d(nd))
    call dictio(nin,0,0,d,nb,nw)
    j=0
@@ -631,6 +650,24 @@ contains
       deallocate(tmax)
       deallocate(tsum)
    endif
+   if (allocated(tabl)) then
+      deallocate(tabl)
+      deallocate(tval)
+      deallocate(er)
+      deallocate(gnr)
+      deallocate(gfr)
+      deallocate(ggr)
+      deallocate(gxr)
+      deallocate(gt)
+      deallocate(es)
+      deallocate(xs)
+      deallocate(fis)
+      deallocate(cap)
+      deallocate(els)
+   endif
+   if (allocated(heat)) deallocate(heat)
+   if (allocated(c)) deallocate(c)
+   if (allocated(d)) deallocate(d)
 
    call atend(nout,0)
    call repoz(nout)
@@ -672,7 +709,7 @@ contains
      7.2e5_kr,8.5e5_kr,1.e6_kr,1.25e6_kr,1.5e6_kr,1.7e6_kr,2.0e6_kr,&
      2.5e6_kr,3.0e6_kr,3.5e6_kr,4.0e6_kr,5.0e6_kr,6.0e6_kr,7.2e6_kr,&
      8.5e6_kr/)
-   real(kr),parameter::etop=1.e6_kr
+   real(kr),parameter::etop=5.e6_kr
    real(kr),parameter::small=1.e-12_kr
    real(kr),parameter::wide=1.26e0_kr
    integer,parameter::n150=150
@@ -714,8 +751,8 @@ contains
    !--read through this sub-section
    call contio(nendf,0,0,a(iscr),nb,nw)
    nls=n1h
-   if (lrf.eq.4) then
-      call contio(nendf,0,0,a(iscr),nb,nw)
+   if (lrf.eq.4.or.lrf.eq.7) then
+      call listio(nendf,0,0,a(iscr),nb,nw)
       do while (nb.ne.0)
          call moreio(nendf,0,0,a(iscr),nb,nw)
       enddo
@@ -726,6 +763,12 @@ contains
          do while (nb.ne.0)
             call moreio(nendf,0,0,a(iscr),nb,nw)
          enddo
+         if (lrf.eq.7) then
+            call listio(nendf,0,0,a(iscr),nb,nw)
+            do while (nb.ne.0)
+               call moreio(nendf,0,0,a(iscr),nb,nw)
+            enddo
+         endif
       else
          call contio(nendf,0,0,a(iscr),nb,nw)
          njs=n1h
@@ -765,10 +808,10 @@ contains
    ! if present, read and store the energy-dependent
    ! scattering radius tab1 data.
    if (nro.eq.1) then
-      call tab1io(nin,0,0,arry(inow),nb,nw)
+      call tab1io(nendf,0,0,arry(inow),nb,nw)
       jj=inow+nw
       do while (nb.ne.0)
-         call moreio(nin,0,0,arry(jj),nb,nw)
+         call moreio(nendf,0,0,arry(jj),nb,nw)
          jj=jj+nw
          if (jj.gt.jx) then
             call error('rdf2un','storage in a exceeded',' ')
@@ -1724,7 +1767,7 @@ contains
    real(kr)::fnorm,cnorm,denom,den,ttt
    character(3),dimension(4),parameter::nmr=(/&
      'tot','els','fis','cap'/)
-   integer::init=0
+   character(60)::strng
    real(kr),parameter::c1=0.5641895835e0_kr
    real(kr),parameter::c2=0.2752551e0_kr
    real(kr),parameter::c3=2.724745e0_kr
@@ -2186,7 +2229,25 @@ contains
       tmax(itemp)=es(ne)
       nebin=nsamp/(nbin-10+1.76)
       ibin=nebin/200
+      if (ibin.le.0) then
+         if (mflg1.eq.0) then
+            mflg1=1
+            write(strng,'(''reset ibin=1, consider larger nsamp'',&
+                         &'' or smaller nbin'')')
+            call mess('purr',strng,'')
+         endif
+         ibin=1
+      endif
       do i=1,nbin-1
+         if (ibin.gt.nsamp) then
+            if (mflg2.eq.0) then
+               mflg2=1
+               write(strng,'(''reset ibin=nsamp,'',&
+                            &'' consider smaller nbin'')')
+               call mess('purr',strng,'')
+            endif
+            ibin=nsamp
+         endif
          tval(i,itemp)=es(ibin)
          if (i.gt.1) then
             if (tval(i,itemp).le.tval(i-1,itemp))&

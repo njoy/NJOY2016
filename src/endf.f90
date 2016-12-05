@@ -1540,8 +1540,6 @@ contains
    if (mt.eq.0) go to 300
    if (mth.eq.mt) go to 300
    if (mth.eq.0) go to 200
-   if (igo.lt.0.and.mth.lt.mt) go to 400
-   if (igo.gt.0.and.mth.gt.mt) go to 400
    go to 200
 
    !--desired section has been found

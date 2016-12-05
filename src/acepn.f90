@@ -944,7 +944,7 @@ contains
                            enddo
                            scr(lld+4)=1
                            scr(lld+5)=nn
-                           scr(lld+6)=iint
+                           scr(lld+6)=nn
                            scr(lld+7)=iint
                            call pttab2(scr(lld))
                         endif

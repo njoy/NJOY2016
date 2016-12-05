@@ -20,7 +20,7 @@ module groupm
    real(kr),dimension(:),allocatable::wght
    real(kr),dimension(:),allocatable::wtbuf
    integer::nfp,nfv,nfscr,nflmax
-   real(kr)::sigpot,alpha2,alpha3,beta,sam,gamma
+   real(kr)::felo,fehi,sigpot,alpha2,alpha3,beta,sam,gamma
    integer,parameter::nbuf=1000
 
    ! temperatures and background cross sections
@@ -39,11 +39,15 @@ module groupm
    integer::ngout1,ngout2,ntw
 
    ! auto reaction processing lists
+   ! - lfs8(i) points to the "level number" from mf8.
+   ! - mlfs8(i) is calculated and corresponds to NJOY's assumption
+   !   of the ground state or isomer number.
    integer,parameter::maxr1=500
    integer,parameter::maxr2=500
    integer::mf4(maxr1),mf6(maxr1),mf12(maxr1),mf13(maxr1),mf18(maxr1),&
      mf4r(6,maxr1),mf6p(6,maxr1),mf10f(maxr2),mf10s(maxr2),mf10i(maxr2),&
-     lfs8(maxr2)
+     lfs8(maxr2),mlfs8(maxr2)
+   integer::lastza,izatest
 
    ! reaction and kinematics parameters
    integer::matd,mfd,mtd
@@ -61,7 +65,7 @@ module groupm
    integer::izat
    real(kr)::spi
    real(kr)::emaxx,ebeg
-   integer::lfs
+   integer::lfs,isom
 
    ! unresolved resonance parameters
    integer::nunr,intunr,lrp,lssf
@@ -84,6 +88,8 @@ module groupm
    real(kr),dimension(:,:),allocatable::slst
    real(kr),dimension(:,:),allocatable::ftmp
    real(kr),dimension(:,:),allocatable::flst
+   real(kr),dimension(:),allocatable::falo,fahi
+   integer::ipan
 
    ! smoothing option
    ! set ismooth to 1 to enable sqrt(e) smoothing for
@@ -167,8 +173,8 @@ contains
    !
    !          weight function options (8a,8b,8c,8d)
    ! card8a     flux calculator parameters (iwt.lt.0 only)
-   !    ehi     break between computed flux and bondarenko flux
-   !                (must be in resolved range)
+   !    fehi    break between computed flux and bondarenko flux
+   !            (must be in the resolved resonance range)
    !    sigpot  estimate of potential scattering cross section
    !    nflmax  maximum number of computed flux points
    !    ninwt   tape unit for new flux parameters (default=0)
@@ -332,6 +338,7 @@ contains
    integer::ngnp1,nggp1,np,loc,ngi,mtdp,iauto,izam,j,ibase
    integer::iaddmt,iglo,nq,ig1,ig,nll,ig2lo,it,iz,il,igzero
    integer::naed,ng2,nl,idis,lim,nlg,ng2g,mfdn,jzam
+   integer::itmp
    real(kr)::time,za,tempin,eps,diff,ee,first,en
    real(kr)::enext,elo,ehi,yld,test
    real(kr),dimension(:,:),allocatable::flux,sig
@@ -356,8 +363,8 @@ contains
    nend3=13
    npend2=0
    ninwt=0
+   ipan=0
    call openz(-nflx,1)
-   ninwt=0
    allocate(wtbuf(nbuf))
    ebeg=10*small
 
@@ -468,7 +475,7 @@ contains
    jtemp=itemp
    tempin=temp(itemp)
    eps=tempin/10000
-   diff=100000
+   diff=100000000
    do while (diff.gt.1+eps)
       za=c1h
       awr=c2h
@@ -583,20 +590,13 @@ contains
    mtd=1
    mtdp=1
    iauto=0
-   izam=0
-   lfs=0
   360 continue
+   lfs=0
+   isom=0
+   izam=0
    if (mtd+mtdp.lt.0) go to 400
    if (iauto.eq.0) go to 365
-   call nextr(iauto,matd,mfd,mtdp,lfs,scr)
-   izam=0
-   if (mfd.ge.10000000) then
-      if (lfs.lt.10) then
-         izam=mod(mfd,10000000)+lfs
-      else
-         izam=10*mod(mfd,10000000)+lfs
-      endif
-   endif
+   call nextr(iauto,matd,mfd,mtdp,scr)
    if (mtdp.ne.0) go to 390
   365 continue
    mtdp=-1000
@@ -621,33 +621,38 @@ contains
   382 continue
    iauto=1
    mtdp=0
-   call nextr(iauto,matd,mfd,mtdp,lfs,scr)
-   izam=0
-   if (mfd.ge.10000000) then
-      if (lfs.lt.10) then
-         izam=mod(mfd,10000000)+lfs
-      else
-         izam=10*mod(mfd,10000000)+lfs
-      endif
-   endif
+   call nextr(iauto,matd,mfd,mtdp,scr)
    if (mtdp.ne.0) go to 390
    write(strng,'(''auto finds no reactions for mf='',i3)') mfd
    call mess('groupr',strng,' ')
    go to 365
   390 continue
    if (mtdp.ge.0) mtd=mtdp
+   ! -- if auto processing, already have level number (lfs) and isomer
+   !    number (isom) from nextr; if user input may need to decode the
+   !    user mfd.  then calculate izam
+   if (iauto.eq.0.and.mfd.ge.10000000) then
+      ! -- decode from user mfd input
+      itmp=mfd/10000000
+      itmp=(mfd-10000000*itmp)/10
+      lfs=mfd-(10000000*(mfd/10000000)+10*itmp)
+      isom=lfs
+      if (lfs.lt.10) then
+         izam=mod(mfd,10000000)
+      else
+         izam=10*mod(mfd,10000000)
+      endif
+   elseif (iauto.eq.1.and.mfd.ge.10000000) then
+      if (lfs.lt.10) then
+         izam=mod(mfd,10000000)+lfs
+      else
+         izam=10*mod(mfd,10000000)+lfs
+      endif
+   endif
   400 continue
    if (mtdp.lt.0) mtd=mtd+1
    if (iauto.eq.0.and.(mfd.eq.13.or.mfd.eq.16)) call mfchk(mfd,mtd)
    if (iauto.eq.0.and.mfd.ge.21.and.mfd.le.26) call mfchk2(mfd,mtd)
-   if (mfd.lt.10000000) go to 405
-   if (izam.gt.0) go to 405
-   if (lfs.lt.10) then
-      izam=mod(mfd,10000000)+lfs
-   else
-      izam=10*mod(mfd,10000000)+lfs
-   endif
-  405 continue
    if (iauto.eq.1) call namer(izap,izam,mfd,mtd,mtname)
    if (iaddmt.le.0) go to 490
   410 continue
@@ -723,7 +728,7 @@ contains
    ig2lo=0
    ng2=2
    if (ehi.le.first) go to 580
-   if (elo.ge.emaxx) go to 580
+   if (elo.ge.emaxx.and.ig.ne.ngi) go to 580
    enext=ehi
    do it=1,ng2g
       do iz=1,nz
@@ -746,7 +751,7 @@ contains
       prod(1,1,ig)=ans(1,1,2)
       ig2lo=0
       if (ig.ge.jconst) then
-         call displa(ig,prod,nl,nz,jconst,ig2lo,igzero,nlg,ng2g)
+         call displa(ig,prod,nl,nz,jconst,ig2lo,igzero,nlg,ngi)
       endif
 
    !--print results for this initial energy group
@@ -764,11 +769,7 @@ contains
               mfd,mtd,(mtname(i),i=1,15)
          else
             mfdn=mfd/10000000
-            if (lfs.lt.10) then
-               jzam=mod(mfd,10000000)+lfs
-            else
-               jzam=10*mod(mfd,10000000)+lfs
-            endif
+            jzam=izam
             if (mfdn.eq.1) then
                write(nsyso,'(&
                  &'' for mf3 mt'',i3,'' zam'',i8,1x,15a4)')&
@@ -888,7 +889,7 @@ contains
 
    !--loop over desired temperatures
   590 continue
-   deallocate(unr)
+   if (allocated(unr)) deallocate(unr)
    if (iaddmt.gt.0) go to 600
    call amend(ngout2,0)
    if (itemp.eq.ntemp) go to 630
@@ -940,6 +941,10 @@ contains
       deallocate(slst)
       deallocate(ftmp)
       deallocate(flst)
+   endif
+   if (allocated(falo)) then
+       deallocate(falo)
+       deallocate(fahi)
    endif
    call repoz(nendf)
    call repoz(npend)
@@ -1041,7 +1046,7 @@ contains
    return
    end subroutine ruinb
 
-   subroutine nextr(iauto,matd,mfd,mtd,lfs,scr)
+   subroutine nextr(iauto,matd,mfd,mtd,scr)
    !-------------------------------------------------------------------
    ! Find next reaction in this file of an endf or pendf tape.
    ! If mtd=0, first reaction is found.  Returns iauto=0 if
@@ -1050,7 +1055,7 @@ contains
    use util ! provides skiprz
    use endf ! provides endf routines and variables
    ! externals
-   integer::iauto,matd,mfd,mtd,lfs
+   integer::iauto,matd,mfd,mtd
    real(kr)::scr(*)
    ! internals
    integer::nin,mft,nb,nw,ir,idone
@@ -1101,6 +1106,7 @@ contains
    if (mf10f(ir).eq.0) go to 280
    mfd=mf10i(ir)
    lfs=lfs8(ir)
+   isom=mlfs8(ir)
    if (mf10f(ir).eq.3) mfd=mfd+10000000
    if (mf10f(ir).eq.6) mfd=mfd+20000000
    if (mf10f(ir).eq.9) mfd=mfd+30000000
@@ -1203,6 +1209,7 @@ contains
    if (mf10f(ir).eq.0) go to 280
    mfd=mf10i(ir)
    lfs=lfs8(ir)
+   isom=mlfs8(ir)
    if (mf10f(ir).eq.3) mfd=mfd+10000000
    if (mf10f(ir).eq.6) mfd=mfd+20000000
    if (mf10f(ir).eq.9) mfd=mfd+30000000
@@ -1397,7 +1404,7 @@ contains
       dummy='('//proj//','//reac//')-cross-section.'
    else if (mfd.ge.10000000) then
       izaa=izam/10
-      imm=lfs
+      imm=isom
       if (imm.eq.0) then
          write(azam,'(i5)') izaa
          dummy='('//proj//','//reac//')-'//azam(1:5)//'-production.'
@@ -2686,6 +2693,8 @@ contains
    !--ecco  33-group structure
    else if (ign.eq.19) then
       ngn=33
+      ngp=ngn+1
+      allocate(egn(ngp))
       do ig=1,34
          egn(ig)=eg19(ig)
       enddo
@@ -2693,6 +2702,8 @@ contains
    !--ecco 1968-group structure
    else if (ign.eq.20) then
       ngn=1968
+      ngp=ngn+1
+      allocate(egn(ngp))
       do ig=1,392
          egn(ig)=eg20a(ig)
       enddo
@@ -2715,6 +2726,8 @@ contains
    !--tripoli 315-group structure
    else if (ign.eq.21) then
       ngn=315
+      ngp=ngn+1
+      allocate(egn(ngp))
       do ig=1,316
          egn(ig)=eg21(ig)
       enddo
@@ -2722,6 +2735,8 @@ contains
    !--xmas lwpc 172-group structure
    else if (ign.eq.22) then
       ngn=172
+      ngp=ngn+1
+      allocate(egn(ngp))
       do ig=1,173
          egn(ig)=eg22(ig)
       enddo
@@ -2729,6 +2744,8 @@ contains
    !--vit-j lwpc 175-group structure
    else if (ign.eq.23) then
       ngn=175
+      ngp=ngn+1
+      allocate(egn(ngp))
       do ig=1,176
          egn(ig)=eg23(ig)
       enddo
@@ -3130,14 +3147,14 @@ contains
       beta=0
       alpha3=0
       gamma=0
-      read(nsysi,*) ehi,sigpot,nflmax,ninwt,jsigz,&
+      read(nsysi,*) fehi,sigpot,nflmax,ninwt,jsigz,&
         alpha2,sam,beta,alpha3,gamma
       ninwt=iabs(ninwt)
       call openz(-ninwt,1)
       write(nsyso,'(/&
-        &'' compute flux...ehi, sigpot, nflmax ='',f9.1,f9.2,i8/&
+        &'' compute flux...fehi, sigpot, nflmax ='',f9.1,f9.2,i8/&
         &4x,''ninwt, jsigz ='',i3,i4)')&
-        ehi,sigpot,nflmax,-ninwt,jsigz
+        fehi,sigpot,nflmax,-ninwt,jsigz
       if (alpha3.ne.zero.and.alpha2.eq.zero) alpha2=small
       if (alpha2.gt.zero) write(nsyso,'(&
         &7x,''alpha2, sam ='',1p,e12.4,0p,f8.3/&
@@ -3465,8 +3482,8 @@ contains
    !   2) scattering from background atoms (sigma zero) gives
    !      a smooth asymptotic spectrum equal to the specified
    !      weight function (see iwt in genwtf)
-   ! The flux is computed between elo (lowest group bound) and
-   ! ehi (must be in resolved range) or until nflmax points
+   ! The flux is computed between felo (lowest group bound) and
+   ! fehi (must be in resolved range) or until nflmax points
    ! have been generated.  The flux at higher energies is extended
    ! using the bondarenko narrow resonance model.
    ! Legendre moments are computed using the B0 large system
@@ -3493,11 +3510,11 @@ contains
    ! internals
    integer::idis,ie,li,iz,lim,k,je,lj,l,il,indx,mt,nscr
    integer::nl,nw,nb,net2,nin,nalph,nemax,nx,net,ne,net1,nett
-   real(kr)::e,enext,en,elo,ebot,ehi,f1,ej,ejp,f2,f3,f4
+   real(kr)::e,enext,en,ebot,f1,ej,ejp,f2,f3,f4
    real(kr)::elim,g3,g4,ei,enxt,fac,flag,t,wtf,xc,time
    real(kr)::tt,ss,s1,s2,sigzj,ttt
    real(kr)::alpha(3)
-   real(kr)::fout(101)
+   real(kr),dimension(:),allocatable::fout
    real(kr),dimension(:),allocatable::denom,add,factor,tot
    real(kr),dimension(:),allocatable::scr1,scr2
    real(kr),parameter::up=1.001e0_kr
@@ -3519,13 +3536,15 @@ contains
    allocate(factor(nsigz))
    allocate(tot(nsigz))
 
+   nl=lord+1
+   if (nl.eq.1.and.nsigz.gt.1) nl=2
+   nfv=1+nl*nsigz+1
+   allocate(fout(nfv))
    !--bondarenko flux model.
    if (nflmax.eq.0) then
-      nl=lord+1
-      if (nl.eq.1.and.nsigz.gt.1) nl=2
-      nfv=1+nl*nsigz+1
       nw=npage+50
       allocate(scr1(nw))
+      scr1=0
       nscr=npend
       call findf(matb,3,1,nscr)
       call contio(nscr,0,0,scr1,nb,nw)
@@ -3544,9 +3563,6 @@ contains
       write(nsyso,'(68x,f9.1,''s'')') time
       nin=npend
       nscr=nfscr
-      nl=lord+1
-      if (nl.eq.1.and.nsigz.gt.1) nl=2
-      nfv=1+nl*nsigz+1
       alpha(2)=alpha2
       alpha(3)=alpha3
       nalph=1
@@ -3554,12 +3570,14 @@ contains
       if (alpha3.ne.zero) nalph=3
       nemax=nflmax
       nx=3+nsigz
-      elo=egn(1)
-      ebot=elo
-      if (elo.lt.tenth) elo=tenth
+      felo=egn(1)
+      ebot=felo
+      if (felo.lt.tenth) felo=tenth
       nw=npage+50
       allocate(scr1(nw))
       allocate(scr2(nw))
+      scr1=0
+      scr2=0
       e=0
       call getwtf(e,en,idis,0,wtf)
 
@@ -3577,13 +3595,13 @@ contains
       call findf(matb,3,2,nin)
       call contio(nin,0,0,scr2,nb,nw)
       call gety2(e,en,idis,ss,nin,scr2)
-      enext=elo
+      enext=felo
       net=0
       ne=0
-      do while (e.lt.ehi.and.ne.lt.nemax)
+      do while (e.lt.fehi.and.ne.lt.nemax)
          ne=ne+1
          e=enext
-         if (e.gt.ehi) e=ehi
+         if (e.gt.fehi) e=fehi
          call gety1(e,enext,idis,tt,nscr,scr1)
          call gety2(e,en,idis,ss,nin,scr2)
          call getwtf(e,en,idis,0,wtf)
@@ -3595,10 +3613,10 @@ contains
             b(iz+3+li)=(sigz(iz)-sam)*wtf*(1-beta)
          enddo
       enddo
-      ehi=e
+      fehi=e
 
-      !--assume nr flux at ehi and above
-      !--calculate contributions below ehi for nr flux
+      !--assume nr flux at fehi and above
+      !--calculate contributions below fehi for nr flux
       do iz=1,nsigz
          b(iz+3+li)=(sigz(iz)+sigpot)*wtf/(sigz(iz)+tt)
       enddo
@@ -3607,8 +3625,8 @@ contains
          do je=1,lim
             lj=nx*(je-1)
             e=b(lj+1)
-            if (e.ge.alpha(k)*ehi) then
-               f1=(1-alpha(k)*ehi/e)*wtf/(1-alpha(k))
+            if (e.ge.alpha(k)*fehi) then
+               f1=(1-alpha(k)*fehi/e)*wtf/(1-alpha(k))
                do iz=1,nsigz
                   if (k.eq.1) b(lj+3+iz)=b(lj+3+iz)+f1*sigpot
                   if (k.eq.2) b(lj+3+iz)=b(lj+3+iz)&
@@ -3762,7 +3780,7 @@ contains
       ie=net
       write(nsyso,'(&
         &'' computed flux from'',1p,e12.4,'' to '',1p,e12.4,'' ev''/&
-        &1x,i6,'' points'')') elo,fout(1),net-net1
+        &1x,i6,'' points'')') felo,fout(1),net-net1
       net2=net
    endif
 
@@ -3813,6 +3831,7 @@ contains
    write(nsyso,'('' finished with narrow-resonance flux to'',&
      & 1p,e12.4,'' ev''/1x,i6,'' points'')') fout(1),net-net2
 
+   deallocate(fout)
    if (allocated(denom)) then
       deallocate(denom)
       deallocate(add)
@@ -3820,6 +3839,8 @@ contains
       deallocate(tot)
    endif
 
+   if (allocated(scr1)) deallocate(scr1)
+   if (allocated(scr2)) deallocate(scr2)
    if (ninwt.eq.0.or.iwt.eq.0) return
    flag=-1
    write(ninwt) flag,flag,flag
@@ -3878,17 +3899,23 @@ contains
 
    !--search for e on ninwt
   200 continue
+   if (abs(e-el).lt.el*small.and.en.lt.0) then
+      w=wl
+      xc=xl
+      enext=en
+      go to 250
+   endif
    if (abs(e-en).lt.en*small) go to 240
-   if (e.gt.el*(1+small).and.e.lt.en*(1-small)) go to 230
+   if (e.gt.el*(1-small).and.e.lt.en*(1+small)) go to 230
    if (e.lt.el*(1-small))&
      call error('getfwt','requested e is out of order',' ')
   210 continue
-   read(ninwt,end=225) en,wn,xn
-   if (abs(e-en).lt.en*small) go to 240
-   if (el.gt.el*(1-small).and.en.lt.en*(1+small)) go to 230
    el=en
    wl=wn
    xl=xn
+   read(ninwt,end=225) en,wn,xn
+   if (abs(e-en).lt.en*small) go to 240
+   if (e.gt.el*(1-small).and.e.lt.en*(1+small)) go to 230
    go to 210
   225 continue
    call error('getfwt','e outside range of data',' ')
@@ -4046,7 +4073,8 @@ contains
    save enext
 
    !--retrieve factors in integrands at lower boundary
-   if (matd.ne.matl.or.mfd.ne.mfl.or.mtd.ne.mtl) then
+   if (matd.ne.matl.or.mfd.ne.mfl.or.mtd.ne.mtl.or.ipan.eq.0) then
+      ipan=1
       matl=matd
       mfl=mfd
       mtl=mtd
@@ -4585,17 +4613,22 @@ contains
    ! internals
    integer::ip,i,llord,iz,il,l
    real(kr)::wtf
-   real(kr)::alo(101),ahi(101)
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::zero=0
-   save ip,alo,ahi
+   save ip
 
    !--initialize.
    if (e.eq.zero) then
       if (nsigz.gt.1) then
-         call finda(1,alo,nfv,nflx,wtbuf,nbuf)
-         call finda(2,ahi,nfv,nflx,wtbuf,nbuf)
-         enext=alo(1)
+         if (allocated(falo)) then
+             deallocate(falo)
+             deallocate(fahi)
+         endif
+         allocate(falo(nfv))
+         allocate(fahi(nfv))
+         call finda(1,falo,nfv,nflx,wtbuf,nbuf)
+         call finda(2,fahi,nfv,nflx,wtbuf,nbuf)
+         enext=falo(1)
          ip=0
       else
          call getwtf(e,enext,idis,0,wtf)
@@ -4609,18 +4642,18 @@ contains
       !--branch for nz>1 (self shielded)
       if (ip.eq.0) then
          call scana(e,ip,nfp,nfv,nflx,wtbuf,nbuf)
-         call finda(ip,alo,nfv,nflx,wtbuf,nbuf)
-         call finda(ip+1,ahi,nfv,nflx,wtbuf,nbuf)
+         call finda(ip,falo,nfv,nflx,wtbuf,nbuf)
+         call finda(ip+1,fahi,nfv,nflx,wtbuf,nbuf)
       endif
 
       !--check energy range
       !--read next block of data if necessary
-      do while (e.ge.ahi(1).and.ip.lt.nfp)
+      do while (e.ge.fahi(1).and.ip.lt.nfp)
          do i=1,nfv
-            alo(i)=ahi(i)
+            falo(i)=fahi(i)
          enddo
          ip=ip+1
-         call finda(ip,ahi,nfv,nflx,wtbuf,nbuf)
+         call finda(ip,fahi,nfv,nflx,wtbuf,nbuf)
       enddo
 
       !--in the right energy range
@@ -4630,11 +4663,11 @@ contains
       do iz=1,nz
          do il=1,nl
             l=1+il+(llord+1)*(iz-1)
-            call terp1(alo(1),alo(l),ahi(1),ahi(l),e,flux(iz,il),2)
+            call terp1(falo(1),falo(l),fahi(1),fahi(l),e,flux(iz,il),2)
          enddo
       enddo
-      call terp1(alo(1),alo(nfv),ahi(1),ahi(nfv),e,xtot,2)
-      enext=ahi(1)
+      call terp1(falo(1),falo(nfv),fahi(1),fahi(nfv),e,xtot,2)
+      enext=fahi(1)
       idis=0
       if (ip.eq.nfp) enext=emax
    else
@@ -5227,8 +5260,10 @@ contains
    if (mtd.eq.452.or.mtd.eq.455.or.mtd.eq.456) ng=2
    iglo=1
    yld=1
-   if (mfd.eq.12.or.(mfd.ge.20000000.and.mfd.lt.40000000))&
+   if (mfd.eq.12.or.(mfd.ge.30000000.and.mfd.lt.40000000))&
      call getyld(e,en,idis,yld,matd,mfd,mtd,lfs,nend3)
+   if (mfd.ge.20000000.and.mfd.lt.30000000)&
+     call getyld(e,en,idis,yld,matd,mfd,mtd,isom,nend3)
    if (mtd.eq.452.or.mtd.eq.455.or.mtd.eq.456)&
      call getyld(e,en,idis,yld,matd,1,mtd,0,nend3)
    if (en.lt.enext*(1-small)) idisc=idis
@@ -5667,7 +5702,9 @@ contains
    real(kr)::term(mxlg),terml(mxlg)
    character(60)::strng
    integer,parameter::maxss=500
-   integer::iyss(3),izss(3),jjss(3),jloss(maxss)
+   integer,parameter::nssm=9
+   integer,dimension(nssm)::iyss,izss,jjss
+   integer,dimension(maxss)::jloss
    real(kr),dimension(:),allocatable::tmp
    integer,parameter::ncmax=350
    real(kr),parameter::emax=1.e10_kr
@@ -5818,13 +5855,22 @@ contains
             call moreio(nin,0,0,tmp(l),nb,nw)
             l=l+nw
          enddo
-         if (nn.eq.2.and.lep.eq.2.and.&
-           tmp(ilo+6+ncyc).lt.tmp(ilo+1)/(awr+1)**2) then
-            write(nsyso,'('' patching low-energy distribution at'',&
-              &1p,e10.3)') tmp(ilo+1)
-            tmp(ilo+7)=0
-            tmp(ilo+8)=tmp(ilo+1)/(awr+1)**2
-            tmp(ilo+9)=2/tmp(ilo+8)
+         if (nn.eq.2.and.lep.eq.2) then
+            j=0
+            if (tmp(ilo+6+ncyc).lt.tmp(ilo+1)/(awr+1)**2) then
+               j=1
+               tmp(ilo+7)=0
+               tmp(ilo+8)=tmp(ilo+1)/(awr+1)**2
+               tmp(ilo+9)=2/tmp(ilo+8)
+            elseif (tmp(ilo+7).ne.0.and.tmp(ilo+9).eq.0) then
+               j=1
+               tmp(ilo+9)=tmp(ilo+7)
+               tmp(ilo+7)=0
+            endif
+            if (j.ne.0) then
+               write(nsyso,'('' patching low-energy distribution at'',&
+                 &1p,e10.3)')tmp(ilo+1)
+            endif
          endif
          if (ismooth.gt.0.and.jzap.eq.1.and.lep.eq.1) then
             fx=.8409
@@ -5857,7 +5903,7 @@ contains
                   tmp(ilo+5+ncyc+ix)=sigfig(tmp(ilo+5+ncyc+ix),7,0)
                enddo
                tmp(ilo+6+ncyc)=fx*tmp(ilo+6+2*ncyc)
-               tmp(ilo+6+ncyc+ix)=sigfig(tmp(ilo+6+ncyc+ix),7,0)
+               tmp(ilo+6+ncyc)=sigfig(tmp(ilo+6+ncyc),7,0)
                val=tmp(ilo+7)
                tmp(ilo+7)=sqrt(fx)*val
                tmp(ilo+7)=sigfig(tmp(ilo+7),7,0)
@@ -6042,7 +6088,7 @@ contains
    if (nint(tmp(l1)).ne.jzap) go to 195
    law=nint(tmp(l1+3))
    nss=nss+1
-   if (nss.gt.3) call error('getmf6',&
+   if (nss.gt.nssm) call error('getmf6',&
      'too many subsections for one particle',' ')
    iyss(nss)=l1
    jjss(nss)=jjss(nss-1)+ne
@@ -6392,9 +6438,9 @@ contains
    real(kr)::xc,elmax,epnn,epmax,w,xx,cc,c,umin,da
    real(kr)::dm,umax,un,u,yy,epp,ym,dy,wmin,wmax
    real(kr)::eps,e,t,epn,epm,epx,s,dx,epnxt,f,test
-   real(kr)::p(7)
    integer,parameter::imax=10
    integer,parameter::mxlg=65
+   real(kr)::p(mxlg)
    real(kr)::x(imax),y(imax,mxlg),yt(mxlg)
    real(kr),parameter::tol=0.005e0_kr
    real(kr),parameter::emax=1.e10_kr
@@ -6432,7 +6478,7 @@ contains
          elmax=e*(sqrt(epmax/e)+sqrt(xc))**2
          elmax=up*elmax
          epn=step*elmax
-         if (epmax.lt.xc*e) epn=e*(sqrt(epmax/e)-sqrt(xc))**2
+         if(epmax*up.lt.xc*e) epn=e*(sqrt(epmax/e)-sqrt(xc))**2
          if (epn.lt.epnext) epnext=epn
          eps=tiny/elmax
          epnext=dn*epnext
@@ -6664,12 +6710,7 @@ contains
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::tomev=1.e-6_kr
    real(kr),parameter::half=0.5e0_kr
-   real(kr),parameter::bach1=0.0236e0_kr
-   real(kr),parameter::bach2=0.0039e0_kr
-   real(kr),parameter::bach3=92.e0_kr
-   real(kr),parameter::bach4=90.e0_kr
    real(kr),parameter::zero=0
-   integer,parameter::k86=1
    save enow,efirst,nl,inow,lnow,mnow,ncnow,na,illdef
 
    !--initialize
@@ -6746,7 +6787,7 @@ contains
          enddo
          if (t.lt.zero) t=0
 
-      !--kalbach-mann or kalbach systematics
+      !--kalbach systematics
       else if (lang.eq.2) then
          s=0
          r=0
@@ -6770,25 +6811,10 @@ contains
             y2=cnow(lnow+2)
             call terp1(x1,y1,x2,y2,ep,r,lep)
          endif
-         if (k86.eq.0) then
-            ! kalbach-mann
-            call legndr(w,p,7)
-            t=half
-            do l=1,6
-               aa=bach1+bach2*l*(l+1)
-               ss=l*(l+1)
-               bb=bach3-bach4/sqrt(ss)
-               sa=1/(1+exp(aa*(bb-ep*tomev)))
-               tt=(2*l+1)*sa*p(l+1)/2
-               if (mod(l,2).eq.1) tt=tt*r
-               t=t+tt
-            enddo
-         else
-            ! kalbach-86
-            iza2=nint(zap)
-            aa=bach(izap,iza2,izat,enow,ep)
-            t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
-         endif
+         ! kalbach-86 (obsolete kalbach-mann coding has been deleted)
+         iza2=nint(zap)
+         aa=bach(izap,iza2,izat,enow,ep)
+         t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
          t=t*s
          if (t.lt.zero) t=0
 
@@ -6869,12 +6895,7 @@ contains
    real(kr)::p(mxlg)
    real(kr),parameter::tomev=1.e-6_kr
    real(kr),parameter::half=0.5e0_kr
-   real(kr),parameter::bach1=0.0236e0_kr
-   real(kr),parameter::bach2=0.0039e0_kr
-   real(kr),parameter::bach3=92.e0_kr
-   real(kr),parameter::bach4=490.e0_kr
    real(kr),parameter::zero=0.e0_kr
-   integer,parameter::k86=1
    save nl,inow,lnow,mnow,ncnow,na,enow
 
    !--initialize
@@ -6910,30 +6931,14 @@ contains
       t=t*cnow(inow+1)
       if (t.lt.zero) t=0
 
-   !--kalbach-mann or kalbach systematics
+   !--kalbach systematics
    else if (lang.eq.2) then
       s=cnow(inow+1)
       r=cnow(inow+2)
-      if (k86.eq.0) then
-         ! kalbach-mann
-         call legndr(w,p,7)
-         ep=enow
-         t=half
-         do l=1,6
-            aa=bach1+bach2*l*(l+1)
-            ss=l*(l+1)
-            bb=bach3-bach4/sqrt(ss)
-            sa=1/(1+exp(aa*(bb-ep*tomev)))
-            tt=(2*l+1)*sa*p(l+1)/2
-            if (mod(l,2).eq.1) tt=tt*r
-            t=t+tt
-         enddo
-      else
-         ! kalbach-86
-         iza2=nint(zap)
-         aa=bach(izap,iza2,izat,enow,epnext)
-         t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
-      endif
+      ! kalbach-86 (obsolete kalbach-mann coding has been deleted)
+      iza2=nint(zap)
+      aa=bach(izap,iza2,izat,enow,epnext)
+      t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
       t=t*s
       if (t.lt.zero) t=0
 
@@ -7499,6 +7504,7 @@ contains
    ! internals
    integer::iecl,iech,nqp0,nld,lidp,lcd,mft,mtt,idis
    integer::npo,ig,il,nqp,iqp,i2s,l,ndig,iii,ii,ld
+   integer::ignow,ngnow,ngn1
    real(kr)::ecl,ech,ecn,en,awr2,ast,whi,ep,aa,b,prob
    real(kr)::ai,at,cc1,ee,cc2,eta,sigc,wlab,fact,test
    real(kr)::ef,disc,af,wmin,wmax,wlo,wqp,wqw,zt,zi,wn
@@ -7553,6 +7559,7 @@ contains
    save iecl,iech,ecl,ech,ecn,nqp0
 
    nld=21
+   ngn1=ngn+1
    enext=emax
    idisc=0
    lidp=0
@@ -7586,6 +7593,8 @@ contains
    if (e.gt.thresh) ast=sqrt(awr2)*sqrt(1-thresh/e)
    ng=0
    ig=0
+   ngnow=1
+   ignow=0
    iglo=iech-1
    if (iglo.lt.1) iglo=1
    wmin=-1
@@ -7597,6 +7606,15 @@ contains
    whi=wmin
   410 continue
    ng=ng+1
+   if (ng.gt.ngn1) then
+      ng=ngn1
+      ig=ignow
+      do il=1,nl
+         ff(il,ng)=0
+      enddo
+      go to 465
+   endif
+   ngnow=ng
    do il=1,nl
       ff(il,ng)=0
    enddo
@@ -7604,6 +7622,12 @@ contains
   425 continue
    wlo=whi
    ig=ig+1
+   if (iglo+ig.gt.ngn1) then
+      ng=ngnow
+      ig=ig-1
+      go to 465
+   endif
+   ignow=ig
    ep=egn(iglo+ig)
    if ((mtd.eq.252.or.mtd.eq.253).and.ep.ge.e) go to 465
    whi=((ep/e)*(1+awr)**2/aprime-(1+ast*ast))/(2*ast)
@@ -8838,7 +8862,7 @@ contains
 
    !--initialize
    if (ed.eq.zero) then
-      ntmp=15000
+      ntmp=99000
       allocate(tmp(ntmp))
       call findf(matd,mfd,mtd,nin)
       call contio(nin,0,0,tmp,nb,nw)
@@ -8904,6 +8928,9 @@ contains
             np=nint(tmp(l+5))
             ll=l+5+2*nr
             e=0
+            !--if histogram interpolation, start with e equal
+            !  to the second energy point
+            if (nint(tmp(l+7)).eq.1) e=tmp(ll+3)
             do j=2,np
                if (tmp(ll+2*j).eq.tmp(ll+2)) e=tmp(ll+2*j-1)
             enddo
@@ -8911,6 +8938,8 @@ contains
             if (e.lt.econst) econst=e
             if (econst.eq.zero) idone=1
          enddo
+      else
+         econst=zero
       endif
       allocate(gyln(na))
       do i=1,na
@@ -9091,6 +9120,8 @@ contains
    mt0old=0
    mtnow=-1
    nnth=0
+   izatest=0
+   lastza=0
 
    !--loop over all sections of this material
   110 continue
@@ -9814,6 +9845,16 @@ contains
          mf10s(imf10)=mth
          mf10i(imf10)=10*izan
          lfs8(imf10)=iis
+         if (izan.ne.lastza) then
+            if (iis.eq.0) then
+               mlfs8(imf10)=0
+            else
+               mlfs8(imf10)=1
+            endif
+         else
+            mlfs8(imf10)=mlfs8(imf10-1)+1
+         endif
+         lastza=izan
          imf10=imf10+1
       enddo
    endif
@@ -9898,6 +9939,7 @@ contains
    integer::nktot,nupm,nb,nw,l,il,ik,lf,ln,ip,ne,nbt,int,nnow,idisc
    integer::nne,iraw,ir,nr,np,nnt,ig,lnow,i,llo,lhi,iout,ikt,mnow
    integer::ntmp,m,m1,klo,nrlo,nplo,khi,nrhi,nphi,jnt
+   integer::ier
    real(kr)::elo,delta,ee,e1,e2,ehi,pe,eihi,test,sigup,ethi,s
    real(kr)::xlo,xhi,xend,e1lo,e1hi,e2lo,e2hi,flo,fhi,fe
    real(kr)::val,fx,ex
@@ -9916,8 +9958,15 @@ contains
 
    !--initialize
    if (ed.eq.zero) then
-      ntmp=50000
-      allocate(tmp(ntmp))
+      ier=1
+      ntmp=250000
+      do while (ier.ne.0)
+         if (allocated(tmp)) deallocate(tmp)
+         allocate(tmp(ntmp),stat=ier)
+         if (ier.ne.0) then
+            ntmp=ntmp/2
+         endif
+      enddo
       call findf(matd,mfd,mtd,nin)
       call contio(nin,0,0,tmp,nb,nw)
       nktot=nint(tmp(5))
@@ -9936,7 +9985,7 @@ contains
          l=l+nw
          do while (nb.ne.0)
             if (l+nw.gt.ntmp) call error('getsed',&
-              'storage for tmp exceeded',' ')
+            'storage for tmp exceeded1',' ')
             call moreio(nin,0,0,tmp(l),nb,nw)
             l=l+nw
          enddo
@@ -9986,6 +10035,8 @@ contains
                       &'' using sqrt(E)'')')
                      mm=nint(tmp(l1+5))
                      do while (tmp(l1+10).gt.ex)
+                        if (l1+9+2*mm.gt.ntmp) call error('getsed',&
+                        'storage for tmp exceeded3',' ')
                         do ix=2*mm,1,-1
                            tmp(l1+9+ix)=tmp(l1+7+ix)
                         enddo
@@ -10044,7 +10095,7 @@ contains
                m=m+nw
                do while (nb.ne.0)
                   if (m.gt.ntmp) call error('getsed',&
-                    'storage for tmp exceeded',' ')
+                  'storage for tmp exceeded2',' ')
                   call moreio(nin,0,0,tmp(m),nb,nw)
                   m=m+nw
                enddo
@@ -10057,6 +10108,8 @@ contains
                    &'' using sqrt(E)'')')
                   mm=nint(tmp(m1+5))
                   do while (tmp(m1+10).gt.ex)
+                     if (m1+9+2*mm.gt.ntmp) call error('getsed',&
+                     'storage for tmp exceeded4',' ')
                      do ix=2*mm,1,-1
                         tmp(m1+9+ix)=tmp(m1+7+ix)
                      enddo
@@ -10070,6 +10123,7 @@ contains
                   enddo
                   tmp(m1+5)=mm
                   tmp(m1+6)=mm
+                  m=m1+8+2*mm
                   if (ismooth.eq.2) then
                      call tab1io(0,nsyso,0,tmp(m1),nb,nw)
                      i=m1
@@ -10359,12 +10413,6 @@ contains
    real(kr)::top,ca,ef,alpha,sa,sb,aa,bb,ab,fact,ap,bp,ans
    real(kr)::h(2)
    real(kr),parameter::xmin=1.e-3_kr
-   real(kr),parameter::a0=.3275911e0_kr
-   real(kr),parameter::a1=.254829592e0_kr
-   real(kr),parameter::a2=-.284496736e0_kr
-   real(kr),parameter::a3=1.421413741e0_kr
-   real(kr),parameter::a4=-1.453152027e0_kr
-   real(kr),parameter::a5=1.061405429e0_kr
    real(kr),parameter::thrhaf=1.5e0_kr
    real(kr),parameter::fivhaf=2.5e0_kr
    real(kr),parameter::brk=.01e0_kr
@@ -10429,16 +10477,13 @@ contains
       if (new.ne.0) then
          rc=sqrt(xc)
          r4=-xc
-         expa=exp(-rc*rc)
-         bot=rp4*(1-expa*erfc(rc))-rc*exp(r4)
+         bot=rp4*(1-erfc(rc))-rc*exp(r4)
       endif
       rl=sqrt(xlo)
       rh=sqrt(xhi)
       r3=-xlo
       r4=-xhi
-      expb=exp(-rh*rh)
-      expc=exp(-rl*rl)
-      top=rl*exp(r3)-rh*exp(r4)-rp4*(expb*erfc(rh)-expc*erfc(rl))
+      top=rl*exp(r3)-rh*exp(r4)-rp4*(erfc(rh)-erfc(rl))
       g=top/bot
 
    !--law 9.  evaporation spectrum.
@@ -10564,25 +10609,6 @@ contains
    endif
    return
 
-   contains
-      real(kr) function r(z)
-      real(kr)::z
-      real(kr),parameter::a0=.3275911e0_kr
-      r=1/(1+a0*abs(z))
-      return
-      end function r
-
-      real(kr) function rerfc(z)
-      real(kr)::z
-      real(kr),parameter::a1=.254829592e0_kr
-      real(kr),parameter::a2=-.284496736e0_kr
-      real(kr),parameter::a3=1.421413741e0_kr
-      real(kr),parameter::a4=-1.453152027e0_kr
-      real(kr),parameter::a5=1.061405429e0_kr
-      rerfc=r(z)*(a1+r(z)*(a2+r(z)*(a3+r(z)*(a4+a5*r(z)))))
-      return
-      end function rerfc
-
    end subroutine anased
 
    subroutine hnab(hh,aa,bb)
@@ -10614,9 +10640,9 @@ contains
 
    expa=exp(-aa*aa)
    expb=exp(-bb*bb)
-   fa(1)=1-expa*erfc(aa)
+   fa(1)=1-erfc(abs(aa))
    if (aa.lt.zero) fa(1)=-fa(1)
-   fb(1)=1-expb*erfc(bb)
+   fb(1)=1-erfc(abs(bb))
    if (bb.lt.zero) fb(1)=-fb(1)
    fa(2)=(1-expa)*resqpi
    fb(2)=(1-expb)*resqpi

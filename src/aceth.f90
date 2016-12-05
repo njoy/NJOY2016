@@ -56,6 +56,7 @@ contains
    real(kr)::temp,em,e,enext,clast,cnow,wtt,emin,sum
    real(kr)::grall,xl,yl,y,add,xn,yn,f,disc,sign,xbar,xlo,xhi
    real(kr)::area
+   real(kr)::delta
    character(60)::strng
    real(kr),dimension(:),allocatable::scr
    real(kr),dimension(:),allocatable::xs
@@ -63,6 +64,7 @@ contains
    real(kr),parameter::eps=1.e-5_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
+   real(kr),parameter::ttol=1
 
    integer::nout=10
    integer::nscr=11
@@ -113,16 +115,16 @@ contains
    call repoz(nin)
    call tpidio(nin,0,0,xs,nb,nw)
    temp=0
-   do while(abs(temp-tempd).ge.tempd/100+1)
+   delta=ttol
+   do while (delta.ge.ttol)
       call contio(nin,0,0,xs,nb,nw)
       aw0=xs(2)
       if (iverf.ge.5) call contio(nin,0,0,xs,nb,nw)
       if (iverf.ge.6) call contio(nin,0,0,xs,nb,nw)
       call contio(nin,0,0,xs,nb,nw)
       temp=xs(1)
-      if (abs(temp-tempd).ge.tempd/100+1) then
-         call tomend(nin,0,0,xs)
-      endif
+      delta=abs(temp-tempd)
+      if (delta.ge.ttol) call tomend(nin,0,0,xs)
    enddo
 
    !--copy incoherent (and coherent elastic) cross section to nscr
@@ -658,9 +660,9 @@ contains
    itix=itie+1+nie
    itxe=itix+nie
    if (ifeng.gt.1) len2=len2+2*nie
-   len2=len2+itxe
+   len2=len2+itxe-1
    if (nee.gt.0) then
-      itce=len2
+      itce=len2+1
       itcx=itce+nee+1
       len2=itcx+nee-1
    endif

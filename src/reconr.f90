@@ -142,6 +142,7 @@ contains
    real(kr),parameter::elow=1.e-5_kr
    real(kr),parameter::ehigh=20.e6_kr
    real(kr),parameter::elarge=9.e9_kr
+   logical there
 
    !--set samrml options
    Want_Partial_Derivs=.false.
@@ -375,6 +376,9 @@ contains
          if (allocated(tr)) deallocate(tr)
          if (allocated(ti)) deallocate(ti)
          if (allocated(sunr)) deallocate(sunr)
+         !-- careful, unit number must match nscrl from resxs.
+         inquire(unit=16,exist=there)
+         if (there) call closz(16)
       else
          deallocate(enode)
       endif
@@ -1898,7 +1902,7 @@ contains
    l=7+2*nint(scr(5))
    if (scr(l+1).ne.zero) then
       write(text,'(''xsec nonzero at threshold for mt='',i3)') mth
-      call mess('lunion',text,'adusted using jump in xsec')
+      call mess('lunion',text,'adjusted using jump in xsec')
    endif
    if (scr(l).ge.thrxx) go to 190
    thrx=thrxx
@@ -2537,7 +2541,6 @@ contains
    deallocate(bufg)
    deallocate(bufr)
    call closz(-nscr)
-   call closz(-nscrl)
    return
    end subroutine resxs
 
@@ -4194,7 +4197,7 @@ contains
          ! interpolate parameters at energy of interest
          i1=inow
          if ((i1+6).lt.jnow) then
-            do while (res(i1+6).lt.e)
+            do while (res(i1+6).le.e-small)
                i1=i1+6
             enddo
          endif

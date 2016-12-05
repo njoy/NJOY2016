@@ -26,12 +26,14 @@ module heatm
    integer::mt103,mt104,mt105,mt106,mt107,mt16
    integer::miss4(250),nmiss4
    integer::i6,mt6(maxmf6),i6g,mt6no(maxmf6)
+   integer::i6p,mt6yp(maxmf6)
    real(kr)::q,zat,awrt,zap,awp
    integer::lct
    integer::idame
    real(kr)::ebot,etop
    integer::mt458,nply
    real(kr),dimension(:),allocatable::c458,cpoly
+   real(kr)::emc2,tm,rtm
 
    ! target
    integer::izat
@@ -125,6 +127,7 @@ contains
    use mainio ! provides nsysi,nsyso
    use util   ! provides timer,openz,error,mess,repoz,closz
    use endf   ! provides endf routines and variables
+   use physics ! provides amassn,amu,ev,clight
    ! internals
    integer::ntemp,local,npkk,i,nz,j,isave,iz,loc,nzq,nz0
    integer::nscr,nend4,nend6,iold,inew,itemp,idone,nb,nw
@@ -317,6 +320,9 @@ contains
          else
             za=c1h
             awr=c2h
+            emc2=amassn*amu*clight*clight/ev
+            tm=emc2*(awr+1)
+            rtm=1/tm
 
             !--check on default damage displacement energy
             if (break.eq.zero) then
@@ -713,6 +719,8 @@ contains
    !--prepare a scratch tape for file 6
    !--check for missing recoil subsections
    !--and check for photon data
+   i6p=0
+   mt6yp=0
    if (i6.gt.0) then
       call repoz(nend6)
       nsp=1
@@ -736,6 +744,10 @@ contains
                call tab1io(nendf,nend6,0,scr,nb,nw)
                nr=n1h
                zap=c1h
+               if (nint(zap).eq.0) then
+                  i6p=i6p+1
+                  mt6yp(i6p)=mth
+               endif
                lf=l1h
                if (mth.eq.5) zar=0
                if (mth.ne.5) then
@@ -896,7 +908,6 @@ contains
    use mainio ! provides nsyso
    use util   ! provides error,mess,loada,finda,skiprz,sigfig
    use endf   ! provides endf routines and variables
-   use physics ! provides amassn,amu,ev,clight
    ! externals
    integer::iold,inew,nscr,nend4,nend6,local
    ! internals
@@ -905,7 +916,7 @@ contains
    integer::ipx,irx,ilist,nn,iii,lq0,idx,ii,indxx
    integer::npkt,intt,isave,npkkk,nwmax,iflag
    real(kr)::awfac,aw1fac,e,emev,thresh,y,t,qendf,pnue
-   real(kr)::emc2,tm,rtm,qs,q0,ebar,dame,yld,qsave
+   real(kr)::qs,q0,ebar,dame,yld,qsave
    real(kr)::elst,yld0,xxx,test,enext,enx,q00,ebal6,h
    real(kr)::ebarp,yldp,yp,hp,damep,ebal6p,hmin,hmax,tt
    real(kr)::c(30)
@@ -940,9 +951,9 @@ contains
 
    !--allocate storage
    allocate(b(npage+50))
-   nwmax=7000
+   nwmax=250000
    allocate(d(nwmax))
-   na=10000
+   na=500000
    allocate(a(na))
    allocate(scr(npage+50))
    allocate(bufo(nbuf))
@@ -999,6 +1010,7 @@ contains
    if (mth.gt.200.and.mth.lt.600) go to 110
    zat=c1h
    awrt=c2h
+   izat=nint(zat)
    go to 120
   110 continue
    call tosend(nin,0,0,scr)
@@ -1012,9 +1024,6 @@ contains
    t=c1h
    q=c2h
    qendf=q
-   emc2=amassn*amu*clight*clight/ev
-   tm=emc2*(awr+1)
-   rtm=1/tm
    lr=l2h
    qs=0
    q0=0
@@ -1193,7 +1202,6 @@ contains
    go to 182
   179 continue
    izap=nint(zap)
-   izat=nint(zat)
    if (irec.gt.0) then
       if (mod(izat,1000).eq.0) then
          izap=1000*(izat/1000-izap/1000)
@@ -1618,14 +1626,13 @@ contains
    !-------------------------------------------------------------------
    ! Compute damage energy for capture reactions.
    !-------------------------------------------------------------------
-   use physics ! provides amassn,amu,ev,clight
    use endf    ! provides iverf,terp1
    ! externals
    integer::mtd
    real(kr)::ee,dame,q,za,awr
    ! internals
    integer::iq,iz
-   real(kr)::e,emc2,tm,rtm,zx,ax,denom,z,en,aw1fac
+   real(kr)::e,zx,ax,denom,z,en,aw1fac
    real(kr)::damn,daml,el,er,ea,ec,et
    real(kr),dimension(4),parameter::qp=(/&
       -.86114e0_kr,-.33998e0_kr,.33998e0_kr,.86114e0_kr/)
@@ -1638,16 +1645,11 @@ contains
    integer,parameter::nq=4
    real(kr),parameter::zero=0
    save en,damn,el,daml
-   save rtm,zx,ax,denom,z,aw1fac
+   save zx,ax,denom,z,aw1fac
 
    !--initialize
    e=ee
    if (e.eq.zero) then
-      if (mtd.eq.102) then
-         emc2=amassn*amu*clight*clight/ev
-         tm=emc2*(awr+1)
-         rtm=1/tm
-      endif
       zx=0
       if (mtd.gt.102) zx=1
       if (mtd.eq.106.or.mtd.eq.107) zx=2
@@ -3359,7 +3361,7 @@ contains
       elmax=e*(sqrt(epmax/e)+sqrt(xc))**2
       elmax=up*elmax
       epn=step*elmax
-      if (epmax.lt.xc*e) epn=e*(sqrt(epmax/e)-sqrt(xc))**2
+      if(epmax*up.lt.xc*e) epn=e*(sqrt(epmax/e)-sqrt(xc))**2
       if (epn.lt.epnext) epnext=epn
       eps=tiny/elmax
       epnext=dn*epnext
@@ -3557,7 +3559,7 @@ contains
    integer::lang,lep
    real(kr)::ep,epnext,epmax,w,cnow(*)
    ! internals
-   integer::izat,ndnow,npnow,ncnow,mnow,inow,lnow,nl,na,l,lll
+   integer::ndnow,npnow,ncnow,mnow,inow,lnow,nl,na,l,lll
    integer::iza2,inn,ii,jj,ia,illdef
    real(kr)::enow,efirst,eplast,t,tt,s,r,aa,tii,tjj
    real(kr)::x1,x2,y1,y2
@@ -3570,11 +3572,10 @@ contains
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::zero=0
-   save izat,efirst,enow,nl,inow,mnow,lnow,ncnow,na,illdef
+   save efirst,enow,nl,inow,mnow,lnow,ncnow,na,illdef
 
    !--initialize
    if (ep.eq.zero) then
-      izat=nint(zat)
       enow=cnow(2)
       ndnow=nint(cnow(3))
       npnow=nint(cnow(6))
@@ -3607,6 +3608,7 @@ contains
   135 continue
    go to 150
   140 continue
+   if (lnow.le.ncnow) go to 200
    eplast=cnow(lnow-ncnow)
    if (ep.ge.off*eplast) go to 150
    if (lnow.le.inow+ncnow) go to 150
@@ -4006,13 +4008,12 @@ contains
    ! corresponding damage energy for File 6 capture photons
    !-------------------------------------------------------------------
    use endf ! provides terp1
-   use physics ! provides amassn,amu,ev,clight
    ! externals
    integer::law
    real(kr)::g,h,a(*),z,awr
    ! internals
    integer::nd,np,ncyc,ibase,inn,nc,i,j
-   real(kr)::emc2,ein,rein,x,y,xr,awc,xh,yh,xl,yl,dx,s
+   real(kr)::ein,rein,x,y,xr,awc,xh,yh,xl,yl,dx,s
    integer,parameter::nq=4
    real(kr),dimension(nq),parameter::qp=(/&
      -.86114e0_kr,-.33998e0_kr,.33998e0_kr,.86114e0_kr/)
@@ -4020,8 +4021,7 @@ contains
      .34785e0_kr,.65215e0_kr,.65215e0_kr,.34785e0_kr/)
 
    !--initialize
-   emc2=amassn*amu*clight*clight/ev
-   ein=2*emc2*(awr+1)
+   ein=2*tm
    rein=1/ein
    g=0
    h=0
@@ -4912,14 +4912,18 @@ contains
    integer::irec
    real(kr)::e,ebar,dame,disc102,zp,ap,zt,at
    real(kr)::c(*)
+   ! internals
+   real(kr)::er,eg2
 
-   !--approximate using discrete gamma for now
    if (irec.eq.0) then
       ebar=disc102+e*awr/(1+awr)
       dame=0
    else
-      ebar=e/(awr+1)
-      dame=df(e,zp,ap,zt,at)
+      !--include recoil energy plus photon "kick" energy
+      er=e/(awr+1)
+      eg2=disc102*disc102*rtm/2
+      ebar=er+eg2
+      dame=df(ebar,zp,ap,zt,at)
    endif
    return
    end subroutine hgam102
@@ -4930,7 +4934,6 @@ contains
    !-------------------------------------------------------------------
    use util ! provides error,mess,loada,finda,sigfig
    use mainio ! provides nsyso
-   use physics ! provides amassn,amu,ev,clight
    use endf ! provides endf routines and variables
    ! externals
    integer::iold,inew,nscr
@@ -4938,7 +4941,7 @@ contains
    integer::nb,nw,mfd,mgam,nk,ik,mfc,mtc,npkk,npkt
    integer::lo,mfx,mtx,mtd,jdis,ilist,nwd,lp,lqx,idis
    integer::i,ipx,irx,nmt,mty,idx,ii,indxx,it,isave,jerr,nd
-   real(kr)::afact,aw1fac,emc2,tm,rtm,z,e,dame
+   real(kr)::afact,aw1fac,z,e,dame
    real(kr)::cerr,enxt,el,elow,ehigh,test,thresh
    real(kr)::egkr,ebar,egam,edam,damn,enext,enx,egk
    real(kr)::h,hk,cfix,eava,ebarp,xp,yp,hp,egamp,edamp
@@ -4954,6 +4957,8 @@ contains
    real(kr),parameter::smin=1.e-9_kr
    real(kr),parameter::qtest=99.e6_kr
    real(kr),parameter::zero=0
+   integer::mf6flg
+   character(len=70)::strng1,strng2
 
    !--allocate buffers for loada/finda
    allocate(bufo(nbuf))
@@ -4964,9 +4969,6 @@ contains
    mfd=3
    afact=awr/(awr+1)
    aw1fac=1/(awr+1)
-   emc2=amassn*amu*clight*clight/ev
-   tm=emc2*(awr+1)
-   rtm=1/tm
    z=nint(za/1000)
    e=0
    dame=df(e,z,awr,z,awr)
@@ -5000,6 +5002,22 @@ contains
    if (mfh.eq.12.and.mth.eq.460) then
       call tosend(nscr,0,0,scr)
       go to 105
+   endif
+   ! skip over this mf/mt if photon data were already found in mf6
+   if (i6p.gt.0) then
+      mf6flg=0
+      do i=1,i6p
+         if (mt6yp(i).ne.mth) cycle
+         mf6flg=1
+         exit
+      enddo
+      if (mf6flg.ne.0) then
+         write(strng1,'(''skipping mf'',i2,''/mt = '',i3)')mfh,mth
+         write(strng2,'(''photons were already processed in mf6'')')
+         call mess('gheat ',strng1,strng2)
+         call tosend(nscr,0,0,scr)
+         go to 105
+      endif
    endif
    lo=l1h
    if (lo.eq.2) call error('gheat','lo=2 not coded.',' ')
@@ -5454,13 +5472,12 @@ contains
    ! corresponding damage energy for a tabulated section of File 15.
    !-------------------------------------------------------------------
    use endf ! provides terp1
-   use physics ! provides amassn,amu,ev,clight
    ! externals
    integer::law
    real(kr)::g,h,a(*),z,awr
    ! internals
    integer::nr,np,ibase,ir,nbt,inn,i,j
-   real(kr)::emc2,ein,rein,xl,yl,xh,yh,dx,x,y,xr,s
+   real(kr)::ein,rein,xl,yl,xh,yh,dx,x,y,xr,s
    integer,parameter::nq=4
    real(kr),dimension(nq),parameter::qp=(/&
      -.86114e0_kr,-.33998e0_kr,.33998e0_kr,.86114e0_kr/)
@@ -5468,8 +5485,7 @@ contains
      .34785e0_kr,.65215e0_kr,.65215e0_kr,.34785e0_kr/)
 
    !--initialize
-   emc2=amassn*amu*clight*clight/ev
-   ein=2*emc2*(awr+1)
+   ein=2*tm
    rein=1/ein
    g=0
    h=0
@@ -5515,18 +5531,13 @@ contains
    !-------------------------------------------------------------------
    ! Compute recoil and damage energy of discrete capture photons.
    !-------------------------------------------------------------------
-   use physics ! provides amassn,amu,ev,clight
    ! externals
    real(kr)::e,egam,edam,z,awr
    ! internals
-   real(kr)::emc2,tm,rtm
    real(kr),parameter::zero=0
-   save rtm
 
    if (e.eq.zero) then
-      emc2=amassn*amu*clight*clight/ev
-      tm=emc2*(awr+1)
-      rtm=1/tm
+      return
    else
       egam=e*e*rtm/2
       edam=df(egam,z,awr+1,z,awr)

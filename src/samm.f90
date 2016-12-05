@@ -28,6 +28,7 @@ module samm
    integer::ngroup,mchan,nres,npp,ntriag,npar,lllmax,kkxlmn
    integer::nrext,krext,nparr,nerm
    integer,dimension(12)::ngroupm,nppm,nresm
+   integer,parameter::lllmaxx=10
    real(kr)::awr,su
 
    integer,dimension(:,:),allocatable::nchan
@@ -82,9 +83,9 @@ contains
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
    ! externals
+   integer::nmtres,ncoef,nresp,ier
    real(kr)::e,sigp(nmtres+2),siga(ncoef,nmtres),sigd(nresp,nmtres)
    integer::mmtres(10)
-   integer::nmtres,ncoef,nresp,ier
    ! internals
    integer::i,l
    real(kr),parameter::cut=1.e-3_kr
@@ -267,7 +268,7 @@ contains
 
          !--check for energy-dependent scattering radius
          if (nro.ne.0) then
-            if (mode.ne.2) call error('s2sammy',&
+            if (lru.eq.1 .and. lrf.ne.2) call error('s2sammy',&
               &'energy-dep scattering length',&
               &'only works for mlbw')
             call tab1io(nin,0,0,res(jnow),nb,nw)
@@ -548,7 +549,10 @@ contains
   10 continue
 
    !--allocate arrays for reading the resonance parameters
-   if (nmtres.gt.0) call allo
+   if (nmtres.gt.0) then
+      lllmax=lllmaxx
+      call allo
+   endif
    if (nmtres.eq.0) deallocate(nchan)
 
    return
@@ -1411,7 +1415,7 @@ contains
    ncoef=1
    if (Want_Angular_Dist) then
       call angle(ier)
-      ncoef=lllmax+1
+      ncoef=lllmax
    endif
 
    !--generate energy-independent portion of derivatives
@@ -1805,7 +1809,7 @@ contains
                      if (gamma(j,ires,ier).lt.zero)&
                        betapr(j,ires,ier)=-betapr(j,ires,ier)
                   else
-                     ex=abs(abs(eres(ires,ier))-echan(j,ig,ier))
+                     ex=abs(eres(ires,ier)-echan(j,ig,ier))
                      if (ex.ne.zero) then
                         ex=sqrt(ex)
                         rho=zkte(j,ig,ier)*ex
@@ -2075,6 +2079,9 @@ contains
       if (kountll(ll).eq.1) l=ll
    enddo
    lllmax=l
+   if (lllmax.gt.lllmaxx) then
+      call error('lmaxxx','need larger lllmaxxx','')
+   endif
 
    return
    end subroutine lmaxxx
@@ -3252,7 +3259,6 @@ contains
             else
                !--here penetrability is very small but non-zero
                psmall(i,ier)=rootp(i,ier)
-               if (psmall(i,ier).lt.1.0e-20_kr) psmall(i,ier)=-1
                ymat(1,ii,ier)=p*ymat(1,ii,ier)
                ymat(2,ii,ier)=p*ymat(2,ii,ier)-one
                rmat(1,ii,ier)=p*rmat(1,ii,ier)
@@ -6351,12 +6357,9 @@ contains
          ik=ijkl(i,k)
          xqr(k,i,ier)=plri*yinv(1,ik,ier)-plii*yinv(2,ik,ier)
          xqi(k,i,ier)=plri*yinv(2,ik,ier)+plii*yinv(1,ik,ier)
-         if (psmall(k,ier).gt.zero) then
+         if (psmall(k,ier).ne.zero) then
             xqr(k,i,ier)=xqr(k,i,ier)*psmall(k,ier)
             xqi(k,i,ier)=xqi(k,i,ier)*psmall(k,ier)
-         else if (psmall(k,ier).lt.zero) then
-            xqr(k,i,ier)=0
-            xqi(k,i,ier)=0
          endif
       enddo
    enddo

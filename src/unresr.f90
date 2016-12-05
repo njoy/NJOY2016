@@ -174,7 +174,7 @@ contains
    allocate(sb(nunr,4))
    call rdunf3(eunr,sb,nunr,scr)
   130 continue
-   nb=5000
+   nb=12+nsigz+nunr*(1+5*nsigz)
    allocate(b(nb))
    l=1
    b(l)=za
@@ -458,7 +458,7 @@ contains
    !--read through this sub-section
    call contio(nendf,0,0,scr,nb,nw)
    nls=n1h
-   if (lrf.eq.4) then
+   if (lrf.eq.4.or.lrf.eq.7) then
       call listio(nendf,0,0,scr,nb,nw)
       do while (nb.ne.0)
          call moreio(nendf,0,0,scr,nb,nw)
@@ -470,6 +470,12 @@ contains
          do while (nb.ne.0)
             call moreio(nendf,0,0,scr,nb,nw)
          enddo
+         if (lrf.eq.7) then
+            call listio(nendf,0,0,scr,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nendf,0,0,scr,nb,nw)
+            enddo
+         endif
       else
          call contio(nendf,0,0,scr,nb,nw)
             njs=n1h

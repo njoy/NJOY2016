@@ -138,12 +138,14 @@ contains
    integer::mt4i,llf,llc,ir,ip,ireac,nbo,nwo,nnn,j1
    integer::mt103,mt104,mt105,mt106,mt107,mpmin,mpmax
    integer::mdmin,mdmax,mtmin,mtmax,m3min,m3max,m4min,m4max
+   integer::lru
    real(kr)::time,temp1,diff,test,thnmx,emin,temp,awr,enext
    real(kr)::sig,en,sun,tempin,break,enow,eone,tev,picon
    real(kr)::fint,cint,alint,etint,v1int,ssf,slf,ssc,slc
    real(kr)::elast,flast,fnul,sf,sc,ss,fnu,xnext,eresh
    real(kr)::ftev,ctev,fnow,ee
    real(kr)::tt(ntt+1)
+   real(kr)::emax
    integer::mtr(ntt),mti(ntt)
    real(kr),dimension(:),allocatable::bufo,bufn
    real(kr),dimension(:),allocatable::scr
@@ -226,10 +228,24 @@ contains
    allocate(bufo(nbuf))
    allocate(bufn(nbuf))
 
-   !**search input endf tape for mf1/mt452, total nubar
+   !--search input endf tape for some parameters ...
+   !  - maximum file energy, emax.
+   !  - total nu-bar (mf1/mt452).
+   !  - resonance flag, lru (from mf2/mt151).
    call repoz(nendf)
    call tpidio(nendf,0,0,scr,nb,nw)
    call findf(mat1,1,0,nendf)
+   !--read input file emax and make sure thnmx is legal
+   emax=20.e6_kr !assumed maximum energy
+   call contio(nendf,0,0,scr,nb,nw) !first record
+   call contio(nendf,0,0,scr,nb,nw) !second record
+   if (n1h.eq.0.and.n2h.ne.0) then
+      call contio(nendf,0,0,scr,nb,nw)
+      if (c2h.gt.zero) emax=c2h
+   endif
+   if (abs(thnmx).ge.0.9999*emax) call error('broadr',&
+      'max. energy is too large for this input file','')
+   !--read input file nu-bar, if present
    lnu=0
   101 continue
    call contio(nendf,0,0,scr,nb,nw)
@@ -261,6 +277,17 @@ contains
    call tosend(nendf,0,0,scr)
    go to 101
   107 continue
+   !--read the (lru) resonance flag
+   lru=0
+   if (mfh.le.1) then
+      if (mfh.eq. 1) call tofend(nendf,0,0,scr)
+      call contio(nendf,0,0,scr,nb,nw)
+   endif
+   if (mfh.eq.2) then
+      call contio(nendf,0,0,scr,nb,nw)
+      call contio(nendf,0,0,scr,nb,nw)
+      lru=l1h
+   endif
 
    !--search for desired mat1 at temp1 on input tape.
    !--if restart is requested, copy all t.le.temp1 to output tape.
@@ -326,6 +353,7 @@ contains
       call contio(nin,no,nscr1,scr,nb,nw)
       call contio(nin,no,nscr1,scr,nb,nw)
       eresh=c2h
+      if ((lru.eq.0.or.lru.eq.2).and.eresh.gt.onemev) eresh=onemev
       call tosend(nin,no,nscr1,scr)
       call contio(nin,no,nscr1,scr,nb,nw)
       if (mfh.ne.0) then

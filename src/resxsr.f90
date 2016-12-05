@@ -407,7 +407,7 @@ contains
    enddo
    ia(iscr+mult+n+1)=jx/n
    ia(iscr+mult+n+2)=je
-   write(nscr) ha(1),(a(mult+i),i=1,n),ia(nwds-1),ia(nwds)
+   write(nscr) ha(1),(a(mult+i),i=iscr,iscr+n),ia(nwds-1),ia(nwds)
 
    !--write the thinned cross-section blocks
    nn=1+jx
@@ -475,6 +475,7 @@ contains
    !--copy the material control and cross-section blocks
    !--from the scratch file to nout
    krec=0
+   call repoz(-nscr)
    do i=1,nmat
       krec=krec+1
       nwr=1+ntemp(i)
@@ -494,7 +495,7 @@ contains
          krec=krec+1
          read(nscr)(a(k),k=1,nwds)
          jrec=jrec+1
-         write(nscr)(a(k),k=1,nwds)
+         write(nout)(a(k),k=1,nwds)
          nw=nw-nwds
       enddo
    enddo
