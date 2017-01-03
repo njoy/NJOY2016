@@ -1,0 +1,33 @@
+if ( NOT PYTHON_EXECUTABLE )
+  find_package( PythonInterp )
+  if ( NOT PYTHONINTERP_FOUND )
+    message( FATAL_ERROR "Python interpeter installation was not found." )
+  endif()
+endif()
+
+set( RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/resources" )
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/execute.py"
+               "${CMAKE_CURRENT_BINARY_DIR}/execute.py" COPYONLY )
+
+add_subdirectory( "01" )	     
+add_subdirectory( "02" )	     
+add_subdirectory( "03" )	     
+add_subdirectory( "04" )	     
+add_subdirectory( "05" )	     
+add_subdirectory( "06" )	     
+add_subdirectory( "07" )	     
+add_subdirectory( "08" )	     
+add_subdirectory( "09" )
+add_subdirectory( "10" )	     
+add_subdirectory( "11" )	     
+add_subdirectory( "12" )
+add_subdirectory( "13" )	     
+add_subdirectory( "14" )
+add_subdirectory( "15" )
+add_subdirectory( "16" )
+add_subdirectory( "17" )	     
+add_subdirectory( "18" )
+add_subdirectory( "19" )	     
+add_subdirectory( "20" )
+

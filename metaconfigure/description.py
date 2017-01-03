@@ -159,14 +159,15 @@ def generate( name, target, language, version, is_external_project = False,
 
     global root
     root = os.getcwd()
-    set_extensions( state )              
+    set_extensions( state )
+    evaluate_src_leaf( state )
     os.chdir( 'src' )
     evaluate_branch( state )
     if target == 'executable':
         driver = None
         for extension in state['implementation_extensions']:
-            possible_driver = name + '.' + extension
-            if trial in implementation_files:
+            possible_driver = 'src/main.' + extension
+            if possible_driver in state['implementation_files']:
                 driver = possible_driver
                 break
         

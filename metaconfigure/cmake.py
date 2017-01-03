@@ -305,11 +305,13 @@ def link_dependencies( state ):
         contents += ' INTERFACE {}'.format(name)
       else:
         contents += ' PUBLIC {}'.format(name)
+        
     contents += ' ) \n'
+    
   contents += '\n'
   return contents
 
-def add_unit_tests( state ):
+def add_tests( state ):
     contents = ''
     if not state['is_external_project'] and state['unit_tests']:
         name = state['name']
@@ -324,6 +326,7 @@ def add_unit_tests( state ):
                 split = '\n                '
             else:
                 split = ' '
+                
             test_contents += split + split.join( [ os.path.split( entry )[1] for entry in sources ] ) + ' )'
             test_contents += textwrap.dedent(
                 """
@@ -338,10 +341,17 @@ def add_unit_tests( state ):
             if os.path.isdir( os.path.join( directory, 'resources' ) ):
                 test_contents += 'file( GLOB resources "resources/*" ) \n'
                 test_contents += 'file( COPY "${resources}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}" ) \n'
+                
             test_contents += 'add_test( NAME {} COMMAND {} ) \n'.format(test_name, executable_name)
             with open( os.path.join( directory, 'CMakeLists.txt' ), 'w') as TestCMakeFile:
                 TestCMakeFile.write( test_contents )
+                
+        if state['target'] == 'executable' and \
+           os.path.isdir( os.path.join( os.getcwd(), 'test' ) ) :
+            contents += '    add_subdirectory( test ) \n'
+          
         contents += 'endif() \n'
+        
     return contents
 
 def generate():
@@ -358,6 +368,6 @@ def generate():
   contents += print_banner( state )
   contents += add_targets( state )
   contents += link_dependencies( state )
-  contents += add_unit_tests( state )
+  contents += add_tests( state )
   with open('CMakeLists.txt', 'w') as CMakeFile:
     CMakeFile.write(contents)
