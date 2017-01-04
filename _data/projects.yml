@@ -1,3 +1,0 @@
- - name: "utility"
-   url: "https://github.com/njoy/utility"
-   description: "Generic utilities used throughout all NJOY subprojects."
