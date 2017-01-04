@@ -2,7 +2,7 @@
    url: "/Build/index.html"
 
  - title: "Developers"
-   url: "/Developers/index.html"
+   url: "/DevelopersGuide/"
 
  - title: "Projects"
    url: "/Projects.html"
