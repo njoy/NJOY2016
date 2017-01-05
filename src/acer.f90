@@ -1,5 +1,5 @@
 module acem
-   ! provides acer for NJOY2012
+   ! provides acer for NJOY2016
      use locale
      implicit none
 

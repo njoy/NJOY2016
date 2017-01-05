@@ -1,5 +1,5 @@
 module mathm
-   ! Math routines for NJOY2012.
+   ! Math routines for NJOY2016.
    use locale
    implicit none
    private

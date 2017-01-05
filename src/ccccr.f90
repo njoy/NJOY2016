@@ -1,5 +1,5 @@
 module ccccm
-   ! provides subroutine ccccr for NJOY2012
+   ! provides subroutine ccccr for NJOY2016
    use locale
    implicit none
    private

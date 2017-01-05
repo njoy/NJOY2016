@@ -1,5 +1,5 @@
 module unresm
-   ! module to provide unresr for NJOY2012
+   ! module to provide unresr for NJOY2016
    use locale
    implicit none
    private

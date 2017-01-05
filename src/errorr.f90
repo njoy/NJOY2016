@@ -1,5 +1,5 @@
 module errorm
-   ! provides error for NJOY2012
+   ! provides error for NJOY2016
    use locale
    implicit none
    private

@@ -3778,7 +3778,7 @@ contains
    llmax=lll+2
    if (llmax.gt.100) call error('pspcou','llmax larger than 100',' ')
 
-   if (rho.lt.0.02e0_kr) then
+   if (rho.lt.1.02e0_kr) then
 
       call coulx(eta,rho,lll,llmax,f,fpr,g,gpr,dummy,pencoul,shiftcoul,&
         dpencoul,sinphi,cosphi,dphi,jdopha,jdoder,ishift)

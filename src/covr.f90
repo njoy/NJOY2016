@@ -1,5 +1,5 @@
 module covm
-   ! provides subroutine covr for NJOY2012
+   ! provides subroutine covr for NJOY2016
    use locale
    implicit none
    private

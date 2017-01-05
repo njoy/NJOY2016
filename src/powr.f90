@@ -1,5 +1,5 @@
 module powm
-   ! provides subroutine powr for NJOY2012
+   ! provides subroutine powr for NJOY2016
    use locale
    implicit none
    private

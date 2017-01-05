@@ -1,5 +1,5 @@
 module wimsm
-   ! provides subroutine wimsr for NJOY2012
+   ! provides subroutine wimsr for NJOY2016
    use locale
    implicit none
    private

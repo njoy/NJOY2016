@@ -1,5 +1,5 @@
 module heatm
-   ! provides heatr for NJOY2012
+   ! provides heatr for NJOY2016
    use locale
    implicit none
    private

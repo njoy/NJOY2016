@@ -1,5 +1,5 @@
 module reconm
-   ! Module to provide reconr for NJOY2012
+   ! Module to provide reconr for NJOY2016
    use locale
    implicit none
    private
@@ -10,6 +10,7 @@ module reconm
    integer::nin,nout
    real(kr)::zain,awin
    real(kr)::zai,el,eh,err,errmax,errint,za,awr,tempr,q18
+   real(kr)::tempi
    real(kr)::elis,sta,efmax
    integer::lis,lis0,nfor,lrel,nver
    integer::lfw,mata,itype,lrp,lfi,lssf,lrx
@@ -215,6 +216,7 @@ contains
          call findf(mata,1,451,nin)
 
          !--process file 1
+         tempi=0
          call contio(nin,0,0,scr,nb,nw)
          za=c1h
          awr=c2h
@@ -255,6 +257,7 @@ contains
             call error('reconr','illegal nsub for reconr',' ')
          endif
          call hdatio(nin,0,0,scr,nb,nw)
+         if (iverf.ge.6) tempi=scr(1)
          do i=1,17
             z(i)=scr(6+i)
          enddo
@@ -5007,6 +5010,7 @@ contains
       call contio(0,nout,0,scr,nb,nw)
    endif
    scr(1)=tempr
+   if (tempr.eq.0) scr(1)=tempi
    scr(2)=err
    scr(3)=0
    if (iverf.eq.6) scr(3)=1
@@ -5034,6 +5038,9 @@ contains
       nw=nw+17
       nc=nc+17
    enddo
+   nxcc=nxc
+   if (nint(zain).eq.1.and.no3.eq.0) nxcc=nxcc-1
+   scr(6)=nxcc+nmtr+i152
    call hdatio(0,nout,0,scr,nb,nw)
    no2=1
    if (nxc.ne.0) then
@@ -5043,8 +5050,6 @@ contains
       j=0
       imtr=1
       idone=0
-      nxcc=nxc
-      if (nint(zain).eq.1.and.no3.eq.0) nxcc=nxcc-1
       do i=1,nxcc
          if (mfs(i).eq.2) no2=0
          if (mfs(i).eq.3.or.mfs(i).eq.23) then
@@ -5111,7 +5116,7 @@ contains
             j=j+6
          endif
       enddo
-      nw=nxc+nmtr+i152
+      nw=nxcc+nmtr+i152
       if (ncoef.gt.1) then
          nw=nw+nmtres-1
       endif
@@ -5173,7 +5178,8 @@ contains
    n2l=n2h
    mfl=mfh
    mtl=mth
-   if (nint(zain).eq.1.and.mfl.gt.3) then
+   !--test mfl=0 (occurs when all mf3 data are redundant and removed)
+   if (nint(zain).eq.1.and.(mfl.eq.0.or.mfl.gt.3)) then
       scr(3)=0
       scr(4)=99
       scr(5)=0
@@ -5197,6 +5203,8 @@ contains
       call tab1io(0,nout,0,scr,nb,nw)
       call asend(nout,0)
       call afend(nout,0)
+   !--if no other mf3 sections on scratch, copy the rest
+      if(mfl.eq.0) go to 272
       goto 270
    endif
    mth=1
@@ -5307,6 +5315,7 @@ contains
    call tofend(nscr,nout,0,scr)
 
    !--process angular coefficients
+  272 continue
    if (ncoef.gt.1) then
       do imt=2,nmtres
          if (imt.eq.2) l=1

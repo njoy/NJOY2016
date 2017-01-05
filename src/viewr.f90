@@ -1,5 +1,5 @@
 module viewm
-   ! provides subroutine viewr for NJOY2012
+   ! provides subroutine viewr for NJOY2016
    use locale
    implicit none
    private

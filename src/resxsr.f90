@@ -1,5 +1,5 @@
 module resxsm
-   ! provides subroutine resxsr for NJOY2012
+   ! provides subroutine resxsr for NJOY2016
    use locale
    implicit none
    private

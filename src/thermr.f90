@@ -1,5 +1,5 @@
 module thermm
-   ! provides thermr for NJOY2012
+   ! provides thermr for NJOY2016
    use locale
    implicit none
    private
@@ -27,7 +27,7 @@ module thermm
    real(kr),dimension(:),allocatable::esi,xsi
 
    integer,parameter::nbuf=1000
-   integer,parameter::nwscr=99000
+   integer,parameter::nwscr=500000
 
 contains
 
@@ -1496,6 +1496,7 @@ contains
    integer::itemp,iold,inew,ne,nex
    real(kr)::temp
    ! internals
+   character(len=60)::strng
    integer::nr,np,nwtab,nl,nlt,nlp,nlp1,nnl,jmax,nne
    integer::i,ia,nl1,ltt,loc,l,jscr,ilog
    integer::matd,itprnt,nb,nw,ni,nbeta,lt,it,nalpha
@@ -1507,19 +1508,19 @@ contains
    real(kr)::b,diff,enow,ep,sabmin,tev,ylast
    real(kr)::u,xl,yl,sum
    real(kr)::tone,elo
-   integer,parameter::nlmax=33
+   integer,parameter::ngrid=118
+   integer,parameter::nlmax=65
    integer,parameter::nemax=5000
    integer,parameter::mumax=300
    integer,parameter::imax=20
    real(kr)::ex(imax),x(imax),y(nlmax,imax),yt(nlmax)
    real(kr)::yy(imax),yu(2*nemax)
-   real(kr)::ubar(117)
-    real(kr)::u2,u2last,u3,u3last,p2(117),p3(117),p(4)
+   real(kr)::ubar(ngrid)
+   real(kr)::u2,u2last,u3,u3last,p2(ngrid),p3(ngrid),p(4)
    real(kr)::uj(mumax),sj(mumax)
    real(kr),dimension(:),allocatable::alpha,beta
    real(kr),dimension(:,:),allocatable::sab
-   integer,parameter::ngrid=117
-   real(kr),dimension(117),parameter::egrid=(/&
+   real(kr),dimension(ngrid),parameter::egrid=(/&
      1.e-5_kr,1.78e-5_kr,2.5e-5_kr,3.5e-5_kr,5.0e-5_kr,7.0e-5_kr,1.e-4_kr,&
      1.26e-4_kr,1.6e-4_kr,2.0e-4_kr,.000253e0_kr,.000297e0_kr,.000350e0_kr,&
      .00042e0_kr,.000506e0_kr,.000615e0_kr,.00075e0_kr,.00087e0_kr,&
@@ -1539,10 +1540,11 @@ contains
      1.42e0_kr,1.55e0_kr,1.70e0_kr,1.855e0_kr,2.02e0_kr,2.18e0_kr,&
      2.36e0_kr,2.59e0_kr,2.855e0_kr,3.12e0_kr,3.42e0_kr,3.75e0_kr,&
      4.07e0_kr,4.46e0_kr,4.90e0_kr,5.35e0_kr,5.85e0_kr,6.40e0_kr,&
-     7.00e0_kr,7.65e0_kr,8.40e0_kr,9.15e0_kr,10.00e0_kr/)
+     7.00e0_kr,7.65e0_kr,8.40e0_kr,9.15e0_kr,9.85e0_kr,10.00e0_kr/)
+   real(kr),parameter::unity=1.0e0_kr
    real(kr),parameter::sabflg=-225.e0_kr
    real(kr),parameter::eps=1.e-4_kr
-   real(kr),parameter::tolmin=1.e-6_kr
+   real(kr),parameter::tolmin=5.e-7_kr
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::therm=.0253e0_kr
    real(kr),parameter::break=3000.e0_kr
@@ -1553,7 +1555,7 @@ contains
    real(kr),parameter::dn=0.9e0_kr
    real(kr),parameter::uumin=0.00001e0_kr
    real(kr),parameter::yumin=2.e-7_kr
-   integer,parameter::nlpmx=12
+   integer,parameter::nlpmx=10
    save nwtab,sabmin,nl,nlt,nlp,nlp1,nl1,nnl,jmax,nne
    tevz=therm
 
@@ -1871,7 +1873,7 @@ contains
       enow=elo*exp(log(enow/elo)*log((temp/tone)*egrid(ngrid)/elo)&
         /log(egrid(ngrid)/elo))
    endif
-   enow=sigfig(enow,6,0)
+   enow=sigfig(enow,8,0)
    esi(ie)=enow
    xsi(ie)=0
    ubar(ie)=0
@@ -1904,9 +1906,9 @@ contains
          ep=enow-beta(-jbeta)*tev
       endif
       if (ep.eq.enow) then
-         ep=sigfig(enow,6,-1)
+         ep=sigfig(enow,8,-1)
       else
-         ep=sigfig(ep,6,0)
+         ep=sigfig(ep,8,0)
       endif
    else
       if (lat.eq.1) then
@@ -1915,17 +1917,17 @@ contains
          ep=enow+beta(jbeta)*tev
       endif
       if (ep.eq.enow) then
-         ep=sigfig(enow,6,+1)
+         ep=sigfig(enow,8,+1)
          iskip=1
       else
-         ep=sigfig(ep,6,0)
+         ep=sigfig(ep,8,0)
       endif
    endif
    if (ep.gt.x(2)) go to 316
    jbeta=jbeta+1
    go to 313
   316 continue
-   ep=sigfig(ep,6,0)
+   ep=sigfig(ep,8,0)
    x(1)=ep
    call sigl(enow,ep,nnl,tev,nalpha,alpha,nbeta,beta,&
      sab,yt,nlmax,tol)
@@ -1944,7 +1946,7 @@ contains
    endif
    if (half*(y(1,i-1)+y(1,i))*(x(i-1)-x(i)).lt.tolmin) go to 360
    xm=half*(x(i-1)+x(i))
-   xm=sigfig(xm,6,0)
+   xm=sigfig(xm,8,0)
    if (xm.le.x(i).or.xm.ge.x(i-1)) go to 360
    call sigl(enow,xm,nnl,tev,nalpha,alpha,nbeta,beta,&
      sab,yt,nlmax,tol)
@@ -1993,12 +1995,33 @@ contains
    jscr=7+(j-1)*(nl+1)
    scr(jscr)=x(i)
    if (y(1,i).ge.em9) then
-      scr(1+jscr)=sigfig(y(1,i),7,0)
+      scr(1+jscr)=sigfig(y(1,i),9,0)
    else
-      scr(1+jscr)=sigfig(y(1,i),6,0)
+      scr(1+jscr)=sigfig(y(1,i),8,0)
    endif
    do il=2,nl
-      scr(il+jscr)=sigfig(y(il,i),7,0)
+      scr(il+jscr)=sigfig(y(il,i),9,0)
+      if (scr(il+jscr).gt.unity) then
+         !--only warn for big miss, but always fix the overflow
+         !  use this same unity+0.0005 value in aceth
+         if (scr(il+jscr).gt.unity+0.0005_kr) then
+            write(strng,'("1cos=",f7.4,", set to 1.&
+                          &  enow,e''=",2(1pe12.5))')&
+                            scr(il+jscr),enow,scr(jscr)
+            call mess('calcem',strng,'')
+         endif
+         scr(il+jscr)=unity
+      endif
+      if (scr(il+jscr).lt.-unity) then
+         !--only warn for big miss, but always fix the underflow
+         if (scr(il+jscr).lt.-(unity+0.0005_kr)) then
+            write(strng,'("1cos=",f7.4,", set to -1.&
+                          &  enow,e''=",2(1pe12.5),i3)')&
+                            scr(il+jscr),enow,scr(jscr)
+            call mess('calcem',strng,'')
+         endif
+         scr(il+jscr)=-unity
+      endif
    enddo
    xlast=x(i)
    ylast=y(1,i)
@@ -2044,32 +2067,54 @@ contains
    ubar(ie)=ubar(ie)+half*(x(i)-xlast)*(uu+ulast)
    p2(ie)=p2(ie)+half*(x(i)-xlast)*(u2+u2last)
    p3(ie)=p3(ie)+half*(x(i)-xlast)*(u3+u3last)
-   xsi(ie)=sigfig(xsi(ie),7,0)
+   xsi(ie)=sigfig(xsi(ie),9,0)
    scr(7+(nl+1)*(j-1))=x(i)
    jscr=7+(j-1)*(nl+1)
    if (y(1,i).ge.em9) then
-      scr(1+jscr)=sigfig(y(1,i),7,0)
+      scr(1+jscr)=sigfig(y(1,i),9,0)
    else
-      scr(1+jscr)=sigfig(y(1,i),6,0)
+      scr(1+jscr)=sigfig(y(1,i),8,0)
    endif
    do il=2,nl
-      scr(il+jscr)=sigfig(y(il,i),7,0)
+      scr(il+jscr)=sigfig(y(il,i),9,0)
+      if (scr(il+jscr).gt.unity) then
+         !--only warn for big miss, but always fix the overflow
+         if (scr(il+jscr).gt.unity+0.0005_kr) then
+            write(strng,'("2cos",f7.4,", set to 1.&
+                          &  enow,e''=",2(1pe12.5))')&
+                            scr(il+jscr),enow,scr(jscr)
+            call mess('calcem',strng,'')
+         endif
+         scr(il+jscr)=unity
+      endif
+      if (scr(il+jscr).lt.-unity) then
+         !--only warn for big miss, but always fix the underflow
+         if (scr(il+jscr).lt.-(unity+0.0005_kr)) then
+            write(strng,'("2cos",f7.4,", set to -1.&
+                          &  enow,e''=",2(1pe12.5),i3)')&
+                            scr(il+jscr),enow,scr(jscr)
+            call mess('calcem',strng,'')
+         endif
+         scr(il+jscr)=-unity
+      endif
    enddo
    if (y(1,1).ne.zero) jnz=j
    if (jnz.lt.j) j=jnz+1
    if (iprint.eq.2) then
       ubar(ie)=ubar(ie)/xsi(ie)
-    !  write(nsyso,'(/'' enow '',1p,e12.4,''   xsec '',e12.3,&
-    !    &''   mubar '',3e12.3)') enow,4.73918*xsi(ie),4.73918*3*ubar(ie),&
-    !    4.73918*5*p2(ie),4.73918*7*p3(ie)
-      write(nsyso,'(/'' enow '',1p,e12.4,''   xsec '',e12.3,&
-        &''   mubar '',3e12.3)') enow,xsi(ie),ubar(ie),&
-        p2(ie),p3(ie)
+      p2(ie)=p2(ie)/xsi(ie)
+      p3(ie)=p3(ie)/xsi(ie)
+      write(nsyso,'(/,1x,"incident energy =",1pe13.6,&
+                   &  5x,"cross section =",1pe13.6,&
+                   &  5x,"mubar,p2,p3 =",3(1pe12.4))')&
+                          enow,xsi(ie),ubar(ie),p2(ie),p3(ie)
+      write(nsyso,'(/,5x,"exit energy",11x,"pdf",7x,"cosines")')
+      write(nsyso,'(  3x,"---------------",5x,"-----------",2x,88("-"))')
       ll=6
       do jj=1,j
-         write(nsyso,'(4x,1p,e12.5,e12.4,0p,10f9.4)')&
+         write(nsyso,'(2x,1pe15.8,5x,1pe12.5,0p,8f11.6)')&
            (scr(ll+ii),ii=1,nlp)
-         if (nl1.gt.nlp) write(nsyso,'(28x,10f9.4)')&
+         if (nl1.gt.nlp) write(nsyso,'(34x,8f11.6)')&
            (scr(ll+ii),ii=nlp1,nl1)
          ll=ll+nl1
       enddo
@@ -2146,7 +2191,7 @@ contains
    ie=ie+1
    enow=egrid(ie)
    if (ie.gt.1.and.temp.gt.break) enow=enow*temp/break
-   enow=sigfig(enow,6,0)
+   enow=sigfig(enow,8,0)
    j=0
    sum=0
 
@@ -2167,7 +2212,7 @@ contains
  530 continue
    if (i.eq.imax) go to 560
    xm=half*(x(i-1)+x(i))
-   xm=sigfig(xm,5,0)
+   xm=sigfig(xm,7,0)
    if (xm.le.x(i).or.xm.ge.x(i-1)) go to 560
    call sigu(enow,xm,tev,nalpha,alpha,nbeta,beta,sab,yu,nemax,tol)
    if (x(i-1)-x(i).gt..25) go to 575
@@ -2207,15 +2252,15 @@ contains
    do i=2,nmu
       ubar(ie)=ubar(ie)+half*(uj(i)-uj(i-1))*(sj(i)+sj(i-1))*(uj(i)+uj(i-1))
    enddo
-   ubar(ie)=ubar(ie)/sum
+   ubar(ie)=half*ubar(ie)/sum
    if (iprint.eq.2) then
-      ubar(ie)=ubar(ie)/xsi(ie)
-      write(nsyso,'(/i5,'' enow '',1p,e12.4,''   xsec '',e12.3,&
-        &''   mubar '',f9.5)') ie,enow,xsi(ie),ubar(ie)
-      write(nsyso,'(/''         mu           theta      dsigma/dmu'')')
+      write(nsyso,'(/i5,'' enow '',1p,e13.6,''   xsec '',e13.6,&
+        &''   mubar  '',e13.6)') ie,enow,xsi(ie),ubar(ie)
+      write(nsyso,'(''      num of mu '', i5)') nmu
+      write(nsyso,'(/''            mu            theta      dsigma/dmu'')')
       do i=1,nmu
-         write(nsyso,'(i5,f13.6,f11.3,1p,e13.3)') i,uj(i),&
-           acos(uj(i))*180/3.14159,sj(i)/2
+         write(nsyso,'(i5,1x,f15.8,1x,f12.4,1x,1p,e14.7)') i,uj(i),&
+               acos(uj(i))*180.0/3.14159265359,sj(i)/2.0
       enddo
    endif
 
@@ -2242,9 +2287,13 @@ contains
         if (yu(2*(nep-i)+4)/sum.gt.yumin) exit
       enddo
       nep=j
-      if (iprint.eq.2) then
-         write(nsyso,'(/'' mu='',f9.6)') u
-         write(nsyso,'(1p,6e12.5)') (yu(2*i+1),yu(2*i+2)/sum,i=1,nep)
+     if (iprint.eq.2) then
+         write(nsyso,'(/'' mu = '',f15.8)') u
+         write(nsyso,'('' (e-prime, pdf);  num of e-prime '', i5)') nep
+         write(nsyso,*)
+         !--test yu()/sum below: is this pdf normalized to 1.0 ?
+         write(nsyso,'(1p,3(1x,e14.7,1x,e14.7,1x))')&
+               (yu(2*i+1),yu(2*i+2)/sum,i=1,nep)
       endif
       scr(1)=0
       scr(2)=u
@@ -2524,7 +2573,7 @@ contains
    real(kr)::yt,tol,s1bb
    integer,parameter::imax=20
    real(kr)::x(imax),y(imax)
-   real(kr)::p(10)
+   real(kr)::p(nlin)
    character(60)::strng
    real(kr),parameter::zero=0
    real(kr),parameter::xtol=.00001e0_kr
@@ -2556,7 +2605,7 @@ contains
    if (ep.eq.zero) x(2)=0
    if (ep.ne.zero) x(2)=half*(e+ep-(s1bb-1)*az*tev)*seep
    if (abs(x(2)).gt.1-eps) x(2)=0.99e0_kr
-   x(2)=sigfig(x(2),6,0)
+   x(2)=sigfig(x(2),8,0)
    y(2)=sig(e,ep,x(2),tev,nalpha,alpha,nbeta,beta,sab)
    x(1)=+1
    y(1)=sig(e,ep,x(1),tev,nalpha,alpha,nbeta,beta,sab)
@@ -2567,7 +2616,7 @@ contains
   110 continue
    if (i.eq.imax) go to 120
    xm=half*(x(i-1)+x(i))
-   xm=sigfig(xm,6,0)
+   xm=sigfig(xm,8,0)
    ym=half*(y(i-1)+y(i))
    yt=sig(e,ep,xm,tev,nalpha,alpha,nbeta,beta,sab)
    test=tol*abs(yt)+tol*ymax/50
@@ -2616,7 +2665,7 @@ contains
    if (ep.eq.zero) x(2)=0
    if (ep.ne.zero) x(2)=half*(e+ep-(s1bb-1)*az*tev)*seep
    if (abs(x(2)).gt.1-eps) x(2)=0.99e0_kr
-   x(2)=sigfig(x(2),6,0)
+   x(2)=sigfig(x(2),8,0)
    y(2)=sig(e,ep,x(2),tev,nalpha,alpha,nbeta,beta,sab)
    x(1)=+1
    y(1)=sig(e,ep,x(1),tev,nalpha,alpha,nbeta,beta,sab)
@@ -2627,7 +2676,7 @@ contains
   150 continue
    if (i.eq.imax) go to 160
    xm=half*(x(i-1)+x(i))
-   xm=sigfig(xm,6,0)
+   xm=sigfig(xm,8,0)
    ym=half*(y(i-1)+y(i))
    yt=sig(e,ep,xm,tev,nalpha,alpha,nbeta,beta,sab)
    test=tol*abs(yt)+tol*ymax/50
@@ -2772,8 +2821,8 @@ contains
       else
          x(1)=e-beta(-jbeta)*tev
       endif
-      x(1)=sigfig(x(1),6,0)
-      if (x(1).eq.e) x(1)=sigfig(e,6,-1)
+      x(1)=sigfig(x(1),8,0)
+      if (x(1).eq.e) x(1)=sigfig(e,8,-1)
    else
       if (lat.eq.1) then
          x(1)=e+beta(jbeta)*tevz
@@ -2788,7 +2837,7 @@ contains
    if (u.lt.zero.and.root1**2.gt.1.01*x(2).and.root1**2.lt.x(1)) then
       x(1)=root1**2
    endif
-   x(1)=sigfig(x(1),6,0)
+   x(1)=sigfig(x(1),8,0)
    y(1)=sig(e,x(1),u,tev,nalpha,alpha,nbeta,beta,sab)
    i=2
 
@@ -2797,7 +2846,7 @@ contains
    if (i.eq.imax) go to 160
    if (i.gt.3.and.half*(y(i-1)+y(i))*(x(i-1)-x(i)).lt.tolmin) go to 160
    xm=half*(x(i-1)+x(i))
-   xm=sigfig(xm,6,0)
+   xm=sigfig(xm,8,0)
    if (xm.le.x(i).or.xm.ge.x(i-1)) go to 160
    ym=half*(y(i-1)+y(i))
    yt=sig(e,xm,u,tev,nalpha,alpha,nbeta,beta,sab)
@@ -2862,7 +2911,7 @@ contains
    real(kr),parameter::em9=1.e-9_kr
    real(kr),parameter::etop=20.e6_kr
    real(kr),parameter::zero=0
-   integer,parameter::nwscr=99000
+   integer,parameter::nwscr=500000
 
    !--initialize.
    temp=tempr(itemp)

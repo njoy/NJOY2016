@@ -1,5 +1,5 @@
 module groupm
-   ! provides subroutine groupr for NJOY2012
+   ! provides subroutine groupr for NJOY2016
    use locale
    implicit none
    private

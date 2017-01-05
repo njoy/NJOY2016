@@ -1,5 +1,5 @@
 module util
-   ! Utility routines for NJOY2012.
+   ! Utility routines for NJOY2016.
    use locale
    implicit none
    private

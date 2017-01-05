@@ -1,5 +1,5 @@
 module broadm
-   ! Module to provide broadr for NJOY2012
+   ! Module to provide broadr for NJOY2016
    use locale
    implicit none
    private
@@ -16,6 +16,7 @@ module broadm
 
    integer,parameter::ntt=160
    integer,parameter::nbuf=1000
+   real(kr),dimension(ntt)::qmtr,emtr
 
 contains
 
@@ -67,8 +68,8 @@ contains
    !    temp1    starting temperature from nin (default=0K)
    ! card 3
    !    errthn   fractional tolerance for thinning
-   !    thnmax   max. energy for broadening and thinning
-   !             (default=1 MeV)
+   !    thnmax   max.energy for broadening and thinning
+   !             (default = 0, but see comments below)
    !    errmax   fractional tolerance used when integral criterion
    !             is satisfied (same usage as in reconr)
    !             (errmax.ge.errthn, default=10*errthn)
@@ -104,26 +105,27 @@ contains
    !            accumulate.
    !
    ! thnmax     A possible upper limit for broadening and thinning.
-   !            The actual upper limit is the lowest of (i) this inout
-   !            value; (ii) the end of the resolved resonance range;
-   !            (iii) the lowest reaction threshold; or (iv) 1.0 MeV.
+   !            Beginning with NJOY2012.75, if the default thnmax
+   !            value is used (default thnmax = 0):
+   !            - (i) and there is a resolved resonance region we
+   !              Doppler broaden to the top of that region.  any
+   !              threshold reactions below this upper limit are also
+   !              broadened, but any non-zero cross section for energies
+   !              below the reaction threshold are zeroed.
+   !            - (ii) and there is no resolved resonance region but
+   !              there is an unresolved resonance region we Doppler
+   !              broaden to the beginning of the urr.
+   !            - (iii) and there are no resolved or unresolved
+   !              resonance parameters, we broaden to the lessor of
+   !              6.5 MeV or the first threshold energy.
    !
-   !            A negative value for thnmax forces the Doppler
-   !            broadening upper limit to be abs(thnmax) irrespective
-   !            of the other conditions.
+   !            As before, a negative value for thnmax forces the
+   !            Doppler broadening upper limit to be abs(thnmax)
+   !            irrespective of the other conditions.
    !
-   !            Caution:  this may cause one or more threshold
-   !            reactions to be broadened.  The magnitude of
-   !            thnmax must be chosen to keep the number of
-   !            broadenable reactions less than or equal to the
-   !            maximum of ntt (160).
-   !
-   !            Caution:  for use in transport codes, it is recommended
-   !            to use the program default.  We don't know how
-   !            to compute the spectrum of scattered neutrons from
-   !            a broadened inelastic level in the current generation
-   !            of codes.  Broadened cross sections for threshold
-   !            reactions may be useful for other purposes.
+   !            Caution:  The magnitude of thnmax must be chosen to
+   !            keep the number of broadenable reactions less than or
+   !            equal to the maximum of ntt (160).
    !
    !-------------------------------------------------------------------
    use mainio  ! provides nsysi,nsyso,nsyse
@@ -138,7 +140,8 @@ contains
    integer::mt4i,llf,llc,ir,ip,ireac,nbo,nwo,nnn,j1
    integer::mt103,mt104,mt105,mt106,mt107,mpmin,mpmax
    integer::mdmin,mdmax,mtmin,mtmax,m3min,m3max,m4min,m4max
-   integer::lru
+   integer::lrf,lrp,lru
+   integer::n,npp,itmp
    real(kr)::time,temp1,diff,test,thnmx,emin,temp,awr,enext
    real(kr)::sig,en,sun,tempin,break,enow,eone,tev,picon
    real(kr)::fint,cint,alint,etint,v1int,ssf,slf,ssc,slc
@@ -147,6 +150,7 @@ contains
    real(kr)::tt(ntt+1)
    real(kr)::emax
    integer::mtr(ntt),mti(ntt)
+   integer,dimension(:),allocatable::nppmt
    real(kr),dimension(:),allocatable::bufo,bufn
    real(kr),dimension(:),allocatable::scr
    real(kr),dimension(:),allocatable::nutot
@@ -158,6 +162,7 @@ contains
    real(kr),parameter::therm=.0253e0_kr
    real(kr),parameter::fact=.99999e0_kr
    real(kr),parameter::onemev=1.e6_kr
+   real(kr),parameter::e6pt5=6.5e6_kr
    real(kr),parameter::tbreak=0.5e0_kr
    real(kr),parameter::big=9.e9_kr
    real(kr),parameter::step=1.01e0_kr
@@ -195,7 +200,7 @@ contains
    temp1=0
    ntemp2=1
    read(nsysi,*) mat1,ntemp2,istart,istrap,temp1
-   thnmx=onemev
+   thnmx=e6pt5
    errmax=0
    errint=0
    read(nsysi,*) errthn,thnmx,errmax,errint
@@ -238,6 +243,7 @@ contains
    !--read input file emax and make sure thnmx is legal
    emax=20.e6_kr !assumed maximum energy
    call contio(nendf,0,0,scr,nb,nw) !first record
+   lrp=l1h
    call contio(nendf,0,0,scr,nb,nw) !second record
    if (n1h.eq.0.and.n2h.ne.0) then
       call contio(nendf,0,0,scr,nb,nw)
@@ -278,15 +284,44 @@ contains
    go to 101
   107 continue
    !--read the (lru) resonance flag
-   lru=0
-   if (mfh.le.1) then
-      if (mfh.eq. 1) call tofend(nendf,0,0,scr)
-      call contio(nendf,0,0,scr,nb,nw)
-   endif
-   if (mfh.eq.2) then
-      call contio(nendf,0,0,scr,nb,nw)
-      call contio(nendf,0,0,scr,nb,nw)
-      lru=l1h
+   lrf=0
+   npp=0
+   if (lrp.eq.0) then
+      lru=0
+   else
+      if (mfh.le.1) then
+         if (mfh.eq. 1) call tofend(nendf,0,0,scr)
+         call contio(nendf,0,0,scr,nb,nw)
+      endif
+      if (mfh.eq.2) then
+         call contio(nendf,0,0,scr,nb,nw)
+         call contio(nendf,0,0,scr,nb,nw)
+         lru=l1h
+         lrf=l2h
+         !--make a list of the lrf7 mt's
+         if (lru.eq.1.and.lrf.eq.7) then
+            call contio(nendf,0,0,scr,nb,nw)
+            call listio(nendf,0,0,scr,nb,nw)
+            npp=l1h
+            if (allocated(nppmt)) deallocate(nppmt)
+            allocate(nppmt(npp))
+            do i=1,npp
+               nppmt(i)=nint(scr(16+12*(i-1)))
+            enddo
+            !--sort the nppmt list into ascending order
+            if (npp.ge.2) then
+               do i=1,npp-1
+                  do j=i+1,npp
+                     if (nppmt(j).lt.nppmt(i)) then
+                        itmp=nppmt(i)
+                        nppmt(i)=nppmt(j)
+                        nppmt(j)=itmp
+                     endif
+                  enddo
+               enddo
+            endif
+         endif
+      endif
    endif
 
    !--search for desired mat1 at temp1 on input tape.
@@ -353,7 +388,6 @@ contains
       call contio(nin,no,nscr1,scr,nb,nw)
       call contio(nin,no,nscr1,scr,nb,nw)
       eresh=c2h
-      if ((lru.eq.0.or.lru.eq.2).and.eresh.gt.onemev) eresh=onemev
       call tosend(nin,no,nscr1,scr)
       call contio(nin,no,nscr1,scr,nb,nw)
       if (mfh.ne.0) then
@@ -363,10 +397,30 @@ contains
       call contio(nin,no,nscr1,scr,nb,nw)
    endif
    call tomend(nin,no,nscr1,scr)
-   if (thnmax.gt.0.and.eresh.lt.1e7.and.eresh.gt.thnmax) thnmax=eresh
    diff=abs(temp-temp1)
    test=1+temp1/1000
    if (diff.gt.test) go to 110
+
+   if (lrp.eq.0) then
+      write(nsyso,'(/'' non-resonance nuclide, input pendf limit'',5x,&
+                   &''= '',1pe14.5,'' eV.'')')eresh
+   elseif (lrp.eq.1.and.lru.eq.1) then
+      write(nsyso,'(/'' resolved resonance range upper limit'',9x,&
+                   &''= '',1pe14.5,'' eV.'')')eresh
+   elseif (lrp.eq.1.and.lru.eq.2) then
+      write(nsyso,'(/'' unresolved resonance range lower limit'',7x,&
+                   &''= '',1pe14.5,'' eV.'')')eresh
+   endif
+   if (eresh.gt.e6pt5) then
+      eresh=e6pt5
+      write(nsyso,'('' - reset to '',1pe14.5,'' eV.'')')e6pt5
+   endif
+   if (thnmx.eq.0) then
+      thnmax=eresh
+   elseif (thnmx.gt.0) then
+      thnmax=min(thnmx,eresh)
+   endif
+   if (lrp.eq.1) emin=eresh
 
    !--copy low threshold reactions from nscr1 to
    !--scratch storage using the grid of mt1.
@@ -430,6 +484,7 @@ contains
       if (idis.eq.0) idnx=0
    enddo
    call tosend(nscr1,0,0,scr)
+   n=1
   160 continue
    call contio(nscr1,0,0,scr,nb,nw)
    if (mfh.eq.0) go to 190
@@ -446,8 +501,15 @@ contains
    enow=0
    call gety1(enow,enext,idis,sig,nscr1,scr)
    if (mth.eq.18) go to 170
+   if (n.le.npp.and.mth.eq.nppmt(n)) then
+      n=n+1
+      goto 170
+   endif
    if (enext.le.emin) go to 170
-   if (fact*enext.lt.thnmax) thnmax=fact*enext
+   if (lrp.eq.1.and.enext.lt.eresh) go to 170
+   if (lrp.eq.0) then
+      if (fact*enext.lt.thnmax) thnmax=fact*enext
+   endif
   165 continue
    call tosend(nscr1,0,0,scr)
    go to 160
@@ -484,10 +546,12 @@ contains
    inew=isave
    go to 160
   190 continue
+   if (thnmax.eq.zero.and.thnmx.eq.0) thnmax=e6pt5
+   if (allocated(nppmt)) deallocate(nppmt)
    if (thnmax.lt.zero) thnmax=-thnmax
    write(nsyso,'(/&
-     &'' max energy for broadening and thinning ='',1p,e14.5)')&
-     thnmax
+     &'' final maximum energy for broadening/thinning = '',1pe14.5,&
+     &'' eV'')')thnmax
    tempin=temp1
    if (nreac.gt.0) go to 200
    call mess('broadr','no broadenable reactions',' ')
@@ -507,6 +571,21 @@ contains
    ndim=3*mpage
    allocate(e(ndim))
    allocate(s(nreac,ndim))
+
+   !--get q-values and lab system threshold energy
+   !  for the mt's to be broadened.
+   call repoz(nscr1)
+   do i=1,nreac
+      call findf(mat1,3,mtr(i),nscr1)
+      call contio(nscr1,0,0,scr,nb,nw)
+      call contio(nscr1,0,0,scr,nb,nw)
+      qmtr(i)=scr(2)
+      if (qmtr(i).eq.0) then
+         emtr(i)=0
+      else
+         emtr(i)=-qmtr(i)*(awr+1)/awr
+      endif
+   enddo
 
    !--doppler broaden and thin these reactions.
    it=0
@@ -1182,6 +1261,7 @@ contains
    ! internals
    integer::n,k,klast,i,is,km,ndig
    real(kr)::et,dn,test,em,xm,dx,errt,errm,f,dy,est,si,xt,stot
+   real(kr)::tt1old
    integer,parameter::nstack=12
    integer::ks(nstack),js(nstack)
    real(kr)::es(nstack),ss(ntt,nstack)
@@ -1211,6 +1291,7 @@ contains
    klast=nlow-1
 
    !--set up first node in stack
+   tt1old=zero
    if (klow.eq.1) go to 110
    klast=k
    ks(2)=k
@@ -1320,8 +1401,13 @@ contains
   150 Continue
    tt(1)=es(is)
    do i=1,nreac
-      tt(1+i)=ss(i,is)
+      if (tt(1).gt.emtr(i).and.tt1old.ge.emtr(i)) then
+         tt(1+i)=ss(i,is)
+      else
+         tt(1+i)=0
+      endif
    enddo
+   tt1old=tt(1)
    j=j+1
    call loada(j,tt,ntx,inew,bufn,nbuf)
    is=is-1

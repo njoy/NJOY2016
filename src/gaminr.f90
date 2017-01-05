@@ -1,5 +1,5 @@
 module gaminm
-   ! provides subroutine gaminr for NJOY2012
+   ! provides subroutine gaminr for NJOY2016
    use locale
    implicit none
    private

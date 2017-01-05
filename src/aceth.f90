@@ -22,7 +22,7 @@ module aceth
    integer::itie,itix,itxe,itce,itcx,itca,jxsd(26)
 
    ! body of the ace data
-   integer,parameter::nxss=4000000
+   integer,parameter::nxss=9000000
    real(kr)::xss(nxss)
    integer::nei
    real(kr),dimension(5000)::wt
@@ -79,7 +79,7 @@ contains
    !--process the thermal data
    nxsd=0
    jxsd=0
-   ninmax=50000
+   ninmax=500000
    call openz(nin,0)
    nscr=iabs(nscr)
    if (nin.lt.0) nscr=-nscr
@@ -94,7 +94,7 @@ contains
    nw=npage+50
    allocate(xs(nw))
    allocate(six(ninmax))
-   nwscr=70000
+   nwscr=500000
    allocate(scr(nwscr))
 
    !--determine what endf version is being used
@@ -438,8 +438,27 @@ contains
       loc=loc+1
       six(loc)=fract
       do k=1,nang
-         six(k+loc)=scr(k+isl)&
-           +(scr(k+isn)-scr(k+isl))*(xn-xlo)/(xhi-xlo)
+    if (abs(xn-xhi).lt.eps) then
+       six(k+loc)=scr(k+isn)
+    else if (abs(xn-xlo).lt.eps) then
+        six(k+loc)=scr(k+isl)
+    else
+        six(k+loc)=scr(k+isl)+&
+        (scr(k+isn)-scr(k+isl))*(xn-xlo)/(xhi-xlo)
+    endif
+!    if ((six(k+loc).lt.-1.0e0_kr).or.(six(k+loc).gt.1.0e0_kr)) then
+!    write(nsyso,'(/'' ---warning from acesix---'','' cosine '',f12.8,&
+!                   &'' outside [-1,1] range for e= '',1p,e13.6,&
+!                   &'',  bin_mu= '',i4)') six(k+loc),e,k
+!    endif
+    if (iwt.eq.2.and.six(k+loc).lt.-1.0e0_kr) then
+       six(k+loc) = -1.0e0_kr
+!       write(nsyso,'('' ---cosine set to -1.0---'')')
+    endif
+    if (iwt.eq.2.and.six(k+loc).gt.1.0e0_kr) then
+       six(k+loc) = 1.0e0_kr
+!       write(nsyso,'('' ---cosine set to  1.0---'')')
+    endif
       enddo
    endif
    loc=loc+1+nang
@@ -629,7 +648,7 @@ contains
    real(kr),parameter::emev=1.e6_kr
 
    !--initialize
-   nwscr=50000
+   nwscr=500000
    allocate(scr(nwscr))
    write(hm,'(''   mat'',i4)') matd
    tz=tempd*bk/emev
@@ -831,29 +850,30 @@ contains
             lines=1
          endif
       endif
-      write(nsyso,'(/6x,''incident energy = '',1p,e12.4,8x,&
-        &''cross section = '',e12.4)') xss(itie+i),xss(itie+ne+i)
-      if (ifeng.le.1) then
-         write(nsyso,'(/&
-           &9x,''exit energy'',5x,''cosines''/9x,''-----------'',&
-           &2x,8(''----------''))')
-      else
-         write(nsyso,'(/&
-           &9x,''exit energy'',8x,''pdf'',11x,''cdf'',5x,''cosines''/&
-           &9x,''-----------'',2x,''---------- '',&
-           &2x,''------------'',2x,8(''----------''))')
-      endif
-      lines=lines+4
-      do j=1,nbini
+       write(nsyso,'(/6x,''incident energy = '',1p,e13.6,8x,&
+         &''cross section = '',e13.6)') xss(itie+i),xss(itie+ne+i)
+       write(nsyso,'(5x,'' num of e-prime '',i5)') nbini
+       if (ifeng.le.1) then
+          write(nsyso,'(/&
+            &9x,''exit energy'',5x,''cosines''/9x,''-----------'',&
+            &4x,8(''------------''))')
+       else
+          write(nsyso,'(/&
+            &9x,''exit energy'',8x,''pdf'',11x,''cdf'',10x,''cosines''/&
+            &9x,''-----------'',4x,''-----------'',&
+            &3x,''------------'',4x,8(''------------''))')
+       endif
+       lines=lines+4
+       do j=1,nbini
          if (ifeng.le.1) then
-            write(nsyso,'(7x,1p,e12.4,2x,0p,8f10.4)')&
+            write(nsyso,'(7x,1p,e13.6,1x,0p,8f12.6)')&
               (xss(k+loc),k=1,lim)
-            if (nang.gt.8) write(nsyso,'(21x,8f10.4)')&
+            if (nang.gt.8) write(nsyso,'(21x,8f12.6)')&
               (xss(loc+k),k=lim1,nang+1)
          else
-            write(nsyso,'(7x,1p,e12.4,e13.4,e15.6,1x,0p,8f10.4)')&
+            write(nsyso,'(7x,1p,e13.6,e15.6,e15.6,1x,0p,8f12.6)')&
               (xss(k+loc),k=1,lim)
-            if (nang.gt.8) write(nsyso,'(48x,8f10.4)')&
+            if (nang.gt.8) write(nsyso,'(51x,8f12.6)')&
               (xss(loc+k),k=lim1,nang+3)
          endif
          if (ifeng.le.1) then
@@ -965,7 +985,8 @@ contains
    !-------------------------------------------------------------------
    ! Do standard plots of a thermal ACE file.
    !-------------------------------------------------------------------
-   use util ! provides openz
+   use mainio ! provides nsyso
+   use util   ! provides openz
    ! externals
    integer::nout
    character(70)::hk
@@ -1221,6 +1242,12 @@ contains
          do j=2,nbini
             p=xss(loc+3)-cdl
             do k=1,nang
+!              if ((xss(loc+3+k).lt.-1.0e0_kr).or.&
+!                  (xss(loc+3+k).gt.1.0e0_kr)) then
+!                 write(nsyso,'(/'' ---warning from tplots---'', &
+!                       &'' cosine '',f12.8,'' outside [-1,1] range'')')&
+!                       xss(loc+3+k)
+!              endif
               ubar=ubar+xss(loc+3+k)*p/2
               ubar=ubar+xss(loc+3+k-nang-2)*p/2
               sum=sum+p
@@ -1484,6 +1511,7 @@ contains
             loc=loc+nang+3
          enddo
       endif
+      ebar=ebar/sum
       write(nout,'(1p,2e14.6,''/'')') e,ebar
    enddo
    write(nout,'(''/'')')
@@ -1679,8 +1707,8 @@ contains
    loc=loc+2*nie
    zmin=1000
    zmax=0
-   xmin=2/scale/100
-   xmax=5/scale
+   xmin=1/scale/100
+   xmax=10/scale
    ymin=2/scale
    ymax=10/scale
    do ie=1,nie

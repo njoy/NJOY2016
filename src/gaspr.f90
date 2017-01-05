@@ -1,5 +1,5 @@
 module gaspm
-   ! provides subroutine gaspr for NJOY2012
+   ! provides subroutine gaspr for NJOY2016
    use locale
    implicit none
    private

@@ -1,5 +1,5 @@
 module mixm
-   ! provides subroutine mixr for NJOY2012
+   ! provides subroutine mixr for NJOY2016
    use locale
    implicit none
    private

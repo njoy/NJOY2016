@@ -1,5 +1,5 @@
 module purm
-   ! provides subroutine purr for NJOY2012
+   ! provides subroutine purr for NJOY2016
    use locale
    implicit none
    private

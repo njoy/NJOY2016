@@ -1,5 +1,5 @@
 module locale
-   ! Provides localization parameters for NJOY2012.  Each site
+   ! Provides localization parameters for NJOY2016.  Each site
    ! should change "lab" and "mx" for their location.  The
    ! "kind" parameter kr is for normal internal real numbers in NJOY.
    ! The default kind is assumed for normal internal integers (either

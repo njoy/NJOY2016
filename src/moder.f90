@@ -1,5 +1,5 @@
 module modem
-   ! provides moder for NJOY2012
+   ! provides moder for NJOY2016
    use locale
    implicit none
    private

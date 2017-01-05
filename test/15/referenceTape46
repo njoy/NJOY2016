@@ -936,8 +936,8 @@ newpath
    410.35   202.12 lineto
    410.35   186.92 lineto
    397.97   186.92 lineto
-   397.97   240.90 lineto
-   385.59   240.90 lineto
+   397.97   240.91 lineto
+   385.59   240.91 lineto
    385.59   221.45 lineto
    373.25   221.45 lineto
    373.25   237.63 lineto
@@ -5079,8 +5079,8 @@ newpath
    174.76   409.01 lineto
    159.56   409.01 lineto
    159.56   421.39 lineto
-   213.54   421.39 lineto
-   213.54   433.77 lineto
+   213.55   421.39 lineto
+   213.55   433.77 lineto
    194.09   433.77 lineto
    194.09   446.11 lineto
    210.27   446.11 lineto
@@ -5551,18 +5551,18 @@ newpath
    472.15   211.02 lineto
    472.15   209.00 lineto
    459.83   209.00 lineto
-   459.83   213.42 lineto
-   447.45   213.42 lineto
+   459.83   213.51 lineto
+   447.45   213.51 lineto
    447.45   140.94 lineto
    435.09   140.94 lineto
    435.09   170.86 lineto
    422.73   170.86 lineto
-   422.73   195.59 lineto
-   410.35   195.59 lineto
+   422.73   195.58 lineto
+   410.35   195.58 lineto
    410.35   181.62 lineto
    397.97   181.62 lineto
-   397.97   237.10 lineto
-   385.59   237.10 lineto
+   397.97   237.11 lineto
+   385.59   237.11 lineto
    385.59   219.33 lineto
    373.25   219.33 lineto
    373.25   235.87 lineto
@@ -8551,18 +8551,18 @@ newpath
    472.15   211.02 lineto
    472.15   209.00 lineto
    459.83   209.00 lineto
-   459.83   213.42 lineto
-   447.45   213.42 lineto
+   459.83   213.51 lineto
+   447.45   213.51 lineto
    447.45   140.94 lineto
    435.09   140.94 lineto
    435.09   170.86 lineto
    422.73   170.86 lineto
-   422.73   195.59 lineto
-   410.35   195.59 lineto
+   422.73   195.58 lineto
+   410.35   195.58 lineto
    410.35   181.62 lineto
    397.97   181.62 lineto
-   397.97   237.10 lineto
-   385.59   237.10 lineto
+   397.97   237.11 lineto
+   385.59   237.11 lineto
    385.59   219.33 lineto
    373.25   219.33 lineto
    373.25   235.87 lineto
@@ -9004,11 +9004,19 @@ newpath
    496.97   371.91 lineto
    496.97   371.91 lineto
    484.58   371.91 lineto
+   484.58   371.91 lineto
+   472.15   371.91 lineto
+   472.15   371.91 lineto
+   459.83   371.91 lineto
+   459.83   359.53 lineto
+   472.15   359.53 lineto
+   472.15   359.53 lineto
+   484.58   359.53 lineto
    484.58   359.53 lineto
    496.97   359.53 lineto
    496.97   359.53 lineto
    530.64   359.53 lineto
-gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
 %cclip
 gsave clip newpath
 stroke grestore
@@ -9307,69 +9315,11 @@ newpath
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   484.58   371.91 moveto
-   0.000 setlinewidth
-   472.15   371.91 lineto
-   472.15   371.91 lineto
-   459.83   371.91 lineto
-   459.83   359.53 lineto
-   472.15   359.53 lineto
-   472.15   359.53 lineto
-   484.58   359.53 lineto
-gsave 0.314 0.627 0.314 setrgbcolor fill grestore
-%cclip
-gsave clip newpath
-stroke grestore
-%nclip
-newpath
-stroke grestore newpath
-%gend
-%gset
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   530.64   288.72 moveto
-   0.360 setlinewidth
-   530.64   553.68 lineto
-   265.68   553.68 lineto
-   265.68   288.72 lineto
-   530.64   288.72 lineto
- gsave clip newpath
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   459.83   334.78 moveto
-   0.000 setlinewidth
-   447.45   334.78 lineto
-   447.45   288.72 lineto
-   459.83   288.72 lineto
-gsave 0.251 0.490 0.251 setrgbcolor fill grestore
-%cclip
-gsave clip newpath
-stroke grestore
-%nclip
-newpath
-stroke grestore newpath
-%gend
-%gset
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   530.64   288.72 moveto
-   0.360 setlinewidth
-   530.64   553.68 lineto
-   265.68   553.68 lineto
-   265.68   288.72 lineto
-   530.64   288.72 lineto
- gsave clip newpath
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
    459.83   359.53 moveto
    0.000 setlinewidth
    447.45   359.53 lineto
-   447.45   334.78 lineto
-   459.83   334.78 lineto
+   447.45   288.72 lineto
+   459.83   288.72 lineto
 gsave 0.314 0.627 0.314 setrgbcolor fill grestore
 %cclip
 gsave clip newpath
@@ -22088,18 +22038,18 @@ newpath
    183.66   347.21 lineto
    181.64   347.21 lineto
    181.64   359.53 lineto
-   186.06   359.53 lineto
-   186.06   371.91 lineto
+   186.15   359.53 lineto
+   186.15   371.91 lineto
    113.58   371.91 lineto
    113.58   384.27 lineto
    143.50   384.27 lineto
    143.50   396.63 lineto
-   168.23   396.63 lineto
-   168.23   409.01 lineto
+   168.22   396.63 lineto
+   168.22   409.01 lineto
    154.26   409.01 lineto
    154.26   421.39 lineto
-   209.74   421.39 lineto
-   209.74   433.77 lineto
+   209.75   421.39 lineto
+   209.75   433.77 lineto
    191.97   433.77 lineto
    191.97   446.11 lineto
    208.51   446.11 lineto
@@ -22564,14 +22514,14 @@ newpath
    472.15   204.70 lineto
    472.15   201.56 lineto
    459.83   201.56 lineto
-   459.83   230.89 lineto
-   447.45   230.89 lineto
+   459.83   230.88 lineto
+   447.45   230.88 lineto
    447.45   147.57 lineto
    435.09   147.57 lineto
    435.09   183.10 lineto
    422.73   183.10 lineto
-   422.73   215.26 lineto
-   410.35   215.26 lineto
+   422.73   215.25 lineto
+   410.35   215.25 lineto
    410.35   203.66 lineto
    397.97   203.66 lineto
    397.97   251.98 lineto
@@ -23434,8 +23384,8 @@ newpath
    435.09   433.77 lineto
    435.09   433.77 lineto
    447.45   433.77 lineto
-   447.45   433.77 lineto
-   459.83   433.77 lineto
+   447.45   421.39 lineto
+   459.83   421.39 lineto
    459.83   433.77 lineto
    472.15   433.77 lineto
    472.15   433.77 lineto
@@ -23643,9 +23593,9 @@ newpath
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   459.83   347.21 moveto
+   459.83   334.78 moveto
    0.000 setlinewidth
-   447.45   347.21 lineto
+   447.45   334.78 lineto
    447.45   288.72 lineto
    459.83   288.72 lineto
 gsave 0.314 0.627 0.314 setrgbcolor fill grestore
@@ -23673,8 +23623,8 @@ newpath
    459.83   359.53 moveto
    0.000 setlinewidth
    447.45   359.53 lineto
-   447.45   347.21 lineto
-   459.83   347.21 lineto
+   447.45   334.78 lineto
+   459.83   334.78 lineto
 gsave 0.251 0.490 0.251 setrgbcolor fill grestore
 %cclip
 gsave clip newpath
@@ -23778,9 +23728,9 @@ newpath
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   459.83   433.77 moveto
+   459.83   421.39 moveto
    0.000 setlinewidth
-   447.45   433.77 lineto
+   447.45   421.39 lineto
    447.45   433.77 lineto
    435.09   433.77 lineto
    435.09   396.63 lineto
@@ -26055,18 +26005,18 @@ newpath
    183.66   347.21 lineto
    181.64   347.21 lineto
    181.64   359.53 lineto
-   186.06   359.53 lineto
-   186.06   371.91 lineto
+   186.15   359.53 lineto
+   186.15   371.91 lineto
    113.58   371.91 lineto
    113.58   384.27 lineto
    143.50   384.27 lineto
    143.50   396.63 lineto
-   168.23   396.63 lineto
-   168.23   409.01 lineto
+   168.22   396.63 lineto
+   168.22   409.01 lineto
    154.26   409.01 lineto
    154.26   421.39 lineto
-   209.74   421.39 lineto
-   209.74   433.77 lineto
+   209.75   421.39 lineto
+   209.75   433.77 lineto
    191.97   433.77 lineto
    191.97   446.11 lineto
    208.51   446.11 lineto
@@ -27174,8 +27124,8 @@ newpath
    410.35   433.77 lineto
    410.35   433.77 lineto
    422.73   433.77 lineto
-   422.73   421.39 lineto
-   435.09   421.39 lineto
+   422.73   433.77 lineto
+   435.09   433.77 lineto
    435.09   433.77 lineto
    447.45   433.77 lineto
    447.45   433.77 lineto
@@ -27657,6 +27607,37 @@ newpath
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
+   435.09   433.77 moveto
+   0.000 setlinewidth
+   422.73   433.77 lineto
+   422.73   433.77 lineto
+   410.35   433.77 lineto
+   410.35   421.39 lineto
+   422.73   421.39 lineto
+   422.73   421.39 lineto
+   435.09   421.39 lineto
+gsave 0.686 0.922 0.686 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
    422.73   384.27 moveto
    0.000 setlinewidth
    410.35   384.27 lineto
@@ -27725,33 +27706,6 @@ newpath
    410.35   396.63 lineto
    422.73   396.63 lineto
 gsave 0.176 0.353 0.176 setrgbcolor fill grestore
-%cclip
-gsave clip newpath
-stroke grestore
-%nclip
-newpath
-stroke grestore newpath
-%gend
-%gset
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   530.64   288.72 moveto
-   0.360 setlinewidth
-   530.64   553.68 lineto
-   265.68   553.68 lineto
-   265.68   288.72 lineto
-   530.64   288.72 lineto
- gsave clip newpath
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   422.73   433.77 moveto
-   0.000 setlinewidth
-   410.35   433.77 lineto
-   410.35   421.39 lineto
-   422.73   421.39 lineto
-gsave 0.686 0.922 0.686 setrgbcolor fill grestore
 %cclip
 gsave clip newpath
 stroke grestore
@@ -38619,8 +38573,8 @@ newpath
    504.35   147.57 lineto
    504.35   183.10 lineto
    486.93   183.10 lineto
-   486.93   215.26 lineto
-   469.49   215.26 lineto
+   486.93   215.25 lineto
+   469.49   215.25 lineto
    469.49   203.66 lineto
    452.06   203.66 lineto
    452.06   251.98 lineto
@@ -42486,14 +42440,14 @@ newpath
    177.34   347.21 lineto
    174.20   347.21 lineto
    174.20   359.53 lineto
-   203.53   359.53 lineto
-   203.53   371.91 lineto
+   203.52   359.53 lineto
+   203.52   371.91 lineto
    120.21   371.91 lineto
    120.21   384.27 lineto
    155.74   384.27 lineto
    155.74   396.63 lineto
-   187.90   396.63 lineto
-   187.90   409.01 lineto
+   187.89   396.63 lineto
+   187.89   409.01 lineto
    176.30   409.01 lineto
    176.30   421.39 lineto
    224.62   421.39 lineto

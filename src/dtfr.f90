@@ -1,5 +1,5 @@
 module dtfm
-   ! Module to provide dtfr for NJOY2012
+   ! Module to provide dtfr for NJOY2016
    use locale
    implicit none
    private

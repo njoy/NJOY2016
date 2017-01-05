@@ -2,7 +2,7 @@ program njoy
 !-----------------------------------------------------------------------
 !
 !    NJOY Nuclear Data Processing System
-!    Version 2012.74
+!    Version 2016.0
 !
 !-----------------------------------------------------------------------
 !
@@ -147,7 +147,6 @@ program njoy
    real(kr)::secs
 
    !--set page size for blocked binary mode in module endf
-   npage=306
    npage=(npage/102)*102
 
    !--open the NJOY listing file

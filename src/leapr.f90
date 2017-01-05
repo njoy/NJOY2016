@@ -1,5 +1,5 @@
 module leapm
-   ! Provides leapr for NJOY2012.
+   ! Provides leapr for NJOY2016.
    use locale
    implicit none
    private
@@ -441,7 +441,7 @@ contains
    integer::itemp,np,maxn
    ! internals
    integer::i,j,k,n,npn,npl,iprt,jprt
-   integer,dimension(400)::maxt
+   integer,dimension(1000)::maxt
    character(3)::tag
    real(kr)::al,be,bel,ex,exx,st,add,sc,alp,alw,ssct,ckk
    real(kr)::ff0,ff1,ff2,ff1l,ff2l,sum0,sum1
@@ -672,9 +672,10 @@ contains
    tempf(itemp)=tbar*tempr(itemp)
    write(nsyso,'(/'' p(beta) is scaled to'',f9.5//&
      &  '' for p-bound only''/&
-     &  ''             effective temp='',f10.2/&
+     &  ''             effective temp = '',f10.3/&
      &  ''        debye-waller lambda='',f10.6)')&
      tbeta,tempf(itemp),f0
+   write(nsyso,'(''          factor_ph = '',f10.6)') tbar
    return
    end subroutine start
 
@@ -830,7 +831,7 @@ contains
    if (lat.eq.1) sc=therm/tev
 
    !---allocate scratch storage
-   ndmax=max(nbeta,25000)
+   ndmax=max(nbeta,1000000)
    allocate(betan(nbeta))
    allocate(ap(ndmax))
    allocate(sd(ndmax))
@@ -950,7 +951,7 @@ contains
 
    !--update effective temperature
    tempf(itemp)=(tbeta*tempf(itemp)+twt*tempr(itemp))/(tbeta+twt)
-   write(nsyso,'(/''     new effective temp='',f10.2)') tempf(itemp)
+   write(nsyso,'(/''     new effective temp = '',f10.3)') tempf(itemp)
 
    !--deallocate scratch storage
    deallocate(sb)
@@ -1090,7 +1091,9 @@ contains
    real(kr),parameter::slim=-225.e0_kr
    real(kr),parameter::zero=0
 
+   terps=0
    i=int(be/delta)
+   if (i.lt.0) return
    if (i.lt.nsd-1) then
       bt=i*delta
       btp=bt+delta
@@ -1110,7 +1113,6 @@ contains
       if (stt.gt.slim) terps=exp(stt)
       return
    endif
-   terps=0
    return
    end function terps
 
@@ -1592,9 +1594,10 @@ contains
    !--finished
    tempf(itemp)=(tbeta+twt)*tempf(itemp)+tsave
    write(nsyso,'(/&
-     &  ''       new effective temp='',f10.2/&
+     &  ''       new effective temp = '',f10.3/&
      &  ''  new debye-waller lambda='',f10.6)')&
      tempf(itemp),dwpix(itemp)
+   write(nsyso,'('' discr.-oscill. part of eff. temp = '',f10.3)') tsave
    deallocate(wtn)
    deallocate(ben)
    deallocate(wts)
@@ -2931,7 +2934,7 @@ contains
    equivalence(t(1),z(1))
    real(kr),parameter::small=1.e-9_kr
    real(kr),parameter::tiny=-999.e0_kr
-   real(kr),parameter::smin=1.e-75_kr
+   real(kr),parameter::smin=2.0e-38_kr
    real(kr),parameter::tol=0.9e-7_kr
    real(kr),parameter::up=1.01e0_kr
    real(kr),parameter::therm=.0253e0_kr

@@ -1,5 +1,5 @@
 module matxsm
-   ! provides subroutine matxsr for NJOY2012
+   ! provides subroutine matxsr for NJOY2016
    use locale
    implicit none
    private
