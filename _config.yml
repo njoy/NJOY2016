@@ -12,7 +12,9 @@ email: njoy@lanl.gov
 
 description: > # this means to ignore newlines until "baseurl:"
   Website for documentation and code for the development of NJOY, a nuclear data 
-  processing code from Los Alamos National Laboratory.
+  processing code from Los Alamos National Laboratory. All source code as part 
+  of the NJOY project—including this website—is covered by the BSD, 3-clause 
+  license, as detailed in the <a href="/LICENSE.html">license</a> file.
 
 url: "http://njoy.lanl.gov" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
@@ -27,5 +29,5 @@ theme: minima
 port: 8000
 baseurl: "" # the subpath of your site, e.g. /blog
 
-exclude: [vendor, 'README-jekyll.md']
+exclude: [vendor]
 include: ['Developers', 'Build', 'LICENSE.md']

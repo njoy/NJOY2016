@@ -1,3 +1,6 @@
+---
+layout: page
+---
 # Jekyll-website
 This repository contains the required stuff to make the NJOY website and keep it consistent across all the projects.
 
