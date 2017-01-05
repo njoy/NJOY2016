@@ -27,5 +27,5 @@ theme: minima
 port: 8000
 baseurl: "" # the subpath of your site, e.g. /blog
 
-exclude: [vendor]
-include: ['Developers', 'Build']
+exclude: [vendor, 'README-jekyll.md']
+include: ['Developers', 'Build', 'LICENSE.md']
