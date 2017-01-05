@@ -14,7 +14,8 @@ description: > # this means to ignore newlines until "baseurl:"
   Website for documentation and code for the development of NJOY, a nuclear data 
   processing code from Los Alamos National Laboratory. All source code as part 
   of the NJOY project—including this website—is covered by the BSD, 3-clause 
-  license, as detailed in the <a href="/LICENSE.html">license</a> file.
+  license, as detailed in the 
+  <a href="https://njoy.github.io/LICENSE.html">license</a> file.
 
 url: "http://njoy.lanl.gov" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
