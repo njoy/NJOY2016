@@ -8,7 +8,7 @@ errorr
    0     /  terminate mt list with zero
 reconr
  +21 +22 /
- 'processing cl35 with rml'
+ 'processing cl35 with rml'/
  1725 0 0 /
  0.01 /
  0 /
@@ -21,7 +21,7 @@ broadr
 groupr
  +20 +23 0 +91 /
  1725 4 0 2 1 1 1 1 /
- 'test of cl35 with rml' 
+ 'test of cl35 with rml' /
  293.6 /
  1.0e10 /
  3 /
@@ -41,5 +41,5 @@ covr
  1 /
  1725 /
 viewr
- +26 +27
+ +26 +27/
 stop
