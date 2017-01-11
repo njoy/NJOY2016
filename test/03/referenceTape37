@@ -21,61 +21,61 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   106.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   112.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   118.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   124.82 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   158.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   170.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   176.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   182.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   188.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   194.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
     68.40   208.86 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   224.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
     68.40   238.87 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   253.27 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
 stroke
 newpath
@@ -139,13 +139,13 @@ newpath
    489.60   263.21 moveto
    484.20   263.21 lineto
    511.20   115.67 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   125.28 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   134.89 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
 stroke
 newpath
@@ -193,13 +193,13 @@ newpath
    489.60   410.81 moveto
    484.20   410.81 lineto
    511.20   256.55 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   266.16 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   275.76 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -247,13 +247,13 @@ newpath
    489.60   558.41 moveto
    484.20   558.41 lineto
    511.20   404.15 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   413.76 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   423.36 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
 stroke
 newpath
@@ -301,13 +301,13 @@ newpath
    489.60   706.01 moveto
    484.20   706.01 lineto
    511.20   551.75 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   561.36 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   570.96 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (7) show
 stroke
 newpath
@@ -315,46 +315,46 @@ newpath
    489.60   712.80 moveto
    478.80   712.80 lineto
    511.20   699.35 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   708.96 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   718.56 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (8) show
    540.36   359.98 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
    540.36   374.39 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (n) show
    540.36   386.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   398.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (r) show
    540.36   405.60 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (g) show
    540.36   417.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (y) show
    540.36   428.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
    540.36   434.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\() show
    540.36   441.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   453.62 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (V) show
    540.36   468.03 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -601,13 +601,13 @@ newpath
    394.30   122.40 moveto
    394.30   127.80 lineto
    496.08    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    496.08    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    487.44   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (2) show
 stroke
 newpath
@@ -655,13 +655,13 @@ newpath
    294.40   122.40 moveto
    294.40   127.80 lineto
    396.18    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    396.18    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    387.54   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (3) show
 stroke
 newpath
@@ -709,13 +709,13 @@ newpath
    194.50   122.40 moveto
    194.50   127.80 lineto
    296.28    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    296.28    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    287.64   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
 stroke
 newpath
@@ -763,13 +763,13 @@ newpath
     94.60   122.40 moveto
     94.60   127.80 lineto
    196.38    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    196.38    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    187.74   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -777,76 +777,76 @@ newpath
     90.00   122.40 moveto
     90.00   133.20 lineto
     96.48    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
     96.48    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
     87.84   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
    394.23    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (C) show
    378.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    371.44    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    359.43    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    348.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    337.83    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    331.82    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (S) show
    317.42    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
    305.41    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (c) show
    294.61    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
    288.60    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
    283.81    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    271.80    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    259.79    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    253.78    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\() show
    246.59    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (b) show
    234.58    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
    222.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    215.38    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    203.37    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    192.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -1098,16 +1098,16 @@ newpath
    0.965 setlinewidth
    108.16   170.09 lineto
    113.92   184.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    113.92   196.48 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
    113.92   200.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (G) show
    113.92   211.69 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
 stroke grestore newpath
 %gend
@@ -1132,64 +1132,64 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   106.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   112.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   118.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   124.82 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   158.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   170.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   176.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   182.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   188.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   194.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   208.86 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (B) show
     68.40   223.27 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (S) show
     68.40   237.68 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   254.48 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (R) show
     68.40   270.08 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
 stroke
 newpath
@@ -1253,13 +1253,13 @@ newpath
    489.60   263.21 moveto
    484.20   263.21 lineto
    511.20   115.67 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   125.28 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   134.89 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
 stroke
 newpath
@@ -1307,13 +1307,13 @@ newpath
    489.60   410.81 moveto
    484.20   410.81 lineto
    511.20   256.55 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   266.16 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   275.76 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -1361,13 +1361,13 @@ newpath
    489.60   558.41 moveto
    484.20   558.41 lineto
    511.20   404.15 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   413.76 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   423.36 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
 stroke
 newpath
@@ -1415,13 +1415,13 @@ newpath
    489.60   706.01 moveto
    484.20   706.01 lineto
    511.20   551.75 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   561.36 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   570.96 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (7) show
 stroke
 newpath
@@ -1429,46 +1429,46 @@ newpath
    489.60   712.80 moveto
    478.80   712.80 lineto
    511.20   699.35 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   708.96 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   718.56 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (8) show
    540.36   359.98 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
    540.36   374.39 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (n) show
    540.36   386.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   398.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (r) show
    540.36   405.60 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (g) show
    540.36   417.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (y) show
    540.36   428.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
    540.36   434.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\() show
    540.36   441.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   453.62 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (V) show
    540.36   468.03 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -1740,16 +1740,16 @@ newpath
    271.65   122.40 moveto
    271.65   127.80 lineto
    443.81    82.26 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    443.81    91.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    435.17   101.47 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (-) show
    435.17   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
 stroke
 newpath
@@ -1797,16 +1797,16 @@ newpath
     97.99   122.40 moveto
     97.99   127.80 lineto
    270.14    82.26 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    270.14    91.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    261.50   101.47 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (-) show
    261.50   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -1814,79 +1814,79 @@ newpath
     90.00   122.40 moveto
     90.00   133.20 lineto
     96.48    82.26 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
     96.48    91.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
     87.84   101.47 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (-) show
     87.84   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
    394.23    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (C) show
    378.63    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    371.44    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    359.43    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    348.63    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    337.83    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    331.82    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (S) show
    317.42    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
    305.41    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (c) show
    294.61    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
    288.60    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
    283.81    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    271.80    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    259.79    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    253.78    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\() show
    246.59    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (b) show
    234.58    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
    222.57    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    215.38    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    203.37    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    192.57    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -2073,16 +2073,16 @@ newpath
    0.965 setlinewidth
    108.03   170.09 lineto
    113.79   184.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    113.79   196.48 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
    113.79   200.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (G) show
    113.79   211.69 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
 stroke grestore newpath
 %gend
@@ -2107,61 +2107,61 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   106.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   112.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   118.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   124.82 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   158.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   170.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   176.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   182.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   188.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   194.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   207.66 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   224.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   237.66 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   252.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (L) show
 stroke
 newpath
@@ -2225,13 +2225,13 @@ newpath
    489.60   263.21 moveto
    484.20   263.21 lineto
    511.20   115.67 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   125.28 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   134.89 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
 stroke
 newpath
@@ -2279,13 +2279,13 @@ newpath
    489.60   410.81 moveto
    484.20   410.81 lineto
    511.20   256.55 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   266.16 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   275.76 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -2333,13 +2333,13 @@ newpath
    489.60   558.41 moveto
    484.20   558.41 lineto
    511.20   404.15 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   413.76 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   423.36 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
 stroke
 newpath
@@ -2387,13 +2387,13 @@ newpath
    489.60   706.01 moveto
    484.20   706.01 lineto
    511.20   551.75 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   561.36 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   570.96 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (7) show
 stroke
 newpath
@@ -2401,46 +2401,46 @@ newpath
    489.60   712.80 moveto
    478.80   712.80 lineto
    511.20   699.35 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   708.96 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   718.56 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (8) show
    540.36   359.98 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
    540.36   374.39 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (n) show
    540.36   386.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   398.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (r) show
    540.36   405.60 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (g) show
    540.36   417.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (y) show
    540.36   428.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
    540.36   434.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\() show
    540.36   441.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   453.62 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (V) show
    540.36   468.03 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -2727,16 +2727,16 @@ newpath
    159.33   122.40 moveto
    159.33   127.80 lineto
    356.42    82.26 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    356.42    91.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    347.78   101.47 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (-) show
    347.78   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (1) show
 stroke
 newpath
@@ -2749,76 +2749,76 @@ newpath
     90.00   122.40 moveto
     90.00   127.80 lineto
    156.62    82.26 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    156.62    91.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    147.98   101.47 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (0) show
    394.23    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (C) show
    378.63    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    371.44    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    359.43    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    348.63    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    337.83    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    331.82    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (S) show
    317.42    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
    305.41    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (c) show
    294.61    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
    288.60    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
    283.81    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    271.80    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    259.79    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    253.78    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\() show
    246.59    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (b) show
    234.58    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
    222.57    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    215.38    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    203.37    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    192.57    73.62 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -2980,16 +2980,16 @@ newpath
    0.965 setlinewidth
    109.22   601.20 lineto
    114.98   615.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    114.98   627.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
    114.98   631.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (G) show
    114.98   642.80 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
 stroke grestore newpath
 %gend
@@ -3514,19 +3514,19 @@ newpath
 [     4.82     2.89] 0 setdash
    125.06   601.20 lineto
    130.82   615.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    130.82   627.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (T) show
    130.82   636.39 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (5) show
    130.82   644.40 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (0) show
    130.82   652.41 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (1) show
 stroke grestore newpath
 %gend
@@ -3551,82 +3551,82 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   116.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   122.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   128.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   134.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (L) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (=) show
     68.40   177.05 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (0) show
     68.40   189.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   195.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
     68.40   209.47 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   225.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   241.87 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   255.07 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (-) show
     68.40   262.26 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
     68.40   276.67 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   292.26 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   309.07 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   322.26 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   328.27 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   341.47 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   355.87 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (B) show
     68.40   370.28 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (L) show
     68.40   382.29 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
 stroke
 newpath
@@ -4563,61 +4563,61 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   106.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   112.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   118.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   124.82 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (U) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   158.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   170.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   176.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   182.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   188.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   194.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
     68.40   208.86 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   224.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
     68.40   238.87 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   253.27 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
 stroke
 newpath
@@ -4681,13 +4681,13 @@ newpath
    489.60   263.21 moveto
    484.20   263.21 lineto
    511.20   115.67 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   125.28 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   134.89 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
 stroke
 newpath
@@ -4735,13 +4735,13 @@ newpath
    489.60   410.81 moveto
    484.20   410.81 lineto
    511.20   256.55 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   266.16 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   275.76 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -4789,13 +4789,13 @@ newpath
    489.60   558.41 moveto
    484.20   558.41 lineto
    511.20   404.15 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   413.76 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   423.36 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
 stroke
 newpath
@@ -4843,13 +4843,13 @@ newpath
    489.60   706.01 moveto
    484.20   706.01 lineto
    511.20   551.75 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   561.36 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   570.96 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (7) show
 stroke
 newpath
@@ -4857,46 +4857,46 @@ newpath
    489.60   712.80 moveto
    478.80   712.80 lineto
    511.20   699.35 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   708.96 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   718.56 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (8) show
    540.36   359.98 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
    540.36   374.39 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (n) show
    540.36   386.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   398.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (r) show
    540.36   405.60 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (g) show
    540.36   417.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (y) show
    540.36   428.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
    540.36   434.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\() show
    540.36   441.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   453.62 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (V) show
    540.36   468.03 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -5168,13 +5168,13 @@ newpath
    238.85   122.40 moveto
    238.85   127.80 lineto
    435.94    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    435.94    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    427.30   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (7) show
 stroke
 newpath
@@ -5202,76 +5202,76 @@ newpath
     90.00   122.40 moveto
     90.00   127.80 lineto
    236.14    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    236.14    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    227.50   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (8) show
    394.23    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (C) show
    378.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    371.44    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    359.43    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    348.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    337.83    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    331.82    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (S) show
    317.42    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
    305.41    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (c) show
    294.61    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
    288.60    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
    283.81    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    271.80    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    259.79    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    253.78    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\() show
    246.59    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (b) show
    234.58    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
    222.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    215.38    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    203.37    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    192.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -5433,16 +5433,16 @@ newpath
    0.965 setlinewidth
    107.32   170.09 lineto
    113.08   184.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    113.08   196.48 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
    113.08   200.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (G) show
    113.08   211.69 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
 stroke grestore newpath
 %gend
@@ -5467,64 +5467,64 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   106.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   112.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   118.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   124.82 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (U) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   158.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   170.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   176.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   182.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   188.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   194.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   208.86 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (B) show
     68.40   223.27 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (S) show
     68.40   237.68 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   254.48 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (R) show
     68.40   270.08 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
 stroke
 newpath
@@ -5588,13 +5588,13 @@ newpath
    489.60   263.21 moveto
    484.20   263.21 lineto
    511.20   115.67 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   125.28 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   134.89 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
 stroke
 newpath
@@ -5642,13 +5642,13 @@ newpath
    489.60   410.81 moveto
    484.20   410.81 lineto
    511.20   256.55 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   266.16 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   275.76 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -5696,13 +5696,13 @@ newpath
    489.60   558.41 moveto
    484.20   558.41 lineto
    511.20   404.15 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   413.76 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   423.36 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
 stroke
 newpath
@@ -5750,13 +5750,13 @@ newpath
    489.60   706.01 moveto
    484.20   706.01 lineto
    511.20   551.75 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   561.36 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   570.96 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (7) show
 stroke
 newpath
@@ -5764,46 +5764,46 @@ newpath
    489.60   712.80 moveto
    478.80   712.80 lineto
    511.20   699.35 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   708.96 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   718.56 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (8) show
    540.36   359.98 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
    540.36   374.39 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (n) show
    540.36   386.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   398.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (r) show
    540.36   405.60 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (g) show
    540.36   417.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (y) show
    540.36   428.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
    540.36   434.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\() show
    540.36   441.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   453.62 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (V) show
    540.36   468.03 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -6050,13 +6050,13 @@ newpath
    394.30   122.40 moveto
    394.30   127.80 lineto
    496.08    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    496.08    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    487.44   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (0) show
 stroke
 newpath
@@ -6104,13 +6104,13 @@ newpath
    294.40   122.40 moveto
    294.40   127.80 lineto
    396.18    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    396.18    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    387.54   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (1) show
 stroke
 newpath
@@ -6158,13 +6158,13 @@ newpath
    194.50   122.40 moveto
    194.50   127.80 lineto
    296.28    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    296.28    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    287.64   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (2) show
 stroke
 newpath
@@ -6212,13 +6212,13 @@ newpath
     94.60   122.40 moveto
     94.60   127.80 lineto
    196.38    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    196.38    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    187.74   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (3) show
 stroke
 newpath
@@ -6226,76 +6226,76 @@ newpath
     90.00   122.40 moveto
     90.00   133.20 lineto
     96.48    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
     96.48    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
     87.84   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
    394.23    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (C) show
    378.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    371.44    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    359.43    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    348.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    337.83    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    331.82    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (S) show
    317.42    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
    305.41    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (c) show
    294.61    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
    288.60    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
    283.81    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    271.80    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    259.79    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    253.78    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\() show
    246.59    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (b) show
    234.58    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
    222.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    215.38    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    203.37    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    192.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -6547,16 +6547,16 @@ newpath
    0.965 setlinewidth
    108.16   170.09 lineto
    113.92   184.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    113.92   196.48 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
    113.92   200.49 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (G) show
    113.92   211.69 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
 stroke grestore newpath
 %gend
@@ -6581,61 +6581,61 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   106.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   112.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   118.81 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   124.82 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (U) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   158.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   170.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   176.44 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   182.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   188.45 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   194.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   207.66 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   224.46 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   237.66 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   252.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (L) show
 stroke
 newpath
@@ -6699,13 +6699,13 @@ newpath
    489.60   263.21 moveto
    484.20   263.21 lineto
    511.20   115.67 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   125.28 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   134.89 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
 stroke
 newpath
@@ -6753,13 +6753,13 @@ newpath
    489.60   410.81 moveto
    484.20   410.81 lineto
    511.20   256.55 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   266.16 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   275.76 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (5) show
 stroke
 newpath
@@ -6807,13 +6807,13 @@ newpath
    489.60   558.41 moveto
    484.20   558.41 lineto
    511.20   404.15 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   413.76 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   423.36 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (6) show
 stroke
 newpath
@@ -6861,13 +6861,13 @@ newpath
    489.60   706.01 moveto
    484.20   706.01 lineto
    511.20   551.75 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   561.36 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   570.96 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (7) show
 stroke
 newpath
@@ -6875,46 +6875,46 @@ newpath
    489.60   712.80 moveto
    478.80   712.80 lineto
    511.20   699.35 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    511.20   708.96 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    502.56   718.56 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (8) show
    540.36   359.98 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
    540.36   374.39 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (n) show
    540.36   386.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   398.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (r) show
    540.36   405.60 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (g) show
    540.36   417.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (y) show
    540.36   428.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
    540.36   434.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\() show
    540.36   441.61 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (e) show
    540.36   453.62 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (V) show
    540.36   468.03 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -7161,13 +7161,13 @@ newpath
    394.30   122.40 moveto
    394.30   127.80 lineto
    496.08    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    496.08    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    487.44   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (0) show
 stroke
 newpath
@@ -7215,13 +7215,13 @@ newpath
    294.40   122.40 moveto
    294.40   127.80 lineto
    396.18    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    396.18    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    387.54   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (1) show
 stroke
 newpath
@@ -7269,13 +7269,13 @@ newpath
    194.50   122.40 moveto
    194.50   127.80 lineto
    296.28    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    296.28    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    287.64   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (2) show
 stroke
 newpath
@@ -7323,13 +7323,13 @@ newpath
     94.60   122.40 moveto
     94.60   127.80 lineto
    196.38    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
    196.38    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
    187.74   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (3) show
 stroke
 newpath
@@ -7337,76 +7337,76 @@ newpath
     90.00   122.40 moveto
     90.00   133.20 lineto
     96.48    86.86 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (1) show
     96.48    96.47 moveto
-/Helvetica findfont [   0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
     87.84   106.07 moveto
-/Helvetica findfont [   0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
 (4) show
    394.23    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (C) show
    378.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    371.44    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    359.43    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    348.63    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    337.83    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    331.82    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (S) show
    317.42    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
    305.41    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (c) show
    294.61    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
    288.60    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
    283.81    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
    271.80    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    259.79    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
    253.78    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\() show
    246.59    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (b) show
    234.58    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
    222.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
    215.38    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
    203.37    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (s) show
    192.57    78.22 moveto
-/Helvetica findfont [ -21.60   0.00   0.00 -21.60 0. 0.] makefont setfont
+/Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\)) show
 stroke
 newpath
@@ -7658,16 +7658,16 @@ newpath
    0.965 setlinewidth
    108.16   601.20 lineto
    113.92   615.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    113.92   627.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
    113.92   631.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (G) show
    113.92   642.80 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (.) show
 stroke grestore newpath
 %gend
@@ -8235,19 +8235,19 @@ newpath
 [     4.82     2.89] 0 setdash
    124.00   601.20 lineto
    129.76   615.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (M) show
    129.76   627.60 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (T) show
    129.76   636.39 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (5) show
    129.76   644.40 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (0) show
    129.76   652.41 moveto
-/Helvetica findfont [   0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (1) show
 stroke grestore newpath
 %gend
@@ -8272,82 +8272,82 @@ newpath
    576.00    36.00 lineto
  gsave clip newpath
     68.40   100.80 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (U) show
     68.40   116.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   122.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   128.40 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   134.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   140.41 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   146.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   152.42 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (L) show
     68.40   164.43 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (=) show
     68.40   177.05 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (0) show
     68.40   189.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   195.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
     68.40   209.47 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   225.06 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   241.87 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   255.07 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (-) show
     68.40   262.26 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (P) show
     68.40   276.67 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (H) show
     68.40   292.26 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (O) show
     68.40   309.07 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   322.26 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 ( ) show
     68.40   328.27 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (T) show
     68.40   341.47 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (A) show
     68.40   355.87 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (B) show
     68.40   370.28 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (L) show
     68.40   382.29 moveto
-/Helvetica findfont [   0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
+/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (E) show
 stroke
 newpath
