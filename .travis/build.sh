@@ -2,16 +2,14 @@
 set -x
 
 if [ "$TRAVIS_OS_NAME" = "linux" ]; then
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 90 \
-	 --slave /usr/bin/g++ g++ /usr/bin/g++-6 \
-	 --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-6 \
-	 --slave /usr/bin/gcov gcov /usr/bin/gcov-6 \
-	 --slave /usr/bin/gcc-ar ar /usr/bin/gcc-ar-6 \
-	 --slave /usr/bin/gcc-nm nm /usr/bin/gcc-nm-6 \
-	 --slave /usr/bin/gcc-ranlib ranlib /usr/bin/gcc-ranlib-6
-    sudo update-alternatives --config gcc
-    export CUSTOM=('-D CMAKE_AR=/usr/bin/gcc-ar' '-D CMAKE_NM=/usr/bin/gcc-nm' '-D CMAKE_RANLIB=/usr/bin/gcc-ranlib')
-  fi;
+  sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 90 \
+       --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-6 \
+       --slave /usr/bin/gcov gcov /usr/bin/gcov-6 \
+       --slave /usr/bin/gcc-ar ar /usr/bin/gcc-ar-6 \
+       --slave /usr/bin/gcc-nm nm /usr/bin/gcc-nm-6 \
+       --slave /usr/bin/gcc-ranlib ranlib /usr/bin/gcc-ranlib-6
+  sudo update-alternatives --config gcc
+  export CUSTOM=('-D CMAKE_AR=/usr/bin/gcc-ar' '-D CMAKE_NM=/usr/bin/gcc-nm' '-D CMAKE_RANLIB=/usr/bin/gcc-ranlib')
 fi
 
 mkdir build

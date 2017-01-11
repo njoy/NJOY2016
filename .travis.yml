@@ -11,19 +11,17 @@ addons:
       - george-edison55-precise-backports
     packages:
       - gcc-6
-      - g++-6
       - gfortran-6
       - cmake
       - cmake-data
       
-language: cpp
+language: c
 
 compiler:
   - gcc
 
 os:
   - linux
-  - osx
   
 script: ./.travis/build.sh
 
