@@ -1,0 +1,37 @@
+sudo: required
+dist: trusty
+
+git:
+  submodules: false  
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - george-edison55-precise-backports
+    packages:
+      - gcc-6
+      - g++-6
+      - gfortran-6
+      - cmake
+      - cmake-data
+      
+language: cpp
+
+compiler:
+  - gcc
+
+os:
+  - linux
+  - osx
+  
+script: ./.travis/build.sh
+
+env:
+  - build_type=debug static_libraries=FALSE
+
+matrix:
+#  include:
+#    - os: linux
+#      compiler: gcc
+#      env: build_type=coverage static_libraries=FALSE
