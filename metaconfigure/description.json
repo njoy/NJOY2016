@@ -43,7 +43,7 @@
 "src/viewr.f90",
 "src/wimsr.f90"
 ],
-"version": "2012",
+"version": "2016",
 "name": "njoy",
 "driver": "src/main.f90",
 "target": "executable"

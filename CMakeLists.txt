@@ -41,6 +41,12 @@ endif()
 
 project( njoy VERSION 2016 LANGUAGES Fortran )
 
+if( NOT DEFINED Fortran_module_directory )
+  set( Fortran_module_directory "${CMAKE_BINARY_DIR}/modules"
+       CACHE PATH "directory for fortran modules" )
+     file( MAKE_DIRECTORY "${Fortran_module_directory}" )
+endif()
+
 if( DEFINED Fortran_compiler_flags )
     if( ( NOT DEFINED njoy_compiler_flags ) AND ( NOT DEFINED njoy_use_default_compiler_flags ) )
         set( njoy_compiler_flags "${Fortran_compiler_flags}" )
@@ -150,6 +156,8 @@ foreach( flag IN LISTS njoy_compiler_flags_list )
 endforeach( flag )           
 set_target_properties( njoy PROPERTIES LINK_FLAGS "${njoy_compiler_flags}" )
 target_include_directories( njoy PUBLIC ${PROJECT_BINARY_DIRECTORY} ) 
+set_target_properties( njoy PROPERTIES Fortran_MODULE_DIRECTORY "${Fortran_module_directory}" )
+target_include_directories( njoy PUBLIC "${Fortran_module_directory}" )
 
 add_executable( njoy_executable src/main.f90 )
 
@@ -159,7 +167,10 @@ foreach( flag IN LISTS $njoy_compiler_flags_list )
 endforeach( flag )           
 set_target_properties( njoy_executable PROPERTIES LINK_FLAGS "${njoy_compiler_flags}" )
 set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
-target_include_directories( njoy_executable PUBLIC ${PROJECT_BINARY_DIRECTORY} )
+set_target_properties( njoy_executable PROPERTIES Fortran_MODULE_DIRECTORY "${Fortran_module_directory}" )
+target_include_directories( njoy_executable PUBLIC "${Fortran_module_directory}" )
 
 enable_testing()
-add_subdirectory(test)
+if ( NOT is_subproject )
+    add_subdirectory(test)
+endif()
