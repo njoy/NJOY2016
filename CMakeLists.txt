@@ -39,7 +39,7 @@ else()
     set( njoy_policy SHARED )
 endif()
 
-project( njoy VERSION 2012 LANGUAGES Fortran )
+project( njoy VERSION 2016 LANGUAGES Fortran )
 
 if( DEFINED Fortran_compiler_flags )
     if( ( NOT DEFINED njoy_compiler_flags ) AND ( NOT DEFINED njoy_use_default_compiler_flags ) )
