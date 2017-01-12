@@ -10,7 +10,7 @@
   <div class="trigger">
     {% for page in site.data.navigation %}
       {% if page.title %}
-      <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">
+      <a class="page-link" href="{{ page.url }}">
         {{ page.title }}
       </a>
 
