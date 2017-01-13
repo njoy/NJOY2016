@@ -18,7 +18,7 @@ title: NJOY2016 Test Descriptions
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/03/input)]
 
- This one demonstrates processing photoatomic data and the use of MATXS output files.  Newer versions of the photoatomic data are all on one file, rather than the two shown here.  Note that two materials are processed to show the limiting behaviors.  The multigroup constants printed by `GAMINR` on the [output file](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/02/referenceOutput) can be checked.  Two different output formats are generated: the DTF format and the MATXS format.  The `DTFR` numbers are given on the listing.  `DTFR` also generates Postscript plots of its results; the [Postscript](https://raw.githubusercontent.com/njoy/NJOY2016/master/docs/tests/03/referenceTape37) file has been converted to [PDF](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/03/referenceTape37.pdf) format for easy viewing.
+ This one demonstrates processing photoatomic data and the use of MATXS output files.  Newer versions of the photoatomic data are all on one file, rather than the two shown here.  Note that two materials are processed to show the limiting behaviors.  The multigroup constants printed by `GAMINR` on the [output file](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/02/referenceOutput) can be checked.  Two different output formats are generated: the DTF format and the MATXS format.  The `DTFR` numbers are given on the listing.  `DTFR` also generates Postscript plots of its results; the [Postscript](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/03/referenceTape37) file has been converted to [PDF](https://raw.githubusercontent.com/njoy/NJOY2016/master/docs/tests/03/referenceTape37.pdf) format for easy viewing.
 
 ## Test Problem 4
 
@@ -54,7 +54,7 @@ title: NJOY2016 Test Descriptions
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/09/input)]
 
- This one demonstrates the use of `LEAPR` to generate a scattering kernel for water.  We have used the ENDF physics model, but we reduced the alpha and beta ranges to make the case run faster with less output.  Note that `RECONR` and `BROADR` are run to prepare a base for the thermal data at 296K.  `THERMR` was run with its long printout option to provide plenty of numbers on the [output file](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/07/referenceOutput) for comparisons.  For additional details, look at the actual `LEAPR` [output](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/08/referenceTape24).
+ This one demonstrates the use of `LEAPR` to generate a scattering kernel for water.  We have used the ENDF physics model, but we reduced the alpha and beta ranges to make the case run faster with less output.  Note that `RECONR` and `BROADR` are run to prepare a base for the thermal data at 296K.  `THERMR` was run with its long printout option to provide plenty of numbers on the [output file](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/07/referenceOutput) for comparisons.  For additional details, look at the actual `LEAPR` [output](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/09/referenceTape24).
 
 ## Test Problem 10
 
