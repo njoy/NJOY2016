@@ -16,10 +16,10 @@ with open('input', 'r') as i, \
      open('error', 'w') as e :
     njoy = os.path.join('..', '..', 'njoy')
     child = subprocess.Popen(njoy, stdin=i, stdout=o, stderr=e)
-    exit_code = child.communicate()[0]
-    if (exit_code):
+    child.communicate()
+    if ( child.poll() ):
         print("Error enountered while running NJOY!")
-        exit(exit_code)
+        exit( child.poll() )
 
     for reference_tape in reference_tapes:
         trial_tape = 'tape' + reference_tape[-2:]
@@ -56,8 +56,3 @@ with open('input', 'r') as i, \
         
     os.remove('output')
     os.remove('error')
-        
-        
-
-    
-    
