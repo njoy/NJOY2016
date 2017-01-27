@@ -1,7 +1,8 @@
 module mainio
-   ! Fortran unit numbers for i/o.  we use the iso_fortran_env
-   ! definitions to maximize portability among platforms.
-   !
+   ! Fortran unit numbers for system I/O.  Users should only revert
+   ! to the legacy values if these iso_fortran_env variable values
+   ! cause conflicts with njoy scratch or user logical units.
+
    use iso_fortran_env,only: INPUT_UNIT, ERROR_UNIT, OUTPUT_UNIT
    implicit none
    private

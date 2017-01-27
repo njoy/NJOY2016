@@ -12,7 +12,7 @@ module locale
    implicit none
    private
    character(8),public::lab='lanl t2'
-   character(8),public::mx='pc-ifort'
+   character(8),public::mx='        '
    integer,parameter,public::kr=selected_real_kind(12,300)
    integer,parameter,public::k4=4
    integer,parameter,public::k8=8
