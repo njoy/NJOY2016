@@ -20,6 +20,7 @@ stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
    288.00   225.36 moveto
+   0.360 setlinewidth
    288.00   585.36 lineto
     44.64   585.36 lineto
     44.64   225.36 lineto
@@ -3433,6 +3434,7 @@ stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
    288.00   225.36 moveto
+   0.360 setlinewidth
    288.00   585.36 lineto
     44.64   585.36 lineto
     44.64   225.36 lineto
@@ -8903,6 +8905,7 @@ stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
    288.00   225.36 moveto
+   0.360 setlinewidth
    288.00   585.36 lineto
     44.64   585.36 lineto
     44.64   225.36 lineto
@@ -14350,6 +14353,7 @@ stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
    288.00   225.36 moveto
+   0.360 setlinewidth
    288.00   585.36 lineto
     44.64   585.36 lineto
     44.64   225.36 lineto
@@ -19033,6 +19037,7 @@ stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
    288.00   225.36 moveto
+   0.360 setlinewidth
    288.00   585.36 lineto
     44.64   585.36 lineto
     44.64   225.36 lineto
@@ -24158,6 +24163,7 @@ stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
    288.00   225.36 moveto
+   0.360 setlinewidth
    288.00   585.36 lineto
     44.64   585.36 lineto
     44.64   225.36 lineto
