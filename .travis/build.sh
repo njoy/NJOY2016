@@ -10,6 +10,8 @@ if [ "$TRAVIS_OS_NAME" = "linux" ]; then
        --slave /usr/bin/gcc-ranlib ranlib /usr/bin/gcc-ranlib-6
   sudo update-alternatives --config gcc
   export CUSTOM=('-D CMAKE_AR=/usr/bin/gcc-ar' '-D CMAKE_NM=/usr/bin/gcc-nm' '-D CMAKE_RANLIB=/usr/bin/gcc-ranlib')
+else
+  export CUSTOM=("-D no_link_time_optimization=TRUE")
 fi
 
 mkdir build
