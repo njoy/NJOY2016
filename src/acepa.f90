@@ -1001,11 +1001,11 @@ contains
    call openz(ndir,1)
    if (mcnpx.eq.0) then
       write(ndir,&
-        &'(a10,f12.6,'' filename route'',i2,'' 1'',i8,2i6,1p,e10.3)')&
+        '(a10,f12.6,'' filename route'',i2,'' 1 '',i8,2i6,1p,e10.3)')&
         hz(1:10),aw0,itype,len2,lrec,nern,tz
    else
       write(ndir,&
-        '(a13,f12.6,'' filename route'',i2,'' 1'',i8,2i6,1p,e10.3)')&
+        '(a13,f12.6,'' filename route'',i2,'' 1 '',i8,2i6,1p,e10.3)')&
         hz(1:13),aw0,itype,len2,lrec,nern,tz
    endif
    call closz(ndir)

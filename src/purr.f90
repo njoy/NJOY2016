@@ -2348,7 +2348,7 @@ contains
          sigf(5,i,itemp)=bval(5,i,itemp)/bval(7,i,itemp)
       enddo
    enddo
-   if (nsyso.ne.0) then
+   if (iprint.gt.0) then
       do itemp=1,ntemp
          do i=1,nsig0
             write(nsyso,'(3x,1p,2e10.3,5e12.4)')&
@@ -2431,7 +2431,7 @@ contains
          sigb(5,i,itemp)=bval(5,i,itemp)/bval(7,i,itemp)
       enddo
    enddo
-   if (nsyso.ne.0) then
+   if (iprint.gt.0) then
       do itemp=1,ntemp
          do i=1,nsig0
             write(nsyso,'(3x,1p,2e10.3,5e12.4)')&
