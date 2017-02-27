@@ -501,9 +501,11 @@ contains
    enow=0
    call gety1(enow,enext,idis,sig,nscr1,scr)
    if (mth.eq.18) go to 170
-   if (n.le.npp.and.mth.eq.nppmt(n)) then
-      n=n+1
-      goto 170
+   if (allocated(nppmt)) then
+      if (n.le.npp.and.mth.eq.nppmt(n)) then
+         n=n+1
+         go to 170
+      endif
    endif
    if (enext.le.emin) go to 170
    if (lrp.eq.1.and.enext.lt.eresh) go to 170

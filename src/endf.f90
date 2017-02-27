@@ -213,10 +213,12 @@ contains
    ! TAB1 structure.  If any unit is zero, it is not used.
    ! Positive units are bcd, negative ones are blocked binary.
    !--------------------------------------------------------------------
+   use util ! provides error
    ! externals
    integer::nin,nout,nscr,nb,nw
    real(kr)::a(*)
    ! internals
+   character(len=60)::strng
    integer::inin,inout,inscr
    integer::i,j,k,l,m,lim,kp1,nbx,nwx
 
@@ -232,6 +234,11 @@ contains
       l2h=nint(a(4))
       n1h=nint(a(5))
       n2h=nint(a(6))
+      if (n1h.le.0) then
+         write(strng,'(" illegal TAB1, nr<=0 for mf/mt = ",i2,"/",i3)')&
+                      mfh,mth
+         call error('endf',strng,'')
+      endif
       a(3)=l1h
       a(4)=l2h
       a(5)=n1h
@@ -242,6 +249,11 @@ contains
       enddo
    else if (nin.gt.0) then
       call contio(nin,0,0,a,nb,nw)
+      if (n1h.le.0) then
+         write(strng,'(" illegal TAB1, nr<=0 for mf/mt = ",i2,"/",i3)')&
+                      mfh,mth
+         call error('endf',strng,'')
+      endif
       nb=6+2*n1h+2*n2h
       call tablio(nin,0,0)
       k=6
@@ -270,6 +282,13 @@ contains
       a(5)=n1h
       a(6)=n2h
       nw=k+j
+   endif
+   if (nin.ne.0) then
+      if (nbt(n1h).ne.n2h) then
+         write(strng,'(" illegal TAB1, nbt(nr)/=np for mf/mt = ",&
+                     &i2,"/",i3)')mfh,mth
+         call error('endf',strng,'')
+      endif
    endif
 
    !--output

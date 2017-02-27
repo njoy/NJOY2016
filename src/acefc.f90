@@ -8458,7 +8458,7 @@ contains
          nexd=nex+2*ne
          !--loop over incident energies
          if (nd0.gt.0) then
-            allocate(tdise(2*nd0))
+            allocate(tdise(2*ndise))
             tdise=0
          endif
          do ie=1,ne

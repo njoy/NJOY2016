@@ -603,9 +603,8 @@ contains
    strng=' '
    read(nsysi,*) mfd,mtdp,strng
    if (mfd.lt.0.or.mfd.eq.1.or.mfd.eq.2.or.mfd.eq.4) go to 381
-   if (mfd.gt.6.and.mfd.lt.8) go to 381
-   if (mfd.gt.8.and.mfd.lt.10) go to 381
-   if (mfd.gt.10.and.mfd.lt.16) go to 381
+   if (mfd.eq.7.or.mfd.eq.9.or.mfd.eq.11) go to 381
+   if (mfd.eq.14.or.mfd.eq.15) go to 381
    if (mfd.gt.18.and.mfd.lt.21) go to 381
    if (mfd.gt.26.and.mfd.lt.31) go to 381
    if (mfd.gt.36.and.mfd.lt.10000000) go to 381

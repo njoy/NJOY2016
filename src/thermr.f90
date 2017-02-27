@@ -427,7 +427,7 @@ contains
    call tpend(iold,itemp,np,nex,icoh,icopy)
 
    !--continue temperature loop
-   if (nwb.ne.0) deallocate(fl)
+   if (allocated(fl)) deallocate(fl)
    if (itemp.eq.ntemp) go to 310
    itemp=itemp+1
    call repoz(nscr2)
