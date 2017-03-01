@@ -1346,6 +1346,7 @@ contains
    do while (nb.ne.0)
       call moreio(nin,0,0,res(jnow),nb,nw)
    enddo
+   lssf=l1h
    ne=n1h
    nls=n2h
    spin=c1h

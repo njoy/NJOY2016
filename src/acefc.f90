@@ -8458,7 +8458,7 @@ contains
          nexd=nex+2*ne
          !--loop over incident energies
          if (nd0.gt.0) then
-            allocate(tdise(2*nd0))
+            allocate(tdise(2*ndise))
             tdise=0
          endif
          do ie=1,ne
@@ -12630,21 +12630,21 @@ contains
    if (mcnpx.eq.0) then
       if (iurpt.gt.0) then
          write(ndir,&
-           '(a10,f12.6,'' filename route'',i2,i4,i8,2i6,1p,e10.3,&
+           '(a10,f12.6,'' filename route'',i2,i4,1x,i8,2i6,1p,e10.3,&
            &'' ptable'')') hz(1:10),aw0,itype,irec1,len2,lrec,nern,tz
       else
          write(ndir,&
-           '(a10,f12.6,'' filename route'',i2,i4,i8,2i6,1p,e10.3)')&
+           '(a10,f12.6,'' filename route'',i2,i4,1x,i8,2i6,1p,e10.3)')&
            hz(1:10),aw0,itype,irec1,len2,lrec,nern,tz
       endif
    else
       if (iurpt.gt.0) then
          write(ndir,&
-           '(a13,f12.6,'' file route'',i2,i4,i8,2i6,1p,e10.3,&
+           '(a13,f12.6,'' file route'',i2,i4,1x,i8,2i6,1p,e10.3,&
            &'' ptable'')') hz(1:13),aw0,itype,irec1,len2,lrec,nern,tz
       else
          write(ndir,&
-           '(a13,f12.6,'' file route'',i2,i4,i8,2i6,1p,e10.3)')&
+           '(a13,f12.6,'' file route'',i2,i4,1x,i8,2i6,1p,e10.3)')&
           hz(1:13),aw0,itype,irec1,len2,lrec,nern,tz
       endif
    endif
