@@ -586,7 +586,6 @@ contains
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zz8=0.08e0_kr
    real(kr),parameter::z123=0.123e0_kr
-   real(kr),parameter::aneutr=1.00866491578e0_kr
    ! use imf2=1 to output converted mf2
    !integer::imf2=1
    integer::imf2=0
@@ -695,7 +694,7 @@ contains
          !--analyze scattering length
          awri=res(jnow)
          emb(2,ier)=awri
-         aptru=z123*(awri*aneutr)**(one/three)+zz8
+         aptru=z123*(awri*amassn)**(one/three)+zz8
          apeff=ascat
          if (naps.eq.1) then
             aptru=ascat
@@ -886,14 +885,14 @@ contains
          emb(2,ier)=awri
          apl=res(jnow+1)
          if (apl.eq.zero) then
-            aptru=z123*(awri*aneutr)**(one/three)+zz8
+            aptru=z123*(awri*amassn)**(one/three)+zz8
             apeff=ascat
          else
             apeff=apl
             if (naps.eq.1) then
                aptru=apl
             else
-               aptru=z123*(awri*aneutr)**(one/three)+zz8
+               aptru=z123*(awri*amassn)**(one/three)+zz8
             endif
          endif
 
@@ -1279,7 +1278,6 @@ contains
    integer::ier
    ! internals
    integer::i
-   real(kr),parameter::neutron=1.00866491578e0_kr
    real(kr),parameter::proton=1.00727646688e0_kr
    real(kr),parameter::deuteron=2.01355321271e0_kr
    real(kr),parameter::triton=3.015501e0_kr
@@ -1301,27 +1299,27 @@ contains
          kza(i,ier)=0
          lpent(i,ier)=1
       else if (mt(i,ier).eq.103) then  ! proton
-         ema(i,ier)=proton/neutron
+         ema(i,ier)=proton/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.104) then  ! deuteron
-         ema(i,ier)=deuteron/neutron
+         ema(i,ier)=deuteron/amassn
          spina(i,ier)=1
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.105) then  ! triton
-         ema(i,ier)=triton/neutron
+         ema(i,ier)=triton/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.106) then  ! he3
-         ema(i,ier)=he3/neutron
+         ema(i,ier)=he3/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=2
          lpent(i,ier)=1
       else if (mt(i,ier).eq.107) then  ! alpha
-         ema(i,ier)=alpha/neutron
+         ema(i,ier)=alpha/amassn
          spina(i,ier)=0
          pa(i,ier)=0
          kza(i,ier)=2
@@ -1724,7 +1722,6 @@ contains
    integer::ippx,kgroup,ichan
    real(kr)::ff,twomhb,etac
    real(kr)::factor,alabcm,aa,redmas,z
-   real(kr),parameter::emneut=1.00866491578e0_kr ! neutron amu
    real(kr),parameter::hbarrr=6.582118890e-16_kr ! hbar in eV-s
    real(kr),parameter::amuevv=931.494013e+6_kr ! atomic mass unit in eV
    real(kr),parameter::cspeed=2.99792458e8_kr ! speed of light in m/s
@@ -1732,8 +1729,8 @@ contains
    real(kr),parameter::zero=0
 
    ff=1.e+15_kr
-   twomhb=sqrt(2*emneut*amuevv)/(hbarrr*ff*cspeed)
-   etac=fininv*amuevv/(hbarrr*ff*cspeed)*emneut
+   twomhb=sqrt(2*amassn*amuevv)/(hbarrr*ff*cspeed)
+   etac=fininv*amuevv/(hbarrr*ff*cspeed)*amassn
 
    do ippx=1,nppm(ier)
       if (ema(ippx,ier).eq.zero) then
