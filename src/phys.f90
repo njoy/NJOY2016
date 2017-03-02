@@ -14,20 +14,20 @@ use locale ! provides kr
 implicit none
 ! CODATA 2014
   real(kr),parameter,public::pi=3.14159265358979323846264338327950e0_kr
-! real(kr),parameter,public::bk=8.6173303e-5_kr
-! real(kr),parameter,public::amassn=1.00866491588_kr
-! real(kr),parameter,public::amu=1.660539040e-24_kr
-! real(kr),parameter,public::hbar=1.054571800e-27_kr
-! real(kr),parameter,public::ev=1.6021766208e-19_kr
+  real(kr),parameter,public::bk=8.6173303e-5_kr
+  real(kr),parameter,public::amassn=1.00866491588_kr
+  real(kr),parameter,public::amu=1.660539040e-24_kr
+  real(kr),parameter,public::hbar=1.054571800e-27_kr
+  real(kr),parameter,public::ev=1.6021766208e-19_kr
   real(kr),parameter,public::clight=2.99792458e10_kr
 
 ! CODATA 1986
 ! real(kr),parameter,public::pi=3.14159265358979e0_kr
-  real(kr),parameter,public::bk=8.617385e-5_kr
-  real(kr),parameter,public::amassn=1.008664904e0_kr
-  real(kr),parameter,public::amu=1.6605402e-24_kr
-  real(kr),parameter,public::hbar=1.05457266e-27_kr
-  real(kr),parameter,public::ev=1.60217733e-12_kr
+! real(kr),parameter,public::bk=8.617385e-5_kr
+! real(kr),parameter,public::amassn=1.008664904e0_kr
+! real(kr),parameter,public::amu=1.6605402e-24_kr
+! real(kr),parameter,public::hbar=1.05457266e-27_kr
+! real(kr),parameter,public::ev=1.60217733e-12_kr
 ! real(kr),parameter,public::clight=2.99792458e10_kr
 
 end module physics
