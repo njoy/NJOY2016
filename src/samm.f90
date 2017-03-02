@@ -7,6 +7,7 @@ module samm
    ! Larson (ORNL).
    !-------------------------------------------------------------------
    use locale
+   use physics
    implicit none
    private
 
@@ -63,7 +64,7 @@ module samm
    real(kr),dimension(:),allocatable::xlmn
    integer,dimension(:),allocatable::kxlmn
    real(kr),dimension(:,:),allocatable::upr,upi
-   real(kr),dimension(:,:,:),allocatable::br,bi,pr,pi
+   real(kr),dimension(:,:,:),allocatable::br,bi,pr,pUi
    real(kr),dimension(:,:,:),allocatable::deriv,dsigma
    real(kr),dimension(:,:,:,:,:),allocatable::derivx
    real(kr),dimension(:,:,:,:,:,:),allocatable::crssx
@@ -1477,7 +1478,7 @@ contains
       allocate(br(ntriag,npar,nerm))
       allocate(bi(ntriag,npar,nerm))
       allocate(pr(ntriag,npar,nerm))
-      allocate(pi(ntriag,npar,nerm))
+      allocate(pUi(ntriag,npar,nerm))
    endif
 
    allocate(crss(npp,nerm))
@@ -2782,8 +2783,8 @@ contains
    subroutine abpart(ier)
    !-------------------------------------------------------------------
    ! Generate alphar and alphai => for cross section
-   ! and upr and upi = Energy-dependent pieces of pr & pi.
-   ! Also generate pr and pi = partial of R wrt U-parameters.
+   ! and upr and upi = Energy-dependent pieces of pr & pUi.
+   ! Also generate pr and pUi = partial of R wrt U-parameters.
    !-------------------------------------------------------------------
    ! externals
    integer::ier
@@ -2841,7 +2842,7 @@ contains
       do i=1,ntriag
          do j=1,npar
             pr(i,j,ier)=0
-            pi(i,j,ier)=0
+            pUi(i,j,ier)=0
          enddo
       enddo
 
@@ -2855,7 +2856,7 @@ contains
                      pr(ij,k,ier)=br(ij,k,ier)*upr(k,ier)
                   endif
                   if (bi(ij,k,ier).ne.zero) then
-                     pi(ij,k,ier)=bi(ij,k,ier)*upi(k,ier)
+                     pUi(ij,k,ier)=bi(ij,k,ier)*upi(k,ier)
                   endif
                enddo
             enddo
@@ -4277,7 +4278,6 @@ contains
    integer::i,m,is,k,j,ll
    integer::mmmxxx=100000
    real(kr),parameter::small=.000001e0_kr
-   real(kr),parameter::pi=3.141592653589793238462643e0_kr
    real(kr),parameter::euler=0.577215664901532860606512e0_kr
    real(kr),dimension(5),parameter::ber=(/&
      0.1666666666666666666666666666666666667e0_kr,&
@@ -4703,7 +4703,6 @@ contains
    real(kr)::g0,g0pr
    integer::k,n
    real(kr),parameter::euler=0.577215664901532860606512e0_kr
-   real(kr),parameter::pi=3.141592653589793238462643e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::half=0.5e0_kr
 
@@ -6669,9 +6668,9 @@ contains
       do i=1,nchan
          do j=1,i
             ij=ij+1
-            if (pi(ij,m,ier).ne.zero) then
+            if (pUi(ij,m,ier).ne.zero) then
                do ip=1,npp
-                  ddddd(ip,ier)=ddddd(ip,ier)-pi(ij,m,ier)*ti(ip,ij,ier)
+                  ddddd(ip,ier)=ddddd(ip,ier)-pUi(ij,m,ier)*ti(ip,ij,ier)
                enddo
             endif
             if (pr(ij,m,ier).ne.zero) then
@@ -6886,7 +6885,7 @@ contains
       deallocate(br)
       deallocate(bi)
       deallocate(pr)
-      deallocate(pi)
+      deallocate(pUi)
    endif
 
    deallocate(crss)

@@ -1,6 +1,7 @@
 module mathm
    ! Math routines for NJOY2016.
    use locale
+   use physics
    implicit none
    private
 
@@ -666,7 +667,6 @@ contains
    real(kr)::dxrel,sinpiy,xmax,y,z,temp
    real(kr),parameter::sq2pil=0.91893853320467274178032973640562e0_kr
    real(kr),parameter::sqpi2l=0.225791352644727432363097614947441e0_kr
-   real(kr),parameter::pi=3.14159265358979323846264338327950e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
    real(kr),parameter::two=2
@@ -1023,7 +1023,6 @@ contains
      -.1967938586345134677295103999999e-29_kr,&
      +.3376448816585338090334890666666e-30_kr,&
      -.5793070335782135784625493333333e-31_kr/)
-   real(kr),parameter::pi=3.14159265358979323846264338327950e0_kr
    real(kr),parameter::sq2pil=0.91893853320467274178032973640562e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
