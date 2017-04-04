@@ -16,30 +16,30 @@ platform = {'linux':'Linux',
             'windows':'Windows'}
 
 def fetch_subprojects( state ):
-  contents = ""
-  if state['subprojects']:
-    contents += textwrap.dedent(
-    """
-    if( NOT ROOT_DIRECTORY )
-        set( ROOT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
-        if ( NOT fetched_subprojects )
-            if ( NOT PYTHON_EXECUTABLE )
-                find_package( PythonInterp )
-                if ( NOT PYTHONINTERP_FOUND )
-                    message( FATAL_ERROR "Python interpeter installation was not found." )
+    contents = ""
+    if state['subprojects']:
+        contents += textwrap.dedent(
+        """
+        if( NOT ROOT_DIRECTORY )
+            set( ROOT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
+            if ( NOT fetched_subprojects )
+                if ( NOT PYTHON_EXECUTABLE )
+                    find_package( PythonInterp )
+                    if ( NOT PYTHONINTERP_FOUND )
+                        message( FATAL_ERROR "Python interpeter installation was not found." )
+                    endif()
+                endif()
+                execute_process( COMMAND ${PYTHON_EXECUTABLE} "./metaconfigure/fetch_subprojects.py"
+                                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
+                                 RESULT_VARIABLE fetch_failure )
+                if ( NOT fetch_failure )
+                    set( fetched_subprojects TRUE CACHE BOOL "fetch script ran" )
+                else()
+                    message( FATAL_ERROR "Failed to fetch dependencies" )
                 endif()
             endif()
-            execute_process( COMMAND ${PYTHON_EXECUTABLE} "./metaconfigure/fetch_subprojects.py"
-                             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
-                             RESULT_VARIABLE fetch_failure )
-            if ( NOT fetch_failure )
-                set( fetched_subprojects TRUE CACHE BOOL "fetch script ran" )
-            else()
-                message( FATAL_ERROR "Failed to fetch dependencies" )
-            endif()
         endif()
-    endif()
-    """)
+        """)
     
     return contents
 
@@ -58,32 +58,62 @@ def has_library( state ):
 def has_executable( state ):
     return 'driver' in state 
 
+def has_unit_tests( state ):
+    return 'tests' in state and state['tests']
+
 def has_tests( state ):
-    return bool(state['tests']) or os.path.isdir("tests") 
+    return has_unit_tests(state) or os.path.isdir("tests") 
     
 def project_statement( state ):
     project_language = language[ state['language'] ]
-    contents = "\nproject( {name} LANGUAGES {language} )\n".format(name = state['name'],
+    contents = "\nproject( {name} LANGUAGES {language} )".format(name = state['name'],
                                                                  language = project_language)
+    contents += "\nget_directory_property( is_subproject PARENT_DIRECTORY )"
+    contents += "\ninclude( CMakeDependentOption REQUIRED )"
     subproject_languages_ = subproject_languages( state )
     if state['language'] in subproject_languages_:
         subproject_languages_.remove( state['language'] )
     
     for addition in subproject_languages_:
-        contents += "enable_language( {0} )\n".format( language[addition] )
+        contents += "\nenable_language( {0} )".format( language[addition] )
     
     return contents
 
+def compiler_minimum( state ):
+    contents = ''
+    any_ = False
+    for name, compiler in state['compiler'].items():
+        if 'minimum version' in compiler:
+            any_ = True
+            contents += "\nset( {name}_{vendor}_minimum_version {version} )".format(name = state['name'],
+                                                                                    vendor = vendor[name],
+                                                                                    version = compiler['minimum version'])
+    
+    if any_:
+        contents += """
+
+if( {name}_${{CMAKE_{language}_COMPILER_ID}}_minimum_version )
+    if( CMAKE_{language}_COMPILER_VERSION VERSION_LESS
+        ${{{name}_${{CMAKE_{language}_COMPILER_ID}}_minimum_version}} )
+        message(FATAL_ERROR "${{CMAKE_{language}_COMPILER_ID}} version must be greater than ${{{name}_${{CMAKE_{language}_COMPILER_ID}}_minimum_version}}" )
+    endif()
+endif()""".format(language = language[state['language']],
+                  name = state['name'])
+    
+    return '\n' + contents
+        
+
 def make_aux_directories( state ):
     contents = """
+
     if ( profile_generate )
         file( MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/profiling" )
     endif()"""
     if state['language'] == 'fortran':
         contents += """
 
-    file( MAKE_DIRECTORY ${fortran_module_directory} )
-    set( fortran_module_directory "${CMAKE_BINARY_DIR}/modules" CACHE PATH "directory for fortran modules" ) """
+    set( CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}/fortran_modules" CACHE PATH "directory for fortran modules" )
+    file( MAKE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}" ) """
         
     contents = textwrap.dedent( contents ) 
     return contents
@@ -107,13 +137,18 @@ def define_options( state ):
     option( nonportable_optimization "Enable optimizations which compromise portability of resulting binary in the RELEASE configuration" )
     
     # libraries and linking
-    option( static "Statically link component and environment libraries")
-    option( static_libaries "Statically link component libraries" ${{static}} )"""
+    option( static "Statically link component and environment libraries" OFF )
+    if ( static AND ("${{CMAKE_SYSTEM_NAME}}" STREQUAL "Darwin" ) )
+        message( FATAL_ERROR "Static binaries not supported on OSX" )
+    endif()
+
+    CMAKE_DEPENDENT_OPTION( static_libraries "Statically link component libraries" OFF "NOT static" ON )"""
+    
     if has_library(state):
         contents += """
-    option( static_{name} "Statically the {name} component library" ${{static_libaries}} ) """
-        
-    if has_tests(state):
+    CMAKE_DEPENDENT_OPTION( static_{name} "Statically link the {name} component library" OFF "NOT static;NOT static_libraries" ON ) """
+
+    if has_unit_tests(state):
         contents += """
         
     option( unit_tests "Compile the {name} unit tests and integrate with ctest" ON ) """
@@ -143,14 +178,11 @@ def traverse_subprojects( state ):
     return contents
 
 def define_compiler_flags( state ):
-    contents = ""
+    contents = "\n"
     for compiler in state['compiler'].keys():        
         for operating_system in set(['linux','windows','osx']).intersection(state['compiler'][compiler].keys()):
-            print(operating_system)
             environment = state['compiler'][compiler][operating_system]
-            print(environment)
             flags = environment['flags']
-            print(flags)
             args ={ 'name' : state['name'],
                     'vendor' : vendor[compiler],
                     'platform' : platform[operating_system],
@@ -164,8 +196,8 @@ def define_compiler_flags( state ):
             args['debug_flags'] = ' '.join( ['"{0}"'.format(flag) for flag in flags['debug'] ] ) 
             args['release_flags'] = ' '.join( ['"{0}"'.format(flag) for flag in flags['optimization'] ] )
             
-            keys = ['strict', 'coverage', 'profile generate',
-                    'link time optimization', 'profile use',
+            keys = ['strict', 'coverage', 'subproject', 'base project',
+                    'profile generate', 'link time optimization', 'profile use',
                     'nonportable optimization', 'static' ]
             
             options = [ (key).replace(' ', '_') for key in keys ]
@@ -176,57 +208,86 @@ def define_compiler_flags( state ):
             block = "\nset( {name}_{vendor}_{platform}_common_flags {common_flags} )"
             block += "\nset( {name}_{vendor}_{platform}_DEBUG_flags {debug_flags} )" 
             block += "\nset( {name}_{vendor}_{platform}_RELEASE_flags {release_flags} )"
+
             for option in options:
                 block += "\nset( {{name}}_{{vendor}}_{{platform}}_{option}_flags {{{option}_flags}} )".format(option = option)
                 
-            contents += block.format(**args)
+            contents += block.format(**args).format(**args)            
             
     return contents
 
+def lto_flags_expression( state ):
+    contents=""
+    release = "${{${{PREFIX}}_RELEASE_flags}}".format(language = language[state['language']], name = state['name'])
+    link_time_optimization = "${{${{PREFIX}}_link_time_optimization_flags}}".format(language = language[state['language']], name = state['name'])
+    option_template = \
+    """$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"""
+
+    profile_generate = option_template.format('profile_generate').format(language = language[state['language']], name = state['name'])
+    profile_use = option_template.format('profile_use').format(language = language[state['language']], name = state['name'])
+    nonportable_optimization = option_template.format('nonportable_optimization').format(language = language[state['language']], name = state['name'])
+    language_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(language[state['language']])
+    project_appended_flags = "$<$<BOOL:{0}_appended_flags>:${{{0}_appended_flags}}>".format(state['name'])
+    contents =    "\"$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${{link_time_optimization}}>>:{release}{link_time_optimization}{profile_generate}{profile_use}{nonportable_optimization}{language_appended_flags}{project_appended_flags}>\""
+    contents = contents.format(release = release,
+                               link_time_optimization = link_time_optimization,
+                               profile_generate = profile_generate,
+                               profile_use = profile_use,
+                               nonportable_optimization = nonportable_optimization,
+                               language_appended_flags = language_appended_flags,
+                               project_appended_flags = project_appended_flags)
+
+    return contents
+
+    
 def target_flags_expression( state ):
     contents=""
-    for entry in state['compiler'].keys():
-        template = " ${{{{{{name}}_{{vendor}}_${{{{CMAKE_SYSTEM_NAME}}}}_{0}_flags}}}}"
-        common = template.format('common')
-        debug = template.format('DEBUG')
-        release = template.format('RELEASE')
+    template = "\n${{{{${{{{PREFIX}}}}_{0}_flags}}}}"
+    common = template.format('common')
+    debug = template.format('DEBUG')
+    release = template.format('RELEASE')
         
-        option_template = "\n         $< $<BOOL:${{{{{0}}}}}> : ${{{{{{name}}_{{vendor}}_${{{{CMAKE_SYSTEM_NAME}}}}_{0}_flags}}}} >"
-        strict = option_template.format('strict')
-        coverage = option_template.format('coverage')
-        profile_generate = option_template.format('profile_generate')
-        link_time_optimization = option_template.format('link_time_optimization')
-        profile_use = option_template.format('profile_use')
-        nonportable_optimization = option_template.format('nonportable_optimization')
-        static = option_template.format('static') 
-        
-        addition = " $< $<{language}_COMPILER_ID:{vendor}> :" + common + strict + static \
-                   + "\n     $< $<CONFIG:DEBUG> :" + debug + coverage + ' >' \
-                   + "\n     $< $<CONFIG:RELEASE> :" + release + profile_generate + profile_use + link_time_optimization + nonportable_optimization + " > >\n"
-        contents += addition.format(language = language[state['language']], name = state['name'], vendor = vendor[entry])
-        
-    contents += " ${{{language}_appended_flags}} ${{{name}_appended_flags}}".format( language=language[state['language']], name=state['name'] )
+    option_template = "\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
+    strict = option_template.format('strict')
+    coverage = option_template.format('coverage')
+    profile_generate = option_template.format('profile_generate')
+    link_time_optimization = option_template.format('link_time_optimization')
+    profile_use = option_template.format('profile_use')
+    nonportable_optimization = option_template.format('nonportable_optimization')
+    static = option_template.format('static')
+
+    subproject = "\n$<$<BOOL:${{is_subproject}}>:${{${{PREFIX}}_subproject_flags}}>"
+    base_project = "\n$<$<NOT:$<BOOL:${{is_subproject}}>>:${{${{PREFIX}}_base_project_flags}}>"
+    addition =  common + strict + static + subproject + base_project \
+                + "\n$<$<CONFIG:DEBUG>:" + debug + ' ' + coverage + '>' \
+                + "\n$<$<CONFIG:RELEASE>:"\
+                + release + ' '\
+                + profile_generate + ' '\
+                + profile_use + ' '\
+                + link_time_optimization\
+                + ' ' + nonportable_optimization + ">"
+    contents += addition.format(language = language[state['language']], name = state['name'] )        
+    contents += "\n${{{language}_appended_flags}} ${{{name}_appended_flags}}".format( language=language[state['language']], name=state['name'] )
     return contents
 
 def test_flags_expression( state ):
     contents = ''
-    for entry in state['compiler'].keys():
-        template = " ${{{{{{name}}_{{vendor}}_${{{{CMAKE_SYSTEM_NAME}}}}_{0}_flags}}}}"
-        common = template.format('common')
-        debug = template.format('DEBUG')
-        release = template.format('RELEASE')
+    template = "${{{{${{{{PREFIX}}}}_{0}_flags}}}}"
+    common = template.format('common')
+    debug = template.format('DEBUG')
+    release = template.format('RELEASE')
         
-        option_template = "\n         $< $<BOOL:${{{{{0}}}}}> : ${{{{{{name}}_{{vendor}}_${{{{CMAKE_SYSTEM_NAME}}}}_{0}_flags}}}} >"
-        strict = option_template.format('strict')
-        link_time_optimization = option_template.format('link_time_optimization')
-        nonportable_optimization = option_template.format('nonportable_optimization')
+    option_template = "$<$<BOOL:${{{{{0}}}}}>:${{{{PREFIX}}}}_{0}_flags}}}}>\n"
+    strict = option_template.format('strict')
+    link_time_optimization = option_template.format('link_time_optimization')
+    nonportable_optimization = option_template.format('nonportable_optimization')
         
-        addition = " $< $<{language}_COMPILER_ID:{vendor}>:" + common + strict \
-                   + "\n     $< $<CONFIG:DEBUG> :" + debug + ' >' \
-                   + "\n     $< $<CONFIG:RELEASE> :" + release + link_time_optimization + nonportable_optimization + " > >\n"
-        contents += addition.format(language = language[state['language']], name = state['name'], vendor = vendor[entry])
+    addition =  common + strict \
+                + "\n$<$<CONFIG:DEBUG>:\n" + debug + '>' \
+                + "\n$<$<CONFIG:RELEASE>:\n" + release + link_time_optimization + nonportable_optimization + ">\n"
+    contents += addition.format(language = language[state['language']], name = state['name'])
         
-    contents += " ${{{language}_appended_flags}} ${{{name}_appended_flags}}".format( language=language[state['language']], name=state['name'] )
+    contents += "\n${{{language}_appended_flags}} ${{{name}_appended_flags}}".format( language=language[state['language']], name=state['name'] )
     return contents
 
 def set_library_type( state ):
@@ -239,7 +300,17 @@ def set_library_type( state ):
         set( {name}_library_linkage STATIC )
     else ()
         set( {name}_library_linkage SHARED )
-    endif () """ ).format(name = state['name'])
+    endif () 
+
+    set( CMAKE_SKIP_BUILD_RPATH FALSE )
+    set( CMAKE_BUILD_WITH_INSTALL_RPATH FALSE )
+    if ( CMAKE_SYSTEM_NAME STREQUAL "Darwin" )
+        set( rpath_prefix "@loader_path" )
+    else()
+        set( rpath_prefix "\\\\$ORIGIN" )
+    endif()
+    set( CMAKE_INSTALL_RPATH "${{rpath_prefix}}/../lib" )
+    set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )""" ).format(name = state['name'])
     
 def collect_revision_info( state ):
   return textwrap.dedent("""
@@ -293,48 +364,65 @@ def add_targets( state ):
     for group in state['file extension']:
         sources.extend(state[group])
         
-    sources = '\n                    '.join( sources )
-    target = "${{{name}_library_linkage}}" if has_library(state) else "INTERFACE"
+    sources = '"\n             "${CMAKE_CURRENT_SOURCE_DIR}/'.join( sources )
     policy = "PUBLIC" if has_library(state) else "INTERFACE"
-    expression = target_flags_expression(state)
-    contents = """
+    compile_flags = target_flags_expression(state)
+    link_flags = lto_flags_expression(state)
     
-    add_library( {name} {target} )
-    target_sources( name {policy} {sources} )
-    """
+    if has_library(state):
+        contents = """
+add_library( {name} ${{{name}_library_linkage}} 
+             "${{CMAKE_CURRENT_SOURCE_DIR}}/{sources}" )
+        """
+    else:
+        contents = """
+add_library( {name} INTERFACE )
+target_sources( {name} INTERFACE "${{CMAKE_CURRENT_SOURCE_DIR}}/{sources}" )
+        """
+
     if state['language'] == 'fortran':
-        contents += "target_include_directory( {name} PUBLIC ${{fortran_module_directory}} )\n"
+        contents += """
+target_include_directories( {name} PUBLIC "${{CMAKE_Fortran_MODULE_DIRECTORY}}" )
+        """
         
-    if state['include path']:
-        contents += "target_include_directory( {name} {policy} {include_path} )\n"
+    if 'include path' in state:
+        contents += """
+target_include_directories( {name} {policy} {include_path} )
+        """
+
+    if has_library( state ) or has_executable( state ):
+        contents += """
+set( PREFIX {name}_${{CMAKE_{language}_COMPILER_ID}}_${{CMAKE_SYSTEM_NAME}} )
+        """
         
     if has_library( state ):
-        contents += textwrap.dedent(
-        """target_compile_options( {name} PRIVATE 
-                                   {expression} )
-        """)
+        contents += """
+target_compile_options( {name} PRIVATE {compile_flags} )
+
+target_link_libraries( {name} PUBLIC {link_flags} )
+        """
 
     contents += link_dependencies( state )
         
     if has_executable( state ):
         contents += textwrap.dedent(
         """
-        if ( NOT is_subproject )
-            add_executable( {name}_executable {driver} )
-            set_target_prooperties( {name}_executable PROPERTIES OUTPUT_NAME {name} )
-            target_link_libraries( {name}_executable {policy} {name} )
-            target_compile_options( {name}_executable PRIVATE 
-                                    {expression} )
-        endif()
+if ( NOT is_subproject )
+    add_executable( {name}_executable {driver} )
+    set_target_properties( {name}_executable PROPERTIES OUTPUT_NAME {name} )
+    target_compile_options( {name}_executable PRIVATE {compile_flags} )
+    target_link_libraries( {name}_executable {policy} {name} )
+endif()
         """)
         
     return textwrap.dedent( contents.format( name = state['name'],
                                              driver = ( state['driver'] if 'driver' in state else ''),
-                                             target = target,
+                                             language = language[ state['language'] ],
                                              policy = policy,
                                              sources = sources,
-                                             expression = expression,
-                                             include_path = state['include path'] ) )
+                                             compile_flags = compile_flags,
+                                             link_flags = link_flags,
+                                             include_path = state['include path'] if 'include path' in state else '' ) )
 
 def add_tests( state ):
     contents = ''
@@ -354,24 +442,24 @@ def add_tests( state ):
                     contents += """
                     add_subdirectory( {} )""".format(directory)
                     test_contents = """
-                    add_executable( {executable_name}"""
+add_executable( {executable_name}"""
                     split = '\n                ' if len(sources) > 1 else ' '
                     test_contents += split + split.join( [ os.path.split( entry )[1] for entry in sources ] ) + ' )'
                     test_contents += """
-                    target_compile_options( {executable_name} PRIVATE {expression} )
-                    target_link_libraries( {executable_name} PUBLIC {name} ) """
+target_compile_options( {executable_name} PRIVATE {expression} )
+target_link_libraries( {executable_name} PUBLIC {name} ) """
                     if os.path.isdir( os.path.join( directory, 'resources' ) ):
                         test_contents += """
-                    file( GLOB resources "resources/*" )"""
+file( GLOB resources "resources/*" )"""
                         test_contents += """
-                    foreach( resource ${{resources}} )"""
+foreach( resource ${{resources}} )"""
                         test_contents += """
-                        file( COPY "${{resource}}" DESTINATION "${{CMAKE_CURRENT_BINARY_DIR}}" )"""
+    file( COPY "${{resource}}" DESTINATION "${{CMAKE_CURRENT_BINARY_DIR}}" )"""
                         test_contents += """
-                    endforeach()"""
+endforeach()"""
                         
                     test_contents += """
-                    add_test( NAME {test_name} COMMAND {executable_name} )"""
+add_test( NAME {test_name} COMMAND {executable_name} )"""
                     test_contents = textwrap.dedent(test_contents).format( executable_name = executable_name,
                                                                            test_name = test_name,
                                                                            expression = expression,
@@ -381,9 +469,9 @@ def add_tests( state ):
                     
                 contents += """
                 endif() """
-            if os.path.isdir( os.path.join( os.getcwd(), 'test' ) ) :
+            if os.path.isdir( os.path.join( os.getcwd(), 'tests' ) ) :
                 contents += """
-                add_subdirectory( test )"""
+                add_subdirectory( tests )"""
           
             contents += """
             endif()"""
@@ -403,17 +491,16 @@ def is_subdirectory( child, parent ):
 
 def install( state ):
     targets = []
-    contents = ""
+    contents = "\n"
     if has_library( state ):
-        targets.append( "{name}" )
+        targets.append( "{name}".format(name = state['name']) )
         
     if has_executable( state ):
-        targets.append( " {name}_executable " )
+        targets.append( "{name}_executable".format(name = state['name'] ) )
         
     if targets:
         targets = ' '.join(targets)
         contents += """
-
         install( TARGETS {targets} 
                  RUNTIME DESTINATION bin
                  LIBRARY DESTINATION lib
@@ -425,56 +512,56 @@ def install( state ):
             contents += """
                              SETGID {gid}"""
             
-        contents += """
-        )
-        
+        contents += """ )
         """
-        contents = contents.format( name = state['name'],
-                                    targets = targets,
-                                    gid = state['group id'] if 'group id' in state else '' )
         
+    regex = []
     if 'include path' in state and is_subdirectory( state['include path'], os.cwd() ):
         if 'header files' in state['file extension']:
-            regex = []
             for extension in state['file extension']['header files']:
                 regex.append( ".*\.{0}".format(extension) )
                 
-            regex = '|'.join( regex )
                 
             contents += """
-
         install( DIRECTORY {include_path} DESTINATION include
                  FILES_MATCHING REGEX "{regex}"
-                 PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ 
-                             GROUP_EXECUTE GROUP_READ 
-                             WORLD_EXECUTE WORLD_READ"""
+                 FILE_PERMISSIONS OWNER_READ OWNER_WRITE 
+                                  GROUP_READ 
+                                  WORLD_READ
+                 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE 
+                                       GROUP_READ 
+                                       WORLD_READ"""
             if "group id" in state:
                 contents += """
                 SETGID {gid}"""
             
             contents += """ )
-                
                 """
-                    
-        contents = contents.format( include_path = state['include_path'],
-                                    regex = regex,
-                                    gid = state['group id'] if 'group id' in state else '' )
-        
+            
     if state['language'] == 'fortran':
         contents += """
-
-        install( DIRECTORY ${{fortran_module_directory}} DESTINATION include
-                 PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ 
-                             GROUP_EXECUTE GROUP_READ 
-                             WORLD_EXECUTE WORLD_READ"""
+        file( RELATIVE_PATH relative_fortran_module_files_path 
+              "${{CMAKE_CURRENT_SOURCE_DIR}}" "${{CMAKE_Fortran_MODULE_DIRECTORY}}" )
+        file( GLOB fortran_module_files 
+              RELATIVE "${{relative_fortran_module_files_path}}"
+              *.mod )
+        install( FILES ${{fortran_module_files}} 
+                 DESTINATION include
+                 PERMISSIONS OWNER_READ OWNER_WRITE 
+                             GROUP_READ 
+                             WORLD_READ"""
         if "group id" in state:
             contents += """
                              SETGID {gid}"""
         
         contents += """ )
-        
         """
-        contents = contents.format( gid = state['group id'] if 'group id' in state else '' )
+        
+    contents = contents.format( name = state['name'],
+                                targets = targets,
+                                include_path = state['include path'] if 'include path' in state else '',
+                                regex = '|'.join( regex ),
+                                gid = state['group id'] if 'group id' in state else '' )
         
     contents = textwrap.dedent(contents)
     return contents
@@ -485,8 +572,9 @@ def generate():
     contents = "cmake_minimum_required( VERSION 3.2 ) \n"
     contents += fetch_subprojects( state )
     contents += project_statement( state )
+    contents += compiler_minimum( state )
+    contents += define_options( state )
     contents += make_aux_directories( state )
-    contents += define_options( state )    
     contents += traverse_subprojects( state )
     contents += define_compiler_flags( state )
     contents += set_library_type( state )

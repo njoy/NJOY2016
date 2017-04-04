@@ -9,10 +9,7 @@ import metaconfigure.cmake as cmake
 
 previous = description.deserialize()
 
-description.generate( previous["name"],
-                      previous["language"],
-                      previous["is_external_project"],
-                      **previous )
+description.generate( **previous )
 
 if sys.argv[1] == 'cmake':
     cmake.generate()

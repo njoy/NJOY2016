@@ -119,20 +119,18 @@ def collect_driver( state ):
             possible_driver = 'src/main.' + extension
             if possible_driver in state['implementation files']:
                 driver = possible_driver
-                break
-            return
-        
-        state['driver'] = driver
-        
-    state['implementation files'].remove(driver)
-    
+                state['driver'] = driver
+                state['implementation files'].remove(driver)
+                return
+        return
+            
 def generate( name, language, is_external_project = False, **kwargs ):
     state = locals()
     state.update( state.pop( 'kwargs' ) )
-    if 'initialized' in state:
+    if not 'initialized' in state:
         state.update( configuration.languages[ state['language'] ] )
         state['initialized'] = True
-    
+
     state['project path'] = os.getcwd()
     state['tests'] = {}
     state['subprojects'] = {}

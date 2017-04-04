@@ -1,0 +1,264 @@
+{
+  "compiler": {
+    "gfortran": {
+      "linux": {
+        "flags": {
+          "base project": [],
+          "common": [],
+          "coverage": [
+            "--coverage"
+          ],
+          "debug": [
+            "-O0",
+            "-g",
+            "-gdwarf-3",
+            "-frounding-math",
+            "-fsignaling-nans",
+            "-fcheck=all",
+            "-ffpe-trap=invalid,zero,overflow"
+          ],
+          "link time optimization": [
+            "-flto"
+          ],
+          "nonportable optimization": [
+            "-march=native"
+          ],
+          "optimization": [
+            "-O3",
+            "-DNDEBUG"
+          ],
+          "profile generate": [
+            "-fprofile-generate='{profile_path}'"
+          ],
+          "profile use": [
+            "-fprofile-use='{profile_path}'"
+          ],
+          "static": [
+            "--static",
+            "-Wl,Bstatic"
+          ],
+          "strict": [
+            "-Werror"
+          ],
+          "subproject": [
+            "-Wno-maybe-uninitialized",
+            "-Wno-conversion",
+            "-Wno-unused-parameter",
+            "-Wno-compare-reals",
+            "-Wno-unused-variable",
+            "-Wno-intrinsic-shadow",
+            "-Wno-unused-dummy-argument",
+            "-Wno-uninitialized",
+            "-Wno-unused-function",
+            "-Wno-unused-label",
+            "-Wno-character-truncation"
+          ],
+          "warning": [
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic"
+          ]
+        },
+        "standard": {
+          "fortran2003": "-std=f2003",
+          "fortran2008": "-std=f2008",
+          "fortran77": "-std=legacy",
+          "fortran95": "-std=f95"
+        }
+      },
+      "minimum version": "5.1",
+      "osx": {
+        "flags": {
+          "base project": [],
+          "common": [],
+          "coverage": [
+            "--coverage"
+          ],
+          "debug": [
+            "-O0",
+            "-g",
+            "-gdwarf-3",
+            "-frounding-math",
+            "-fsignaling-nans",
+            "-fcheck=all",
+            "-ffpe-trap=invalid,zero,overflow"
+          ],
+          "link time optimization": [
+            "-flto"
+          ],
+          "nonportable optimization": [
+            "-march=native"
+          ],
+          "optimization": [
+            "-O3",
+            "-DNDEBUG"
+          ],
+          "profile generate": [
+            "-fprofile-generate='{profile_path}'"
+          ],
+          "profile use": [
+            "-fprofile-use='{profile_path}'"
+          ],
+          "static": [
+            "--static",
+            "-Wl,Bstatic"
+          ],
+          "strict": [
+            "-Werror"
+          ],
+          "subproject": [
+            "-Wno-maybe-uninitialized",
+            "-Wno-conversion",
+            "-Wno-unused-parameter",
+            "-Wno-compare-reals",
+            "-Wno-unused-variable",
+            "-Wno-intrinsic-shadow",
+            "-Wno-unused-dummy-argument",
+            "-Wno-uninitialized",
+            "-Wno-unused-function",
+            "-Wno-unused-label",
+            "-Wno-character-truncation"
+          ],
+          "warning": [
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic"
+          ]
+        },
+        "standard": {
+          "fortran2003": "-std=f2003",
+          "fortran2008": "-std=f2008",
+          "fortran77": "-std=legacy",
+          "fortran95": "-std=f95"
+        }
+      },
+      "windows": {
+        "flags": {
+          "base project": [],
+          "common": [],
+          "coverage": [
+            "--coverage"
+          ],
+          "debug": [
+            "-O0",
+            "-g",
+            "-gdwarf-3",
+            "-frounding-math",
+            "-fsignaling-nans",
+            "-fcheck=all",
+            "-ffpe-trap=invalid,zero,overflow"
+          ],
+          "link time optimization": [
+            "-flto"
+          ],
+          "nonportable optimization": [
+            "-march=native"
+          ],
+          "optimization": [
+            "-O3",
+            "-DNDEBUG"
+          ],
+          "profile generate": [
+            "-fprofile-generate='{profile_path}'"
+          ],
+          "profile use": [
+            "-fprofile-use='{profile_path}'"
+          ],
+          "static": [
+            "--static",
+            "-Wl,Bstatic"
+          ],
+          "strict": [
+            "-Werror"
+          ],
+          "subproject": [
+            "-Wno-maybe-uninitialized",
+            "-Wno-conversion",
+            "-Wno-unused-parameter",
+            "-Wno-compare-reals",
+            "-Wno-unused-variable",
+            "-Wno-intrinsic-shadow",
+            "-Wno-unused-dummy-argument",
+            "-Wno-uninitialized",
+            "-Wno-unused-function",
+            "-Wno-unused-label",
+            "-Wno-character-truncation"
+          ],
+          "warning": [
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic"
+          ]
+        },
+        "standard": {
+          "fortran2003": "-std=f2003",
+          "fortran2008": "-std=f2008",
+          "fortran77": "-std=legacy",
+          "fortran95": "-std=f95"
+        }
+      }
+    }
+  },
+  "driver": "src/main.f90",
+  "file extension": {
+    "implementation files": [
+      "f",
+      "for",
+      "f90"
+    ]
+  },
+  "implementation files": [
+    "src/acecm.f90",
+    "src/acedo.f90",
+    "src/acefc.f90",
+    "src/acepa.f90",
+    "src/acepn.f90",
+    "src/acer.f90",
+    "src/aceth.f90",
+    "src/broadr.f90",
+    "src/ccccr.f90",
+    "src/covr.f90",
+    "src/dtfr.f90",
+    "src/endf.f90",
+    "src/errorr.f90",
+    "src/gaminr.f90",
+    "src/gaspr.f90",
+    "src/graph.f90",
+    "src/groupr.f90",
+    "src/heatr.f90",
+    "src/leapr.f90",
+    "src/locale.f90",
+    "src/main.f90",
+    "src/mainio.f90",
+    "src/mathm.f90",
+    "src/matxsr.f90",
+    "src/mixr.f90",
+    "src/moder.f90",
+    "src/phys.f90",
+    "src/plotr.f90",
+    "src/powr.f90",
+    "src/purr.f90",
+    "src/reconr.f90",
+    "src/resxsr.f90",
+    "src/samm.f90",
+    "src/thermr.f90",
+    "src/unresr.f90",
+    "src/util.f90",
+    "src/vers.f90",
+    "src/viewr.f90",
+    "src/wimsr.f90"
+  ],
+  "initialized": true,
+  "is_external_project": false,
+  "language": "fortran",
+  "name": "njoy",
+  "standards": [
+    "fortran77",
+    "fortran90",
+    "fortran95",
+    "fortran2003",
+    "fortran2008"
+  ],
+  "strict": false,
+  "tests": {}
+}

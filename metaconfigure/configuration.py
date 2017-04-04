@@ -68,7 +68,7 @@ languages['fortran']['compiler']['gfortran']['linux']['flags']['debug'] = langua
 languages['c']['compiler']['gcc']['linux']['flags']['coverage'] = ['--coverage']
 languages['fortran']['compiler']['gfortran']['linux']['flags']['coverage'] = languages['c']['compiler']['gcc']['linux']['flags']['coverage']
 
-languages['c']['compiler']['gcc']['linux']['flags']['static'] = ['--static', '-Wl,Bstatic']
+languages['c']['compiler']['gcc']['linux']['flags']['static'] = ['-static']
 languages['fortran']['compiler']['gfortran']['linux']['flags']['static'] = languages['c']['compiler']['gcc']['linux']['flags']['static']
 
 languages['c']['compiler']['gcc']['linux']['flags']['optimization'] = ['-O3', '-DNDEBUG']
