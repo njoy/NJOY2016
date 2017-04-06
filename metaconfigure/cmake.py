@@ -309,7 +309,7 @@ def set_library_type( state ):
     else()
         set( rpath_prefix "\\\\$ORIGIN" )
     endif()
-    set( CMAKE_INSTALL_RPATH "${{rpath_prefix}}/../lib" )
+    list( INSERT 0 CMAKE_INSTALL_RPATH "${{rpath_prefix}}/../lib" )
     set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )""" ).format(name = state['name'])
     
 def collect_revision_info( state ):

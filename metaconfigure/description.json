@@ -34,8 +34,7 @@
             "-fprofile-use='{profile_path}'"
           ],
           "static": [
-            "--static",
-            "-Wl,Bstatic"
+            "-static"
           ],
           "strict": [
             "-Werror"
@@ -100,8 +99,7 @@
             "-fprofile-use='{profile_path}'"
           ],
           "static": [
-            "--static",
-            "-Wl,Bstatic"
+            "-static"
           ],
           "strict": [
             "-Werror"
@@ -165,8 +163,7 @@
             "-fprofile-use='{profile_path}'"
           ],
           "static": [
-            "--static",
-            "-Wl,Bstatic"
+            "-static"
           ],
           "strict": [
             "-Werror"
