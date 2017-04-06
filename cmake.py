@@ -98,7 +98,8 @@ def compiler_minimum(state):
         contents += """
 
 if( {name}_${{CMAKE_{language}_COMPILER_ID}}_minimum_version )
-    if( CMAKE_{language}_COMPILER_VERSION VERSION_LESS
+    if( CMAKE_{language}_COMPILER_VERSION AND
+        CMAKE_{language}_COMPILER_VERSION VERSION_LESS
         ${{{name}_${{CMAKE_{language}_COMPILER_ID}}_minimum_version}} )
         message( FATAL_ERROR "${{CMAKE_{language}_COMPILER_ID}} version must be greater than ${{{name}_${{CMAKE_{language}_COMPILER_ID}}_minimum_version}}" )
     endif()
