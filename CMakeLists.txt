@@ -9,7 +9,7 @@ set( njoy_GNU_minimum_version 5.1 )
 if( njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version )
     if( CMAKE_Fortran_COMPILER_VERSION VERSION_LESS
         ${njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version} )
-        message(FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be greater than ${njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version}" )
+        message( FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be greater than ${njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version}" )
     endif()
 endif()
 
@@ -27,14 +27,14 @@ option( nonportable_optimization "Enable optimizations which compromise portabil
 
 # libraries and linking
 option( static "Statically link component and environment libraries" OFF )
-if ( static AND ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" ) )
+if ( static AND ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" ) )
     message( FATAL_ERROR "Static binaries not supported on OSX" )
 endif()
 
 CMAKE_DEPENDENT_OPTION( static_libraries "Statically link component libraries" OFF "NOT static" ON )
 CMAKE_DEPENDENT_OPTION( static_njoy "Statically link the njoy component library" OFF "NOT static;NOT static_libraries" ON ) 
 
-if (profile_generate AND profile_use)
+if ( profile_generate AND profile_use )
     message( FATAL_ERROR "Cannot both generate and use execution profile in the same configuration" )
 endif()
 
@@ -57,18 +57,6 @@ set( njoy_GNU_Darwin_link_time_optimization_flags "-flto" )
 set( njoy_GNU_Darwin_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( njoy_GNU_Darwin_nonportable_optimization_flags "-march=native" )
 set( njoy_GNU_Darwin_static_flags "-static" )
-set( njoy_GNU_Windows_common_flags "-Wall" "-Wextra" "-Wpedantic" )
-set( njoy_GNU_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
-set( njoy_GNU_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
-set( njoy_GNU_Windows_strict_flags "-Werror" )
-set( njoy_GNU_Windows_coverage_flags "--coverage" )
-set( njoy_GNU_Windows_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
-set( njoy_GNU_Windows_base_project_flags  )
-set( njoy_GNU_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Windows_link_time_optimization_flags "-flto" )
-set( njoy_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Windows_nonportable_optimization_flags "-march=native" )
-set( njoy_GNU_Windows_static_flags "-static" )
 set( njoy_GNU_Linux_common_flags "-Wall" "-Wextra" "-Wpedantic" )
 set( njoy_GNU_Linux_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
 set( njoy_GNU_Linux_RELEASE_flags "-O3" "-DNDEBUG" )
@@ -81,6 +69,18 @@ set( njoy_GNU_Linux_link_time_optimization_flags "-flto" )
 set( njoy_GNU_Linux_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( njoy_GNU_Linux_nonportable_optimization_flags "-march=native" )
 set( njoy_GNU_Linux_static_flags "-static" )
+set( njoy_GNU_Windows_common_flags "-Wall" "-Wextra" "-Wpedantic" )
+set( njoy_GNU_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
+set( njoy_GNU_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
+set( njoy_GNU_Windows_strict_flags "-Werror" )
+set( njoy_GNU_Windows_coverage_flags "--coverage" )
+set( njoy_GNU_Windows_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
+set( njoy_GNU_Windows_base_project_flags  )
+set( njoy_GNU_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Windows_link_time_optimization_flags "-flto" )
+set( njoy_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Windows_nonportable_optimization_flags "-march=native" )
+set( njoy_GNU_Windows_static_flags "-static" )
 
 if ( static_njoy )
     set( njoy_library_linkage STATIC )
@@ -98,24 +98,24 @@ endif()
 list( INSERT 0 CMAKE_INSTALL_RPATH "${rpath_prefix}/../lib" )
 set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
 
-if ( NOT GIT_EXECUTABLE )
-    find_package( Git )
-    if ( NOT GIT_FOUND )
-        message( FATAL_ERROR "git installation was not found." )
-    endif()
-endif()
+ if ( NOT GIT_EXECUTABLE )
+     find_package( Git )
+     if ( NOT GIT_FOUND )
+         message( FATAL_ERROR "git installation was not found." )
+     endif()
+ endif()
 
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    OUTPUT_VARIABLE GIT_BRANCH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
+ execute_process(
+     COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+     OUTPUT_VARIABLE GIT_BRANCH
+     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    OUTPUT_VARIABLE GIT_HASH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
+ execute_process(
+     COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+     OUTPUT_VARIABLE GIT_HASH
+     OUTPUT_STRIP_TRAILING_WHITESPACE
 ) 
 
 message( STATUS "" )
@@ -224,7 +224,7 @@ install( TARGETS njoy njoy_executable
          ARCHIVE DESTINATION lib
          PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ 
                      GROUP_EXECUTE GROUP_READ 
-                     WORLD_EXECUTE WORLD_READ  )
+                     WORLD_EXECUTE WORLD_READ )
 
 file( RELATIVE_PATH relative_fortran_module_files_path 
       "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_Fortran_MODULE_DIRECTORY}" )

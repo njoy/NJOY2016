@@ -204,6 +204,7 @@
       "f90"
     ]
   },
+  "ignore pattern": "",
   "implementation files": [
     "src/acecm.f90",
     "src/acedo.f90",
@@ -246,7 +247,7 @@
     "src/wimsr.f90"
   ],
   "initialized": true,
-  "is_external_project": false,
+  "is external project": false,
   "language": "fortran",
   "name": "njoy",
   "standards": [
@@ -257,5 +258,7 @@
     "fortran2008"
   ],
   "strict": false,
-  "tests": {}
+  "test pattern": "test$",
+  "tests": {},
+  "update": true
 }
