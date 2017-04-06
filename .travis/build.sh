@@ -14,7 +14,7 @@ else
   export CUSTOM=("-D no_link_time_optimization=TRUE")
 fi
 
-gfortran --version
+export FC=$(which gfortran)
 
 mkdir build
 cd build
