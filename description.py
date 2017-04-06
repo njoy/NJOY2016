@@ -138,7 +138,7 @@ def collect_driver(state):
             possible_driver = 'src/main.' + extension
             if possible_driver in state['implementation files']:
                 state['driver'] = possible_driver
-                state['implementation files'].remove(driver)
+                state['implementation files'].remove(possible_driver)
                 return
         return
 
