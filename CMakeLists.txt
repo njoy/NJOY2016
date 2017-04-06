@@ -9,6 +9,7 @@ set( njoy_GNU_minimum_version 5.1 )
 if( njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version )
     if( CMAKE_Fortran_COMPILER_VERSION VERSION_LESS
         ${njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version} )
+        message( STATUS ${CMAKE_Fortran_COMPILER_VERSION} )
         message( FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be greater than ${njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version}" )
     endif()
 endif()
