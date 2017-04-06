@@ -56,6 +56,12 @@ languages['fortran']['compiler']['gfortran']['linux']['flags'] = {}
 languages['c']['compiler']['gcc']['linux']['flags']['common'] = []
 languages['fortran']['compiler']['gfortran']['linux']['flags']['common'] = languages['c']['compiler']['gcc']['linux']['flags']['common']
 
+languages['c']['compiler']['gcc']['linux']['flags']['subproject'] = []
+languages['fortran']['compiler']['gfortran']['linux']['flags']['subproject'] = languages['c']['compiler']['gcc']['linux']['flags']['subproject']
+
+languages['c']['compiler']['gcc']['linux']['flags']['base project'] = []
+languages['fortran']['compiler']['gfortran']['linux']['flags']['base project'] = languages['c']['compiler']['gcc']['linux']['flags']['subproject']
+
 languages['c']['compiler']['gcc']['linux']['flags']['warning'] = ['-Wall', '-Wextra', '-Wpedantic']
 languages['fortran']['compiler']['gfortran']['linux']['flags']['warning'] = languages['c']['compiler']['gcc']['linux']['flags']['warning']
 
@@ -68,7 +74,7 @@ languages['fortran']['compiler']['gfortran']['linux']['flags']['debug'] = langua
 languages['c']['compiler']['gcc']['linux']['flags']['coverage'] = ['--coverage']
 languages['fortran']['compiler']['gfortran']['linux']['flags']['coverage'] = languages['c']['compiler']['gcc']['linux']['flags']['coverage']
 
-languages['c']['compiler']['gcc']['linux']['flags']['static'] = ['--static', '-Wl,Bstatic']
+languages['c']['compiler']['gcc']['linux']['flags']['static'] = ['-static']
 languages['fortran']['compiler']['gfortran']['linux']['flags']['static'] = languages['c']['compiler']['gcc']['linux']['flags']['static']
 
 languages['c']['compiler']['gcc']['linux']['flags']['optimization'] = ['-O3', '-DNDEBUG']
