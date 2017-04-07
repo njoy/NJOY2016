@@ -254,8 +254,6 @@ contains
    endif
    if (abs(thnmx).ge.0.9999*emax) call error('broadr',&
       'max. energy is too large for this input file','')
-   !--jump to the end of mf1/mt451
-   call tosend(nendf,0,0,scr)
    !--read input file nu-bar, if present
    lnu=0
   101 continue
