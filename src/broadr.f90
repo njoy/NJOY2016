@@ -141,6 +141,7 @@ contains
    integer::mt103,mt104,mt105,mt106,mt107,mpmin,mpmax
    integer::mdmin,mdmax,mtmin,mtmax,m3min,m3max,m4min,m4max
    integer::lrf,lrp,lru
+   integer::loop
    integer::n,npp,itmp
    real(kr)::time,temp1,diff,test,thnmx,emin,temp,awr,enext
    real(kr)::sig,en,sun,tempin,break,enow,eone,tev,picon
@@ -233,6 +234,8 @@ contains
    allocate(bufo(nbuf))
    allocate(bufn(nbuf))
 
+   loop=0
+  110 continue
    !--search input endf tape for some parameters ...
    !  - maximum file energy, emax.
    !  - total nu-bar (mf1/mt452).
@@ -326,16 +329,18 @@ contains
 
    !--search for desired mat1 at temp1 on input tape.
    !--if restart is requested, copy all t.le.temp1 to output tape.
-   nsh=0
-   call repoz(nin)
-   call repoz(nout)
-   call tpidio(nin,nout,0,scr,nb,nw)
-  110 continue
+   if (loop.eq.0) then
+      nsh=0
+      call repoz(nin)
+      call repoz(nout)
+      call tpidio(nin,nout,0,scr,nb,nw)
+   endif
+  115 continue
    call contio(nin,0,0,scr,nb,nw)
    if (math.eq.-1) go to 120
    if (math.eq.mat1) go to 130
    call tomend(nin,0,0,scr)
-   go to 110
+   go to 115
   120 continue
    call mess('broadr','desired mat and temp not on tape',' ')
    go to 400
@@ -399,7 +404,7 @@ contains
    call tomend(nin,no,nscr1,scr)
    diff=abs(temp-temp1)
    test=1+temp1/1000
-   if (diff.gt.test) go to 110
+   if (diff.gt.test) go to 115
 
    if (lrp.eq.0) then
       write(nsyso,'(/'' non-resonance nuclide, input pendf limit'',5x,&
@@ -993,6 +998,8 @@ contains
    endif
    if (nwunr.gt.0) deallocate(unr)
    if (lnu.gt.0) deallocate(nutot)
+   if (allocated(nutot)) deallocate(nutot)
+   loop=loop+1
    go to 110
 
    !--broadr is finished
