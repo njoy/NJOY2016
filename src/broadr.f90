@@ -955,29 +955,19 @@ contains
             if (mth.ge.201) iflag=1
             ! Don't include partial xs if its sum is already available
             if (mt103.eq.1) then
-              if (mtr(i).ge.mpmin) then
-                if (mtr(i).le.mpmax) iflag=1
-              endif
+              if (mtr(i).ge.mpmin.and.mtr(i).le.mpmax) iflag=1
             endif
             if (mt104.eq.1) then
-              if (mtr(i).ge.mdmin) then
-                if (mtr(i).le.mdmax) iflag=1
-              endif
+              if (mtr(i).ge.mdmin.and.mtr(i).le.mdmax) iflag=1
             endif
             if (mt105.eq.1) then
-              if (mtr(i).ge.mtmin) then
-                if (mtr(i).le.mtmax) iflag=1
-              endif
+              if (mtr(i).ge.mtmin.and.mtr(i).le.mtmax) iflag=1
             endif
             if (mt106.eq.1) then
-              if (mtr(i).ge.m3min) then
-                if (mtr(i).le.m3max) iflag=1
-              endif
+              if (mtr(i).ge.m3min.and.mtr(i).le.m3max) iflag=1
             endif
             if (mt107.eq.1) then
-              if (mtr(i).ge.m4min) then
-                if (mtr(i).le.m4max) iflag=1
-              endif
+              if (mtr(i).ge.m4min.and.mtr(i).le.m4max) iflag=1
             endif
             if (iflag.eq.0) scr(k)=scr(k)+tt(1+i)
          enddo
