@@ -940,17 +940,45 @@ contains
          scr(k)=0
          do i=1,nreac
             iflag=0
-            if (mth.eq.3.and.mtr(i).eq.2) iflag=1
-            if (mth.eq.4.and.(mtr(i).lt.51.or.mtr(i).gt.91)) iflag=1
-            if (mth.eq.19.and.mtr(i).ne.18) iflag=1
-            if (mth.ge.46.and.mth.le.49.and.mtr(i).ne.mth-40) iflag=1
+            if (mth.eq.3) then
+              if (mtr(i).eq.2) iflag=1
+            endif
+            if (mth.eq.4) then
+              if(mtr(i).lt.51.or.mtr(i).gt.91) iflag=1
+            endif
+            if (mth.eq.19) then
+              if (mtr(i).ne.18) iflag=1
+            endif
+            if (mth.ge.46.and.mth.le.49) then
+              if (mtr(i).ne.mth-40) iflag=1
+            endif
             if (mth.ge.201) iflag=1
             ! Don't include partial xs if its sum is already available
-            if (mt103.eq.1.and.mtr(i).ge.mpmin.and.mtr(i).le.mpmax) iflag=1
-            if (mt104.eq.1.and.mtr(i).ge.mdmin.and.mtr(i).le.mdmax) iflag=1
-            if (mt105.eq.1.and.mtr(i).ge.mtmin.and.mtr(i).le.mtmax) iflag=1
-            if (mt106.eq.1.and.mtr(i).ge.m3min.and.mtr(i).le.m3max) iflag=1
-            if (mt107.eq.1.and.mtr(i).ge.m4min.and.mtr(i).le.m4max) iflag=1
+            if (mt103.eq.1) then
+              if (mtr(i).ge.mpmin) then
+                if (mtr(i).le.mpmax) iflag=1
+              endif
+            endif
+            if (mt104.eq.1) then
+              if (mtr(i).ge.mdmin) then
+                if (mtr(i).le.mdmax) iflag=1
+              endif
+            endif
+            if (mt105.eq.1) then
+              if (mtr(i).ge.mtmin) then
+                if (mtr(i).le.mtmax) iflag=1
+              endif
+            endif
+            if (mt106.eq.1) then
+              if (mtr(i).ge.m3min) then
+                if (mtr(i).le.m3max) iflag=1
+              endif
+            endif
+            if (mt107.eq.1) then
+              if (mtr(i).ge.m4min) then
+                if (mtr(i).le.m4max) iflag=1
+              endif
+            endif
             if (iflag.eq.0) scr(k)=scr(k)+tt(1+i)
          enddo
          call getunx(1,tt(1),en,sun,unr)
@@ -1366,15 +1394,19 @@ contains
    is=2
   140 continue
    if (is.ge.nstack) go to 150
-   if (ks(is-1).eq.ks(is)+1&
-     .and.js(is-1).eq.0.and.js(is).eq.0) go to 150
+   if (ks(is-1).eq.ks(is)+1) then
+     if (js(is-1).eq.0) then
+       if(js(is).eq.0) go to 150
+     endif
+   endif
    ! compare true function to linear approximation
    em=half*(es(is-1)+es(is))
    ndig=9
    if (em.gt.tenth.and.em.lt.one) ndig=8
-   if (em.gt.sigfig(es(is),7,+1).and.&
-     em.lt.sigfig(es(is-1),7,-1)) then
-      em=sigfig(em,7,0)
+   if (em.gt.sigfig(es(is),7,+1)) then
+     if(em.lt.sigfig(es(is-1),7,-1)) then
+       em=sigfig(em,7,0)
+     endif
    else
       em=sigfig(em,ndig,0)
    endif
@@ -1850,7 +1882,9 @@ contains
       a=abs(aa)
       b=abs(bb)
    endif
-   if (bb.lt.zero.and.mod(n,2).ne.0) sign=-sign
+   if (bb.lt.zero) then
+     if (mod(n,2).ne.0) sign=-sign
+   endif
    h=(b-a)*pow2(1)
    x=pow2(1)*a
    xx=x*x
