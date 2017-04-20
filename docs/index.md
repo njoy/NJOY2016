@@ -2,6 +2,7 @@
 layout: page
 title: NJOY2016
 ---
+For information on obtaining and building NJOY2016, please see [this page](https://njoy.github.io/Build/index.html).
 
 The NJOY Nuclear Data Processing System, version 2016, is a modular computer code used for converting evaluated nuclear data in the ENDF format into libraries useful for applications calculations.  Since the Evaluated Nuclear Data File (ENDF) format is used worldwide, NJOY gives its users access to a wide variety of the most up- to-date nuclear data.  NJOY provides comprehensive capabilities for processing evaluated data, serving applications that include continuous-energy Monte Carlo (MCNP), deterministic transport codes (PARTISN, ANISN, DORT), and reactor lattice codes (WIMS, EPRI).  
 
