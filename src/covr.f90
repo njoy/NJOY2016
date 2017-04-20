@@ -1594,6 +1594,7 @@ contains
    !--finished
    deallocate(ixmip)
    deallocate(ixmap)
+   deallocate(ilcf)
    return
    end subroutine matshd
 

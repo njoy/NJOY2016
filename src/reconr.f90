@@ -326,8 +326,10 @@ contains
                mcards(i)=0
             enddo
             call rdfil2(nrtot,intunr)
-            nsig=4
-            if (nmtres.gt.0) then
+            if (nmtres.eq.0) then
+               nsig=5
+            else
+               nsig=4
                write(nsyso,'(/''   samm resonance reactions:'',10i5)')&
                  (mmtres(i),i=1,nmtres)
                if (nmtres.gt.2) then
