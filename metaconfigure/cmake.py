@@ -546,14 +546,14 @@ def install(state):
                 contents += """
         set( installation_targets {0} )""".format(targets[0])
                 contents += """
-        if (NOT subproject)
+        if ( NOT is_subproject )
             list( APPEND installation_targets {0} )
         endif()
                 """.format(targets[-1])
                 contents += block
             else:
                 contents += """
-        if (NOT subproject)
+        if ( NOT is_subproject )
             list( APPEND installation_targets {0} )"""
                 contents += block.replace('\n', '\n    ')
                 contents += """
