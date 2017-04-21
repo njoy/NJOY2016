@@ -1,5 +1,7 @@
-cmake_minimum_required( VERSION 3.2 ) 
 
+cmake_minimum_required( VERSION 3.2 ) 
+set( CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configuration types" FORCE )
+        
 project( njoy LANGUAGES Fortran )
 get_directory_property( is_subproject PARENT_DIRECTORY )
 include( CMakeDependentOption REQUIRED )
@@ -46,30 +48,6 @@ endif()
 set( CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}/fortran_modules" CACHE PATH "directory for fortran modules" )
 file( MAKE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}" ) 
 
-set( njoy_GNU_Windows_common_flags "-Wall" "-Wextra" "-Wpedantic" )
-set( njoy_GNU_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
-set( njoy_GNU_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
-set( njoy_GNU_Windows_strict_flags "-Werror" )
-set( njoy_GNU_Windows_coverage_flags "--coverage" )
-set( njoy_GNU_Windows_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
-set( njoy_GNU_Windows_base_project_flags  )
-set( njoy_GNU_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Windows_link_time_optimization_flags "-flto" )
-set( njoy_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Windows_nonportable_optimization_flags "-march=native" )
-set( njoy_GNU_Windows_static_flags "-static" )
-set( njoy_GNU_Darwin_common_flags "-Wall" "-Wextra" "-Wpedantic" )
-set( njoy_GNU_Darwin_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
-set( njoy_GNU_Darwin_RELEASE_flags "-O3" "-DNDEBUG" )
-set( njoy_GNU_Darwin_strict_flags "-Werror" )
-set( njoy_GNU_Darwin_coverage_flags "--coverage" )
-set( njoy_GNU_Darwin_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
-set( njoy_GNU_Darwin_base_project_flags  )
-set( njoy_GNU_Darwin_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Darwin_link_time_optimization_flags "-flto" )
-set( njoy_GNU_Darwin_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Darwin_nonportable_optimization_flags "-march=native" )
-set( njoy_GNU_Darwin_static_flags "-static" )
 set( njoy_GNU_Linux_common_flags "-Wall" "-Wextra" "-Wpedantic" )
 set( njoy_GNU_Linux_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
 set( njoy_GNU_Linux_RELEASE_flags "-O3" "-DNDEBUG" )
@@ -82,6 +60,30 @@ set( njoy_GNU_Linux_link_time_optimization_flags "-flto" )
 set( njoy_GNU_Linux_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( njoy_GNU_Linux_nonportable_optimization_flags "-march=native" )
 set( njoy_GNU_Linux_static_flags "-static" )
+set( njoy_GNU_Darwin_common_flags "-Wall" "-Wextra" "-Wpedantic" )
+set( njoy_GNU_Darwin_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
+set( njoy_GNU_Darwin_RELEASE_flags "-O3" "-DNDEBUG" )
+set( njoy_GNU_Darwin_strict_flags "-Werror" )
+set( njoy_GNU_Darwin_coverage_flags "--coverage" )
+set( njoy_GNU_Darwin_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
+set( njoy_GNU_Darwin_base_project_flags  )
+set( njoy_GNU_Darwin_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Darwin_link_time_optimization_flags "-flto" )
+set( njoy_GNU_Darwin_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Darwin_nonportable_optimization_flags "-march=native" )
+set( njoy_GNU_Darwin_static_flags "-static" )
+set( njoy_GNU_Windows_common_flags "-Wall" "-Wextra" "-Wpedantic" )
+set( njoy_GNU_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
+set( njoy_GNU_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
+set( njoy_GNU_Windows_strict_flags "-Werror" )
+set( njoy_GNU_Windows_coverage_flags "--coverage" )
+set( njoy_GNU_Windows_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
+set( njoy_GNU_Windows_base_project_flags  )
+set( njoy_GNU_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Windows_link_time_optimization_flags "-flto" )
+set( njoy_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Windows_nonportable_optimization_flags "-march=native" )
+set( njoy_GNU_Windows_static_flags "-static" )
 
 if ( static_njoy )
     set( njoy_library_linkage STATIC )
@@ -99,24 +101,24 @@ endif()
 list( INSERT 0 CMAKE_INSTALL_RPATH "${rpath_prefix}/../lib" )
 set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
 
- if ( NOT GIT_EXECUTABLE )
-     find_package( Git )
-     if ( NOT GIT_FOUND )
-         message( FATAL_ERROR "git installation was not found." )
-     endif()
- endif()
+if ( NOT GIT_EXECUTABLE )
+    find_package( Git )
+    if ( NOT GIT_FOUND )
+        message( FATAL_ERROR "git installation was not found." )
+    endif()
+endif()
 
- execute_process(
-     COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-     OUTPUT_VARIABLE GIT_BRANCH
-     OUTPUT_STRIP_TRAILING_WHITESPACE
+execute_process(
+    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_BRANCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
 )
- execute_process(
-     COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
-     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-     OUTPUT_VARIABLE GIT_HASH
-     OUTPUT_STRIP_TRAILING_WHITESPACE
+execute_process(
+    COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
 ) 
 
 message( STATUS "" )
@@ -190,27 +192,27 @@ $<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}>
 $<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>>
 ${Fortran_appended_flags} ${njoy_appended_flags} )
 
-target_link_libraries( njoy PUBLIC "$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${link_time_optimization}>>:${${PREFIX}_RELEASE_flags}${${PREFIX}_link_time_optimization_flags}$<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}>$<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}>$<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>$<$<BOOL:Fortran_appended_flags>:${Fortran_appended_flags}>$<$<BOOL:njoy_appended_flags>:${njoy_appended_flags}>>" )
+target_link_libraries( njoy PUBLIC "$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${link_time_optimization}>>:${${PREFIX}_RELEASE_flags};${${PREFIX}_link_time_optimization_flags}$<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags};>$<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags};>$<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags};>>$<$<CONFIG:DEBUG>:$<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags};>>$<$<BOOL:Fortran_appended_flags>:${Fortran_appended_flags};>$<$<BOOL:njoy_appended_flags>:${njoy_appended_flags};>" )
 
 if ( NOT is_subproject )
     add_executable( njoy_executable src/main.f90 )
     set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
     target_compile_options( njoy_executable PRIVATE 
-${${PREFIX}_common_flags}
-$<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>
-$<$<BOOL:${static}>:${${PREFIX}_static_flags}>
-$<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
-$<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>
-$<$<CONFIG:DEBUG>:
-${${PREFIX}_DEBUG_flags} 
-$<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags}>>
-$<$<CONFIG:RELEASE>:
-${${PREFIX}_RELEASE_flags} 
-$<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}> 
-$<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}> 
-$<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}> 
-$<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>>
-${Fortran_appended_flags} ${njoy_appended_flags} )
+    ${${PREFIX}_common_flags}
+    $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>
+    $<$<BOOL:${static}>:${${PREFIX}_static_flags}>
+    $<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
+    $<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>
+    $<$<CONFIG:DEBUG>:
+    ${${PREFIX}_DEBUG_flags} 
+    $<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags}>>
+    $<$<CONFIG:RELEASE>:
+    ${${PREFIX}_RELEASE_flags} 
+    $<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}> 
+    $<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}> 
+    $<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}> 
+    $<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>>
+    ${Fortran_appended_flags} ${njoy_appended_flags} )
     target_link_libraries( njoy_executable PUBLIC njoy )
 endif()
 
@@ -219,7 +221,12 @@ if( NOT is_subproject )
     add_subdirectory( tests )
 endif()
 
-install( TARGETS njoy njoy_executable 
+set( installation_targets njoy )
+if (NOT subproject)
+    list( APPEND installation_targets njoy_executable )
+endif()
+
+install( TARGETS ${installation_targets} 
          RUNTIME DESTINATION bin
          LIBRARY DESTINATION lib
          ARCHIVE DESTINATION lib
