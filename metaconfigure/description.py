@@ -144,7 +144,7 @@ def collect_driver(state):
 
 
 def generate(name, language, **kwargs):
-    state = {'strict':True, 'test pattern':'test$', 'ignore pattern':'',
+    state = {'strict':True, 'test pattern':'test$', 'ignore pattern':'$^',
              'is external project':False}
     state.update({'name':name, 'language':language})
     state.update(kwargs)

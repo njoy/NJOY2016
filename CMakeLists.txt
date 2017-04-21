@@ -17,7 +17,7 @@ if( njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version )
 endif()
 
 # general properties
-option( strict "Compile time warnings are converted to errors" OFF )
+option( njoy_strict "Compile time warnings are converted to errors" OFF )
 
 # binary instrumentation
 option( coverage "Enable binary instrumentation to collect test coverage information in the DEBUG configuration" )
@@ -60,18 +60,6 @@ set( njoy_GNU_Windows_link_time_optimization_flags "-flto" )
 set( njoy_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( njoy_GNU_Windows_nonportable_optimization_flags "-march=native" )
 set( njoy_GNU_Windows_static_flags "-static" )
-set( njoy_GNU_Darwin_common_flags "-Wall" "-Wextra" "-Wpedantic" )
-set( njoy_GNU_Darwin_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
-set( njoy_GNU_Darwin_RELEASE_flags "-O3" "-DNDEBUG" )
-set( njoy_GNU_Darwin_strict_flags "-Werror" )
-set( njoy_GNU_Darwin_coverage_flags "--coverage" )
-set( njoy_GNU_Darwin_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
-set( njoy_GNU_Darwin_base_project_flags  )
-set( njoy_GNU_Darwin_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Darwin_link_time_optimization_flags "-flto" )
-set( njoy_GNU_Darwin_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Darwin_nonportable_optimization_flags "-march=native" )
-set( njoy_GNU_Darwin_static_flags "-static" )
 set( njoy_GNU_Linux_common_flags "-Wall" "-Wextra" "-Wpedantic" )
 set( njoy_GNU_Linux_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
 set( njoy_GNU_Linux_RELEASE_flags "-O3" "-DNDEBUG" )
@@ -84,6 +72,18 @@ set( njoy_GNU_Linux_link_time_optimization_flags "-flto" )
 set( njoy_GNU_Linux_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
 set( njoy_GNU_Linux_nonportable_optimization_flags "-march=native" )
 set( njoy_GNU_Linux_static_flags "-static" )
+set( njoy_GNU_Darwin_common_flags "-Wall" "-Wextra" "-Wpedantic" )
+set( njoy_GNU_Darwin_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
+set( njoy_GNU_Darwin_RELEASE_flags "-O3" "-DNDEBUG" )
+set( njoy_GNU_Darwin_strict_flags "-Werror" )
+set( njoy_GNU_Darwin_coverage_flags "--coverage" )
+set( njoy_GNU_Darwin_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
+set( njoy_GNU_Darwin_base_project_flags  )
+set( njoy_GNU_Darwin_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Darwin_link_time_optimization_flags "-flto" )
+set( njoy_GNU_Darwin_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
+set( njoy_GNU_Darwin_nonportable_optimization_flags "-march=native" )
+set( njoy_GNU_Darwin_static_flags "-static" )
 
 if ( static_njoy )
     set( njoy_library_linkage STATIC )
@@ -177,7 +177,7 @@ set( PREFIX njoy_${CMAKE_Fortran_COMPILER_ID}_${CMAKE_SYSTEM_NAME} )
 
 target_compile_options( njoy PRIVATE 
 ${${PREFIX}_common_flags}
-$<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>
+$<$<BOOL:${njoy_strict}>:${${PREFIX}_njoy_strict_flags}>
 $<$<BOOL:${static}>:${${PREFIX}_static_flags}>
 $<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
 $<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>
@@ -199,7 +199,7 @@ if ( NOT is_subproject )
     set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
     target_compile_options( njoy_executable PRIVATE 
     ${${PREFIX}_common_flags}
-    $<$<BOOL:${strict}>:${${PREFIX}_strict_flags}>
+    $<$<BOOL:${njoy_strict}>:${${PREFIX}_njoy_strict_flags}>
     $<$<BOOL:${static}>:${${PREFIX}_static_flags}>
     $<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
     $<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>

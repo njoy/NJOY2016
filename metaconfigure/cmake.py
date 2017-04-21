@@ -132,7 +132,7 @@ def define_options(state):
     contents="""
 
     # general properties
-    option( strict "Compile time warnings are converted to errors" {strict} )
+    option( {name}_strict "Compile time warnings are converted to errors" {strict} )
     
     # binary instrumentation
     option( coverage "Enable binary instrumentation to collect test coverage information in the DEBUG configuration" )
@@ -261,7 +261,7 @@ def target_flags_expression(state):
     release = template.format('RELEASE')
 
     option_template = "\n$<$<BOOL:${{{{{0}}}}}>:${{{{${{{{PREFIX}}}}_{0}_flags}}}}>"
-    strict = option_template.format('strict')
+    strict = option_template.format('{name}_strict')
     coverage = option_template.format('coverage')
     profile_generate = option_template.format('profile_generate')
     link_time_optimization = option_template.format('link_time_optimization')
