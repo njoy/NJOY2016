@@ -274,6 +274,7 @@ contains
    !--read in the total and partial heating cross sections
    if (allocated(heat)) deallocate(heat)
    allocate(heat(4,nunr,ntemp))
+   heat(:,:,:)=zero
    call rdheat(a,heat,eunr,temp,ntemp,nunr,ihave,matd)
    if (ihave.eq.0) call mess('purr',&
      'no heating found on pendf',&
@@ -2842,4 +2843,3 @@ contains
    end function rann
 
 end module purm
-
