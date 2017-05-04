@@ -18,6 +18,7 @@ module leapm
    integer::npr
    integer::iel
    integer::nss
+   integer::ncold,nsk
    real(kr)::b7
    real(kr)::aws
    real(kr)::sps
@@ -34,6 +35,7 @@ module leapm
    integer::nka
    real(kr)::dka
    real(kr),dimension(:),allocatable::ska
+   real(kr)::cfrac
 
    ! other global variables for module
    integer::naint,nbint
@@ -196,13 +198,13 @@ contains
    !    card 15 - oscillator energies (ev)
    !    card 16 - oscillator weights (sum to 1.-tbeta-twt)
    !
-   !    card 17 - pair correlation control (nsk.ne.0 only)
+   !    card 17 - pair correlation control (nsk.ne.0 .or ncold.ne.0 only)
    !       nka     number of kappa values
    !       dka     kappa increment (inv. angstroms)
    !
    !    card 18  skappa values in increasing order (inv. ang.)
    !
-   !    card 19  coherent scattering fraction for nsk.eq.2 only
+   !    card 19  coherent scattering fraction for (nsk.ne.0) only
    !       cfrac   coherent fraction
    !
    ! card 20 - file 1 comments, repeat until blank line is read.
@@ -212,11 +214,11 @@ contains
    use physics ! provides bk (boltzmann constant)
    use util    ! provides timer,openz,error,mess
    ! internals
-   integer::itemp,idone,i,ntempr,isabt,ilog,ncold,nsk,ni,nedge
+   integer::itemp,idone,i,ntempr,isabt,ilog,ni,nedge
    integer::isym,mscr,maxb,isecs
    real(kr)::time
    character(4)::title(20)
-   real(kr)::temp,emax,cfrac
+   real(kr)::temp,emax
    character::text*80
    real(kr),dimension(:),allocatable::bragg
    real(kr),dimension(:),allocatable::scr
@@ -293,7 +295,7 @@ contains
 
    !--allocate storage for ssm (and ssp if needed)
    allocate(ssm(nbeta,nalpha,ntempr))
-   if (nsk.ne.0) allocate(ssp(nbeta,nalpha,ntempr))
+   if (ncold.ne.0) allocate(ssp(nbeta,nalpha,ntempr))
 
    !--allocate storage for dwpix, dwp1, tempf and tempf1
    allocate(dwpix(ntempr))
@@ -341,7 +343,7 @@ contains
             endif
 
             !--read in pair correlation function, s_kappa
-            if (nsk.gt.0) then
+            if ((nsk.gt.0).or.(ncold.gt.0)) then
                read(nsysi,*) nka,dka
                if (allocated(ska)) deallocate(ska)
                allocate(ska(nka))
@@ -354,7 +356,7 @@ contains
             endif
 
             !--read in coherent fraction for skold method
-            if (nsk.eq.2) read(nsysi,*) cfrac
+            if (nsk.gt.0) read(nsysi,*) cfrac
 
          endif
 
@@ -368,10 +370,10 @@ contains
          if (nd.gt.0) call discre(itemp)
 
          !--check for special hydrogen and deuterium options
-         if (ncold.gt.0) call coldh(ncold,itemp,temp)
+         if (ncold.gt.0) call coldh(itemp,temp)
 
          !--check for skold option for correlations
-         if (nsk.eq.2) call skold(cfrac,itemp,temp,ssm,nalpha,nbeta,ntempr)
+         if ((nsk.eq.2).and.(ncold.eq.0)) call skold(cfrac,itemp,temp,ssm,nalpha,nbeta,ntempr)
 
       !--continue temperature loop
       enddo
@@ -1885,7 +1887,7 @@ contains
    return
    end function sint
 
-   subroutine coldh(nd,itemp,temp)
+   subroutine coldh(itemp,temp)
    !--------------------------------------------------------------------
    ! Convolve the current solid-type and/or diffusive S(alpha,beta)
    ! with discrete rotational modes for ortho or para hydrogen or
@@ -1900,7 +1902,7 @@ contains
    use mainio  ! provides nsyso
    use util    ! provides timer
    ! externals
-   integer::nd,itemp
+   integer::itemp
    real(kr)::temp
    ! internals
    real(kr)::time,tev,sc,de,x,amassm,bp,sampc,sampi
@@ -1946,7 +1948,7 @@ contains
    tev=bk*abs(temp)
    sc=1
    if (lat.eq.1) sc=therm/tev
-   law=nd+1
+   law=ncold+1
    de=deh
    if (law.gt.3) de=ded
    x=de/tev
