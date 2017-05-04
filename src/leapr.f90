@@ -311,6 +311,7 @@ contains
          arat=aws/awr
          write(nsyso,'(/'' secondary scatterer...''/&
            &'' input alpha values divided by'',f7.3)') arat
+         if (allocated(tempr)) deallocate(tempr)
       endif
       allocate(tempr(ntempr))
       do itemp=1,ntempr
