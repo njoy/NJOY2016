@@ -1,44 +1,37 @@
 sudo: required
 dist: trusty
-
 git:
-  submodules: false  
-
+  submodules: false
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
-      - george-edison55-precise-backports
+    - ubuntu-toolchain-r-test
+    - george-edison55-precise-backports
     packages:
-      - gcc-6
-      - gfortran-6
-      - cmake
-      - cmake-data
-      
+    - gcc-6
+    - gfortran-6
+    - cmake
+    - cmake-data
 language: c
-
 compiler:
-  - gcc
-
+- gcc
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc; fi
-
-script: ./.travis/build.sh
-
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc; fi
+script: "./.travis/build.sh"
 env:
+  matrix:
   - build_type=debug static_libraries=FALSE
   - build_type=release static_libraries=FALSE
   - build_type=debug static_libraries=TRUE
   - build_type=release static_libraries=TRUE
-
-
+  global:
+    secure: h3RbdhYgrxX7vp97U7eu5lpaXFZEkwoLLtc4jdBfP9PxfRS2GcvFhJ0InNq3HJjhH5n6DuCDXCQ5y5K/OghCTWK2jkuxEh+PC/TlfxaDeTXyfMxQeJnVU2IuXGgTnDhuKlmU4FlbM+9NU0CD0u7MX03UXx4vpgQEat1reoz3l6+MyG2RtSzrz4781Sui559ovT7GTqPhWPgb7M+lC55sRbqD3c0fnw+XGiRFBpkt7mMNDoVu5MM/JJQ2Ovgc8C5FbXJxV/2hTmS8EHezsdE4IMALZS95pQRo3EOLSKEUn+lnDsgS7m6sWA/hFq3PeXIz8s/C8au4Kt/xvRARZle5AN8v8FSn05NHsTww5ZioKoV1WoaE13NtP1p7owBO4sQ/UZmAta709yqvDrkTYc7IoTMTGg8MtnzCSr86NInU7Hg22cuuRv1AB6PrhaKQOnVg9dIAp+LGIrte8TsncBd5KAD88eMcL0FwbhDmB3ZynfNH2GV5+pASP0CNjhBgx3UXdTIGLScAQA7EKlD7nDNJsMbc6WKFSLYEnjGRwiN6ZFcf/m5saiLmeBSrZQq5OpmGS0ymKb2fjJQl3fYBiY/4tqtcmX2+c/5D6pbqRNxk1pHhEzOCxQqDf4K+ZDpnjkbG4anSf2G6jNzwJZcq5kuliKWsl4FaOEonXHV2BfuGGsw=
 matrix:
   include:
-    - os: linux
-      compiler: gcc
-      env: build_type=coverage static_libraries=FALSE
+  - os: linux
+    compiler: gcc
+    env: build_type=coverage static_libraries=FALSE
