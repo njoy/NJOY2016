@@ -22,7 +22,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc; fi
 
-script: "./.travis/build.sh"
+script: "travis_wait 30 ./.travis/build.sh"
 after_success: "./.travis/signature.sh"
 
 env:
