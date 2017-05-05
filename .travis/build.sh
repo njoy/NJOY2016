@@ -29,7 +29,7 @@ then
   exit 1
 fi
 
-ctest --output-on-failure -j2
+travis_wait ctest --output-on-failure -j2
 export TEST_FAILURE=$?
 if [ $TEST_FAILURE -ne 0 ];
 then
