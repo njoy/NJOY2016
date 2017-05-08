@@ -121,3 +121,10 @@ title: NJOY2016 Test Descriptions
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/20/input)]
 
   This test case uses a preliminary ENDF/B-VII.1 evaluation for <sup>35</sup>Cl, which uses the advanced Reich-Moore-Limited format for the resonances.  This allows more complex covariances to be represented.  In this case, covariances involving the (n,p) reaction are calculated.
+
+## Test Problem 21
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/21/input)]
+ 
+  This test case was developed to check if NaNs were "calculated" in `PURR`. This problem was discovered by Dave Brown and Paul Romano and was fixed in [Pull Request 18](https://github.com/njoy/NJOY2016/pull/18). This test was created in an attempt to prevent this from happening again. (No guarantees.)
+

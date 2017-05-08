@@ -13,16 +13,16 @@ def project_signature( git ):
     invocation = [ "git", "rev-parse", "HEAD" ]
     if os.name == "nt":
         invocation.insert( 0, "powershell" )
-        
+
     process = subprocess.Popen( invocation, stdout=subprocess.PIPE )
     hash_value = process.communicate()
-    git[ project_name ] = hash_value[0].strip()
-    
+    git[ project_name ] = str(hash_value[0].strip())
+
 def generate( name = None ):
     if name is None:
         project_name = os.path.split( os.getcwd() )[1]
         name = project_name + str( time.time() )
-    
+
     git = {}
     project_signature( git )
     if os.path.isdir( os.path.join( os.getcwd(), 'subprojects' ) ):
@@ -33,7 +33,7 @@ def generate( name = None ):
                 os.chdir( subproject )
                 project_signature( git )
                 os.chdir( root )
-        
+
         os.chdir( '..' )
 
     with open ( name + ".json", "w" ) as json_file:
