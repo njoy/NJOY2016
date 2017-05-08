@@ -11,6 +11,7 @@ module leapm
    integer::nout
    integer::iprint
    integer::nphon
+   real(kr)::smin
    integer::mat
    real(kr)::za
    real(kr)::awr
@@ -132,6 +133,7 @@ contains
    !    za      1000*z+a for principal scatterer
    !    isabt   sab type (0=s, 1=ss, def=0)
    !    ilog    log flag (0=s, 1=log10(s), def=0)
+   !    smin    minimum S(alpha, beta) stored in file (def=2e-38)
    !
    ! card 5 - principal scatterer control
    !    awr     weight ratio to neutron for principal scatterer
@@ -241,7 +243,8 @@ contains
    read(nsysi,*) ntempr,iprint,nphon
    isabt=0
    ilog=0
-   read(nsysi,*) mat,za,isabt,ilog
+   smin=2.0e-38_kr
+   read(nsysi,*) mat,za,isabt,ilog,smin
    write(nsyso,'(/&
      &  '' no. of temperatures .................. '',i10/&
      &  '' print flag ........................... '',i10/&
@@ -249,8 +252,9 @@ contains
      &  '' endf mat number ...................... '',i10/&
      &  '' za ................................... '',i10/&
      &  '' isabt ................................ '',i10/&
-     &  '' ilog ................................. '',i10)')&
-     &  ntempr,iprint,nphon,mat,nint(za),isabt,ilog
+     &  '' ilog ................................. '',i10/&
+     &  '' smin.................. ............... '',es10.3)')&
+     &  ntempr,iprint,nphon,mat,nint(za),isabt,ilog,smin
    if (isabt.ne.0) write(nsyso,'(/&
      &''*** Warning.  isabt=1 pendf tapes CANNOT be processed '',&
      &''by the NJOY THERMR module ***'')')
@@ -2937,7 +2941,6 @@ contains
    equivalence(t(1),z(1))
    real(kr),parameter::small=1.e-9_kr
    real(kr),parameter::tiny=-999.e0_kr
-   real(kr),parameter::smin=2.0e-38_kr
    real(kr),parameter::tol=0.9e-7_kr
    real(kr),parameter::up=1.01e0_kr
    real(kr),parameter::therm=.0253e0_kr
