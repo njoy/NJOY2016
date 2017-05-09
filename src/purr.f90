@@ -225,6 +225,7 @@ contains
    allocate(fis(ntemp,nsamp))
    allocate(cap(ntemp,nsamp))
    allocate(els(ntemp,nsamp))
+   xs=0
 
    !--process this material
    call timer(time)
@@ -273,6 +274,7 @@ contains
 
    !--read in the total and partial heating cross sections
    if (allocated(heat)) deallocate(heat)
+   h=0
    allocate(heat(4,nunr,ntemp))
    heat(:,:,:)=zero
    call rdheat(a,heat,eunr,temp,ntemp,nunr,ihave,matd)
@@ -2843,3 +2845,4 @@ contains
    end function rann
 
 end module purm
+

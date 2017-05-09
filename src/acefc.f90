@@ -15097,13 +15097,15 @@ contains
    integer::nnf,mt,kf,iif,kc,iic,nofiss,n,k,iaa
    integer::major,minor,mtl,icurv,mtlast,nlev,iflag
    integer::nure,intunr,nurb,lssf,ie,ib,ii,ll,kk,nunu
+   integer,parameter::pltumx=10000
    real(kr)::e,tot,abso,elas,gprod,xtag,ytag,thin,abss
    real(kr)::e1,e2,fiss,cap,heat,dam,x,y,xlast
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,test
-   real(kr)::ee(1000),s0(1000),s1(1000),s2(1000)
+   real(kr)::ee(pltumx),s0(pltumx),s1(pltumx),s2(pltumx)
    real(kr)::f0,f1,f2,c1,c2,cl,dp,pp,pe,capt
    character(1)::qu=''''
    character(10)::name
+   character(70)::strng
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::ten=10.e0_kr
    real(kr),parameter::small=1.e-12_kr
@@ -15462,6 +15464,10 @@ contains
    !--plot ur cross sections
    if (iurpt.ne.0) then
       nure=nint(xss(iurpt))
+      if (nure.gt.pltumx) then
+         write(strng,'(''1need to redefine pltumx to'',i5)')nure
+         call error('aplots',strng,'')
+      endif
       intunr=nint(xss(iurpt+2))
       nurb=nint(xss(iurpt+1))
       lssf=nint(xss(iurpt+5))
@@ -15514,6 +15520,7 @@ contains
            e=xss(esz-1+i)
            if (e.lt.xmin.or.e.ge.xmax) cycle
            ie=ie+1
+           if (ie.gt.pltumx) cycle
            ee(ie)=e
            tot=xss(esz+nes-1+i)
            s0(ie)=tot
@@ -15551,6 +15558,10 @@ contains
               if (s2(ie).lt.ymin) ymin=s2(ie)
            enddo
          enddo
+         if (ie.gt.pltumx) then
+            write(strng,'(''2need to redefine pltumx to'',i5)')ie
+            call error('aplots',strng,'')
+         endif
          nunu=ie
       endif
       ymax=ymax+ymax/10
