@@ -37,6 +37,7 @@ then
 fi
 if [ "$build_type" = "coverage" ]
 then
+  pip install --upgrade pip
   pip install --user cpp-coveralls
   echo "loading coverage information"
   coveralls  --exclude-pattern "/usr/include/.*|.*/CMakeFiles/.*|.*subprojects.*|.*dependencies.*|.*test\.cpp" --root ".." --build-root "." --gcov-options '\-lp'
