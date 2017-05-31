@@ -128,3 +128,15 @@ title: NJOY2016 Test Descriptions
  
   This test case was developed to check if NaNs were "calculated" in `PURR`. This problem was discovered by Dave Brown and Paul Romano and was fixed in [Pull Request 18](https://github.com/njoy/NJOY2016/pull/18). This test was created in an attempt to prevent this from happening again. (No guarantees.)
 
+## Test Problem 22
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/22/input)]
+
+  This test is the LEAPR input for para H2 at 20 K from ENDF/B-VIII.0-beta4. The test checks the compatibility between the skold and coldh subroutines.
+
+## Test Problem 23
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/23/input)]
+
+  This test is the LEAPR input for BeO from ENDF/B-VI.8. The test checks the ability to process materials with secondary scatterers.
+
