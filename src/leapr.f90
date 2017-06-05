@@ -133,7 +133,7 @@ contains
    !    za      1000*z+a for principal scatterer
    !    isabt   sab type (0=s, 1=ss, def=0)
    !    ilog    log flag (0=s, 1=log10(s), def=0)
-   !    smin    minimum S(alpha, beta) stored in file (def=2e-38)
+   !    smin    minimum S(alpha, beta) stored in file (def=1e-75)
    !
    ! card 5 - principal scatterer control
    !    awr     weight ratio to neutron for principal scatterer
@@ -243,7 +243,7 @@ contains
    read(nsysi,*) ntempr,iprint,nphon
    isabt=0
    ilog=0
-   smin=2.0e-38_kr
+   smin=1.0e-75_kr
    read(nsysi,*) mat,za,isabt,ilog,smin
    write(nsyso,'(/&
      &  '' no. of temperatures .................. '',i10/&
