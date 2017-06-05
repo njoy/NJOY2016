@@ -7,6 +7,7 @@ module samm
    ! Larson (ORNL).
    !-------------------------------------------------------------------
    use locale
+   use physics
    implicit none
    private
 
@@ -63,7 +64,7 @@ module samm
    real(kr),dimension(:),allocatable::xlmn
    integer,dimension(:),allocatable::kxlmn
    real(kr),dimension(:,:),allocatable::upr,upi
-   real(kr),dimension(:,:,:),allocatable::br,bi,pr,pi
+   real(kr),dimension(:,:,:),allocatable::br,bi,pr,pUi
    real(kr),dimension(:,:,:),allocatable::deriv,dsigma
    real(kr),dimension(:,:,:,:,:),allocatable::derivx
    real(kr),dimension(:,:,:,:,:,:),allocatable::crssx
@@ -585,7 +586,6 @@ contains
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zz8=0.08e0_kr
    real(kr),parameter::z123=0.123e0_kr
-   real(kr),parameter::aneutr=1.00866491578e0_kr
    ! use imf2=1 to output converted mf2
    !integer::imf2=1
    integer::imf2=0
@@ -694,7 +694,7 @@ contains
          !--analyze scattering length
          awri=res(jnow)
          emb(2,ier)=awri
-         aptru=z123*(awri*aneutr)**(one/three)+zz8
+         aptru=z123*(awri*amassn)**(one/three)+zz8
          apeff=ascat
          if (naps.eq.1) then
             aptru=ascat
@@ -885,14 +885,14 @@ contains
          emb(2,ier)=awri
          apl=res(jnow+1)
          if (apl.eq.zero) then
-            aptru=z123*(awri*aneutr)**(one/three)+zz8
+            aptru=z123*(awri*amassn)**(one/three)+zz8
             apeff=ascat
          else
             apeff=apl
             if (naps.eq.1) then
                aptru=apl
             else
-               aptru=z123*(awri*aneutr)**(one/three)+zz8
+               aptru=z123*(awri*amassn)**(one/three)+zz8
             endif
          endif
 
@@ -1278,7 +1278,6 @@ contains
    integer::ier
    ! internals
    integer::i
-   real(kr),parameter::neutron=1.00866491578e0_kr
    real(kr),parameter::proton=1.00727646688e0_kr
    real(kr),parameter::deuteron=2.01355321271e0_kr
    real(kr),parameter::triton=3.015501e0_kr
@@ -1300,27 +1299,27 @@ contains
          kza(i,ier)=0
          lpent(i,ier)=1
       else if (mt(i,ier).eq.103) then  ! proton
-         ema(i,ier)=proton/neutron
+         ema(i,ier)=proton/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.104) then  ! deuteron
-         ema(i,ier)=deuteron/neutron
+         ema(i,ier)=deuteron/amassn
          spina(i,ier)=1
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.105) then  ! triton
-         ema(i,ier)=triton/neutron
+         ema(i,ier)=triton/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.106) then  ! he3
-         ema(i,ier)=he3/neutron
+         ema(i,ier)=he3/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=2
          lpent(i,ier)=1
       else if (mt(i,ier).eq.107) then  ! alpha
-         ema(i,ier)=alpha/neutron
+         ema(i,ier)=alpha/amassn
          spina(i,ier)=0
          pa(i,ier)=0
          kza(i,ier)=2
@@ -1477,7 +1476,7 @@ contains
       allocate(br(ntriag,npar,nerm))
       allocate(bi(ntriag,npar,nerm))
       allocate(pr(ntriag,npar,nerm))
-      allocate(pi(ntriag,npar,nerm))
+      allocate(pUi(ntriag,npar,nerm))
    endif
 
    allocate(crss(npp,nerm))
@@ -1723,7 +1722,6 @@ contains
    integer::ippx,kgroup,ichan
    real(kr)::ff,twomhb,etac
    real(kr)::factor,alabcm,aa,redmas,z
-   real(kr),parameter::emneut=1.00866491578e0_kr ! neutron amu
    real(kr),parameter::hbarrr=6.582118890e-16_kr ! hbar in eV-s
    real(kr),parameter::amuevv=931.494013e+6_kr ! atomic mass unit in eV
    real(kr),parameter::cspeed=2.99792458e8_kr ! speed of light in m/s
@@ -1731,8 +1729,8 @@ contains
    real(kr),parameter::zero=0
 
    ff=1.e+15_kr
-   twomhb=sqrt(2*emneut*amuevv)/(hbarrr*ff*cspeed)
-   etac=fininv*amuevv/(hbarrr*ff*cspeed)*emneut
+   twomhb=sqrt(2*amassn*amuevv)/(hbarrr*ff*cspeed)
+   etac=fininv*amuevv/(hbarrr*ff*cspeed)*amassn
 
    do ippx=1,nppm(ier)
       if (ema(ippx,ier).eq.zero) then
@@ -2782,8 +2780,8 @@ contains
    subroutine abpart(ier)
    !-------------------------------------------------------------------
    ! Generate alphar and alphai => for cross section
-   ! and upr and upi = Energy-dependent pieces of pr & pi.
-   ! Also generate pr and pi = partial of R wrt U-parameters.
+   ! and upr and upi = Energy-dependent pieces of pr & pUi.
+   ! Also generate pr and pUi = partial of R wrt U-parameters.
    !-------------------------------------------------------------------
    ! externals
    integer::ier
@@ -2841,7 +2839,7 @@ contains
       do i=1,ntriag
          do j=1,npar
             pr(i,j,ier)=0
-            pi(i,j,ier)=0
+            pUi(i,j,ier)=0
          enddo
       enddo
 
@@ -2855,7 +2853,7 @@ contains
                      pr(ij,k,ier)=br(ij,k,ier)*upr(k,ier)
                   endif
                   if (bi(ij,k,ier).ne.zero) then
-                     pi(ij,k,ier)=bi(ij,k,ier)*upi(k,ier)
+                     pUi(ij,k,ier)=bi(ij,k,ier)*upi(k,ier)
                   endif
                enddo
             enddo
@@ -4277,7 +4275,6 @@ contains
    integer::i,m,is,k,j,ll
    integer::mmmxxx=100000
    real(kr),parameter::small=.000001e0_kr
-   real(kr),parameter::pi=3.141592653589793238462643e0_kr
    real(kr),parameter::euler=0.577215664901532860606512e0_kr
    real(kr),dimension(5),parameter::ber=(/&
      0.1666666666666666666666666666666666667e0_kr,&
@@ -4703,7 +4700,6 @@ contains
    real(kr)::g0,g0pr
    integer::k,n
    real(kr),parameter::euler=0.577215664901532860606512e0_kr
-   real(kr),parameter::pi=3.141592653589793238462643e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::half=0.5e0_kr
 
@@ -6669,9 +6665,9 @@ contains
       do i=1,nchan
          do j=1,i
             ij=ij+1
-            if (pi(ij,m,ier).ne.zero) then
+            if (pUi(ij,m,ier).ne.zero) then
                do ip=1,npp
-                  ddddd(ip,ier)=ddddd(ip,ier)-pi(ij,m,ier)*ti(ip,ij,ier)
+                  ddddd(ip,ier)=ddddd(ip,ier)-pUi(ij,m,ier)*ti(ip,ij,ier)
                enddo
             endif
             if (pr(ij,m,ier).ne.zero) then
@@ -6886,7 +6882,7 @@ contains
       deallocate(br)
       deallocate(bi)
       deallocate(pr)
-      deallocate(pi)
+      deallocate(pUi)
    endif
 
    deallocate(crss)
