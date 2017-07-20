@@ -1469,6 +1469,50 @@ contains
             enddo
          enddo
       enddo
+   else if (law.lt.0) then
+      if (law.eq.-1) then
+         call tab2io(nin,nout,nscr,a(1),nb,nw)
+         ne=n2h
+         do ie=1,ne
+            call tab1io(nin,nout,nscr,a(1),nb,nw)      !g(E->E') tab1
+            do while (nb.ne.0)
+               call moreio(nin,nout,nscr,a(1),nb,nw)
+            enddo
+         enddo
+      else if (law.eq.-5) then
+         call tab1io(nin,nout,nscr,a(1),nb,nw)         !theta(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a(1),nb,nw)
+         enddo
+         call tab1io(nin,nout,nscr,a(1),nb,nw)         !g(x) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a(1),nb,nw)
+         enddo
+      else if (law.eq.-7) then
+         call tab1io(nin,nout,nscr,a(1),nb,nw)         !theta(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a(1),nb,nw)
+         enddo
+      else if (law.eq.-9) then
+         call tab1io(nin,nout,nscr,a(1),nb,nw)         !theta(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a(1),nb,nw)
+         enddo
+      else if (law.eq.-11) then
+         call tab1io(nin,nout,nscr,a(1),nb,nw)         !a(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a(1),nb,nw)
+         enddo
+         call tab1io(nin,nout,nscr,a(1),nb,nw)         !b(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a(1),nb,nw)
+         enddo
+      else if (law.eq.-12) then
+         call tab1io(nin,nout,nscr,a(1),nb,nw)         !Tm(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a(1),nb,nw)
+         enddo
+      endif
    endif
    return
    end subroutine skip6
@@ -1598,6 +1642,12 @@ contains
    ! internals
    real(kr)::a,b,t
    real(kr),parameter::zero=0
+
+   !--make sure x2 .ne. x1
+   if (x2.eq.x1) then
+      y=y1
+      return
+   endif
 
    !--y is constant
    if (i.eq.1.or.y2.eq.y1.or.x.eq.x1) then
