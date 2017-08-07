@@ -919,6 +919,48 @@ contains
                enddo
             enddo
          enddo
+      else if (law.eq.-1) then
+         call tab2io(nin,nout,nscr,a,nb,nw)
+         ne=n2h
+         do ie=1,ne
+            call tab1io(nin,nout,nscr,a,nb,nw)      !g(E->E') tab1
+            do while (nb.ne.0)
+               call moreio(nin,nout,nscr,a,nb,nw)
+            enddo
+         enddo
+      else if (law.eq.-5) then
+         call tab1io(nin,nout,nscr,a,nb,nw)         !theta(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+         call tab1io(nin,nout,nscr,a,nb,nw)         !g(x) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+      else if (law.eq.-7) then
+         call tab1io(nin,nout,nscr,a,nb,nw)         !theta(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+      else if (law.eq.-9) then
+         call tab1io(nin,nout,nscr,a,nb,nw)         !theta(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+      else if (law.eq.-11) then
+         call tab1io(nin,nout,nscr,a,nb,nw)         !a(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+         call tab1io(nin,nout,nscr,a,nb,nw)         !b(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+      else if (law.eq.-12) then
+         call tab1io(nin,nout,nscr,a,nb,nw)         !Tm(E) tab1
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
       else if (law.ne.0.and.law.ne.3.and.law.ne.4) then
          call error('file6','illegal endf6 law.',' ')
       endif
