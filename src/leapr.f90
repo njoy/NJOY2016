@@ -11,8 +11,8 @@ module leapm
    integer::nout
    integer::iprint
    integer::nphon
-   real(kr)::smin
    integer::mat
+   real(kr)::smin
    real(kr)::za
    real(kr)::awr
    real(kr)::spr
@@ -200,13 +200,13 @@ contains
    !    card 15 - oscillator energies (ev)
    !    card 16 - oscillator weights (sum to 1.-tbeta-twt)
    !
-   !    card 17 - pair correlation control (nsk.ne.0 .or ncold.ne.0 only)
+   !    card 17 - pair correlation control (nsk.ne.0 .or. ncold.ne.0)
    !       nka     number of kappa values
    !       dka     kappa increment (inv. angstroms)
    !
    !    card 18  skappa values in increasing order (inv. ang.)
    !
-   !    card 19  coherent scattering fraction for (nsk.ne.0) only
+   !    card 19 - coherent scattering fraction (nsk.ne.0)
    !       cfrac   coherent fraction
    !
    ! card 20 - file 1 comments, repeat until blank line is read.
@@ -301,7 +301,8 @@ contains
    allocate(ssm(nbeta,nalpha,ntempr))
    if (ncold.ne.0) allocate(ssp(nbeta,nalpha,ntempr))
 
-   !--allocate storage for dwpix, dwp1, tempf and tempf1
+   !--allocate storage for tempr, dwpix, dwp1, tempf and tempf1
+   allocate(tempr(ntempr))
    allocate(dwpix(ntempr))
    allocate(dwp1(ntempr))
    allocate(tempf(ntempr))
@@ -317,9 +318,7 @@ contains
          arat=aws/awr
          write(nsyso,'(/'' secondary scatterer...''/&
            &'' input alpha values divided by'',f7.3)') arat
-         if (allocated(tempr)) deallocate(tempr)
       endif
-      allocate(tempr(ntempr))
       do itemp=1,ntempr
          read(nsysi,*) temp
          tempr(itemp)=abs(temp)
@@ -374,10 +373,11 @@ contains
          if (nd.gt.0) call discre(itemp)
 
          !--check for special hydrogen and deuterium options
-         if (ncold.gt.0) call coldh(itemp,temp)
+          if (ncold.gt.0) call coldh(itemp,temp)
 
          !--check for skold option for correlations
-         if ((nsk.eq.2).and.(ncold.eq.0)) call skold(cfrac,itemp,temp,ssm,nalpha,nbeta,ntempr)
+          if ((nsk.eq.2) .and. (ncold.eq.0))&
+             call skold(itemp,temp,ssm,nalpha,nbeta,ntempr)
 
       !--continue temperature loop
       enddo
@@ -420,6 +420,8 @@ contains
    deallocate(tempr)
    deallocate(p1)
    deallocate(ssm)
+   deallocate(scr)
+   if (allocated(ssp)) deallocate(ssp)
    deallocate(alpha)
    deallocate(beta)
    deallocate(dwpix)
@@ -2768,7 +2770,7 @@ contains
 
    end subroutine coher
 
-   subroutine skold(cfrac,itemp,temp,ssm,nalpha,nbeta,ntempr)
+   subroutine skold(itemp,temp,ssm,nalpha,nbeta,ntempr)
    !--------------------------------------------------------------------
    ! use skold approximation to add in the effects
    ! of intermolecular coherence.

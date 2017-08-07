@@ -27,6 +27,7 @@ module heatm
    integer::miss4(250),nmiss4
    integer::i6,mt6(maxmf6),i6g,mt6no(maxmf6)
    integer::i6p,mt6yp(maxmf6)
+   integer::jp,jpn,jpp
    real(kr)::q,zat,awrt,zap,awp
    integer::lct
    integer::idame
@@ -444,6 +445,7 @@ contains
    integer::mfd,mtd,j,idone,mf4,mt4,ie,nmu,imu,npkk,idis
    integer::ielem,ik,nr,idnx,nen,law
    integer::lrel,nmod
+   integer::iik,izap1,mtnow,nkk,nnb,nnw,i6t
    real(kr)::zar,awrr,e,enext,y,yld,test,efix
    real(kr)::c(30)
    character(60)::strng
@@ -472,6 +474,9 @@ contains
    i519=0
    mt458=0
    qdel=0
+   jp=0
+   jpn=0
+   jpp=0
    etop=20000000
    ebot=1
    ebot=ebot/100000
@@ -731,7 +736,25 @@ contains
    endif
    mfh=6
    do while (mfh.eq.6)
-      call contio(nendf,nend6,0,scr,nb,nw)
+      call contio(nendf,0,0,scr,nb,nw)
+      if (mth.eq.18) then
+         jp=l1h
+         jpn=mod(jp,10)
+         jpp=jp-10*jpn
+      endif
+      if (mth.ne.18 .or. (mth.eq.18 .and. jp.eq.0)) then
+         call contio(0,nend6,0,scr,nb,nw)
+      else
+         !--delete mt=18 from mt6 array and skip this section (for now)
+         i6t=i6
+         do i=1,i6t
+            if (mt6(i).lt.18) cycle
+            if (mt6(i).eq.18) i6=i6-1
+            if (mt6(i).gt.18 .and. i6.ne.i6t) mt6(i-1)=mt6(i)
+         enddo
+         call tosend(nendf,0,0,scr)
+         cycle
+      endif
       if (mfh.ne.0) then
          if (mth.ne.0) then
             nk=n1h
@@ -812,6 +835,8 @@ contains
                         enddo
                      enddo
                   enddo
+               else if (law.lt.0) then
+                  call skip6(nendf,nend6,0,scr,law)
                endif
             enddo
             if (zar.ne.zero) then
@@ -1043,6 +1068,13 @@ contains
    call contio(nend6,0,0,scr,nb,nw)
    n6=nint(scr(5))
    lct=nint(scr(4))
+   jp=nint(scr(3))
+   jpn=mod(jp,10)
+   jpp=jp-10*jpn
+   if (mth.eq.18 .and. jpn.ne.0) then
+      call tosend(nend6,0,0,scr)
+      go to 105
+   endif
    i6g=i6g+1
   123 continue
    j6=j6+1
@@ -3644,9 +3676,6 @@ contains
             if (x1.eq.x2.and.lep.gt.1) then
                x2=sigfig(x2,6,1)
                if (illdef.eq.0) then
-                  call mess('h6ddx',&
-                    'vertical segment(s) in distribution',&
-                    'y(x) is ill defined')
                   illdef=1
                endif
             endif
@@ -3669,9 +3698,6 @@ contains
          if (x1.eq.x2.and.lep.gt.1) then
             x2=sigfig(x2,6,1)
             if (illdef.eq.0) then
-               call mess('h6ddx',&
-                 'vertical segment(s) in distribution',&
-                 'y(x) is ill defined')
                illdef=1
             endif
          endif
@@ -3698,9 +3724,6 @@ contains
       if (x1.eq.x2.and.lep.gt.1) then
          x2=sigfig(x2,6,1)
          if (illdef.eq.0) then
-            call mess('h6ddx',&
-              'vertical segment(s) in distribution',&
-              'y(x) is ill defined')
             illdef=1
          endif
       endif
@@ -5272,7 +5295,7 @@ contains
    mtd=0
    go to 105
   250 continue
-   if (kchk.eq.0) go to 300
+   if (kchk.ne.1) go to 300
    if (mt303.eq.0) go to 300
 
    !--print kinematic test for total photon production

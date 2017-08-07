@@ -1375,7 +1375,11 @@ contains
 
    pi2=pi/2
    sqpi=sqrt(pi)
-   term=exp(-st/2)
+   if ((-st/2).lt.log(tiny(1._kr))) then
+      term=0
+   else
+      term=exp(-st/2)
+   endif
    ep=(1-term)/eps-b
    if (ep.le.zero) then
       aj=pi2/b
