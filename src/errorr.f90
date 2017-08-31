@@ -7294,7 +7294,7 @@ contains
    else
       cova(igp,ig)=cova(igp,ig)+akxy(iy,ix,k)*akxy(iyp,ixp,kp)*cov(jgp)
       if (cova(igp,ig).ne.zero) izero=1
-      cova(ig,igp)=cova(ig,igp)+akxy(iyp,ix,k)*akxy(iy,ixp,kp)*cov(jgp)
+      cova(ig,igp)=cova(ig,igp)+akxy(iyp,ix,kp)*akxy(iy,ixp,k)*cov(jgp)
       if (cova(ig,igp).ne.zero) izero=1
    endif
   310 continue
