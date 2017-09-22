@@ -418,7 +418,7 @@ contains
    integer::nin,nout,nscr
    real(kr)::a(*)
    ! internals
-   integer::nx,ns,i,npr,j,lep1,lnd,lnp,ns457,nb,nw,ng,ng460,lfc,nfc
+   integer::nx,ns,i,npr,j,lep1,lnd,lnp,ns457,nb,nw,ng,ng460,lfc,nfc,lo
 
    !--hollerith descriptive data and tape dictionary.
    if (mth.eq.451) then
@@ -547,7 +547,8 @@ contains
 
    !--beta-delayed photon spectra
    else if (mth.eq.460) then
-      if (l1h.eq.1) then
+      lo=l1h
+      if (lo.eq.1) then
          ng460=n1h
          do ng=1,ng460
             call tab1io(nin,nout,nscr,a,nb,nw)
@@ -555,7 +556,7 @@ contains
                call moreio(nin,nout,nscr,a,nb,nw)
             enddo
          enddo
-      else if (l2h.eq.2) then
+      else if (lo.eq.2) then
          call listio(nin,nout,nscr,a,nb,nw)
       else
          call error('file1','bad LO in mt=460.',' ')
