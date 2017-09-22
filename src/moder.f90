@@ -418,7 +418,7 @@ contains
    integer::nin,nout,nscr
    real(kr)::a(*)
    ! internals
-   integer::nx,ns,i,npr,j,lep1,lnd,lnp,ns457,nb,nw,ng,ng460
+   integer::nx,ns,i,npr,j,lep1,lnd,lnp,ns457,nb,nw,ng,ng460,lfc,nfc
 
    !--hollerith descriptive data and tape dictionary.
    if (mth.eq.451) then
@@ -528,7 +528,22 @@ contains
 
    !--components of energy release due to fission.
    else if (mth.eq.458) then
+      lfc=l2h
+      nfc=n2h
       call listio(nin,nout,nscr,a,nb,nw)
+      do while (nb.ne.0)
+         call moreio(nin,nout,nscr,a,nb,nw)
+      enddo
+      if (lfc.eq.1) then
+         do i=1,nfc
+            call tab1io(nin,nout,nscr,a,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nin,nout,nscr,a,nb,nw)
+            enddo
+         enddo
+      else if (lfc.ne.0) then
+         call error('file1','bad LFC in mt=458.',' ')
+      endif
 
    !--beta-delayed photon spectra
    else if (mth.eq.460) then
