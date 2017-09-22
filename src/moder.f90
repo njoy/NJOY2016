@@ -887,6 +887,7 @@ contains
    real(kr)::a(*)
    ! internals
    integer::nk,ik,law,ne,ie,nmu,imu,nb,nw
+   character(60)::strng
 
    nk=n1h
    do ik=1,nk
@@ -919,48 +920,11 @@ contains
                enddo
             enddo
          enddo
-      else if (law.eq.-1) then
-         call tab2io(nin,nout,nscr,a,nb,nw)
-         ne=n2h
-         do ie=1,ne
-            call tab1io(nin,nout,nscr,a,nb,nw)      !g(E->E') tab1
-            do while (nb.ne.0)
-               call moreio(nin,nout,nscr,a,nb,nw)
-            enddo
-         enddo
-      else if (law.eq.-5) then
-         call tab1io(nin,nout,nscr,a,nb,nw)         !theta(E) tab1
-         do while (nb.ne.0)
-            call moreio(nin,nout,nscr,a,nb,nw)
-         enddo
-         call tab1io(nin,nout,nscr,a,nb,nw)         !g(x) tab1
-         do while (nb.ne.0)
-            call moreio(nin,nout,nscr,a,nb,nw)
-         enddo
-      else if (law.eq.-7) then
-         call tab1io(nin,nout,nscr,a,nb,nw)         !theta(E) tab1
-         do while (nb.ne.0)
-            call moreio(nin,nout,nscr,a,nb,nw)
-         enddo
-      else if (law.eq.-9) then
-         call tab1io(nin,nout,nscr,a,nb,nw)         !theta(E) tab1
-         do while (nb.ne.0)
-            call moreio(nin,nout,nscr,a,nb,nw)
-         enddo
-      else if (law.eq.-11) then
-         call tab1io(nin,nout,nscr,a,nb,nw)         !a(E) tab1
-         do while (nb.ne.0)
-            call moreio(nin,nout,nscr,a,nb,nw)
-         enddo
-         call tab1io(nin,nout,nscr,a,nb,nw)         !b(E) tab1
-         do while (nb.ne.0)
-            call moreio(nin,nout,nscr,a,nb,nw)
-         enddo
-      else if (law.eq.-12) then
-         call tab1io(nin,nout,nscr,a,nb,nw)         !Tm(E) tab1
-         do while (nb.ne.0)
-            call moreio(nin,nout,nscr,a,nb,nw)
-         enddo
+      else if (law.lt.0) then
+         if (mth.ne.18) then
+            write(strng,'(''illegal endf6 law for mt='',i3)') mth
+            call error('file6',strng,' ')
+         endif
       else if (law.ne.0.and.law.ne.3.and.law.ne.4) then
          call error('file6','illegal endf6 law.',' ')
       endif
