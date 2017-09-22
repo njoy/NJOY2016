@@ -981,7 +981,7 @@ contains
                ia1(i)=nint(a(ii))
             enddo
          elseif (it2.gt.3) then
-            call error('file7','NS>3',' ')
+            call error('file7','bad NS in mt=4.',' ')
          endif
       endif
       do while (nb.ne.0)
@@ -1168,8 +1168,9 @@ contains
    integer::lo,nk,nkp,k,nb,nw,ng,ng460
 
    !--special path for beta delayed gammas (mt=460)
+   lo=l1h
    if (mfh.eq.12.and.mth.eq.460) then
-      if (l1h.eq.1) then
+      if (lo.eq.1) then
          ng460=n1h
          do ng=1,ng460+1
             call tab1io(nin,nout,nscr,a,nb,nw)
@@ -1177,15 +1178,17 @@ contains
                call moreio(nin,nout,nscr,a,nb,nw)
             enddo
          enddo
-      else if (l2h.eq.2) then
+      else if (lo.eq.2) then
          call listio(nin,nout,nscr,a,nb,nw)
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
       else
          call error('file12','bad LO in mt=460.',' ')
       endif
 
    !--normal path for other mf1x formats
    else
-      lo=l1h
       if (lo.ne.2) then
          nk=n1h
          nkp=nk+1
