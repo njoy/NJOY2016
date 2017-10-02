@@ -2270,6 +2270,9 @@ contains
             do while (nb.ne.0)
                call moreio(nin,nout,0,scr,nb,nw)
             enddo
+
+            ! negative laws, law 0, 3 and 4 have no law dependent
+            ! structure so no need to do anything
             if (lf.eq.6) then
                call contio(nin,nout,0,scr,nb,nw)
             else if (lf.eq.7.and.newfor.eq.1.and.no7.eq.1) then
@@ -2476,52 +2479,6 @@ contains
                      enddo
                   endif
                enddo
-            else if (lf.lt.0) then
-            ! copy subsection based upon abs(lf) format as
-            ! defined for mf5
-               if (lf.eq.-1) then
-                  call tab2io(nin,nout,0,scr,nb,nw)
-                  ne=n2h
-                  do ie=1,ne
-                     call tab1io(nin,nout,0,scr,nb,nw)      !g(E->E') tab1
-                     do while (nb.ne.0)
-                        call moreio(nin,nout,0,scr,nb,nw)
-                     enddo
-                  enddo
-               else if (lf.eq.-5) then
-                  call tab1io(nin,nout,nscr,scr,nb,nw)      !theta(E) tab1
-                  do while (nb.ne.0)
-                     call moreio(nin,nout,nscr,scr,nb,nw)
-                  enddo
-                  call tab1io(nin,nout,nscr,scr,nb,nw)      !g(x) tab1
-                  do while (nb.ne.0)
-                     call moreio(nin,nout,nscr,scr,nb,nw)
-                  enddo
-               else if (lf.eq.-7) then
-                  call tab1io(nin,nout,nscr,scr,nb,nw)      !theta(E) tab1
-                  do while (nb.ne.0)
-                     call moreio(nin,nout,nscr,scr,nb,nw)
-                  enddo
-               else if (lf.eq.-9) then
-                  call tab1io(nin,nout,nscr,scr,nb,nw)      !theta(E) tab1
-                  do while (nb.ne.0)
-                     call moreio(nin,nout,nscr,scr,nb,nw)
-                  enddo
-               else if (lf.eq.-11) then
-                  call tab1io(nin,nout,nscr,scr,nb,nw)      !a(E) tab1
-                  do while (nb.ne.0)
-                     call moreio(nin,nout,nscr,scr,nb,nw)
-                  enddo
-                  call tab1io(nin,nout,nscr,scr,nb,nw)      !b(E) tab1
-                  do while (nb.ne.0)
-                     call moreio(nin,nout,nscr,scr,nb,nw)
-                  enddo
-               else if (lf.eq.-12) then
-                  call tab1io(nin,nout,nscr,scr,nb,nw)      !Tm(E) tab1
-                  do while (nb.ne.0)
-                     call moreio(nin,nout,nscr,scr,nb,nw)
-                  enddo
-               endif
             endif
          enddo
          call tosend(nin,nout,0,scr)
