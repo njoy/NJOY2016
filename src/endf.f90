@@ -1447,7 +1447,9 @@ contains
 
    ! negative laws, law 0, 3 and 4 have no law dependent structure so no
    ! need to skip over it
-   if (law.eq.6) then
+   if (law.lt.1) then
+      call tab1io(nin,nout,nscr,a(1),nb,nw)
+   else if (law.eq.6) then
       call contio(nin,nout,nscr,a(1),nb,nw)
    else if (law.eq.1.or.law.eq.2.or.law.eq.5) then
       call tab2io(nin,nout,nscr,a(1),nb,nw)
