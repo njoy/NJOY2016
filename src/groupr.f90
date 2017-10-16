@@ -603,10 +603,6 @@ contains
    strng=' '
    read(nsysi,*) mfd,mtdp,strng
    if (mfd.lt.0.or.mfd.eq.1.or.mfd.eq.2.or.mfd.eq.4) go to 381
-   if (mfd.eq.6.and.mtdp.eq.18) then
-      call mess('groupr', "MF6/MT18 has been skipped", ' ')
-      go to 360
-   endif
    if (mfd.eq.7.or.mfd.eq.9.or.mfd.eq.11) go to 381
    if (mfd.eq.14.or.mfd.eq.15) go to 381
    if (mfd.gt.18.and.mfd.lt.21) go to 381
@@ -5705,7 +5701,7 @@ contains
    real(kr)::term(mxlg),terml(mxlg)
    character(60)::strng
    integer,parameter::maxss=500
-   integer,parameter::nssm=20
+   integer,parameter::nssm=9
    integer,dimension(nssm)::iyss,izss,jjss
    integer,dimension(maxss)::jloss
    real(kr),dimension(:),allocatable::tmp
@@ -5789,11 +5785,6 @@ contains
    go to 100
   130 continue
 
-  !-- Skip 
-   if (mtd.eq.18.and.law.lt.1) then
-      return
-   endif
-
    !--for discrete recoil, back up to particle distribution,
    !--which is assumed to be the first subsection.
    if (law.eq.4) then
@@ -5819,6 +5810,7 @@ contains
   140 continue
    if (disc102.gt.zero) go to 195
    if (law.ge.2.and.law.le.5) go to 194
+   if (law.eq.-4) go to 194
    if (law.gt.7) call error('getmf6','illegal law.',' ')
 
    !--read in data for law 1
@@ -9153,6 +9145,14 @@ contains
       call tosend(nin,0,0,scr)
       go to 110
    endif
+
+   if (mfh.eq.6.and.mth.eq.18.and.l1h.ne.0) then
+      call mess('conver','skipping new mf6/mt18 multiplicity section',&
+                '')
+      call tosend(nin,0,0,scr)
+      go to 110
+   endif
+
    if (mfh.ne.4) go to 111
    if (imf4.eq.1) go to 211
    if (mth.eq.18) go to 211
