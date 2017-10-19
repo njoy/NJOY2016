@@ -4698,6 +4698,7 @@ contains
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::zero=0
    save lnu,ip,ir
+   character(60)::strng
 
    !--initialize
    if (e.gt.zero) go to 200
@@ -4753,7 +4754,8 @@ contains
    call skip6(itape,0,0,tmp(loc),law)
   170 continue
    if (ik.lt.nk) go to 130
-   call error('getyld','requested nuclide not found',' ')
+   write(strng,'(''unable to find nuclide for iza='',i7,'' lfs='',i3)') iza,lfs
+   call error('getyld',strng,' ')
   180 continue
    na=loc-1
    ip=2
