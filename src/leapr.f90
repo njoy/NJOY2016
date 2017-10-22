@@ -1904,7 +1904,7 @@ contains
    ! with discrete rotations is based on the work of Keinert and
    ! Sax.  Note that the final S(alpha,beta) is not symmetric in beta.
    !--------------------------------------------------------------------
-   use physics ! provides pi,bk,hbar,ev
+   use physics !get global physics and light particle mass constants
    use mainio  ! provides nsyso
    use util    ! provides timer
    ! externals
@@ -1919,12 +1919,9 @@ contains
    integer::law,nal,iprt,ipo,jt1,lp,jp,nbe
    real(kr),dimension(:),allocatable::betan,exb
    real(kr),dimension(:),allocatable::bex,rdbex,sex
-   real(kr),parameter::pmass=1.6726231e-24_kr
-   real(kr),parameter::dmass=3.343586e-24_kr
+   real(kr)::pmass,dmass
    real(kr),parameter::deh=0.0147e0_kr
    real(kr),parameter::ded=0.0074e0_kr
-   real(kr),parameter::amassh=3.3465e-24_kr
-   real(kr),parameter::amassd=6.69e-24_kr
    real(kr),parameter::sampch=0.356e0_kr
    real(kr),parameter::sampcd=0.668e0_kr
    real(kr),parameter::sampih=2.526e0_kr
@@ -1955,17 +1952,20 @@ contains
    sc=1
    if (lat.eq.1) sc=therm/tev
    law=ncold+1
-   de=deh
-   if (law.gt.3) de=ded
+   if (law.gt.3) then
+      de=ded
+      amassm=2*(amassd+amasse)*amu*ev/(clight*clight) ! 2*deuteron molecule
+      bp=hbar/2*sqrt(2/ded/ev/dmass)/angst
+      sampc=sampcd
+      sampi=sampid
+   else
+      de=deh
+      amassm=2*(amassp+amasse)*amu*ev/(clight*clight) ! 2*hydrogen molecule
+      bp=hbar/2*sqrt(2/deh/ev/pmass)/angst
+      sampc=sampch
+      sampi=sampih
+   endif
    x=de/tev
-   amassm=amassh
-   if (law.gt.3) amassm=amassd
-   bp=hbar/2*sqrt(2/deh/ev/pmass)/angst
-   if (law.gt.3) bp=hbar/2*sqrt(2/ded/ev/dmass)/angst
-   sampc=sampch
-   if (law.gt.3) sampc=sampcd
-   sampi=sampih
-   if (law.gt.3) sampi=sampid
    wt=twt+tbeta
    tbart=tempf(itemp)/tempr(itemp)
 

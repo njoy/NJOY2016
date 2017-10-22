@@ -5561,15 +5561,16 @@ contains
    !-------------------------------------------------------------------
    ! Set up particles for reactions that use file 4.
    !-------------------------------------------------------------------
+   use physics !get global physics and light particle mass constants
    use endf ! provides iverf
    ! externals
    integer::mfd,mtd
    ! internals
-   real(kr),parameter::awr1=.99862e0_kr
-   real(kr),parameter::awr2=1.99626e0_kr
-   real(kr),parameter::awr3=2.98960e0_kr
-   real(kr),parameter::awr4=2.98903e0_kr
-   real(kr),parameter::awr5=3.96713e0_kr
+   real(kr),parameter::awr1=amassp/amassn
+   real(kr),parameter::awr2=amassd/amassn
+   real(kr),parameter::awr3=amasst/amassn
+   real(kr),parameter::awr4=amassh/amassn
+   real(kr),parameter::awr5=amassa/amassn
 
    law=0
    zap=1

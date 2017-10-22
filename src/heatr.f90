@@ -1748,6 +1748,7 @@ contains
    !-------------------------------------------------------------------
    use endf ! provides iverf,terp1
    use mathm ! provides legndr
+   use physics !get global physics and light particle mass constants
    ! externals
    integer::ntape,matd,mtd,nwa
    real(kr)::ee,ebar,dame,q,za,awr,a(*)
@@ -1804,11 +1805,11 @@ contains
       8.84675983E-03_kr, 6.50445797E-03_kr, 4.14703326E-03_kr,&
       1.78328072E-03_kr/)
    real(kr),parameter::edis=25.e0_kr
-   real(kr),parameter::am1=.99924e0_kr
-   real(kr),parameter::am2=1.9968e0_kr
-   real(kr),parameter::am3=2.9896e0_kr
-   real(kr),parameter::am4=3.e0_kr
-   real(kr),parameter::am5=3.9682e0_kr
+   real(kr),parameter::am1=amassp/amassn
+   real(kr),parameter::am2=amassd/amassn
+   real(kr),parameter::am3=amasst/amassn
+   real(kr),parameter::am4=amassh/amassn
+   real(kr),parameter::am5=amassa/amassn
    real(kr),parameter::step=1.1e0_kr
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::zero=0

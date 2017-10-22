@@ -63,7 +63,7 @@ module samm
    real(kr),dimension(:),allocatable::xlmn
    integer,dimension(:),allocatable::kxlmn
    real(kr),dimension(:,:),allocatable::upr,upi
-   real(kr),dimension(:,:,:),allocatable::br,bi,pr,pi
+   real(kr),dimension(:,:,:),allocatable::br,bi,pr,pii
    real(kr),dimension(:,:,:),allocatable::deriv,dsigma
    real(kr),dimension(:,:,:,:,:),allocatable::derivx
    real(kr),dimension(:,:,:,:,:,:),allocatable::crssx
@@ -566,6 +566,7 @@ contains
    use mainio  ! provides nsyso
    use util    ! provides error
    use endf    ! provides endf routines and variables
+   use physics ! get neutron mass
    ! externals
    integer::nin,ier,jnow,nro,naps,mode,nodes,nodmax,maxres
    real(kr)::el,eh,spin,ascat
@@ -585,7 +586,7 @@ contains
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zz8=0.08e0_kr
    real(kr),parameter::z123=0.123e0_kr
-   real(kr),parameter::aneutr=1.00866491578e0_kr
+   real(kr),parameter::aneutr=amassn
    ! use imf2=1 to output converted mf2
    !integer::imf2=1
    integer::imf2=0
@@ -1274,16 +1275,17 @@ contains
    !-------------------------------------------------------------------
    ! Set particle-pair defaults
    !-------------------------------------------------------------------
+   use physics ! light particle masses
    ! externals
    integer::ier
    ! internals
    integer::i
-   real(kr),parameter::neutron=1.00866491578e0_kr
-   real(kr),parameter::proton=1.00727646688e0_kr
-   real(kr),parameter::deuteron=2.01355321271e0_kr
-   real(kr),parameter::triton=3.015501e0_kr
-   real(kr),parameter::he3=3.0149326e0_kr
-   real(kr),parameter::alpha=4.0015061747e0_kr
+   real(kr),parameter::neutron=amassn
+   real(kr),parameter::proton=amassp
+   real(kr),parameter::deuteron=amassd
+   real(kr),parameter::triton=amasst
+   real(kr),parameter::he3=amassh
+   real(kr),parameter::alpha=amassa
 
    do i=1,nppm(ier)
       if (mt(i,ier).eq.102) then  ! one particle is gamma
@@ -1477,7 +1479,7 @@ contains
       allocate(br(ntriag,npar,nerm))
       allocate(bi(ntriag,npar,nerm))
       allocate(pr(ntriag,npar,nerm))
-      allocate(pi(ntriag,npar,nerm))
+      allocate(pii(ntriag,npar,nerm))
    endif
 
    allocate(crss(npp,nerm))
@@ -1717,17 +1719,18 @@ contains
    !-------------------------------------------------------------------
    ! Generate parameters for calculating k, rho, and eta for sammy
    !-------------------------------------------------------------------
+   use physics ! get global physics constants
    ! externals
    integer::ier
    ! internals
    integer::ippx,kgroup,ichan
    real(kr)::ff,twomhb,etac
    real(kr)::factor,alabcm,aa,redmas,z
-   real(kr),parameter::emneut=1.00866491578e0_kr ! neutron amu
-   real(kr),parameter::hbarrr=6.582118890e-16_kr ! hbar in eV-s
-   real(kr),parameter::amuevv=931.494013e+6_kr ! atomic mass unit in eV
-   real(kr),parameter::cspeed=2.99792458e8_kr ! speed of light in m/s
-   real(kr),parameter::fininv=1.e0_kr/137.03599976e0_kr ! fine struct
+   real(kr),parameter::emneut=amassn               !neutron mass in amu
+   real(kr),parameter::hbarrr=hbar/ev              !hbar in eV-s
+   real(kr),parameter::amuevv=amu*clight*clight/ev !amu in eV
+   real(kr),parameter::cspeed=clight/100           !c in m/s (not cm/s!)
+   real(kr),parameter::fininv=1.e0_kr/finstri      !fine structure constant
    real(kr),parameter::zero=0
 
    ff=1.e+15_kr
@@ -2841,7 +2844,7 @@ contains
       do i=1,ntriag
          do j=1,npar
             pr(i,j,ier)=0
-            pi(i,j,ier)=0
+            pii(i,j,ier)=0
          enddo
       enddo
 
@@ -2855,7 +2858,7 @@ contains
                      pr(ij,k,ier)=br(ij,k,ier)*upr(k,ier)
                   endif
                   if (bi(ij,k,ier).ne.zero) then
-                     pi(ij,k,ier)=bi(ij,k,ier)*upi(k,ier)
+                     pii(ij,k,ier)=bi(ij,k,ier)*upi(k,ier)
                   endif
                enddo
             enddo
@@ -2873,13 +2876,14 @@ contains
    ! ( partial derivatives of the cross section with respect to
    ! the resonance parameters ) = Dsigma(Ksigma,Ipar)
    !-------------------------------------------------------------------
+   use physics, only : pi ! get pi
    ! externals
    integer::ier
    ! internals
    integer::i,n,nn2,nn,minr,nchann,nentnn,nextnn,nnnn,npr,mx,mplus
    integer::kstart,jstart,maxr,kount,lrmat,ip,mm,m,needxq,j,k,l
    real(kr)::u
-   real(kr),parameter::fourpi=0.1256637061435917295385057e0_kr
+   real(kr),parameter::fourpi=4*pi/100
    real(kr),parameter::zero=0
 
    !--Initialize
@@ -4268,6 +4272,7 @@ contains
    !-------------------------------------------------------------------
    ! Generate sigma(LL) for LL=1 thru Lmax+1  (Ie L=0 thru Lmax)
    !-------------------------------------------------------------------
+   use physics, only : pi,euler ! get pi,euler
    ! externals
    integer::lmax
    real(kr)::eeta,sigma0
@@ -4277,8 +4282,6 @@ contains
    integer::i,m,is,k,j,ll
    integer::mmmxxx=100000
    real(kr),parameter::small=.000001e0_kr
-   real(kr),parameter::pi=3.141592653589793238462643e0_kr
-   real(kr),parameter::euler=0.577215664901532860606512e0_kr
    real(kr),dimension(5),parameter::ber=(/&
      0.1666666666666666666666666666666666667e0_kr,&
      -0.0333333333333333333333333333333333333e0_kr,&
@@ -4694,6 +4697,7 @@ contains
    ! Formulae 14.6.7-8 page 542 in Abramowitz & Stegun, for Eta >> Rho
    !-------------------------------------------------------------------
    use util ! provides error
+   use physics, only : pi,euler ! get pi,euler ! get pi,euler
    ! externals
    real(kr)::f(*),fpr(*),g(*),gpr(*)
    real(kr)::eeta,rrho,p,s,dp,sinphi,cosphi,dphi
@@ -4702,8 +4706,6 @@ contains
    real(kr)::eta,rho,q,zhalf,z,sum,a,ai0,b,ak0,ai1,c,ak1,d
    real(kr)::g0,g0pr
    integer::k,n
-   real(kr),parameter::euler=0.577215664901532860606512e0_kr
-   real(kr),parameter::pi=3.141592653589793238462643e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::half=0.5e0_kr
 
@@ -6669,9 +6671,9 @@ contains
       do i=1,nchan
          do j=1,i
             ij=ij+1
-            if (pi(ij,m,ier).ne.zero) then
+            if (pii(ij,m,ier).ne.zero) then
                do ip=1,npp
-                  ddddd(ip,ier)=ddddd(ip,ier)-pi(ij,m,ier)*ti(ip,ij,ier)
+                  ddddd(ip,ier)=ddddd(ip,ier)-pii(ij,m,ier)*ti(ip,ij,ier)
                enddo
             endif
             if (pr(ij,m,ier).ne.zero) then
@@ -6886,7 +6888,7 @@ contains
       deallocate(br)
       deallocate(bi)
       deallocate(pr)
-      deallocate(pi)
+      deallocate(pii)
    endif
 
    deallocate(crss)
