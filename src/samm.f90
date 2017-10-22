@@ -586,7 +586,6 @@ contains
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zz8=0.08e0_kr
    real(kr),parameter::z123=0.123e0_kr
-   real(kr),parameter::aneutr=amassn
    ! use imf2=1 to output converted mf2
    !integer::imf2=1
    integer::imf2=0
@@ -695,7 +694,7 @@ contains
          !--analyze scattering length
          awri=res(jnow)
          emb(2,ier)=awri
-         aptru=z123*(awri*aneutr)**(one/three)+zz8
+         aptru=z123*(awri*amassn)**(one/three)+zz8
          apeff=ascat
          if (naps.eq.1) then
             aptru=ascat
@@ -886,14 +885,14 @@ contains
          emb(2,ier)=awri
          apl=res(jnow+1)
          if (apl.eq.zero) then
-            aptru=z123*(awri*aneutr)**(one/three)+zz8
+            aptru=z123*(awri*amassn)**(one/three)+zz8
             apeff=ascat
          else
             apeff=apl
             if (naps.eq.1) then
                aptru=apl
             else
-               aptru=z123*(awri*aneutr)**(one/three)+zz8
+               aptru=z123*(awri*amassn)**(one/three)+zz8
             endif
          endif
 
@@ -1280,12 +1279,6 @@ contains
    integer::ier
    ! internals
    integer::i
-   real(kr),parameter::neutron=amassn
-   real(kr),parameter::proton=amassp
-   real(kr),parameter::deuteron=amassd
-   real(kr),parameter::triton=amasst
-   real(kr),parameter::he3=amassh
-   real(kr),parameter::alpha=amassa
 
    do i=1,nppm(ier)
       if (mt(i,ier).eq.102) then  ! one particle is gamma
@@ -1302,27 +1295,27 @@ contains
          kza(i,ier)=0
          lpent(i,ier)=1
       else if (mt(i,ier).eq.103) then  ! proton
-         ema(i,ier)=proton/neutron
+         ema(i,ier)=amassp/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.104) then  ! deuteron
-         ema(i,ier)=deuteron/neutron
+         ema(i,ier)=amassd/amassn
          spina(i,ier)=1
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.105) then  ! triton
-         ema(i,ier)=triton/neutron
+         ema(i,ier)=amasst/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.106) then  ! he3
-         ema(i,ier)=he3/neutron
+         ema(i,ier)=amassh/amassn
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=2
          lpent(i,ier)=1
       else if (mt(i,ier).eq.107) then  ! alpha
-         ema(i,ier)=alpha/neutron
+         ema(i,ier)=amassa/amassn
          spina(i,ier)=0
          pa(i,ier)=0
          kza(i,ier)=2
