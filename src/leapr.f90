@@ -1954,13 +1954,15 @@ contains
    law=ncold+1
    if (law.gt.3) then
       de=ded
-      amassm=2*(amassd+amasse)*amu*ev/(clight*clight) ! 2*deuteron molecule
+      amassm=amassd
+      ! amassm=2*(amassd+amasse)*amu*ev/(clight*clight) ! 2*deuteron molecule
       bp=hbar/2*sqrt(2/ded/ev/dmass)/angst
       sampc=sampcd
       sampi=sampid
    else
       de=deh
-      amassm=2*(amassp+amasse)*amu*ev/(clight*clight) ! 2*hydrogen molecule
+      amassm=amassh
+      ! amassm=2*(amassp+amasse)*amu*ev/(clight*clight) ! 2*hydrogen molecule
       bp=hbar/2*sqrt(2/deh/ev/pmass)/angst
       sampc=sampch
       sampi=sampih
