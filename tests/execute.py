@@ -54,5 +54,5 @@ with open('input', 'r') as i, \
     for diff in glob.glob('*_diff'):
         os.remove( diff )
         
-    os.remove('output')
-    os.remove('error')
+os.remove('output')
+os.remove('error')
