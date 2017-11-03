@@ -27,7 +27,7 @@ build_script:
 - mkdir build
 - cd build
 - set Path=C:\Program Files (x86)\CMake\bin
-- cmake -D CMAKE_Fortran_COMPILER=C:\msys64\mingw64\bin\gfortran.exe .. #-G "MinGW Makefiles" ..
+- cmake -D CMAKE_Fortran_COMPILER=C:\\msys64\\mingw64\\bin\\gfortran.exe .. #-G "MinGW Makefiles" ..
 - set Path=%OrigPath%
 - mingw32-make
 
