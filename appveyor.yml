@@ -1,10 +1,9 @@
-# adapted from https://github.com/scivision/appveyor-gfortran/blob/master/appveyor.yml
 image:
   -
     Visual Studio 2017
 shallow_clone: false
 environment:
-  MINGW_DIR: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin
+  MINGW_DIR: C:\msys64\mingw64\bin
   matrix:
     - BUILD_TYPE: release
       STATIC_LIBRARIES: TRUE
@@ -12,6 +11,7 @@ environment:
 
 before_build: 
 - set Path=%MINGW_DIR%;%Path%
+- dir C:\msys64\mingw64\bin\
 - gcc -dumpversion
 - g++ -dumpversion
 - mingw32-make --version
@@ -26,12 +26,42 @@ build_script:
 - mkdir build
 - cd build
 - set Path=C:\Program Files (x86)\CMake\bin
-- cmake -G "MinGW Makefiles" ..
+- cmake .. #-G "MinGW Makefiles" ..
 - set Path=%OrigPath%
-- mingw43-make
+- mingw32-make
 
 after_build:
 - ctest -j2
 
 on_failure:
 - type C:\projects\NJOY2016\build\CMakeFiles\CMakeError.log
+#environment:
+#  machine_user: test_user
+#  machine_pass: Pass@word1
+#  CTEST_OUTPUT_ON_FAILURE: 1
+#  global:
+#    CYG_ROOT: "C:\\cygwin"
+#    CYG_MIRROR: "http://cygwin.mirror.constant.com"
+#    CYG_CACHE: "C:\\cygwin\\var\\cache\\setup"
+#    CYG_BASH: "C:\\cygwin\\bin\\bash"
+#  matrix:
+#    - BUILD_TYPE: release
+#      STATIC_LIBRARIES: ON
+#      UNIT_TESTS: ON
+#      CC: gcc
+#      CXX: g++
+#      APPENDED_FLAGS: ''
+#cache:
+#  - '%CYG_CACHE%'
+#install:
+#  - "C:\\cygwin\\setup-x86.exe -q --root \"%CYG_ROOT%\" --site \"%CYG_MIRROR%\" --local-package-dir \"%CYG_CACHE%\" --packages clang,cmake,make,git,python3,gcc,g++ --force-current"
+#clone_folder: C:\cygwin\projects\utility
+#build_script:
+#  - cd C:\cygwin\projects\utility\
+#  - set PATH=C:\cygwin\bin;%PATH%
+#  - bash -c "mkdir build"
+#  - cd build
+#  - bash -c "cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBRARIES -D unit_tests=$UNIT_TESTS -D appended_flags=\"$APPENDED_FLAGS\" -G \"Unix Makefiles\" .."
+#  - bash -c "make VERBOSE=1 -j2"
+#test_script:
+#  - bash -c "ctest --output-on-failure -j2"
