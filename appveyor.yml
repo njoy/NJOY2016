@@ -28,7 +28,7 @@ build_script:
 - set Path=C:\Program Files (x86)\CMake\bin
 - cmake -G "MinGW Makefiles" ..
 - set Path=%OrigPath%
-- %MINGW_DIR%\mingw43-make
+- mingw43-make
 
 after_build:
 - ctest -j2
