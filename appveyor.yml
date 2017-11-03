@@ -14,6 +14,7 @@ before_build:
 - dir C:\msys64\mingw64\bin\
 - gcc -dumpversion
 - g++ -dumpversion
+- gfortran -dumpversion
 - mingw32-make --version
 - cmake --version
 
