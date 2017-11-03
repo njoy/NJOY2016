@@ -1,0 +1,37 @@
+// adapted from https://github.com/scivision/appveyor-gfortran/blob/master/appveyor.yml
+image:
+  -
+    Visual Studio 2017
+shallow_clone: false
+environment:
+  MINGW_DIR: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin
+  matrix:
+    - BUILD_TYPE: release
+      STATIC_LIBRARIES: TRUE
+      UNIT_TESTS: TRUE
+
+before_build: 
+- set Path=%MINGW_DIR%;%Path%
+- gcc -dumpversion
+- g++ -dumpversion
+- mingw32-make --version
+- cmake --version
+
+- set OrigPath=%Path%
+- set CC=%MINGW_DIR%\gcc.exe
+- set CXX=%MINGW_DIR%\g++.exe
+- set FC=%MINGW_DIR%\gfortran.exe
+
+build_script:
+- mkdir build
+- cd build
+- set Path=C:\Program Files (x86)\CMake\bin
+- cmake -G "MinGW Makefiles" ..
+- set Path=%OrigPath%
+- %MINGW_DIR%\mingw43-make
+
+after_build:
+- ctest -j2
+
+on_failure:
+- type C:\projects\NJOY2016\build\CMakeFiles\CMakeError.log
