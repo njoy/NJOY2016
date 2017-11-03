@@ -1,4 +1,4 @@
-// adapted from https://github.com/scivision/appveyor-gfortran/blob/master/appveyor.yml
+# adapted from https://github.com/scivision/appveyor-gfortran/blob/master/appveyor.yml
 image:
   -
     Visual Studio 2017
