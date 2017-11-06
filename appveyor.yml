@@ -35,12 +35,12 @@ environment:
       CMAKE_BUILD: MinGW
       TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd
 
-clone_folder:
-  - if "%CMAKE_BUILD" equ "cygwin" (
-        C:\cygwin\projects\NJOY2016
-    ) else (
-        C:\projects\NJOY2016
-    )
+      #clone_folder:
+      #  - if "%CMAKE_BUILD" equ "cygwin" (
+      #        C:\cygwin\projects\NJOY2016
+      #    ) else (
+      #        C:\projects\NJOY2016
+      #    )
 
 install:
   - if "%CMAKE_BUILD" equ "cygwin" (
