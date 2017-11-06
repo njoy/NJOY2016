@@ -37,9 +37,9 @@ environment:
 
 clone_folder:
   - if "%CMAKE_BUILD" equ "cygwin" (
-        C:\cygwin\projects\utility
+        C:\cygwin\projects\NJOY2016
     ) else (
-        C:\projects\utility
+        C:\projects\NJOY2016
     )
 
 install:
