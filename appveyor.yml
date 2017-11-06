@@ -35,17 +35,7 @@ environment:
       CMAKE_BUILD: MinGW
       TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd
 
-      #clone_folder:
-      #  - if "%CMAKE_BUILD" equ "cygwin" (
-      #        C:\cygwin\projects\NJOY2016
-      #    ) else (
-      #        C:\projects\NJOY2016
-      #    )
-
-install:
-  - if "%CMAKE_BUILD" equ "cygwin" (
-        "C:\\cygwin\\setup-x86.exe -q --root \"%CYG_ROOT%\" --site \"%CYG_MIRROR%\" --local-package-dir \"%CYG_CACHE%\" --packages clang,cmake,make,git,python3,gcc,g++ --force-current"
-    )
+clone_folder: C:\projects\NJOY2016
 
 before_build: 
 - set OrigPath=%Path%
@@ -72,8 +62,9 @@ build_script:
 - mkdir build
 - cd build
 - if "%CMAKE_BUILD%" equ "cygwin" (
-      bash -c "cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" .."
-      bash -c make -j2
+      "C:\\cygwin\\setup-x86.exe -q --root \"%CYG_ROOT%\" --site \"%CYG_MIRROR%\" --local-package-dir \"%CYG_CACHE%\" --packages clang,cmake,make,git,python3,gcc,g++ --force-current"
+      C:\cygwin\bin\bash -c "cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" .."
+      C:\cygwin\bin\bash -c make -j2
   ) else (
       set Path=%TMP_PATH%
       cmake -D "CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe" -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
@@ -83,7 +74,7 @@ build_script:
 
 after_build:
 - if "%CMAKE_BUILD%" equ "cygwin" (
-      bash -c "ctest -j2 --output-on-failure"
+      C:\cygwin\bin\bash -c "ctest -j2 --output-on-failure"
   ) else (
       ctest -j2 --output-on-failure
   )
