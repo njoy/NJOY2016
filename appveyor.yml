@@ -3,9 +3,17 @@ image:
     Visual Studio 2017
 shallow_clone: false
 environment:
+  CYG_ROOT: "C:\\cygwin"
+  CYG_MIRROR: "http://cygwin.mirror.constant.com"
+  CYG_CACHE: "C:\\cygwin\\var\\cache\\setup"
+  CYG_BASH: "C:\\cygwin\\bin\\bash"
   MINGW_DIR: C:\msys64\mingw64\bin
   Path: C:\Python36-x64\;%MINGW_DIR%;%Path%
   matrix:
+    - BUILD_TYPE: release
+      CMAKE_BUILD: cygwin
+      STATIC_LIBRARIES: TRUE
+      UNIT_TESTS: TRUE
     - BUILD_TYPE: release
       STATIC_LIBS: TRUE
       UNIT_TESTS: TRUE
@@ -27,24 +35,34 @@ environment:
       CMAKE_BUILD: MinGW
       TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd
 
+clone_folder:
+  - if "%CMAKE_BUILD" equ "cygwin" (
+        C:\cygwin\projects\utility
+    ) else (
+        C:\projects\utility
+    )
+
+install:
+  - if "%CMAKE_BUILD" equ "cygwin" (
+        "C:\\cygwin\\setup-x86.exe -q --root \"%CYG_ROOT%\" --site \"%CYG_MIRROR%\" --local-package-dir \"%CYG_CACHE%\" --packages clang,cmake,make,git,python3,gcc,g++ --force-current"
+    )
+
 before_build: 
-#- set Path=C:\Python36-x64\;%MINGW_DIR%;%Path%
-#- echo %Path%
 - set OrigPath=%Path%
-- where python
-- python --version
-- where gcc
-- gcc -dumpversion
-- where g++
-- g++ -dumpversion
-- where gfortran
-- gfortran -dumpversion
-- where mingw32-make
-- mingw32-make --version
-- where cmake
-- cmake --version
-- where git
-- git --version
+  #- where python
+  #- python --version
+  #- where gcc
+  #- gcc -dumpversion
+  #- where g++
+  #- g++ -dumpversion
+  #- where gfortran
+  #- gfortran -dumpversion
+  #- where mingw32-make
+  #- mingw32-make --version
+  #- where cmake
+  #- cmake --version
+  #- where git
+  #- git --version
 
 - set CC=%MINGW_DIR%\gcc.exe
 - set CXX=%MINGW_DIR%\g++.exe
@@ -53,13 +71,22 @@ before_build:
 build_script:
 - mkdir build
 - cd build
-- set Path=%TMP_PATH%
-- cmake -D "CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe" -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
-- set Path=%OrigPath%
-- mingw32-make
+- if "%CMAKE_BUILD%" equ "cygwin" (
+      bash -c "cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" .."
+      bash -c make -j2
+  ) else (
+      set Path=%TMP_PATH%
+      cmake -D "CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe" -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
+      set Path=%OrigPath%
+      mingw32-make
+  )
 
 after_build:
-- ctest -j2 --output-on-failure
+- if "%CMAKE_BUILD%" equ "cygwin" (
+      bash -c "ctest -j2 --output-on-failure"
+  ) else (
+      ctest -j2 --output-on-failure
+  )
 
 on_failure:
 - type C:\projects\NJOY2016\build\CMakeFiles\CMakeError.log
@@ -68,22 +95,9 @@ on_failure:
 #  machine_pass: Pass@word1
 #  CTEST_OUTPUT_ON_FAILURE: 1
 #  global:
-#    CYG_ROOT: "C:\\cygwin"
-#    CYG_MIRROR: "http://cygwin.mirror.constant.com"
-#    CYG_CACHE: "C:\\cygwin\\var\\cache\\setup"
-#    CYG_BASH: "C:\\cygwin\\bin\\bash"
 #  matrix:
-#    - BUILD_TYPE: release
-#      STATIC_LIBRARIES: ON
-#      UNIT_TESTS: ON
-#      CC: gcc
-#      CXX: g++
-#      APPENDED_FLAGS: ''
 #cache:
 #  - '%CYG_CACHE%'
-#install:
-#  - "C:\\cygwin\\setup-x86.exe -q --root \"%CYG_ROOT%\" --site \"%CYG_MIRROR%\" --local-package-dir \"%CYG_CACHE%\" --packages clang,cmake,make,git,python3,gcc,g++ --force-current"
-#clone_folder: C:\cygwin\projects\utility
 #build_script:
 #  - cd C:\cygwin\projects\utility\
 #  - set PATH=C:\cygwin\bin;%PATH%
