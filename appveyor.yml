@@ -1,24 +1,51 @@
-#image:
-#  -
-#    Visual Studio 2017
+image:
+  -
+    Visual Studio 2017
 shallow_clone: false
 environment:
   MINGW_DIR: C:\msys64\mingw64\bin
+  Path: C:\Python36-x64\;%MINGW_DIR%;%Path%
   matrix:
     - BUILD_TYPE: release
-      STATIC_LIBRARIES: TRUE
+      STATIC_LIBS: TRUE
       UNIT_TESTS: TRUE
+      CMAKE_BUILD: MSYS
+      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd;C:\msys64;C:\Program Files\Git\usr\bin
+    - BUILD_TYPE: release
+      STATIC_LIBS: FALSE
+      UNIT_TESTS: TRUE
+      CMAKE_BUILD: MSYS
+      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd;C:\msys64;C:\Program Files\Git\usr\bin
+    - BUILD_TYPE: release
+      STATIC_LIBS: TRUE
+      UNIT_TESTS: TRUE
+      CMAKE_BUILD: MinGW
+      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd
+    - BUILD_TYPE: release
+      STATIC_LIBS: FALSE
+      UNIT_TESTS: TRUE
+      CMAKE_BUILD: MinGW
+      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd
 
 before_build: 
-- set Path=%MINGW_DIR%;%Path%
-- dir C:\msys64\mingw64\bin\
-- gcc -dumpversion
-- g++ -dumpversion
-- gfortran -dumpversion
-- mingw32-make --version
-- cmake --version
-
+#- set Path=C:\Python36-x64\;%MINGW_DIR%;%Path%
+#- echo %Path%
 - set OrigPath=%Path%
+- where python
+- python --version
+- where gcc
+- gcc -dumpversion
+- where g++
+- g++ -dumpversion
+- where gfortran
+- gfortran -dumpversion
+- where mingw32-make
+- mingw32-make --version
+- where cmake
+- cmake --version
+- where git
+- git --version
+
 - set CC=%MINGW_DIR%\gcc.exe
 - set CXX=%MINGW_DIR%\g++.exe
 - set FC=%MINGW_DIR%\gfortran.exe
@@ -26,13 +53,13 @@ before_build:
 build_script:
 - mkdir build
 - cd build
-- set Path=C:\Program Files (x86)\CMake\bin
-- cmake -D CMAKE_Fortran_COMPILER=C:\\msys64\\mingw64\\bin\\gfortran.exe .. #-G "MinGW Makefiles" ..
+- set Path=%TMP_PATH%
+- cmake -D "CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe" -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
 - set Path=%OrigPath%
 - mingw32-make
 
 after_build:
-- ctest -j2
+- ctest -j2 --output-on-failure
 
 on_failure:
 - type C:\projects\NJOY2016\build\CMakeFiles\CMakeError.log
