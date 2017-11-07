@@ -1,98 +1,78 @@
 image:
-  -
-    Visual Studio 2017
+  - "Visual Studio 2017"
+
 shallow_clone: false
+
 environment:
-  CYG_ROOT: "C:\\cygwin"
-  CYG_MIRROR: "http://cygwin.mirror.constant.com"
-  CYG_CACHE: "C:\\cygwin\\var\\cache\\setup"
   CYG_BASH: "C:\\cygwin\\bin\\bash"
-  MINGW_DIR: C:\msys64\mingw64\bin
-  Path: C:\Python36-x64\;%MINGW_DIR%;%Path%
+  CYG_CACHE: "C:\\cygwin\\var\\cache\\setup"
+  CYG_MIRROR: "http://cygwin.mirror.constant.com"
+  CYG_ROOT: "C:\\cygwin"
+  MINGW_DIR: "C:\\msys64\\mingw64\\bin"
+  Path: "C:\\Python34-x64\\;%MINGW_DIR%;%Path%"
   matrix:
-    - BUILD_TYPE: release
+    -
+      BUILD_TYPE: release
       CMAKE_BUILD: cygwin
-      STATIC_LIBRARIES: TRUE
-      UNIT_TESTS: TRUE
-    - BUILD_TYPE: release
-      STATIC_LIBS: TRUE
-      UNIT_TESTS: TRUE
+      STATIC_LIBS: true
+      UNIT_TESTS: true
+    -
+      BUILD_TYPE: release
       CMAKE_BUILD: MSYS
-      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd;C:\msys64;C:\Program Files\Git\usr\bin
-    - BUILD_TYPE: release
-      STATIC_LIBS: FALSE
-      UNIT_TESTS: TRUE
+      STATIC_LIBS: true
+      UNIT_TESTS: true
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;\
+                 C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
+    -
+      BUILD_TYPE: release
       CMAKE_BUILD: MSYS
-      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd;C:\msys64;C:\Program Files\Git\usr\bin
-    - BUILD_TYPE: release
-      STATIC_LIBS: TRUE
-      UNIT_TESTS: TRUE
+      STATIC_LIBS: false
+      UNIT_TESTS: true
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;\
+                 C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
+    -
+      BUILD_TYPE: release
       CMAKE_BUILD: MinGW
-      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd
-    - BUILD_TYPE: release
-      STATIC_LIBS: FALSE
-      UNIT_TESTS: TRUE
+      STATIC_LIBS: true
+      UNIT_TESTS: true
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;\
+                 C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
+    -
+      BUILD_TYPE: release
       CMAKE_BUILD: MinGW
-      TMP_PATH: C:\Program Files (x86)\CMake\bin;C:\Python34-x64;%MINGW_DIR%;C:\Program Files\Git\cmd
+      STATIC_LIBS: false
+      UNIT_TESTS: true
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;\
+                 C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
 
-clone_folder: C:\projects\NJOY2016
+clone_folder: "C:\\projects\\NJOY2016"
 
-before_build: 
-- set OrigPath=%Path%
-  #- where python
-  #- python --version
-  #- where gcc
-  #- gcc -dumpversion
-  #- where g++
-  #- g++ -dumpversion
-  #- where gfortran
-  #- gfortran -dumpversion
-  #- where mingw32-make
-  #- mingw32-make --version
-  #- where cmake
-  #- cmake --version
-  #- where git
-  #- git --version
-
-- set CC=%MINGW_DIR%\gcc.exe
-- set CXX=%MINGW_DIR%\g++.exe
-- set FC=%MINGW_DIR%\gfortran.exe
+before_build:
+  - "set OrigPath=%Path%"
+  - "set CC=%MINGW_DIR%\\gcc.exe"
+  - "set CXX=%MINGW_DIR%\\g++.exe"
+  - "set FC=%MINGW_DIR%\\gfortran.exe"
 
 build_script:
-- mkdir build
-- cd build
-- "if %CMAKE_BUILD% equ cygwin (
-      C:\\cygwin\\setup-x86.exe -q --root %CYG_ROOT% --site %CYG_MIRROR% --local-package-dir %CYG_CACHE --packages cmake,make,git,python3,gcc,g++ --force-current
-      C:\cygwin\\bin\\bash -c cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" ..
-      C:\cygwin\\bin\\bash -c make -j2
-  ) else (
-      set Path=%TMP_PATH%
-      cmake -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G \"%CMAKE_BUILD% Makefiles\" ..
-      set Path=%OrigPath%
-      mingw32-make
-  )"
+  - "mkdir build"
+  - "cd build"
+  - "if [%CMAKE_BUILD]==[\"cygwin\"] (
+       C:\\cygwin\\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE%
+       --packages cmake,make,git,python3,gcc,g++ --force-current &&
+       C:\\cygwin\\bin\\bash -c cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS
+       -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" .. &&
+       C:\\cygwin\\bin\\bash -c make -j2
+     ) else (
+       set Path=%TMP_PATH% &&
+       cmake -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS%
+       -D unit_tests=%UNIT_TESTS% -G \"%CMAKE_BUILD% Makefiles\" .. &&
+       set Path=%OrigPath% &&
+       mingw32-make -j2
+     )"
 
 after_build:
-- "if %CMAKE_BUILD% equ cygwin (
-      C:\\cygwin\\bin\\bash -c \"ctest -j2 --output-on-failure\"
-  ) else (
-      ctest -j2 --output-on-failure
-  )"
-
-on_failure:
-- type C:\projects\NJOY2016\build\CMakeFiles\CMakeError.log
-#environment:
-#  machine_user: test_user
-#  machine_pass: Pass@word1
-#  CTEST_OUTPUT_ON_FAILURE: 1
-#  global:
-#  matrix:
-#cache:
-#  - '%CYG_CACHE%'
-#build_script:
-#  - cd C:\cygwin\projects\utility\
-#  - set PATH=C:\cygwin\bin;%PATH%
-#  - bash -c "mkdir build"
-#  - cd build
-#  - bash -c "cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBRARIES -D unit_tests=$UNIT_TESTS -D appended_flags=\"$APPENDED_FLAGS\" -G \"Unix Makefiles\" .."
-#  - bash -c "make VERBOSE=1 -j2"
+  - "if [%CMAKE_BUILD%]==[\"cygwin\"] (
+       C:\\cygwin\\bin\\bash -c \"ctest -j2 --output-on-failure\"
+     ) else (
+       ctest -j2 --output-on-failure
+     )"
