@@ -21,43 +21,53 @@ environment:
       CMAKE_BUILD: MSYS
       STATIC_LIBS: true
       UNIT_TESTS: true
+      CC: "%MINGW_DIR%\\gcc.exe"
+      CXX: "%MINGW_DIR%\\g++.exe"
+      FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MSYS
       STATIC_LIBS: false
       UNIT_TESTS: true
+      CC: "%MINGW_DIR%\\gcc.exe"
+      CXX: "%MINGW_DIR%\\g++.exe"
+      FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MinGW
       STATIC_LIBS: true
       UNIT_TESTS: true
+      CC: "%MINGW_DIR%\\gcc.exe"
+      CXX: "%MINGW_DIR%\\g++.exe"
+      FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MinGW
       STATIC_LIBS: false
       UNIT_TESTS: true
+      CC: "%MINGW_DIR%\\gcc.exe"
+      CXX: "%MINGW_DIR%\\g++.exe"
+      FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
 
 clone_folder: "C:\\projects\\NJOY2016"
 
 install:
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,g++ --force-current
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,g++ --force-current --no-shortcuts --no-startmenu --no-desktop
 
 before_build:
-  - "set OrigPath=%Path%"
-  - "set CC=%MINGW_DIR%\\gcc.exe"
-  - "set CXX=%MINGW_DIR%\\g++.exe"
-  - "set FC=%MINGW_DIR%\\gfortran.exe"
+  - if not [%CMAKE_BUILD%]==[cygwin] set OrigPath=%Path%
+  - if [%CMAKE_BUILD%]==[cygwin] set Path=C:\cygwin64\bin;C:\cygwin\usr\bin;%Path%
 
 build_script:
   - dir
   - mkdir build
   - cd build
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\bin\bash -c cmake -D build_type=%BUILD_TYPE% -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "Unix Makefiles" ..
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\bin\bash -c make -j2
+  - if [%CMAKE_BUILD%]==[cygwin] cmake -D build_type=%BUILD_TYPE% -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "Unix Makefiles" ..
+  - if [%CMAKE_BUILD%]==[cygwin] make -j2
 # Non-cygwin builds
   - if not [%CMAKE_BUILD%]==[cygwin] set Path=%TMP_PATH%
   - if not [%CMAKE_BUILD%]==[cygwin] cmake -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
