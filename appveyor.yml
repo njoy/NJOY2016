@@ -16,6 +16,7 @@ environment:
       CMAKE_BUILD: cygwin
       STATIC_LIBS: true
       UNIT_TESTS: true
+      CYGWIN_NOWINPATH: yes
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MSYS
@@ -61,6 +62,7 @@ install:
 before_build:
   - if not [%CMAKE_BUILD%]==[cygwin] set OrigPath=%Path%
   - if [%CMAKE_BUILD%]==[cygwin] set Path=C:\cygwin64\bin;C:\cygwin\usr\bin;%Path%
+  - if [%CMAKE_BUILD%]==[cygwin] set Path=%Path:C:\Program Files\Git\usr\bin;=%
 
 build_script:
   - dir
