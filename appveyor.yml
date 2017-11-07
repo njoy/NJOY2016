@@ -61,7 +61,7 @@ install:
 
 before_build:
   - if not [%CMAKE_BUILD%]==[cygwin] set OrigPath=%Path%
-  - if [%CMAKE_BUILD%]==[cygwin] set Path=C:\cygwin64\bin;C:\cygwin\usr\bin;%Path%
+  - if [%CMAKE_BUILD%]==[cygwin] set Path=C:\cygwin64\bin;C:\cygwin\usr\bin
   - if [%CMAKE_BUILD%]==[cygwin] set Path=%Path:C:\Program Files\Git\usr\bin;=%
 
 build_script:
