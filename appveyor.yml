@@ -57,11 +57,11 @@ before_build:
 - set CC=%MINGW_DIR%\gcc.exe
 - set CXX=%MINGW_DIR%\g++.exe
 - set FC=%MINGW_DIR%\gfortran.exe
+
+build_script:
 - if "%CMAKE_BUILD%" equ "cygwin" (
       C:\cygwin\setup-x86.exe -q --root "%CYG_ROOT%" --site "%CYG_MIRROR%" --local-package-dir "%CYG_CACHE" --packages cmake,make,git,python3,gcc,g++ --force-current
   )
-
-build_script:
 - mkdir build
 - cd build
 - if "%CMAKE_BUILD%" equ "cygwin" (
