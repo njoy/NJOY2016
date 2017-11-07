@@ -28,7 +28,7 @@ environment:
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
-      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MSYS
@@ -37,7 +37,7 @@ environment:
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
-      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MinGW
@@ -46,7 +46,7 @@ environment:
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
-      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MinGW
@@ -55,7 +55,7 @@ environment:
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
-      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\ProgramFiles\\Git\\usr\\bin"
+      TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
 
 clone_folder: "C:\\projects\\NJOY2016"
 
@@ -69,11 +69,11 @@ before_build:
   - if [%CMAKE_BUILD%]==[cygwin] set Path=%Path:C:\Program Files\Git\usr\bin;=%
 
 build_script:
-  - dir
-  - dir C:\msys64\
-  - dir C:\msys64\mingw64\
-  - dir C:\msys64\usr\bin\
-  - dir "C:\\Program Files\\"
+        #  - dir
+        #  - dir C:\msys64\
+        #  - dir C:\msys64\mingw64\
+        #  - dir C:\msys64\usr\bin\
+        #  - dir "C:\\Program Files\\"
   - mkdir build
   - cd build
   - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\bin\
