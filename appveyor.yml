@@ -70,15 +70,17 @@ before_build:
 
 build_script:
   - dir
+  - dir C:\msys64\
+  - dir C:\msys64\mingw64\
   - mkdir build
   - cd build
   - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\bin\
-  - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\usr\sbin\
+  - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\usr\
   - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin64\usr\bin\cmake -D build_type=%BUILD_TYPE% -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "Unix Makefiles" ..
   - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin64\bin\make -j2
 # Non-cygwin builds
   - if not [%CMAKE_BUILD%]==[cygwin] set Path=%TMP_PATH%
-  - if not [%CMAKE_BUILD%]==[cygwin] cmake -D CMAKE_Fortran_COMPILER=C:/msys64/mingw64/bin/gfortran.exe -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
+  - if not [%CMAKE_BUILD%]==[cygwin] cmake -D "CMAKE_Fortran_COMPILER=C:/msys64/mingw64/bin/gfortran.exe" -D "CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe" -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
   - if not [%CMAKE_BUILD%]==[cygwin] set Path=%OrigPath%
   - if not [%CMAKE_BUILD%]==[cygwin] mingw32-make -j2
 
