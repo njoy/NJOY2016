@@ -59,12 +59,10 @@ before_build:
 - set FC=%MINGW_DIR%\gfortran.exe
 
 build_script:
-- if "%CMAKE_BUILD%" equ "cygwin" (
-      C:\cygwin\setup-x86.exe -q --root "%CYG_ROOT%" --site "%CYG_MIRROR%" --local-package-dir "%CYG_CACHE" --packages cmake,make,git,python3,gcc,g++ --force-current
-  )
 - mkdir build
 - cd build
-- if "%CMAKE_BUILD%" equ "cygwin" (
+- "if "%CMAKE_BUILD%" equ "cygwin" (
+      C:\cygwin\setup-x86.exe -q --root "%CYG_ROOT%" --site "%CYG_MIRROR%" --local-package-dir "%CYG_CACHE" --packages cmake,make,git,python3,gcc,g++ --force-current
       C:\cygwin\bin\bash -c "cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" .."
       C:\cygwin\bin\bash -c make -j2
   ) else (
@@ -72,14 +70,14 @@ build_script:
       cmake -D "CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe" -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
       set Path=%OrigPath%
       mingw32-make
-  )
+  )"
 
 after_build:
-- if "%CMAKE_BUILD%" equ "cygwin" (
+- "if "%CMAKE_BUILD%" equ "cygwin" (
       C:\cygwin\bin\bash -c "ctest -j2 --output-on-failure"
   ) else (
       ctest -j2 --output-on-failure
-  )
+  )"
 
 on_failure:
 - type C:\projects\NJOY2016\build\CMakeFiles\CMakeError.log
@@ -98,5 +96,3 @@ on_failure:
 #  - cd build
 #  - bash -c "cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBRARIES -D unit_tests=$UNIT_TESTS -D appended_flags=\"$APPENDED_FLAGS\" -G \"Unix Makefiles\" .."
 #  - bash -c "make VERBOSE=1 -j2"
-#test_script:
-#  - bash -c "ctest --output-on-failure -j2"
