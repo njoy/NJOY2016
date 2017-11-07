@@ -61,20 +61,20 @@ before_build:
 build_script:
 - mkdir build
 - cd build
-- "if \"%CMAKE_BUILD%\" equ \"cygwin\" (
-      C:\cygwin\setup-x86.exe -q --root \"%CYG_ROOT%\" --site \"%CYG_MIRROR%\" --local-package-dir \"%CYG_CACHE\" --packages cmake,make,git,python3,gcc,g++ --force-current
-      C:\cygwin\bin\bash -c \"cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" ..\"
-      C:\cygwin\bin\bash -c make -j2
+- "if %CMAKE_BUILD% equ cygwin (
+      C:\\cygwin\\setup-x86.exe -q --root %CYG_ROOT% --site %CYG_MIRROR% --local-package-dir %CYG_CACHE --packages cmake,make,git,python3,gcc,g++ --force-current
+      C:\cygwin\\bin\\bash -c cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" ..
+      C:\cygwin\\bin\\bash -c make -j2
   ) else (
       set Path=%TMP_PATH%
-      cmake -D \"CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe\" -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G \"%CMAKE_BUILD% Makefiles\" ..
+      cmake -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G \"%CMAKE_BUILD% Makefiles\" ..
       set Path=%OrigPath%
       mingw32-make
   )"
 
 after_build:
-- "if \"%CMAKE_BUILD%\" equ \"cygwin\" (
-      C:\cygwin\bin\bash -c \"ctest -j2 --output-on-failure\"
+- "if %CMAKE_BUILD% equ cygwin (
+      C:\\cygwin\\bin\\bash -c \"ctest -j2 --output-on-failure\"
   ) else (
       ctest -j2 --output-on-failure
   )"
