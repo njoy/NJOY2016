@@ -17,6 +17,9 @@ environment:
       STATIC_LIBS: true
       UNIT_TESTS: true
       CYGWIN_NOWINPATH: yes
+      CC: C:\cygwin64\bin\gcc.exe
+      CXX: C:\cygwin64\bin\g++.exe
+      FC: C:\cygwin64\bin\gfortran.exe
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MSYS
@@ -57,10 +60,11 @@ environment:
 clone_folder: "C:\\projects\\NJOY2016"
 
 install:
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,g++ --force-current --no-shortcuts --no-startmenu --no-desktop
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,g++,gfortran --force-current --no-shortcuts --no-startmenu --no-desktop
 
 before_build:
   - if not [%CMAKE_BUILD%]==[cygwin] set OrigPath=%Path%
+  - if not [%CMAKE_BUILD%]==[cygwin] C:\msys64\mingw64\bin\gfortran.exe --version
   - if [%CMAKE_BUILD%]==[cygwin] set Path=C:\cygwin64\bin;C:\cygwin64\usr\bin
   - if [%CMAKE_BUILD%]==[cygwin] set Path=%Path:C:\Program Files\Git\usr\bin;=%
 
@@ -69,9 +73,9 @@ build_script:
   - mkdir build
   - cd build
   - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\bin\
-  - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\usr\
+  - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\usr\sbin\
   - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin64\usr\bin\cmake -D build_type=%BUILD_TYPE% -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "Unix Makefiles" ..
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin64\usr\bin\make -j2
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin64\bin\make -j2
 # Non-cygwin builds
   - if not [%CMAKE_BUILD%]==[cygwin] set Path=%TMP_PATH%
   - if not [%CMAKE_BUILD%]==[cygwin] cmake -D CMAKE_Fortran_COMPILER=C:/msys64/mingw64/bin/gfortran.exe -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
