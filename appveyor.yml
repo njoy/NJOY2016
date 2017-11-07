@@ -4,12 +4,12 @@ image:
 shallow_clone: false
 
 environment:
-  CYG_BASH: "C:\\cygwin\\bin\\bash"
-  CYG_CACHE: "C:\\cygwin\\var\\cache\\setup"
-  CYG_MIRROR: "http://cygwin.mirror.constant.com"
-  CYG_ROOT: "C:\\cygwin"
-  MINGW_DIR: "C:\\msys64\\mingw64\\bin"
-  Path: "C:\\Python34-x64\\;%MINGW_DIR%;%Path%"
+  CYG_BASH: C:\cygwin\bin\bash
+  CYG_CACHE: C:\cygwin\var\cache\setup
+  CYG_MIRROR: http://cygwin.mirror.constant.com
+  CYG_ROOT: C:\cygwin
+  MINGW_DIR: C:\msys64\mingw64\bin
+  Path: C:\Python34-x64\;%MINGW_DIR%;%Path%
   matrix:
     -
       BUILD_TYPE: release
@@ -47,6 +47,10 @@ environment:
 
 clone_folder: "C:\\projects\\NJOY2016"
 
+install:
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE%
+                                 --packages cmake,make,git,python3,gcc,g++ --force-current
+
 before_build:
   - "set OrigPath=%Path%"
   - "set CC=%MINGW_DIR%\\gcc.exe"
@@ -54,25 +58,18 @@ before_build:
   - "set FC=%MINGW_DIR%\\gfortran.exe"
 
 build_script:
-  - "mkdir build"
-  - "cd build"
-  - "if [%CMAKE_BUILD%]==[cygwin] (
-       C:\\cygwin\\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE%
-       --packages cmake,make,git,python3,gcc,g++ --force-current &&
-       C:\\cygwin\\bin\\bash -c cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS
-       -D unit_tests=$UNIT_TESTS -G \"Unix Makefiles\" .. &&
-       C:\\cygwin\\bin\\bash -c make -j2
-     ) else (
-       set Path=%TMP_PATH% &&
-       cmake -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS%
-       -D unit_tests=%UNIT_TESTS% -G \"%CMAKE_BUILD% Makefiles\" .. &&
-       set Path=%OrigPath% &&
-       mingw32-make -j2
-     )"
+  - mkdir build
+  - cd build
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\bin\bash -c cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS
+                                 -D unit_tests=$UNIT_TESTS -G "Unix Makefiles" ..
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\bin\bash -c make -j2
+# Non-cygwin builds
+  - if not [%CMAKE_BUILD%]==[cygwin] set Path=%TMP_PATH%
+  - if not [%CMAKE_BUILD%]==[cygwin] cmake -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS%
+                                     -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
+  - if not [%CMAKE_BUILD%]==[cygwin] set Path=%OrigPath%
+  - if not [%CMAKE_BUILD%]==[cygwin] mingw32-make -j2
 
 after_build:
-  - "if [%CMAKE_BUILD%]==[cygwin] (
-       C:\\cygwin\\bin\\bash -c \"ctest -j2 --output-on-failure\"
-     ) else (
-       ctest -j2 --output-on-failure
-     )"
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\bin\bash -c ctest -j2 --output-on-failure
+  - if not [%CMAKE_BUILD%]==[cygwin] ctest -j2 --output-on-failure
