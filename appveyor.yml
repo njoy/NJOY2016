@@ -72,6 +72,7 @@ build_script:
   - dir
   - dir C:\msys64\
   - dir C:\msys64\mingw64\
+  - dir C:\Program Files\
   - mkdir build
   - cd build
   - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin64\bin\
