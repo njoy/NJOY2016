@@ -56,7 +56,7 @@ before_build:
 build_script:
   - "mkdir build"
   - "cd build"
-  - "if [%CMAKE_BUILD]==[\"cygwin\"] (
+  - "if [%CMAKE_BUILD%]==[\"cygwin\"] (
        C:\\cygwin\\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE%
        --packages cmake,make,git,python3,gcc,g++ --force-current &&
        C:\\cygwin\\bin\\bash -c cmake -D build_type=$BUILD_TYPE -D static=$STATIC_LIBS
