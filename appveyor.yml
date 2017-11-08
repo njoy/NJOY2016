@@ -13,6 +13,7 @@ environment:
       STATIC_LIBS: true
       UNIT_TESTS: true
       CYGWIN_NOWINPATH: yes
+      clone_folder: "C:\\cygwin\\projects\\NJOY2016"
       CYG_BASH: C:\cygwin\bin\bash
       CYG_CACHE: C:\cygwin\var\cache\setup
       CYG_MIRROR: http://cygwin.mirror.constant.com
@@ -25,6 +26,7 @@ environment:
       CMAKE_BUILD: MSYS
       STATIC_LIBS: true
       UNIT_TESTS: true
+      clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
@@ -34,6 +36,7 @@ environment:
       CMAKE_BUILD: MSYS
       STATIC_LIBS: false
       UNIT_TESTS: true
+      clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
@@ -43,6 +46,7 @@ environment:
       CMAKE_BUILD: MinGW
       STATIC_LIBS: true
       UNIT_TESTS: true
+      clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
@@ -52,14 +56,15 @@ environment:
       CMAKE_BUILD: MinGW
       STATIC_LIBS: false
       UNIT_TESTS: true
+      clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
-
-clone_folder: 
-  - if [%CMAKE_BUILD%]==[cygwin] "C:\\cygwin\\projects\\NJOY2016"
-  - if not [%CMAKE_BUILD%]==[cygwin] "C:\\projects\\NJOY2016"
+      #
+      #clone_folder: 
+      #  - if [%CMAKE_BUILD%]==[cygwin] "C:\\cygwin\\projects\\NJOY2016"
+      #  - if not [%CMAKE_BUILD%]==[cygwin] "C:\\projects\\NJOY2016"
 
 install:
   - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,gcc-g++,gcc-fortran --force-current --no-shortcuts --no-startmenu --no-desktop
