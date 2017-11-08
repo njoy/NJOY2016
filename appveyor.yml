@@ -4,10 +4,6 @@ image:
 shallow_clone: false
 
 environment:
-  CYG_BASH: C:\cygwin\bin\bash
-  CYG_CACHE: C:\cygwin\var\cache\setup
-  CYG_MIRROR: http://cygwin.mirror.constant.com
-  CYG_ROOT: C:\cygwin
   MINGW_DIR: C:\msys64\mingw64\bin
   Path: C:\Python34-x64\;%MINGW_DIR%;%Path%
   matrix:
@@ -17,9 +13,13 @@ environment:
       STATIC_LIBS: true
       UNIT_TESTS: true
       CYGWIN_NOWINPATH: yes
-      CC: C:\cygwin64\bin\gcc.exe
-      CXX: C:\cygwin64\bin\g++.exe
-      FC: C:\cygwin64\bin\gfortran.exe
+      CYG_BASH: C:\cygwin\bin\bash
+      CYG_CACHE: C:\cygwin\var\cache\setup
+      CYG_MIRROR: http://cygwin.mirror.constant.com
+      CYG_ROOT: C:\cygwin
+      CC: /usr/bin/gcc
+      CXX: /usr/bin/g++
+      FC: /usr/bin/gfortran
     -
       BUILD_TYPE: release
       CMAKE_BUILD: MSYS
@@ -71,8 +71,8 @@ before_build:
 build_script:
   - mkdir build
   - cd build
-  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "cmake -D build_type=%BUILD_TYPE% -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G \"Unix Makefiles\" .."
-  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "make -j2"
+  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "/usr/bin/cmake -D build_type=%BUILD_TYPE% -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G \"Unix Makefiles\" .."
+  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "/usr/bin/make -j2"
 # Non-cygwin builds
   - if not [%CMAKE_BUILD%]==[cygwin] set Path=%TMP_PATH%
   - if not [%CMAKE_BUILD%]==[cygwin] cmake -D CMAKE_Fortran_COMPILER=C:/msys64/mingw64/bin/gfortran.exe -D CMAKE_MAKE_PROGRAM=C:/msys64/mingw64/bin/mingw32-make.exe -D static=%STATIC_LIBS% -D unit_tests=%UNIT_TESTS% -G "%CMAKE_BUILD% Makefiles" ..
@@ -80,5 +80,5 @@ build_script:
   - if not [%CMAKE_BUILD%]==[cygwin] mingw32-make -j2
 
 after_build:
-  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "ctest -j2 --output-on-failure"
+  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "/usr/bin/ctest -j2 --output-on-failure"
   - if not [%CMAKE_BUILD%]==[cygwin] ctest -j2 --output-on-failure
