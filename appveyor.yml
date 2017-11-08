@@ -58,8 +58,8 @@ environment:
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
 
 clone_folder: 
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\projects\NJOY2016
-  - if not [%CMAKE_BUILD%]==[cygwin] C:\projects\NJOY2016
+  - if [%CMAKE_BUILD%]==[cygwin] "C:\\cygwin\\projects\\NJOY2016"
+  - if not [%CMAKE_BUILD%]==[cygwin] "C:\\projects\\NJOY2016"
 
 install:
   - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,gcc-g++,gcc-fortran --force-current --no-shortcuts --no-startmenu --no-desktop
