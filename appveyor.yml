@@ -60,7 +60,7 @@ environment:
 clone_folder: "C:\\projects\\NJOY2016"
 
 install:
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,g++,gfortran --force-current --no-shortcuts --no-startmenu --no-desktop
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,gcc-g++,gcc-fortran --force-current --no-shortcuts --no-startmenu --no-desktop
 
 before_build:
   - if not [%CMAKE_BUILD%]==[cygwin] set OrigPath=%Path%
