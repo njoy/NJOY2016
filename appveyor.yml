@@ -74,5 +74,5 @@ build_script:
   - if not [%CMAKE_BUILD%]==[cygwin] mingw32-make -j2
 
 after_build:
-  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "cd tests/23 && ctest; python ../execute.py; ../../njoy <input"
+  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "cd tests && ctest -j2"
   - if not [%CMAKE_BUILD%]==[cygwin] ctest -j2 --output-on-failure
