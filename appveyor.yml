@@ -8,10 +8,8 @@ environment:
   Path: C:\Python34-x64\;%MINGW_DIR%;%Path%
   matrix:
     -
-      BUILD_TYPE: release
       CMAKE_BUILD: cygwin
       STATIC_LIBS: true
-      UNIT_TESTS: true
       CYGWIN_NOWINPATH: yes
       clone_folder: "C:\\cygwin\\projects\\NJOY2016"
       CYG_BASH: C:\cygwin\bin\bash
@@ -22,49 +20,37 @@ environment:
       CXX: /usr/bin/g++
       FC: /usr/bin/gfortran
     -
-      BUILD_TYPE: release
       CMAKE_BUILD: MSYS
       STATIC_LIBS: true
-      UNIT_TESTS: true
       clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
     -
-      BUILD_TYPE: release
       CMAKE_BUILD: MSYS
       STATIC_LIBS: false
-      UNIT_TESTS: true
       clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
     -
-      BUILD_TYPE: release
       CMAKE_BUILD: MinGW
       STATIC_LIBS: true
-      UNIT_TESTS: true
       clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
     -
-      BUILD_TYPE: release
       CMAKE_BUILD: MinGW
       STATIC_LIBS: false
-      UNIT_TESTS: true
       clone_folder: "C:\\projects\\NJOY2016"
       CC: "%MINGW_DIR%\\gcc.exe"
       CXX: "%MINGW_DIR%\\g++.exe"
       FC: "%MINGW_DIR%\\gfortran.exe"
       TMP_PATH: "C:\\Program Files (x86)\\CMake\\bin;C:\\Python34-x64;%MINGW_DIR%;C:\\Program Files\\Git\\cmd;C:\\msys64;C:\\Program Files\\Git\\usr\\bin"
-      #
-      #clone_folder: 
-      #  - if [%CMAKE_BUILD%]==[cygwin] "C:\\cygwin\\projects\\NJOY2016"
-      #  - if not [%CMAKE_BUILD%]==[cygwin] "C:\\projects\\NJOY2016"
 
 init:
   - if [%CMAKE_BUILD%]==[cygwin] git config --global core.autocrlf input
@@ -73,10 +59,8 @@ install:
   - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc-core,gcc-g++,gcc-fortran --force-current --no-shortcuts --no-startmenu --no-desktop
 
 before_build:
-  - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin\
   - if not [%CMAKE_BUILD%]==[cygwin] set OrigPath=%Path%
   - if [%CMAKE_BUILD%]==[cygwin] set Path=C:\cygwin\bin
-    #  - if [%CMAKE_BUILD%]==[cygwin] set Path=%Path:C:\Program Files\Git\usr\bin;=%
 
 build_script:
   - mkdir build
@@ -90,5 +74,5 @@ build_script:
   - if not [%CMAKE_BUILD%]==[cygwin] mingw32-make -j2
 
 after_build:
-  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "cd tests/03 && python ../execute.py"
+  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "cd tests && ../njoy.exe <./01/input && ../njoy.exe <./02/input && ../njoy.exe <./03/input && ../njoy.exe <./04/input && ../njoy.exe <./05/input"
   - if not [%CMAKE_BUILD%]==[cygwin] ctest -j2 --output-on-failure
