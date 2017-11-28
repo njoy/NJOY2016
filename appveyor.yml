@@ -74,5 +74,5 @@ build_script:
   - if not [%CMAKE_BUILD%]==[cygwin] mingw32-make -j2
 
 after_build:
-  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "cd tests && ../njoy.exe <./01/input && ../njoy.exe <./02/input && ../njoy.exe <./03/input && ../njoy.exe <./04/input && ../njoy.exe <./05/input"
+  - if [%CMAKE_BUILD%]==[cygwin] %CYG_BASH% -c "cd tests/01 && ../../njoy.exe <input && cd ../02 && ../../njoy.exe <input && cd ../03 && ../../njoy.exe <input && cd ../04 && ../../njoy.exe <input && cd ../05 && ../../njoy.exe <input"
   - if not [%CMAKE_BUILD%]==[cygwin] ctest -j2 --output-on-failure
