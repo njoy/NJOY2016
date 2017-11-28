@@ -1,5 +1,5 @@
 if ( NOT PYTHON_EXECUTABLE )
-  find_package( PythonInterp )
+  find_package( PythonInterp 3.4 )
   if ( NOT PYTHONINTERP_FOUND )
     message( FATAL_ERROR "Python interpeter installation was not found." )
   endif()
