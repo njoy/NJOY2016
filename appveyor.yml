@@ -67,10 +67,10 @@ environment:
       #  - if not [%CMAKE_BUILD%]==[cygwin] "C:\\projects\\NJOY2016"
 
 init:
-  - if [%CMAKE_BUILD%]==[cygwin] git config --global core.autocrlf true
+  - if [%CMAKE_BUILD%]==[cygwin] git config --global core.autocrlf input
 
 install:
-  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc,gcc-g++,gcc-fortran --force-current --no-shortcuts --no-startmenu --no-desktop
+  - if [%CMAKE_BUILD%]==[cygwin] C:\cygwin\setup-x86.exe -q --root %CYG_ROOT% --local-package-dir %CYG_CACHE% --packages cmake,make,git,python3,gcc-core,gcc-g++,gcc-fortran --force-current --no-shortcuts --no-startmenu --no-desktop
 
 before_build:
   - if [%CMAKE_BUILD%]==[cygwin] dir C:\cygwin\
