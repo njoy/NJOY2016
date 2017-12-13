@@ -32,8 +32,8 @@ module heatm
    integer::lct
    integer::idame
    real(kr)::ebot,etop
-   integer::mt458,nply
-   real(kr),dimension(:),allocatable::c458,cpoly
+   integer::mt458,nply,lfc,ifc1,ifc2,ifc4
+   real(kr),dimension(:),allocatable::c458,cpoly,hpoly,afr,anp,agp
    real(kr)::emc2,tm,rtm
 
    ! target
@@ -391,6 +391,7 @@ contains
    !--heatr is finished.
    if (allocated(c458)) deallocate(c458)
    if (allocated(cpoly)) deallocate(cpoly)
+   if (allocated(hpoly)) deallocate(hpoly)
    call atend(nout,0)
    call repoz(nout)
    call repoz(nin)
@@ -441,11 +442,11 @@ contains
    ! externals
    integer::iold,nend4,nend6,nscr
    ! internals
-   integer::ifiss,i519,nb,nw,n6,nx,i,ifini,ii6,lf,n,nk
+   integer::ifiss,i519,nb,nw,n6,nx,i,ifini,ii6,lf,n,nk,nfc,ifc
    integer::mfd,mtd,j,idone,mf4,mt4,ie,nmu,imu,npkk,idis
    integer::ielem,ik,nr,idnx,nen,law
    integer::lrel,nmod
-   integer::iik,izap1,mtnow,nkk,nnb,nnw,i6t
+   integer::i6t,nl
    real(kr)::zar,awrr,e,enext,y,yld,test,efix
    real(kr)::c(30)
    character(60)::strng
@@ -620,12 +621,22 @@ contains
       if (mt458.eq.1) then
          call findf(matd,1,458,nendf)
          call contio(nendf,0,0,scr,nb,nw)
+         lfc=nint(scr(4))
+         nfc=nint(scr(6))
+         ifc1=0
+         ifc2=0
+         ifc4=0
          call listio(nendf,0,0,scr,nb,nw)
          nply=nint(scr(4))
-         if (allocated(c458).and.nply.ne.0) deallocate(cpoly)
-         if (nply.ne.0) then
+         if (allocated(c458).and.lfc.eq.0) then
+            deallocate(cpoly)
+            deallocate(hpoly)
+         endif
+         if (lfc.eq.0) then
             allocate(cpoly(0:nply))
+            allocate(hpoly(0:nply))
             cpoly=0
+            hpoly=0
          endif
          if (allocated(c458)) deallocate(c458)
          allocate(c458(nint(scr(5))))
@@ -633,89 +644,81 @@ contains
          ! but for endf/b-vii.1, c2 and higher are mistakenly given
          ! as if the energy will be given in MeV and therefore need
          ! correction.
-         c458(1:18)=scr(7:24)
-         if (nply.ge.1) then
-            c458(19:36)=scr(25:42)
-            if (nply.gt.1) then
-               do n=2,nply
-                  if (nmod.ne.7.or.lrel.ne.1) then
-                     efix=1
-                  else
-                     efix=mevev**(n-1)
-                  endif
-                  c458(1+18*n:18+18*n)=scr(7+18*n:24+18*n)*efix
-               enddo
-            endif
-         endif
          write(nsyso,'(/,&
-           &'' q correction for delayed fission energy''/)')
-         qdel=c458(5)+c458(9)+c458(11)
-         if (nply.eq.0) then
-            ! qdel=energy independent delayed gammas+delayed betas
-            qdel=c458(9)+c458(11)
-            write(nsyso,'(&
-              &''   delayed gammas:   '',1pe13.6/&
-              &''   delayed betas:    '',e13.6/&
-              &''   total correction: '',e13.6)')&
-              c458(9),c458(11),qdel
-         else if (nply.eq.1) then
-            if (c458(27).ne.0) then
-               write(nsyso,'(''   delayed gammas:   '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E'')')c458(9),c458(27)
-            else
-               write(nsyso,'(''   delayed gammas:   '',1pe13.6)')c458(9)
-            endif
-            if (c458(29).ne.0) then
-               write(nsyso,'(''   delayed betas:    '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E'')')c458(11),c458(29)
-            else
-               write(nsyso,'(''   delayed betas:    '',1pe13.6)')c458(11)
-               if (c458(27).eq.0) then
-                  write(nsyso,'(''   total correction: '',1pe13.6)')&
-                    &c458(9)+c458(11)
+           &'' fission energy components''/)')
+         c458(1:18)=scr(7:24)
+         if (lfc.eq.0) then      ! thermal point or polynomial
+            if (nply.ge.1) then
+               c458(19:36)=scr(25:42)
+               if (nply.gt.1) then
+                  do n=2,nply
+                     if (nmod.ne.7.or.lrel.ne.1) then
+                        efix=1
+                     else
+                        efix=mevev**(n-1)
+                     endif
+                     c458(1+18*n:18+18*n)=scr(7+18*n:24+18*n)*efix
+                  enddo
                endif
-            endif
-         else if (nply.eq.2) then
-            if (c458(27).ne.0.and.c458(45).ne.0) then
-               write(nsyso,'(''   delayed gammas:   '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E + ('',e13.6,'')*E**2'')')&
-                 &c458(9),c458(27),c458(45)
-            else if (c458(27).ne.0.and.c458(45).eq.0) then
-               write(nsyso,'(''   delayed gammas:   '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E'')')&
-                 &c458(9),c458(27)
-            else if (c458(27).eq.0.and.c458(45).ne.0) then
-               write(nsyso,'(''   delayed gammas:   '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E**2'')')c458(9),c458(45)
+               write(nsyso,'(&
+                 &''   fission products: polynomial of order '',i2/&
+                 &''   prompt neutrons : polynomial of order '',i2/&
+                 &''   prompt gammas   : polynomial of order '',i2)')&
+                 nply,nply,nply
             else
-               write(nsyso,'(''   delayed gammas:   '',1pe13.6)')c458(9)
+               write(nsyso,'(&
+                 &''   fission products: thermal point''/&
+                 &''   prompt neutrons : thermal point''/&
+                 &''   prompt gammas   : thermal point'')')
             endif
-            if (c458(29).ne.0.and.c458(47).ne.0) then
-               write(nsyso,'(''   delayed betas:    '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E + ('',e13.6,'')*E**2'')')&
-                 &c458(11),c458(29),c458(47)
-            else if (c458(29).ne.0.and.c458(47).eq.0) then
-               write(nsyso,'(''   delayed betas:    '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E'')')&
-                 &c458(11),c458(29)
-            else if (c458(29).eq.0.and.c458(47).ne.0) then
-               write(nsyso,'(''   delayed betas:    '',1pe13.6,&
-                 &'' + ('',e13.6,'')*E**2'')')c458(11),c458(47)
-            else
-               write(nsyso,'(''   delayed betas:    '',1pe13.6)')c458(11)
-               if (c458(27).eq.0.and.c458(45).eq.0) then
-                  write(nsyso,'(''   total correction: '',1pe13.6)')&
-                    &c458(9)+c458(11)
+            do  i=0,nply
+               cpoly(i)=c458(1+i*18)+c458(3+i*18)+c458(7+i*18)
+               hpoly(i)=c458(1+i*18)+c458(7+i*18)
+            enddo
+         else if (lfc.eq.1) then ! tabulated components
+            do i=1,nfc
+               call tab1io(nendf,0,0,scr,nb,nw)
+               do while (nb.ne.0)
+                  call moreio(nendf,0,0,scr(nw+1),nb,nw)
+               enddo
+               nl=6+2*n1h+2*n2h
+               ifc=l2h
+               if (ifc.eq.1) then      ! EFR is tabulated
+                  ifc1=1
+                  allocate(afr(1:nl))
+                  afr(1:nl)=scr(1:nl)
+               else if (ifc.eq.2) then ! ENP is tabulated
+                  ifc2=1
+                  allocate(anp(1:nl))
+                  anp(1:nl)=scr(1:nl)
+               else if (ifc.eq.4) then ! EGP is tabulated
+                  ifc4=1
+                  allocate(agp(1:nl))
+                  agp(1:nl)=scr(1:nl)
                endif
+
+! todo test boundaries to see if they are the same?
+
+            enddo
+            if (ifc1.eq.1) then
+               write(nsyso,'(''   fission products: tabulated values'')')
+            else
+               write(nsyso,'(''   fission products: thermal point'')')
+            endif
+            if (ifc2.eq.1) then
+               write(nsyso,'(''   prompt neutrons : tabulated values'')')
+            else
+               write(nsyso,'(''   prompt neutrons : thermal point'')')
+            endif
+            if (ifc4.eq.1) then
+               write(nsyso,'(''   prompt gammas   : tabulated values'')')
+            else
+               write(nsyso,'(''   prompt gammas   : thermal point'')')
             endif
          else
-            write(nsyso,'('' uses a 3rd or higher order polynomial.'')')
+            call error('hinit','bad LFC in mt=458.',' ')
          endif
-         if (nply.ne.0) then
-            do  i=0,nply
-                cpoly(i)=c458(1+i*18)+c458(3+i*18)+c458(7+i*18)
-            enddo
-         endif
+         qdel=c458(5)+c458(9)+c458(11) ! delayed fission Q at 0 eV
       else
          call mess('hinit','mt458 is missing for this mat',' ')
       endif
@@ -939,13 +942,14 @@ contains
    integer::nb,nw,npkk,ipk,n6,j6,irec,jrec,last6,new6
    integer::lr,icon,mtd,i,iimt,nmt,na,nwa,nwm,idis
    integer::ipx,irx,ilist,nn,iii,lq0,idx,ii,indxx
+   integer::ipfr,irfr,ipnp,irnp,ipgp,irgp
    integer::npkt,intt,isave,npkkk,nwmax,iflag
-   real(kr)::awfac,aw1fac,e,emev,thresh,y,t,qendf,pnue
-   real(kr)::qs,q0,ebar,dame,yld,qsave
-   real(kr)::elst,yld0,xxx,test,enext,enx,q00,ebal6,h
+   real(kr)::awfac,aw1fac,e,thresh,y,t,qendf,pnue
+   real(kr)::qs,q0,h0,ebar,dame,yld,qsave
+   real(kr)::elst,yld0,xxx,test,enext,enx,ebal6,h
    real(kr)::ebarp,yldp,yp,hp,damep,ebal6p,hmin,hmax,tt
+   real(kr)::qfr,qnp,qgp
    real(kr)::c(30)
-   real(kr)::qchk
    integer::imt(30)
    character(60)::strng1,strng2
    real(kr),dimension(:),allocatable::b
@@ -957,7 +961,7 @@ contains
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::efis=15.e6_kr
    real(kr),parameter::fq1=8.07e6_kr
-   real(kr),parameter::fq2=.307e0_kr
+   real(kr),parameter::fq2=1.307e0_kr
    real(kr),parameter::one=1
    real(kr),parameter::ten=10
    real(kr),parameter::qtest=99.e6_kr
@@ -1052,6 +1056,7 @@ contains
    lr=l2h
    qs=0
    q0=0
+   h0=0
    icon=0
    ebar=0
    dame=0
@@ -1088,23 +1093,19 @@ contains
 
    !--adjust fission q to e(in)=0 prompt value
    if ((mth.ge.18.and.mth.le.21).or.mth.eq.38) then
-      if (qdel.ne.zero) then
-         if (nply.ne.0) then
-            qchk=abs(c458(15)-q)/q
-            if (qchk.gt.qsmall) then
-               q=c458(15)
-               qendf=q
-               call mess('nheat',&
-                         'use mt458 ER for initial fission q',' ')
-            endif
-         endif
-         q=q-qdel
-         write(strng1,&
+      if (lfc.eq.0) then ! thermal point or polynomial
+         qendf=c458(15)
+         q=qendf-qdel
+      else               ! tabulated components
+! todo check for tabulated?
+         qendf=c458(15)
+         q=qendf-qdel
+      endif
+      write(strng1,&
            &'(''changed q from '',1p,e14.6,'' to '',1p,e14.6)')&
            qendf,q
-         write(strng2,'(''for mt '',i3)') mth
-         call mess('nheat',strng1,strng2)
-      endif
+      write(strng2,'(''for mt '',i3,'' by taking out delayed components'')') mth
+      call mess('nheat',strng1,strng2)
    endif
 
    !--choose appropriate ground state q value.
@@ -1267,6 +1268,12 @@ contains
   182 continue
    ipx=2
    irx=1
+   ipfr=2
+   irfr=1
+   ipnp=2
+   irnp=1
+   ipgp=2
+   irgp=1
    elst=0
    ilist=1
    if (icon.eq.0) yld=0
@@ -1327,20 +1334,43 @@ contains
    if (icon.eq.0.and.idame.gt.0) call capdam(e,dame,q,za,awr,mtd)
    if (icon.lt.0)&
      call sixbar(e,ebar,yld,dame,nend6,a,nwa,nscr,d,nwm,n6,j6,irec,jrec,iflag)
-   if (yld0.eq.zero) q00=q0
    if (yld0.eq.zero) yld0=yld
    ! correct fission q for current incident energy
    if ((mtd.ge.18.and.mtd.le.21).or.mtd.eq.38) then
-      if (nply.eq.0) then
-         q0=q00-(yld-yld0)*fq1+fq2*e
-      else
-         q0=cpoly(0)
-         pnue=c458(3)
-         do i=1,nply
-            q0=q0+cpoly(i)*e**i
-            pnue=pnue+c458(3+i*18)*e**i !=prompt nu energy (same as ebar*yld)
-         enddo
+      if (lfc.eq.0) then     ! thermal point or polynomial
+         if (nply.eq.0) then
+            q0=cpoly(0)-(yld-yld0)*fq1+fq2*e
+            h0=hpoly(0)
+         else
+            q0=cpoly(nply)
+            h0=hpoly(nply)
+            do i=nply-1,0,-1
+               q0=q0*e+cpoly(i)
+               h0=h0*e+hpoly(i)
+            enddo
+         endif
+         pnue=q0-h0
+      else                   ! tabulated
+         if (ifc1.eq.1) then
+            call terpa(qfr,e,enx,idx,afr,ipfr,irfr)
+         else
+            qfr=c458(1)
+         endif
+         if (ifc2.eq.1) then
+            call terpa(qnp,e,enx,idx,anp,ipnp,irnp)
+         else
+            qnp=c458(3)-(yld-yld0)*fq1+fq2*e
+         endif
+         if (ifc4.eq.1) then
+            call terpa(qgp,e,enx,idx,agp,ipgp,irgp)
+         else
+            qgp=c458(7)
+         endif
+         pnue=qnp
+         h0=qfr+qgp
+         q0=h0+pnue
       endif
+      q0=q0-e
    endif
    if (icon.ge.0) then
       ebal6=0
@@ -1348,21 +1378,13 @@ contains
       if ((mtd.lt.18.or.mtd.gt.21).and.mtd.ne.38) then
          h=(e+q0-ebar*yld)*y
       else
-         if (nply.eq.0) then
-            h=(e+q0-ebar*yld)*y
-         else
-            h=(q0-pnue)*y
-         endif
+         h=h0*y
       endif
    else
-      if ((mtd.ge.18.and.mtd.le.21).or.mtd.eq.38) then
-         if (nply.eq.0) then
-            h=(e+q0-ebar*yld)*y
-         else
-            h=(q0-pnue)*y
-         endif
-      else
+      if ((mtd.lt.18.or.mtd.gt.21).and.mtd.ne.38) then
          h=ebar*yld*y
+      else
+         h=h0*y
       endif
       dame=dame*y
       c(npkk)=c(npkk)+h
@@ -1385,7 +1407,7 @@ contains
 
    !--accumulate total and partial heating factors.
    c(2)=c(2)+h+ebal6
-   if (((mtd.ge.18.and.mtd.le.21).or.mtd.eq.38).and.nply.ne.0) ebar=pnue/yld
+   if ((mtd.ge.18.and.mtd.le.21).or.mtd.eq.38) ebar=pnue/yld
    ebarp=sigfig(ebar,9,0)
    yldp=sigfig(yld,9,0)
    yp=sigfig(y,9,0)
@@ -4453,8 +4475,8 @@ contains
    integer::l2flg,imax,lmax,i,istor,nb,nw,j,lg,mt0,mt0old,n,jm1
    integer::kk,k,ii,kp1,l,ja,jb,lm1,ip1,mtl,no455,lnu
    integer::mf,mt,l1,l2,n1,n2,nnu,idone,imax2
-   integer::i10,maths,mtold,mtnow,mtmess,mttst,nn
-   integer::itst,jq,m1,m2,m,mm,nmf3,nmf12
+   integer::i10,maths,mtnow,mtmess,mttst,nn
+   integer::m1,m2,nmf3,nmf12
    integer,parameter::nqmx=450
    real(kr)::g,ei,p,ysum,eja,ejb,yy,tsave
    character(60)::strng
@@ -5580,7 +5602,7 @@ contains
    integer::iold
    ! internals
    integer::nscr,npkk,npkt,npkd,npktd,i,ilist,inpk,nb,nw
-   integer::mtx,nscrnd,ninend,mtb,nxn,k,kj,mfi,mti,mtn,ia,nn
+   integer::nxn,k,mfi,mti,mtn,ia,nn
    integer::idict,idict1,nx,inow,nwd,n,ilo,ihi,j,ibase
    integer::iowr,mfnin,mtnin,mfnscr,mtnscr,inow6
    real(kr)::x,y,xlast,ylo,yhi,thin,rat,elo,test,e
