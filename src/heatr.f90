@@ -22,7 +22,7 @@ module heatm
    real(kr),dimension(:),allocatable::qbar
    real(kr)::qa(nqamax),efirst,elast,za,awr,elist(ilmax)
    real(kr)::break
-   real(kr)::qdel
+   real(kr)::qdel,etabmax
    integer::mt103,mt104,mt105,mt106,mt107,mt16
    integer::miss4(250),nmiss4
    integer::i6,mt6(maxmf6),i6g,mt6no(maxmf6)
@@ -32,7 +32,7 @@ module heatm
    integer::lct
    integer::idame
    real(kr)::ebot,etop
-   integer::mt458,nply,lfc,ifc1,ifc2,ifc4
+   integer::mt458,nply,lfc,ifc1,ifc2,ifc3,ifc4,ifc5,ifc6
    real(kr),dimension(:),allocatable::c458,cpoly,hpoly,afr,anp,agp
    real(kr)::emc2,tm,rtm
 
@@ -457,6 +457,7 @@ contains
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::zero=0
    real(kr),parameter::mevev=1.e-6_kr
+   real(kr),parameter::tol=1.e-5_kr
 
    !--analyze dictionary
    lrel=0
@@ -481,6 +482,7 @@ contains
    etop=20000000
    ebot=1
    ebot=ebot/100000
+   etabmax=-1.0
    call repoz(nendf)
    call tpidio(nendf,0,0,c(1),nb,nw)
    call findf(matd,1,451,nendf)
@@ -625,7 +627,10 @@ contains
          nfc=nint(scr(6))
          ifc1=0
          ifc2=0
+         ifc3=0
          ifc4=0
+         ifc5=0
+         ifc6=0
          call listio(nendf,0,0,scr,nb,nw)
          nply=nint(scr(4))
          if (allocated(c458).and.lfc.eq.0) then
@@ -648,6 +653,7 @@ contains
            &'' fission energy components''/)')
          c458(1:18)=scr(7:24)
          if (lfc.eq.0) then      ! thermal point or polynomial
+            qdel=c458(5)+c458(9)+c458(11) ! delayed fission Q at 0 eV
             if (nply.ge.1) then
                c458(19:36)=scr(25:42)
                if (nply.gt.1) then
@@ -676,13 +682,23 @@ contains
                hpoly(i)=c458(1+i*18)+c458(7+i*18)
             enddo
          else if (lfc.eq.1) then ! tabulated components
+            qdel=0
             do i=1,nfc
                call tab1io(nendf,0,0,scr,nb,nw)
                do while (nb.ne.0)
                   call moreio(nendf,0,0,scr(nw+1),nb,nw)
                enddo
-               nl=6+2*n1h+2*n2h
                ifc=l2h
+               nl=6+2*n1h+2*n2h
+               if (etabmax.lt.0) then
+                  etabmax=scr(nl-1)
+               else
+                  if ((abs(etabmax-scr(nl-1))/etabmax).gt.tol) then
+                     write(strng,'(''upper energy mismatch for ifc='',i2,&
+                        &'' in mt=458.'')')ifc
+                     call error('hinit',strng,' ')
+                  endif
+               endif
                if (ifc.eq.1) then      ! EFR is tabulated
                   ifc1=1
                   allocate(afr(1:nl))
@@ -691,15 +707,24 @@ contains
                   ifc2=1
                   allocate(anp(1:nl))
                   anp(1:nl)=scr(1:nl)
+               else if (ifc.eq.3) then ! END is tabulated
+                  ifc3=1
+                  qdel=qdel+scr(7)
                else if (ifc.eq.4) then ! EGP is tabulated
                   ifc4=1
                   allocate(agp(1:nl))
                   agp(1:nl)=scr(1:nl)
+               else if (ifc.eq.5) then ! EGD is tabulated
+                  ifc5=1
+                  qdel=qdel+scr(7)
+               else if (ifc.eq.6) then ! EB is tabulated
+                  ifc6=1
+                  qdel=qdel+scr(7)
                endif
-
-! todo test boundaries to see if they are the same?
-
             enddo
+            if (ifc3.eq.0) qdel=qdel+c458(5)
+            if (ifc5.eq.0) qdel=qdel+c458(9)
+            if (ifc6.eq.0) qdel=qdel+c458(11)
             if (ifc1.eq.1) then
                write(nsyso,'(''   fission products: tabulated values'')')
             else
@@ -718,7 +743,6 @@ contains
          else
             call error('hinit','bad LFC in mt=458.',' ')
          endif
-         qdel=c458(5)+c458(9)+c458(11) ! delayed fission Q at 0 eV
       else
          call mess('hinit','mt458 is missing for this mat',' ')
       endif
@@ -1093,14 +1117,8 @@ contains
 
    !--adjust fission q to e(in)=0 prompt value
    if ((mth.ge.18.and.mth.le.21).or.mth.eq.38) then
-      if (lfc.eq.0) then ! thermal point or polynomial
-         qendf=c458(15)
-         q=qendf-qdel
-      else               ! tabulated components
-! todo check for tabulated?
-         qendf=c458(15)
-         q=qendf-qdel
-      endif
+      qendf=c458(15)
+      q=qendf-qdel
       write(strng1,&
            &'(''changed q from '',1p,e14.6,'' to '',1p,e14.6)')&
            qendf,q
