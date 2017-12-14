@@ -740,6 +740,11 @@ contains
             else
                write(nsyso,'(''   prompt gammas   : thermal point'')')
             endif
+            if (etabmax.lt.0) then
+               write(strng,'(''no tabulated fission q components found'',&
+                  &'' in mt=458.'')')
+               call error('nheat',strng,' ')
+            endif
          else
             call error('hinit','bad LFC in mt=458.',' ')
          endif
@@ -975,7 +980,7 @@ contains
    real(kr)::qfr,qnp,qgp
    real(kr)::c(30)
    integer::imt(30)
-   character(60)::strng1,strng2
+   character(60)::strng,strng1,strng2
    real(kr),dimension(:),allocatable::b
    real(kr),dimension(:),allocatable::a
    real(kr),dimension(:),allocatable::d
@@ -1001,6 +1006,7 @@ contains
    real(kr),parameter::up=1.1e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::qsmall=1e-6_kr
+   real(kr),parameter::tol=1.e-5_kr
 
    !--allocate storage
    allocate(b(npage+50))
@@ -1369,6 +1375,11 @@ contains
          endif
          pnue=q0-h0
       else                   ! tabulated
+         if (etabmax.lt.e.and.((abs(etabmax-e)/etabmax).gt.tol)) then
+            write(strng,'(''upper energy tabulated fission q components'',&
+               &'' is too low.'')')
+            call error('nheat',strng,' ')
+         endif
          if (ifc1.eq.1) then
             call terpa(qfr,e,enx,idx,afr,ipfr,irfr)
          else
