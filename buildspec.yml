@@ -9,3 +9,7 @@ phases:
     commands:
       - echo "Entered the 'build' phase..."
       - ./.AWS/build.sh
+  post_build:
+    commands:
+      - echo "Entered the 'post_build' phase..."
+      - ./.AWS/post_build.sh
