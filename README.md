@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/njoy/NJOY2016.svg?branch=master)](https://travis-ci.org/njoy/NJOY2016)
+![Build Status](https://codebuild.us-east-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoicVM4U3hVS1QwRmZuZ0pZVm01WjVueEJubmk0ZXd1WW5UV2xHRVBsQjgrN2NVQmZwamcvb2p5UHFBd3pqS2orTHZuTUtpRGgrbEFlUDBqSHJMcEk5M0d3PSIsIml2UGFyYW1ldGVyU3BlYyI6InYzUzJ4eld4RG1GSmJNcGYiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 
  The NJOY Nuclear Data Processing System is a modular computer code designed to read evaluated data in ENDF format, transform the data in various ways, and output the results as libraries designed to be used in various applications. Each module performs a well defined processing task. The modules are essentially independent programs, and they communicate with each other using input and output files, plus a very few common variables.
 
@@ -27,3 +28,5 @@
 +  `LEAPR` generates ENDF scattering-law files (File 7) for moderator materials in the thermal range. These scattering-law files can be used by `THERMR` to produce the corresponding cross sections.
 +  `GASPR` generates gas-production cross sections in pointwise format from basic reaction data in an ENDF evaluation. These results can be converted to multigroup form using `GROUPR`, passed to `ACER`, or displayed using `PLOTR`.
 
+## LICENSE
+The software contained in this repository is covered under the associated [LICENSE](LICENSE) file.
