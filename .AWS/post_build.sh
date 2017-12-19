@@ -1,6 +1,10 @@
 #!/bin/bash
 CORES=$(grep -c ^processor /proc/cpuinfo)
 
+echo `pwd`
+cd bin
+echo `pwd`
+
 ctest --output-on-failure -j${CORES}
 
 export TEST_FAILURE=$?
