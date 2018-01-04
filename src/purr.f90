@@ -556,11 +556,8 @@ contains
             h=h*a(n1+j+4*nbin)/sigu(4,1,1)
          endif
          a(l)=a(l)+h
-         if (lssf.eq.1) then
-            a(l)=a(l)/heat(1,ie,it)/a(n1+j+nbin)
-         else
-            if (a(n1+j+nbin).ne.zero) a(l)=a(l)/a(n1+j+nbin)
-         endif
+         if (a(n1+j+nbin).ne.zero) a(l)=a(l)/a(n1+j+nbin)
+         if (lssf.eq.1) a(l)=a(l)/heat(1,ie,it)
       endif
    enddo
   320 continue
@@ -2845,4 +2842,3 @@ contains
    end function rann
 
 end module purm
-
