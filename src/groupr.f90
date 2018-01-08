@@ -305,6 +305,8 @@ contains
    !                     subsection from file 9
    !    4zzzaaam       nuclide production for zzzaaam
    !                     subsection from file 10
+   !    40000000       fission product production (mtd=18 only)
+   !                     subsection from file 10
    !
    !     mtd          meaning
    !     ---          -------
@@ -632,20 +634,30 @@ contains
    !    user mfd.  then calculate izam
    if (iauto.eq.0.and.mfd.ge.10000000) then
       ! -- decode from user mfd input
-      itmp=mfd/10000000
-      itmp=(mfd-10000000*itmp)/10
-      lfs=mfd-(10000000*(mfd/10000000)+10*itmp)
-      isom=lfs
-      if (lfs.lt.10) then
-         izam=mod(mfd,10000000)
+      if (mfd.eq.40000000) then ! fission special case for mf10
+         lfs=0
+         isom=0
+         izam=-1
       else
-         izam=10*mod(mfd,10000000)
+         itmp=mfd/10000000
+         itmp=(mfd-10000000*itmp)/10
+         lfs=mfd-(10000000*(mfd/10000000)+10*itmp)
+         isom=lfs
+         if (lfs.lt.10) then
+            izam=mod(mfd,10000000)
+         else
+            izam=10*mod(mfd,10000000)
+         endif
       endif
    elseif (iauto.eq.1.and.mfd.ge.10000000) then
-      if (lfs.lt.10) then
-         izam=mod(mfd,10000000)+lfs
+      if (mfd.eq.40000000) then ! fission special case for mf10
+         izam=-1
       else
-         izam=10*mod(mfd,10000000)+lfs
+         if (lfs.lt.10) then
+            izam=mod(mfd,10000000)+lfs
+         else
+            izam=10*mod(mfd,10000000)+lfs
+         endif
       endif
    endif
   400 continue
