@@ -9853,6 +9853,7 @@ contains
          mf10f(imf10)=imf
          mf10s(imf10)=mth
          mf10i(imf10)=10*izan
+         if (izan.eq.-1.and.mth.eq.18) mf10i(imf10)=0
          lfs8(imf10)=iis
          if (izan.ne.lastza) then
             if (iis.eq.0) then
