@@ -446,7 +446,7 @@ contains
    integer::mfd,mtd,j,idone,mf4,mt4,ie,nmu,imu,npkk,idis
    integer::ielem,ik,nr,idnx,nen,law
    integer::lrel,nmod
-   integer::i6t,nl
+   integer::i6t,nl,l
    real(kr)::zar,awrr,e,enext,y,yld,test,efix
    real(kr)::c(30)
    character(60)::strng
@@ -620,6 +620,9 @@ contains
 
    !--calculate q change for fissionables in mt 458
    if (ifiss.ne.0) then
+      deallocate(scr)
+      nw=10000
+      allocate(scr(nw))
       if (mt458.eq.1) then
          call findf(matd,1,458,nendf)
          call contio(nendf,0,0,scr,nb,nw)
@@ -684,9 +687,11 @@ contains
          else if (lfc.eq.1) then ! tabulated components
             qdel=0
             do i=1,nfc
+               l=1
                call tab1io(nendf,0,0,scr,nb,nw)
                do while (nb.ne.0)
-                  call moreio(nendf,0,0,scr(nw+1),nb,nw)
+                  l=l+nw
+                  call moreio(nendf,0,0,scr(l),nb,nw)
                enddo
                ifc=l2h
                nl=6+2*n1h+2*n2h
