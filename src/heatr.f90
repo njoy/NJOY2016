@@ -706,10 +706,12 @@ contains
                endif
                if (ifc.eq.1) then      ! EFR is tabulated
                   ifc1=1
+                  if (allocated(afr)) deallocate(afr)
                   allocate(afr(1:nl))
                   afr(1:nl)=scr(1:nl)
                else if (ifc.eq.2) then ! ENP is tabulated
                   ifc2=1
+                  if (allocated(anp)) deallocate(anp)
                   allocate(anp(1:nl))
                   anp(1:nl)=scr(1:nl)
                else if (ifc.eq.3) then ! END is tabulated
@@ -717,6 +719,7 @@ contains
                   qdel=qdel+scr(7)
                else if (ifc.eq.4) then ! EGP is tabulated
                   ifc4=1
+                  if (allocated(agp)) deallocate(agp)
                   allocate(agp(1:nl))
                   agp(1:nl)=scr(1:nl)
                else if (ifc.eq.5) then ! EGD is tabulated
