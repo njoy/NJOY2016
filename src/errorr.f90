@@ -3551,13 +3551,18 @@ contains
             enddo
          enddo
       endif
-      do n1=1,nmtres+2
-         if (ee.ge.enode(nodes)) exit
-         if (abs(sigpn(n1)-(sigp(n1)+sigpl(n1))/2).gt.eps*sigpn(n1)+epm) then
-            ee=e
-            go to 110
-         endif
-      enddo
+      if (eel.lt.e) then
+         do n1=1,nmtres+2
+            if (ee.ge.enode(nodes)) exit
+            if (abs(sigpn(n1)-(sigp(n1)+sigpl(n1))/2).gt.eps*sigpn(n1)+epm) then
+               ee=e
+               go to 110
+            endif
+         enddo
+      else
+         write(strng1,'(''convergence issue for e='',1p,e10.3)') eel
+         call mess('rpxsamm',strng1,'check reconstructed xs for steep increase')
+      endif
       k=0
       do i=1,nek
          if (ee.ge.ek(i).and.ee.lt.ek(i+1)) k=i
