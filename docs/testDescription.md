@@ -140,3 +140,9 @@ title: NJOY2016 Test Descriptions
 
   This test is the LEAPR input for BeO from ENDF/B-VI.8. The test checks the ability to process materials with secondary scatterers.
 
+## Test Problem 24
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/24/input)]
+
+  This test is essentially a standard NJOY input file for producing a continuous energy ACE file for Pu239 (it should be noted that `UNRESR` and `PURR` are omitted from this input file due to runtime constraints). The Pu239 evaluation associated to this test contains tabulated fission energy components in MF1 MT458 (a new format made available for ENDF/B-VIII.0). This test was designed to test this new feature in `HEATR`. This test also runs a double heatr run to detect the issue of reallocating arrays in a double heatr run encountered with NJOY 2016.21.
+
