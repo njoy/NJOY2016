@@ -26,7 +26,7 @@ floatPattern = re.compile("""(
 
 
 def identicalLines(refLines, trialLines, diffFile,
-                   relativeError=1E-8, absoluteError=1E-8):
+                   relativeError=1E-9, absoluteError=1E-10):
     """
     Look at two lists of strings (presumably lines from two files) and compare
     them; that is, determine if they are the same within the given tolerance.
@@ -98,7 +98,7 @@ def writeDiff(diff_file, refLine, trialLine, lineNumber):
     diff_file.write("!{}".format(trialLine))
 
 
-def fuzzyDiff(a, b, relativeError=1E-6, absoluteError=1E-8):
+def fuzzyDiff(a, b, relativeError=1E-9, absoluteError=1E-10):
     """
     fuzzDiff will compare to numbers (a and b) to see if they are identical
     within the given tolerance. Returns bool.
