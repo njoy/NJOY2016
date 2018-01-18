@@ -152,3 +152,9 @@ title: NJOY2016 Test Descriptions
 
   This test is essentially a standard NJOY input file for producing continuous energy thermal scattering ACE files for H in H2O. This test produces three ACE files, one for each iwt option value in `ACER`. This test is made in preparation of a fix proposed by D. Roubtsov to solve issues with cosines outside the [-1,1] range produced by `ACER` for thermal scattering files.
 
+## Test Problem 26
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/26/input)]
+
+  This test is used to check heatr results using an ENDF file without an MT458 section (fission energy release components) in MF1. This test was added in response to an issue introduced in NJOY 2016.21 involving such ENDF files.
+
