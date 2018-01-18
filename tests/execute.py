@@ -23,6 +23,48 @@ floatPattern = re.compile("""(
                                 )? 					# exponent (optional)
                             )
                           """, re.VERBOSE)
+datePattern = re.compile(r'\d{2}/\d{2}/\d{2}')
+
+
+def lineEquivalence(ref, trial, n, relativeError=1E-9, absoluteError=1E-10):
+    """
+    Look to see if two lines (ref and trial) are identical. Returns a boolean.
+    """
+    equivalent = True
+    if ref != trial:
+
+        # Look for numbers
+        refFloats = floatPattern.findall(ref)
+        if refFloats:
+            floatEquivalence = True
+            trialFloats = floatPattern.findall(trial)
+
+            if len(refFloats) != len(trialFloats):
+                print("Found wrong number of floats on line: {}".format(n))
+                floatEquivalence = False
+            else:
+                # Look at all the floats on the lines
+                for rF, tF in zip(refFloats, trialFloats):
+                    equal = fuzzyDiff(makeFloat(rF), makeFloat(tF),
+                                      relativeError, absoluteError)
+                    if not equal:
+                        print("{} and {} are not equal".format(
+                            rF[0], tF[0]))
+                        floatEquivalence = False
+
+            if not floatEquivalence:
+                equivalent = False
+            else:
+                refNoNumbers = floatPattern.sub("", ref)
+                trialNoNumbers = floatPattern.sub("", trial)
+                if refNoNumbers != trialNoNumbers:
+                    equivalent = False
+
+        # Lines contain only text (no numbers)
+        else:
+            equivalent = False
+
+    return equivalent
 
 
 def identicalLines(refLines, trialLines, diffFile,
@@ -36,43 +78,15 @@ def identicalLines(refLines, trialLines, diffFile,
         print("Reference file and trial file have different number of lines!")
         return False
 
-    equivalent = True
+    fullEquivalence = True
     for n, (ref, trial) in enumerate(zip(refLines, trialLines)):
-        if ref != trial:
+        equivalent = lineEquivalence(ref, trial, n,
+                                     relativeError, absoluteError)
+        if not equivalent:
+            fullEquivalence = False
+            writeDiff(diffFile, ref, trial, n)
 
-            # Look for numbers
-            refFloats = floatPattern.findall(ref)
-            if refFloats:
-                floatEquivalence = True
-                trialFloats = floatPattern.findall(trial)
-
-                if len(refFloats) != len(trialFloats):
-                    print("Found wrong number of floats on line: {}".format(n))
-                    floatEquivalence = False
-                else:
-                    # Look at all the floats on the lines
-                    for rF, tF in zip(refFloats, trialFloats):
-                        equal = fuzzyDiff(makeFloat(rF), makeFloat(tF),
-                                          relativeError, absoluteError)
-                        if not equal:
-                            print("{} and {} are not equal".format(
-                                rF[0], tF[0]))
-                            floatEquivalence = False
-
-                if not floatEquivalence:
-                    equivalent = False
-                    writeDiff(diffFile, ref, trial, n)
-
-            # Lines contain only text (no numbers)
-            else:
-                equivalent = False
-                writeDiff(diffFile, ref, trial, n)
-
-        # Lines are the the same
-        else:
-            continue
-
-    return equivalent
+    return fullEquivalence
 
 
 def makeFloat(D):
@@ -130,11 +144,9 @@ with open('input', 'r') as i, \
                 should_exit = False
                 reference_lines = reference_file.readlines()
                 trial_lines = trial_file.readlines()
-                reference_lines = [re.sub(r'\d{2}/\d{2}/\d{2}',
-                                          r'XX/XX/XX', line)
+                reference_lines = [datePattern.sub(r'XX/XX/XX', line)
                                    for line in reference_lines]
-                trial_lines = [re.sub(r'\d{2}/\d{2}/\d{2}',
-                                      r'XX/XX/XX', line)
+                trial_lines = [datePattern.sub(r'XX/XX/XX', line)
                                for line in trial_lines]
 
                 diff_file.write("*** {} ***\n".format(reference_tape))
