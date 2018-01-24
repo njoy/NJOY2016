@@ -1,4 +1,7 @@
 #!/bin/bash - 
+set -x
+
+dir=$1
 
 cd ${dir}
 echo `pwd`
@@ -6,4 +9,7 @@ echo `pwd`
 ctest --output-on-failure -j${CORES}
 
 export TEST_FAILURE=$?
-return $?
+if [ $TEST_FAILURE -ne 0 ];
+then
+    exit 1
+fi

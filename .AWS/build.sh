@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 dir=$1
 build_type=$2
@@ -21,4 +22,4 @@ cmake -D CMAKE_BUILD_TYPE=$build_type \
       -D static_libraries=$static_libs \
       ../
 
-make VERBOSE=1 -j${CORES}
+make -j${CORES}
