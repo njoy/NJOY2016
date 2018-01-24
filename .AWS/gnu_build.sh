@@ -1,5 +1,5 @@
 #!/bin/bash - 
-set -x
+# set -x
 
 export FC=$(which gfortran)
 export CC=$(which gcc)
@@ -9,7 +9,7 @@ export CORES=$(grep -c ^processor /proc/cpuinfo)
 echo "Number cores: ${CORES}"
 
 build_types=(Debug Release)
-static_types=(TRUE False)
+static_types=(TRUE FALSE)
 
 pwd=$PWD
 
@@ -18,15 +18,22 @@ results=()
 for bt in "${build_types[@]}"; do
   for st in "${static_types[@]}"; do
     dir_name="gnu_${bt}_${st}"
+
     mkdir ${dir_name}
     ./.AWS/build.sh ${dir_name} ${bt} ${st}
-    ./.AWS/test.sh ${dir_name} ${bt} ${st}
-    res=$?
-    echo "res: ${res}"
-    if [ ${res} -ne 0 ]; then
+    make_result=$?
+    if [ ${make_result} -ne 0 ]; then
       failed=true
+      results+=("(${dir_name}:\t${make_result})")
+      continue
     fi
-    results+=("(${dir_name}:\t${res})")
+
+    ./.AWS/test.sh ${dir_name} ${bt} ${st}
+    test_result=$?
+    if [ ${test_result} -ne 0 ]; then
+      failed=true
+      results+=("(${dir_name}:\t${test_result})")
+    fi
     cd ${pwd}
   done
 done

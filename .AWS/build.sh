@@ -12,8 +12,6 @@ echo "static_libs: $static_libs"
 echo "--------------------------------------"
 echo
 
-echo "fortran compiler version:" 
-$FC --version
 
 cd ${dir}
 echo `pwd`
@@ -23,3 +21,9 @@ cmake -D CMAKE_BUILD_TYPE=$build_type \
       ../
 
 make -j${CORES}
+
+export MAKE_FAILURE=$?
+if [ ${MAKE_FAILURE} -ne 0 ];
+then
+    exit 1
+fi
