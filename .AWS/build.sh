@@ -1,15 +1,24 @@
-#! /bin/bash
+#!/bin/bash
 
-gcc --version
+dir=$1
+build_type=$2
+static_libs=$3
 
-CORES=$(grep -c ^processor /proc/cpuinfo)
+echo
+echo "--------------------------------------"
+echo "build_type: $build_type"
+echo "static_libs: $static_libs"
+echo "--------------------------------------"
+echo
 
-echo "Number cores: ${CORES}"
+echo "fortran compiler version:" 
+$FC --version
 
+cd ${dir}
 echo `pwd`
-mkdir bin
-cd bin
-cmake -D link_time_optimization=ON ../
+
+cmake -D CMAKE_BUILD_TYPE=$build_type \
+      -D static_libraries=$static_libs \
+      ../
 
 make VERBOSE=1 -j${CORES}
-
