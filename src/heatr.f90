@@ -392,6 +392,9 @@ contains
    if (allocated(c458)) deallocate(c458)
    if (allocated(cpoly)) deallocate(cpoly)
    if (allocated(hpoly)) deallocate(hpoly)
+   if (allocated(afr)) deallocate(afr)
+   if (allocated(anp)) deallocate(anp)
+   if (allocated(agp)) deallocate(agp)
    call atend(nout,0)
    call repoz(nout)
    call repoz(nin)
@@ -623,6 +626,9 @@ contains
       deallocate(scr)
       nw=10000
       allocate(scr(nw))
+      if (allocated(c458)) deallocate(c458)
+      if (allocated(cpoly)) deallocate(cpoly)
+      if (allocated(hpoly)) deallocate(hpoly)
       if (mt458.eq.1) then
          call findf(matd,1,458,nendf)
          call contio(nendf,0,0,scr,nb,nw)
@@ -636,17 +642,12 @@ contains
          ifc6=0
          call listio(nendf,0,0,scr,nb,nw)
          nply=nint(scr(4))
-         if (allocated(c458).and.lfc.eq.0) then
-            deallocate(cpoly)
-            deallocate(hpoly)
-         endif
          if (lfc.eq.0) then
             allocate(cpoly(0:nply))
             allocate(hpoly(0:nply))
             cpoly=0
             hpoly=0
          endif
-         if (allocated(c458)) deallocate(c458)
          allocate(c458(nint(scr(5))))
          ! save polynomial coefficients ... c0 & c1 terms are ok,
          ! but for endf/b-vii.1, c2 and higher are mistakenly given
@@ -754,6 +755,10 @@ contains
             call error('hinit','bad LFC in mt=458.',' ')
          endif
       else
+         lfc=0
+         nply=0
+         allocate(cpoly(0:nply))
+         cpoly=0
          call mess('hinit','mt458 is missing for this mat',' ')
       endif
    endif
@@ -1128,13 +1133,18 @@ contains
 
    !--adjust fission q to e(in)=0 prompt value
    if ((mth.ge.18.and.mth.le.21).or.mth.eq.38) then
-      qendf=c458(15)
-      q=qendf-qdel
-      write(strng1,&
-           &'(''changed q from '',1p,e14.6,'' to '',1p,e14.6)')&
-           qendf,q
-      write(strng2,'(''for mt '',i3,'' by taking out delayed components'')') mth
-      call mess('nheat',strng1,strng2)
+      if (mt458.eq.1) then
+         qendf=c458(15)
+         q=qendf-qdel
+         write(strng1,&
+              &'(''changed q from '',1p,e14.6,'' to '',1p,e14.6)')&
+              qendf,q
+         write(strng2,'(''for mt '',i3,'' by taking out delayed components'')') mth
+         call mess('nheat',strng1,strng2)
+      else
+         q=qendf
+         cpoly(0)=q
+      endif
    endif
 
    !--choose appropriate ground state q value.
@@ -1369,7 +1379,11 @@ contains
       if (lfc.eq.0) then     ! thermal point or polynomial
          if (nply.eq.0) then
             q0=cpoly(0)-(yld-yld0)*fq1+fq2*e
-            h0=hpoly(0)
+            if (mt458.eq.1) then
+               h0=hpoly(0)
+            else
+               h0=q0-ebar*yld
+            endif
          else
             q0=cpoly(nply)
             h0=hpoly(nply)

@@ -17620,7 +17620,7 @@ contains
                endif
             enddo
             if (zmax1.gt.zero) then
-               if (zmax2/zmax1.lt.1.e-4_kr) then
+               if ((zmax2/zmax1.lt.1.e-4_kr).and.(zmax2.ne.zero)) then
                   zmax=zmax2
                else
                   zmax=zmax1
@@ -17746,7 +17746,7 @@ contains
                endif
             enddo
             if (zmax1.gt.zero) then
-               if (zmax2/zmax1.lt.1.e-4_kr) then
+               if ((zmax2/zmax1.lt.1.e-4_kr).and.(zmax2.ne.zero)) then
                   zmax=zmax2
                else
                   zmax=zmax1
@@ -17890,7 +17890,7 @@ contains
                enddo
             enddo
             if (zmax1.gt.zero) then
-               if (zmax2/zmax1.lt.1.e-4_kr) then
+               if ((zmax2/zmax1.lt.1.e-4_kr).and.(zmax2.ne.zero)) then
                   zmax=zmax2
                else
                   zmax=zmax1
