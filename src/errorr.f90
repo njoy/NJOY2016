@@ -559,11 +559,14 @@ contains
             call error('errorr',strng,' ')
          endif
          i=0
+         idone=0
          do while (i.lt.nfissp)
             i=i+1
             call listio(nendf,0,0,scr,nb,nw)
-            eclo=c1h
-            echi=c2h
+            if (idone.eq.0) then
+               eclo=c1h
+               echi=c2h
+            endif
             if (n1h.gt.ncovl) ncovl=n1h+6
             is=1
             do while (nb.ne.0)
@@ -573,10 +576,12 @@ contains
             enddo
             if (i.eq.ifissp) then
                efmean=(eclo+echi)/2
+               idone=1
             else if (ifissp.le.0) then
                if (eclo.le.efmean .and. echi.ge.efmean) then
                   ifissp=i
                   igflag=1
+                  idone=1
                endif
                if (nfissp.eq.1) then
                   if (efmean.lt.eclo.or.efmean.gt.echi) then
