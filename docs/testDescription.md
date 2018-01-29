@@ -158,3 +158,9 @@ title: NJOY2016 Test Descriptions
 
   This test is used to check heatr results using an ENDF file without an MT458 section (fission energy release components) in MF1. This test was added in response to an issue introduced in NJOY 2016.21 involving such ENDF files.
 
+## Test Problem 27
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/27/input)]
+
+  This test is used to complete testing for the `ERRORR` module when processing MF35 covariances. Test 18 already has a test for this, but it uses an evaluation with a single covariance energy range (between 0 and 20 MeV). This test uses a Pu239 evaluation in which MF35 is composed of multiple covariance ranges. `ERRORR` is called twice in this run, once for the second range (between 5 and 6.5 MeV) and a second time using the -1 option with an efmean equal to 5.75 MeV (which should also be the second range). Both `ERRORR` runs should give the same results.
+
