@@ -556,11 +556,8 @@ contains
             h=h*a(n1+j+4*nbin)/sigu(4,1,1)
          endif
          a(l)=a(l)+h
-         if (lssf.eq.1) then
-            a(l)=a(l)/heat(1,ie,it)/a(n1+j+nbin)
-         else
-            if (a(n1+j+nbin).ne.zero) a(l)=a(l)/a(n1+j+nbin)
-         endif
+         if (a(n1+j+nbin).ne.zero) a(l)=a(l)/a(n1+j+nbin)
+         if (lssf.eq.1) a(l)=a(l)/heat(1,ie,it)
       endif
    enddo
   320 continue
@@ -1758,7 +1755,7 @@ contains
    ! internals
    integer::navoid,i,nres,nrest,iladr,ne,ie,itemp,k,nr,jr
    integer::i7,i0,it,i6,i1,i5,i2,is,i4,i3,jj,j,n,ii
-   integer::ixx,l,mfl,nebin,ibin
+   integer::ixx,l,mfl,nebin,ibin,izeroprob,ibadxs
    real(kr)::rpi,binmin,elow,dmin,erange,ehigh,emin,emax,espan
    real(kr)::dbart,sigx,ctx,chek1,chek2,chekn,delr,elo,ehi
    real(kr)::y,yy,szy,cc2,cs2,ccg,ccf,test,x,a1,rew,aimw,h,g
@@ -1794,6 +1791,8 @@ contains
    real(kr),parameter::zero=0
    save navoid,binmin,elow
    rpi=sqrt(pi)
+   izeroprob=0
+   ibadxs=0
    ! data for optional bondarenko plots
    if (ipl.lt.200) ipl=ipl+1
    epl(ipl)=e
@@ -1817,7 +1816,7 @@ contains
       allocate(tmax(ntemp))
       allocate(tsum(ntemp))
    endif
-   dmin=500
+   dmin=100000
    do i=1,nseq0
       if (dbar(i).lt.dmin) dmin=dbar(i)
    enddo
@@ -1828,6 +1827,9 @@ contains
    emin=elow+navoid/dbarin
    emax=ehigh-navoid/dbarin
    espan=emax-emin
+   if ((nres.le.zero).or.(emax.lt.emin)) then
+      call error('unrest','bad value for nres or emin>emax, increase dmin','')
+   endif
    dbart=1/dbarin
    sigx=bkg(1)-bkg(2)-bkg(3)-bkg(4)
    do itemp=1,ntemp
@@ -2385,6 +2387,11 @@ contains
          tabl(i,3,itemp)=tabl(i,3,itemp)-enorm
          tabl(i,4,itemp)=tabl(i,4,itemp)-fnorm
          tabl(i,5,itemp)=tabl(i,5,itemp)-cnorm
+         if (tabl(i,1,itemp).le.zero) izeroprob=izeroprob+1
+         if (tabl(i,2,itemp).lt.zero) ibadxs=ibadxs+1
+         if (tabl(i,3,itemp).lt.zero) ibadxs=ibadxs+1
+         if (tabl(i,4,itemp).lt.zero) ibadxs=ibadxs+1
+         if (tabl(i,5,itemp).lt.zero) ibadxs=ibadxs+1
       enddo
    enddo
    do itemp=1,ntemp
@@ -2401,6 +2408,14 @@ contains
            nmr(ixx),temp(itemp),(tabl(i,ixx+1,itemp),i=1,nbin)
       enddo
    enddo
+   if (izeroprob.gt.0) then
+      write(strng,'(''ptable has '',i3,'' zero probability bins'')') izeroprob
+      call mess('purr',strng,' ')
+   endif
+   if (ibadxs.gt.0) then
+      write(strng,'(''ptable has '',i3,'' negative xs values'')') ibadxs
+      call mess('purr',strng,' ')
+   endif
 
    !--compute bondarenko cross sections from prob. table
    if (iprint.gt.0) write(nsyso,'(/&
