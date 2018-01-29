@@ -1828,7 +1828,7 @@ contains
    emax=ehigh-navoid/dbarin
    espan=emax-emin
    if ((nres.le.zero).or.(emax.lt.emin)) then
-      call error('purr','bad value for nres or emin>emax, increase dmin','')
+      call error('unrest','bad value for nres or emin>emax, increase dmin','')
    endif
    dbart=1/dbarin
    sigx=bkg(1)-bkg(2)-bkg(3)-bkg(4)

@@ -559,11 +559,14 @@ contains
             call error('errorr',strng,' ')
          endif
          i=0
+         idone=0
          do while (i.lt.nfissp)
             i=i+1
             call listio(nendf,0,0,scr,nb,nw)
-            eclo=c1h
-            echi=c2h
+            if (idone.eq.0) then
+               eclo=c1h
+               echi=c2h
+            endif
             if (n1h.gt.ncovl) ncovl=n1h+6
             is=1
             do while (nb.ne.0)
@@ -573,10 +576,12 @@ contains
             enddo
             if (i.eq.ifissp) then
                efmean=(eclo+echi)/2
+               idone=1
             else if (ifissp.le.0) then
                if (eclo.le.efmean .and. echi.ge.efmean) then
                   ifissp=i
                   igflag=1
+                  idone=1
                endif
                if (nfissp.eq.1) then
                   if (efmean.lt.eclo.or.efmean.gt.echi) then
@@ -3551,13 +3556,18 @@ contains
             enddo
          enddo
       endif
-      do n1=1,nmtres+2
-         if (ee.ge.enode(nodes)) exit
-         if (abs(sigpn(n1)-(sigp(n1)+sigpl(n1))/2).gt.eps*sigpn(n1)+epm) then
-            ee=e
-            go to 110
-         endif
-      enddo
+      if (eel.lt.e) then
+         do n1=1,nmtres+2
+            if (ee.ge.enode(nodes)) exit
+            if (abs(sigpn(n1)-(sigp(n1)+sigpl(n1))/2).gt.eps*sigpn(n1)+epm) then
+               ee=e
+               go to 110
+            endif
+         enddo
+      else
+         write(strng1,'(''convergence issue for e='',1p,e10.3)') eel
+         call mess('rpxsamm',strng1,'check reconstructed xs for steep increase')
+      endif
       k=0
       do i=1,nek
          if (ee.ge.ek(i).and.ee.lt.ek(i+1)) k=i
