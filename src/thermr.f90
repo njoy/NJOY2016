@@ -1793,7 +1793,7 @@ contains
    !--use free-gas s(alpha,beta).
   200 continue
    nalpha=1
-   nbeta=9
+   nbeta=30
    allocate(alpha(nalpha))
    allocate(beta(nbeta))
    allocate(sab(nalpha,nbeta))
@@ -1806,6 +1806,27 @@ contains
    beta(7)=10
    beta(8)=15
    beta(9)=25
+   beta(10)=30
+   beta(11)=35
+   beta(12)=40
+   beta(13)=45
+   beta(14)=50
+   beta(15)=55
+   beta(16)=60
+   beta(17)=65
+   beta(18)=70
+   beta(19)=75
+   beta(20)=80
+   beta(21)=100
+   beta(22)=120
+   beta(23)=140
+   beta(24)=160   
+   beta(25)=180
+   beta(26)=200
+   beta(27)=250
+   beta(28)=300
+   beta(29)=350
+   beta(30)=400
    t=temp
    smz=1
    sb=smz*((az+1)/az)**2
