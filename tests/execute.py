@@ -117,9 +117,8 @@ def fuzzyDiff(a, b, relativeError=1E-9, absoluteError=1E-10):
     fuzzDiff will compare to numbers (a and b) to see if they are identical
     within the given tolerance. Returns bool.
     """
-    diff = a - b
     delta = max(abs(a), abs(b))*relativeError + absoluteError
-    return (diff <= abs(delta))
+    return (abs(a - b) <= abs(delta))
 
 
 retained_tapes = set(glob.glob('tape*'))
@@ -153,7 +152,7 @@ with open('input', 'r') as i, \
                 diff_file.write("--- {} ---\n".format(trial_tape))
 
                 identical = identicalLines(
-                    reference_lines, trial_lines, diff_file, 1E-9, 1E-10)
+                    reference_lines, trial_lines, diff_file, 1E-9, 1E-7)
                 should_exit = not identical
 
             if should_exit:
