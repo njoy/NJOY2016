@@ -418,7 +418,12 @@ contains
       xlo=scr(7+nl1*(l-2))
       xhi=scr(7+nl1*(l-1))
       if (l.eq.nep) exit
-      if (xhi.ge.xbar) exit
+      if (iwt.le.1) then
+         if (xhi.ge.xbar) exit
+      endif
+      if (iwt.eq.2) then
+         if (xhi.ge.xn) exit
+      endif
       l=l+1
    enddo
    if (loc.gt.ninmax-nang) call error('acesix','exceeded storage in six',' ')
@@ -427,40 +432,42 @@ contains
    isn=is+7+nl1*(l-1)
    if (iwt.le.1) then
       six(loc)=xbar
-      do k=1,nang
-         six(k+loc)=scr(k+isl)&
-           +(scr(k+isn)-scr(k+isl))*(xbar-xlo)/(xhi-xlo)
-      enddo
    else
       six(loc)=xn
       loc=loc+1
       six(loc)=yn
       loc=loc+1
       six(loc)=fract
-      do k=1,nang
-    if (abs(xn-xhi).lt.eps) then
-       six(k+loc)=scr(k+isn)
-    else if (abs(xn-xlo).lt.eps) then
-        six(k+loc)=scr(k+isl)
-    else
-        six(k+loc)=scr(k+isl)+&
-        (scr(k+isn)-scr(k+isl))*(xn-xlo)/(xhi-xlo)
-    endif
-!    if ((six(k+loc).lt.-1.0e0_kr).or.(six(k+loc).gt.1.0e0_kr)) then
-!    write(nsyso,'(/'' ---warning from acesix---'','' cosine '',f12.8,&
-!                   &'' outside [-1,1] range for e= '',1p,e13.6,&
-!                   &'',  bin_mu= '',i4)') six(k+loc),e,k
-!    endif
-    if (iwt.eq.2.and.six(k+loc).lt.-1.0e0_kr) then
-       six(k+loc) = -1.0e0_kr
-!       write(nsyso,'('' ---cosine set to -1.0---'')')
-    endif
-    if (iwt.eq.2.and.six(k+loc).gt.1.0e0_kr) then
-       six(k+loc) = 1.0e0_kr
-!       write(nsyso,'('' ---cosine set to  1.0---'')')
-    endif
-      enddo
    endif
+   do k=1,nang
+      if (iwt.le.1) then
+         six(k+loc)=scr(k+isl)&
+           +(scr(k+isn)-scr(k+isl))*(xbar-xlo)/(xhi-xlo)
+      else
+         if (abs(xn-xhi).lt.eps) then
+            six(k+loc)=scr(k+isn)
+         else if (abs(xn-xlo).lt.eps) then
+            six(k+loc)=scr(k+isl)
+         else
+            six(k+loc)=scr(k+isl)+&
+             (scr(k+isn)-scr(k+isl))*(xn-xlo)/(xhi-xlo)
+         endif
+      endif
+      if ((six(k+loc).lt.-1.0e0_kr).or.(six(k+loc).gt.1.0e0_kr)) then
+         write(strng,'(''cosine '',f12.8,&
+                     &'' outside [-1,1] range for e_in -> e_out '',&
+                     &1p,e13.6,1x,e13.6,&
+                     &'',  bin_mu= '',i4)') six(k+loc),e,xbar,k
+         if (six(k+loc).lt.-1.0e0_kr) then
+            six(k+loc) = -1.0e0_kr
+            call mess('acesix',strng,'cosine set to -1.0')
+         endif
+         if (six(k+loc).gt.1.0e0_kr) then
+            six(k+loc) = 1.0e0_kr
+            call mess('acesix',strng,'cosine set to 1.0')
+         endif
+      endif
+   enddo
    loc=loc+1+nang
    xl=xn
    yl=yn
@@ -2166,11 +2173,11 @@ contains
    call openz(ndir,1)
    if (mcnpx.eq.0) then
       write(ndir,&
-        '(a10,f12.6,'' filename route'',i2,'' 1 '',i8,2i6,1p,e10.3)')&
+        '(a10,f12.6,'' filename route'',i2,'' 1 '',i9,2i6,1p,e10.3)')&
         hz(1:10),aw0,itype,len2,lrec,nern,tz
    else
       write(ndir,&
-        '(a13,f12.6,'' filename route'',i2,'' 1 '',i8,2i6,1p,e10.3)')&
+        '(a13,f12.6,'' filename route'',i2,'' 1 '',i9,2i6,1p,e10.3)')&
         hz(1:13),aw0,itype,len2,lrec,nern,tz
    endif
    call closz(ndir)
