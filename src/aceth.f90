@@ -1554,40 +1554,42 @@ contains
          loc=loc+nang+3
       enddo
    enddo
-   zmin=zmax/1000
-   call ascll(zmin,zmax)
-   write(nout,'(''1'',i3,''/'')') iwcol
-   write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
-   write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
-   write(nout,'(''-4 2/'')')
-   write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
-   write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
-   write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
-   write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
-   write(nout,'(''/'')')
-   write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
-   write(nout,'(''1/'')')
-   loc=itxe-1
-   loc=loc+2*nie
-   do ie=1,nie
-      e=xss(itie+ie)
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
-      nbini=nint(xss(itxe-1+nie+ie))
-      do j=1,nbini
-         ep=xss(loc+1)
-         p=xss(loc+2)
-         if (p.lt.zmin) p=zmin
-         if (e.ge.ymin.and.e.le.ymax.and.&
-           ep.gt.xmin.and.ep.le.xmax) then
-            write(nout,'(1p,2e14.6,''/'')') ep,p
-         endif
-         loc=loc+nang+3
+   if (zmax.gt.zero) then
+      zmin=zmax/1000
+      call ascll(zmin,zmax)
+      write(nout,'(''1'',i3,''/'')') iwcol
+      write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
+      write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
+      write(nout,'(''-4 2/'')')
+      write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
+      write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
+      write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
+      write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
+      write(nout,'(''/'')')
+      write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
+      write(nout,'(''1/'')')
+      loc=itxe-1
+      loc=loc+2*nie
+      do ie=1,nie
+         e=xss(itie+ie)
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
+         nbini=nint(xss(itxe-1+nie+ie))
+         do j=1,nbini
+            ep=xss(loc+1)
+            p=xss(loc+2)
+            if (p.lt.zmin) p=zmin
+            if (e.ge.ymin.and.e.le.ymax.and.&
+              ep.gt.xmin.and.ep.le.xmax) then
+               write(nout,'(1p,2e14.6,''/'')') ep,p
+            endif
+            loc=loc+nang+3
+         enddo
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
       enddo
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
-   enddo
-   write(nout,'(''/'')')
+      write(nout,'(''/'')')
+   endif
 
    ! plot energy distributions for middle incident energies
    nang=nil-1
@@ -1614,40 +1616,42 @@ contains
          loc=loc+nang+3
       enddo
    enddo
-   zmin=zmax/500
-   call ascll(zmin,zmax)
-   write(nout,'(''1'',i3,''/'')') iwcol
-   write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
-   write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
-   write(nout,'(''-4 2/'')')
-   write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
-   write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
-   write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
-   write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
-   write(nout,'(''/'')')
-   write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
-   write(nout,'(''1/'')')
-   loc=itxe-1
-   loc=loc+2*nie
-   do ie=1,nie
-      e=xss(itie+ie)
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
-      nbini=nint(xss(itxe-1+nie+ie))
-      do j=1,nbini
-         ep=xss(loc+1)
-         p=xss(loc+2)
-         if (p.lt.zmin) p=zmin
-         if (e.ge.ymin.and.e.le.ymax.and.&
-           ep.gt.xmin.and.ep.le.xmax) then
-            write(nout,'(1p,2e14.6,''/'')') ep,p
-         endif
-         loc=loc+nang+3
+   if (zmax.gt.zero) then
+      zmin=zmax/500
+      call ascll(zmin,zmax)
+      write(nout,'(''1'',i3,''/'')') iwcol
+      write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
+      write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
+      write(nout,'(''-4 2/'')')
+      write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
+      write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
+      write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
+      write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
+      write(nout,'(''/'')')
+      write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
+      write(nout,'(''1/'')')
+      loc=itxe-1
+      loc=loc+2*nie
+      do ie=1,nie
+         e=xss(itie+ie)
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
+         nbini=nint(xss(itxe-1+nie+ie))
+         do j=1,nbini
+            ep=xss(loc+1)
+            p=xss(loc+2)
+            if (p.lt.zmin) p=zmin
+            if (e.ge.ymin.and.e.le.ymax.and.&
+              ep.gt.xmin.and.ep.le.xmax) then
+               write(nout,'(1p,2e14.6,''/'')') ep,p
+            endif
+            loc=loc+nang+3
+         enddo
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
       enddo
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
-   enddo
-   write(nout,'(''/'')')
+      write(nout,'(''/'')')
+   endif
 
    ! plot energy distributions for higher incident energies
    nang=nil-1
@@ -1673,40 +1677,42 @@ contains
          loc=loc+nang+3
       enddo
    enddo
-   zmin=zmax/500
-   call ascll(zmin,zmax)
-   write(nout,'(''1'',i3,''/'')') iwcol
-   write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
-   write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
-   write(nout,'(''-4 2/'')')
-   write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
-   write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
-   write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
-   write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
-   write(nout,'(''/'')')
-   write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
-   write(nout,'(''1/'')')
-   loc=itxe-1
-   loc=loc+2*nie
-   do ie=1,nie
-      e=xss(itie+ie)
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
-      nbini=nint(xss(itxe-1+nie+ie))
-      do j=1,nbini
-         ep=xss(loc+1)
-         p=xss(loc+2)
-         if (p.lt.zmin) p=zmin
-         if (e.ge.ymin.and.e.le.ymax.and.&
-           ep.gt.xmin.and.ep.le.xmax) then
-            write(nout,'(1p,2e14.6,''/'')') ep,p
-         endif
-         loc=loc+nang+3
+   if (zmax.gt.zero) then
+      zmin=zmax/500
+      call ascll(zmin,zmax)
+      write(nout,'(''1'',i3,''/'')') iwcol
+      write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
+      write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
+      write(nout,'(''-4 2/'')')
+      write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
+      write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
+      write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
+      write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
+      write(nout,'(''/'')')
+      write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
+      write(nout,'(''1/'')')
+      loc=itxe-1
+      loc=loc+2*nie
+      do ie=1,nie
+         e=xss(itie+ie)
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
+         nbini=nint(xss(itxe-1+nie+ie))
+         do j=1,nbini
+            ep=xss(loc+1)
+            p=xss(loc+2)
+            if (p.lt.zmin) p=zmin
+            if (e.ge.ymin.and.e.le.ymax.and.&
+              ep.gt.xmin.and.ep.le.xmax) then
+               write(nout,'(1p,2e14.6,''/'')') ep,p
+            endif
+            loc=loc+nang+3
+         enddo
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
       enddo
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
-   enddo
-   write(nout,'(''/'')')
+      write(nout,'(''/'')')
+   endif
 
    ! plot energy distributions for highest incident energies
    nang=nil-1
@@ -1732,40 +1738,42 @@ contains
          loc=loc+nang+3
       enddo
    enddo
-   zmin=zmax/500
-   call ascll(zmin,zmax)
-   write(nout,'(''1'',i3,''/'')') iwcol
-   write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
-   write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
-   write(nout,'(''-4 2/'')')
-   write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
-   write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
-   write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
-   write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
-   write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
-   write(nout,'(''/'')')
-   write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
-   write(nout,'(''1/'')')
-   loc=itxe-1
-   loc=loc+2*nie
-   do ie=1,nie
-      e=xss(itie+ie)
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
-      nbini=nint(xss(itxe-1+nie+ie))
-      do j=1,nbini
-         ep=xss(loc+1)
-         p=xss(loc+2)
-         if (p.lt.zmin) p=zmin
-         if (e.ge.ymin.and.e.le.ymax.and.&
-           ep.gt.xmin.and.ep.le.xmax) then
-            write(nout,'(1p,2e14.6,''/'')') ep,p
-         endif
-         loc=loc+nang+3
+   if (zmax.gt.zero) then
+      zmin=zmax/500
+      call ascll(zmin,zmax)
+      write(nout,'(''1'',i3,''/'')') iwcol
+      write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
+      write(nout,'(a,''thermal inelastic'',a,''/'')') qu,qu
+      write(nout,'(''-4 2/'')')
+      write(nout,'(1p,3e12.3,''/'')') xmin,xmax,1.
+      write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') ymin,ymax,1.
+      write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
+      write(nout,'(1p,3e12.3,''/'')') zmin,zmax,1.
+      write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
+      write(nout,'(''/'')')
+      write(nout,'(''10 -15 15 3.5 5.5 2.5/'')')
+      write(nout,'(''1/'')')
+      loc=itxe-1
+      loc=loc+2*nie
+      do ie=1,nie
+         e=xss(itie+ie)
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(1p,e14.6,''/'')') e
+         nbini=nint(xss(itxe-1+nie+ie))
+         do j=1,nbini
+            ep=xss(loc+1)
+            p=xss(loc+2)
+            if (p.lt.zmin) p=zmin
+            if (e.ge.ymin.and.e.le.ymax.and.&
+              ep.gt.xmin.and.ep.le.xmax) then
+               write(nout,'(1p,2e14.6,''/'')') ep,p
+            endif
+            loc=loc+nang+3
+         enddo
+         if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
       enddo
-      if (e.ge.ymin.and.e.le.ymax) write(nout,'(''/'')')
-   enddo
-   write(nout,'(''/'')')
+      write(nout,'(''/'')')
+   endif
 
    ! plot angle-energy distribution for several incident energies
    ie=19
