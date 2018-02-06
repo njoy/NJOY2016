@@ -1792,8 +1792,8 @@ contains
 
    !--use free-gas s(alpha,beta).
   200 continue
-   ! the beta grid is fixed to 30 beta values (previously only the first 9)
-   ! following an issue with Fe56 from ENDF/B-VIII.0b7 - a better solution
+   ! the beta grid is fixed to 45 beta values (previously only the first 9)
+   ! following an issue with Fe56 and H1 from ENDF/B-VIII.0 - a better solution
    ! would be to contruct the grid adaptatively based on emax and tempr
    nalpha=1
    nbeta=45
