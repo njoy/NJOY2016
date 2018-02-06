@@ -3,7 +3,7 @@ module version
    ! These values are updated during the NJOY revision-control process.
    implicit none
    private
-   character(8),public::vers='2016.26'
-   character(8),public::vday='31Jan18'
+   character(8),public::vers='2016.27'
+   character(8),public::vday='06Feb18'
 end module version
 
