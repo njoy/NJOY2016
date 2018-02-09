@@ -233,7 +233,7 @@ contains
    real(kr)::thin(4)
    integer::iskf,iwtt,npts
    real(kr)::suff
-   character(70)::hk
+   character(70)::hk=' '
    integer::izn(16)
    real(kr)::awn(16)
    character(6)::tname,tscr
@@ -279,6 +279,7 @@ contains
       iopt=-iopt
    endif
    read(nsysi,*) hk
+print *, hk
    do i=1,16
       izn(i)=0
       awn(i)=0
