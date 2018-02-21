@@ -318,6 +318,9 @@ contains
         &'' photon option ........................ '',i10/&
         &'' smoothing option ..................... '',i10)')&
         newfor,iopp,ismooth
+      if (ismooth.ne.0.and.ismooth.ne.1) then
+         call error('acer','illegal ismooth.',' ')
+      endif
       if (iopp.eq.0) write(nsyso,&
         '(/'' photons will not be processed'')')
       if (ismooth.eq.0) write(nsyso,&
