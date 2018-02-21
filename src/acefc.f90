@@ -86,19 +86,10 @@ module acefc
    integer,parameter::nxss=20000000
    real(kr)::xss(nxss)
 
-   ! set ismooth to 1 to cause extension of mf6 cm distributions
-   ! to lower energies using a sqrt(E) shape, to extend delayed
-   ! neutron distributions as sqrt(E) to lower energies, and to
-   ! add additional points above 10 Mev to some fission spectra
-   ! assuming an exponential shape.  otherwise, use ismooth=0.
-   ! NOTE:  ismooth=0 is the default value in njoy99.
-   integer,parameter::ismooth=1
-!   integer,parameter::ismooth=0
-
 contains
 
    subroutine acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,&
-     suff,hk,izn,awn,matd,tempd,newfor,iopp,thin)
+     suff,hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin)
    !--------------------------------------------------------------------
    ! Prepare an ACE fast continuous file.
    !--------------------------------------------------------------------
@@ -106,7 +97,7 @@ contains
    use util   ! provides openz,mess,closz
    use endf   ! provides endf routines and variables
    ! externals
-   integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp
+   integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp,ismooth
    integer::mcnpx
    real(kr)::suff
    character(70)::hk
@@ -184,7 +175,7 @@ contains
    call atend(mscr,0)
 
    !--load ace data into memory.
-   call acelod(mscr,nedis,suff,matd,tempd,newfor,mcnpx)
+   call acelod(mscr,nedis,suff,matd,tempd,newfor,mcnpx,ismooth)
 
    !--print ace file.
    if (iprint.gt.0) call aceprt(hk)
@@ -4794,7 +4785,7 @@ contains
    return
    end subroutine gamout
 
-   subroutine acelod(nin,nedis,suff,matd,tempd,newfor,mcnpx)
+   subroutine acelod(nin,nedis,suff,matd,tempd,newfor,mcnpx,ismooth)
    !-------------------------------------------------------------------
    ! Load data in ace format from the input file.
    !-------------------------------------------------------------------
@@ -4803,7 +4794,7 @@ contains
    use util ! repoz,dater,error,skiprz,sigfig
    use endf ! provides endf routines and variables
    ! externals
-   integer::nin,nedis,matd,newfor,mcnpx
+   integer::nin,nedis,matd,newfor,mcnpx,ismooth
    real(kr)::suff,tempd
    ! internals
    integer::nwscr,nnu,nnup,kfis,mtnr,mtntr,i,nnud,nnf
@@ -5802,9 +5793,11 @@ contains
             endif
          enddo
          if (mf.eq.5) then
-            call acelf5(next,i,matd,mt,q,nin)
+            call acelf5(next,i,matd,mt,q,nin,ismooth)
          else if (mf.eq.6) then
-            if (mt518.eq.0) call acelf6(next,i,matd,mt,q,iza,izai,nin,newfor)
+            if (mt518.eq.0) then
+               call acelf6(next,i,matd,mt,q,iza,izai,nin,newfor,ismooth)
+            endif
          else
             if ((next+11).gt.nxss) call error('acelod',&
               'insufficient space for energy distributions',' ')
@@ -6522,7 +6515,7 @@ contains
    return
    end subroutine acecpe
 
-   subroutine acelf5(next,i,matd,mt,q,nin)
+   subroutine acelf5(next,i,matd,mt,q,nin,ismooth)
    !-------------------------------------------------------------------
    ! Process this reaction from File 5.
    !-------------------------------------------------------------------
@@ -6530,7 +6523,7 @@ contains
    use util ! provides sigfig
    use endf ! provides endf routines and variables
    ! externals
-   integer::next,i,matd,mt,nin
+   integer::next,i,matd,mt,nin,ismooth
    real(kr)::q
    ! internals
    integer::nb,nw,nk,k,lf,m,n,jnt,ja,jb,j,l,nextn,nexd,ne,jscr,ki
@@ -6929,7 +6922,7 @@ contains
    return
    end subroutine acelf5
 
-   subroutine acelf6(next,i,matd,mt,q,iza,izai,nin,newfor)
+   subroutine acelf6(next,i,matd,mt,q,iza,izai,nin,newfor,ismooth)
    !-------------------------------------------------------------------
    ! Prepare generalized yields and energy-angle distributions for
    ! this reaction from File 6.
@@ -6939,7 +6932,7 @@ contains
    use endf ! provides endf routines and variables
    use acecm ! provides bachaa,ptleg2,pttab2
    ! externals
-   integer::next,i,matd,mt,iza,izai,nin,newfor
+   integer::next,i,matd,mt,iza,izai,nin,newfor,ismooth
    real(kr)::q
    ! internals
    integer::nb,nw,lct,nk,jscr,ivar,ik,idone,ikk,law,m,n,jnt
@@ -7357,8 +7350,8 @@ contains
                   n=n-1
                enddo
                write(nsyso,'('' extending histograms as sqrt(E) below'',&
-                 &1p,e10.2,'' MeV for E='',e10.2,'' MeV'')')&
-                 scr(7+ncyc)/emev,ee
+                 &1p,e10.2,'' MeV for E='',e10.2,'' MeV mt='',i3)')&
+                 scr(7+ncyc)/emev,ee,mt
                do while (scr(7+ncyc).gt.ex)
                   do ix=nx,1,-1
                      scr(6+ncyc+ix)=scr(6+ix)
@@ -7386,8 +7379,8 @@ contains
                ! insert those zero energy data
                if (scr(7).gt.ex) then
                   write(nsyso,'('' extending lin-lin as sqrt(E) '',&
-                   &''below'',1p,e10.2,'' eV for E='',e10.2,'' eV'')&
-                   &')scr(7)/emev,ee
+                   &''below'',1p,e10.2,'' MeV for E='',e10.2,'' MeV mt='')&
+                   &')scr(7)/emev,ee,mt
                   do ix=nx,1,-1
                      scr(6+ncyc+ix)=scr(6+ix)
                   enddo
