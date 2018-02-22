@@ -170,3 +170,9 @@ title: NJOY2016 Test Descriptions
 
   This test is used to test some of the options available to users when processing continuous energy data (iopt=1). There are currently three options (all defaulted to 1) concerning the user of law 61, whether or not detailed photons should be used and whether or not delayed neutron distributions should be smoothed to lower energies. The test consists of running `ACER` three times: once with the options defaulted, once with all options set to 1 explicitly and once with all options set to 0 explicitly. The first two ACE files should be identical.
 
+## Test Problem 29
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/28/input)]
+
+  This test is similar to test 28, but this one is for the smoothing option in `GROUPR`. The test consists of running `GROUPR` three times: once with the default smoothing option, once with the option set to 1 explicitly and once with the option set to 0 explicitly. The first two GENDF files should be identical.
+
