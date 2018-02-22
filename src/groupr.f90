@@ -28,8 +28,8 @@ module groupm
    real(kr),dimension(:),allocatable::sigz
    integer::ntemp,nsigz
 
-   ! input mat, legendre order, print control, and run title
-   integer::matb,lord,iprint
+   ! input mat, legendre order, print control, smoothing option and run title
+   integer::matb,lord,iprint,ismooth
    real(kr)::rtitle(17)
    character(4)::title(17)
    equivalence(title(1),rtitle(1))
@@ -91,14 +91,6 @@ module groupm
    real(kr),dimension(:),allocatable::falo,fahi
    integer::ipan
 
-   ! smoothing option
-   ! set ismooth to 1 to enable sqrt(e) smoothing for
-   ! mf6 cm emission spectra at low energies and for
-   ! histogram delayed neutron spectra at low energies.
-   ! set ismooth to 2 to get the changed distribution
-   ! printed out on the output listing.
-   integer,parameter::ismooth=1
-
 contains
 
    subroutine groupr
@@ -151,6 +143,10 @@ contains
    !    nsigz   number of sigma zeroes (default=1)
    !    iprint  long print option (0/1=minimum/maximum)
    !            (default=1)
+   !    ismooth switch on/off smoothing operation (1/0, default=1=on)
+   !            set ismooth to 1 to enable sqrt(e) smoothing for
+   !            mf6 cm emission spectra at low energies and for
+   !            histogram delayed neutron spectra at low energies.
    ! card3
    !    title   run label (up to 80 characters delimited by *,
    !            ended with /)  (default=blank)
@@ -1001,9 +997,10 @@ contains
    call openz(ngout1,0)
    call openz(ngout2,1)
    iprint=1
+   ismooth=1
    ntemp=1
    nsigz=1
-   read(nsysi,*) matb,ign,igg,iwt,lord,ntemp,nsigz,iprint
+   read(nsysi,*) matb,ign,igg,iwt,lord,ntemp,nsigz,iprint,ismooth
    iaddmt=0
    if (matb.lt.0.and.ngout1.ne.0) iaddmt=1
    if (matb.lt.0.and.ngout1.eq.0) iaddmt=-1
@@ -1023,8 +1020,12 @@ contains
      &'' gamma group option ................... '',i10/&
      &'' weight function option ............... '',i10/&
      &'' legendre order ....................... '',i10/&
-     &'' print option (0 min, 1 max) .......... '',i10)')&
-     matb,ign,igg,iwt,lord,iprint
+     &'' print option (0 min, 1 max) .......... '',i10/&
+     &'' smoothing option (0 off, 1 on) ....... '',i10)')&
+     matb,ign,igg,iwt,lord,iprint,ismooth
+   if (ismooth.ne.0.and.ismooth.ne.1) then
+      call error('ruinb','illegal ismooth.',' ')
+   endif
    write(nsyso,'(/'' run title''/&
      &1x,3(''----------''),''--------''/&
      &6x,16a4,a2)') (title(i),i=1,ntw)
@@ -5977,15 +5978,6 @@ contains
              enddo
              l=ilo+6+nx
          endif
-         if (ismooth.eq.2.and.jzap.eq.1) then
-            i=ilo
-            call listio(0,nsyso,0,tmp(ilo),nb,nw)
-            do while (nb.ne.0)
-               i=i+nw
-               call moreio(0,nsyso,0,tmp(i),nb,nw)
-            enddo
-            write(nsyso,'(1x)')
-         endif
          if (lct.eq.2.or.(lct.eq.3.and.awp.le.alight)) then
             call cm2lab(ilo,jlo,l,tmp,nl,lang,lep,max)
             do i=jlo,l
@@ -10084,14 +10076,6 @@ contains
                      tmp(l1+5)=mm
                      tmp(l1+6)=mm
                      l=l1+8+2*mm
-                     if (ismooth.eq.2) then
-                        call tab1io(0,nsyso,0,tmp(l1),nb,nw)
-                        do while (nb.ne.0)
-                           l1=l1+nw
-                           call moreio(0,nsyso,0,tmp(l1),nb,nw)
-                        enddo
-                        write(nsyso,'(1x)')
-                     endif
                   endif
                   if (lf.ne.5) then
                      do ip=2,np
@@ -10157,15 +10141,6 @@ contains
                   tmp(m1+5)=mm
                   tmp(m1+6)=mm
                   m=m1+8+2*mm
-                  if (ismooth.eq.2) then
-                     call tab1io(0,nsyso,0,tmp(m1),nb,nw)
-                     i=m1
-                     do while (nb.ne.0)
-                        i=i+nw
-                        call moreio(0,nsyso,0,tmp(i),nb,nw)
-                     enddo
-                     write(nsyso,'(1x)')
-                  endif
                endif
                nne=nne+1
                tmp(l)=tmp(m1+1)
