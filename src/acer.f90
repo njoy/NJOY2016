@@ -318,6 +318,12 @@ contains
         &'' photon option ........................ '',i10/&
         &'' smoothing option ..................... '',i10)')&
         newfor,iopp,ismooth
+      if (newfor.ne.0.and.newfor.ne.1) then
+         call error('acer','illegal newfor.',' ')
+      endif
+      if (iopp.ne.0.and.iopp.ne.1) then
+         call error('acer','illegal iopp.',' ')
+      endif
       if (ismooth.ne.0.and.ismooth.ne.1) then
          call error('acer','illegal ismooth.',' ')
       endif
