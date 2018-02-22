@@ -5838,7 +5838,7 @@ contains
       mtxx=-1
       if (iinel.ne.0) mtxx=iinel
       mtaa=-1
-      if (iabso.ne.0) mtxx=iabso
+      if (iabso.ne.0) mtaa=iabso
       xss(next+1)=nurb
       xss(next+2)=2
       xss(next+3)=mtxx
