@@ -7488,7 +7488,11 @@ contains
                !--distribution given in kalbach format
                if (lang.eq.2) then
                   xss(ki+3*n+nexd)=scr(9+ncyc*(ki-1))
-                  aa=bachaa(1,1,iza,ee,ep)
+                  if (na.eq.2) then
+                     aa=scr(10+ncyc*(ki-1))
+                  else
+                     aa=bachaa(1,1,iza,ee,ep)
+                  endif
                   xss(ki+4*n+nexd)=sigfig(aa,7,0)
 
                !--convert legendre distribution to kalbach form
@@ -10111,7 +10115,11 @@ contains
                                  rkal=scr(lld+8+ncyc*(ig-1))
                                  xss(next+1+ig+3*ng)=sigfig(rkal,7,0)
                                  ep=xss(next+1+ig)
-                                 akal=bachaa(izai,izap,iza,ee,ep)
+                                 if (na.eq.2) then
+                                    akal=scr(lld+9+ncyc*(ig-1))
+                                 else
+                                    akal=bachaa(izai,izap,iza,ee,ep)
+                                 endif
                                  xss(next+1+ig+4*ng)=sigfig(akal,7,0)
                               ! legendre or tabulated distribution
                               else if (lawnow.eq.61) then

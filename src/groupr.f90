@@ -6826,7 +6826,14 @@ contains
          endif
          ! kalbach-86 (obsolete kalbach-mann coding has been deleted)
          iza2=nint(zap)
-         aa=bach(izap,iza2,izat,enow,ep)
+         if (na.eq.2) then
+            y1=cnow(lnow-ncnow+3)
+            y2=cnow(lnow+3)
+            call terp1(x1,y1,x2,y2,ep,aa,lep)
+         else
+            aa=bach(izap,iza2,izat,enow,ep)
+         endif
+
          t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
          t=t*s
          if (t.lt.zero) t=0
@@ -6950,7 +6957,11 @@ contains
       r=cnow(inow+2)
       ! kalbach-86 (obsolete kalbach-mann coding has been deleted)
       iza2=nint(zap)
-      aa=bach(izap,iza2,izat,enow,epnext)
+      if(na.eq.2) then
+         aa=cnow(inow+3)
+      else
+         aa=bach(izap,iza2,izat,enow,epnext)
+      endif
       t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
       t=t*s
       if (t.lt.zero) t=0
