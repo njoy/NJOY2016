@@ -279,7 +279,6 @@ contains
       iopt=-iopt
    endif
    read(nsysi,*) hk
-print *, hk
    do i=1,16
       izn(i)=0
       awn(i)=0
