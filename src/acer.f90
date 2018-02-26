@@ -241,7 +241,7 @@ contains
    real(kr)::thin(4)
    integer::iskf,iwtt,npts
    real(kr)::suff
-   character(70)::hk
+   character(70)::hk=' '
    integer::izn(16)
    real(kr)::awn(16)
    character(6)::tname,tscr
