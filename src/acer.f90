@@ -149,11 +149,11 @@ contains
    !               (0=no, 1=yes, default=1)
    !    iopp     detailed photons (0=no, 1=yes, default=1)
    !    ismooth  switch on/off smoothing operation (1/0, default=1=on)
-   !               set ismooth to 1 to cause extension of mf6 cm 
-   !               distributions to lower energies using a sqrt(E) 
-   !               shape, to extend delayed neutron distributions as 
-   !               sqrt(E) to lower energies, and to add additional 
-   !               points above 10 Mev to some fission spectra assuming 
+   !               set ismooth to 1 to cause extension of mf6 cm
+   !               distributions to lower energies using a sqrt(E)
+   !               shape, to extend delayed neutron distributions as
+   !               sqrt(E) to lower energies, and to add additional
+   !               points above 10 Mev to some fission spectra assuming
    !               an exponential shape.  otherwise, use ismooth=0.
    !               NOTE:  ismooth=0 is the default value in njoy99.
    ! card 7

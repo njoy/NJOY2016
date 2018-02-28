@@ -148,7 +148,7 @@ contains
    !            mf6 cm emission spectra at low energies and for
    !            histogram delayed neutron spectra at low energies.
    ! card3
-   !    title   run label (up to 80 characters delimited by *,
+   !    title   run label (up to 80 characters delimited by quotes,
    !            ended with /)  (default=blank)
    ! card4
    !    temp    temperatures in kelvin
@@ -185,8 +185,8 @@ contains
    !    gamma    fraction of admixed moderator cross section in
    !              external moderator cross section (def=0)
    ! card8b     tabulated (iwt=1 or -1 only)
-   !    wght    read weight function as tab1 record.
-   !            end with a /.
+   !    wght    read weight function as tab1 record,
+   !            this may span multiple lines and ends with a /.
    ! card8c     analytic flux parameters (iwt=4 or -4 only)
    !    eb      thermal break (ev)
    !    tb      thermal temperature (ev)
