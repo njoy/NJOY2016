@@ -172,7 +172,13 @@ title: NJOY2016 Test Descriptions
 
 ## Test Problem 29
 
-[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/28/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/29/input)]
 
   This test is similar to test 28, but this one is for the smoothing option in `GROUPR`. The test consists of running `GROUPR` three times: once with the default smoothing option, once with the option set to 1 explicitly and once with the option set to 0 explicitly. The first two GENDF files should be identical.
+
+## Test Problem 30
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/30/input)]
+
+  This test is an addition to test 3 using `MATXSR`. While test 3 only uses photons, test 30 uses both neutrons and photons.
 
