@@ -158,3 +158,27 @@ title: NJOY2016 Test Descriptions
 
   This test is used to check heatr results using an ENDF file without an MT458 section (fission energy release components) in MF1. This test was added in response to an issue introduced in NJOY 2016.21 involving such ENDF files.
 
+## Test Problem 27
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/27/input)]
+
+  This test is used to complete testing for the `ERRORR` module when processing MF35 covariances. Test 18 already has a test for this, but it uses an evaluation with a single covariance energy range (between 0 and 20 MeV). This test uses a Pu239 evaluation in which MF35 is composed of multiple covariance ranges. `ERRORR` is called twice in this run, once for the second range (between 5 and 6.5 MeV) and a second time using the -1 option with an efmean equal to 5.75 MeV (which should also be the second range). Both `ERRORR` runs should give the same results.
+
+## Test Problem 28
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/28/input)]
+
+  This test is used to test some of the options available to users when processing continuous energy data (iopt=1). There are currently three options (all defaulted to 1) concerning the user of law 61, whether or not detailed photons should be used and whether or not delayed neutron distributions should be smoothed to lower energies. The test consists of running `ACER` three times: once with the options defaulted, once with all options set to 1 explicitly and once with all options set to 0 explicitly. The first two ACE files should be identical.
+
+## Test Problem 29
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/29/input)]
+
+  This test is similar to test 28, but this one is for the smoothing option in `GROUPR`. The test consists of running `GROUPR` three times: once with the default smoothing option, once with the option set to 1 explicitly and once with the option set to 0 explicitly. The first two GENDF files should be identical.
+
+## Test Problem 30
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/30/input)]
+
+  This test is an addition to test 3 using `MATXSR`. While test 3 only uses photons, test 30 uses both neutrons and photons.
+

@@ -629,6 +629,9 @@ contains
       if (allocated(c458)) deallocate(c458)
       if (allocated(cpoly)) deallocate(cpoly)
       if (allocated(hpoly)) deallocate(hpoly)
+      if (allocated(afr)) deallocate(afr)
+      if (allocated(anp)) deallocate(anp)
+      if (allocated(agp)) deallocate(agp)
       if (mt458.eq.1) then
          call findf(matd,1,458,nendf)
          call contio(nendf,0,0,scr,nb,nw)
