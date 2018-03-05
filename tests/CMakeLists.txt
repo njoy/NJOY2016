@@ -37,4 +37,7 @@ add_subdirectory( "24" )
 add_subdirectory( "25" )
 add_subdirectory( "26" )
 add_subdirectory( "27" )
+add_subdirectory( "28" )
+add_subdirectory( "29" )
+add_subdirectory( "30" )
 
