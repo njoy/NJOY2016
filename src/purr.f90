@@ -266,7 +266,7 @@ contains
          loc=i
          sb(loc)=sb(loc)-sb(loc+nunr)-sb(loc+2*nunr)-sb(loc+3*nunr)
          if (sb(loc).lt.sigmin) then
-            if (sb(loc).lt.zero) then
+            if (sb(loc).lt.-sigmin) then
                write(strng1,&
                  '(''total xs less than its components at e=''&
                  &,1p,e12.4)') eunr(loc)
