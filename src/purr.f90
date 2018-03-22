@@ -265,7 +265,16 @@ contains
       do i=1,nunr
          loc=i
          sb(loc)=sb(loc)-sb(loc+nunr)-sb(loc+2*nunr)-sb(loc+3*nunr)
-         if (abs(sb(loc)).lt.sigmin) sb(loc)=0
+         if (sb(loc).lt.sigmin) then
+            if (sb(loc).lt.-sigmin) then
+               write(strng1,&
+                 '(''total xs less than its components at e=''&
+                 &,1p,e12.4)') eunr(loc)
+               write(strng2,'(''check evaluation file'')')
+               call mess('purr',strng1,strng2)
+            endif
+            sb(loc)=0
+         endif
          sb(loc+nunr)=0
          sb(loc+2*nunr)=0
          sb(loc+3*nunr)=0

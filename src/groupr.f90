@@ -373,7 +373,7 @@ contains
      &8x,f8.1,''s'')') time
    write(nsyse,'(/'' groupr...'',59x,f8.1,''s'')') time
    call ruinb(iaddmt)
-   nwscr=10000
+   nwscr=max(10000,nsigz+ngn+9,nsigz+ngg+8)
    allocate(scr(nwscr))
    if (nendf.lt.0) nend2=-nend2
    if (nendf.lt.0) nend3=-nend3

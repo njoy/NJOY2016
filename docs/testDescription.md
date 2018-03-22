@@ -182,3 +182,9 @@ title: NJOY2016 Test Descriptions
 
   This test is an addition to test 3 using `MATXSR`. While test 3 only uses photons, test 30 uses both neutrons and photons.
 
+## Test Problem 31
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/31/input)]
+
+  This test runs `PURR` for Pu240 from ENDF/B-VIII.0. This evaluation is one of the few that still gave negative cross sections in the probability tables for ENDF/B-VIII.0. In most cases, this behaviour is due to the fact that the original evaluation has an LSSF flag of 0 (MF3 contains background cross sections) and those background cross sections in the unresolved resonance region are negative (an example would be Na22). In the case of Pu240 however, the LSSF flag is set to 1 (MF3 contains the actual cross sections and the unresolved resonances should only be used for self-shielding). The negative cross section values in the probability table for this nuclide were due to the fact that the total cross section was actually lower than its components.
+
