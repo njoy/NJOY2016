@@ -2231,6 +2231,7 @@ contains
    enow=egrid(ie)
    if (ie.gt.1.and.temp.gt.break) enow=enow*temp/break
    enow=sigfig(enow,8,0)
+   esi(ie)=enow
    j=0
    sum=0
 
