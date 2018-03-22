@@ -559,11 +559,14 @@ contains
             call error('errorr',strng,' ')
          endif
          i=0
+         idone=0
          do while (i.lt.nfissp)
             i=i+1
             call listio(nendf,0,0,scr,nb,nw)
-            eclo=c1h
-            echi=c2h
+            if (idone.eq.0) then
+               eclo=c1h
+               echi=c2h
+            endif
             if (n1h.gt.ncovl) ncovl=n1h+6
             is=1
             do while (nb.ne.0)
@@ -573,10 +576,12 @@ contains
             enddo
             if (i.eq.ifissp) then
                efmean=(eclo+echi)/2
+               idone=1
             else if (ifissp.le.0) then
                if (eclo.le.efmean .and. echi.ge.efmean) then
                   ifissp=i
                   igflag=1
+                  idone=1
                endif
                if (nfissp.eq.1) then
                   if (efmean.lt.eclo.or.efmean.gt.echi) then
@@ -3551,13 +3556,18 @@ contains
             enddo
          enddo
       endif
-      do n1=1,nmtres+2
-         if (ee.ge.enode(nodes)) exit
-         if (abs(sigpn(n1)-(sigp(n1)+sigpl(n1))/2).gt.eps*sigpn(n1)+epm) then
-            ee=e
-            go to 110
-         endif
-      enddo
+      if (eel.lt.e) then
+         do n1=1,nmtres+2
+            if (ee.ge.enode(nodes)) exit
+            if (abs(sigpn(n1)-(sigp(n1)+sigpl(n1))/2).gt.eps*sigpn(n1)+epm) then
+               ee=e
+               go to 110
+            endif
+         enddo
+      else
+         write(strng1,'(''convergence issue for e='',1p,e10.3)') eel
+         call mess('rpxsamm',strng1,'check reconstructed xs for steep increase')
+      endif
       k=0
       do i=1,nek
          if (ee.ge.ek(i).and.ee.lt.ek(i+1)) k=i
@@ -11283,14 +11293,14 @@ contains
    if (allocated(scr1)) deallocate(scr1)
    allocate(scr1(npage+50))
   200 continue
-   call listio(ngout,0,0,scr1(1),nb,nw)
-   nbsave=nb
-   nwsave=nw
    if (math.eq.-1) then
       write(strng,'("can''t find tempin = ",1pe10.4,&
             &"K on the gendf tape")')tempin
       call error('ngchk',strng,'')
    endif
+   call listio(ngout,0,0,scr1(1),nb,nw)
+   nbsave=nb
+   nwsave=nw
    if (tempin.eq.0 .and. scr1(1).le.0.1) goto 300
    if (tempin.lt.1.e4 .and. abs(tempin-scr1(1)).gt.0.1) then
       call tomend(ngout,0,0,c1)
