@@ -109,7 +109,7 @@ contains
    integer::lrp,nstep,ie,i,j,k,new152,new153,it,nx,newmat
    integer::matd,mfd,mtd,ix,is,n1,nsamp,nscr,maxscr,iscr,nb,nw
    integer::nunx,ntemp,nsigz,nbin,nwds,icomp,n,lstart,l
-   integer::nwd,nc153,ncds,loc,ihave,nc,nd,maxtst
+   integer::nwd,nc153,ncds,ihave,nc,nd,maxtst
    real(kr)::time,za,awr,ez,sigx,temz,h
    real(kr)::bkgz(4)
    character(60)::strng1,strng2
@@ -261,25 +261,6 @@ contains
    endif
    call findf(matd,3,1,nendf)
    call rdf3un(a)
-   if (lssf.gt.0) then
-      do i=1,nunr
-         loc=i
-         sb(loc)=sb(loc)-sb(loc+nunr)-sb(loc+2*nunr)-sb(loc+3*nunr)
-         if (sb(loc).lt.sigmin) then
-            if (sb(loc).lt.-sigmin) then
-               write(strng1,&
-                 '(''total xs less than its components at e=''&
-                 &,1p,e12.4)') eunr(loc)
-               write(strng2,'(''check evaluation file'')')
-               call mess('purr',strng1,strng2)
-            endif
-            sb(loc)=0
-         endif
-         sb(loc+nunr)=0
-         sb(loc+2*nunr)=0
-         sb(loc+3*nunr)=0
-      enddo
-   endif
 
    !--read in the total and partial heating cross sections
    if (allocated(heat)) deallocate(heat)
@@ -721,7 +702,6 @@ contains
    real(kr),parameter::etop=5.e6_kr
    real(kr),parameter::small=1.e-12_kr
    real(kr),parameter::wide=1.26e0_kr
-   integer,parameter::n150=150
 
    iscr=1
    indep=0
@@ -1097,17 +1077,20 @@ contains
    ! competitive reactions, if any.
    !-------------------------------------------------------------------
    use mainio ! provides nsysi,nsyso
+   use util ! provides mess
    use endf ! provides endf routines and variables
    ! externals
    real(kr)::a(*)
    ! internals
-   integer::iscr,nthr,nb,nw,idis,ix,jthr,ibase,ie,icx,kthr,mtc
-   real(kr)::e,enext,bkg,sigx,ecomp
+   integer::iscr,nthr,nb,nw,idis,ix,jthr,ibase,ie,icx,kthr,mtc,mtmax
+   real(kr)::e,enext,bkg,sigx,ecomp,total
    real(kr),dimension(:),allocatable::thr
+   character(60)::strng1,strng2
    integer,dimension(4),parameter::mtx=(/1,2,18,102/)
    real(kr),parameter::up=1.00001e0_kr
    real(kr),parameter::dn=.99999e0_kr
    real(kr),parameter::small=1.e-5_kr
+   real(kr),parameter::tol=1.e-6_kr
 
    !--allocate storage
    iscr=1
@@ -1115,50 +1098,49 @@ contains
    nw=2*nthr
    allocate(thr(nw))
    nw=nunr*4
-   allocate(sb(nw))
+   allocate(sb(nunr*4))
+
+   !--initialise background array for total, elastic, fission and capture
+   sb(1:nunr*4)=0
 
    !--loop over reactions
    !--saving resonance cross sections
    !--and reaction thresholds
    jthr=0
    ix=1
-  100 continue
-   call contio(nendf,0,0,a(iscr),nb,nw)
-   e=0
-   call gety1(e,enext,idis,bkg,nendf,a(iscr))
-   if (mth.ge.4.and.mth.lt.150) then
-      jthr=jthr+1
-      thr(1+2*(jthr-1))=mth
-      thr(2+2*(jthr-1))=enext
-   endif
    ibase=1+nunr*(ix-1)-1
-   if (mth.lt.mtx(ix)) go to 120
-   if (mth.eq.mtx(ix)) go to 130
-   do ie=1,nunr
-      sb(ibase+ie)=0
+   mtmax=891 ! continuum n,2n
+   call contio(nendf,0,0,a(iscr),nb,nw)
+   do while (mfh.eq.3.and.mth.le.mtmax)
+      if (mth.le.200.or.mth.ge.600) then
+         !--get reaction threshold and store data
+         e=0
+         call gety1(e,enext,idis,bkg,nendf,a(iscr))
+         if (mth.ge.4) then
+            jthr=jthr+1
+            thr(1+2*(jthr-1))=mth
+            thr(2+2*(jthr-1))=enext
+         endif
+         !--skip unresolved resonance reaction if required
+         do while (mtx(ix).ne.102.and.mtx(ix).lt.mth)
+            ix=ix+1
+         enddo
+         !--store data is this is one we need
+         if (mth.eq.mtx(ix)) then
+            ibase=1+nunr*(ix-1)-1
+            do ie=1,nunr
+               e=abs(eunr(ie))
+               if (ie.eq.1) e=up*e
+               if (ie.eq.nunr) e=dn*e
+               call gety1(e,enext,idis,sb(ibase+ie),nendf,a(iscr))
+            enddo
+         endif
+      endif
+      call tosend(nendf,0,0,a(iscr))
+      call contio(nendf,0,0,a(iscr),nb,nw)
    enddo
-   ix=ix+1
-   if (mth.eq.mtx(ix)) then
-      ibase=1+nunr*(ix-1)-1
-      go to 130
-   endif
-  120 continue
-   call tosend(nendf,0,0,a(iscr))
-   if (ix.le.4) go to 100
-   go to 200
-  130 continue
-   do ie=1,nunr
-      e=abs(eunr(ie))
-      if (ie.eq.1) e=up*e
-      if (ie.eq.nunr) e=dn*e
-      call gety1(e,enext,idis,sb(ibase+ie),nendf,a(iscr))
-   enddo
-   call tosend(nendf,0,0,a(iscr))
-   ix=ix+1
-   if (ix.le.4) go to 100
 
    !--check for competitive reactions
-  200 continue
    icx=0
    do ie=1,nunr
       sigx=sb(ie)-sb(nunr+ie)-sb(2*nunr+ie)-sb(3*nunr+ie)
@@ -1171,23 +1153,21 @@ contains
       write(nsyso,'(/'' competition starts at'',1p,e12.4)') ecomp
       do kthr=1,jthr
          mtc=nint(thr(1+2*(kthr-1)))
-         if (mtc.gt.4.and.&
-           mtc.ne.18.and.mtc.ne.19.and.mtc.ne.102) then
+         if (mtc.gt.4.and.mtc.ne.18.and.mtc.ne.19.and.mtc.ne.102) then
             if (up*thr(2+2*(kthr-1)).lt.eunr(nunr)) then
                write(nsyso,'(''   ur competes with mt'',i3)') mtc
-               if (iinel.eq.0.and.mtc.eq.51) then
-                  iinel=51
-               else if (iinel.eq.51.and.mtc.ge.52.and.mtc.le.91) then
-                  iinel=4
-               else if (iinel.eq.4.and.mtc.ge.52.and.mtc.le.91) then
-                  iinel=4
-               endif
-               if (iabso.eq.0.and.mtc.lt.51) then
-                  write(nsyso,'(''    not allowed'')')
-               else if (iabso.eq.0.and.mtc.gt.91) then
-                  iabso=mtc
-               else if (iabso.gt.0.and.mtc.lt.51.or.mtc.gt.91) then
-                  write(nsyso,'(''    not allowed'')')
+               if (mtc.eq.4.or.(mtc.ge.51.and.mtc.le.91)) then
+                  iinel=4 ! the original code distinguished 4 and 51 (51 was used if it was the only inelastic level), why?
+               else
+                  if (iabso.eq.0) then
+                     iabso=mtc
+                     if (mtc.ge.600) iabso=103
+                     if (mtc.ge.650) iabso=104
+                     if (mtc.ge.700) iabso=105
+                     if (mtc.ge.750) iabso=106
+                     if (mtc.ge.800) iabso=107
+                     if (mtc.ge.875) iabso=16
+                  endif
                endif
             endif
          endif
@@ -1195,6 +1175,39 @@ contains
       write(nsyso,'('' inelastic competition flag set to '',i3/&
         &'' absorption competition flag set to '',i3)') iinel,iabso
    endif
+
+   !--sanity check for lssf=1, derive corresponding sb(i) array
+   if (lssf.gt.0) then
+      do ie=1,nunr
+         total=sb(ie)
+         sb(ie)=sb(ie)-sb(ie+nunr)-sb(ie+2*nunr)-sb(ie+3*nunr)
+         if (sb(ie).gt.tol*total) then
+            !--this can only happen if there is competition
+            if (iinel.eq.0.and.iabso.eq.0) then
+               write(strng1,&
+                 '(''total xs greater than its components at e=''&
+                 &,1p,e12.4)') eunr(ie)
+               write(strng2,'(''check evaluation file'')')
+               call mess('purr',strng1,strng2)
+               sb(ie)=0
+            endif
+         else
+            !--either roundoff or total is smaller than its components
+            if (sb(ie).lt.-tol*total) then
+               write(strng1,&
+                 '(''total xs less than its components at e=''&
+                 &,1p,e12.4)') eunr(ie)
+               write(strng2,'(''check evaluation file'')')
+               call mess('purr',strng1,strng2)
+            endif
+            sb(ie)=0
+         endif
+         sb(ie+nunr)=0
+         sb(ie+2*nunr)=0
+         sb(ie+3*nunr)=0
+      enddo
+   endif
+
    return
    end subroutine rdf3un
 
