@@ -470,17 +470,14 @@ contains
    n=iscr
    a(n)=za
    a(n+1)=awr
-   a(n+2)=0
-   a(n+3)=0
+   a(n+2)=iinel
+   a(n+3)=iabso
    a(n+4)=intunr
    a(n+5)=nbin
    a(n+6)=temz
    a(n+7)=0
    a(n+8)=lssf
    a(n+9)=0
-   ! pack iinel and iabso into one field
-   icomp=1000*iabso+iinel
-   if (icomp.ne.0) a(n+9)=icomp
    a(n+10)=(1+6*nbin)*nunr
    a(n+11)=nunr
    n=n+11
@@ -1146,8 +1143,8 @@ contains
       sigx=sb(ie)-sb(nunr+ie)-sb(2*nunr+ie)-sb(3*nunr+ie)
       if (icx.eq.0.and.sigx.gt.small) icx=ie
    enddo
-   iinel=0
-   iabso=0
+   iinel=-1 ! default is no competition
+   iabso=-1 ! default is no competition
    if (icx.gt.0) then
       ecomp=eunr(icx)
       write(nsyso,'(/'' competition starts at'',1p,e12.4)') ecomp
@@ -1156,17 +1153,17 @@ contains
          if (mtc.gt.4.and.mtc.ne.18.and.mtc.ne.19.and.mtc.ne.102) then
             if (up*thr(2+2*(kthr-1)).lt.eunr(nunr)) then
                write(nsyso,'(''   ur competes with mt'',i3)') mtc
-               if (mtc.eq.4.or.(mtc.ge.51.and.mtc.le.91)) then
-                  iinel=4 ! the original code distinguished 4 and 51 (51 was used if it was the only inelastic level), why?
+               if (mtc.ge.51.and.mtc.le.91) then
+                  if (iinel.lt.0) then
+                     iinel=mtc ! use mt51 as flag if it is the only one
+                  else
+                     iinel=4   ! more than one in competition, use mt4
+                  endif
                else
-                  if (iabso.eq.0) then
-                     iabso=mtc
-                     if (mtc.ge.600) iabso=103
-                     if (mtc.ge.650) iabso=104
-                     if (mtc.ge.700) iabso=105
-                     if (mtc.ge.750) iabso=106
-                     if (mtc.ge.800) iabso=107
-                     if (mtc.ge.875) iabso=16
+                  if (iabso.lt.0) then
+                     iabso=mtc ! use mtc as flag if it is the only one
+                  else
+                     iabso=0   ! more than one in competition, use 0
                   endif
                endif
             endif
@@ -1183,7 +1180,7 @@ contains
          sb(ie)=sb(ie)-sb(ie+nunr)-sb(ie+2*nunr)-sb(ie+3*nunr)
          if (sb(ie).gt.tol*total) then
             !--this can only happen if there is competition
-            if (iinel.eq.0.and.iabso.eq.0) then
+            if (iinel.lt.0.and.iabso.lt.0) then
                write(strng1,&
                  '(''total xs greater than its components at e=''&
                  &,1p,e12.4)') eunr(ie)
