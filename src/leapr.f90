@@ -2780,7 +2780,7 @@ contains
    use endf    ! provides terp1
    ! externals
    integer::itemp,nalpha,nbeta,ntempr
-   real(kr)::cfrac,temp
+   real(kr)::temp
    real(kr)::ssm(nbeta,nalpha,ntempr)
    ! internals
    integer::i,j,k,kk,nal,ibeta,iprt,jprt
