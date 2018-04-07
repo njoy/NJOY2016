@@ -2491,7 +2491,7 @@ contains
    ! internals
    character(60)::strng
    character(66)::c
-   real(kr)::b(17)
+   real(kr)::b(10000)
    integer::nnw,mtt,mf56,mat,mf,mt,nk
    integer::i,nb,nw,k,lf,nr1,nr2,np1,np2,ib,ib2,iloop,ibx,nr12,np12
    integer::ir,ip,idis,izap,law,lang,lep,ib2x,na,nep,indx1,nnk,nd
