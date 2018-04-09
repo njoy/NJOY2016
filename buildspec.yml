@@ -1,0 +1,14 @@
+
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Entered the 'pre_build' phase..."
+  build:
+    commands:
+      - echo "Entered the 'build' phase..."
+      - ./.AWS/gnu_build.sh
+  post_build:
+    commands:
+      - echo "Entered the 'post_build' phase..."
