@@ -148,6 +148,14 @@ contains
    !               law 61, and outgoing particle distributions.
    !               (0=no, 1=yes, default=1)
    !    iopp     detailed photons (0=no, 1=yes, default=1)
+   !    ismooth  switch on/off smoothing operation (1/0, default=1=on)
+   !               set ismooth to 1 to cause extension of mf6 cm
+   !               distributions to lower energies using a sqrt(E)
+   !               shape, to extend delayed neutron distributions as
+   !               sqrt(E) to lower energies, and to add additional
+   !               points above 10 Mev to some fission spectra assuming
+   !               an exponential shape.  otherwise, use ismooth=0.
+   !               NOTE:  ismooth=0 is the default value in njoy99.
    ! card 7
    !  type of thinning is determined by sign of thin(1)
    !  (pos. or zero/neg.=energy skip/integral fraction)
@@ -229,11 +237,11 @@ contains
    integer::iopt,iprint,itype,nxtra
    integer::matd
    real(kr)::tempd
-   integer::newfor,iopp
+   integer::newfor,iopp,ismooth
    real(kr)::thin(4)
    integer::iskf,iwtt,npts
    real(kr)::suff
-   character(70)::hk
+   character(70)::hk=' '
    integer::izn(16)
    real(kr)::awn(16)
    character(6)::tname,tscr
@@ -303,13 +311,26 @@ contains
         matd,tempd
       iopp=1
       newfor=1
-      read(nsysi,*) newfor,iopp
+      ismooth=1
+      read(nsysi,*) newfor,iopp,ismooth
       write(nsyso,'(&
         &'' new formats .......................... '',i10/&
-        &'' photon option ........................ '',i10)')&
-        newfor,iopp
+        &'' photon option ........................ '',i10/&
+        &'' smoothing option ..................... '',i10)')&
+        newfor,iopp,ismooth
+      if (newfor.ne.0.and.newfor.ne.1) then
+         call error('acer','illegal newfor.',' ')
+      endif
+      if (iopp.ne.0.and.iopp.ne.1) then
+         call error('acer','illegal iopp.',' ')
+      endif
+      if (ismooth.ne.0.and.ismooth.ne.1) then
+         call error('acer','illegal ismooth.',' ')
+      endif
       if (iopp.eq.0) write(nsyso,&
         '(/'' photons will not be processed'')')
+      if (ismooth.eq.0) write(nsyso,&
+        '(/'' smoothing operation will not be performed'')')
       mte=0
       z(1)=0
       z(2)=0
@@ -400,7 +421,7 @@ contains
    !--prepare fast ace data
    if (iopt.eq.1) then
       call acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,suff,&
-        hk,izn,awn,matd,tempd,newfor,iopp,thin)
+        hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin)
 
    !--prepare thermal ace data
    else if (iopt.eq.2) then

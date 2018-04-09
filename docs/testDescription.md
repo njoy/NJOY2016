@@ -164,3 +164,27 @@ title: NJOY2016 Test Descriptions
 
   This test is used to complete testing for the `ERRORR` module when processing MF35 covariances. Test 18 already has a test for this, but it uses an evaluation with a single covariance energy range (between 0 and 20 MeV). This test uses a Pu239 evaluation in which MF35 is composed of multiple covariance ranges. `ERRORR` is called twice in this run, once for the second range (between 5 and 6.5 MeV) and a second time using the -1 option with an efmean equal to 5.75 MeV (which should also be the second range). Both `ERRORR` runs should give the same results.
 
+## Test Problem 28
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/28/input)]
+
+  This test is used to test some of the options available to users when processing continuous energy data (iopt=1). There are currently three options (all defaulted to 1) concerning the user of law 61, whether or not detailed photons should be used and whether or not delayed neutron distributions should be smoothed to lower energies. The test consists of running `ACER` three times: once with the options defaulted, once with all options set to 1 explicitly and once with all options set to 0 explicitly. The first two ACE files should be identical.
+
+## Test Problem 29
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/29/input)]
+
+  This test is similar to test 28, but this one is for the smoothing option in `GROUPR`. The test consists of running `GROUPR` three times: once with the default smoothing option, once with the option set to 1 explicitly and once with the option set to 0 explicitly. The first two GENDF files should be identical.
+
+## Test Problem 30
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/30/input)]
+
+  This test is an addition to test 3 using `MATXSR`. While test 3 only uses photons, test 30 uses both neutrons and photons.
+
+## Test Problem 31
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/31/input)]
+
+  This test runs `PURR` for Pu240 from ENDF/B-VIII.0. This evaluation is one of the few that still gave negative cross sections in the probability tables for ENDF/B-VIII.0. In most cases, this behaviour is due to the fact that the original evaluation has an LSSF flag of 0 (MF3 contains background cross sections) and those background cross sections in the unresolved resonance region are negative (an example would be Na22). In the case of Pu240 however, the LSSF flag is set to 1 (MF3 contains the actual cross sections and the unresolved resonances should only be used for self-shielding). The negative cross section values in the probability table for this nuclide were due to the fact that the total cross section was actually lower than its components.
+

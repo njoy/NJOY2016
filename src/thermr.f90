@@ -1792,8 +1792,11 @@ contains
 
    !--use free-gas s(alpha,beta).
   200 continue
+   ! the beta grid is fixed to 45 beta values (previously only the first 9)
+   ! following an issue with Fe56 and H1 from ENDF/B-VIII.0 - a better solution
+   ! would be to contruct the grid adaptatively based on emax and tempr
    nalpha=1
-   nbeta=9
+   nbeta=45
    allocate(alpha(nalpha))
    allocate(beta(nbeta))
    allocate(sab(nalpha,nbeta))
@@ -1806,6 +1809,42 @@ contains
    beta(7)=10
    beta(8)=15
    beta(9)=25
+   beta(10)=30
+   beta(11)=35
+   beta(12)=40
+   beta(13)=45
+   beta(14)=50
+   beta(15)=55
+   beta(16)=60
+   beta(17)=65
+   beta(18)=70
+   beta(19)=75
+   beta(20)=80
+   beta(21)=100
+   beta(22)=120
+   beta(23)=140
+   beta(24)=160   
+   beta(25)=180
+   beta(26)=200
+   beta(27)=250
+   beta(28)=300
+   beta(29)=350
+   beta(30)=400
+   beta(31)=500
+   beta(32)=600
+   beta(33)=700
+   beta(34)=800
+   beta(35)=900
+   beta(36)=1000
+   beta(37)=1250
+   beta(38)=1500
+   beta(39)=1750
+   beta(40)=2000
+   beta(41)=2250
+   beta(42)=2500
+   beta(43)=2750
+   beta(44)=3000
+   beta(45)=3500
    t=temp
    smz=1
    sb=smz*((az+1)/az)**2
@@ -2192,6 +2231,7 @@ contains
    enow=egrid(ie)
    if (ie.gt.1.and.temp.gt.break) enow=enow*temp/break
    enow=sigfig(enow,8,0)
+   esi(ie)=enow
    j=0
    sum=0
 

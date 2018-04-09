@@ -1,0 +1,59 @@
+moder / Extract/convert neutron evaluated data
+20 -21
+moder / Extract/convert photo-atomic data
+40 -41
+reconr / Reconstruct XS for neutrons
+-21 -22
+'PENDF for 1-H-1'/
+125 0/
+0.001 0.0 0.002/
+0/
+broadr / Doppler broaden XS
+-21 -22 -23
+125 1 0 0 0./
+0.001 0.0 0.002/
+300.
+0/
+groupr / Prepare multigroup data for neutrons
+-21 -23 0 31
+125 17 10 2 6 1 1 1 1/
+'1-H-1'/
+300.
+1.E+10
+3/
+3  251 'mubar'/
+3  252 'xi'/
+3  253 'gamma'/
+3  259 '1/v'/
+6/
+16/
+0/
+0/
+reconr / Reconstruct photo-atomic data
+-41 -42
+'PENDF photo-atomic data for 1-H-1'/
+100 0/
+0.001 0. 0.003/
+0/
+moder
+-42 45
+gaminr / Prepare multigroup data for photons
+-41 -42 0 43/
+100 10 3 6 1/
+'1-H-1'/
+-1/
+0/
+matxsr / Produce MATXS file
+31 43 44/
+1 'h1'/
+2 3 2 1
+'1-H-1 from ENDF/B-VIII.0'/
+'Photo-atomic data from ENDF/B-VIII.0'/
+'n' 'g'/
+ 175  42
+'nscat' 'ng' 'gscat'/
+1 1 2/
+1 2 2/
+'h1' 125 100/
+stop
+

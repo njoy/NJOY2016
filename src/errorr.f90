@@ -11293,14 +11293,14 @@ contains
    if (allocated(scr1)) deallocate(scr1)
    allocate(scr1(npage+50))
   200 continue
-   call listio(ngout,0,0,scr1(1),nb,nw)
-   nbsave=nb
-   nwsave=nw
    if (math.eq.-1) then
       write(strng,'("can''t find tempin = ",1pe10.4,&
             &"K on the gendf tape")')tempin
       call error('ngchk',strng,'')
    endif
+   call listio(ngout,0,0,scr1(1),nb,nw)
+   nbsave=nb
+   nwsave=nw
    if (tempin.eq.0 .and. scr1(1).le.0.1) goto 300
    if (tempin.lt.1.e4 .and. abs(tempin-scr1(1)).gt.0.1) then
       call tomend(ngout,0,0,c1)
