@@ -188,3 +188,9 @@ title: NJOY2016 Test Descriptions
 
   This test runs `PURR` for Pu240 from ENDF/B-VIII.0. This evaluation is one of the few that still gave negative cross sections in the probability tables for ENDF/B-VIII.0. In most cases, this behaviour is due to the fact that the original evaluation has an LSSF flag of 0 (MF3 contains background cross sections) and those background cross sections in the unresolved resonance region are negative (an example would be Na22). In the case of Pu240 however, the LSSF flag is set to 1 (MF3 contains the actual cross sections and the unresolved resonances should only be used for self-shielding). The negative cross section values in the probability table for this nuclide were due to the fact that the total cross section was actually lower than its components.
 
+## Test Problem 33
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/33/input)]
+
+  This test runs `LEAPR` for D(D2O) and O(D2O) from ENDF/B-VIII.0 at 283.0 K. These evaluations include the Skold approximation, which in the past had conflicts with the COLDH subroutine. The test also checks the capacity of running several instances of LEAPR in the same input file.
+  
