@@ -740,7 +740,8 @@ contains
    ! internals
    integer::i
    real(kr)::bt,btp
-
+   terpt=0
+   if (be.gt.ntn*delta) return
    i=int(be/delta)
    if (i.lt.ntn-1) then
       bt=i*delta
@@ -1101,8 +1102,8 @@ contains
    real(kr),parameter::zero=0
 
    terps=0
+   if (be.gt.delta*nsd) return
    i=int(be/delta)
-   if (i.lt.0) return
    if (i.lt.nsd-1) then
       bt=i*delta
       btp=bt+delta
@@ -2410,14 +2411,14 @@ contains
    integer::i
    real(kr)::bt,btp
 
+   terpk=1
+   if (be.gt.nka*delta) return   
    i=int(be/delta)
    if (i.lt.nka-1) then
       bt=i*delta
       btp=bt+delta
       i=i+1
       terpk=ska(i)+(be-bt)*(ska(i+1)-ska(i))/(btp-bt)
-   else
-      terpk=1
    endif
    return
    end function terpk
@@ -2806,8 +2807,12 @@ contains
             if (ap.lt.alpha(k)) exit
          enddo
          if (kk.eq.1) kk=2
+         if (ssm(i,kk-1,itemp)*ssm(i,kk,itemp).eq.0) then
+            scoh(j)=0
+         else
          call terp1(alpha(kk-1),ssm(i,kk-1,itemp),&
            alpha(kk),ssm(i,kk,itemp),ap,scoh(j),5)
+         endif
          scoh(j)=scoh(j)*sk
       enddo
       do j=1,nalpha
