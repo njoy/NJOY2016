@@ -2790,6 +2790,7 @@ contains
    real(kr)::scoh(1000)
    real(kr),parameter::angst=1.e-8_kr
    real(kr),parameter::therm=.0253e0_kr
+   real(kr),parameter::zero=0.0
 
    !--apply the skold approximation
    tev=bk*abs(temp)
@@ -2807,8 +2808,8 @@ contains
             if (ap.lt.alpha(k)) exit
          enddo
          if (kk.eq.1) kk=2
-         if (ssm(i,kk-1,itemp)*ssm(i,kk,itemp).eq.0) then
-            scoh(j)=0
+         if (ssm(i,kk-1,itemp).eq.zero.or.ssm(i,kk,itemp).eq.zero) then
+            scoh(j)=zero
          else
          call terp1(alpha(kk-1),ssm(i,kk-1,itemp),&
            alpha(kk),ssm(i,kk,itemp),ap,scoh(j),5)
