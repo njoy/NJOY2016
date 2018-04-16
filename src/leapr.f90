@@ -3010,6 +3010,7 @@ contains
    math=1
    mfh=0
    mth=0
+   nsh=0
    text=' '
    read(text,'(16a4,a2)') (t(i),i=1,17)
    call tpidio(0,nout,nprnt,z,nb,nw)
