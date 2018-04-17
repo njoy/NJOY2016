@@ -193,4 +193,10 @@ title: NJOY2016 Test Descriptions
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/33/input)]
 
   This test runs `LEAPR` for D(D2O) and O(D2O) from ENDF/B-VIII.0 at 283.0 K. These evaluations include the Skold approximation, which in the past had conflicts with the COLDH subroutine. The test also checks the capacity of running several instances of LEAPR in the same input file.
-  
+
+## Test Problem 34
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/34/input)]
+
+  This test is added following a problem encountered when running `ERRORR` using a binary input ENDF and GENDF file. The `ERRORR` run crashed with a segmentation fault prior to NJOY 2016.34.
+
