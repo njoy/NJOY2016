@@ -355,6 +355,7 @@ contains
    real(kr),parameter::zero=0
 
    !--initialize
+   nwscr=10000
    nfscr=10
    nflx=11
    nend2=12
@@ -373,7 +374,7 @@ contains
      &8x,f8.1,''s'')') time
    write(nsyse,'(/'' groupr...'',59x,f8.1,''s'')') time
    call ruinb(iaddmt)
-   nwscr=max(10000,nsigz+ngn+ngg+9)
+   nwscr=max(nwscr,nsigz+ngn+ngg+9)
    allocate(scr(nwscr))
    if (nendf.lt.0) nend2=-nend2
    if (nendf.lt.0) nend3=-nend3
