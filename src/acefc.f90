@@ -7365,7 +7365,7 @@ contains
                ! insert those zero energy data
                if (scr(7).gt.ex) then
                   write(nsyso,'('' extending lin-lin as sqrt(E) '',&
-                   &''below'',1p,e10.2,'' MeV for E='',e10.2,'' MeV mt='')&
+                   &''below'',1p,e10.2,'' MeV for E='',e10.2,'' MeV mt='',i3)&
                    &')scr(7)/emev,ee,mt
                   do ix=nx,1,-1
                      scr(6+ncyc+ix)=scr(6+ix)
