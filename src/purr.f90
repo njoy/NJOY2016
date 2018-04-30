@@ -1109,7 +1109,13 @@ contains
    mtmax=891 ! continuum n,2n
    call contio(nendf,0,0,a(iscr),nb,nw)
    do while (mfh.eq.3.and.mth.le.mtmax)
-      if (mth.le.200.or.mth.ge.600) then
+      if (mth.lt.6.or.(mth.gt.10.and.mth.lt.12).or. &
+         & (mth.gt.15.and.mth.lt.43).or. &
+         & (mth.gt.43.and.mth.lt.46).or. &
+         & (mth.gt.49.and.mth.lt.92).or. &
+         & (mth.gt.100.and.mth.lt.110).or. &
+         & (mth.gt.110.and.mth.lt.118).or. &
+         & (mth.gt.150.and.mth.le.200).or.mth.ge.600) then
          !--get reaction threshold and store data
          e=0
          call gety1(e,enext,idis,bkg,nendf,a(iscr))
@@ -1155,9 +1161,9 @@ contains
                write(nsyso,'(''   ur competes with mt'',i3)') mtc
                if (mtc.ge.51.and.mtc.le.91) then
                   if (iinel.lt.0) then
-                     iinel=mtc ! use mt51 as flag if it is the only one
+                     iinel=mtc ! use mtc as flag if it is the only one
                   else
-                     iinel=4   ! more than one in competition, use mt4
+                     iinel=4   ! more than one in competition, use mt4 instead
                   endif
                else
                   if (iabso.lt.0) then
