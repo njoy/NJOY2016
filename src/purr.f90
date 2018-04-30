@@ -1143,6 +1143,9 @@ contains
       call contio(nendf,0,0,a(iscr),nb,nw)
    enddo
 
+   !--output lssf flag
+   write(nsyso,'('' evaluation lssf equal to'',i2)') lssf
+
    !--check for competitive reactions
    icx=0
    do ie=1,nunr
