@@ -108,7 +108,7 @@ contains
    ! internals
    integer::lrp,nstep,ie,i,j,k,new152,new153,it,nx,newmat
    integer::matd,mfd,mtd,ix,is,n1,nsamp,nscr,maxscr,iscr,nb,nw
-   integer::nunx,ntemp,nsigz,nbin,nwds,icomp,n,lstart,l
+   integer::nunx,ntemp,nsigz,nbin,nwds,n,lstart,l
    integer::nwd,nc153,ncds,ihave,nc,nd,maxtst
    real(kr)::time,za,awr,ez,sigx,temz,h
    real(kr)::bkgz(4)
@@ -1185,12 +1185,19 @@ contains
          total=sb(ie)
          sb(ie)=sb(ie)-sb(ie+nunr)-sb(ie+2*nunr)-sb(ie+3*nunr)
          if (sb(ie).gt.tol*total) then
-            !--this can only happen if there is competition
+            !--this can only happen if there is competition and above ecomp
             if (iinel.lt.0.and.iabso.lt.0) then
                write(strng1,&
                  '(''total xs greater than its components at e=''&
                  &,1p,e12.4)') eunr(ie)
                write(strng2,'(''check evaluation file'')')
+               call mess('purr',strng1,strng2)
+               sb(ie)=0
+            elseif (eunr(ie).lt.ecomp) then
+               write(strng1,&
+                 '(''total xs greater than its components at e=''&
+                 &,1p,e12.4)') eunr(ie)
+               write(strng2,'(''check evaluation file below competition'')')
                call mess('purr',strng1,strng2)
                sb(ie)=0
             endif
