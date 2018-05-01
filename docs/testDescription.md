@@ -200,3 +200,18 @@ title: NJOY2016 Test Descriptions
 
   This test is added following a problem encountered when running `ERRORR` using a binary input ENDF and GENDF file. The `ERRORR` run crashed with a segmentation fault prior to NJOY 2016.34.
 
+## Test Problem 35-42
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/35/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/36/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/37/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/38/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/39/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/40/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/41/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/42/input)]
+
+  Tests 35 to 42 were added to test the inelastic and absorption competition flags determined by `PURR` and used in `ACER` to be included in ACE files. Previous versions of NJOY 2016 (prior to 2016.30) incorrectly handled these flags. NJOY only tested competition up to MT102 (neutron capture) and explicitly omitted checking reactions like MT103 (n,p) or MT107 (n,a). As a result, for some nuclides NJOY did not capture the competition flags properly, leading MCNP or other codes using probability tables to incorrectly calculate the total cross section in the unresolved resonance region.
+
+  The tests cover all possible combinations of the competition flags (no competition, only elastic competition, only absorption competition and both) for each possible value of the LSSF flag (0 or 1). These tests are related to test 31.
+
