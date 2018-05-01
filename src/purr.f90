@@ -349,7 +349,7 @@ contains
    enddo
    nw=nx
    if (nw.eq.0) go to 250
-   nc=6*nx+6
+   nc=6*(nx+new152+new153)
    if (allocated(c)) deallocate(c)
    allocate(c(nc))
    nd=6*nx
