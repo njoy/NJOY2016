@@ -213,5 +213,5 @@ title: NJOY2016 Test Descriptions
 
   Tests 35 to 42 were added to test the inelastic and absorption competition flags determined by `PURR` and used in `ACER` to be included in ACE files. Previous versions of NJOY 2016 (prior to 2016.30) incorrectly handled these flags. NJOY only tested competition up to MT102 (neutron capture) and explicitly omitted checking reactions like MT103 (n,p) or MT107 (n,a). As a result, for some nuclides NJOY did not capture the competition flags properly, leading MCNP or other codes using probability tables to incorrectly calculate the total cross section in the unresolved resonance region.
 
-  The tests cover all possible combinations of the competition flags (no competition, only elastic competition, only absorption competition and both) for each possible value of the LSSF flag (0 or 1). These tests are related to test 31.
+  The tests cover all possible combinations of the competition flags (no competition, only inelastic competition, only absorption competition and both) for each possible value of the LSSF flag (0 or 1). These tests are related to test 31.
 
