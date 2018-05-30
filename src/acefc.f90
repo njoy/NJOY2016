@@ -1110,9 +1110,12 @@ contains
          call contio(nin,0,0,scr,nb,nw)
       enddo
       if (mfh.ne.0) then
+         !--new competition flag (can only be -1, 51, 91 or 4)
          iinel=l1h
-         if (iinel.eq.4) mtcomp=4
+         !--continue but check for file with old competition flag
          call listio(nin,0,0,scr,nb,nw)
+         if (iinel.eq.zero.and.l2h.gt.zero) iinel=mod(l2h,1000)
+         if (iinel.eq.4) mtcomp=4
       endif
    endif
 
@@ -5166,10 +5169,16 @@ contains
       if (mth.eq.153) then
          write(nsyso,'(/'' found mt=153 with unresolved-range'',&
            &'' probability tables'')')
-         iinel=l1h
-         iabso=l2h
+         iinel=l1h !--new competition flag (can only be -1, 51, 91 or 4)
+         iabso=l2h !--new competition flag (can be -1, 0 or positive)
          call listio(nin,0,0,scr,nb,nw)
          lssf=l1h
+         if (iinel.eq.zero) then !--old competition flags are used
+            iinel=-1
+            iabso=-1
+            if (mod(l2h,1000).ne.zero) iinel=mod(l2h,1000)
+            if (l2h/1000.ne.zero) iabso=l2h/1000
+         endif
          nunr=n2h
          ncyc=n1h/nunr
          nurd=n1h+6
