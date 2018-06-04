@@ -10,4 +10,3 @@ configure_file("${RESOURCES}/t404"
 add_test( NAME "Test11"
           COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )
-
