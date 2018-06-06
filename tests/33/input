@@ -1,6 +1,6 @@
 leapr
 24  /NOUT
-D in D2O, CAB Model from molecular dynamics calculations / TITLE
+'D in D2O, CAB Model from molecular dynamics calculations' / TITLE
 1 2 200  / NTEMPR IPRINT IPHON
 11 1002 0 0 2E-38 / MAT ZA ISABT ILOG SMIN
 1.996800 3.395 2 0 0 2  / AWR SPR NPR IEL NCOLD NSK
@@ -362,7 +362,7 @@ D in D2O, CAB Model from molecular dynamics calculations / TITLE
 / end leapr
 leapr
 34  /NOUT
-O in D2O, CAB Model from molecular dynamics calculations/ TITLE
+'O in D2O, CAB Model from molecular dynamics calculations'/ TITLE
 1 2 200  / NTEMPR IPRINT IPHON
 51 8016 0 0 2E-38 / MAT ZA ISABT ILOG
 15.857511 3.7939 1 0 0 2  / AWR SPR NPR IEL NCOLD NSK

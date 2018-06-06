@@ -3,7 +3,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/input"
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/referenceTape25"
                "${CMAKE_CURRENT_BINARY_DIR}/referenceTape25" COPYONLY )
-	     
+
 configure_file("${RESOURCES}/t511"
                "${CMAKE_CURRENT_BINARY_DIR}/tape20" COPYONLY )
 
