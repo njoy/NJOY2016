@@ -1016,7 +1016,7 @@ contains
    real(kr)::thin(4)
    ! internals
    integer::nws,nwscr,ithopt,iwtt,npts,iskp,j,mtcomp
-   integer::nb,nw,icomp,iinel,iedis,jethr,lt,lr
+   integer::nb,nw,iinel,iedis,jethr,lt,lr
    integer::i,jt,ne,isave,iter,idone,nsave,ilast,inext
    integer::limit,ii,k,nc,nen,ll,nee,iee,mtn,itest
    integer::kbase,np,ifrst,it,ibase,idis,nold,nxcs
@@ -1110,12 +1110,11 @@ contains
          call contio(nin,0,0,scr,nb,nw)
       enddo
       if (mfh.ne.0) then
+         !--new competition flag (can only be -1, 51, 91 or 4)
+         iinel=l1h
+         !--continue but check for file with old competition flag
          call listio(nin,0,0,scr,nb,nw)
-         icomp=l2h
-         iinel=0
-         if (icomp.ne.0) then
-            iinel=mod(icomp,1000)
-         endif
+         if (iinel.eq.zero.and.l2h.gt.zero) iinel=mod(l2h,1000)
          if (iinel.eq.4) mtcomp=4
       endif
    endif
@@ -4799,11 +4798,11 @@ contains
    ! internals
    integer::nwscr,nnu,nnup,kfis,mtnr,mtntr,i,nnud,nnf
    integer::nurd,idone,mta,nb,nw,lnu,n,m,jnt,j
-   integer::lssf,icomp,iinel,iabso,nunr,ncyc,i1,idis
+   integer::lssf,iinel,iabso,nunr,ncyc,i1,idis
    integer::k,it,ic,ie,ih,next,keep3,keep4,keep,ir,iskip
    integer::nnex,keep1,keep2,l,ij,lct,lvt,ltt,ltt3,lttn
    integer::jscr,iso,ne,law,lidp,last,il,ja,jb,nure,nurb
-   integer::mtxx,mtaa,jj,ll,ib,iza,mf,mt,lend,lendp,inow
+   integer::jj,ll,ib,iza,mf,mt,lend,lendp,inow
    integer::lff,lxx,nn,mm,iint,loc,ix
    integer::mt418,mt518
    real(kr)::urlo,urhi,e,enext,s,test,awp,spi,q,x,teste,zaid
@@ -5170,14 +5169,15 @@ contains
       if (mth.eq.153) then
          write(nsyso,'(/'' found mt=153 with unresolved-range'',&
            &'' probability tables'')')
+         iinel=l1h !--new competition flag (can only be -1, 51, 91 or 4)
+         iabso=l2h !--new competition flag (can be -1, 0 or positive)
          call listio(nin,0,0,scr,nb,nw)
          lssf=l1h
-         icomp=l2h
-         iinel=0
-         iabso=0
-         if (icomp.ne.0) then
-            iinel=mod(icomp,1000)
-            iabso=icomp/1000
+         if (iinel.eq.zero) then !--old competition flags are used
+            iinel=-1
+            iabso=-1
+            if (mod(l2h,1000).ne.zero) iinel=mod(l2h,1000)
+            if (l2h/1000.ne.zero) iabso=l2h/1000
          endif
          nunr=n2h
          ncyc=n1h/nunr
@@ -5202,7 +5202,7 @@ contains
            write(nsyso,'(''   tables are cross sections'')')
          if (lssf.eq.1)&
            write(nsyso,'(''   tables are factors'')')
-         if (icomp.eq.0) then
+         if (iinel.lt.0.and.iabso.lt.0) then
             write(nsyso,'(''   no competition'')')
          else
             write(nsyso,'(''   inelastic competition ='',i3/&
@@ -5834,15 +5834,10 @@ contains
       xss(next)=nure
       nurb=nint(urd(5))
       nurb=(nurb/nure-1)/6
-      mtxx=nint(urd(4))
-      mtxx=-1
-      if (iinel.ne.0) mtxx=iinel
-      mtaa=-1
-      if (iabso.ne.0) mtaa=iabso
       xss(next+1)=nurb
       xss(next+2)=2
-      xss(next+3)=mtxx
-      xss(next+4)=mtaa
+      xss(next+3)=iinel
+      xss(next+4)=iabso
       xss(next+5)=lssf
       next=next+6
       do ie=1,nure

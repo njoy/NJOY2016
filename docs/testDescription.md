@@ -188,6 +188,12 @@ title: NJOY2016 Test Descriptions
 
   This test runs `PURR` for Pu240 from ENDF/B-VIII.0. This evaluation is one of the few that still gave negative cross sections in the probability tables for ENDF/B-VIII.0. In most cases, this behaviour is due to the fact that the original evaluation has an LSSF flag of 0 (MF3 contains background cross sections) and those background cross sections in the unresolved resonance region are negative (an example would be Na22). In the case of Pu240 however, the LSSF flag is set to 1 (MF3 contains the actual cross sections and the unresolved resonances should only be used for self-shielding). The negative cross section values in the probability table for this nuclide were due to the fact that the total cross section was actually lower than its components.
 
+## Test Problem 32
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/32/input)]
+
+  This test runs `THERMR` for each formatting option available for thermal scattering, being (E, E', μ) or (E, μ, E').
+
 ## Test Problem 33
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/33/input)]
@@ -199,4 +205,19 @@ title: NJOY2016 Test Descriptions
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/34/input)]
 
   This test is added following a problem encountered when running `ERRORR` using a binary input ENDF and GENDF file. The `ERRORR` run crashed with a segmentation fault prior to NJOY 2016.34.
+
+## Test Problem 35-42
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/35/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/36/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/37/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/38/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/39/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/40/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/41/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/test/42/input)]
+
+  Tests 35 to 42 were added to test the inelastic and absorption competition flags determined by `PURR` and used in `ACER` to be included in ACE files. Previous versions of NJOY 2016 (prior to 2016.30) incorrectly handled these flags. NJOY only tested competition up to MT102 (neutron capture) and explicitly omitted checking reactions like MT103 (n,p) or MT107 (n,a). As a result, for some nuclides NJOY did not capture the competition flags properly, leading MCNP or other codes using probability tables to incorrectly calculate the total cross section in the unresolved resonance region.
+
+  The tests cover all possible combinations of the competition flags (no competition, only inelastic competition, only absorption competition and both) for each possible value of the LSSF flag (0 or 1). These tests are related to test 31.
 
