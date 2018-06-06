@@ -4778,8 +4778,15 @@ contains
    in=in+1
    if (itype.eq.2.and.sn.le.small) then
       nneg=nneg+1
-      if (nneg.eq.1) call mess('emerge',&
-        'nonpositive elastic cross sections found.',' ')
+      if (nneg.eq.1) then
+         if (sn .le. 0.0) then
+            call mess('emerge',&
+            'nonpositive elastic cross sections found.',' ')
+         else
+            call mess('emerge',&
+            'tiny elastic cross sections replaced by the lower limit.',' ')
+         end if
+      endif
       sn=small
    endif
    sn=sigfig(sn,7,0)
