@@ -10617,7 +10617,7 @@ contains
    call findf(matd,6,0,nin)
    do while (mfh.eq.6)
       call contio(nin,0,0,scr,nb,nw)
-      if (mfh.eq.6) then
+      if (mfh.eq.6.and.mth.gt.2) then
          mt=mth
          mtt=0
          ir=0
@@ -10644,7 +10644,7 @@ contains
             enddo
 
             !--compute the heating from this recoil nuclide
-            if (izap.gt.2004.and.mt.gt.2) then
+            if (izap.gt.2004) then
 
                !--law 1
                if (law.eq.1) then
@@ -10783,8 +10783,8 @@ contains
                call skip6a(nin,0,0,scr,law)
             endif
          enddo
-         call tosend(nin,0,0,scr)
       endif
+      call tosend(nin,0,0,scr)
 
    !--continue loop over mts
    enddo
