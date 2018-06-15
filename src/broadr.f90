@@ -1535,7 +1535,6 @@ contains
    real(kr),parameter::two=2.e0_kr
    real(kr),parameter::atop=4.e0_kr
    real(kr),parameter::sigmin=1.e-15_kr
-
    aamin=atop
    aa=0
 
@@ -1547,9 +1546,11 @@ contains
 
    !--search for panel containing en
    k=kn
-   do while (en.ge.e(k+1))
-      k=k+1
-   enddo
+   if (e(k+1).ge.e(k)) then
+      do while (en.ge.e(k+1))
+         k=k+1
+      enddo
+   endif
 
    !--compute desired cross sections
    y=en
@@ -1691,8 +1692,8 @@ contains
    real(kr)::denom,slope,sp
    real(kr)::tt(ntt+1)
    real(kr),parameter::stpmax=1.24e0_kr
+   real(kr),parameter::eps=1.e-5_kr
    real(kr),parameter::zero=0
-
    nmin=nlow+2
    ilow=nlow+1
 
@@ -1720,7 +1721,7 @@ contains
    if (e(k).ge.stpmax*tt(1)) go to 140
    sp=tt(1+i)+slope*(e(k)-tt(1))
    if (abs(sp-s(i,k)).gt.errthn*s(i,k)) go to 140
-   if (e(k).gt.thnmax) go to 140
+   if (e(k)*(1.+eps).gt.thnmax) go to 140
   120 continue
   130 continue
    ! all intervening points can be thinned
@@ -1734,7 +1735,7 @@ contains
    do i=1,nreac
       tt(1+i)=s(i,nm1)
    enddo
-   if (tt(1).ge.thnmax) go to 180
+   if (tt(1)*(1.+eps).ge.thnmax) go to 180
    call loada(j,tt,ntx,inew,bufn,nbuf)
    ! reset lower limit of interval that can be thinned
    ilow=n
