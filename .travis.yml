@@ -10,8 +10,6 @@ addons:
     packages:
     - gcc-6
     - gfortran-6
-    - cmake
-    - cmake-data
 language: c
 compiler:
 - gcc
