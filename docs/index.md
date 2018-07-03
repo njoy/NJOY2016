@@ -12,7 +12,6 @@ NJOY2016 is a Fortran-90/95/2003 implementation of the NJOY Nuclear Data Process
 
 A pdf version of the NJOY2016 user's manual is [available here](https://github.com/njoy/NJOY2016-manual/raw/master/njoy16.pdf). For an alternative description of NJOY and its application see the report ["Methods for Processing ENDF/B-VII with NJOY"](http://www.sciencedirect.com/science/article/pii/S0090375210001006) in the December 2010 issue of Nuclear Data Sheets. 
 
-For a tutorial on using NJOY (originally written for NJOY97 but still applicable to the current code version), go to the LANL T-2 web site, [http://t2.lanl.gov](http://t2.lanl.gov), and follow links to the Nuclear Information Service (NIS), "Training Area" and "NJOY".
 
 ## Verification Tests
 An set of test problems is provided with NJOY2016, both to check the installation, and to provide examples of how to use NJOY.  In order to provide continuity to earlier versions, we still use fairly old ENDF/B-III, -IV, and -V files for many of these tests.  They also tend to have less detail than the newer ENDF/B-VII files, which makes the test problems run faster.  
