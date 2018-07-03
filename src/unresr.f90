@@ -220,6 +220,7 @@ contains
          do is=1,nsigz
             l=l+1
             b(l)=sigfig(sigu(ix,is),7,0)
+            write(nsyso,'(1x,1p,8e11.3)') b(l)
          enddo
          if (l.gt.nb)&
            call error('unresr','storage exceeded.',' ')
@@ -592,6 +593,11 @@ contains
          call ilist(enow,eunr,nunr)
       endif
    enddo
+   if (enow.lt.eh) then
+      write(strng,&
+        '(''between'',1p,e12.4,'' and'',1p,e12.4,'' eV'')') enow, eh
+      call error('rdunf2','energy dependent data undefined',strng) 
+   endif
    ! loop over l states
    do l=1,nls
       call contio(nendf,0,0,scr,nb,nw)
@@ -669,12 +675,17 @@ contains
             enddo
             inow=inow+6
             ! add to list of energy nodes
+            enow=sigfig(scr(jnow+1),7,0)
             if (n.ne.1.and.n.ne.ne.and.l.eq.1.and.j.eq.1) then
-               enow=sigfig(scr(jnow+1),7,0)
                call ilist(enow,eunr,nunr)
             endif
             jnow=jnow+6
          enddo
+         if (enow.lt.eh) then
+            write(strng,&
+              '(''between'',1p,e12.4,'' and'',1p,e12.4,'' eV'')') enow, eh
+            call error('rdunf2','energy dependent data undefined',strng) 
+         endif
       enddo
    enddo
    if (inow.gt.jx) call error('rdunf2','storage exceeded.',' ')
@@ -1248,7 +1259,6 @@ contains
    ! internals
    integer::i1,i,i2
    real(kr),parameter::small=1.e-8_kr
-
    i1=inow
    do i=2,ne
       i2=i1+6
@@ -1259,7 +1269,7 @@ contains
          call terp1(a(i1),a(i1+4),a(i2),a(i2+4),e,ggx,int)
          call terp1(a(i1),a(i1+5),a(i2),a(i2+5),e,gfx,int)
       endif
-      if (i.lt.ne) i1=i2
+      if (i.lt.ne) i1=i2 
    enddo
    if (gxx.lt.small) gxx=0
    if (gfx.lt.small) gfx=0
