@@ -1258,6 +1258,7 @@ contains
    ! internals
    integer::i1,i,i2
    real(kr),parameter::small=1.e-8_kr
+
    i1=inow
    do i=2,ne
       i2=i1+6
@@ -1268,7 +1269,7 @@ contains
          call terp1(a(i1),a(i1+4),a(i2),a(i2+4),e,ggx,int)
          call terp1(a(i1),a(i1+5),a(i2),a(i2+5),e,gfx,int)
       endif
-      if (i.lt.ne) i1=i2 
+      if (i.lt.ne) i1=i2
    enddo
    if (gxx.lt.small) gxx=0
    if (gfx.lt.small) gfx=0
