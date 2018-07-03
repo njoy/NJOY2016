@@ -220,7 +220,6 @@ contains
          do is=1,nsigz
             l=l+1
             b(l)=sigfig(sigu(ix,is),7,0)
-            write(nsyso,'(1x,1p,8e11.3)') b(l)
          enddo
          if (l.gt.nb)&
            call error('unresr','storage exceeded.',' ')
