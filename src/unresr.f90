@@ -592,6 +592,11 @@ contains
          call ilist(enow,eunr,nunr)
       endif
    enddo
+   if (enow.lt.eh) then
+      write(strng,&
+        '(''between'',1p,e12.4,'' and'',1p,e12.4,'' eV'')') enow, eh
+      call error('rdunf2','energy dependent data undefined',strng) 
+   endif
    ! loop over l states
    do l=1,nls
       call contio(nendf,0,0,scr,nb,nw)
@@ -669,12 +674,17 @@ contains
             enddo
             inow=inow+6
             ! add to list of energy nodes
+            enow=sigfig(scr(jnow+1),7,0)
             if (n.ne.1.and.n.ne.ne.and.l.eq.1.and.j.eq.1) then
-               enow=sigfig(scr(jnow+1),7,0)
                call ilist(enow,eunr,nunr)
             endif
             jnow=jnow+6
          enddo
+         if (enow.lt.eh) then
+            write(strng,&
+              '(''between'',1p,e12.4,'' and'',1p,e12.4,'' eV'')') enow, eh
+            call error('rdunf2','energy dependent data undefined',strng) 
+         endif
       enddo
    enddo
    if (inow.gt.jx) call error('rdunf2','storage exceeded.',' ')
