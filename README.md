@@ -37,3 +37,6 @@ Instructions for the installation of NJOY2016 are found on our page, [Obtaining 
 
 ## License and Copyright
 This software is distributed and copyrighted according to the [LICENSE](LICENSE) file.
+
+## Remove this if found in production
+Modification 1 for pull-request testing in Jenkins.
