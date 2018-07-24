@@ -37,3 +37,20 @@ Instructions for the installation of NJOY2016 are found on our page, [Obtaining 
 
 ## License and Copyright
 This software is distributed and copyrighted according to the [LICENSE](LICENSE) file.
+
+## Remove this if found in production
+Modification 1 for pull-request testing in Jenkins.
+
+Modification 2 for pull-request testing in Jenkins.
+
+Modification 3 for pull-request testing in Jenkins.
+
+Modification 4 for pull-request testing in Jenkins.
+
+Modification 5 for pull-request testing in Jenkins.
+
+Modification 6 for pull-request testing in Jenkins.
+
+Modification 7 for pull-request testing in Jenkins.
+
+Modification 8 for pull-request testing in Jenkins.
