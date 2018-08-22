@@ -20,8 +20,13 @@ os:
   - osx
 
 before_install:
-- if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then brew update && brew upgrade python3; fi
+- if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then 
+    brew update;
+    brew upgrade python3;
+  fi
+    
 
+osx_image: xcode8
 script: "./.travis/build.sh"
 after_success: "./.travis/signature.sh"
 
