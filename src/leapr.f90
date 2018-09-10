@@ -740,7 +740,8 @@ contains
    ! internals
    integer::i
    real(kr)::bt,btp
-
+   terpt=0
+   if (be.gt.ntn*delta) return
    i=int(be/delta)
    if (i.lt.ntn-1) then
       bt=i*delta
@@ -1101,8 +1102,8 @@ contains
    real(kr),parameter::zero=0
 
    terps=0
+   if (be.gt.delta*nsd) return
    i=int(be/delta)
-   if (i.lt.0) return
    if (i.lt.nsd-1) then
       bt=i*delta
       btp=bt+delta
@@ -2413,14 +2414,14 @@ contains
    integer::i
    real(kr)::bt,btp
 
+   terpk=1
+   if (be.gt.nka*delta) return   
    i=int(be/delta)
    if (i.lt.nka-1) then
       bt=i*delta
       btp=bt+delta
       i=i+1
       terpk=ska(i)+(be-bt)*(ska(i+1)-ska(i))/(btp-bt)
-   else
-      terpk=1
    endif
    return
    end function terpk
@@ -2783,7 +2784,7 @@ contains
    use endf    ! provides terp1
    ! externals
    integer::itemp,nalpha,nbeta,ntempr
-   real(kr)::cfrac,temp
+   real(kr)::temp
    real(kr)::ssm(nbeta,nalpha,ntempr)
    ! internals
    integer::i,j,k,kk,nal,ibeta,iprt,jprt
@@ -2792,6 +2793,7 @@ contains
    real(kr)::scoh(1000)
    real(kr),parameter::angst=1.e-8_kr
    real(kr),parameter::therm=.0253e0_kr
+   real(kr),parameter::zero=0.0
 
    !--apply the skold approximation
    tev=bk*abs(temp)
@@ -2809,8 +2811,12 @@ contains
             if (ap.lt.alpha(k)) exit
          enddo
          if (kk.eq.1) kk=2
+         if (ssm(i,kk-1,itemp).eq.zero.or.ssm(i,kk,itemp).eq.zero) then
+            scoh(j)=zero
+         else
          call terp1(alpha(kk-1),ssm(i,kk-1,itemp),&
            alpha(kk),ssm(i,kk,itemp),ap,scoh(j),5)
+         endif
          scoh(j)=scoh(j)*sk
       enddo
       do j=1,nalpha
@@ -3013,6 +3019,7 @@ contains
    math=1
    mfh=0
    mth=0
+   nsh=0
    text=' '
    read(text,'(16a4,a2)') (t(i),i=1,17)
    call tpidio(0,nout,nprnt,z,nb,nw)

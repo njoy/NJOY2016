@@ -102,7 +102,7 @@ contains
    real(kr)::time,zref,znow,za,awr,e,en,elo,ehi,enext
    real(kr)::thresh
    character(4)::mtname(15)
-   integer::ng2s(400),ig2s(400)
+   integer::ng2s(ngmax+1),ig2s(ngmax+1)
    real(kr)::z(10,10)
    character(66)::text
    character(4)::tt(17)

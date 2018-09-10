@@ -2491,16 +2491,16 @@ contains
    ! internals
    character(60)::strng
    character(66)::c
-   real(kr)::b(17)
-   integer::nnw,mtt,mf56,mat,mf,mt,nk
+   integer,parameter::nnw=10000
+   integer::mtt,mf56,mat,mf,mt,nk
    integer::i,nb,nw,k,lf,nr1,nr2,np1,np2,ib,ib2,iloop,ibx,nr12,np12
    integer::ir,ip,idis,izap,law,lang,lep,ib2x,na,nep,indx1,nnk,nd
    real(kr)::c1,c2,esp,pe,enext,elow,ehigh,aaa
    real(kr),dimension(:),allocatable::scr3
+   real(kr)::b(nnw)
 
    !--allocate scratch storage and initialize the spectrum
    !--integral array
-   nnw=10000
    allocate(scr3(nnw))
    do i=1,ne1
       spc(i)=0
