@@ -38,8 +38,6 @@ contains
    integer::izg,izr,idis,lr,ngas,j,ip,ir,nsec
    integer::n203,n204,n205,n206,n207,jg,ii,k,nold
    integer::ni,nm,mtb,ifini,np,istart,iend,ib
-   integer::mt103,mt104,mt105,mt106,mt107
-   integer::mt600,mt650,mt700,mt750,mt800
    integer::mpmin,mpmax,mdmin,mdmax,mtmin,mtmax,m3min,m3max,m4min,m4max
    integer::maxg
    real(kr)::time,za,awr,zain,thrg,en,enext,y
@@ -113,16 +111,6 @@ contains
    mf6mt5=0
    i=1
    idone=0
-   mt103=0
-   mt104=0
-   mt105=0
-   mt106=0
-   mt107=0
-   mt600=0
-   mt650=0
-   mt700=0
-   mt750=0
-   mt800=0
    if (iverf .ge. 6) then
        mpmin=600
        mpmax=649
@@ -149,16 +137,6 @@ contains
    do while (i.le.nw.and.idone.eq.0)
       mfi=nint(a(1+i+1))
       mti=nint(a(1+i+2))
-      if (mfi.eq.3.and.mti.eq.103) mt103=1
-      if (mfi.eq.3.and.mti.eq.104) mt104=1
-      if (mfi.eq.3.and.mti.eq.105) mt105=1
-      if (mfi.eq.3.and.mti.eq.106) mt106=1
-      if (mfi.eq.3.and.mti.eq.107) mt107=1
-      if (mfi.eq.3.and.mti.ge.mpmin.and.mti.le.mpmax) mt600=1
-      if (mfi.eq.3.and.mti.ge.mdmin.and.mti.le.mdmax) mt650=1
-      if (mfi.eq.3.and.mti.ge.mtmin.and.mti.le.mtmax) mt700=1
-      if (mfi.eq.3.and.mti.ge.m3min.and.mti.le.m3max) mt750=1
-      if (mfi.eq.3.and.mti.ge.m4min.and.mti.le.m4max) mt800=1
       if (mfi.gt.6) then
          idone=1
       else
@@ -368,27 +346,18 @@ contains
       if (lr.eq.36) izr=izr-5011
    endif
    if (mth.ge.92.and.mth.le.101) go to 245
-   if ((mth.ge.103.and.mth.le.117).or.&
-     (mt103.eq.0.and.mth.ge.mpmin.and.mth.le.mpmax).or.&
-     (mt104.eq.0.and.mth.ge.mdmin.and.mth.le.mdmax).or.&
-     (mt105.eq.0.and.mth.ge.mtmin.and.mth.le.mtmax).or.&
-     (mt106.eq.0.and.mth.ge.m3min.and.mth.le.m3max).or.&
-     (mt107.eq.0.and.mth.ge.m4min.and.mth.le.m4max)) izg=1
-   if ((mth.eq.103).or.&
-     (mt103.eq.0.and.mth.ge.mpmin.and.mth.le.mpmax)) izr=izr-1001
-   if (mt103.eq.1.and.mth.ge.mpmin.and.mth.le.mpmax) go to 245
-   if ((mth.eq.104).or.&
-     (mt104.eq.0.and.mth.ge.mdmin.and.mth.le.mdmax)) izr=izr-1002
-   if (mt104.eq.1.and.mth.ge.mdmin.and.mth.le.mdmax) go to 245
-   if ((mth.eq.105).or.&
-     (mt105.eq.0.and.mth.ge.mtmin.and.mth.le.mtmax)) izr=izr-1003
-   if (mt105.eq.1.and.mth.ge.mtmin.and.mth.le.mtmax) go to 245
-   if ((mth.eq.106).or.&
-     (mt106.eq.0.and.mth.ge.m3min.and.mth.le.m3max)) izr=izr-2003
-   if (mt106.eq.1.and.mth.ge.m3min.and.mth.le.m3max) go to 245
-   if ((mth.eq.107).or.&
-     (mt107.eq.0.and.mth.ge.m4min.and.mth.le.m4max)) izr=izr-2004
-   if (mt107.eq.1.and.mth.ge.m4min.and.mth.le.m4max) go to 245
+   if (mth.ge.103.and.mth.le.117) izg=1
+   if (mth.eq.103) izr=izr-1001
+   if (mth.eq.104) izr=izr-1002
+   if (mth.eq.105) izr=izr-1003
+   if (mth.eq.106) izr=izr-2003
+   if (mth.eq.107) izr=izr-2004
+   !--always skip levels for mt103-107
+   if (mth.ge.mpmin.and.mth.le.mpmax) go to 245
+   if (mth.ge.mdmin.and.mth.le.mdmax) go to 245
+   if (mth.ge.mtmin.and.mth.le.mtmax) go to 245
+   if (mth.ge.m3min.and.mth.le.m3max) go to 245
+   if (mth.ge.m4min.and.mth.le.m4max) go to 245
    if (mth.eq.108) izr=izr-4008
    if (mth.eq.109) izr=izr-6012
    if (mth.eq.111) izr=izr-2002
@@ -513,11 +482,12 @@ contains
    if (mth.eq.43) go to 310
    if (mth.ge.46.and.mth.le.50) go to 310
    if (mth.ge.92.and.mth.le.101) go to 310
-   if (mt103.eq.1.and.mth.ge.mpmin.and.mth.le.mpmax) go to 310
-   if (mt104.eq.1.and.mth.ge.mdmin.and.mth.le.mdmax) go to 310
-   if (mt105.eq.1.and.mth.ge.mtmin.and.mth.le.mtmax) go to 310
-   if (mt106.eq.1.and.mth.ge.m3min.and.mth.le.m3max) go to 310
-   if (mt107.eq.1.and.mth.ge.m4min.and.mth.le.m4max) go to 310
+   !--always skip levels for mt103-107
+   if (mth.ge.mpmin.and.mth.le.mpmax) go to 310
+   if (mth.ge.mdmin.and.mth.le.mdmax) go to 310
+   if (mth.ge.mtmin.and.mth.le.mtmax) go to 310
+   if (mth.ge.m3min.and.mth.le.m3max) go to 310
+   if (mth.ge.m4min.and.mth.le.m4max) go to 310
    if (mth.eq.152.or.mth.eq.153.or.mth.eq.160.or.mth.eq.161)go to 310
    en=0
    call gety1(en,enext,idis,y,nscr1,a(1))
@@ -639,24 +609,19 @@ contains
       else if (lr.eq.40) then
          izr=izr
       endif
-      else if ((mth.eq.103).or.&
-        (mt103.eq.0.and.mth.ge.mpmin.and.mth.le.mpmax)) then
+      else if (mth.eq.103) then
       izr=izr-1001
       y203=1
-      else if ((mth.eq.104).or.&
-        (mt104.eq.0.and.mth.ge.mdmin.and.mth.le.mdmax)) then
+      else if (mth.eq.104) then
       izr=izr-1002
       y204=1
-      else if ((mth.eq.105).or.&
-        (mt105.eq.0.and.mth.ge.mtmin.and.mth.le.mtmax)) then
+      else if (mth.eq.105) then
       izr=izr-1003
       y205=1
-      else if ((mth.eq.106).or.&
-        (mt106.eq.0.and.mth.ge.m3min.and.mth.le.m3max)) then
+      else if (mth.eq.106) then
       izr=izr-2003
       y206=1
-      else if ((mth.eq.107).or.&
-        (mt107.eq.0.and.mth.ge.m4min.and.mth.le.m4max)) then
+      else if (mth.eq.107) then
       izr=izr-2004
       y207=1
    else if (mth.eq.108) then
