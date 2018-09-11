@@ -38,5 +38,6 @@ module physics
    real(kr),parameter,public::amassh=3.01493223469e0_kr !hellion (3)
    real(kr),parameter,public::amassa=4.0015061747e0_kr  !alpha
    real(kr),parameter,public::amasse=5.485799110e-4_kr  !electron
+   real(kr),parameter,public::epair=amasse*amu*clight*clight/ev
 end module physics
 

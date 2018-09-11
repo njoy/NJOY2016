@@ -125,8 +125,6 @@ contains
    real(kr),dimension(:,:,:),allocatable::ans
    real(kr),parameter::ekn=12.4e3_kr
    real(kr),parameter::emax=1.e12_kr
-!  real(kr),parameter::epair=.5110034e6_kr
-   real(kr),parameter::epair=amasse*amu*clight*clight/ev
    real(kr),parameter::zero=0
    integer,parameter::ncnt=9
    integer,parameter::nwpff=5000
@@ -1204,7 +1202,6 @@ contains
    real(kr),parameter::c5=20.60744e0_kr
    real(kr),parameter::toler=1.e-6_kr
    real(kr),parameter::rndoff=1.0000001e0_kr
-   real(kr),parameter::epair=2._kr*amasse*amu*clight*clight/ev
    real(kr),parameter::emax=1.e12_kr
    real(kr),parameter::two=2.e0_kr
    real(kr),parameter::half=0.5e0_kr
@@ -1504,7 +1501,7 @@ contains
             iglo=ig2pp
             nq=0
             ff(1,1)=2
-            ff(1,2)=e-epair
+            ff(1,2)=e-2.0*epair
          endif
          return
       endif
