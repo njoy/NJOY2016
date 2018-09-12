@@ -20,7 +20,7 @@ module physics
    real(kr),parameter,public::pi=3.14159265359e0_kr     !
    real(kr),parameter,public::euler=0.55721566490153286e0_kr !
    real(kr),parameter,public::bk=8.6173303e-5_kr         !eV/degK
-   real(kr),parameter,public::ev=1.602176462e-12_kr     !erg/eV
+   real(kr),parameter,public::ev=1.6021766208e-12_kr     !erg/eV
    real(kr),parameter,public::clight=2.99792458e10_kr   !cm/s
    real(kr),parameter,public::amu=931.494013e6_kr*ev/&
                                         (clight*clight) !g/amu
