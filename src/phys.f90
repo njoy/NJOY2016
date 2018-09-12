@@ -1,23 +1,25 @@
 module physics
-   ! Provides pi and physics constants taken from CODATA'89 as
-   ! given on the NIST site; namely, bk (Boltzmann's constant),
+   ! Provides pi and physics constants taken from CODATA'2014 as
+   ! given on the NIST site: 
+   !      https://physics.nist.gov/cuu/Constants
+   ! namely, bk (Boltzmann's constant),
    ! amassn (the neutron mass in amu), amu (the amu value itself),
    ! hbar (Planck's constant), ev (the conversion to eV), and
    ! clight (the speed of light).
    use locale ! provides kr
    implicit none
 !
-! Constants per ENDF-102, Appendix G (October 24, 2012 edition, also
-! identified as SVN Commit:  Revision 85).  This is the manual version
+! Constants per ENDF-102, Appendix H (February 1, 2018) edition, also
+! identified as SVN Commit:  Revision 215).  This is the manual version
 ! available from http://www.nndc.bnl.gov/csewg/docs/endf-manual.pdf in
-! the Spring 2017.
+! the Summer 2018.
 !  - numerical values are given for pi, Boltzmann's constant, eV
 !    speed of light, atomic mass unit in eV, Planck's constant and
 !    the fine structure constant.
 !  - other values are given in terms of the above.
    real(kr),parameter,public::pi=3.14159265359e0_kr     !
    real(kr),parameter,public::euler=0.55721566490153286e0_kr !
-   real(kr),parameter,public::bk=8.617342e-5_kr         !eV/degK
+   real(kr),parameter,public::bk=8.6173303e-5_kr         !eV/degK
    real(kr),parameter,public::ev=1.602176462e-12_kr     !erg/eV
    real(kr),parameter,public::clight=2.99792458e10_kr   !cm/s
    real(kr),parameter,public::amu=931.494013e6_kr*ev/&
@@ -25,7 +27,7 @@ module physics
    real(kr),parameter,public::hbar=6.58211889e-16_kr*ev !Planck/2pi, erg
    real(kr),parameter,public::finstri=1.e16_kr*hbar/(ev*ev*clight) !inv fine str
 ! ****************************************************************
-! * Light particle masses (in amu), per ENDF-102, Appendix G:    *
+! * Light particle masses (in amu), per ENDF-102, Appendix H:    *
 ! * - note, these are particle masses, not atomic masses.        *
 ! * - we use "a" to start the variable name due to the legacy    *
 ! *   fortran naming convention that would have considered a     *
