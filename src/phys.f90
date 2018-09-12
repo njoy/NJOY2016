@@ -22,7 +22,7 @@ module physics
    real(kr),parameter,public::bk=8.6173303e-5_kr         !eV/degK
    real(kr),parameter,public::ev=1.6021766208e-12_kr     !erg/eV
    real(kr),parameter,public::clight=2.99792458e10_kr   !cm/s
-   real(kr),parameter,public::amu=931.494013e6_kr*ev/&
+   real(kr),parameter,public::amu=931.4940954e6_kr*ev/&
                                         (clight*clight) !g/amu
    real(kr),parameter,public::hbar=6.58211889e-16_kr*ev !Planck/2pi, erg
    real(kr),parameter,public::finstri=1.e16_kr*hbar/(ev*ev*clight) !inv fine str
