@@ -1295,27 +1295,27 @@ contains
          kza(i,ier)=0
          lpent(i,ier)=1
       else if (mt(i,ier).eq.103) then  ! proton
-         ema(i,ier)=amassp/amassn
+         ema(i,ier)=pnratio
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.104) then  ! deuteron
-         ema(i,ier)=amassd/amassn
+         ema(i,ier)=dnratio
          spina(i,ier)=1
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.105) then  ! triton
-         ema(i,ier)=amasst/amassn
+         ema(i,ier)=tnratio
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=1
          lpent(i,ier)=1
       else if (mt(i,ier).eq.106) then  ! he3
-         ema(i,ier)=amassh/amassn
+         ema(i,ier)=hnratio
          spina(i,ier)=0.5e0_kr
          kza(i,ier)=2
          lpent(i,ier)=1
       else if (mt(i,ier).eq.107) then  ! alpha
-         ema(i,ier)=amassa/amassn
+         ema(i,ier)=anratio
          spina(i,ier)=0
          pa(i,ier)=0
          kza(i,ier)=2
@@ -1719,7 +1719,6 @@ contains
    integer::ippx,kgroup,ichan
    real(kr)::ff,twomhb,etac
    real(kr)::factor,alabcm,aa,redmas,z
-   real(kr),parameter::emneut=amassn               !neutron mass in amu
    real(kr),parameter::hbarrr=hbar/ev              !hbar in eV-s
    real(kr),parameter::amuevv=amu*clight*clight/ev !amu in eV
    real(kr),parameter::cspeed=clight/100           !c in m/s (not cm/s!)
@@ -1727,8 +1726,8 @@ contains
    real(kr),parameter::zero=0
 
    ff=1.e+15_kr
-   twomhb=sqrt(2*emneut*amuevv)/(hbarrr*ff*cspeed)
-   etac=fininv*amuevv/(hbarrr*ff*cspeed)*emneut
+   twomhb=sqrt(2*amassn*amuevv)/(hbarrr*ff*cspeed)
+   etac=fininv*amuevv/(hbarrr*ff*cspeed)*amassn
 
    do ippx=1,nppm(ier)
       if (ema(ippx,ier).eq.zero) then

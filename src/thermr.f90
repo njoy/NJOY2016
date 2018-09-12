@@ -2300,7 +2300,7 @@ contains
       write(nsyso,'(/''            mu            theta      dsigma/dmu'')')
       do i=1,nmu
          write(nsyso,'(i5,1x,f15.8,1x,f12.4,1x,1p,e14.7)') i,uj(i),&
-           acos(uj(i))*180/pi,sj(i)/2
+           acos(uj(i))*180.0/pi,sj(i)/2.0
       enddo
    endif
 

@@ -1878,11 +1878,6 @@ contains
       8.84675983E-03_kr, 6.50445797E-03_kr, 4.14703326E-03_kr,&
       1.78328072E-03_kr/)
    real(kr),parameter::edis=25.e0_kr
-   real(kr),parameter::am1=amassp/amassn
-   real(kr),parameter::am2=amassd/amassn
-   real(kr),parameter::am3=amasst/amassn
-   real(kr),parameter::am4=amassh/amassn
-   real(kr),parameter::am5=amassa/amassn
    real(kr),parameter::step=1.1e0_kr
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::zero=0
@@ -1908,16 +1903,16 @@ contains
       endif
       thresh=((awr+1)/awr)*(-q)
       awp=1
-      if (iverf.le.5.and.mtd.ge.700.and.mtd.lt.718) awp=am1
-      if (iverf.le.5.and.mtd.ge.720.and.mtd.lt.738) awp=am2
-      if (iverf.le.5.and.mtd.ge.740.and.mtd.lt.758) awp=am3
-      if (iverf.le.5.and.mtd.ge.760.and.mtd.lt.778) awp=am4
-      if (iverf.le.5.and.mtd.ge.780.and.mtd.lt.798) awp=am5
-      if (iverf.ge.6.and.mtd.ge.600.and.mtd.lt.649) awp=am1
-      if (iverf.ge.6.and.mtd.ge.650.and.mtd.lt.699) awp=am2
-      if (iverf.ge.6.and.mtd.ge.700.and.mtd.lt.749) awp=am3
-      if (iverf.ge.6.and.mtd.ge.750.and.mtd.lt.799) awp=am4
-      if (iverf.ge.6.and.mtd.ge.800.and.mtd.lt.849) awp=am5
+      if (iverf.le.5.and.mtd.ge.700.and.mtd.lt.718) awp=pnratio
+      if (iverf.le.5.and.mtd.ge.720.and.mtd.lt.738) awp=dnratio
+      if (iverf.le.5.and.mtd.ge.740.and.mtd.lt.758) awp=tnratio
+      if (iverf.le.5.and.mtd.ge.760.and.mtd.lt.778) awp=hnratio
+      if (iverf.le.5.and.mtd.ge.780.and.mtd.lt.798) awp=anratio
+      if (iverf.ge.6.and.mtd.ge.600.and.mtd.lt.649) awp=pnratio
+      if (iverf.ge.6.and.mtd.ge.650.and.mtd.lt.699) awp=dnratio
+      if (iverf.ge.6.and.mtd.ge.700.and.mtd.lt.749) awp=tnratio
+      if (iverf.ge.6.and.mtd.ge.750.and.mtd.lt.799) awp=hnratio
+      if (iverf.ge.6.and.mtd.ge.800.and.mtd.lt.849) awp=anratio
       afact=awp/((awr+1)**2)
       arat=awp/(awr+1-awp)
       en=0
