@@ -33,7 +33,7 @@ module physics
 ! *   fortran naming convention that would have considered a     *
 ! *   name of the form "massn" to be an integer variable.        *
 ! ****************************************************************
-   real(kr),parameter,public::amassn=1.00866491578e0_kr !neutron
+   real(kr),parameter,public::amassn=1.00866491588e0_kr !neutron
    real(kr),parameter,public::amassp=1.00727646688e0_kr !proton
    real(kr),parameter,public::amassd=2.01355321271e0_kr !deuteron
    real(kr),parameter,public::amasst=3.015500713e0_kr   !triton
