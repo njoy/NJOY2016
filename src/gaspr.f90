@@ -609,19 +609,19 @@ contains
       else if (lr.eq.40) then
          izr=izr
       endif
-      else if (mth.eq.103) then
+   else if (mth.eq.103) then
       izr=izr-1001
       y203=1
-      else if (mth.eq.104) then
+   else if (mth.eq.104) then
       izr=izr-1002
       y204=1
-      else if (mth.eq.105) then
+   else if (mth.eq.105) then
       izr=izr-1003
       y205=1
-      else if (mth.eq.106) then
+   else if (mth.eq.106) then
       izr=izr-2003
       y206=1
-      else if (mth.eq.107) then
+   else if (mth.eq.107) then
       izr=izr-2004
       y207=1
    else if (mth.eq.108) then
