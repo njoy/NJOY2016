@@ -7903,7 +7903,7 @@ contains
    real(kr),parameter::r2=0.333333333e0_kr
    real(kr),parameter::r3=0.08e0_kr
    real(kr),parameter::zero=0
-   cwaven=sqrt(2*amassn*amu*ev)*1.d-12/hbar
+   cwaven=sqrt(2*amassn*amu*ev)*1.e-12_kr/hbar
 
    nresg=0
    ifresr=0

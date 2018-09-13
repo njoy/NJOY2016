@@ -1924,8 +1924,6 @@ contains
    real(kr),parameter::dmass=3.343586e-24_kr
    real(kr),parameter::deh=0.0147e0_kr
    real(kr),parameter::ded=0.0074e0_kr
-   real(kr),parameter::amassh=3.3465e-24_kr
-   real(kr),parameter::amassd=6.69e-24_kr
    real(kr),parameter::sampch=0.356e0_kr
    real(kr),parameter::sampcd=0.668e0_kr
    real(kr),parameter::sampih=2.526e0_kr
@@ -1959,14 +1957,19 @@ contains
    de=deh
    if (law.gt.3) de=ded
    x=de/tev
-   amassm=amassh
-   if (law.gt.3) amassm=amassd
-   bp=hbar/2*sqrt(2/deh/ev/pmass)/angst
-   if (law.gt.3) bp=hbar/2*sqrt(2/ded/ev/dmass)/angst
-   sampc=sampch
-   if (law.gt.3) sampc=sampcd
-   sampi=sampih
-   if (law.gt.3) sampi=sampid
+   if (law.gt.3) then
+     amassm=6.69E-24_kr
+     ! amassm=2*(amassd+amasse)*amu*ev/(clight*clight)
+     sampc=sampcd
+     bp=hbar/2*sqrt(2/ded/ev/dmass)/angst
+     sampi=sampid
+   else
+     amassm=3.3464e-24_kr
+     ! amassm=2*(amassp+amasse)*amu*ev/(clight*clight)
+     sampc=sampch
+     bp=hbar/2*sqrt(2/deh/ev/pmass)/angst
+     sampi=sampih
+   endif
    wt=twt+tbeta
    tbart=tempf(itemp)/tempr(itemp)
 
