@@ -5577,15 +5577,10 @@ contains
    !-------------------------------------------------------------------
    ! Set up particles for reactions that use file 4.
    !-------------------------------------------------------------------
+   use physics !get global physics and light particle mass constants
    use endf ! provides iverf
    ! externals
    integer::mfd,mtd
-   ! internals
-   real(kr),parameter::awr1=.99862e0_kr
-   real(kr),parameter::awr2=1.99626e0_kr
-   real(kr),parameter::awr3=2.98960e0_kr
-   real(kr),parameter::awr4=2.98903e0_kr
-   real(kr),parameter::awr5=3.96713e0_kr
 
    law=0
    zap=1
@@ -5601,35 +5596,35 @@ contains
          endif
       else if (mtd.ge.700.and.mtd.lt.720) then
          zap=1001
-         aprime=awr1
+         aprime=pnratio
          if (mfd.ne.31) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.720.and.mtd.lt.740) then
          zap=1002
-         aprime=awr2
+         aprime=dnratio
          if (mfd.ne.32) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.740.and.mtd.lt.760) then
          zap=1003
-         aprime=awr3
+         aprime=tnratio
          if (mfd.ne.33) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.760.and.mtd.lt.780) then
          zap=2003
-         aprime=awr4
+         aprime=hnratio
          if (mfd.ne.34) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.780.and.mtd.lt.800) then
          zap=2004
-         aprime=awr5
+         aprime=anratio
          if (mfd.ne.35) then
             aprime=awr+1-aprime
             law=4
@@ -5653,35 +5648,35 @@ contains
          endif
       else if (mtd.ge.600.and.mtd.lt.650) then
          zap=1001
-         aprime=awr1
+         aprime=pnratio
          if (mfd.ne.31) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.650.and.mtd.lt.700) then
          zap=1002
-         aprime=awr2
+         aprime=dnratio
          if (mfd.ne.32) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.700.and.mtd.lt.750) then
          zap=1003
-         aprime=awr3
+         aprime=tnratio
          if (mfd.ne.33) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.750.and.mtd.lt.800) then
          zap=2003
-         aprime=awr4
+         aprime=hnratio
          if (mfd.ne.34) then
             aprime=awr+1-aprime
             law=4
          endif
       else if(mtd.ge.800.and.mtd.lt.850) then
          zap=2004
-         aprime=awr5
+         aprime=anratio
          if (mfd.ne.35) then
             aprime=awr+1-aprime
             law=4
