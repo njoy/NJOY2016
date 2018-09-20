@@ -1939,10 +1939,6 @@ contains
       if (mt1.eq.0) call error('covcal','illegal mt1=0.',' ')
       nc=n1h
       ni=n2h
-      if (mfcov.eq.34) then
-         nc=0
-         ni=1
-      endif
    endif
    if (ni.gt.locm) call error('covcal','storage exceeded in loc.',' ')
    iok=1
@@ -2491,16 +2487,16 @@ contains
    ! internals
    character(60)::strng
    character(66)::c
-   real(kr)::b(17)
-   integer::nnw,mtt,mf56,mat,mf,mt,nk
+   integer,parameter::nnw=10000
+   integer::mtt,mf56,mat,mf,mt,nk
    integer::i,nb,nw,k,lf,nr1,nr2,np1,np2,ib,ib2,iloop,ibx,nr12,np12
    integer::ir,ip,idis,izap,law,lang,lep,ib2x,na,nep,indx1,nnk,nd
    real(kr)::c1,c2,esp,pe,enext,elow,ehigh,aaa
    real(kr),dimension(:),allocatable::scr3
+   real(kr)::b(nnw)
 
    !--allocate scratch storage and initialize the spectrum
    !--integral array
-   nnw=10000
    allocate(scr3(nnw))
    do i=1,ne1
       spc(i)=0
@@ -7903,7 +7899,7 @@ contains
    real(kr),parameter::r2=0.333333333e0_kr
    real(kr),parameter::r3=0.08e0_kr
    real(kr),parameter::zero=0
-   cwaven=sqrt(2*amassn*amu*ev)*1.d-12/hbar
+   cwaven=sqrt(2*amassn*amu*ev)*1.e-12_kr/hbar
 
    nresg=0
    ifresr=0
@@ -11293,14 +11289,14 @@ contains
    if (allocated(scr1)) deallocate(scr1)
    allocate(scr1(npage+50))
   200 continue
-   call listio(ngout,0,0,scr1(1),nb,nw)
-   nbsave=nb
-   nwsave=nw
    if (math.eq.-1) then
       write(strng,'("can''t find tempin = ",1pe10.4,&
             &"K on the gendf tape")')tempin
       call error('ngchk',strng,'')
    endif
+   call listio(ngout,0,0,scr1(1),nb,nw)
+   nbsave=nb
+   nwsave=nw
    if (tempin.eq.0 .and. scr1(1).le.0.1) goto 300
    if (tempin.lt.1.e4 .and. abs(tempin-scr1(1)).gt.0.1) then
       call tomend(ngout,0,0,c1)

@@ -16,4 +16,3 @@ configure_file("${RESOURCES}/epn14"
 add_test( NAME "Test14"
           COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )
-

@@ -94,6 +94,7 @@ contains
    use mainio ! provides nsysi,nsyso,nsyse
    use endf   ! provides endf routines and variables
    use util   ! provides timer,repoz,skiprz,closz
+   use physics ! provides electron mass
    integer::nw,nb,nwds,nggp1,np,loc,nleft,icnt,mflg,nl
    integer::idis,ng2,iglo,nq,ig1,ig,ig2lo,it,iz,il
    integer::idone,igzero,j,ibase,i,lim,l
@@ -101,7 +102,7 @@ contains
    real(kr)::time,zref,znow,za,awr,e,en,elo,ehi,enext
    real(kr)::thresh
    character(4)::mtname(15)
-   integer::ng2s(400),ig2s(400)
+   integer::ng2s(ngmax+1),ig2s(ngmax+1)
    real(kr)::z(10,10)
    character(66)::text
    character(4)::tt(17)
@@ -124,7 +125,6 @@ contains
    real(kr),dimension(:,:,:),allocatable::ans
    real(kr),parameter::ekn=12.4e3_kr
    real(kr),parameter::emax=1.e12_kr
-   real(kr),parameter::epair=.5110034e6_kr
    real(kr),parameter::zero=0
    integer,parameter::ncnt=9
    integer,parameter::nwpff=5000
@@ -1166,6 +1166,7 @@ contains
    use util ! provides error
    use endf ! provides endf routines and variables
    use mathm ! provides legndr
+   use physics ! provides electron mass
    ! externals
    integer::idisc,nl,ng,iglo,nq,nwpff
    real(kr)::e,enext,ff(nl,*),pff(nwpff)
@@ -1201,7 +1202,6 @@ contains
    real(kr),parameter::c5=20.60744e0_kr
    real(kr),parameter::toler=1.e-6_kr
    real(kr),parameter::rndoff=1.0000001e0_kr
-   real(kr),parameter::epair=1.0220068e6_kr
    real(kr),parameter::emax=1.e12_kr
    real(kr),parameter::two=2.e0_kr
    real(kr),parameter::half=0.5e0_kr
@@ -1501,7 +1501,7 @@ contains
             iglo=ig2pp
             nq=0
             ff(1,1)=2
-            ff(1,2)=e-epair
+            ff(1,2)=e-2.0*epair
          endif
          return
       endif

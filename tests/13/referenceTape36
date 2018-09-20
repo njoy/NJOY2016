@@ -749,7 +749,7 @@ newpath
    152.28   130.85 lineto
    153.27   132.52 lineto
    154.19   134.06 lineto
-   155.84   136.85 lineto
+   155.83   136.85 lineto
    156.94   138.72 lineto
    157.95   140.43 lineto
    158.89   142.01 lineto
@@ -758,7 +758,7 @@ newpath
    162.72   148.51 lineto
    163.96   150.63 lineto
    165.09   152.56 lineto
-   166.13   154.32 lineto
+   166.12   154.32 lineto
    167.07   155.95 lineto
    168.51   158.40 lineto
    169.78   160.60 lineto
@@ -773,7 +773,7 @@ newpath
    180.19   178.85 lineto
    181.12   180.52 lineto
    181.98   182.06 lineto
-   183.51   184.84 lineto
+   183.50   184.84 lineto
    184.52   186.71 lineto
    185.45   188.43 lineto
    186.30   190.01 lineto
@@ -792,7 +792,7 @@ newpath
    198.89   215.61 lineto
    200.10   218.39 lineto
    201.13   220.85 lineto
-   202.04   223.04 lineto
+   202.03   223.04 lineto
    202.83   225.03 lineto
    203.54   226.84 lineto
    204.18   228.51 lineto
@@ -859,7 +859,7 @@ newpath
    223.94   344.54 lineto
    224.08   347.93 lineto
    224.26   352.58 lineto
-   224.40   356.38 lineto
+   224.39   356.38 lineto
    224.50   359.60 lineto
    224.58   362.38 lineto
    224.71   367.03 lineto
@@ -918,7 +918,7 @@ newpath
    252.81   541.44 lineto
    255.35   542.17 lineto
    258.56   542.87 lineto
-   262.70   543.54 lineto
+   262.71   543.54 lineto
    265.29   543.87 lineto
    268.39   544.20 lineto
    270.12   544.36 lineto
@@ -928,7 +928,7 @@ newpath
    290.13   545.45 lineto
    295.78   545.63 lineto
    302.11   545.81 lineto
-   308.12   546.00 lineto
+   308.13   546.00 lineto
    310.39   546.17 lineto
    304.13   546.35 lineto
    289.61   546.52 lineto
@@ -955,7 +955,7 @@ newpath
    208.89   550.30 lineto
    212.28   550.54 lineto
    215.29   550.77 lineto
-   218.30   551.01 lineto
+   218.29   551.01 lineto
    220.95   551.18 lineto
    225.39   551.35 lineto
    241.46   551.51 lineto
@@ -1020,7 +1020,7 @@ newpath
    207.33   564.27 lineto
    198.79   564.47 lineto
    189.25   564.67 lineto
-   180.12   564.86 lineto
+   180.11   564.86 lineto
    174.22   565.05 lineto
    174.19   565.21 lineto
    183.72   565.50 lineto
@@ -1088,7 +1088,7 @@ newpath
    190.61   578.17 lineto
    197.88   578.33 lineto
    204.75   578.48 lineto
-   211.35   578.66 lineto
+   211.34   578.66 lineto
    217.01   578.81 lineto
    208.95   578.96 lineto
    181.10   579.12 lineto
@@ -1169,7 +1169,7 @@ newpath
    247.76   592.36 lineto
    248.77   592.54 lineto
    246.94   592.69 lineto
-   238.65   592.85 lineto
+   238.64   592.85 lineto
    213.73   593.01 lineto
    209.95   593.17 lineto
    249.81   593.33 lineto
@@ -1606,7 +1606,7 @@ newpath
    174.84   152.56 lineto
    175.90   154.32 lineto
    176.87   155.95 lineto
-   178.34   158.40 lineto
+   178.33   158.40 lineto
    179.65   160.60 lineto
    180.84   162.59 lineto
    181.92   164.40 lineto
@@ -1631,7 +1631,7 @@ newpath
    204.59   202.32 lineto
    205.56   203.94 lineto
    207.03   206.40 lineto
-   208.35   208.60 lineto
+   208.34   208.60 lineto
    209.53   210.58 lineto
    210.62   212.40 lineto
    211.61   214.06 lineto
@@ -1651,7 +1651,7 @@ newpath
    228.40   242.14 lineto
    229.82   244.51 lineto
    231.08   246.63 lineto
-   232.24   248.55 lineto
+   232.23   248.55 lineto
    233.29   250.31 lineto
    234.26   251.94 lineto
    235.73   254.40 lineto
@@ -1667,7 +1667,7 @@ newpath
    247.95   274.84 lineto
    248.95   276.51 lineto
    249.87   278.05 lineto
-   251.54   280.84 lineto
+   251.53   280.84 lineto
    253.09   283.43 lineto
    254.47   285.74 lineto
    254.61   285.97 lineto
@@ -1703,12 +1703,12 @@ newpath
    287.21   340.50 lineto
    288.48   342.62 lineto
    289.62   344.54 lineto
-   291.65   347.93 lineto
+   291.64   347.93 lineto
    294.43   352.58 lineto
-   296.70   356.38 lineto
+   296.69   356.38 lineto
    298.62   359.60 lineto
    300.29   362.38 lineto
-   303.08   367.03 lineto
+   303.07   367.03 lineto
    305.35   370.83 lineto
    307.27   374.05 lineto
    308.94   376.83 lineto
@@ -1727,7 +1727,7 @@ newpath
    341.78   431.46 lineto
    344.83   436.49 lineto
    347.29   440.54 lineto
-   349.37   443.92 lineto
+   349.36   443.92 lineto
    352.22   448.58 lineto
    354.57   452.38 lineto
    356.57   455.59 lineto
@@ -1735,7 +1735,7 @@ newpath
    361.23   463.02 lineto
    363.65   466.82 lineto
    365.72   470.04 lineto
-   367.53   472.82 lineto
+   367.52   472.82 lineto
    369.88   476.40 lineto
    371.91   479.46 lineto
    375.32   484.49 lineto
@@ -1793,7 +1793,7 @@ newpath
    261.18   548.66 lineto
    277.84   548.83 lineto
    292.48   549.00 lineto
-   305.00   549.18 lineto
+   304.99   549.18 lineto
    317.32   549.40 lineto
    327.11   549.61 lineto
    335.28   549.83 lineto
@@ -1804,10 +1804,10 @@ newpath
    356.20   551.01 lineto
    350.27   551.18 lineto
    331.44   551.35 lineto
-   275.25   551.51 lineto
+   275.24   551.51 lineto
    291.88   551.66 lineto
    338.86   551.82 lineto
-   359.72   552.00 lineto
+   359.71   552.00 lineto
    371.22   552.21 lineto
    379.19   552.47 lineto
    384.38   552.72 lineto
@@ -1819,17 +1819,17 @@ newpath
    402.95   554.70 lineto
    404.21   555.03 lineto
    405.44   555.68 lineto
-   404.65   556.36 lineto
+   404.64   556.36 lineto
    403.27   556.70 lineto
    401.08   557.03 lineto
    399.74   557.19 lineto
    397.85   557.35 lineto
-   395.99   557.51 lineto
+   395.98   557.51 lineto
    393.50   557.67 lineto
    390.52   557.83 lineto
    386.94   557.98 lineto
    382.59   558.14 lineto
-   377.52   558.29 lineto
+   377.51   558.29 lineto
    368.06   558.50 lineto
    354.52   558.71 lineto
    340.39   558.86 lineto
@@ -1841,14 +1841,14 @@ newpath
    354.41   559.82 lineto
    360.47   560.03 lineto
    357.92   560.20 lineto
-   347.45   560.38 lineto
+   347.44   560.38 lineto
    327.28   560.53 lineto
    285.16   560.68 lineto
    273.14   560.83 lineto
    325.52   561.00 lineto
    338.05   561.18 lineto
    304.95   561.33 lineto
-   298.88   561.48 lineto
+   298.87   561.48 lineto
    349.62   561.64 lineto
    366.66   561.79 lineto
    377.77   562.01 lineto
@@ -1861,7 +1861,7 @@ newpath
    379.10   563.27 lineto
    375.30   563.48 lineto
    370.70   563.68 lineto
-   365.47   563.88 lineto
+   365.46   563.88 lineto
    359.23   564.08 lineto
    352.05   564.27 lineto
    343.74   564.47 lineto
@@ -1881,7 +1881,7 @@ newpath
    365.35   567.01 lineto
    365.53   567.17 lineto
    354.51   567.32 lineto
-   316.78   567.47 lineto
+   316.77   567.47 lineto
    306.42   567.62 lineto
    358.61   567.79 lineto
    378.88   567.97 lineto
@@ -1897,11 +1897,11 @@ newpath
    429.22   571.06 lineto
    428.59   571.46 lineto
    426.04   571.85 lineto
-   423.34   572.04 lineto
+   423.33   572.04 lineto
    419.43   572.23 lineto
    413.34   572.41 lineto
    403.73   572.60 lineto
-   384.93   572.81 lineto
+   384.92   572.81 lineto
    358.10   572.96 lineto
    302.66   573.12 lineto
    345.84   573.28 lineto
@@ -1911,7 +1911,7 @@ newpath
    417.67   574.09 lineto
    419.66   574.29 lineto
    419.99   574.46 lineto
-   418.04   574.79 lineto
+   418.03   574.79 lineto
    416.05   574.95 lineto
    413.41   575.11 lineto
    410.05   575.27 lineto
@@ -1930,7 +1930,7 @@ newpath
    362.64   577.50 lineto
    332.61   577.65 lineto
    337.73   577.80 lineto
-   334.59   577.96 lineto
+   334.58   577.96 lineto
    342.51   578.17 lineto
    353.84   578.33 lineto
    295.55   578.48 lineto
@@ -1948,12 +1948,12 @@ newpath
    413.63   580.58 lineto
    411.73   580.87 lineto
    406.83   581.04 lineto
-   397.45   581.21 lineto
+   397.44   581.21 lineto
    381.47   581.37 lineto
    353.42   581.53 lineto
    290.31   581.68 lineto
    336.85   581.83 lineto
-   375.95   582.00 lineto
+   375.94   582.00 lineto
    399.18   582.19 lineto
    412.71   582.39 lineto
    422.77   582.63 lineto
@@ -1976,7 +1976,7 @@ newpath
    417.03   585.65 lineto
    385.50   585.82 lineto
    321.47   585.97 lineto
-   382.90   586.12 lineto
+   382.89   586.12 lineto
    321.22   586.27 lineto
    406.01   586.42 lineto
    428.43   586.58 lineto
@@ -2016,17 +2016,17 @@ newpath
    411.30   592.54 lineto
    400.90   592.69 lineto
    385.22   592.85 lineto
-   354.26   593.01 lineto
+   354.25   593.01 lineto
    337.38   593.17 lineto
    366.19   593.33 lineto
-   364.02   593.49 lineto
+   364.01   593.49 lineto
    357.85   593.66 lineto
    366.97   593.84 lineto
    378.32   594.03 lineto
    378.00   594.18 lineto
    363.65   594.34 lineto
    348.79   594.49 lineto
-   369.50   594.68 lineto
+   369.49   594.68 lineto
    392.46   594.86 lineto
    357.99   595.66 lineto
    358.44   596.36 lineto
@@ -2532,7 +2532,7 @@ newpath
    225.61   287.04 lineto
    225.62   288.20 lineto
    225.64   290.34 lineto
-   225.66   292.28 lineto
+   225.65   292.28 lineto
    225.67   294.05 lineto
    225.68   295.68 lineto
    225.69   297.20 lineto
@@ -2551,7 +2551,7 @@ newpath
    225.78   324.50 lineto
    225.78   326.05 lineto
    225.78   328.83 lineto
-   225.79   330.70 lineto
+   225.78   330.70 lineto
    225.79   332.41 lineto
    225.79   334.00 lineto
    225.79   335.47 lineto
@@ -2581,7 +2581,7 @@ newpath
    225.89   422.04 lineto
    225.90   424.82 lineto
    225.93   431.46 lineto
-   225.97   436.49 lineto
+   225.96   436.49 lineto
    226.00   440.54 lineto
    226.03   443.92 lineto
    226.09   448.58 lineto
@@ -2624,7 +2624,7 @@ newpath
    265.58   543.87 lineto
    268.77   544.20 lineto
    270.56   544.36 lineto
-   272.62   544.52 lineto
+   272.63   544.52 lineto
    277.40   544.83 lineto
    283.62   545.14 lineto
    291.95   545.45 lineto
@@ -2638,7 +2638,7 @@ newpath
    253.91   546.85 lineto
    230.28   547.01 lineto
    200.66   547.17 lineto
-   163.82   547.32 lineto
+   163.81   547.32 lineto
    168.16   547.49 lineto
    191.70   547.65 lineto
    198.13   547.82 lineto
@@ -2646,7 +2646,7 @@ newpath
    175.93   548.15 lineto
    158.54   548.30 lineto
    143.21   548.49 lineto
-   148.57   548.66 lineto
+   148.56   548.66 lineto
    161.14   548.83 lineto
    172.12   549.00 lineto
    181.09   549.18 lineto
@@ -2719,7 +2719,7 @@ newpath
    223.69   563.68 lineto
    219.70   563.88 lineto
    214.28   564.08 lineto
-   207.41   564.27 lineto
+   207.40   564.27 lineto
    198.86   564.47 lineto
    189.32   564.67 lineto
    180.18   564.86 lineto
@@ -2730,7 +2730,7 @@ newpath
    204.81   565.88 lineto
    220.10   566.06 lineto
    244.58   566.21 lineto
-   190.01   566.36 lineto
+   190.00   566.36 lineto
    180.57   566.52 lineto
    191.56   566.67 lineto
    199.39   566.83 lineto
@@ -2778,7 +2778,7 @@ newpath
    243.88   576.04 lineto
    242.09   576.23 lineto
    225.64   576.40 lineto
-   197.09   576.57 lineto
+   197.08   576.57 lineto
    194.19   576.76 lineto
    216.11   576.93 lineto
    236.05   577.13 lineto
@@ -2853,7 +2853,7 @@ newpath
    198.37   589.28 lineto
    231.71   589.44 lineto
    245.03   589.63 lineto
-   246.24   589.78 lineto
+   246.23   589.78 lineto
    221.01   589.94 lineto
    233.04   590.10 lineto
    240.52   590.26 lineto
@@ -2874,7 +2874,7 @@ newpath
    238.71   592.85 lineto
    213.82   593.01 lineto
    210.10   593.17 lineto
-   250.05   593.33 lineto
+   250.04   593.33 lineto
    222.05   593.49 lineto
    196.96   593.66 lineto
    196.78   593.84 lineto
@@ -3305,7 +3305,7 @@ newpath
    154.16   143.49 lineto
    155.75   146.15 lineto
    157.17   148.51 lineto
-   158.44   150.63 lineto
+   158.43   150.63 lineto
    159.59   152.56 lineto
    160.64   154.32 lineto
    161.61   155.95 lineto
@@ -3323,7 +3323,7 @@ newpath
    176.30   180.52 lineto
    177.22   182.06 lineto
    178.89   184.84 lineto
-   180.01   186.71 lineto
+   180.00   186.71 lineto
    181.03   188.43 lineto
    181.98   190.01 lineto
    182.86   191.48 lineto
@@ -3342,11 +3342,11 @@ newpath
    198.95   218.39 lineto
    200.41   220.85 lineto
    201.73   223.04 lineto
-   202.92   225.03 lineto
+   202.91   225.03 lineto
    204.00   226.84 lineto
    205.00   228.51 lineto
    205.92   230.06 lineto
-   207.59   232.84 lineto
+   207.58   232.84 lineto
    208.70   234.71 lineto
    209.73   236.42 lineto
    210.67   238.01 lineto
@@ -3356,7 +3356,7 @@ newpath
    215.83   246.63 lineto
    216.98   248.55 lineto
    218.03   250.31 lineto
-   219.01   251.94 lineto
+   219.00   251.94 lineto
    220.47   254.40 lineto
    221.79   256.59 lineto
    222.97   258.58 lineto
@@ -3369,7 +3369,7 @@ newpath
    231.61   273.03 lineto
    232.70   274.84 lineto
    233.69   276.51 lineto
-   234.62   278.05 lineto
+   234.61   278.05 lineto
    236.28   280.84 lineto
    237.83   283.43 lineto
    239.21   285.74 lineto
@@ -3378,7 +3378,7 @@ newpath
    239.63   286.44 lineto
    239.99   287.04 lineto
    240.69   288.20 lineto
-   241.97   290.34 lineto
+   241.96   290.34 lineto
    243.12   292.28 lineto
    244.18   294.05 lineto
    245.16   295.68 lineto
@@ -3395,7 +3395,7 @@ newpath
    259.12   319.04 lineto
    260.31   321.02 lineto
    261.40   322.84 lineto
-   262.40   324.50 lineto
+   262.39   324.50 lineto
    263.31   326.05 lineto
    264.98   328.83 lineto
    266.10   330.70 lineto
@@ -3460,7 +3460,7 @@ newpath
    386.47   535.46 lineto
    386.33   535.62 lineto
    386.03   535.93 lineto
-   385.37   536.53 lineto
+   385.36   536.53 lineto
    382.61   538.29 lineto
    378.64   539.92 lineto
    375.93   540.69 lineto
@@ -3468,13 +3468,13 @@ newpath
    369.44   542.17 lineto
    365.26   542.87 lineto
    360.28   543.54 lineto
-   357.49   543.87 lineto
+   357.48   543.87 lineto
    354.24   544.20 lineto
    352.71   544.36 lineto
    350.74   544.52 lineto
    347.06   544.83 lineto
    342.66   545.14 lineto
-   337.77   545.45 lineto
+   337.76   545.45 lineto
    334.32   545.63 lineto
    330.56   545.81 lineto
    326.37   546.00 lineto
@@ -3494,16 +3494,16 @@ newpath
    243.21   548.30 lineto
    233.11   548.49 lineto
    242.75   548.66 lineto
-   259.41   548.83 lineto
+   259.40   548.83 lineto
    274.04   549.00 lineto
    286.56   549.18 lineto
    298.89   549.40 lineto
    308.68   549.61 lineto
    316.85   549.83 lineto
-   324.05   550.06 lineto
+   324.04   550.06 lineto
    330.38   550.30 lineto
    335.45   550.54 lineto
-   338.46   550.77 lineto
+   338.45   550.77 lineto
    337.76   551.01 lineto
    331.83   551.18 lineto
    313.00   551.35 lineto
@@ -3513,7 +3513,7 @@ newpath
    341.28   552.00 lineto
    352.79   552.21 lineto
    360.75   552.47 lineto
-   365.95   552.72 lineto
+   365.94   552.72 lineto
    371.46   553.08 lineto
    374.37   553.33 lineto
    376.73   553.57 lineto
@@ -3587,7 +3587,7 @@ newpath
    298.34   567.47 lineto
    287.99   567.62 lineto
    340.18   567.79 lineto
-   360.45   567.97 lineto
+   360.44   567.97 lineto
    371.42   568.14 lineto
    380.42   568.37 lineto
    386.43   568.59 lineto
@@ -3617,7 +3617,7 @@ newpath
    399.60   574.79 lineto
    397.61   574.95 lineto
    394.98   575.11 lineto
-   391.62   575.27 lineto
+   391.61   575.27 lineto
    387.54   575.42 lineto
    382.06   575.58 lineto
    373.88   575.73 lineto
@@ -3689,7 +3689,7 @@ newpath
    422.62   587.46 lineto
    415.00   587.64 lineto
    399.92   587.81 lineto
-   366.67   587.98 lineto
+   366.66   587.98 lineto
    289.54   588.13 lineto
    374.46   588.29 lineto
    400.91   588.47 lineto
@@ -3700,7 +3700,7 @@ newpath
    296.10   589.28 lineto
    367.13   589.44 lineto
    371.71   589.63 lineto
-   320.65   589.78 lineto
+   320.64   589.78 lineto
    353.07   589.94 lineto
    382.22   590.10 lineto
    375.23   590.26 lineto
@@ -3708,7 +3708,7 @@ newpath
    348.04   590.56 lineto
    382.78   590.72 lineto
    374.71   590.89 lineto
-   308.94   591.04 lineto
+   308.93   591.04 lineto
    366.32   591.19 lineto
    398.80   591.37 lineto
    410.65   591.60 lineto
@@ -4974,7 +4974,7 @@ newpath
    348.21   480.29 lineto
    348.51   482.20 lineto
    349.13   485.99 lineto
-   350.41   493.40 lineto
+   350.42   493.40 lineto
    354.88   515.08 lineto
    360.42   535.07 lineto
    363.89   544.63 lineto
@@ -4987,7 +4987,7 @@ newpath
    400.54   589.69 lineto
    404.29   591.66 lineto
    412.89   595.53 lineto
-   423.90   599.35 lineto
+   423.91   599.35 lineto
    438.21   603.11 lineto
    448.85   605.38 lineto
    460.77   607.62 lineto
@@ -4997,31 +4997,31 @@ newpath
    476.49   611.50 lineto
    476.36   612.05 lineto
    475.41   612.48 lineto
-   473.80   612.91 lineto
+   473.79   612.91 lineto
    471.56   613.34 lineto
    468.43   613.77 lineto
    464.57   614.20 lineto
-   460.23   614.62 lineto
+   460.22   614.62 lineto
    455.16   615.05 lineto
-   449.49   615.48 lineto
+   449.48   615.48 lineto
    443.57   615.90 lineto
    437.23   616.33 lineto
    430.40   616.75 lineto
    423.51   617.17 lineto
    416.45   617.60 lineto
-   408.95   618.02 lineto
-   401.43   618.44 lineto
+   408.94   618.02 lineto
+   401.42   618.44 lineto
    393.90   618.86 lineto
-   384.55   619.35 lineto
-   374.90   619.85 lineto
+   384.54   619.35 lineto
+   374.89   619.85 lineto
    365.39   620.34 lineto
    355.27   620.84 lineto
    344.80   621.33 lineto
-   333.87   621.82 lineto
+   333.86   621.82 lineto
    322.37   622.31 lineto
-   316.40   622.55 lineto
+   316.39   622.55 lineto
    310.24   622.80 lineto
-   298.99   623.22 lineto
+   298.98   623.22 lineto
    293.13   623.44 lineto
    287.06   623.65 lineto
    280.74   623.86 lineto
@@ -5036,16 +5036,16 @@ newpath
    213.63   625.75 lineto
    198.63   626.17 lineto
    188.96   626.51 lineto
-   185.62   626.68 lineto
+   185.61   626.68 lineto
    183.59   626.85 lineto
    182.96   627.02 lineto
    184.12   627.23 lineto
    186.99   627.43 lineto
-   195.91   627.84 lineto
+   195.90   627.84 lineto
    207.12   628.24 lineto
    212.86   628.44 lineto
    218.42   628.65 lineto
-   223.78   628.85 lineto
+   223.77   628.85 lineto
    228.80   629.05 lineto
    237.81   629.46 lineto
    245.38   629.86 lineto
@@ -5058,7 +5058,7 @@ newpath
    261.45   633.05 lineto
    259.31   633.42 lineto
    256.31   633.79 lineto
-   248.91   634.54 lineto
+   248.90   634.54 lineto
    239.38   635.28 lineto
    234.05   635.65 lineto
    228.21   636.03 lineto
@@ -5091,7 +5091,7 @@ newpath
    273.84   658.29 lineto
    277.96   659.79 lineto
    281.81   661.28 lineto
-   285.26   662.77 lineto
+   285.25   662.77 lineto
    288.55   664.24 lineto
    291.63   665.71 lineto
    294.46   667.17 lineto
@@ -5127,7 +5127,7 @@ newpath
    350.36   677.85 lineto
    348.85   677.89 lineto
    345.96   677.93 lineto
-   343.87   677.95 lineto
+   343.86   677.95 lineto
    341.27   677.97 lineto
    338.12   677.99 lineto
    334.39   678.00 lineto
@@ -5139,7 +5139,7 @@ newpath
    308.89   678.09 lineto
    304.80   678.10 lineto
    300.53   678.11 lineto
-   296.11   678.12 lineto
+   296.10   678.12 lineto
    291.55   678.13 lineto
    286.86   678.15 lineto
    282.07   678.16 lineto
@@ -5147,9 +5147,9 @@ newpath
    272.28   678.18 lineto
    262.36   678.20 lineto
    252.52   678.22 lineto
-   242.94   678.24 lineto
+   242.93   678.24 lineto
    233.83   678.27 lineto
-   225.36   678.29 lineto
+   225.35   678.29 lineto
    217.69   678.31 lineto
    205.23   678.35 lineto
    198.89   678.38 lineto
@@ -5158,7 +5158,7 @@ newpath
    194.35   678.49 lineto
    198.04   678.52 lineto
    203.67   678.56 lineto
-   210.42   678.60 lineto
+   210.41   678.60 lineto
    217.52   678.64 lineto
    224.39   678.68 lineto
    230.73   678.72 lineto
@@ -5174,7 +5174,7 @@ newpath
    266.22   679.11 lineto
    269.49   679.18 lineto
    272.30   679.26 lineto
-   274.75   679.33 lineto
+   274.74   679.33 lineto
    277.26   679.41 lineto
    279.43   679.50 lineto
    281.32   679.58 lineto
@@ -5190,7 +5190,7 @@ newpath
    297.41   681.19 lineto
    298.60   681.45 lineto
    299.65   681.71 lineto
-   300.59   681.96 lineto
+   300.58   681.96 lineto
    301.42   682.22 lineto
    302.18   682.47 lineto
    302.86   682.73 lineto
@@ -5203,10 +5203,10 @@ newpath
    311.33   687.89 lineto
    313.02   689.44 lineto
    314.51   690.98 lineto
-   315.93   692.51 lineto
+   315.92   692.51 lineto
    317.24   694.03 lineto
    319.58   697.04 lineto
-   321.76   700.02 lineto
+   321.75   700.02 lineto
    323.73   702.97 lineto
    327.44   708.76 lineto
    329.87   712.80 lineto
@@ -6066,12 +6066,12 @@ newpath
    374.87   174.17 lineto
    386.29   175.02 lineto
    401.73   175.86 lineto
-   411.58   176.29 lineto
-   423.19   176.71 lineto
+   411.59   176.29 lineto
+   423.20   176.71 lineto
    436.52   177.13 lineto
    443.47   177.34 lineto
    449.96   177.55 lineto
-   453.43   177.68 lineto
+   453.44   177.68 lineto
    456.28   177.82 lineto
    457.88   177.95 lineto
    457.97   178.08 lineto
@@ -6081,18 +6081,18 @@ newpath
    441.63   178.58 lineto
    437.38   178.65 lineto
    432.80   178.73 lineto
-   427.96   178.80 lineto
+   427.95   178.80 lineto
    422.88   178.87 lineto
-   417.65   178.94 lineto
+   417.64   178.94 lineto
    406.80   179.09 lineto
-   395.69   179.23 lineto
+   395.68   179.23 lineto
    384.44   179.37 lineto
    373.21   179.52 lineto
    362.01   179.66 lineto
    350.87   179.80 lineto
    339.78   179.95 lineto
    328.73   180.09 lineto
-   317.69   180.23 lineto
+   317.68   180.23 lineto
    306.61   180.38 lineto
    295.46   180.52 lineto
    284.21   180.66 lineto
@@ -6101,12 +6101,12 @@ newpath
    249.43   181.09 lineto
    237.37   181.23 lineto
    225.05   181.37 lineto
-   212.51   181.52 lineto
+   212.50   181.52 lineto
    201.86   181.64 lineto
    191.25   181.76 lineto
    180.79   181.88 lineto
    170.76   181.99 lineto
-   154.28   182.23 lineto
+   154.27   182.23 lineto
    148.42   182.35 lineto
    144.85   182.47 lineto
    143.73   182.57 lineto
@@ -6163,25 +6163,25 @@ newpath
    445.55   198.95 lineto
    436.36   199.03 lineto
    425.64   199.10 lineto
-   419.92   199.14 lineto
+   419.91   199.14 lineto
    414.05   199.18 lineto
    408.09   199.21 lineto
-   402.10   199.25 lineto
+   402.09   199.25 lineto
    396.09   199.29 lineto
    390.10   199.32 lineto
-   384.15   199.36 lineto
+   384.14   199.36 lineto
    378.24   199.40 lineto
    371.09   199.44 lineto
-   364.07   199.49 lineto
+   364.06   199.49 lineto
    357.11   199.54 lineto
-   350.28   199.58 lineto
+   350.27   199.58 lineto
    343.51   199.63 lineto
    336.86   199.67 lineto
    323.78   199.76 lineto
-   310.98   199.85 lineto
+   310.97   199.85 lineto
    298.39   199.94 lineto
    285.96   200.03 lineto
-   273.67   200.13 lineto
+   273.66   200.13 lineto
    266.70   200.18 lineto
    259.75   200.23 lineto
    252.81   200.28 lineto
@@ -6190,7 +6190,7 @@ newpath
    232.06   200.43 lineto
    225.16   200.49 lineto
    218.31   200.54 lineto
-   204.72   200.64 lineto
+   204.71   200.64 lineto
    191.52   200.74 lineto
    179.04   200.84 lineto
    168.10   200.95 lineto
@@ -6201,10 +6201,10 @@ newpath
    147.85   201.40 lineto
    149.47   201.48 lineto
    155.29   201.64 lineto
-   163.07   201.80 lineto
+   163.06   201.80 lineto
    167.20   201.88 lineto
    171.30   201.96 lineto
-   175.32   202.04 lineto
+   175.31   202.04 lineto
    179.18   202.12 lineto
    186.42   202.28 lineto
    192.95   202.45 lineto
@@ -6226,7 +6226,7 @@ newpath
    253.83   206.42 lineto
    254.83   206.62 lineto
    255.69   206.83 lineto
-   256.38   207.03 lineto
+   256.37   207.03 lineto
    256.86   207.24 lineto
    257.11   207.44 lineto
    257.07   207.56 lineto
@@ -6234,13 +6234,13 @@ newpath
    256.43   207.81 lineto
    255.69   207.93 lineto
    254.52   208.05 lineto
-   253.73   208.12 lineto
+   253.72   208.12 lineto
    252.76   208.18 lineto
    251.57   208.24 lineto
    250.10   208.30 lineto
-   248.28   208.36 lineto
+   248.27   208.36 lineto
    246.01   208.42 lineto
-   243.53   208.47 lineto
+   243.52   208.47 lineto
    240.49   208.53 lineto
    236.77   208.58 lineto
    232.24   208.64 lineto
@@ -6269,7 +6269,7 @@ newpath
    232.95   209.45 lineto
    239.00   209.51 lineto
    242.90   209.55 lineto
-   246.23   209.60 lineto
+   246.22   209.60 lineto
    249.08   209.64 lineto
    251.53   209.68 lineto
    253.65   209.72 lineto
@@ -6283,14 +6283,14 @@ newpath
    268.34   210.44 lineto
    269.35   210.56 lineto
    270.20   210.68 lineto
-   270.94   210.80 lineto
-   271.59   210.92 lineto
+   270.93   210.80 lineto
+   271.58   210.92 lineto
    272.69   211.16 lineto
-   273.63   211.40 lineto
+   273.62   211.40 lineto
    274.42   211.64 lineto
    275.15   211.89 lineto
    275.81   212.13 lineto
-   276.49   212.40 lineto
+   276.48   212.40 lineto
    277.11   212.67 lineto
    278.24   213.20 lineto
    279.25   213.74 lineto
@@ -6304,9 +6304,9 @@ newpath
    287.63   222.48 lineto
    288.14   224.32 lineto
    287.96   226.91 lineto
-   286.73   229.46 lineto
+   286.72   229.46 lineto
    284.24   231.99 lineto
-   280.22   234.50 lineto
+   280.21   234.50 lineto
    274.32   236.98 lineto
    270.75   238.22 lineto
    266.57   239.44 lineto
@@ -6384,16 +6384,16 @@ newpath
    239.28   277.89 lineto
    244.71   278.93 lineto
    249.58   279.88 lineto
-   252.09   280.35 lineto
-   254.67   280.82 lineto
+   252.08   280.35 lineto
+   254.66   280.82 lineto
    257.31   281.29 lineto
-   258.65   281.52 lineto
+   258.64   281.52 lineto
    259.95   281.75 lineto
    261.24   281.99 lineto
    262.39   282.22 lineto
    263.31   282.46 lineto
    263.78   282.69 lineto
-   263.65   282.85 lineto
+   263.64   282.85 lineto
    262.91   283.01 lineto
    261.28   283.18 lineto
    258.52   283.34 lineto
@@ -6403,15 +6403,15 @@ newpath
    242.21   283.75 lineto
    236.80   283.83 lineto
    230.52   283.91 lineto
-   223.42   283.99 lineto
-   215.09   284.08 lineto
+   223.41   283.99 lineto
+   215.08   284.08 lineto
    206.06   284.16 lineto
    196.54   284.25 lineto
    186.80   284.33 lineto
    169.66   284.50 lineto
    163.33   284.59 lineto
    159.29   284.67 lineto
-   157.92   284.73 lineto
+   157.91   284.73 lineto
    157.85   284.80 lineto
    159.42   284.88 lineto
    162.28   284.96 lineto
@@ -6424,7 +6424,7 @@ newpath
    194.58   285.63 lineto
    197.77   285.71 lineto
    200.71   285.80 lineto
-   205.94   285.96 lineto
+   205.93   285.96 lineto
    210.41   286.13 lineto
    214.56   286.31 lineto
    218.03   286.49 lineto
@@ -6444,7 +6444,7 @@ newpath
    258.55   294.62 lineto
    260.94   296.01 lineto
    263.12   297.39 lineto
-   266.94   300.13 lineto
+   266.93   300.13 lineto
    271.11   303.75 lineto
    274.66   307.33 lineto
    277.77   310.85 lineto
@@ -6473,7 +6473,7 @@ newpath
    285.19   352.14 lineto
    278.15   352.27 lineto
    269.22   352.41 lineto
-   259.11   352.56 lineto
+   259.10   352.56 lineto
    247.95   352.70 lineto
    236.10   352.84 lineto
    223.92   352.99 lineto
@@ -6538,7 +6538,7 @@ newpath
    367.61   388.12 lineto
    366.93   388.13 lineto
    364.84   388.15 lineto
-   360.72   388.16 lineto
+   360.71   388.16 lineto
    353.97   388.17 lineto
    344.29   388.18 lineto
    338.36   388.19 lineto
@@ -6624,7 +6624,7 @@ newpath
    339.78   405.62 lineto
    344.81   406.06 lineto
    348.73   406.50 lineto
-   351.81   406.93 lineto
+   351.82   406.93 lineto
    353.04   407.36 lineto
    352.46   407.75 lineto
    351.57   407.95 lineto
@@ -6638,26 +6638,26 @@ newpath
    344.05   409.00 lineto
    343.47   409.04 lineto
    342.57   409.08 lineto
-   341.13   409.12 lineto
+   341.12   409.12 lineto
    338.77   409.16 lineto
    334.85   409.20 lineto
    332.00   409.22 lineto
-   328.36   409.24 lineto
+   328.35   409.24 lineto
    323.70   409.26 lineto
    317.86   409.28 lineto
    310.57   409.30 lineto
    301.70   409.32 lineto
    294.20   409.34 lineto
-   285.82   409.35 lineto
+   285.81   409.35 lineto
    276.63   409.37 lineto
    266.82   409.38 lineto
    256.62   409.40 lineto
    246.35   409.41 lineto
-   236.36   409.43 lineto
+   236.35   409.43 lineto
    227.04   409.44 lineto
    210.19   409.47 lineto
    204.24   409.49 lineto
-   200.21   409.50 lineto
+   200.20   409.50 lineto
    197.93   409.52 lineto
    198.06   409.54 lineto
    200.31   409.56 lineto
@@ -6695,11 +6695,11 @@ newpath
    215.23   416.01 lineto
    221.25   416.83 lineto
    224.43   417.24 lineto
-   227.66   417.65 lineto
-   230.34   417.98 lineto
+   227.65   417.65 lineto
+   230.33   417.98 lineto
    231.69   418.15 lineto
    233.07   418.32 lineto
-   234.49   418.49 lineto
+   234.48   418.49 lineto
    235.21   418.57 lineto
    235.94   418.65 lineto
    236.68   418.74 lineto
@@ -6711,21 +6711,21 @@ newpath
    238.36   419.03 lineto
    238.14   419.05 lineto
    237.75   419.07 lineto
-   237.07   419.09 lineto
+   237.06   419.09 lineto
    235.95   419.11 lineto
    234.13   419.13 lineto
    232.86   419.14 lineto
-   231.29   419.15 lineto
+   231.28   419.15 lineto
    229.33   419.16 lineto
    227.00   419.17 lineto
-   224.27   419.18 lineto
+   224.26   419.18 lineto
    221.13   419.19 lineto
    212.38   419.21 lineto
-   203.30   419.23 lineto
+   203.29   419.23 lineto
    199.29   419.25 lineto
-   195.98   419.26 lineto
+   195.97   419.26 lineto
    193.52   419.27 lineto
-   192.06   419.28 lineto
+   192.05   419.28 lineto
    191.70   419.29 lineto
    192.10   419.30 lineto
    194.29   419.32 lineto
@@ -6748,7 +6748,7 @@ newpath
    238.99   419.84 lineto
    240.30   419.95 lineto
    241.42   420.05 lineto
-   243.36   420.26 lineto
+   243.35   420.26 lineto
    245.06   420.46 lineto
    247.89   420.84 lineto
    250.52   421.22 lineto
@@ -6767,22 +6767,22 @@ newpath
    249.84   424.85 lineto
    245.87   424.97 lineto
    241.01   425.09 lineto
-   235.57   425.21 lineto
-   229.51   425.32 lineto
+   235.56   425.21 lineto
+   229.50   425.32 lineto
    222.89   425.44 lineto
-   215.68   425.56 lineto
+   215.67   425.56 lineto
    205.79   425.72 lineto
-   196.76   425.87 lineto
+   196.75   425.87 lineto
    189.10   426.03 lineto
-   183.87   426.19 lineto
+   183.86   426.19 lineto
    181.97   426.29 lineto
    181.40   426.40 lineto
-   182.49   426.54 lineto
-   184.75   426.68 lineto
+   182.48   426.54 lineto
+   184.74   426.68 lineto
    191.90   426.97 lineto
    195.91   427.11 lineto
-   199.97   427.25 lineto
-   203.82   427.39 lineto
+   199.96   427.25 lineto
+   203.81   427.39 lineto
    207.45   427.53 lineto
    210.90   427.67 lineto
    214.08   427.81 lineto
@@ -6797,7 +6797,7 @@ newpath
    248.12   430.48 lineto
    250.71   430.79 lineto
    253.31   431.09 lineto
-   257.18   431.52 lineto
+   257.17   431.52 lineto
    259.30   431.73 lineto
    261.64   431.94 lineto
    264.30   432.16 lineto
@@ -6809,7 +6809,7 @@ newpath
    282.31   433.02 lineto
    283.93   433.08 lineto
    285.39   433.13 lineto
-   286.46   433.19 lineto
+   286.45   433.19 lineto
    286.77   433.25 lineto
    285.90   433.30 lineto
    283.30   433.35 lineto
@@ -6822,8 +6822,8 @@ newpath
    248.09   433.56 lineto
    235.50   433.61 lineto
    224.24   433.66 lineto
-   218.37   433.69 lineto
-   213.76   433.73 lineto
+   218.36   433.69 lineto
+   213.75   433.73 lineto
    210.47   433.76 lineto
    208.46   433.79 lineto
    207.57   433.83 lineto
@@ -6838,7 +6838,7 @@ newpath
    228.27   434.35 lineto
    230.64   434.42 lineto
    233.07   434.51 lineto
-   235.20   434.59 lineto
+   235.19   434.59 lineto
    237.06   434.68 lineto
    238.71   434.77 lineto
    241.51   434.94 lineto
@@ -6881,14 +6881,14 @@ newpath
    295.18   457.78 lineto
    290.70   457.85 lineto
    285.49   457.92 lineto
-   279.56   457.99 lineto
+   279.55   457.99 lineto
    272.89   458.05 lineto
    265.55   458.12 lineto
    257.63   458.19 lineto
    249.31   458.26 lineto
    241.18   458.32 lineto
    232.90   458.38 lineto
-   224.72   458.45 lineto
+   224.71   458.45 lineto
    216.90   458.51 lineto
    203.48   458.64 lineto
    198.43   458.70 lineto
@@ -6907,7 +6907,7 @@ newpath
    223.11   459.75 lineto
    225.78   459.83 lineto
    230.58   459.98 lineto
-   234.75   460.14 lineto
+   234.74   460.14 lineto
    237.93   460.28 lineto
    240.69   460.41 lineto
    243.24   460.55 lineto
@@ -6916,9 +6916,9 @@ newpath
    252.71   461.22 lineto
    255.44   461.49 lineto
    257.78   461.76 lineto
-   261.59   462.30 lineto
+   261.58   462.30 lineto
    263.87   462.70 lineto
-   265.81   463.10 lineto
+   265.80   463.10 lineto
    268.95   463.90 lineto
    271.43   464.70 lineto
    273.44   465.50 lineto
@@ -6942,9 +6942,9 @@ newpath
    312.70   485.12 lineto
    307.19   485.27 lineto
    303.49   485.34 lineto
-   299.14   485.41 lineto
+   299.13   485.41 lineto
    294.10   485.48 lineto
-   288.40   485.55 lineto
+   288.39   485.55 lineto
    282.08   485.62 lineto
    275.32   485.69 lineto
    268.13   485.76 lineto
@@ -6993,14 +6993,14 @@ newpath
    309.05   497.75 lineto
    305.53   497.77 lineto
    301.92   497.78 lineto
-   296.85   497.79 lineto
+   296.84   497.79 lineto
    290.21   497.80 lineto
    282.16   497.81 lineto
    273.10   497.82 lineto
    263.56   497.83 lineto
    254.14   497.84 lineto
    245.37   497.85 lineto
-   232.85   497.87 lineto
+   232.84   497.87 lineto
    228.23   497.88 lineto
    224.85   497.89 lineto
    222.05   497.90 lineto
@@ -7012,7 +7012,7 @@ newpath
    241.46   497.97 lineto
    245.75   497.99 lineto
    249.09   497.99 lineto
-   252.16   498.00 lineto
+   252.15   498.00 lineto
    257.47   498.02 lineto
    261.77   498.04 lineto
    265.24   498.06 lineto
@@ -7039,13 +7039,13 @@ newpath
    316.38   499.73 lineto
    314.86   499.76 lineto
    311.95   499.78 lineto
-   307.12   499.80 lineto
+   307.11   499.80 lineto
    303.80   499.82 lineto
    299.82   499.83 lineto
    295.13   499.84 lineto
    289.76   499.85 lineto
    283.68   499.87 lineto
-   277.04   499.88 lineto
+   277.03   499.88 lineto
    269.86   499.89 lineto
    262.36   499.90 lineto
    254.64   499.92 lineto
@@ -7054,8 +7054,8 @@ newpath
    223.86   499.97 lineto
    215.23   499.99 lineto
    209.21   500.01 lineto
-   206.24   500.03 lineto
-   205.18   500.05 lineto
+   206.23   500.03 lineto
+   205.17   500.05 lineto
    206.82   500.08 lineto
    211.30   500.10 lineto
    217.13   500.13 lineto
@@ -7092,7 +7092,7 @@ newpath
    312.94   509.73 lineto
    315.43   509.87 lineto
    318.24   510.01 lineto
-   321.05   510.16 lineto
+   321.06   510.16 lineto
    322.26   510.24 lineto
    322.45   510.32 lineto
    320.08   510.40 lineto
@@ -7100,7 +7100,7 @@ newpath
    312.45   510.49 lineto
    305.72   510.53 lineto
    301.51   510.56 lineto
-   296.72   510.58 lineto
+   296.71   510.58 lineto
    291.33   510.60 lineto
    285.41   510.62 lineto
    279.04   510.64 lineto
@@ -7140,10 +7140,10 @@ newpath
    323.31   514.19 lineto
    323.42   514.24 lineto
    322.16   514.27 lineto
-   319.35   514.30 lineto
+   319.34   514.30 lineto
    314.49   514.33 lineto
    307.27   514.36 lineto
-   302.74   514.38 lineto
+   302.73   514.38 lineto
    297.64   514.39 lineto
    292.00   514.41 lineto
    285.95   514.42 lineto
@@ -7160,7 +7160,7 @@ newpath
    231.00   514.72 lineto
    236.05   514.77 lineto
    241.06   514.82 lineto
-   245.60   514.88 lineto
+   245.59   514.88 lineto
    249.55   514.93 lineto
    252.95   514.98 lineto
    255.88   515.03 lineto
@@ -7177,7 +7177,7 @@ newpath
    288.04   518.64 lineto
    289.74   519.57 lineto
    292.38   521.43 lineto
-   296.58   525.11 lineto
+   296.57   525.11 lineto
    299.07   527.32 lineto
    301.92   529.51 lineto
    305.63   531.69 lineto
@@ -7189,7 +7189,7 @@ newpath
    327.92   535.92 lineto
    331.33   536.13 lineto
    335.24   536.34 lineto
-   339.36   536.56 lineto
+   339.37   536.56 lineto
    342.29   536.77 lineto
    342.28   536.84 lineto
    341.37   536.90 lineto
@@ -7200,9 +7200,9 @@ newpath
    317.06   537.21 lineto
    311.68   537.24 lineto
    305.78   537.27 lineto
-   299.46   537.31 lineto
+   299.45   537.31 lineto
    292.76   537.34 lineto
-   285.84   537.37 lineto
+   285.83   537.37 lineto
    277.88   537.41 lineto
    269.97   537.45 lineto
    255.05   537.52 lineto
@@ -7269,11 +7269,11 @@ newpath
    238.08   552.04 lineto
    243.77   552.13 lineto
    248.92   552.22 lineto
-   253.51   552.31 lineto
+   253.50   552.31 lineto
    257.79   552.40 lineto
-   261.60   552.50 lineto
+   261.59   552.50 lineto
    268.03   552.68 lineto
-   273.27   552.87 lineto
+   273.26   552.87 lineto
    277.56   553.06 lineto
    284.50   553.44 lineto
    289.89   553.81 lineto
@@ -7300,7 +7300,7 @@ newpath
    280.30   558.29 lineto
    269.20   558.36 lineto
    258.66   558.43 lineto
-   249.48   558.50 lineto
+   249.47   558.50 lineto
    242.16   558.57 lineto
    236.27   558.65 lineto
    233.62   558.73 lineto
@@ -7309,7 +7309,7 @@ newpath
    239.86   559.04 lineto
    246.03   559.19 lineto
    251.93   559.35 lineto
-   257.20   559.50 lineto
+   257.19   559.50 lineto
    261.76   559.65 lineto
    265.70   559.81 lineto
    269.13   559.96 lineto
@@ -7335,7 +7335,7 @@ newpath
    296.10   565.93 lineto
    290.26   565.97 lineto
    283.64   566.01 lineto
-   276.29   566.05 lineto
+   276.28   566.05 lineto
    268.34   566.09 lineto
    260.25   566.13 lineto
    251.82   566.17 lineto
@@ -7348,7 +7348,7 @@ newpath
    211.16   566.47 lineto
    214.06   566.54 lineto
    219.68   566.62 lineto
-   226.38   566.69 lineto
+   226.37   566.69 lineto
    233.04   566.77 lineto
    239.19   566.84 lineto
    244.69   566.92 lineto
@@ -7358,7 +7358,7 @@ newpath
    265.34   567.34 lineto
    269.64   567.47 lineto
    273.23   567.61 lineto
-   278.94   567.87 lineto
+   278.93   567.87 lineto
    283.32   568.14 lineto
    289.29   568.62 lineto
    293.94   569.10 lineto
@@ -7372,7 +7372,7 @@ newpath
    336.13   572.60 lineto
    341.57   572.81 lineto
    343.58   572.91 lineto
-   344.11   573.02 lineto
+   344.12   573.02 lineto
    342.85   573.10 lineto
    339.67   573.17 lineto
    336.98   573.21 lineto
@@ -7385,12 +7385,12 @@ newpath
    297.94   573.48 lineto
    290.37   573.52 lineto
    282.72   573.56 lineto
-   267.98   573.64 lineto
+   267.97   573.64 lineto
    255.58   573.71 lineto
    246.04   573.78 lineto
    240.66   573.85 lineto
    237.61   573.91 lineto
-   236.69   573.97 lineto
+   236.68   573.97 lineto
    236.99   574.03 lineto
    240.66   574.16 lineto
    245.94   574.30 lineto
@@ -7403,19 +7403,19 @@ newpath
    279.43   575.73 lineto
    285.35   576.37 lineto
    289.47   577.01 lineto
-   292.68   577.64 lineto
+   292.67   577.64 lineto
    297.86   579.05 lineto
    301.87   580.45 lineto
    308.37   583.23 lineto
    312.98   585.44 lineto
    317.40   587.62 lineto
    321.11   589.78 lineto
-   323.07   591.93 lineto
-   321.63   593.22 lineto
+   323.06   591.93 lineto
+   321.62   593.22 lineto
    319.51   593.86 lineto
    316.01   594.50 lineto
    311.07   595.14 lineto
-   307.62   595.46 lineto
+   307.61   595.46 lineto
    303.43   595.78 lineto
    298.43   596.10 lineto
    292.51   596.41 lineto
@@ -7454,9 +7454,9 @@ newpath
    292.06   602.99 lineto
    284.84   603.20 lineto
    271.11   603.63 lineto
-   258.12   604.06 lineto
-   236.48   604.91 lineto
-   222.57   605.75 lineto
+   258.11   604.06 lineto
+   236.47   604.91 lineto
+   222.56   605.75 lineto
    218.39   606.28 lineto
    217.02   606.80 lineto
    218.78   607.38 lineto
@@ -7479,9 +7479,9 @@ newpath
    324.93   614.60 lineto
    321.97   614.69 lineto
    313.88   614.87 lineto
-   303.63   615.05 lineto
+   303.62   615.05 lineto
    292.39   615.23 lineto
-   280.92   615.41 lineto
+   280.91   615.41 lineto
    269.67   615.59 lineto
    259.72   615.77 lineto
    247.25   616.03 lineto
@@ -7506,7 +7506,7 @@ newpath
    234.25   621.28 lineto
    234.27   621.29 lineto
    234.30   621.30 lineto
-   234.33   621.30 lineto
+   234.32   621.30 lineto
    234.37   621.32 lineto
    234.41   621.35 lineto
    234.37   621.35 lineto
@@ -12283,7 +12283,7 @@ newpath
    0.965 setlinewidth
    466.43   179.62 lineto
    471.09   226.36 lineto
-   474.91   265.89 lineto
+   474.90   265.89 lineto
    478.02   300.13 lineto
    481.56   344.19 lineto
    483.85   381.78 lineto
@@ -12293,11 +12293,11 @@ newpath
    482.69   478.11 lineto
    482.67   478.36 lineto
    482.56   479.32 lineto
-   482.46   480.29 lineto
+   482.45   480.29 lineto
    482.23   482.20 lineto
    481.76   485.99 lineto
-   480.70   493.40 lineto
-   476.29   515.08 lineto
+   480.69   493.40 lineto
+   476.28   515.08 lineto
    469.93   535.07 lineto
    465.60   544.63 lineto
    460.62   553.85 lineto
@@ -12314,14 +12314,14 @@ newpath
    399.04   605.38 lineto
    393.03   607.62 lineto
    389.75   608.73 lineto
-   386.33   609.84 lineto
+   386.32   609.84 lineto
    382.62   610.95 lineto
    380.67   611.50 lineto
    378.65   612.05 lineto
    376.99   612.48 lineto
    375.29   612.91 lineto
    373.56   613.34 lineto
-   371.75   613.77 lineto
+   371.74   613.77 lineto
    369.87   614.20 lineto
    367.95   614.62 lineto
    365.94   615.05 lineto
@@ -12334,19 +12334,19 @@ newpath
    349.31   618.02 lineto
    346.46   618.44 lineto
    343.49   618.86 lineto
-   339.70   619.35 lineto
+   339.69   619.35 lineto
    335.59   619.85 lineto
    331.32   620.34 lineto
-   326.58   620.84 lineto
+   326.57   620.84 lineto
    321.42   621.33 lineto
    315.75   621.82 lineto
    309.50   622.31 lineto
-   306.13   622.55 lineto
-   302.57   622.80 lineto
+   306.12   622.55 lineto
+   302.56   622.80 lineto
    295.85   623.22 lineto
    292.25   623.44 lineto
    288.45   623.65 lineto
-   284.42   623.86 lineto
+   284.41   623.86 lineto
    280.19   624.07 lineto
    275.73   624.28 lineto
    270.99   624.49 lineto
@@ -12354,20 +12354,20 @@ newpath
    260.82   624.91 lineto
    255.35   625.12 lineto
    249.67   625.33 lineto
-   243.88   625.54 lineto
+   243.87   625.54 lineto
    238.06   625.75 lineto
    227.29   626.17 lineto
    220.57   626.51 lineto
-   218.43   626.68 lineto
+   218.42   626.68 lineto
    217.39   626.85 lineto
    217.51   627.02 lineto
    219.24   627.23 lineto
-   222.39   627.43 lineto
+   222.38   627.43 lineto
    231.28   627.84 lineto
    241.98   628.24 lineto
    247.38   628.44 lineto
    252.59   628.65 lineto
-   257.61   628.85 lineto
+   257.60   628.85 lineto
    262.29   629.05 lineto
    270.70   629.46 lineto
    277.78   629.86 lineto
@@ -12386,7 +12386,7 @@ newpath
    277.92   636.03 lineto
    274.22   636.40 lineto
    270.23   636.76 lineto
-   261.88   637.50 lineto
+   261.87   637.50 lineto
    253.32   638.24 lineto
    241.91   639.41 lineto
    238.24   639.99 lineto
@@ -12408,8 +12408,8 @@ newpath
    342.37   651.71 lineto
    350.58   653.04 lineto
    358.04   654.36 lineto
-   364.86   655.68 lineto
-   371.11   656.99 lineto
+   364.85   655.68 lineto
+   371.10   656.99 lineto
    376.82   658.29 lineto
    382.61   659.79 lineto
    388.05   661.28 lineto
@@ -12424,16 +12424,16 @@ newpath
    399.64   672.92 lineto
    395.07   673.63 lineto
    391.92   673.98 lineto
-   388.27   674.34 lineto
+   388.26   674.34 lineto
    384.01   674.69 lineto
    378.82   675.04 lineto
    372.53   675.39 lineto
    364.95   675.75 lineto
-   359.73   675.95 lineto
+   359.72   675.95 lineto
    353.84   676.16 lineto
    347.36   676.37 lineto
    339.82   676.57 lineto
-   331.15   676.78 lineto
+   331.14   676.78 lineto
    326.30   676.88 lineto
    321.06   676.99 lineto
    315.37   677.09 lineto
@@ -12441,7 +12441,7 @@ newpath
    302.34   677.30 lineto
    294.88   677.40 lineto
    288.89   677.48 lineto
-   282.32   677.55 lineto
+   282.31   677.55 lineto
    275.08   677.63 lineto
    267.06   677.70 lineto
    258.11   677.78 lineto
@@ -12452,20 +12452,20 @@ newpath
    233.29   677.95 lineto
    229.98   677.97 lineto
    226.53   677.99 lineto
-   222.94   678.00 lineto
+   222.93   678.00 lineto
    218.56   678.03 lineto
    213.96   678.05 lineto
-   211.57   678.06 lineto
+   211.56   678.06 lineto
    209.11   678.07 lineto
-   206.60   678.08 lineto
-   204.03   678.09 lineto
+   206.59   678.08 lineto
+   204.02   678.09 lineto
    201.39   678.10 lineto
    198.69   678.11 lineto
-   195.95   678.12 lineto
+   195.94   678.12 lineto
    193.15   678.13 lineto
    190.31   678.15 lineto
    187.42   678.16 lineto
-   184.51   678.17 lineto
+   184.50   678.17 lineto
    181.58   678.18 lineto
    175.69   678.20 lineto
    169.89   678.22 lineto
@@ -12479,7 +12479,7 @@ newpath
    141.89   678.45 lineto
    146.29   678.49 lineto
    153.19   678.52 lineto
-   161.99   678.56 lineto
+   161.98   678.56 lineto
    171.96   678.60 lineto
    182.40   678.64 lineto
    192.67   678.68 lineto
@@ -12513,21 +12513,21 @@ newpath
    376.83   681.45 lineto
    382.12   681.71 lineto
    386.88   681.96 lineto
-   391.18   682.22 lineto
+   391.17   682.22 lineto
    395.06   682.47 lineto
    398.41   682.73 lineto
    404.78   683.24 lineto
-   410.19   683.75 lineto
+   410.18   683.75 lineto
    414.83   684.26 lineto
-   418.87   684.76 lineto
+   418.86   684.76 lineto
    424.03   685.55 lineto
    428.59   686.33 lineto
    435.73   687.89 lineto
    441.33   689.44 lineto
    445.66   690.98 lineto
    449.63   692.51 lineto
-   453.08   694.03 lineto
-   458.46   697.04 lineto
+   453.07   694.03 lineto
+   458.45   697.04 lineto
    463.11   700.02 lineto
    466.88   702.97 lineto
    473.24   708.76 lineto
@@ -13504,7 +13504,7 @@ newpath
    369.98   171.60 lineto
    364.97   172.46 lineto
    359.37   173.31 lineto
-   353.06   174.17 lineto
+   353.05   174.17 lineto
    345.89   175.02 lineto
    337.71   175.86 lineto
    333.16   176.29 lineto
@@ -13519,9 +13519,9 @@ newpath
    306.57   178.22 lineto
    304.08   178.37 lineto
    301.49   178.51 lineto
-   300.17   178.58 lineto
+   300.16   178.58 lineto
    298.81   178.65 lineto
-   297.44   178.73 lineto
+   297.43   178.73 lineto
    296.03   178.80 lineto
    294.60   178.87 lineto
    293.14   178.94 lineto
@@ -13548,8 +13548,8 @@ newpath
    189.55   181.88 lineto
    183.69   181.99 lineto
    174.48   182.23 lineto
-   171.71   182.35 lineto
-   170.80   182.47 lineto
+   171.70   182.35 lineto
+   170.79   182.47 lineto
    171.43   182.57 lineto
    173.47   182.67 lineto
    176.69   182.77 lineto
@@ -13564,9 +13564,9 @@ newpath
    243.78   184.20 lineto
    249.98   184.37 lineto
    255.75   184.54 lineto
-   261.01   184.70 lineto
+   261.00   184.70 lineto
    266.10   184.87 lineto
-   275.40   185.20 lineto
+   275.39   185.20 lineto
    283.62   185.53 lineto
    290.97   185.87 lineto
    297.61   186.20 lineto
@@ -13591,16 +13591,16 @@ newpath
    300.02   198.01 lineto
    297.16   198.14 lineto
    294.14   198.27 lineto
-   290.97   198.40 lineto
-   289.32   198.47 lineto
+   290.96   198.40 lineto
+   289.31   198.47 lineto
    287.62   198.54 lineto
    285.87   198.60 lineto
    284.08   198.67 lineto
    282.24   198.74 lineto
    281.30   198.77 lineto
    280.35   198.80 lineto
-   279.26   198.84 lineto
-   278.15   198.88 lineto
+   279.25   198.84 lineto
+   278.14   198.88 lineto
    275.87   198.95 lineto
    273.52   199.03 lineto
    271.09   199.10 lineto
@@ -13614,7 +13614,7 @@ newpath
    260.49   199.40 lineto
    258.73   199.44 lineto
    256.94   199.49 lineto
-   255.10   199.54 lineto
+   255.09   199.54 lineto
    253.22   199.58 lineto
    251.29   199.63 lineto
    249.32   199.67 lineto
@@ -13625,10 +13625,10 @@ newpath
    226.77   200.13 lineto
    223.85   200.18 lineto
    220.84   200.23 lineto
-   217.77   200.28 lineto
+   217.76   200.28 lineto
    214.62   200.33 lineto
    211.40   200.38 lineto
-   208.11   200.43 lineto
+   208.10   200.43 lineto
    204.76   200.49 lineto
    201.38   200.54 lineto
    194.53   200.64 lineto
@@ -13638,17 +13638,17 @@ newpath
    170.84   201.09 lineto
    169.65   201.17 lineto
    169.67   201.24 lineto
-   170.85   201.31 lineto
-   173.40   201.40 lineto
+   170.84   201.31 lineto
+   173.39   201.40 lineto
    176.99   201.48 lineto
-   186.18   201.64 lineto
+   186.17   201.64 lineto
    196.76   201.80 lineto
    202.21   201.88 lineto
    207.54   201.96 lineto
    212.73   202.04 lineto
    217.74   202.12 lineto
    227.19   202.28 lineto
-   235.87   202.45 lineto
+   235.86   202.45 lineto
    243.79   202.61 lineto
    250.38   202.75 lineto
    256.42   202.90 lineto
@@ -13680,13 +13680,13 @@ newpath
    244.32   208.24 lineto
    238.85   208.30 lineto
    232.86   208.36 lineto
-   226.34   208.42 lineto
+   226.33   208.42 lineto
    220.00   208.47 lineto
    213.10   208.53 lineto
    205.57   208.58 lineto
    197.37   208.64 lineto
    188.37   208.69 lineto
-   183.56   208.72 lineto
+   183.55   208.72 lineto
    178.52   208.75 lineto
    173.28   208.77 lineto
    167.86   208.80 lineto
@@ -13698,14 +13698,14 @@ newpath
    129.14   209.04 lineto
    128.39   209.06 lineto
    128.77   209.09 lineto
-   130.37   209.12 lineto
+   130.36   209.12 lineto
    136.73   209.18 lineto
    146.29   209.23 lineto
    157.42   209.29 lineto
    163.18   209.31 lineto
    168.89   209.34 lineto
    174.47   209.37 lineto
-   179.83   209.40 lineto
+   179.82   209.40 lineto
    185.01   209.43 lineto
    189.97   209.45 lineto
    199.19   209.51 lineto
@@ -13714,7 +13714,7 @@ newpath
    217.53   209.64 lineto
    222.81   209.68 lineto
    227.76   209.72 lineto
-   232.41   209.77 lineto
+   232.40   209.77 lineto
    240.97   209.85 lineto
    248.70   209.94 lineto
    255.69   210.03 lineto
@@ -13755,7 +13755,7 @@ newpath
    345.24   241.88 lineto
    339.70   243.09 lineto
    333.76   244.29 lineto
-   327.30   245.51 lineto
+   327.29   245.51 lineto
    320.47   246.73 lineto
    313.33   247.93 lineto
    306.30   249.14 lineto
@@ -13771,15 +13771,15 @@ newpath
    313.83   261.78 lineto
    316.26   262.36 lineto
    317.78   262.95 lineto
-   319.30   263.53 lineto
+   319.29   263.53 lineto
    319.87   264.11 lineto
    319.65   264.64 lineto
-   318.57   265.17 lineto
+   318.56   265.17 lineto
    316.43   265.70 lineto
    313.03   266.22 lineto
    310.96   266.49 lineto
    308.12   266.75 lineto
-   305.36   267.01 lineto
+   305.35   267.01 lineto
    301.85   267.27 lineto
    297.77   267.53 lineto
    293.13   267.80 lineto
@@ -13787,8 +13787,8 @@ newpath
    285.19   268.19 lineto
    282.21   268.32 lineto
    278.93   268.46 lineto
-   275.50   268.59 lineto
-   271.93   268.73 lineto
+   275.49   268.59 lineto
+   271.92   268.73 lineto
    270.10   268.80 lineto
    268.25   268.86 lineto
    264.45   269.00 lineto
@@ -13815,34 +13815,34 @@ newpath
    310.90   273.35 lineto
    315.18   273.58 lineto
    318.91   273.81 lineto
-   325.88   274.27 lineto
+   325.87   274.27 lineto
    331.89   274.73 lineto
    337.58   275.26 lineto
    342.61   275.79 lineto
    346.67   276.32 lineto
    350.23   276.84 lineto
-   353.10   277.37 lineto
+   353.09   277.37 lineto
    355.02   277.89 lineto
    357.03   278.93 lineto
    355.32   279.88 lineto
    353.22   280.35 lineto
-   349.87   280.82 lineto
+   349.86   280.82 lineto
    344.76   281.29 lineto
    341.61   281.52 lineto
    337.69   281.75 lineto
    333.56   281.99 lineto
-   328.50   282.22 lineto
+   328.49   282.22 lineto
    322.63   282.46 lineto
    315.82   282.69 lineto
    310.40   282.85 lineto
    304.35   283.01 lineto
-   297.62   283.18 lineto
+   297.61   283.18 lineto
    290.29   283.34 lineto
    281.90   283.50 lineto
-   277.34   283.58 lineto
+   277.33   283.58 lineto
    272.51   283.67 lineto
    267.39   283.75 lineto
-   262.01   283.83 lineto
+   262.00   283.83 lineto
    256.32   283.91 lineto
    250.39   283.99 lineto
    243.92   284.08 lineto
@@ -13864,22 +13864,22 @@ newpath
    266.49   285.55 lineto
    271.91   285.63 lineto
    277.03   285.71 lineto
-   281.89   285.80 lineto
+   281.88   285.80 lineto
    290.82   285.96 lineto
    298.83   286.13 lineto
    306.62   286.31 lineto
    313.38   286.49 lineto
    319.81   286.67 lineto
    325.62   286.85 lineto
-   335.66   287.21 lineto
+   335.65   287.21 lineto
    344.25   287.56 lineto
    351.54   287.92 lineto
    357.63   288.28 lineto
    363.35   288.63 lineto
-   368.40   288.99 lineto
+   368.39   288.99 lineto
    376.67   289.70 lineto
    383.61   290.41 lineto
-   389.15   291.12 lineto
+   389.14   291.12 lineto
    394.22   291.82 lineto
    402.11   293.22 lineto
    408.62   294.62 lineto
@@ -13902,21 +13902,21 @@ newpath
    408.39   347.57 lineto
    398.54   348.43 lineto
    386.34   349.27 lineto
-   379.10   349.70 lineto
+   379.09   349.70 lineto
    370.83   350.12 lineto
-   358.51   350.66 lineto
+   358.50   350.66 lineto
    351.34   350.93 lineto
    343.44   351.20 lineto
    334.60   351.47 lineto
    324.67   351.73 lineto
    319.23   351.87 lineto
    313.51   352.00 lineto
-   307.39   352.14 lineto
+   307.38   352.14 lineto
    301.01   352.27 lineto
    293.59   352.41 lineto
    285.76   352.56 lineto
    277.61   352.70 lineto
-   269.39   352.84 lineto
+   269.38   352.84 lineto
    261.45   352.99 lineto
    254.76   353.13 lineto
    249.77   353.27 lineto
@@ -13926,7 +13926,7 @@ newpath
    252.47   353.68 lineto
    256.37   353.78 lineto
    266.07   353.96 lineto
-   276.91   354.15 lineto
+   276.90   354.15 lineto
    282.36   354.25 lineto
    287.67   354.34 lineto
    292.85   354.44 lineto
@@ -13936,10 +13936,10 @@ newpath
    323.83   355.09 lineto
    330.39   355.26 lineto
    336.45   355.43 lineto
-   347.23   355.77 lineto
+   347.22   355.77 lineto
    356.79   356.11 lineto
    365.12   356.44 lineto
-   372.53   356.78 lineto
+   372.52   356.78 lineto
    379.17   357.11 lineto
    390.55   357.78 lineto
    398.87   358.40 lineto
@@ -13948,7 +13948,7 @@ newpath
    425.39   361.45 lineto
    431.41   362.67 lineto
    438.72   365.07 lineto
-   441.90   367.46 lineto
+   441.89   367.46 lineto
    442.43   369.62 lineto
    439.30   373.62 lineto
    436.12   375.60 lineto
@@ -13967,18 +13967,18 @@ newpath
    345.74   387.47 lineto
    335.39   387.60 lineto
    321.91   387.73 lineto
-   313.55   387.80 lineto
-   303.78   387.87 lineto
+   313.54   387.80 lineto
+   303.77   387.87 lineto
    291.91   387.93 lineto
    284.97   387.97 lineto
    277.16   388.00 lineto
    270.22   388.03 lineto
    262.46   388.05 lineto
    253.70   388.08 lineto
-   243.62   388.11 lineto
+   243.61   388.11 lineto
    237.93   388.12 lineto
-   231.73   388.13 lineto
-   224.91   388.15 lineto
+   231.72   388.13 lineto
+   224.90   388.15 lineto
    217.40   388.16 lineto
    209.17   388.17 lineto
    200.25   388.18 lineto
@@ -14030,14 +14030,14 @@ newpath
    363.05   390.30 lineto
    361.23   390.83 lineto
    357.22   391.37 lineto
-   351.76   391.90 lineto
+   351.75   391.90 lineto
    345.07   392.43 lineto
    337.53   392.95 lineto
    328.89   393.48 lineto
    324.32   393.74 lineto
    319.33   394.01 lineto
-   314.26   394.27 lineto
-   309.14   394.53 lineto
+   314.25   394.27 lineto
+   309.13   394.53 lineto
    303.84   394.79 lineto
    298.47   395.05 lineto
    288.53   395.57 lineto
@@ -14050,13 +14050,13 @@ newpath
    292.67   397.89 lineto
    298.08   398.16 lineto
    303.41   398.42 lineto
-   314.05   398.95 lineto
+   314.04   398.95 lineto
    318.99   399.21 lineto
    323.64   399.48 lineto
    332.32   400.00 lineto
    339.63   400.53 lineto
    345.94   401.05 lineto
-   352.66   401.76 lineto
+   352.65   401.76 lineto
    357.53   402.47 lineto
    360.68   403.17 lineto
    362.22   403.88 lineto
@@ -14086,9 +14086,9 @@ newpath
    241.14   409.24 lineto
    235.36   409.26 lineto
    229.08   409.28 lineto
-   222.19   409.30 lineto
+   222.18   409.30 lineto
    214.67   409.32 lineto
-   208.81   409.34 lineto
+   208.80   409.34 lineto
    202.60   409.35 lineto
    196.10   409.37 lineto
    189.39   409.38 lineto
@@ -14112,7 +14112,7 @@ newpath
    228.43   409.73 lineto
    234.78   409.75 lineto
    240.58   409.77 lineto
-   245.88   409.79 lineto
+   245.87   409.79 lineto
    255.16   409.83 lineto
    263.02   409.87 lineto
    269.69   409.92 lineto
@@ -14120,7 +14120,7 @@ newpath
    280.49   410.00 lineto
    288.38   410.08 lineto
    294.42   410.15 lineto
-   301.52   410.29 lineto
+   301.51   410.29 lineto
    306.21   410.42 lineto
    309.17   410.55 lineto
    310.85   410.68 lineto
@@ -14133,7 +14133,7 @@ newpath
    307.15   413.77 lineto
    310.89   414.36 lineto
    318.50   415.18 lineto
-   326.85   416.01 lineto
+   326.84   416.01 lineto
    334.07   416.83 lineto
    336.62   417.24 lineto
    337.70   417.65 lineto
@@ -14142,35 +14142,35 @@ newpath
    330.48   418.32 lineto
    324.30   418.49 lineto
    320.08   418.57 lineto
-   314.66   418.65 lineto
-   307.34   418.74 lineto
+   314.65   418.65 lineto
+   307.33   418.74 lineto
    297.67   418.82 lineto
    291.74   418.86 lineto
    285.00   418.91 lineto
    277.07   418.95 lineto
    267.56   418.99 lineto
    256.71   419.03 lineto
-   250.40   419.05 lineto
+   250.39   419.05 lineto
    243.39   419.07 lineto
    235.50   419.09 lineto
    226.63   419.11 lineto
    216.58   419.13 lineto
-   211.13   419.14 lineto
+   211.12   419.14 lineto
    205.40   419.15 lineto
    199.39   419.16 lineto
-   193.26   419.17 lineto
+   193.25   419.17 lineto
    187.04   419.18 lineto
    180.85   419.19 lineto
    166.79   419.21 lineto
    155.36   419.23 lineto
    151.11   419.25 lineto
    148.02   419.26 lineto
-   146.20   419.27 lineto
+   146.19   419.27 lineto
    145.69   419.28 lineto
    145.95   419.29 lineto
    148.42   419.30 lineto
    153.32   419.32 lineto
-   169.07   419.35 lineto
+   169.06   419.35 lineto
    178.93   419.37 lineto
    189.33   419.39 lineto
    199.70   419.40 lineto
@@ -14189,7 +14189,7 @@ newpath
    311.05   419.84 lineto
    319.77   419.95 lineto
    326.50   420.05 lineto
-   335.68   420.26 lineto
+   335.67   420.26 lineto
    341.29   420.46 lineto
    346.81   420.84 lineto
    348.83   421.22 lineto
@@ -14202,7 +14202,7 @@ newpath
    329.83   423.36 lineto
    323.70   423.67 lineto
    317.97   423.91 lineto
-   311.52   424.14 lineto
+   311.51   424.14 lineto
    304.32   424.38 lineto
    296.25   424.62 lineto
    287.22   424.85 lineto
@@ -14217,9 +14217,9 @@ newpath
    240.67   426.03 lineto
    239.37   426.19 lineto
    239.98   426.29 lineto
-   241.76   426.40 lineto
+   241.75   426.40 lineto
    245.78   426.54 lineto
-   250.83   426.68 lineto
+   250.82   426.68 lineto
    263.20   426.97 lineto
    269.68   427.11 lineto
    276.19   427.25 lineto
@@ -14228,7 +14228,7 @@ newpath
    293.94   427.67 lineto
    299.23   427.81 lineto
    308.92   428.10 lineto
-   317.45   428.38 lineto
+   317.44   428.38 lineto
    325.02   428.66 lineto
    332.09   428.96 lineto
    337.92   429.27 lineto
@@ -14264,7 +14264,7 @@ newpath
    211.88   433.61 lineto
    208.22   433.66 lineto
    207.29   433.69 lineto
-   207.54   433.73 lineto
+   207.53   433.73 lineto
    208.95   433.76 lineto
    211.43   433.79 lineto
    214.79   433.83 lineto
@@ -14308,7 +14308,7 @@ newpath
    380.81   454.62 lineto
    368.86   455.26 lineto
    361.87   455.58 lineto
-   354.45   455.90 lineto
+   354.44   455.90 lineto
    345.79   456.22 lineto
    335.95   456.54 lineto
    330.51   456.69 lineto
@@ -14319,9 +14319,9 @@ newpath
    298.57   457.44 lineto
    291.19   457.58 lineto
    283.20   457.72 lineto
-   278.95   457.78 lineto
+   278.94   457.78 lineto
    274.52   457.85 lineto
-   269.92   457.92 lineto
+   269.91   457.92 lineto
    265.14   457.99 lineto
    260.19   458.05 lineto
    255.10   458.12 lineto
@@ -14362,8 +14362,8 @@ newpath
    386.96   463.10 lineto
    399.09   463.90 lineto
    409.14   464.70 lineto
-   417.41   465.50 lineto
-   430.79   467.08 lineto
+   417.40   465.50 lineto
+   430.78   467.08 lineto
    440.46   468.66 lineto
    446.88   470.12 lineto
    451.20   471.58 lineto
@@ -14371,7 +14371,7 @@ newpath
    452.77   476.40 lineto
    446.23   478.32 lineto
    433.57   480.23 lineto
-   423.84   481.18 lineto
+   423.83   481.18 lineto
    411.05   482.12 lineto
    399.58   482.77 lineto
    385.75   483.41 lineto
@@ -14386,7 +14386,7 @@ newpath
    307.93   485.41 lineto
    303.60   485.48 lineto
    299.19   485.55 lineto
-   294.73   485.62 lineto
+   294.72   485.62 lineto
    290.28   485.69 lineto
    285.89   485.76 lineto
    281.64   485.83 lineto
@@ -14403,8 +14403,8 @@ newpath
    315.03   487.22 lineto
    325.31   487.41 lineto
    334.91   487.60 lineto
-   343.63   487.79 lineto
-   351.54   487.98 lineto
+   343.62   487.79 lineto
+   351.53   487.98 lineto
    364.33   488.32 lineto
    375.27   488.67 lineto
    384.70   489.01 lineto
@@ -14414,7 +14414,7 @@ newpath
    426.35   491.51 lineto
    432.80   492.28 lineto
    439.00   493.81 lineto
-   437.87   494.55 lineto
+   437.86   494.55 lineto
    432.85   495.29 lineto
    421.97   496.03 lineto
    412.45   496.39 lineto
@@ -14438,10 +14438,10 @@ newpath
    208.13   497.80 lineto
    199.62   497.81 lineto
    191.35   497.82 lineto
-   183.62   497.83 lineto
-   176.69   497.84 lineto
-   170.81   497.85 lineto
-   163.66   497.87 lineto
+   183.61   497.83 lineto
+   176.68   497.84 lineto
+   170.80   497.85 lineto
+   163.65   497.87 lineto
    161.73   497.88 lineto
    160.97   497.89 lineto
    162.05   497.90 lineto
@@ -14452,10 +14452,10 @@ newpath
    197.17   497.96 lineto
    205.84   497.97 lineto
    214.51   497.99 lineto
-   221.59   497.99 lineto
+   221.58   497.99 lineto
    228.35   498.00 lineto
    240.89   498.02 lineto
-   251.92   498.04 lineto
+   251.91   498.04 lineto
    261.54   498.06 lineto
    270.00   498.07 lineto
    277.52   498.09 lineto
@@ -14470,7 +14470,7 @@ newpath
    359.94   498.80 lineto
    355.58   498.98 lineto
    345.13   499.17 lineto
-   337.69   499.26 lineto
+   337.68   499.26 lineto
    328.60   499.36 lineto
    317.58   499.45 lineto
    304.15   499.54 lineto
@@ -14481,7 +14481,7 @@ newpath
    259.81   499.76 lineto
    252.59   499.78 lineto
    244.78   499.80 lineto
-   240.63   499.82 lineto
+   240.62   499.82 lineto
    236.33   499.83 lineto
    231.85   499.84 lineto
    227.25   499.85 lineto
@@ -14495,7 +14495,7 @@ newpath
    187.00   499.97 lineto
    183.68   499.99 lineto
    182.59   500.01 lineto
-   183.52   500.03 lineto
+   183.51   500.03 lineto
    186.10   500.05 lineto
    193.21   500.08 lineto
    202.87   500.10 lineto
@@ -14516,7 +14516,7 @@ newpath
    356.73   500.93 lineto
    367.20   501.08 lineto
    376.19   501.22 lineto
-   390.74   501.50 lineto
+   390.73   501.50 lineto
    402.39   501.78 lineto
    416.68   502.24 lineto
    426.90   502.70 lineto
@@ -14534,10 +14534,10 @@ newpath
    354.24   509.87 lineto
    342.58   510.01 lineto
    328.75   510.16 lineto
-   319.72   510.24 lineto
+   319.71   510.24 lineto
    309.53   510.32 lineto
-   296.97   510.40 lineto
-   290.00   510.45 lineto
+   296.96   510.40 lineto
+   289.99   510.45 lineto
    282.55   510.49 lineto
    274.63   510.53 lineto
    270.52   510.56 lineto
@@ -14550,7 +14550,7 @@ newpath
    235.19   510.75 lineto
    231.18   510.79 lineto
    230.26   510.81 lineto
-   230.17   510.83 lineto
+   230.16   510.83 lineto
    231.06   510.86 lineto
    232.96   510.88 lineto
    236.40   510.91 lineto
@@ -14575,7 +14575,7 @@ newpath
    362.74   513.57 lineto
    353.38   513.71 lineto
    341.55   513.85 lineto
-   331.22   513.94 lineto
+   331.21   513.94 lineto
    318.46   514.04 lineto
    304.22   514.14 lineto
    295.83   514.19 lineto
@@ -14583,7 +14583,7 @@ newpath
    280.16   514.27 lineto
    273.49   514.30 lineto
    266.44   514.33 lineto
-   259.09   514.36 lineto
+   259.08   514.36 lineto
    255.32   514.38 lineto
    251.54   514.39 lineto
    247.76   514.41 lineto
@@ -14636,7 +14636,7 @@ newpath
    327.94   536.90 lineto
    321.94   536.97 lineto
    315.57   537.04 lineto
-   308.86   537.11 lineto
+   308.85   537.11 lineto
    301.80   537.17 lineto
    298.12   537.21 lineto
    294.37   537.24 lineto
@@ -14667,15 +14667,15 @@ newpath
    384.31   539.33 lineto
    399.09   539.72 lineto
    410.73   540.11 lineto
-   421.66   540.58 lineto
+   421.65   540.58 lineto
    429.96   541.04 lineto
    441.39   541.98 lineto
    447.48   542.91 lineto
    449.50   543.83 lineto
-   446.83   545.06 lineto
+   446.82   545.06 lineto
    439.42   546.28 lineto
    425.63   547.50 lineto
-   415.48   548.11 lineto
+   415.47   548.11 lineto
    403.03   548.71 lineto
    393.13   549.09 lineto
    381.17   549.46 lineto
@@ -14689,7 +14689,7 @@ newpath
    309.36   550.77 lineto
    304.82   550.82 lineto
    300.06   550.87 lineto
-   295.10   550.92 lineto
+   295.09   550.92 lineto
    289.92   550.97 lineto
    284.54   551.02 lineto
    278.35   551.07 lineto
@@ -14701,7 +14701,7 @@ newpath
    245.47   551.40 lineto
    243.62   551.46 lineto
    243.51   551.50 lineto
-   244.57   551.55 lineto
+   244.56   551.55 lineto
    246.71   551.59 lineto
    253.98   551.68 lineto
    263.40   551.77 lineto
@@ -14723,7 +14723,7 @@ newpath
    401.65   555.61 lineto
    394.68   556.20 lineto
    388.34   556.50 lineto
-   380.14   556.79 lineto
+   380.13   556.79 lineto
    369.26   557.09 lineto
    355.90   557.39 lineto
    344.79   557.58 lineto
@@ -14741,12 +14741,12 @@ newpath
    290.60   558.29 lineto
    285.27   558.36 lineto
    280.97   558.43 lineto
-   277.73   558.50 lineto
+   277.72   558.50 lineto
    276.06   558.57 lineto
    276.62   558.65 lineto
    279.73   558.73 lineto
    284.37   558.81 lineto
-   289.96   558.89 lineto
+   289.95   558.89 lineto
    302.88   559.04 lineto
    316.00   559.19 lineto
    328.08   559.35 lineto
@@ -14755,16 +14755,16 @@ newpath
    357.23   559.81 lineto
    364.86   559.96 lineto
    378.38   560.29 lineto
-   389.36   560.62 lineto
+   389.35   560.62 lineto
    397.62   560.95 lineto
    404.07   561.28 lineto
    411.50   561.94 lineto
-   413.70   562.60 lineto
+   413.69   562.60 lineto
    409.74   563.26 lineto
    400.31   563.92 lineto
    392.52   564.24 lineto
-   382.65   564.57 lineto
-   369.40   564.90 lineto
+   382.64   564.57 lineto
+   369.39   564.90 lineto
    361.88   565.06 lineto
    352.83   565.22 lineto
    338.39   565.44 lineto
@@ -14800,7 +14800,7 @@ newpath
    348.61   567.47 lineto
    356.82   567.61 lineto
    370.54   567.87 lineto
-   381.54   568.14 lineto
+   381.53   568.14 lineto
    396.27   568.62 lineto
    406.23   569.10 lineto
    412.40   569.58 lineto
@@ -14809,7 +14809,7 @@ newpath
    406.16   571.33 lineto
    399.48   571.65 lineto
    390.78   571.97 lineto
-   379.34   572.28 lineto
+   379.33   572.28 lineto
    364.27   572.60 lineto
    351.82   572.81 lineto
    344.64   572.91 lineto
@@ -14820,7 +14820,7 @@ newpath
    316.90   573.25 lineto
    313.23   573.29 lineto
    309.49   573.33 lineto
-   305.69   573.37 lineto
+   305.68   573.37 lineto
    301.86   573.40 lineto
    298.04   573.44 lineto
    294.28   573.48 lineto
@@ -14831,7 +14831,7 @@ newpath
    275.66   573.78 lineto
    276.40   573.85 lineto
    278.92   573.91 lineto
-   282.97   573.97 lineto
+   282.96   573.97 lineto
    287.97   574.03 lineto
    300.49   574.16 lineto
    313.56   574.30 lineto
@@ -14852,11 +14852,11 @@ newpath
    450.64   587.62 lineto
    441.04   589.78 lineto
    428.52   591.93 lineto
-   418.15   593.22 lineto
+   418.14   593.22 lineto
    411.89   593.86 lineto
    404.69   594.50 lineto
    396.73   595.14 lineto
-   392.03   595.46 lineto
+   392.02   595.46 lineto
    386.81   595.78 lineto
    381.02   596.10 lineto
    374.55   596.41 lineto
@@ -14867,7 +14867,7 @@ newpath
    337.28   597.75 lineto
    328.55   597.98 lineto
    319.02   598.22 lineto
-   310.01   598.45 lineto
+   310.00   598.45 lineto
    301.85   598.68 lineto
    298.58   598.80 lineto
    296.16   598.92 lineto
@@ -14878,7 +14878,7 @@ newpath
    317.25   599.98 lineto
    323.96   600.16 lineto
    330.21   600.35 lineto
-   335.83   600.53 lineto
+   335.82   600.53 lineto
    339.27   600.66 lineto
    342.31   600.79 lineto
    345.14   600.91 lineto
@@ -14887,26 +14887,26 @@ newpath
    351.69   601.29 lineto
    354.70   601.54 lineto
    356.38   601.74 lineto
-   357.50   601.94 lineto
+   357.49   601.94 lineto
    358.12   602.14 lineto
    358.31   602.35 lineto
    358.11   602.56 lineto
    357.54   602.77 lineto
    356.66   602.99 lineto
    355.54   603.20 lineto
-   352.90   603.63 lineto
+   352.89   603.63 lineto
    349.93   604.06 lineto
    344.90   604.91 lineto
    343.04   605.75 lineto
    344.39   606.28 lineto
    347.31   606.80 lineto
    352.11   607.38 lineto
-   357.63   607.97 lineto
+   357.62   607.97 lineto
    363.36   608.55 lineto
    368.43   609.13 lineto
    372.65   609.71 lineto
    375.78   610.29 lineto
-   377.58   610.87 lineto
+   377.57   610.87 lineto
    377.82   611.44 lineto
    375.26   612.17 lineto
    369.54   612.89 lineto
@@ -14930,7 +14930,7 @@ newpath
    330.63   616.48 lineto
    333.07   616.70 lineto
    336.23   616.93 lineto
-   339.96   617.15 lineto
+   339.95   617.15 lineto
    344.03   617.38 lineto
    352.93   617.83 lineto
    361.66   618.27 lineto
@@ -14938,14 +14938,14 @@ newpath
    378.26   619.15 lineto
    385.57   619.59 lineto
    398.40   620.47 lineto
-   404.30   620.91 lineto
+   404.29   620.91 lineto
    407.00   621.13 lineto
-   408.42   621.24 lineto
+   408.41   621.24 lineto
    408.46   621.26 lineto
    408.19   621.27 lineto
-   407.62   621.28 lineto
+   407.61   621.28 lineto
    406.54   621.28 lineto
-   404.75   621.29 lineto
+   404.74   621.29 lineto
    401.99   621.30 lineto
    398.17   621.30 lineto
    387.57   621.32 lineto
@@ -19566,7 +19566,7 @@ newpath
    368.71   166.07 lineto
    368.75   167.61 lineto
    368.83   170.40 lineto
-   368.91   172.85 lineto
+   368.90   172.85 lineto
    368.98   175.05 lineto
    369.06   177.03 lineto
    369.13   178.85 lineto
@@ -19579,7 +19579,7 @@ newpath
    369.84   191.48 lineto
    370.04   194.15 lineto
    370.24   196.51 lineto
-   370.44   198.63 lineto
+   370.43   198.63 lineto
    370.62   200.56 lineto
    370.81   202.32 lineto
    370.99   203.94 lineto
@@ -19591,7 +19591,7 @@ newpath
    372.63   215.61 lineto
    373.12   218.39 lineto
    373.58   220.85 lineto
-   374.02   223.04 lineto
+   374.01   223.04 lineto
    374.43   225.03 lineto
    374.83   226.84 lineto
    375.21   228.51 lineto
@@ -19619,9 +19619,9 @@ newpath
    390.32   273.03 lineto
    391.11   274.84 lineto
    391.85   276.51 lineto
-   392.55   278.05 lineto
+   392.54   278.05 lineto
    393.82   280.84 lineto
-   395.03   283.43 lineto
+   395.02   283.43 lineto
    396.12   285.74 lineto
    396.23   285.97 lineto
    396.31   286.13 lineto
@@ -19644,8 +19644,8 @@ newpath
    412.22   316.84 lineto
    413.44   319.04 lineto
    414.56   321.02 lineto
-   415.58   322.84 lineto
-   416.52   324.50 lineto
+   415.57   322.84 lineto
+   416.51   324.50 lineto
    417.38   326.05 lineto
    418.97   328.83 lineto
    420.05   330.70 lineto
@@ -19655,7 +19655,7 @@ newpath
    424.34   338.14 lineto
    425.73   340.50 lineto
    426.98   342.62 lineto
-   428.11   344.54 lineto
+   428.10   344.54 lineto
    430.11   347.93 lineto
    432.88   352.58 lineto
    435.16   356.38 lineto
@@ -19728,7 +19728,7 @@ newpath
    383.49   545.63 lineto
    380.55   545.81 lineto
    376.69   546.00 lineto
-   373.41   546.17 lineto
+   373.40   546.17 lineto
    373.67   546.35 lineto
    377.00   546.52 lineto
    380.52   546.69 lineto
@@ -21524,7 +21524,7 @@ newpath
    287.69   258.58 lineto
    289.08   260.39 lineto
    290.35   262.06 lineto
-   291.54   263.60 lineto
+   291.53   263.60 lineto
    293.66   266.39 lineto
    295.54   268.84 lineto
    297.22   271.04 lineto
@@ -21557,10 +21557,10 @@ newpath
    333.95   319.04 lineto
    335.47   321.02 lineto
    336.86   322.84 lineto
-   338.14   324.50 lineto
+   338.13   324.50 lineto
    339.31   326.05 lineto
    341.44   328.83 lineto
-   342.88   330.70 lineto
+   342.87   330.70 lineto
    344.19   332.41 lineto
    345.40   334.00 lineto
    346.52   335.47 lineto
@@ -21586,7 +21586,7 @@ newpath
    401.78   407.59 lineto
    403.93   410.38 lineto
    407.51   415.03 lineto
-   410.44   418.83 lineto
+   410.43   418.83 lineto
    412.92   422.04 lineto
    415.07   424.82 lineto
    420.22   431.46 lineto
@@ -21603,7 +21603,7 @@ newpath
    453.35   472.82 lineto
    456.40   476.40 lineto
    459.04   479.46 lineto
-   463.49   484.49 lineto
+   463.48   484.49 lineto
    467.16   488.53 lineto
    470.31   491.92 lineto
    473.87   496.57 lineto
@@ -21631,17 +21631,17 @@ newpath
    355.43   542.87 lineto
    359.50   543.54 lineto
    362.15   543.87 lineto
-   365.39   544.20 lineto
+   365.40   544.20 lineto
    367.22   544.36 lineto
    369.32   544.52 lineto
    374.16   544.83 lineto
-   380.22   545.14 lineto
+   380.23   545.14 lineto
    387.74   545.45 lineto
    392.87   545.63 lineto
    397.95   545.81 lineto
    401.65   546.00 lineto
    401.10   546.17 lineto
-   393.37   546.35 lineto
+   393.36   546.35 lineto
    378.24   546.52 lineto
    357.48   546.69 lineto
    335.20   546.85 lineto
@@ -21649,7 +21649,7 @@ newpath
    270.95   547.17 lineto
    224.57   547.32 lineto
    230.49   547.49 lineto
-   260.65   547.65 lineto
+   260.64   547.65 lineto
    268.83   547.82 lineto
    258.67   548.00 lineto
    240.58   548.15 lineto
@@ -21703,7 +21703,7 @@ newpath
    214.98   559.31 lineto
    256.52   559.47 lineto
    275.92   559.63 lineto
-   289.16   559.82 lineto
+   289.15   559.82 lineto
    300.88   560.03 lineto
    311.81   560.20 lineto
    330.12   560.38 lineto
@@ -21721,7 +21721,7 @@ newpath
    290.24   562.35 lineto
    290.55   562.50 lineto
    290.66   562.65 lineto
-   290.23   562.86 lineto
+   290.22   562.86 lineto
    289.10   563.07 lineto
    287.15   563.27 lineto
    284.19   563.48 lineto
@@ -21801,7 +21801,7 @@ newpath
    234.19   578.48 lineto
    242.13   578.66 lineto
    249.18   578.81 lineto
-   238.71   578.96 lineto
+   238.70   578.96 lineto
    202.78   579.12 lineto
    229.63   579.29 lineto
    241.11   579.43 lineto
@@ -21860,7 +21860,7 @@ newpath
    271.64   588.97 lineto
    281.89   589.13 lineto
    209.74   589.28 lineto
-   252.27   589.44 lineto
+   252.26   589.44 lineto
    269.01   589.63 lineto
    270.06   589.78 lineto
    237.83   589.94 lineto
@@ -21885,7 +21885,7 @@ newpath
    219.14   593.17 lineto
    269.98   593.33 lineto
    234.01   593.49 lineto
-   201.68   593.66 lineto
+   201.67   593.66 lineto
    201.19   593.84 lineto
    217.19   594.03 lineto
    236.74   594.18 lineto
@@ -23046,11 +23046,11 @@ newpath
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   134.15   122.40 moveto
+   134.14   122.40 moveto
    0.965 setlinewidth
    135.64   124.86 lineto
    136.97   127.05 lineto
-   138.18   129.04 lineto
+   138.17   129.04 lineto
    139.28   130.85 lineto
    140.29   132.52 lineto
    141.23   134.06 lineto
@@ -23062,8 +23062,8 @@ newpath
    148.56   146.15 lineto
    150.00   148.51 lineto
    151.29   150.63 lineto
-   152.46   152.56 lineto
-   153.53   154.32 lineto
+   152.45   152.56 lineto
+   153.52   154.32 lineto
    154.51   155.95 lineto
    156.00   158.40 lineto
    157.34   160.60 lineto
@@ -23077,8 +23077,8 @@ newpath
    167.31   177.03 lineto
    168.41   178.85 lineto
    169.43   180.52 lineto
-   170.37   182.06 lineto
-   172.06   184.84 lineto
+   170.36   182.06 lineto
+   172.05   184.84 lineto
    173.19   186.71 lineto
    174.23   188.43 lineto
    175.19   190.01 lineto
@@ -23108,7 +23108,7 @@ newpath
    204.33   238.01 lineto
    205.22   239.48 lineto
    206.84   242.14 lineto
-   208.28   244.51 lineto
+   208.27   244.51 lineto
    209.56   246.63 lineto
    210.73   248.55 lineto
    211.80   250.31 lineto
@@ -23127,7 +23127,7 @@ newpath
    227.70   276.51 lineto
    228.64   278.05 lineto
    230.33   280.84 lineto
-   231.91   283.43 lineto
+   231.90   283.43 lineto
    233.31   285.74 lineto
    233.45   285.97 lineto
    233.55   286.13 lineto
@@ -23150,7 +23150,7 @@ newpath
    252.19   316.84 lineto
    253.52   319.04 lineto
    254.73   321.02 lineto
-   255.84   322.84 lineto
+   255.83   322.84 lineto
    256.85   324.50 lineto
    257.78   326.05 lineto
    259.47   328.83 lineto
@@ -23176,17 +23176,17 @@ newpath
    298.17   392.54 lineto
    300.24   395.93 lineto
    303.07   400.58 lineto
-   305.39   404.38 lineto
+   305.38   404.38 lineto
    307.35   407.59 lineto
    309.05   410.38 lineto
-   311.89   415.03 lineto
+   311.88   415.03 lineto
    314.21   418.83 lineto
-   316.18   422.04 lineto
+   316.17   422.04 lineto
    317.88   424.82 lineto
    321.96   431.46 lineto
    325.06   436.49 lineto
    327.56   440.54 lineto
-   329.67   443.92 lineto
+   329.66   443.92 lineto
    332.57   448.58 lineto
    334.95   452.38 lineto
    336.98   455.59 lineto
@@ -23205,7 +23205,7 @@ newpath
    370.07   503.59 lineto
    372.23   506.37 lineto
    375.88   511.02 lineto
-   378.84   514.82 lineto
+   378.83   514.82 lineto
    381.26   518.03 lineto
    383.24   520.82 lineto
    385.48   524.40 lineto
@@ -23216,7 +23216,7 @@ newpath
    386.05   535.46 lineto
    385.91   535.62 lineto
    385.61   535.93 lineto
-   384.94   536.53 lineto
+   384.93   536.53 lineto
    382.14   538.29 lineto
    378.10   539.92 lineto
    375.35   540.69 lineto
@@ -23234,12 +23234,12 @@ newpath
    333.10   545.63 lineto
    329.28   545.81 lineto
    325.03   546.00 lineto
-   320.16   546.17 lineto
+   320.15   546.17 lineto
    314.58   546.35 lineto
    307.96   546.52 lineto
    299.72   546.69 lineto
    290.11   546.85 lineto
-   276.26   547.01 lineto
+   276.25   547.01 lineto
    254.82   547.17 lineto
    224.07   547.32 lineto
    233.40   547.49 lineto
@@ -23253,7 +23253,7 @@ newpath
    257.04   548.83 lineto
    271.90   549.00 lineto
    284.61   549.18 lineto
-   297.13   549.40 lineto
+   297.12   549.40 lineto
    307.07   549.61 lineto
    315.37   549.83 lineto
    322.67   550.06 lineto
@@ -23268,7 +23268,7 @@ newpath
    319.00   551.82 lineto
    340.17   552.00 lineto
    351.86   552.21 lineto
-   359.95   552.47 lineto
+   359.94   552.47 lineto
    365.22   552.72 lineto
    370.82   553.08 lineto
    373.77   553.33 lineto
@@ -23314,7 +23314,7 @@ newpath
    363.07   562.18 lineto
    365.41   562.35 lineto
    366.10   562.50 lineto
-   366.21   562.65 lineto
+   366.20   562.65 lineto
    365.07   562.86 lineto
    362.91   563.07 lineto
    359.86   563.27 lineto
@@ -23345,11 +23345,11 @@ newpath
    339.05   567.79 lineto
    359.63   567.97 lineto
    370.77   568.14 lineto
-   379.92   568.37 lineto
+   379.91   568.37 lineto
    386.02   568.59 lineto
    390.90   568.81 lineto
    395.88   569.11 lineto
-   399.83   569.40 lineto
+   399.82   569.40 lineto
    403.02   569.68 lineto
    405.61   569.97 lineto
    409.22   570.52 lineto
@@ -23358,7 +23358,7 @@ newpath
    407.52   571.85 lineto
    404.77   572.04 lineto
    400.81   572.23 lineto
-   394.63   572.41 lineto
+   394.62   572.41 lineto
    384.87   572.60 lineto
    365.77   572.81 lineto
    338.54   572.96 lineto
@@ -23367,7 +23367,7 @@ newpath
    361.22   573.45 lineto
    378.36   573.60 lineto
    390.56   573.80 lineto
-   399.03   574.09 lineto
+   399.02   574.09 lineto
    401.04   574.29 lineto
    401.38   574.46 lineto
    399.39   574.79 lineto
@@ -23395,10 +23395,10 @@ newpath
    275.02   578.48 lineto
    341.96   578.66 lineto
    333.38   578.81 lineto
-   299.83   578.96 lineto
+   299.82   578.96 lineto
    287.60   579.12 lineto
    331.33   579.29 lineto
-   345.36   579.43 lineto
+   345.35   579.43 lineto
    319.39   579.59 lineto
    310.66   579.74 lineto
    359.97   579.89 lineto
@@ -23407,7 +23407,7 @@ newpath
    394.92   580.58 lineto
    392.99   580.87 lineto
    388.02   581.04 lineto
-   378.49   581.21 lineto
+   378.48   581.21 lineto
    362.26   581.37 lineto
    333.78   581.53 lineto
    269.70   581.68 lineto
@@ -23417,7 +23417,7 @@ newpath
    393.99   582.39 lineto
    404.20   582.63 lineto
    409.30   582.99 lineto
-   407.95   583.14 lineto
+   407.94   583.14 lineto
    403.79   583.30 lineto
    395.75   583.45 lineto
    381.46   583.61 lineto
@@ -23465,7 +23465,7 @@ newpath
    382.31   590.72 lineto
    374.11   590.89 lineto
    307.33   591.04 lineto
-   365.60   591.19 lineto
+   365.59   591.19 lineto
    398.58   591.37 lineto
    410.61   591.60 lineto
    412.49   591.83 lineto
@@ -23485,7 +23485,7 @@ newpath
    358.74   594.18 lineto
    344.17   594.34 lineto
    329.08   594.49 lineto
-   350.11   594.68 lineto
+   350.10   594.68 lineto
    373.43   594.86 lineto
    338.42   595.66 lineto
    338.88   596.36 lineto
@@ -89647,112 +89647,112 @@ newpath
    240.42   210.18 lineto
    240.42   210.46 lineto
    240.42   210.74 lineto
-   279.67   211.02 lineto
-   279.67   211.30 lineto
-   279.67   211.58 lineto
-   279.67   211.86 lineto
-   279.67   212.14 lineto
-   279.67   212.42 lineto
-   279.67   212.70 lineto
-   279.67   212.98 lineto
-   279.67   213.26 lineto
-   279.67   213.54 lineto
-   279.67   213.82 lineto
-   279.67   214.10 lineto
-   279.67   214.38 lineto
-   279.67   214.66 lineto
-   279.67   214.95 lineto
-   279.67   215.23 lineto
-   279.67   215.51 lineto
-   279.67   215.79 lineto
-   279.67   216.07 lineto
-   279.67   216.35 lineto
-   279.67   216.63 lineto
-   279.67   216.91 lineto
-   279.67   217.19 lineto
-   279.67   217.47 lineto
-   279.67   217.75 lineto
-   279.67   218.03 lineto
-   279.67   218.31 lineto
-   279.67   218.59 lineto
-   279.67   218.87 lineto
-   279.67   219.15 lineto
-   279.67   219.43 lineto
-   279.67   219.71 lineto
-   279.67   219.99 lineto
-   279.67   220.27 lineto
-   279.67   220.55 lineto
-   279.67   220.83 lineto
-   279.67   221.11 lineto
-   279.67   221.40 lineto
-   279.67   221.68 lineto
-   279.67   221.96 lineto
-   279.67   222.24 lineto
-   279.67   222.52 lineto
-   279.67   222.80 lineto
-   279.67   223.08 lineto
-   279.67   223.36 lineto
-   279.67   223.64 lineto
-   279.67   223.92 lineto
-   279.67   224.20 lineto
-   279.67   224.48 lineto
-   279.67   224.76 lineto
-   279.67   225.04 lineto
-   279.67   225.32 lineto
-   279.67   225.60 lineto
-   279.67   225.88 lineto
-   279.67   226.16 lineto
-   279.67   226.44 lineto
-   279.67   226.72 lineto
-   279.67   227.00 lineto
-   279.67   227.28 lineto
-   279.67   227.57 lineto
-   279.67   227.85 lineto
-   279.67   228.13 lineto
-   279.67   228.41 lineto
-   279.67   228.69 lineto
-   279.67   228.97 lineto
-   279.67   229.25 lineto
-   279.67   229.53 lineto
-   279.67   229.81 lineto
-   279.67   230.09 lineto
-   279.67   230.37 lineto
-   279.67   230.65 lineto
-   279.67   230.93 lineto
-   279.67   231.21 lineto
-   279.67   231.49 lineto
-   279.67   231.77 lineto
-   279.67   232.05 lineto
-   279.67   232.33 lineto
-   279.67   232.61 lineto
-   279.67   232.89 lineto
-   279.67   233.17 lineto
-   279.67   233.45 lineto
-   279.67   233.73 lineto
-   279.67   234.02 lineto
-   279.67   234.30 lineto
-   279.67   234.58 lineto
-   279.67   234.86 lineto
-   279.67   235.14 lineto
-   279.67   235.42 lineto
-   279.67   235.70 lineto
-   279.67   235.98 lineto
-   279.67   236.26 lineto
-   279.67   236.54 lineto
-   279.67   236.82 lineto
-   279.67   237.10 lineto
-   279.67   237.38 lineto
-   279.67   237.66 lineto
-   279.67   237.94 lineto
-   279.67   238.22 lineto
-   279.67   238.50 lineto
-   279.67   238.78 lineto
-   279.67   239.06 lineto
-   279.67   239.34 lineto
-   279.67   239.62 lineto
-   279.67   239.90 lineto
-   279.67   240.18 lineto
-   279.67   240.47 lineto
+   279.66   211.02 lineto
+   279.66   211.30 lineto
+   279.66   211.58 lineto
+   279.66   211.86 lineto
+   279.66   212.14 lineto
+   279.66   212.42 lineto
+   279.66   212.70 lineto
+   279.66   212.98 lineto
+   279.66   213.26 lineto
+   279.66   213.54 lineto
+   279.66   213.82 lineto
+   279.66   214.10 lineto
+   279.66   214.38 lineto
+   279.66   214.66 lineto
+   279.66   214.95 lineto
+   279.66   215.23 lineto
+   279.66   215.51 lineto
+   279.66   215.79 lineto
+   279.66   216.07 lineto
+   279.66   216.35 lineto
+   279.66   216.63 lineto
+   279.66   216.91 lineto
+   279.66   217.19 lineto
+   279.66   217.47 lineto
+   279.66   217.75 lineto
+   279.66   218.03 lineto
+   279.66   218.31 lineto
+   279.66   218.59 lineto
+   279.66   218.87 lineto
+   279.66   219.15 lineto
+   279.66   219.43 lineto
+   279.66   219.71 lineto
+   279.66   219.99 lineto
+   279.66   220.27 lineto
+   279.66   220.55 lineto
+   279.66   220.83 lineto
+   279.66   221.11 lineto
+   279.66   221.40 lineto
+   279.66   221.68 lineto
+   279.66   221.96 lineto
+   279.66   222.24 lineto
+   279.66   222.52 lineto
+   279.66   222.80 lineto
+   279.66   223.08 lineto
+   279.66   223.36 lineto
+   279.66   223.64 lineto
+   279.66   223.92 lineto
+   279.66   224.20 lineto
+   279.66   224.48 lineto
+   279.66   224.76 lineto
+   279.66   225.04 lineto
+   279.66   225.32 lineto
+   279.66   225.60 lineto
+   279.66   225.88 lineto
+   279.66   226.16 lineto
+   279.66   226.44 lineto
+   279.66   226.72 lineto
+   279.66   227.00 lineto
+   279.66   227.28 lineto
+   279.66   227.57 lineto
+   279.66   227.85 lineto
+   279.66   228.13 lineto
+   279.66   228.41 lineto
+   279.66   228.69 lineto
+   279.66   228.97 lineto
+   279.66   229.25 lineto
+   279.66   229.53 lineto
+   279.66   229.81 lineto
+   279.66   230.09 lineto
+   279.66   230.37 lineto
+   279.66   230.65 lineto
+   279.66   230.93 lineto
+   279.66   231.21 lineto
+   279.66   231.49 lineto
+   279.66   231.77 lineto
+   279.66   232.05 lineto
+   279.66   232.33 lineto
+   279.66   232.61 lineto
+   279.66   232.89 lineto
+   279.66   233.17 lineto
+   279.66   233.45 lineto
+   279.66   233.73 lineto
+   279.66   234.02 lineto
+   279.66   234.30 lineto
+   279.66   234.58 lineto
+   279.66   234.86 lineto
+   279.66   235.14 lineto
+   279.66   235.42 lineto
+   279.66   235.70 lineto
+   279.66   235.98 lineto
+   279.66   236.26 lineto
+   279.66   236.54 lineto
+   279.66   236.82 lineto
+   279.66   237.10 lineto
+   279.66   237.38 lineto
+   279.66   237.66 lineto
+   279.66   237.94 lineto
+   279.66   238.22 lineto
+   279.66   238.50 lineto
+   279.66   238.78 lineto
+   279.66   239.06 lineto
+   279.66   239.34 lineto
+   279.66   239.62 lineto
+   279.66   239.90 lineto
+   279.66   240.18 lineto
+   279.66   240.47 lineto
    287.51   240.75 lineto
    287.51   241.03 lineto
    287.51   241.31 lineto
@@ -90279,111 +90279,111 @@ newpath
    324.51   387.42 lineto
    324.51   387.70 lineto
    324.51   387.98 lineto
-   312.20   388.26 lineto
-   312.20   388.54 lineto
-   312.20   388.82 lineto
-   312.20   389.10 lineto
-   312.20   389.38 lineto
-   312.20   389.66 lineto
-   312.20   389.94 lineto
-   312.20   390.22 lineto
-   312.20   390.50 lineto
-   312.20   390.78 lineto
-   312.20   391.06 lineto
-   312.20   391.34 lineto
-   312.20   391.62 lineto
-   312.20   391.90 lineto
-   312.20   392.18 lineto
-   312.20   392.46 lineto
-   312.20   392.74 lineto
-   312.20   393.02 lineto
-   312.20   393.31 lineto
-   312.20   393.59 lineto
-   312.20   393.87 lineto
-   312.20   394.15 lineto
-   312.20   394.43 lineto
-   312.20   394.71 lineto
-   312.20   394.99 lineto
-   312.20   395.27 lineto
-   312.20   395.55 lineto
-   312.20   395.83 lineto
-   312.20   396.11 lineto
-   312.20   396.39 lineto
-   312.20   396.67 lineto
-   312.20   396.95 lineto
-   312.20   397.23 lineto
-   312.20   397.51 lineto
-   312.20   397.79 lineto
-   312.20   398.07 lineto
-   312.20   398.35 lineto
-   312.20   398.63 lineto
-   312.20   398.91 lineto
-   312.20   399.19 lineto
-   312.20   399.47 lineto
-   312.20   399.76 lineto
-   312.20   400.04 lineto
-   312.20   400.32 lineto
-   312.20   400.60 lineto
-   312.20   400.88 lineto
-   312.20   401.16 lineto
-   312.20   401.44 lineto
-   312.20   401.72 lineto
-   312.20   402.00 lineto
-   312.20   402.28 lineto
-   312.20   402.56 lineto
-   312.20   402.84 lineto
-   312.20   403.12 lineto
-   312.20   403.40 lineto
-   312.20   403.68 lineto
-   312.20   403.96 lineto
-   312.20   404.24 lineto
-   312.20   404.52 lineto
-   312.20   404.80 lineto
-   312.20   405.08 lineto
-   312.20   405.36 lineto
-   312.20   405.64 lineto
-   312.20   405.92 lineto
-   312.20   406.21 lineto
-   312.20   406.49 lineto
-   312.20   406.77 lineto
-   312.20   407.05 lineto
-   312.20   407.33 lineto
-   312.20   407.61 lineto
-   312.20   407.89 lineto
-   312.20   408.17 lineto
-   312.20   408.45 lineto
-   312.20   408.73 lineto
-   312.20   409.01 lineto
-   312.20   409.29 lineto
-   312.20   409.57 lineto
-   312.20   409.85 lineto
-   312.20   410.13 lineto
-   312.20   410.41 lineto
-   312.20   410.69 lineto
-   312.20   410.97 lineto
-   312.20   411.25 lineto
-   312.20   411.53 lineto
-   312.20   411.81 lineto
-   312.20   412.09 lineto
-   312.20   412.37 lineto
-   312.20   412.66 lineto
-   312.20   412.94 lineto
-   312.20   413.22 lineto
-   312.20   413.50 lineto
-   312.20   413.78 lineto
-   312.20   414.06 lineto
-   312.20   414.34 lineto
-   312.20   414.62 lineto
-   312.20   414.90 lineto
-   312.20   415.18 lineto
-   312.20   415.46 lineto
-   312.20   415.74 lineto
-   312.20   416.02 lineto
-   312.20   416.30 lineto
-   312.20   416.58 lineto
-   312.20   416.86 lineto
-   312.20   417.14 lineto
-   312.20   417.42 lineto
+   312.19   388.26 lineto
+   312.19   388.54 lineto
+   312.19   388.82 lineto
+   312.19   389.10 lineto
+   312.19   389.38 lineto
+   312.19   389.66 lineto
+   312.19   389.94 lineto
+   312.19   390.22 lineto
+   312.19   390.50 lineto
+   312.19   390.78 lineto
+   312.19   391.06 lineto
+   312.19   391.34 lineto
+   312.19   391.62 lineto
+   312.19   391.90 lineto
+   312.19   392.18 lineto
+   312.19   392.46 lineto
+   312.19   392.74 lineto
+   312.19   393.02 lineto
+   312.19   393.31 lineto
+   312.19   393.59 lineto
+   312.19   393.87 lineto
+   312.19   394.15 lineto
+   312.19   394.43 lineto
+   312.19   394.71 lineto
+   312.19   394.99 lineto
+   312.19   395.27 lineto
+   312.19   395.55 lineto
+   312.19   395.83 lineto
+   312.19   396.11 lineto
+   312.19   396.39 lineto
+   312.19   396.67 lineto
+   312.19   396.95 lineto
+   312.19   397.23 lineto
+   312.19   397.51 lineto
+   312.19   397.79 lineto
+   312.19   398.07 lineto
+   312.19   398.35 lineto
+   312.19   398.63 lineto
+   312.19   398.91 lineto
+   312.19   399.19 lineto
+   312.19   399.47 lineto
+   312.19   399.76 lineto
+   312.19   400.04 lineto
+   312.19   400.32 lineto
+   312.19   400.60 lineto
+   312.19   400.88 lineto
+   312.19   401.16 lineto
+   312.19   401.44 lineto
+   312.19   401.72 lineto
+   312.19   402.00 lineto
+   312.19   402.28 lineto
+   312.19   402.56 lineto
+   312.19   402.84 lineto
+   312.19   403.12 lineto
+   312.19   403.40 lineto
+   312.19   403.68 lineto
+   312.19   403.96 lineto
+   312.19   404.24 lineto
+   312.19   404.52 lineto
+   312.19   404.80 lineto
+   312.19   405.08 lineto
+   312.19   405.36 lineto
+   312.19   405.64 lineto
+   312.19   405.92 lineto
+   312.19   406.21 lineto
+   312.19   406.49 lineto
+   312.19   406.77 lineto
+   312.19   407.05 lineto
+   312.19   407.33 lineto
+   312.19   407.61 lineto
+   312.19   407.89 lineto
+   312.19   408.17 lineto
+   312.19   408.45 lineto
+   312.19   408.73 lineto
+   312.19   409.01 lineto
+   312.19   409.29 lineto
+   312.19   409.57 lineto
+   312.19   409.85 lineto
+   312.19   410.13 lineto
+   312.19   410.41 lineto
+   312.19   410.69 lineto
+   312.19   410.97 lineto
+   312.19   411.25 lineto
+   312.19   411.53 lineto
+   312.19   411.81 lineto
+   312.19   412.09 lineto
+   312.19   412.37 lineto
+   312.19   412.66 lineto
+   312.19   412.94 lineto
+   312.19   413.22 lineto
+   312.19   413.50 lineto
+   312.19   413.78 lineto
+   312.19   414.06 lineto
+   312.19   414.34 lineto
+   312.19   414.62 lineto
+   312.19   414.90 lineto
+   312.19   415.18 lineto
+   312.19   415.46 lineto
+   312.19   415.74 lineto
+   312.19   416.02 lineto
+   312.19   416.30 lineto
+   312.19   416.58 lineto
+   312.19   416.86 lineto
+   312.19   417.14 lineto
+   312.19   417.42 lineto
    267.08   417.70 lineto
    267.08   417.98 lineto
    267.08   418.26 lineto
@@ -90489,112 +90489,112 @@ newpath
    267.08   446.31 lineto
    267.08   446.59 lineto
    267.08   446.87 lineto
-   256.06   447.15 lineto
-   256.06   447.43 lineto
-   256.06   447.71 lineto
-   256.06   447.99 lineto
-   256.06   448.27 lineto
-   256.06   448.55 lineto
-   256.06   448.83 lineto
-   256.06   449.11 lineto
-   256.06   449.39 lineto
-   256.06   449.67 lineto
-   256.06   449.95 lineto
-   256.06   450.23 lineto
-   256.06   450.51 lineto
-   256.06   450.80 lineto
-   256.06   451.08 lineto
-   256.06   451.36 lineto
-   256.06   451.64 lineto
-   256.06   451.92 lineto
-   256.06   452.20 lineto
-   256.06   452.48 lineto
-   256.06   452.76 lineto
-   256.06   453.04 lineto
-   256.06   453.32 lineto
-   256.06   453.60 lineto
-   256.06   453.88 lineto
-   256.06   454.16 lineto
-   256.06   454.44 lineto
-   256.06   454.72 lineto
-   256.06   455.00 lineto
-   256.06   455.28 lineto
-   256.06   455.56 lineto
-   256.06   455.84 lineto
-   256.06   456.12 lineto
-   256.06   456.40 lineto
-   256.06   456.68 lineto
-   256.06   456.96 lineto
-   256.06   457.25 lineto
-   256.06   457.53 lineto
-   256.06   457.81 lineto
-   256.06   458.09 lineto
-   256.06   458.37 lineto
-   256.06   458.65 lineto
-   256.06   458.93 lineto
-   256.06   459.21 lineto
-   256.06   459.49 lineto
-   256.06   459.77 lineto
-   256.06   460.05 lineto
-   256.06   460.33 lineto
-   256.06   460.61 lineto
-   256.06   460.89 lineto
-   256.06   461.17 lineto
-   256.06   461.45 lineto
-   256.06   461.73 lineto
-   256.06   462.01 lineto
-   256.06   462.29 lineto
-   256.06   462.57 lineto
-   256.06   462.85 lineto
-   256.06   463.13 lineto
-   256.06   463.42 lineto
-   256.06   463.70 lineto
-   256.06   463.98 lineto
-   256.06   464.26 lineto
-   256.06   464.54 lineto
-   256.06   464.82 lineto
-   256.06   465.10 lineto
-   256.06   465.38 lineto
-   256.06   465.66 lineto
-   256.06   465.94 lineto
-   256.06   466.22 lineto
-   256.06   466.50 lineto
-   256.06   466.78 lineto
-   256.06   467.06 lineto
-   256.06   467.34 lineto
-   256.06   467.62 lineto
-   256.06   467.90 lineto
-   256.06   468.18 lineto
-   256.06   468.46 lineto
-   256.06   468.74 lineto
-   256.06   469.02 lineto
-   256.06   469.30 lineto
-   256.06   469.58 lineto
-   256.06   469.87 lineto
-   256.06   470.15 lineto
-   256.06   470.43 lineto
-   256.06   470.71 lineto
-   256.06   470.99 lineto
-   256.06   471.27 lineto
-   256.06   471.55 lineto
-   256.06   471.83 lineto
-   256.06   472.11 lineto
-   256.06   472.39 lineto
-   256.06   472.67 lineto
-   256.06   472.95 lineto
-   256.06   473.23 lineto
-   256.06   473.51 lineto
-   256.06   473.79 lineto
-   256.06   474.07 lineto
-   256.06   474.35 lineto
-   256.06   474.63 lineto
-   256.06   474.91 lineto
-   256.06   475.19 lineto
-   256.06   475.47 lineto
-   256.06   475.75 lineto
-   256.06   476.03 lineto
-   256.06   476.32 lineto
-   256.06   476.60 lineto
+   256.05   447.15 lineto
+   256.05   447.43 lineto
+   256.05   447.71 lineto
+   256.05   447.99 lineto
+   256.05   448.27 lineto
+   256.05   448.55 lineto
+   256.05   448.83 lineto
+   256.05   449.11 lineto
+   256.05   449.39 lineto
+   256.05   449.67 lineto
+   256.05   449.95 lineto
+   256.05   450.23 lineto
+   256.05   450.51 lineto
+   256.05   450.80 lineto
+   256.05   451.08 lineto
+   256.05   451.36 lineto
+   256.05   451.64 lineto
+   256.05   451.92 lineto
+   256.05   452.20 lineto
+   256.05   452.48 lineto
+   256.05   452.76 lineto
+   256.05   453.04 lineto
+   256.05   453.32 lineto
+   256.05   453.60 lineto
+   256.05   453.88 lineto
+   256.05   454.16 lineto
+   256.05   454.44 lineto
+   256.05   454.72 lineto
+   256.05   455.00 lineto
+   256.05   455.28 lineto
+   256.05   455.56 lineto
+   256.05   455.84 lineto
+   256.05   456.12 lineto
+   256.05   456.40 lineto
+   256.05   456.68 lineto
+   256.05   456.96 lineto
+   256.05   457.25 lineto
+   256.05   457.53 lineto
+   256.05   457.81 lineto
+   256.05   458.09 lineto
+   256.05   458.37 lineto
+   256.05   458.65 lineto
+   256.05   458.93 lineto
+   256.05   459.21 lineto
+   256.05   459.49 lineto
+   256.05   459.77 lineto
+   256.05   460.05 lineto
+   256.05   460.33 lineto
+   256.05   460.61 lineto
+   256.05   460.89 lineto
+   256.05   461.17 lineto
+   256.05   461.45 lineto
+   256.05   461.73 lineto
+   256.05   462.01 lineto
+   256.05   462.29 lineto
+   256.05   462.57 lineto
+   256.05   462.85 lineto
+   256.05   463.13 lineto
+   256.05   463.42 lineto
+   256.05   463.70 lineto
+   256.05   463.98 lineto
+   256.05   464.26 lineto
+   256.05   464.54 lineto
+   256.05   464.82 lineto
+   256.05   465.10 lineto
+   256.05   465.38 lineto
+   256.05   465.66 lineto
+   256.05   465.94 lineto
+   256.05   466.22 lineto
+   256.05   466.50 lineto
+   256.05   466.78 lineto
+   256.05   467.06 lineto
+   256.05   467.34 lineto
+   256.05   467.62 lineto
+   256.05   467.90 lineto
+   256.05   468.18 lineto
+   256.05   468.46 lineto
+   256.05   468.74 lineto
+   256.05   469.02 lineto
+   256.05   469.30 lineto
+   256.05   469.58 lineto
+   256.05   469.87 lineto
+   256.05   470.15 lineto
+   256.05   470.43 lineto
+   256.05   470.71 lineto
+   256.05   470.99 lineto
+   256.05   471.27 lineto
+   256.05   471.55 lineto
+   256.05   471.83 lineto
+   256.05   472.11 lineto
+   256.05   472.39 lineto
+   256.05   472.67 lineto
+   256.05   472.95 lineto
+   256.05   473.23 lineto
+   256.05   473.51 lineto
+   256.05   473.79 lineto
+   256.05   474.07 lineto
+   256.05   474.35 lineto
+   256.05   474.63 lineto
+   256.05   474.91 lineto
+   256.05   475.19 lineto
+   256.05   475.47 lineto
+   256.05   475.75 lineto
+   256.05   476.03 lineto
+   256.05   476.32 lineto
+   256.05   476.60 lineto
    257.16   476.88 lineto
    257.16   477.16 lineto
    257.16   477.44 lineto

@@ -28,8 +28,8 @@ module groupm
    real(kr),dimension(:),allocatable::sigz
    integer::ntemp,nsigz
 
-   ! input mat, legendre order, print control, and run title
-   integer::matb,lord,iprint
+   ! input mat, legendre order, print control, smoothing option and run title
+   integer::matb,lord,iprint,ismooth
    real(kr)::rtitle(17)
    character(4)::title(17)
    equivalence(title(1),rtitle(1))
@@ -91,14 +91,6 @@ module groupm
    real(kr),dimension(:),allocatable::falo,fahi
    integer::ipan
 
-   ! smoothing option
-   ! set ismooth to 1 to enable sqrt(e) smoothing for
-   ! mf6 cm emission spectra at low energies and for
-   ! histogram delayed neutron spectra at low energies.
-   ! set ismooth to 2 to get the changed distribution
-   ! printed out on the output listing.
-   integer,parameter::ismooth=1
-
 contains
 
    subroutine groupr
@@ -151,8 +143,12 @@ contains
    !    nsigz   number of sigma zeroes (default=1)
    !    iprint  long print option (0/1=minimum/maximum)
    !            (default=1)
+   !    ismooth switch on/off smoothing operation (1/0, default=1=on)
+   !            set ismooth to 1 to enable sqrt(e) smoothing for
+   !            mf6 cm emission spectra at low energies and for
+   !            histogram delayed neutron spectra at low energies.
    ! card3
-   !    title   run label (up to 80 characters delimited by *,
+   !    title   run label (up to 80 characters delimited by quotes,
    !            ended with /)  (default=blank)
    ! card4
    !    temp    temperatures in kelvin
@@ -189,8 +185,8 @@ contains
    !    gamma    fraction of admixed moderator cross section in
    !              external moderator cross section (def=0)
    ! card8b     tabulated (iwt=1 or -1 only)
-   !    wght    read weight function as tab1 record.
-   !            end with a /.
+   !    wght    read weight function as tab1 record,
+   !            this may span multiple lines and ends with a /.
    ! card8c     analytic flux parameters (iwt=4 or -4 only)
    !    eb      thermal break (ev)
    !    tb      thermal temperature (ev)
@@ -364,6 +360,7 @@ contains
    real(kr),parameter::zero=0
 
    !--initialize
+   nwscr=10000
    nfscr=10
    nflx=11
    nend2=12
@@ -382,7 +379,7 @@ contains
      &8x,f8.1,''s'')') time
    write(nsyse,'(/'' groupr...'',59x,f8.1,''s'')') time
    call ruinb(iaddmt)
-   nwscr=10000
+   nwscr=max(nwscr,nsigz+ngn+ngg+9)
    allocate(scr(nwscr))
    if (nendf.lt.0) nend2=-nend2
    if (nendf.lt.0) nend3=-nend3
@@ -1006,9 +1003,10 @@ contains
    call openz(ngout1,0)
    call openz(ngout2,1)
    iprint=1
+   ismooth=1
    ntemp=1
    nsigz=1
-   read(nsysi,*) matb,ign,igg,iwt,lord,ntemp,nsigz,iprint
+   read(nsysi,*) matb,ign,igg,iwt,lord,ntemp,nsigz,iprint,ismooth
    iaddmt=0
    if (matb.lt.0.and.ngout1.ne.0) iaddmt=1
    if (matb.lt.0.and.ngout1.eq.0) iaddmt=-1
@@ -1028,8 +1026,12 @@ contains
      &'' gamma group option ................... '',i10/&
      &'' weight function option ............... '',i10/&
      &'' legendre order ....................... '',i10/&
-     &'' print option (0 min, 1 max) .......... '',i10)')&
-     matb,ign,igg,iwt,lord,iprint
+     &'' print option (0 min, 1 max) .......... '',i10/&
+     &'' smoothing option (0 off, 1 on) ....... '',i10)')&
+     matb,ign,igg,iwt,lord,iprint,ismooth
+   if (ismooth.ne.0.and.ismooth.ne.1) then
+      call error('ruinb','illegal ismooth.',' ')
+   endif
    write(nsyso,'(/'' run title''/&
      &1x,3(''----------''),''--------''/&
      &6x,16a4,a2)') (title(i),i=1,ntw)
@@ -5983,15 +5985,10 @@ contains
    !-------------------------------------------------------------------
    ! Set up particles for reactions that use file 4.
    !-------------------------------------------------------------------
+   use physics !get global physics and light particle mass constants
    use endf ! provides iverf
    ! externals
    integer::mfd,mtd
-   ! internals
-   real(kr),parameter::awr1=.99862e0_kr
-   real(kr),parameter::awr2=1.99626e0_kr
-   real(kr),parameter::awr3=2.98960e0_kr
-   real(kr),parameter::awr4=2.98903e0_kr
-   real(kr),parameter::awr5=3.96713e0_kr
 
    law=0
    zap=1
@@ -6007,35 +6004,35 @@ contains
          endif
       else if (mtd.ge.700.and.mtd.lt.720) then
          zap=1001
-         aprime=awr1
+         aprime=pnratio
          if (mfd.ne.31) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.720.and.mtd.lt.740) then
          zap=1002
-         aprime=awr2
+         aprime=dnratio
          if (mfd.ne.32) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.740.and.mtd.lt.760) then
          zap=1003
-         aprime=awr3
+         aprime=tnratio
          if (mfd.ne.33) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.760.and.mtd.lt.780) then
          zap=2003
-         aprime=awr4
+         aprime=hnratio
          if (mfd.ne.34) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.780.and.mtd.lt.800) then
          zap=2004
-         aprime=awr5
+         aprime=anratio
          if (mfd.ne.35) then
             aprime=awr+1-aprime
             law=4
@@ -6059,35 +6056,35 @@ contains
          endif
       else if (mtd.ge.600.and.mtd.lt.650) then
          zap=1001
-         aprime=awr1
+         aprime=pnratio
          if (mfd.ne.31) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.650.and.mtd.lt.700) then
          zap=1002
-         aprime=awr2
+         aprime=dnratio
          if (mfd.ne.32) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.700.and.mtd.lt.750) then
          zap=1003
-         aprime=awr3
+         aprime=tnratio
          if (mfd.ne.33) then
             aprime=awr+1-aprime
             law=4
          endif
       else if (mtd.ge.750.and.mtd.lt.800) then
          zap=2003
-         aprime=awr4
+         aprime=hnratio
          if (mfd.ne.34) then
             aprime=awr+1-aprime
             law=4
          endif
       else if(mtd.ge.800.and.mtd.lt.850) then
          zap=2004
-         aprime=awr5
+         aprime=anratio
          if (mfd.ne.35) then
             aprime=awr+1-aprime
             law=4
@@ -6384,15 +6381,6 @@ contains
                 enddo
              enddo
              l=ilo+6+nx
-         endif
-         if (ismooth.eq.2.and.jzap.eq.1) then
-            i=ilo
-            call listio(0,nsyso,0,tmp(ilo),nb,nw)
-            do while (nb.ne.0)
-               i=i+nw
-               call moreio(0,nsyso,0,tmp(i),nb,nw)
-            enddo
-            write(nsyso,'(1x)')
          endif
          if (lct.eq.2.or.(lct.eq.3.and.awp.le.alight)) then
             call cm2lab(ilo,jlo,l,tmp,nl,lang,lep,max)
@@ -7234,7 +7222,14 @@ contains
          endif
          ! kalbach-86 (obsolete kalbach-mann coding has been deleted)
          iza2=nint(zap)
-         aa=bach(izap,iza2,izat,enow,ep)
+         if (na.eq.2) then
+            y1=cnow(lnow-ncnow+3)
+            y2=cnow(lnow+3)
+            call terp1(x1,y1,x2,y2,ep,aa,lep)
+         else
+            aa=bach(izap,iza2,izat,enow,ep)
+         endif
+
          t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
          t=t*s
          if (t.lt.zero) t=0
@@ -7358,7 +7353,11 @@ contains
       r=cnow(inow+2)
       ! kalbach-86 (obsolete kalbach-mann coding has been deleted)
       iza2=nint(zap)
-      aa=bach(izap,iza2,izat,enow,epnext)
+      if(na.eq.2) then
+         aa=cnow(inow+3)
+      else
+         aa=bach(izap,iza2,izat,enow,epnext)
+      endif
       t=aa*(cosh(aa*w)+r*sinh(aa*w))/(2*sinh(aa))
       t=t*s
       if (t.lt.zero) t=0
@@ -10481,14 +10480,6 @@ contains
                      tmp(l1+5)=mm
                      tmp(l1+6)=mm
                      l=l1+8+2*mm
-                     if (ismooth.eq.2) then
-                        call tab1io(0,nsyso,0,tmp(l1),nb,nw)
-                        do while (nb.ne.0)
-                           l1=l1+nw
-                           call moreio(0,nsyso,0,tmp(l1),nb,nw)
-                        enddo
-                        write(nsyso,'(1x)')
-                     endif
                   endif
                   if (lf.ne.5) then
                      do ip=2,np
@@ -10554,15 +10545,6 @@ contains
                   tmp(m1+5)=mm
                   tmp(m1+6)=mm
                   m=m1+8+2*mm
-                  if (ismooth.eq.2) then
-                     call tab1io(0,nsyso,0,tmp(m1),nb,nw)
-                     i=m1
-                     do while (nb.ne.0)
-                        i=i+nw
-                        call moreio(0,nsyso,0,tmp(i),nb,nw)
-                     enddo
-                     write(nsyso,'(1x)')
-                  endif
                endif
                nne=nne+1
                tmp(l)=tmp(m1+1)

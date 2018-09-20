@@ -86,19 +86,10 @@ module acefc
    integer,parameter::nxss=20000000
    real(kr)::xss(nxss)
 
-   ! set ismooth to 1 to cause extension of mf6 cm distributions
-   ! to lower energies using a sqrt(E) shape, to extend delayed
-   ! neutron distributions as sqrt(E) to lower energies, and to
-   ! add additional points above 10 Mev to some fission spectra
-   ! assuming an exponential shape.  otherwise, use ismooth=0.
-   ! NOTE:  ismooth=0 is the default value in njoy99.
-   integer,parameter::ismooth=1
-!   integer,parameter::ismooth=0
-
 contains
 
    subroutine acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,&
-     suff,hk,izn,awn,matd,tempd,newfor,iopp,thin)
+     suff,hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin)
    !--------------------------------------------------------------------
    ! Prepare an ACE fast continuous file.
    !--------------------------------------------------------------------
@@ -106,7 +97,7 @@ contains
    use util   ! provides openz,mess,closz
    use endf   ! provides endf routines and variables
    ! externals
-   integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp
+   integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp,ismooth
    integer::mcnpx
    real(kr)::suff
    character(70)::hk
@@ -184,7 +175,7 @@ contains
    call atend(mscr,0)
 
    !--load ace data into memory.
-   call acelod(mscr,nedis,suff,matd,tempd,newfor,mcnpx)
+   call acelod(mscr,nedis,suff,matd,tempd,newfor,mcnpx,ismooth)
 
    !--print ace file.
    if (iprint.gt.0) call aceprt(hk)
@@ -795,6 +786,7 @@ contains
    integer,parameter::nc=4
 
    !--initialize
+   if (allocated(scr)) deallocate(scr)
    allocate(scr(maxscr))
    nxc=nxc+1
    mfs(nxc)=1
@@ -1025,7 +1017,7 @@ contains
    real(kr)::thin(4)
    ! internals
    integer::nws,nwscr,ithopt,iwtt,npts,iskp,j,mtcomp
-   integer::nb,nw,icomp,iinel,iedis,jethr,lt,lr
+   integer::nb,nw,iinel,iedis,jethr,lt,lr
    integer::i,jt,ne,isave,iter,idone,nsave,ilast,inext
    integer::limit,ii,k,nc,nen,ll,nee,iee,mtn,itest
    integer::kbase,np,ifrst,it,ibase,idis,nold,nxcs
@@ -1119,12 +1111,11 @@ contains
          call contio(nin,0,0,scr,nb,nw)
       enddo
       if (mfh.ne.0) then
+         !--new competition flag (can only be -1, 51, 91 or 4)
+         iinel=l1h
+         !--continue but check for file with old competition flag
          call listio(nin,0,0,scr,nb,nw)
-         icomp=l2h
-         iinel=0
-         if (icomp.ne.0) then
-            iinel=mod(icomp,1000)
-         endif
+         if (iinel.eq.zero.and.l2h.gt.zero) iinel=mod(l2h,1000)
          if (iinel.eq.4) mtcomp=4
       endif
    endif
@@ -4794,7 +4785,7 @@ contains
    return
    end subroutine gamout
 
-   subroutine acelod(nin,nedis,suff,matd,tempd,newfor,mcnpx)
+   subroutine acelod(nin,nedis,suff,matd,tempd,newfor,mcnpx,ismooth)
    !-------------------------------------------------------------------
    ! Load data in ace format from the input file.
    !-------------------------------------------------------------------
@@ -4803,16 +4794,16 @@ contains
    use util ! repoz,dater,error,skiprz,sigfig
    use endf ! provides endf routines and variables
    ! externals
-   integer::nin,nedis,matd,newfor,mcnpx
+   integer::nin,nedis,matd,newfor,mcnpx,ismooth
    real(kr)::suff,tempd
    ! internals
    integer::nwscr,nnu,nnup,kfis,mtnr,mtntr,i,nnud,nnf
    integer::nurd,idone,mta,nb,nw,lnu,n,m,jnt,j
-   integer::lssf,icomp,iinel,iabso,nunr,ncyc,i1,idis
+   integer::lssf,iinel,iabso,nunr,ncyc,i1,idis
    integer::k,it,ic,ie,ih,next,keep3,keep4,keep,ir,iskip
    integer::nnex,keep1,keep2,l,ij,lct,lvt,ltt,ltt3,lttn
    integer::jscr,iso,ne,law,lidp,last,il,ja,jb,nure,nurb
-   integer::mtxx,mtaa,jj,ll,ib,iza,mf,mt,lend,lendp,inow
+   integer::jj,ll,ib,iza,mf,mt,lend,lendp,inow
    integer::lff,lxx,nn,mm,iint,loc,ix
    integer::mt418,mt518
    real(kr)::urlo,urhi,e,enext,s,test,awp,spi,q,x,teste,zaid
@@ -5179,14 +5170,15 @@ contains
       if (mth.eq.153) then
          write(nsyso,'(/'' found mt=153 with unresolved-range'',&
            &'' probability tables'')')
+         iinel=l1h !--new competition flag (can only be -1, 51, 91 or 4)
+         iabso=l2h !--new competition flag (can be -1, 0 or positive)
          call listio(nin,0,0,scr,nb,nw)
          lssf=l1h
-         icomp=l2h
-         iinel=0
-         iabso=0
-         if (icomp.ne.0) then
-            iinel=mod(icomp,1000)
-            iabso=icomp/1000
+         if (iinel.eq.zero) then !--old competition flags are used
+            iinel=-1
+            iabso=-1
+            if (mod(l2h,1000).ne.zero) iinel=mod(l2h,1000)
+            if (l2h/1000.ne.zero) iabso=l2h/1000
          endif
          nunr=n2h
          ncyc=n1h/nunr
@@ -5211,7 +5203,7 @@ contains
            write(nsyso,'(''   tables are cross sections'')')
          if (lssf.eq.1)&
            write(nsyso,'(''   tables are factors'')')
-         if (icomp.eq.0) then
+         if (iinel.lt.0.and.iabso.lt.0) then
             write(nsyso,'(''   no competition'')')
          else
             write(nsyso,'(''   inelastic competition ='',i3/&
@@ -5802,9 +5794,11 @@ contains
             endif
          enddo
          if (mf.eq.5) then
-            call acelf5(next,i,matd,mt,q,nin)
+            call acelf5(next,i,matd,mt,q,nin,ismooth)
          else if (mf.eq.6) then
-            if (mt518.eq.0) call acelf6(next,i,matd,mt,q,iza,izai,nin,newfor)
+            if (mt518.eq.0) then
+               call acelf6(next,i,matd,mt,q,iza,izai,nin,newfor,ismooth)
+            endif
          else
             if ((next+11).gt.nxss) call error('acelod',&
               'insufficient space for energy distributions',' ')
@@ -5841,15 +5835,10 @@ contains
       xss(next)=nure
       nurb=nint(urd(5))
       nurb=(nurb/nure-1)/6
-      mtxx=nint(urd(4))
-      mtxx=-1
-      if (iinel.ne.0) mtxx=iinel
-      mtaa=-1
-      if (iabso.ne.0) mtxx=iabso
       xss(next+1)=nurb
       xss(next+2)=2
-      xss(next+3)=mtxx
-      xss(next+4)=mtaa
+      xss(next+3)=iinel
+      xss(next+4)=iabso
       xss(next+5)=lssf
       next=next+6
       do ie=1,nure
@@ -6522,7 +6511,7 @@ contains
    return
    end subroutine acecpe
 
-   subroutine acelf5(next,i,matd,mt,q,nin)
+   subroutine acelf5(next,i,matd,mt,q,nin,ismooth)
    !-------------------------------------------------------------------
    ! Process this reaction from File 5.
    !-------------------------------------------------------------------
@@ -6530,7 +6519,7 @@ contains
    use util ! provides sigfig
    use endf ! provides endf routines and variables
    ! externals
-   integer::next,i,matd,mt,nin
+   integer::next,i,matd,mt,nin,ismooth
    real(kr)::q
    ! internals
    integer::nb,nw,nk,k,lf,m,n,jnt,ja,jb,j,l,nextn,nexd,ne,jscr,ki
@@ -6929,7 +6918,7 @@ contains
    return
    end subroutine acelf5
 
-   subroutine acelf6(next,i,matd,mt,q,iza,izai,nin,newfor)
+   subroutine acelf6(next,i,matd,mt,q,iza,izai,nin,newfor,ismooth)
    !-------------------------------------------------------------------
    ! Prepare generalized yields and energy-angle distributions for
    ! this reaction from File 6.
@@ -6939,7 +6928,7 @@ contains
    use endf ! provides endf routines and variables
    use acecm ! provides bachaa,ptleg2,pttab2
    ! externals
-   integer::next,i,matd,mt,iza,izai,nin,newfor
+   integer::next,i,matd,mt,iza,izai,nin,newfor,ismooth
    real(kr)::q
    ! internals
    integer::nb,nw,lct,nk,jscr,ivar,ik,idone,ikk,law,m,n,jnt
@@ -7357,8 +7346,8 @@ contains
                   n=n-1
                enddo
                write(nsyso,'('' extending histograms as sqrt(E) below'',&
-                 &1p,e10.2,'' MeV for E='',e10.2,'' MeV'')')&
-                 scr(7+ncyc)/emev,ee
+                 &1p,e10.2,'' MeV for E='',e10.2,'' MeV mt='',i3)')&
+                 scr(7+ncyc)/emev,ee,mt
                do while (scr(7+ncyc).gt.ex)
                   do ix=nx,1,-1
                      scr(6+ncyc+ix)=scr(6+ix)
@@ -7386,8 +7375,8 @@ contains
                ! insert those zero energy data
                if (scr(7).gt.ex) then
                   write(nsyso,'('' extending lin-lin as sqrt(E) '',&
-                   &''below'',1p,e10.2,'' eV for E='',e10.2,'' eV'')&
-                   &')scr(7)/emev,ee
+                   &''below'',1p,e10.2,'' MeV for E='',e10.2,'' MeV mt='',i3)&
+                   &')scr(7)/emev,ee,mt
                   do ix=nx,1,-1
                      scr(6+ncyc+ix)=scr(6+ix)
                   enddo
@@ -7495,7 +7484,11 @@ contains
                !--distribution given in kalbach format
                if (lang.eq.2) then
                   xss(ki+3*n+nexd)=scr(9+ncyc*(ki-1))
-                  aa=bachaa(1,1,iza,ee,ep)
+                  if (na.eq.2) then
+                     aa=scr(10+ncyc*(ki-1))
+                  else
+                     aa=bachaa(1,1,iza,ee,ep)
+                  endif
                   xss(ki+4*n+nexd)=sigfig(aa,7,0)
 
                !--convert legendre distribution to kalbach form
@@ -10118,7 +10111,11 @@ contains
                                  rkal=scr(lld+8+ncyc*(ig-1))
                                  xss(next+1+ig+3*ng)=sigfig(rkal,7,0)
                                  ep=xss(next+1+ig)
-                                 akal=bachaa(izai,izap,iza,ee,ep)
+                                 if (na.eq.2) then
+                                    akal=scr(lld+9+ncyc*(ig-1))
+                                 else
+                                    akal=bachaa(izai,izap,iza,ee,ep)
+                                 endif
                                  xss(next+1+ig+4*ng)=sigfig(akal,7,0)
                               ! legendre or tabulated distribution
                               else if (lawnow.eq.61) then
@@ -10621,7 +10618,7 @@ contains
    call findf(matd,6,0,nin)
    do while (mfh.eq.6)
       call contio(nin,0,0,scr,nb,nw)
-      if (mfh.eq.6) then
+      if (mfh.eq.6.and.mth.gt.2) then
          mt=mth
          mtt=0
          ir=0
@@ -10648,7 +10645,7 @@ contains
             enddo
 
             !--compute the heating from this recoil nuclide
-            if (izap.gt.2004.and.mt.gt.2) then
+            if (izap.gt.2004) then
 
                !--law 1
                if (law.eq.1) then
@@ -10787,8 +10784,8 @@ contains
                call skip6a(nin,0,0,scr,law)
             endif
          enddo
-         call tosend(nin,0,0,scr)
       endif
+      call tosend(nin,0,0,scr)
 
    !--continue loop over mts
    enddo
@@ -19684,5 +19681,4 @@ contains
    end subroutine ascll
 
 end module acefc
-
 

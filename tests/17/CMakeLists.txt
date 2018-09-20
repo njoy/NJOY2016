@@ -28,4 +28,3 @@ configure_file("${RESOURCES}/J33Pu239"
 add_test( NAME "Test17"
           COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )
-	
