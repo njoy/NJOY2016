@@ -786,6 +786,7 @@ contains
    integer,parameter::nc=4
 
    !--initialize
+   if (allocated(scr)) deallocate(scr)
    allocate(scr(maxscr))
    nxc=nxc+1
    mfs(nxc)=1

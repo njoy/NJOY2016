@@ -1939,10 +1939,6 @@ contains
       if (mt1.eq.0) call error('covcal','illegal mt1=0.',' ')
       nc=n1h
       ni=n2h
-      if (mfcov.eq.34) then
-         nc=0
-         ni=1
-      endif
    endif
    if (ni.gt.locm) call error('covcal','storage exceeded in loc.',' ')
    iok=1
