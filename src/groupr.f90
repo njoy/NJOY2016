@@ -227,8 +227,6 @@ contains
    !     16           vitamin-e 174-group structure
    !     17           vitamin-j 175-group structure
    !     18           xmas nea-lanl
-   !     all new additional group structure with 7 significant
-   !     decimal digits compatible with calendf
    !     19           ecco  33-group structure
    !     20           ecco 1968-group structure
    !     21           tripoli 315-group structure
@@ -1063,6 +1061,9 @@ contains
      (sigz(i),i=2,nsigz)
    if (iaddmt.gt.0) write(nsyso,'(/&
      &'' replacing and/or adding mts'')')
+   if (ign.eq.-1) then
+      call error('gengpn','illegal group structure.',' ')
+   endif
    call gengpn
    call gengpg
    call genwtf
@@ -1546,7 +1547,7 @@ contains
    !
    !    ign     meaning
    !    ---     ---------------------------------------
-   !     1      arbitrary structure (read in)
+   ! abs(1)     arbitrary structure (read in)
    !     2      CSEWG 239 group structure
    !     3      LANL 30 group structure
    !     4      ANL 27 group structure
@@ -1584,7 +1585,7 @@ contains
    use mainio ! provides nsyso
    use util   ! provides error
    ! internals
-   integer::lflag,ig,ngp,n1,n2,n,i,ic
+   integer::lflag,ig,ngp,n1,n2,n,ic
    real(kr)::u,du,delta
    real(kr),dimension(241),parameter::gl2=(/&
      27.631e0_kr,17.0e0_kr,16.75e0_kr,16.588e0_kr,16.5e0_kr,16.3e0_kr,&
@@ -3856,9 +3857,10 @@ contains
    lflag=0
 
    !--group structure is read in (free format)
-   if (ign.eq.1) then
+   if (abs(ign).eq.1) then
       read(nsysi,*) ngn
       ngp=ngn+1
+      if (allocated(egn)) deallocate(egn)
       allocate(egn(ngp))
       read(nsysi,*) (egn(ig),ig=1,ngp)
       do ig=1,ngn
@@ -3999,10 +4001,10 @@ contains
       allocate(egn(ngp))
       egn(1)=sanda
       ! generate the first 45 boundaries
-      do i=1,8
-         delta=deltl(i)*sandb
-         n1=ndelta(i)
-         n2=ndelta(i+1)-1
+      do ig=1,8
+         delta=deltl(ig)*sandb
+         n1=ndelta(ig)
+         n2=ndelta(ig+1)-1
          do n=n1,n2
             egn(n)=egn(n-1)+delta
          enddo
@@ -4010,13 +4012,13 @@ contains
       ! correct group 21
       egn(21)=sandc
       ! groups 46 to 450 are multiples of previous groups
-      do i=46,450
-         egn(i)=egn(i-45)*10
+      do ig=46,450
+         egn(ig)=egn(ig-45)*10
       enddo
       ! groups 451 through 620 have constant spacing of 1.e5
       egn(451)=sandd
-      do i=452,ngp
-         egn(i)=egn(i-1)+sande
+      do ig=452,ngp
+         egn(ig)=egn(ig-1)+sande
       enddo
 
    !--lanl 80-group structure
@@ -4036,8 +4038,7 @@ contains
       ngn=100
       ngp=ngn+1
       allocate(egn(ngp))
-      egn(101)=-4
-      egn(101)=egn(101)/10
+      egn(101)=-4*tenth
       ic=0
       do ig=2,101
          if (ig.eq.ig14(ic+1)) ic=ic+1
@@ -4236,7 +4237,7 @@ contains
       enddo
    endif
 
-   !--display group structure
+   !--display group structure - except for ign=-1
    if (ign.eq.1) write(nsyso,'(/&
      &'' neutron group structure......read in'')')
    if (ign.eq.2) write(nsyso,'(/&
@@ -4303,10 +4304,12 @@ contains
      &  '' neutron group structure......ukaea 1102-group'')')
    if (ign.eq.33) write(nsyso,'(/&
      &  '' neutron group structure......ukaea 142-group'')')
-   do ig=1,ngn
-      write(nsyso,'(1x,i5,2x,1p,e12.5,''  - '',e12.5)')&
-        ig,egn(ig),egn(ig+1)
-   enddo
+   if (ign.ne.-1) then
+      do ig=1,ngn
+         write(nsyso,'(1x,i5,2x,1p,e12.5,''  - '',e12.5)')&
+           ig,egn(ig),egn(ig+1)
+      enddo
+   endif
    return
    end subroutine gengpn
 
