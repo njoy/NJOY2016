@@ -3,7 +3,7 @@ module groupm
    use locale
    implicit none
    private
-   public groupr
+   public groupr,gengpn,gengpg
 
    ! global variables
 
@@ -1061,11 +1061,12 @@ contains
      (sigz(i),i=2,nsigz)
    if (iaddmt.gt.0) write(nsyso,'(/&
      &'' replacing and/or adding mts'')')
+   !--exclude ign=-1 (only used in errorr)
    if (ign.eq.-1) then
       call error('gengpn','illegal group structure.',' ')
    endif
-   call gengpn
-   call gengpg
+   call gengpn(ign,ngn,egn)
+   call gengpg(igg,ngg,egg)
    call genwtf
    return
    end subroutine ruinb
@@ -1540,7 +1541,7 @@ contains
    return
    end subroutine mfchk2
 
-   subroutine gengpn
+   subroutine gengpn(ign,ngn,egn)
    !-------------------------------------------------------------------
    ! Generate requested neutron group structure or read in from
    ! the system input file in the form of an ENDF list record
@@ -1584,6 +1585,9 @@ contains
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
    use util   ! provides error
+   ! externals
+   integer::ign,ngn
+   real(kr),dimension(:),allocatable::egn
    ! internals
    integer::lflag,ig,ngp,n1,n2,n,ic
    real(kr)::u,du,delta
@@ -4313,7 +4317,7 @@ contains
    return
    end subroutine gengpn
 
-   subroutine gengpg
+   subroutine gengpg(igg,ngg,egg)
    !-------------------------------------------------------------------
    ! Generate requested gamma group structure or read in from
    ! the system input file in the form of an ENDF list record
@@ -4335,6 +4339,9 @@ contains
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
    use util   ! provides error
+   ! externals
+   integer::igg,ngg
+   real(kr),dimension(:),allocatable::egg
    ! internals
    integer::ngp,ig
    real(kr),dimension(95),parameter::eg2=(/&
