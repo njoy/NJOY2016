@@ -9789,7 +9789,7 @@ contains
                         renorm=1/xss(next+1+3*nx)
                         do ix=1,nx
                            xss(next+1+nx+ix)=&
-                             sigfig(renorm*xss(next+1+2*nx+ix),7,0)
+                             sigfig(renorm*xss(next+1+nx+ix),7,0)
                            xss(next+1+2*nx+ix)=&
                              sigfig(renorm*xss(next+1+2*nx+ix),9,0)
                         enddo
