@@ -336,6 +336,7 @@ contains
    !      31           ukaea 1067-group structure (200 MeV)
    !      32           ukaea 1102-group structure   (1 GeV)
    !      33           ukaea  142-group structure (200 MeV)   
+   !      34           lanl 618-group structure
    !
    !      iwt          meaning
    !      ---          -------
@@ -9630,6 +9631,7 @@ contains
    !    31      UKAEA 1067-group structure
    !    32      UKAEA 1102-group structure
    !    33      UKAEA  142-group structure   
+   !    34      LANL 618-group structure   
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
