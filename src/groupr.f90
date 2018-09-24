@@ -242,6 +242,7 @@ contains
    !     31           ukaea 1067-group structure (200 MeV)
    !     32           ukaea 1102-group structure   (1 GeV)
    !     33           ukaea  142-group structure (200 MeV)   
+   !     34           lanl 618-group structure
    !
    !     igg          meaning
    !     ---          -------
