@@ -24,7 +24,7 @@ module physics
    real(kr),parameter,public::clight=2.99792458e10_kr   !cm/s
    real(kr),parameter,public::amu=931.4940954e6_kr*ev/&
                                         (clight*clight) !g/amu
-   real(kr),parameter,public::hbar=6.58219514e-16_kr*ev !Planck/2pi, erg
+   real(kr),parameter,public::hbar=6.582119514e-16_kr*ev !Planck/2pi, erg
    real(kr),parameter,public::finstri=1.e16_kr*hbar/(ev*ev*clight) !inv fine str
 ! ****************************************************************
 ! * Light particle masses (in amu), per ENDF-102, Appendix H:    *
