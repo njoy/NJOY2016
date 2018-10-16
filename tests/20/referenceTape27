@@ -392,8 +392,8 @@ newpath
    200.85   489.76 lineto
    196.66   489.76 lineto
    196.66   498.89 lineto
-   197.83   498.89 lineto
-   197.83   508.02 lineto
+   197.84   498.89 lineto
+   197.84   508.02 lineto
    193.32   508.02 lineto
    193.32   517.16 lineto
    195.30   517.16 lineto
@@ -875,8 +875,8 @@ newpath
    430.04   179.18 lineto
    430.04   174.37 lineto
    420.91   174.37 lineto
-   420.91   170.62 lineto
-   411.78   170.62 lineto
+   420.91   170.63 lineto
+   411.78   170.63 lineto
    411.78   169.30 lineto
    402.65   169.30 lineto
    402.65   165.79 lineto
@@ -3895,8 +3895,8 @@ newpath
    151.82   389.32 lineto
    147.01   389.32 lineto
    147.01   398.45 lineto
-   143.26   398.45 lineto
-   143.26   407.58 lineto
+   143.27   398.45 lineto
+   143.27   407.58 lineto
    141.94   407.58 lineto
    141.94   416.71 lineto
    138.43   416.71 lineto
@@ -9366,8 +9366,8 @@ newpath
    151.82   389.32 lineto
    147.01   389.32 lineto
    147.01   398.45 lineto
-   143.26   398.45 lineto
-   143.26   407.58 lineto
+   143.27   398.45 lineto
+   143.27   407.58 lineto
    141.94   407.58 lineto
    141.94   416.71 lineto
    138.43   416.71 lineto
@@ -9753,8 +9753,8 @@ newpath
  0.000 0.000 0.882 setrgbcolor
    530.48   251.98 moveto
    1.930 setlinewidth
-   530.48   171.06 lineto
-   503.09   171.06 lineto
+   530.48   171.07 lineto
+   503.09   171.07 lineto
    503.09   169.51 lineto
    493.96   169.51 lineto
    493.96   167.90 lineto
@@ -14790,8 +14790,8 @@ newpath
    196.70   498.89 lineto
    202.09   498.89 lineto
    202.09   508.02 lineto
-   202.93   508.02 lineto
-   202.93   517.16 lineto
+   202.94   508.02 lineto
+   202.94   517.16 lineto
    196.23   517.16 lineto
    196.23   526.29 lineto
    199.35   526.29 lineto
@@ -19805,8 +19805,8 @@ newpath
  0.000 0.000 0.882 setrgbcolor
    530.48   251.98 moveto
    1.930 setlinewidth
-   530.48   171.06 lineto
-   503.09   171.06 lineto
+   530.48   171.07 lineto
+   503.09   171.07 lineto
    503.09   169.51 lineto
    493.96   169.51 lineto
    493.96   167.90 lineto
@@ -24952,8 +24952,8 @@ newpath
  0.000 0.000 0.882 setrgbcolor
    530.48   251.98 moveto
    1.930 setlinewidth
-   530.48   171.06 lineto
-   503.09   171.06 lineto
+   530.48   171.07 lineto
+   503.09   171.07 lineto
    503.09   169.51 lineto
    493.96   169.51 lineto
    493.96   167.90 lineto
