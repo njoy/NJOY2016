@@ -1604,6 +1604,9 @@ contains
 
    lat=l2h
    call listio(nendf,0,0,scr,nb,nw)
+   if (scr(12).ne.0) then
+     natom=scr(12)
+   endif
    ilog=l1h
    ni=n1h
    ! parameters for principal atom
