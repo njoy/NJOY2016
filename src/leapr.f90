@@ -131,7 +131,7 @@ contains
    ! card 4 - endf output control
    !    mat     endf mat number
    !    za      1000*z+a for principal scatterer
-   !    isabt   sab type (0=s, 1=ss, def=0)
+   !    isabt   sab type (0=symmetric, 1=asymmetric, def=0)
    !    ilog    log flag (0=s, 1=log10(s), def=0)
    !    smin    minimum S(alpha, beta) stored in file (def=1e-75)
    !
@@ -2415,7 +2415,7 @@ contains
    real(kr)::bt,btp
 
    terpk=1
-   if (be.gt.nka*delta) return   
+   if (be.gt.nka*delta) return
    i=int(be/delta)
    if (i.lt.nka-1) then
       bt=i*delta
@@ -3584,4 +3584,3 @@ contains
    end subroutine endout
 
 end module leapm
-
