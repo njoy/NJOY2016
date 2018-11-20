@@ -37,9 +37,9 @@ module physics
    real(kr),parameter,public::amassp=1.007276466879e0_kr !proton
    real(kr),parameter,public::amassd=2.013553212745e0_kr !deuteron
    real(kr),parameter,public::amasst=3.01550071632e0_kr   !triton
-   real(kr),parameter,public::amassh=3.014932234673e0_kr !hellion (3)
+   real(kr),parameter,public::amassh=3.01493224673e0_kr !helion (3)
    real(kr),parameter,public::amassa=4.001506179127e0_kr  !alpha
-   real(kr),parameter,public::amasse=5.485799090e-4_kr  !electron
+   real(kr),parameter,public::amasse=5.48579909070e-4_kr  !electron
    real(kr),parameter,public::pnratio=amassp/amassn ! proton/neutron mass
    real(kr),parameter,public::dnratio=amassd/amassn ! deuteron/neutron mass
    real(kr),parameter,public::tnratio=amasst/amassn ! triton/neutron mass
