@@ -899,8 +899,11 @@ contains
    real(kr),parameter::rc1=.123e0_kr
    real(kr),parameter::rc2=.08e0_kr
    real(kr),parameter::third=.333333333e0_kr
+   real(kr),parameter::zero=0
    real(kr),parameter::one=1.e0_kr
    real(kr),parameter::small=1.e-8_kr
+   logical::noissue=.true.
+   character(60)::strng1,strng2
 
    cwaven=sqrt(2*amassn*amu*ev)*1.e-12_kr/hbar
 
@@ -941,6 +944,10 @@ contains
    sigbt=sigbkg(1)+spot+sint
    do is=1,nsig0
       sigm(is)=sigbt+sig0(is)
+	  if (sigm(is).lt.zero) then
+         call mess('unresl', 'Negative background xs in urr may cause issues',&
+		                     &'Check the evaluation')
+	  endif
    enddo
    ispot=1
 
@@ -1103,6 +1110,11 @@ contains
                   sti=gg(5)/del(itp)
                   do is0=1,nsig0
                      beta=sigm(is0)/s0u
+					 if (beta.lt.zero.and.abs(beta).lt.one.and.noissue) then
+					    call mess('unresl','Square root of negative number detected',&
+						                  &'Probably caused by negative background xs in urr')
+						noissue=.false.
+					 endif
                      call ajku(beta,sti,xj,xk)
                      if (mu.gt.0) xj=xj*qw(kf,mu)
                      if (mu.gt.0) xk=xk*qw(kf,mu)
