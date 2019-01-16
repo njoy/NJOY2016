@@ -944,10 +944,10 @@ contains
    sigbt=sigbkg(1)+spot+sint
    do is=1,nsig0
       sigm(is)=sigbt+sig0(is)
-	  if (sigm(is).lt.zero) then
+      if (sigm(is).lt.zero) then
          call mess('unresl', 'Negative background xs in urr may cause issues',&
-		                     &'Check the evaluation')
-	  endif
+                         &'Check the evaluation')
+      endif
    enddo
    ispot=1
 
@@ -1110,11 +1110,11 @@ contains
                   sti=gg(5)/del(itp)
                   do is0=1,nsig0
                      beta=sigm(is0)/s0u
-					 if (beta.lt.zero.and.abs(beta).lt.one.and.noissue) then
-					    call mess('unresl','Square root of negative number detected',&
-						                  &'Probably caused by negative background xs in urr')
-						noissue=.false.
-					 endif
+                     if (beta.lt.zero.and.abs(beta).lt.one.and.noissue) then
+                        call mess('unresl','Square root of negative number detected',&
+                             &'Probably caused by negative background xs in urr')
+                        noissue=.false.
+                     endif
                      call ajku(beta,sti,xj,xk)
                      if (mu.gt.0) xj=xj*qw(kf,mu)
                      if (mu.gt.0) xk=xk*qw(kf,mu)
