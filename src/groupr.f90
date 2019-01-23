@@ -706,7 +706,9 @@ contains
   502 continue
    if (mtd.eq.455) then
       do i=1,ndelg
-         ans(i,1,1)=dntc(i)
+         do iz=1,nz
+            ans(i,iz,1)=dntc(i)
+         enddo
       enddo
       nll=ndelg
    endif
@@ -716,7 +718,9 @@ contains
       do i=1,ng2
          j=i
          if (mtd.eq.455) j=i+1
-         ans(il,1,j)=ff(il,i)
+         do iz=1,nz
+            ans(il,iz,j)=ff(il,i)
+         enddo
       enddo
    enddo
    if (mfd.eq.5) ig=ngi
@@ -755,8 +759,12 @@ contains
 
    !--accumulate production below econst, and print it
    if (econst.gt.0.and.mfd.ne.5.and.ig.ne.0.and.ig.le.jconst) then
-      ans(1,1,2)=ans(1,1,2)/ans(1,1,1)
-      prod(1,1,ig)=ans(1,1,2)
+      do iz=1,nz
+         do il=1,nl
+            ans(il,iz,2)=ans(il,iz,2)/ans(il,iz,1)
+            prod(il,iz,ig)=ans(il,iz,2)
+         enddo
+      enddo
       ig2lo=0
       if (ig.ge.jconst) then
          call displa(ig,prod,nl,nz,jconst,ig2lo,igzero,nlg,ngi)
@@ -3995,6 +4003,7 @@ contains
    if (mfd.eq.3.and.mtd.eq.2) nz=nsigz
    if (mfd.eq.6.and.mtd.eq.2) nz=nsigz
    if (mfd.eq.3.and.mtd.eq.18) nz=nsigz
+   if (mfd.eq.6.and.mtd.eq.18) nz=nsigz
    if (mfd.eq.3.and.mtd.eq.19) nz=nsigz
    if (mfd.eq.3.and.mtd.eq.51) nz=nsigz
    if (mfd.eq.3.and.mtd.eq.102) nz=nsigz
@@ -4384,7 +4393,7 @@ contains
    if (itr.eq.0) go to 310
    if (nl.eq.1) go to 250
 
-   !--infinite dilution transfer matrices.
+   !--infinite dilution transfer matrices (iz=1).
    ilo=0
    ihi=ng2
    do ig2=2,ng2
@@ -4420,7 +4429,7 @@ contains
    ng2=ihi-ilo+2
    return
 
-   !--isotropic infinite dilution transfer matrix.
+   !--isotropic infinite dilution transfer matrix (il=1,iz=1).
   250 continue
    ilo=0
    ihi=ng2
