@@ -221,3 +221,28 @@ title: NJOY2016 Test Descriptions
 
   The tests cover all possible combinations of the competition flags (no competition, only inelastic competition, only absorption competition and both) for each possible value of the LSSF flag (0 or 1). These tests are related to test 31.
 
+## Test Problem 43-44
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/43/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/44/input)]
+
+  Tests 43 and 44 were added to test an issue encountered when using `BROADR`. A high value of thnmax close to the upper energy value of the energy range lead to `BROADR` crashing. This appeared to happen when the actual temperature was zero (in that case, broadr will only thin the cross sections) and non zero (in which case broadr will apply broadening). Both cases needed their own fix so a specific test for each was added to detect this problem in the future.
+
+## Test Problem 45
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/45/input)]
+
+  This test was added following an issue identified in `GASPR` concerning the charged particle production cros ssections when the original ENDF tape does not contain the summation cross section when individual levels are present. This lead to double counting of these levels. This test was added to detect this problem in the future.
+
+## Test Problem 46
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/46/input)]
+
+  This test was added following a fix in `ERRORR`. NJOY set the number of subsections to be treated for MF34 to 1, even though the ENDF-6 format allows using more than 1 subsection in MF34. This test was added to detect this problem in the future.
+
+## Test Problem 47
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/47/input)]
+
+  This test is added following a change in `GROUPR` for the MF6 MT18 part of the GENDF file. Versions prior to NJOY 2016.49 only gave the infinite dilute fission matrix, independent of the number of sigma0 values requested by the user. This test runs two `GROUPR` runs, one with only infinite dilute and another one with two sigma0 values (including infinite dilute). The test also contains `ERRORR` runs for MF35 covariances to verify that the `ERRORR` module still gives the same results (only infinite dilute data is used) when using either of the produced GENDF files.
+
