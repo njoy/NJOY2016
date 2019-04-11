@@ -174,7 +174,7 @@ contains
    !    matd     material to be processed
    !    tempd    temperature desired (kelvin) (default=300)
    !    tname    thermal zaid name ( 6 char max, def=za)
-   !    niza     number of moderator compound za values (default=3, max=16)
+   !    nza      number of moderator compound za values (default=3, max=16)
    ! card 8a
    !    iza      moderator component za values
    ! card 9
@@ -233,7 +233,7 @@ contains
 
    ! internals
    integer::nendf,npend,ngend,nace,ndir
-   integer::iopt,iprint,itype,nxtra,niza
+   integer::iopt,iprint,itype,nxtra,nza
    integer::matd
    real(kr)::tempd
    integer::newfor,iopp,ismooth
@@ -358,8 +358,8 @@ contains
    else if (iopt.eq.2) then
       tempd=300
       tscr=' '
-      niza=3
-      read(nsysi,*) matd,tempd,tscr,niza
+      nza=3
+      read(nsysi,*) matd,tempd,tscr,nza
       nch=0
       do i=1,6
          if (tscr(i:i).ne.' ') nch=i
@@ -369,21 +369,25 @@ contains
       do i=1,16
          izn(i)=0
       enddo
-      read(nsysi,*) (izn(i),i=1,niza)
-      do i=1,niza
+      read(nsysi,*) (izn(i),i=1,nza)
+      do i=1,nza
          if (izn(i).eq.zero) then
-            niza=i-1
+            nza=i-1
             exit
          endif
       enddo
       write(nsyso,'(&
         &'' mat to be processed .................. '',i10/&
         &'' temperature .......................... '',1p,e10.3/&
-        &'' thermal name ......................... '',4x,a6)')&
-        matd,tempd,tname
+        &'' thermal name ......................... '',4x,a6/&
+        &'' number moderator compound za values .. '',4x,i10)')&
+        matd,tempd,tname,nza
       write(nsyso,'(&
         &'' iza   ................................ '',i10/&
-        &(40x,i10))') (izn(i),i=1,niza)
+        &(40x,i10))') (izn(i),i=1,nza)
+      if (nza.gt.16) then
+         call error('acer','nza cannot be larger then 16.',' ')
+      endif
       mti=0
       nbint=0
       mte=0
