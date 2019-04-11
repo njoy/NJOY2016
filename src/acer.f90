@@ -234,7 +234,7 @@ contains
 
    ! internals
    integer::nendf,npend,ngend,nace,ndir
-   integer::iopt,iprint,itype,nxtra
+   integer::iopt,iprint,itype,nxtra,niza
    integer::matd
    real(kr)::tempd
    integer::newfor,iopp,ismooth
@@ -245,7 +245,6 @@ contains
    integer::izn(16)
    real(kr)::awn(16)
    character(6)::tname,tscr
-   integer::iza01,iza02,iza03
    integer::mti,nbint,mte,ielas,nmix,iwt
    real(kr)::emax
    real(kr)::time,zaid
@@ -360,16 +359,18 @@ contains
    else if (iopt.eq.2) then
       tempd=300
       tscr=' '
-      read(nsysi,*) matd,tempd,tscr
+      niza=3
+      read(nsysi,*) matd,tempd,tscr,niza
       nch=0
       do i=1,6
          if (tscr(i:i).ne.' ') nch=i
       enddo
       tname='      '
       if (nch.gt.0) tname(7-nch:6)=tscr(1:nch)
-      iza02=0
-      iza03=0
-      read(nsysi,*) iza01,iza02,iza03
+      do i=1,16
+         izn(i)=0
+      enddo
+      read(nsysi,*) (izn(i),i=1,niza)
       write(nsyso,'(&
         &'' mat to be processed .................. '',i10/&
         &'' temperature .......................... '',1p,e10.3/&
@@ -377,7 +378,7 @@ contains
         &'' iza01 ................................ '',i10/&
         &'' iza02 ................................ '',i10/&
         &'' iza03 ................................ '',i10)')&
-        matd,tempd,tname,iza01,iza02,iza03
+        matd,tempd,tname,izn(1),izn(2),izn(3)
       mti=0
       nbint=0
       mte=0
@@ -426,7 +427,6 @@ contains
    !--prepare thermal ace data
    else if (iopt.eq.2) then
       call acesix(npend,nace,ndir,matd,tempd,tname,suff,hk,izn,awn,&
-        iza01,iza02,iza03,&
         mti,nbint,mte,ielas,nmix,emax,iwt,iprint,mcnpx)
 
    !--prepare dosimetry data
