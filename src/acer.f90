@@ -174,7 +174,7 @@ contains
    !    matd     material to be processed
    !    tempd    temperature desired (kelvin) (default=300)
    !    tname    thermal zaid name ( 6 char max, def=za)
-   !    nza      number of moderator compound za values (default=3, max=16)
+   !    nza      number of moderator component za values (default=3, max=16)
    ! card 8a
    !    iza      moderator component za values
    ! card 9
@@ -380,7 +380,7 @@ contains
         &'' mat to be processed .................. '',i10/&
         &'' temperature .......................... '',1p,e10.3/&
         &'' thermal name ......................... '',4x,a6/&
-        &'' number moderator compound za values .. '',4x,i10)')&
+        &'' number moderator component za values . '',i10)')&
         matd,tempd,tname,nza
       write(nsyso,'(&
         &'' iza   ................................ '',i10/&
