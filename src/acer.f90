@@ -174,10 +174,9 @@ contains
    !    matd     material to be processed
    !    tempd    temperature desired (kelvin) (default=300)
    !    tname    thermal zaid name ( 6 char max, def=za)
+   !    niza     number of moderator compound za values (default=3, max=16)
    ! card 8a
-   !    iza01    moderator component za value
-   !    iza02    moderator component za value (def=0)
-   !    iza03    moderator component za value (def=0)
+   !    iza      moderator component za values
    ! card 9
    !    mti      mt for thermal incoherent data
    !    nbint    number of bins for incoherent scattering
@@ -371,14 +370,20 @@ contains
          izn(i)=0
       enddo
       read(nsysi,*) (izn(i),i=1,niza)
+      do i=1,niza
+         if (izn(i).eq.zero) then
+            niza=i-1
+            exit
+         endif
+      enddo
       write(nsyso,'(&
         &'' mat to be processed .................. '',i10/&
         &'' temperature .......................... '',1p,e10.3/&
-        &'' thermal name ......................... '',4x,a6/&
-        &'' iza01 ................................ '',i10/&
-        &'' iza02 ................................ '',i10/&
-        &'' iza03 ................................ '',i10)')&
-        matd,tempd,tname,izn(1),izn(2),izn(3)
+        &'' thermal name ......................... '',4x,a6)')&
+        matd,tempd,tname
+      write(nsyso,'(&
+        &'' iza   ................................ '',i10/&
+        &(40x,i10))') (izn(i),i=1,niza)
       mti=0
       nbint=0
       mte=0
