@@ -23,3 +23,9 @@ This Pull Request addresses issue [\#116](https://github.com/njoy/NJOY2016/issue
 Additional fixes to the physical constants: electron and helion mass. See issue [\#106](https://github.com/njoy/NJOY2016/issues/106).
 
 No impact on test results (no changes, these constants do not seem to be used in any of the tests we currently run).
+
+## [NJOY2016.46](https://github.com/njoy/NJOY2016/pull/109)
+This is a companion PR to [njoy/NJOY2016-manual#23](https://github.com/njoy/NJOY2016-manual/pull/23), updating the comment block in leapr.f90.
+
+## [NJOY2016.45](https://github.com/njoy/NJOY2016/pull/113)
+This should resolve issue [\#105](https://github.com/njoy/NJOY2016/issues/105).
