@@ -5,7 +5,7 @@
 ## Documentation
 The documentation for NJOY2016 is found in the [NJOY2016-manual](https://github.com/njoy/NJOY2016-manual) repository. There, you can find a [pre-compiled PDF](https://github.com/njoy/NJOY2016-manual/raw/master/njoy16.pdf) of the manual.
 
-Please refer to the [Release Notes](Release Notes.md) to see what has changed from one version to the next.
+Please refer to the [Release Notes](ReleaseNotes.md) to see what has changed from one version to the next.
 
 ## Installation
 Instructions for the installation of NJOY2016 are found on our page, [Obtaining and Installing NJOY](https://njoy.github.io/Build/index.html).
