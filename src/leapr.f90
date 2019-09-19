@@ -16,7 +16,7 @@ module leapm
    real(kr)::za
    real(kr)::awr
    real(kr)::spr
-   integer::npr
+   real(kr)::npr
    integer::iel
    integer::nss
    integer::ncold,nsk
@@ -267,7 +267,7 @@ contains
    write(nsyso,'(/&
      &  '' awr for principal scatterer .......... '',f10.3/&
      &  '' free xsec for principal scatterer .... '',f10.3/&
-     &  '' number of principal atoms ............ '',i10/&
+     &  '' number of principal atoms ............ '',f10.3/&
      &  '' elastic option ....................... '',i10/&
      &  '' cold moderator option ................ '',i10/&
      &  '' s(kappa) option ...................... '',i10)')&
@@ -2456,8 +2456,8 @@ contains
    use physics ! provides pi,hbar,ev,amu,amassn
    use util    ! provides timer,error
    ! externals
-   integer::lat,natom,nbe,maxb
-   real(kr)::b(maxb),emax
+   integer::lat,nbe,maxb
+   real(kr)::b(maxb),emax,natom
    ! internals
    integer::i,j,k,imax,jmin,idone,ifl,i1m,nw
    integer::i1,i2,i3,l1,l2,l3,i2m,i3m
