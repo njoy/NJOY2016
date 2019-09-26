@@ -327,8 +327,8 @@ contains
    if (mth.eq.44) izr=izr-2003
    if (mth.eq.45) izr=izr-3006
    if (mth.ge.46.and.mth.le.50) go to 245
-   if ((mth.ge.51.and.mth.le.91).or.mth.eq.102) then
-      if (mth.ne.102) izr=izr-1
+   if (mth.ge.51.and.mth.le.91) then
+      izr=izr-1
       if (lr.ge.22.and.lr.le.25) izg=1
       if (lr.eq.22) izr=izr-2004
       if (lr.eq.23) izr=izr-6012
@@ -564,8 +564,8 @@ contains
       izr=izr-3006
       y203=1
       y207=1
-   else if ((mth.ge.51.and.mth.le.91).or.mth.eq.102) then
-      if (mth.ne.102) izr=izr-1
+   else if (mth.ge.51.and.mth.le.91) then
+      izr=izr-1
       if (lr.eq.22) then
          izr=izr-2004
          y207=1
