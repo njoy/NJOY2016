@@ -17,7 +17,7 @@ Questions:
 - the first message could be slightly changed so that it is issued when the background plus the potential scattering and the interference are negative, regardless of the value of sigma0. In my opinion, the fact that this value is negative before adding sigma0 is an indication that the evaluation is no good whatever happens.
 - the second message could be transformed into an error and that would stop the processing dead in its tracks (which degrades the behaviour from before these changes - it was silently ignored). In my opinion, the results will be inherently wrong, which would merit the use of error instead of mess.
 
-This Pull Request addresses issue [\#116](https://github.com/njoy/NJOY2016/issues/116). Look there for more information.
+This Pull Request addresses issue [\#116 (GROUPR has problems due to NaNs coming from UNRESR)](https://github.com/njoy/NJOY2016/issues/116). Look there for more information.
 
 ## [NJOY2016.47](https://github.com/njoy/NJOY2016/pull/115)
 Additional fixes to the physical constants: electron and helion mass. See issue [\#106](https://github.com/njoy/NJOY2016/issues/106).
@@ -28,4 +28,7 @@ No impact on test results (no changes, these constants do not seem to be used in
 This is a companion PR to [njoy/NJOY2016-manual#23](https://github.com/njoy/NJOY2016-manual/pull/23), updating the comment block in leapr.f90.
 
 ## [NJOY2016.45](https://github.com/njoy/NJOY2016/pull/113)
-This should resolve issue [\#105](https://github.com/njoy/NJOY2016/issues/105).
+This should resolve issue [\#105 (A Simple Bug in NJOY2016 and NJOY2012)](https://github.com/njoy/NJOY2016/issues/105).
+
+## [NJOY2016.44](https://github.com/njoy/NJOY2016/pull/107)
+This fixes issue [\#106 (Typo in hbar)](https://github.com/njoy/NJOY2016/issues/106)
