@@ -70,7 +70,7 @@ contains
    jxsd=0
 
    !--allocate scratch storage
-   nwscr=1000
+   nwscr=10000
    allocate(scr(nwscr))
 
    !--allocate main container array
@@ -103,13 +103,13 @@ contains
    call gety1(e,enext,idis,s,nin,scr)
    enext=emin
    do while (enext.lt.emax)
-      e=sigfig(enext,7,0)
+      e=sigfig(enext,9,0)
       if (idis.ne.0) then
-         e=sigfig(e,7,-1)
+         e=sigfig(e,9,-1)
          call gety1(e,enext,idis,s,nin,scr)
          l=l+1
          xss(l)=e
-         e=sigfig(e,7,+2)
+         e=sigfig(e,9,+2)
       endif
       call gety1(e,enext,idis,s,nin,scr)
       l=l+1
@@ -181,10 +181,12 @@ contains
    call contio(nin,0,0,scr,nb,nw)
    z=nint(scr(1)/1000)
    call tab1io(nin,0,0,scr,nb,nw)
-   l=1
+   l=1+nw
    do while (nb.ne.0)
-      l=l+nw
+      if (l.gt.nwscr) call error('acepho',&
+              'storage exceeded for the coherent form factors',' ')
       call moreio(nin,0,0,scr(l),nb,nw)
+      l=l+nw
    enddo
    ip=2
    ir=1
@@ -212,10 +214,12 @@ contains
    call findf(matd,27,504,nin)
    call contio(nin,0,0,scr,nb,nw)
    call tab1io(nin,0,0,scr,nb,nw)
-   l=1
+   l=1+nw
    do while (nb.ne.0)
-      l=l+nw
+      if (l.gt.nwscr) call error('acepho',&
+              'storage exceeded for the incoherent scattering function',' ')
       call moreio(nin,0,0,scr(l),nb,nw)
+      l=l+nw
    enddo
    ip=2
    ir=1
