@@ -246,3 +246,9 @@ title: NJOY2016 Test Descriptions
 
   This test is added following a change in `GROUPR` for the MF6 MT18 part of the GENDF file. Versions prior to NJOY 2016.49 only gave the infinite dilute fission matrix, independent of the number of sigma0 values requested by the user. This test runs two `GROUPR` runs, one with only infinite dilute and another one with two sigma0 values (including infinite dilute). The test also contains `ERRORR` runs for MF35 covariances to verify that the `ERRORR` module still gives the same results (only infinite dilute data is used) when using either of the produced GENDF files.
 
+## Test Problem 48
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/48/input)]
+
+  This test is added following issues in processing photoatomic data in `ACER` (see issues [\#91](https://github.com/njoy/NJOY2016/issues/91) and  [\#135](https://github.com/njoy/NJOY2016/issues/135)). The problems were caused by truncation to 7 significant digits (knowing that the ENDF/B-VIII.0 files often go to 9 significant digits) and array sizes that were too small for the current data. This test was added to detect this problem in the future.
+
