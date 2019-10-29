@@ -1490,6 +1490,7 @@ contains
    ! internals
    integer::math,mfh,mth,matl,mfl,itape,igo
    character strng*60
+
    !---read first card and determine whether to read up or down.
    itape=iabs(ntape)
    100 continue
@@ -1498,6 +1499,7 @@ contains
    else
       read(itape)math,mfh,mth
    endif
+
    !--test for mat
    if (math.eq.0) go to 100
    if (math.eq.mat) go to 120
@@ -1527,10 +1529,7 @@ contains
 
    !--search up or down for section
    200 continue
-   if (igo.lt.0) then
-      call skiprz(ntape,-2)
-      if (ftell(abs(ntape)).eq.0) go to 400
-   endif
+   if (igo.lt.0) call skiprz(ntape,-2)
    if (igo.lt.0) matl=math
    if (igo.lt.0) mfl=mfh
    if (ntape.gt.0) then
