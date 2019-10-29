@@ -250,5 +250,5 @@ title: NJOY2016 Test Descriptions
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/48/input)]
 
-  This test is added following issues in processing photoatomic data in `ACER` (see issues #91 and #135). The problems were caused by truncation to 7 significant digits (knowing that the ENDF/B-VIII.0 files often go to 9 significant digits) and array sizes that were too small for the current data. This test was added to detect this problem in the future.
+  This test is added following issues in processing photoatomic data in `ACER` (see issues [\#91](https://github.com/njoy/NJOY2016/issues/91) and  [\#135](https://github.com/njoy/NJOY2016/issues/135)). The problems were caused by truncation to 7 significant digits (knowing that the ENDF/B-VIII.0 files often go to 9 significant digits) and array sizes that were too small for the current data. This test was added to detect this problem in the future.
 
