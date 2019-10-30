@@ -384,6 +384,11 @@ contains
       write(nsyso,'(&
         &'' iza   ................................ '',i10/&
         &(40x,i10))') (izn(i),i=1,nza)
+print*, nza
+      if (nza.eq.zero) then
+print*, "in error"
+         call error('acer','at least one za value must be given.',' ')
+      endif
       mti=0
       nbint=0
       mte=0
