@@ -175,7 +175,8 @@ contains
    !    tempd    temperature desired (kelvin) (default=300)
    !    tname    thermal zaid name ( 6 char max, def=za)
    ! card 8a
-   !    iza      moderator component za values (maximum of 16 values)
+   !    iza      moderator component za values (up to a maximum of 16 values,
+   !             must be terminated by /)
    ! card 9
    !    mti      mt for thermal incoherent data
    !    nbint    number of bins for incoherent scattering
