@@ -174,9 +174,8 @@ contains
    !    matd     material to be processed
    !    tempd    temperature desired (kelvin) (default=300)
    !    tname    thermal zaid name ( 6 char max, def=za)
-   !    nza      number of moderator component za values (default=3, max=16)
    ! card 8a
-   !    iza      moderator component za values
+   !    iza      moderator component za values (maximum of 16 values)
    ! card 9
    !    mti      mt for thermal incoherent data
    !    nbint    number of bins for incoherent scattering
@@ -358,15 +357,15 @@ contains
    else if (iopt.eq.2) then
       tempd=300
       tscr=' '
-      nza=3
-      read(nsysi,*) matd,tempd,tscr,nza
+      nza=16
+      read(nsysi,*) matd,tempd,tscr
       nch=0
       do i=1,6
          if (tscr(i:i).ne.' ') nch=i
       enddo
       tname='      '
       if (nch.gt.0) tname(7-nch:6)=tscr(1:nch)
-      do i=1,16
+      do i=1,nza
          izn(i)=0
       enddo
       read(nsysi,*) (izn(i),i=1,nza)
@@ -385,9 +384,6 @@ contains
       write(nsyso,'(&
         &'' iza   ................................ '',i10/&
         &(40x,i10))') (izn(i),i=1,nza)
-      if (nza.gt.16) then
-         call error('acer','nza cannot be larger then 16.',' ')
-      endif
       mti=0
       nbint=0
       mte=0
