@@ -370,9 +370,9 @@ contains
          izn(i)=0
       enddo
       read(nsysi,*) (izn(i),i=1,nza)
-      do i=1,nza
-         if (izn(i).eq.zero) then
-            nza=i-1
+      do i=nza,1,-1
+         if (izn(i).ne.zero) then
+            nza=i
             exit
          endif
       enddo
@@ -388,6 +388,11 @@ contains
       if (nza.eq.zero) then
          call error('acer','at least one za value must be given.',' ')
       endif
+      do i=1,nza
+         if (izn(i).lt.1001) then
+            call error('acer','a za value must be larger then 1000.',' ')
+         endif
+      enddo
       mti=0
       nbint=0
       mte=0
@@ -513,4 +518,3 @@ contains
    end subroutine acer
 
 end module acem
-
