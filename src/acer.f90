@@ -389,8 +389,8 @@ contains
          call error('acer','at least one za value must be given.',' ')
       endif
       do i=1,nza
-         if (izn(i).lt.1001) then
-            call error('acer','a za value must be larger then 1000.',' ')
+         if (izn(i).le.zero) then
+            call error('acer','found invalid za numbers in izn.',' ')
          endif
       enddo
       mti=0
