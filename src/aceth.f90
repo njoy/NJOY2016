@@ -31,7 +31,7 @@ module aceth
 contains
 
    subroutine acesix(nin,nace,ndir,matd,tempd,tname,suff,&
-     hk,izn,awn,iza01,iza02,iza03,&
+     hk,izn,awn,&
      mti,nbin,mte,ielas,nmix,emax,iwt,iprint,mcnpx)
    !-------------------------------------------------------------------
    ! Convert thermal matrices in njoy MF6 format to various ACE
@@ -41,7 +41,7 @@ contains
    use util ! provides openz,repoz,mess,error,closz
    use endf ! provides endf routines and variables
    ! externals
-   integer::nin,nace,ndir,matd,iza01,iza02,iza03
+   integer::nin,nace,ndir,matd
    integer::mti,nbin,mte,ielas,nmix,iwt,iprint,mcnpx
    real(kr)::tempd,suff,emax
    integer::izn(16)
@@ -513,7 +513,7 @@ contains
   290 continue
 
    !--write ace format thermal tape
-   call thrlod(nout,matd,tempd,tname,suff,izn,iza01,iza02,iza03,&
+   call thrlod(nout,matd,tempd,tname,suff,izn,&
      nbin,nang,nmix,iwt,mcnpx)
    if (iprint.gt.0) call thrprt(hk)
    itype=1
@@ -634,7 +634,7 @@ contains
    return
    end subroutine thrfix
 
-   subroutine thrlod(nin,matd,tempd,tname,suff,izn,iza01,iza02,iza03,&
+   subroutine thrlod(nin,matd,tempd,tname,suff,izn,&
      nbini,nang,nmix,iwt,mcnpx)
    !-------------------------------------------------------------------
    ! write a thermal output tape in ace format.
@@ -643,7 +643,7 @@ contains
    use util ! provides date,repoz
    use mainio ! provides nsyso
    ! externals
-   integer::nin,matd,iza01,iza02,iza03,nbini,nang,nmix,iwt,mcnpx
+   integer::nin,matd,nbini,nang,nmix,iwt,mcnpx
    real(kr)::tempd,suff
    integer::izn(16)
    character(6)::tname
@@ -666,9 +666,6 @@ contains
    endif
    call dater(hdt)
    hd='  '//hdt
-   izn(1)=iza01
-   izn(2)=iza02
-   izn(3)=iza03
    ncl=0
    idpni=3
    ifeng=0

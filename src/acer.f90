@@ -175,9 +175,8 @@ contains
    !    tempd    temperature desired (kelvin) (default=300)
    !    tname    thermal zaid name ( 6 char max, def=za)
    ! card 8a
-   !    iza01    moderator component za value
-   !    iza02    moderator component za value (def=0)
-   !    iza03    moderator component za value (def=0)
+   !    iza      moderator component za values (up to a maximum of 16 values,
+   !             must be terminated by /)
    ! card 9
    !    mti      mt for thermal incoherent data
    !    nbint    number of bins for incoherent scattering
@@ -234,7 +233,7 @@ contains
 
    ! internals
    integer::nendf,npend,ngend,nace,ndir
-   integer::iopt,iprint,itype,nxtra
+   integer::iopt,iprint,itype,nxtra,nza
    integer::matd
    real(kr)::tempd
    integer::newfor,iopp,ismooth
@@ -245,7 +244,6 @@ contains
    integer::izn(16)
    real(kr)::awn(16)
    character(6)::tname,tscr
-   integer::iza01,iza02,iza03
    integer::mti,nbint,mte,ielas,nmix,iwt
    real(kr)::emax
    real(kr)::time,zaid
@@ -360,6 +358,7 @@ contains
    else if (iopt.eq.2) then
       tempd=300
       tscr=' '
+      nza=16
       read(nsysi,*) matd,tempd,tscr
       nch=0
       do i=1,6
@@ -367,17 +366,33 @@ contains
       enddo
       tname='      '
       if (nch.gt.0) tname(7-nch:6)=tscr(1:nch)
-      iza02=0
-      iza03=0
-      read(nsysi,*) iza01,iza02,iza03
+      do i=1,nza
+         izn(i)=0
+      enddo
+      read(nsysi,*) (izn(i),i=1,nza)
+      do i=nza,1,-1
+         if (izn(i).ne.zero) then
+            nza=i
+            exit
+         endif
+      enddo
       write(nsyso,'(&
         &'' mat to be processed .................. '',i10/&
         &'' temperature .......................... '',1p,e10.3/&
         &'' thermal name ......................... '',4x,a6/&
-        &'' iza01 ................................ '',i10/&
-        &'' iza02 ................................ '',i10/&
-        &'' iza03 ................................ '',i10)')&
-        matd,tempd,tname,iza01,iza02,iza03
+        &'' number moderator component za values . '',i10)')&
+        matd,tempd,tname,nza
+      write(nsyso,'(&
+        &'' iza   ................................ '',i10/&
+        &(40x,i10))') (izn(i),i=1,nza)
+      if (nza.eq.zero) then
+         call error('acer','at least one za value must be given.',' ')
+      endif
+      do i=1,nza
+         if (izn(i).le.zero) then
+            call error('acer','found invalid za numbers in izn.',' ')
+         endif
+      enddo
       mti=0
       nbint=0
       mte=0
@@ -426,7 +441,6 @@ contains
    !--prepare thermal ace data
    else if (iopt.eq.2) then
       call acesix(npend,nace,ndir,matd,tempd,tname,suff,hk,izn,awn,&
-        iza01,iza02,iza03,&
         mti,nbint,mte,ielas,nmix,emax,iwt,iprint,mcnpx)
 
    !--prepare dosimetry data
@@ -504,4 +518,3 @@ contains
    end subroutine acer
 
 end module acem
-
