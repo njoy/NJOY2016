@@ -258,3 +258,18 @@ title: NJOY2016 Test Descriptions
 
   This test is added following the change in how additional za values are handled in `ACER`. Previously, only 3 were allowed even though thermal scattering ACE file sometimes need more of them (e.g. Zr in ZrH). The user can now specify up to 16 values (the actual number of za values that the ACE file can store). The changes were made to be backwards compatible (test 25 ensures this).
 
+## Test Problem 50-54
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/50/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/51/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/52/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/53/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/54/input)]
+
+  These tests were added following issue [\#138](https://github.com/njoy/NJOY2016/issues/91) in which a charged particle ACE file is produced with NaN values due to an error in the Coulomb elastic scattering cross section for identical particles. These 5 tests cover most of the different possibilities we may encounter:
+- test 50: LAW=5 LTP=12 for identical particles with a spin s = 0 (this file produces NaN values)
+- test 51: LAW=5 LTP=12 for different particles (as expected, this remains the same before and after the fix)
+- test 52: LAW=5 LTP=1 for identical particles with a spin s = 0.5 (as expected, this remains the same before and after the fix)
+- test 53: LAW=5 LTP=1 for identical particles with a spin s = 1 (this changes due to the fix but the original file does no have NaN values, as expected)
+- test 54: LAW=5 LTP=1 for different particles (as expected, this remains the same before and after the fix)
+
