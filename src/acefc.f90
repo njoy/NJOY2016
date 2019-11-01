@@ -6427,7 +6427,7 @@ contains
                if (lidp.eq.0) sigc=(eta**2/wn**2)/(1-amuu)**2
                if (lidp.eq.1) sigc=((2*eta**2/wn**2)&
                  /(1-amuu**2))*((1+amuu**2)/(1-amuu**2)&
-                 +(-1**i2s)*cos(eta*log((1+amuu)/(1-amuu)))&
+                 +((-1)**i2s)*cos(eta*log((1+amuu)/(1-amuu)))&
                  /(2*spi+1))
                if (ltp.lt.12) pmu=pmu-sigc
                if (iterp.eq.1) then
@@ -7776,7 +7776,7 @@ contains
    real(kr)::dy,dm,xm,yt,test,check,f,diff,ym,dco
    integer,parameter::imax=20
    real(kr)::x(imax),y(imax)
-   integer,parameter::maxang=2000
+   integer,parameter::maxang=4000
    real(kr)::aco(maxang),cprob(maxang)
    real(kr),parameter::tol1=.001e0_kr
    real(kr),parameter::tol2=.01e0_kr
@@ -7920,7 +7920,7 @@ contains
    if (lidp.eq.0) sigc=(eta**2/wn**2)/(1-x)**2
    if (lidp.eq.1) sigc=((2*eta**2/wn**2)&
      /(1-x**2))*((1+x**2)/(1-x**2)&
-     +(-1**i2s)*cos(eta*log((1+x)/(1-x)))/(2*spi+1))
+     +((-1)**i2s)*cos(eta*log((1+x)/(1-x)))/(2*spi+1))
    nt=nint(c(6))
    np=2*nt
    call legndr(x,p,np)

@@ -7714,7 +7714,7 @@ contains
          if (lidp.eq.0) sigc=(eta**2/wn**2)/(1-wqp)**2
          if (lidp.eq.1) sigc=((2*eta**2/wn**2)&
            /(1-wqp**2))*((1+wqp**2)/(1-wqp**2)&
-           +(-1**i2s)*cos(eta*log((1+wqp)/(1-wqp)))/(2*spi+1))
+           +((-1)**i2s)*cos(eta*log((1+wqp)/(1-wqp)))/(2*spi+1))
          if (lidp.eq.0) prob=prob/(1-wqp)
          if (lidp.eq.1) prob=prob/(1-wqp*wqp)
          prob=prob+sigc
