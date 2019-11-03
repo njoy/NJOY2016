@@ -152,7 +152,7 @@ with open('input', 'r') as i, \
                 diff_file.write("--- {} ---\n".format(trial_tape))
 
                 identical = identicalLines(
-                    reference_lines, trial_lines, diff_file, 5E-6, 1E-7)
+                    reference_lines, trial_lines, diff_file, 1E-7, 1E-7)
                 should_exit = not identical
 
             if should_exit:
