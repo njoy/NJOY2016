@@ -78,7 +78,7 @@ title: NJOY2016 Test Descriptions
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/13/input)]
 
-  This case demonstrates the modern MCNP formats using <sup>61</sup>Ni from ENDF/B-VI.  Note that `ACER` is run twice, once to prepare the ACE file, and again to do consistency checking and to prepare detailed [plots](https://raw.githubusercontent.com/njoy/NJOY2016/master/docs/tests/13/referenceTape36.pdf). 
+  This case demonstrates the modern MCNP formats using <sup>61</sup>Ni from ENDF/B-VI.  Note that `ACER` is run twice, once to prepare the ACE file, and again to do consistency checking and to prepare detailed [plots](https://raw.githubusercontent.com/njoy/NJOY2016/master/docs/tests/13/referenceTape36.pdf).
 
 ## Test Problem 14
 
@@ -125,7 +125,7 @@ title: NJOY2016 Test Descriptions
 ## Test Problem 21
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/21/input)]
- 
+
   This test case was developed to check if NaNs were "calculated" in `PURR`. This problem was discovered by Dave Brown and Paul Romano and was fixed in [Pull Request 18](https://github.com/njoy/NJOY2016/pull/18). This test was created in an attempt to prevent this from happening again. (No guarantees.)
 
 ## Test Problem 22
@@ -232,7 +232,7 @@ title: NJOY2016 Test Descriptions
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/45/input)]
 
-  This test was added following an issue identified in `GASPR` concerning the charged particle production cros ssections when the original ENDF tape does not contain the summation cross section when individual levels are present. This lead to double counting of these levels. This test was added to detect this problem in the future.
+  This test was added following an issue identified in `GASPR` concerning the charged particle production cross sections when the original ENDF tape does not contain the summation cross section when individual levels are present. This lead to double counting of these levels. This test was added to detect this problem in the future.
 
 ## Test Problem 46
 
@@ -272,4 +272,3 @@ title: NJOY2016 Test Descriptions
 - test 52: LAW=5 LTP=1 for identical particles with a spin s = 0.5 (as expected, this remains the same before and after the fix)
 - test 53: LAW=5 LTP=1 for identical particles with a spin s = 1 (this changes due to the fix but the original file does no have NaN values, as expected)
 - test 54: LAW=5 LTP=1 for different particles (as expected, this remains the same before and after the fix)
-
