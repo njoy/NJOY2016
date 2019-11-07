@@ -144,7 +144,7 @@ contains
    !    matd     material to be processed
    !    tempd    temperature desired (kelvin) (default=300)
    ! card 6
-   !    newfor   use new cummulative angle distributions,
+   !    newfor   use new cumulative angle distributions,
    !               law 61, and outgoing particle distributions.
    !               (0=no, 1=yes, default=1)
    !    iopp     detailed photons (0=no, 1=yes, default=1)
