@@ -1,6 +1,9 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.53](https://github.com/njoy/NJOY2016/pull/141)
+In an initial proposal for NJOY2016.51, the number of za values to be read (the nza variable) was explicitly requested in the input. This was removed in favor of reading 16 values by default and then determining how many were given. This proves problematic for NJOY21. As a result, specifying nza is now mandatory again.
+
 ## [NJOY2016.52](https://github.com/njoy/NJOY2016/pull/139)
 An error was corrected in the calculation of the Coulomb elastic scattering cross section for incident charged particles. The issue was detected when producing an ACE file for alpha on alpha with ACER but the error also existed in GROUPR. All instances have been corrected. Tests were added for 5 cases to detect this issue in the future.
 
