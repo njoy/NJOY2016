@@ -12777,7 +12777,7 @@ contains
    ! externals
    integer::nout
    ! internals
-   integer::n,i,l,lnu,m,nc,j,nrr,ne,nn,ll,k,np,nw
+   integer::n,i,l,lnu,m,nc,j,nrr,ne,nn,ll,k,np,nw,rlocator,slocator
    integer::ly,lnw,law,net,nmu,kk,nep,nure,nurb,mftype
    integer::nyp,ntro,jj,ir,nyh,li,ii,ntrh
 
@@ -13176,25 +13176,32 @@ contains
                ne=nint(xss(l))
                call typen(l,nout,1)
                l=l+1
-               do j=1,ne
+               do j=1,ne ! the incident energy values
                   call typen(l,nout,2)
                   l=l+1
                enddo
-               do j=1,ne
+               slocator=l ! index for the location of the secondary distribution
+               do j=1,ne ! the locators for the secondary distributions
                   call typen(l,nout,1)
                   l=l+1
                enddo
                do j=1,ne
-                  call typen(l,nout,1)
+                  call typen(l,nout,1) ! interpolation flag INTT
                   l=l+1
                   np=nint(xss(l))
-                  call typen(l,nout,1)
+                  call typen(l,nout,1) ! number of energy points
                   l=l+1
-                  n=5*np
-                  do k=1,n
+                  if (j.ne.ne) then
+                    ! remaining number of points up to the next locator
+                    n=nint(xss(slocator+1))-nint(xss(slocator))-2
+                  else
+                    n=5*np
+                  endif
+                  do k=1,n ! secondary energy, pdf, cdf, r, a
                      call typen(l,nout,2)
                      l=l+1
                   enddo
+                  slocator=slocator+1
                enddo
 
             !--law 61
