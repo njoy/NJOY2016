@@ -14317,7 +14317,7 @@ contains
    use util ! provides mess
    use acecm ! provides mtname
    ! internals
-   integer::nerr,i,k,iaa,iin,nrl,nn,n,na,ic,id,ne,nr1
+   integer::nerr,i,k,iaa,iin,nrl,nn,nnew,n,na,ic,id,ne,nr1
    integer::nb,nk,ie,k1,im,ll,nlaw,icm,j,m,law,loci,intt
    integer::n2big,ishift,locj,nmu,loct,loc1,mftype,mtmult
    integer::ii,naa,locv,locc,iflag,imt,l1,l2,l3,mt,l
@@ -14715,25 +14715,51 @@ contains
                      endif
                   enddo
                   if (n2big.gt.0) then
+print*, e, n2big, epmax, intt
                      write(nsyso,'(''   consis:'',&
                        &'' shifting eprimes greater than epmax'',&
                        &'' and renorming the distribution'')')
-                     do j=nn-n2big+1,nn
-                        ishift=j-nn-1
-                        ep=xss(j+loci)
-                        xss(j+loci)=sigfig(epmax,7,ishift)
-                        if (intt.eq.1) then
-                           p=(xss(j+2*nn+loci)-xss(j-1+2*nn+loci))&
-                            /(xss(j+loci)-xss(j-1+loci))
-                           xss(j-1+nn+loci)=p
-                           xss(j+nn+loci)=p
-                        else
-                           p=2*(xss(j+2*nn+loci)-xss(j-1+2*nn+loci))&
-                            /(xss(j+loci)-xss(j-1+loci))&
-                             -xss(j-1+nn+loci)
-                           xss(j+nn+loci)=p
-                        endif
+if (mt.eq.5) print*, xss(loci)
+do j=nn-n2big,nn
+  if (mt.eq.5) print*, j, xss(j+loci), xss(j+nn+loci), xss(j+2*nn+loci)
+enddo
+                     nnew=nn-n2big+1
+                     xss(loci)=nnew
+                     xss(loci+nnew)=sigfig(epmax,7,-1)
+                     if (intt.eq.1) then
+                       p=(1.0-xss(loci+nnew-1+2*nn))&
+                         /(xss(loci+nnew)-xss(loci+nnew-1))
+                       xss(loci+nnew-1+nn)=p
+                       xss(loci+nnew+nn)=p
+                     else
+                       p=2.0*(1.0-xss(loci+nnew-1+2*nn))&
+                             /(xss(loci+nnew)-xss(loci+nnew-1))&
+                         -xss(loci+nnew-1+nn)
+                       xss(loci+nnew+nn)=p
+                     endif
+                     xss(loci+nnew+2*nn)=1.0
+                     do j=nnew+1,nn
+                       xss(loci+j)=0.0      ! Eprime
+                       xss(loci+j+nn)=0.0   ! pdf
+                       xss(loci+j+2*nn)=1.0 ! cdf
+                       xss(loci+j+3*nn)=0.0 ! precompound fraction
+                       xss(loci+j+4*nn)=0.0 ! slope
                      enddo
+                     if (nnew.ne.nn) then
+                       ishift=n2big-1
+                       do i=1,4
+                         do j=i*nnew+1,5*nn
+                           xss(loci+j)=xss(loci+j+ishift)
+                         enddo
+                       enddo
+                       do j=5*nnew+1,5*nn
+                         xss(loci+j)=0.0
+                       enddo
+                     endif
+if (mt.eq.5) print*, xss(loci)
+do j=nn-n2big,nn
+  if (mt.eq.5) print*, j, xss(j+loci), xss(j+nn+loci), xss(j+2*nn+loci)
+enddo
                   endif
                enddo
 
@@ -19681,4 +19707,3 @@ contains
    end subroutine ascll
 
 end module acefc
-
