@@ -12764,6 +12764,21 @@ contains
    return
    end subroutine aceout
 
+   subroutine advance_to_locator(nout,l,locator)
+   !-------------------------------------------------------------------
+   ! Advance to the next locator position
+   !-------------------------------------------------------------------
+   ! externals
+   integer::nout,l,locator
+
+   do while (l.lt.locator)
+      call typen(l,nout,1)
+      l=l+1
+   enddo
+
+   return
+   end subroutine advance_to_locator
+
    subroutine change(nout)
    !-------------------------------------------------------------------
    ! Change ACE data fields from integer to real or vice versa.
@@ -12782,14 +12797,18 @@ contains
    integer::nyp,ntro,jj,ir,nyh,li,ii,ntrh
 
    !--write or convert esz block
+   l=1
    n=5*nes
    do i=1,n
-      call typen(i,nout,2)
+      call typen(l,nout,2)
+      l=l+1
    enddo
 
    !--nu block
    if (nu.ne.0) then
-      l=nu
+print*, 'l', l, 'nu', nu
+      call advance_to_locator(nout,l,nu)
+print*, 'l', l, 'nu', nu
       lnu=nint(xss(l))
       if (lnu.gt.0) then
         m=1
@@ -12837,20 +12856,27 @@ contains
    if (ntr.ne.0) then
 
       !--mtr block
-      l=mtr
+print*, 'l', l, 'mtr', mtr
+      call advance_to_locator(nout,l,mtr)
+print*, 'l', l, 'mtr', mtr
       do i=1,ntr
          call typen(l,nout,1)
          l=l+1
       enddo
 
       !--lqr block
-      l=lqr
+print*, 'l', l, 'lqr', lqr
+      call advance_to_locator(nout,l,lqr)
+print*, 'l', l, 'lqr', lqr
       do i=1,ntr
          call typen(l,nout,2)
          l=l+1
       enddo
 
       !--tyr block
+print*, 'l', l, 'tyr', tyr
+      call advance_to_locator(nout,l,tyr)
+print*, 'l', l, 'tyr', tyr
       l=tyr
       do i=1,ntr
          call typen(l,nout,1)
@@ -12858,14 +12884,18 @@ contains
       enddo
 
       !--lsig block
-      l=lsig
+print*, 'l', l, 'lsig', lsig
+      call advance_to_locator(nout,l,lsig)
+print*, 'l', l, 'lsig', lsig
       do i=1,ntr
          call typen(l,nout,1)
          l=l+1
       enddo
 
       !--sig block
-      l=sig
+print*, 'l', l, 'sig', sig
+      call advance_to_locator(nout,l,sig)
+print*, 'l', l, 'sig', sig
       do i=1,ntr
          call typen(l,nout,1)
          l=l+1
@@ -12880,8 +12910,10 @@ contains
    endif
 
    !--land block
+print*, 'l', l, 'land', land
+   call advance_to_locator(nout,l,land)
+print*, 'l', l, 'land', land
    n=nr+1
-   l=land
    li=l-1
    do i=1,n
       call typen(l,nout,1)
@@ -12889,6 +12921,9 @@ contains
    enddo
 
    !--and block
+print*, 'l', l, 'and', and
+   call advance_to_locator(nout,l,and)
+print*, 'l', l, 'and', and
    l=and
    do i=1,n
       nn=nint(xss(li+i))
@@ -12934,19 +12969,23 @@ contains
     if (nr.ne.0) then
 
       !--ldlw block
-      l=ldlw
+print*, 'l', l, 'ldlw', ldlw
+      call advance_to_locator(nout,l,ldlw)
+print*, 'l', l, 'ldlw', ldlw
       do i=1,nr
          call typen(l,nout,1)
          l=l+1
       enddo
 
       !--dlw block
-      l=dlw
+print*, 'l', l, 'dlw', dlw
+      call advance_to_locator(nout,l,dlw)
+print*, 'l', l, 'dlw', dlw
       do i=1,nr
          ly=nint(xss(tyr+i-1))
          ly=iabs(ly)
          if (ly.gt.100) then
-            l=ly-100+dlw-1
+            l=ly-100+dlw-1  ! call advance_to_locator?
             nrr=nint(xss(l))
             call typen(l,nout,1)
             l=l+1
@@ -13181,7 +13220,7 @@ contains
                   l=l+1
                enddo
                slocator=l ! index for the location of the secondary distribution
-               do j=1,ne ! the locators for the secondary distributions
+               do j=1,ne  ! the locators for the secondary distributions
                   call typen(l,nout,1)
                   l=l+1
                enddo
@@ -13330,7 +13369,9 @@ contains
 
    !--unresolved-range probability-table block
    if (iurpt.gt.0) then
-      l=iurpt
+print*, 'l', l, 'iurpt', iurpt
+      call advance_to_locator(nout,l,iurpt)
+print*, 'l', l, 'iurpt', iurpt
       nure=nint(xss(l))
       call typen(l,nout,1)
       l=l+1
@@ -13355,7 +13396,9 @@ contains
    !--delayed neutron block
    if (ndnf.ne.0) then
       !--delayed nubar
-      l=nud
+print*, 'l', l, 'nud', nud
+      call advance_to_locator(nout,l,nud)
+print*, 'l', l, 'nud', nud
       lnu=nint(xss(l))
       call typen(l,nout,1)
       l=l+1
@@ -13378,15 +13421,17 @@ contains
          l=l+1
       enddo
       !--precursor data
-      l=dndat
+print*, 'l', l, 'dndat', dndat
+      call advance_to_locator(nout,l,dndat)
+print*, 'l', l, 'dndat', dndat
       do i=1,ndnf
          call typen(l,nout,2)
          l=l+1
-      nrr=nint(xss(l))
+         nrr=nint(xss(l))
          call typen(l,nout,1)
          l=l+1
-      if (nrr.ne.0) then
-         n=2*nrr
+         if (nrr.ne.0) then
+            n=2*nrr
             do j=1,n
                call typen(l,nout,1)
                l=l+1
@@ -13414,11 +13459,11 @@ contains
          l=l+1
          call typen(l,nout,1)
          l=l+1
-      nrr=nint(xss(l))
+         nrr=nint(xss(l))
          call typen(l,nout,1)
          l=l+1
-      if (nrr.ne.0) then
-         n=2*nrr
+         if (nrr.ne.0) then
+            n=2*nrr
             do j=1,n
                call typen(l,nout,1)
                l=l+1
@@ -13433,11 +13478,11 @@ contains
             l=l+1
          enddo
          !--law=4 data
-      nrr=nint(xss(l))
+         nrr=nint(xss(l))
          call typen(l,nout,1)
          l=l+1
-      if (nrr.ne.0) then
-         n=2*nrr
+         if (nrr.ne.0) then
+            n=2*nrr
             do j=1,n
                call typen(l,nout,1)
                l=l+1
@@ -13471,7 +13516,9 @@ contains
 
    !--gpd block
    if (gpd.ne.0) then
-      l=gpd
+print*, 'l', l, 'gpd', gpd
+      call advance_to_locator(nout,l,gpd)
+print*, 'l', l, 'gpd', gpd
       do i=1,nes
          call typen(l,nout,2)
          l=l+1
@@ -13489,21 +13536,27 @@ contains
    if (ntrp.ne.0) then
 
       !--mtrp block
-      l=mtrp
+print*, 'l', l, 'mtrp', mtrp
+      call advance_to_locator(nout,l,mtrp)
+print*, 'l', l, 'mtrp', mtrp
       do i=1,ntrp
          call typen(l,nout,1)
          l=l+1
       enddo
 
       !--lsigp block
-      l=lsigp
+print*, 'l', l, 'lsigp', lsigp
+      call advance_to_locator(nout,l,lsigp)
+print*, 'l', l, 'lsigp', lsigp
       do i=1,ntrp
          call typen(l,nout,1)
          l=l+1
       enddo
 
       !--sigp block
-      l=sigp
+print*, 'l', l, 'sigp', sigp
+      call advance_to_locator(nout,l,sigp)
+print*, 'l', l, 'sigp', sigp
       do i=1,ntrp
          mftype=nint(xss(l))
          call typen(l,nout,1)
@@ -13543,7 +13596,9 @@ contains
       enddo
 
       !--landp block
-      l=landp
+print*, 'l', l, 'landp', landp
+      call advance_to_locator(nout,l,landp)
+print*, 'l', l, 'landp', landp
       li=l-1
       do i=1,ntrp
          call typen(l,nout,1)
@@ -13551,7 +13606,9 @@ contains
       enddo
 
       !--andp block
-      l=andp
+print*, 'l', l, 'andp', andp
+      call advance_to_locator(nout,l,andp)
+print*, 'l', l, 'andp', andp
       do i=1,ntrp
          nn=nint(xss(li+i))
          if (nn.gt.0) then
@@ -13580,14 +13637,18 @@ contains
       enddo
 
       !--ldlwp block
-      l=ldlwp
+print*, 'l', l, 'ldlwp', ldlwp
+      call advance_to_locator(nout,l,ldlwp)
+print*, 'l', l, 'ldlwp', ldlwp
       do i=1,ntrp
          call typen(l,nout,1)
          l=l+1
       enddo
 
       !--dlwp block
-      l=dlwp
+print*, 'l', l, 'dlwp', dlwp
+      call advance_to_locator(nout,l,dlwp)
+print*, 'l', l, 'dlwp', dlwp
       do i=1,ntrp
          lnw=1
          do while (lnw.ne.0)
@@ -13694,34 +13755,36 @@ contains
       enddo
 
       !--yp block
-        l=yp
-        nyp=nint(xss(l))
-        call typen(l,nout,1)
-        l=l+1
-        do i=1,nyp
-           call typen(l,nout,1)
-           l=l+1
-        enddo
-     endif
+print*, 'l', l, 'yp', yp
+      call advance_to_locator(nout,l,yp)
+print*, 'l', l, 'yp', yp
+      nyp=nint(xss(l))
+      call typen(l,nout,1)
+      l=l+1
+      do i=1,nyp
+         call typen(l,nout,1)
+         l=l+1
+      enddo
+   endif
 
    !--particle production blocks
-     if (ntype.gt.0) then
+   if (ntype.gt.0) then
 
       !--ptype, ntro, and ixs arrays
-        do i=1,ntype
-           call typen(l,nout,1)
-           l=l+1
-        enddo
-        ntro=l
-        do i=1,ntype
-           call typen(l,nout,1)
-           l=l+1
-        enddo
-        nw=10*ntype
-        do i=1,nw
-           call typen(l,nout,1)
-           l=l+1
-        enddo
+      do i=1,ntype
+         call typen(l,nout,1)
+         l=l+1
+      enddo
+      ntro=l
+      do i=1,ntype
+         call typen(l,nout,1)
+         l=l+1
+      enddo
+      nw=10*ntype
+      do i=1,nw
+         call typen(l,nout,1)
+         l=l+1
+      enddo
 
       !--loop over particle types
       do i=1,ntype
