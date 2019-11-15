@@ -97,7 +97,7 @@ contains
    use util   ! provides openz,mess,closz
    use endf   ! provides endf routines and variables
    ! externals
-   integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp,ismooth
+   integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp,ismooth,i
    integer::mcnpx
    real(kr)::suff
    character(70)::hk
@@ -112,6 +112,40 @@ contains
    nxsd=0
    jxsd=0
    xss=0
+
+   esz=0
+   nu=0
+   mtr=0
+   lqr=0
+   tyr=0
+   lsig=0
+   sig=0
+   land=0
+   and=0
+   ldlw=0
+   dlw=0
+   gpd=0
+   mtrp=0
+   lsigp=0
+   sigp=0
+   landp=0
+   andp=0
+   ldlwp=0
+   dlwp=0
+   yp=0
+   fis=0
+   end=0
+   iurpt=0
+   nud=0
+   dndat=0
+   ldnd=0
+   dnd=0
+   do i=1,2
+      jxsd(i)=0
+   enddo
+   ptype=0
+   ntro=0
+   ploct=0
 
    !--assign input units
    call openz(nendf,0)
@@ -12766,7 +12800,11 @@ contains
 
    subroutine advance_to_locator(nout,l,locator)
    !-------------------------------------------------------------------
-   ! Advance to the next locator position
+   ! Advance to the next locator position from the current position l.
+   ! If the current position is not equal to the locator position, the
+   ! function will advance l until it is equal to the locator position.
+   ! It will write the values in the xss array while advancing to the
+   ! new position. 
    !-------------------------------------------------------------------
    ! externals
    integer::nout,l,locator
@@ -12778,6 +12816,70 @@ contains
 
    return
    end subroutine advance_to_locator
+
+   subroutine write_integer(nout,l)
+   !-------------------------------------------------------------------
+   ! Write an integer value at the position l, and advance l to the
+   ! next position
+   !-------------------------------------------------------------------
+   ! externals
+   integer::nout,l
+
+   call typen(l,nout,1)
+   l=l+1
+
+   return
+   end subroutine write_integer
+
+   subroutine write_real(nout,l)
+   !-------------------------------------------------------------------
+   ! Write a real value at the position l, and advance l to the
+   ! next position
+   !-------------------------------------------------------------------
+   ! externals
+   integer::nout,l
+
+   call typen(l,nout,2)
+   l=l+1
+
+   return
+   end subroutine write_real
+
+   subroutine write_integer_list(nout,l,n)
+   !-------------------------------------------------------------------
+   ! Write n integer values from position l, and advance l to the
+   ! next position
+   !-------------------------------------------------------------------
+   ! externals
+   integer::nout,l,n
+   ! internals
+   integer::i
+
+   do i=1,n
+      call typen(l,nout,1)
+      l=l+1
+   enddo
+
+   return
+   end subroutine write_integer_list
+
+   subroutine write_real_list(nout,l,n)
+   !-------------------------------------------------------------------
+   ! Write n real values from position l, and advance l to the
+   ! next position
+   !-------------------------------------------------------------------
+   ! externals
+   integer::nout,l,n
+   ! internals
+   integer::i
+
+   do i=1,n
+      call typen(l,nout,2)
+      l=l+1
+   enddo
+
+   return
+   end subroutine write_real_list
 
    subroutine change(nout)
    !-------------------------------------------------------------------
@@ -12796,15 +12898,13 @@ contains
    integer::ly,lnw,law,net,nmu,kk,nep,nure,nurb,mftype
    integer::nyp,ntro,jj,ir,nyh,li,ii,ntrh
 
-   !--write or convert esz block
+   ! initialise starting position
    l=1
-   n=5*nes
-   do i=1,n
-      call typen(l,nout,2)
-      l=l+1
-   enddo
 
-   !--nu block
+   !--write esz block
+   call write_real_list(nout,l,5*nes)
+
+   !--write nu block
    if (nu.ne.0) then
 print*, 'l', l, 'nu', nu
       call advance_to_locator(nout,l,nu)
@@ -12814,40 +12914,24 @@ print*, 'l', l, 'nu', nu
         m=1
       else
         m=2
-        call typen(l,nout,1)
-        l=l+1
+        call write_integer(nout,l)
       endif
       do i=1,m
          lnu=nint(xss(l))
-         call typen(l,nout,1)
-         l=l+1
+         call write_integer(nout,l)
          if (lnu.ne.2) then
             nc=nint(xss(l))
-            call typen(l,nout,1)
-            l=l+1
-            do j=1,nc
-               call typen(l,nout,2)
-               l=l+1
-            enddo
+            call write_integer(nout,l)
+            call write_real_list(nout,l,nc)
          else
             nrr=nint(xss(l))
-            call typen(l,nout,1)
-            l=l+1
+            call write_integer(nout,l)
             if (nrr.ne.0) then
-               n=2*nrr
-               do j=1,n
-                  call typen(l,nout,1)
-                  l=l+1
-               enddo
+               call write_integer_list(nout,l,2*nrr)
             endif
             ne=nint(xss(l))
-            call typen(l,nout,1)
-            l=l+1
-            n=2*ne
-            do j=1,n
-               call typen(l,nout,2)
-               l=l+1
-            enddo
+            call write_integer(nout,l)
+            call write_real_list(nout,l,2*ne)
          endif
       enddo
    endif
@@ -12859,53 +12943,35 @@ print*, 'l', l, 'nu', nu
 print*, 'l', l, 'mtr', mtr
       call advance_to_locator(nout,l,mtr)
 print*, 'l', l, 'mtr', mtr
-      do i=1,ntr
-         call typen(l,nout,1)
-         l=l+1
-      enddo
+      call write_integer_list(nout,l,ntr)
 
       !--lqr block
 print*, 'l', l, 'lqr', lqr
       call advance_to_locator(nout,l,lqr)
 print*, 'l', l, 'lqr', lqr
-      do i=1,ntr
-         call typen(l,nout,2)
-         l=l+1
-      enddo
+      call write_real_list(nout,l,ntr)
 
       !--tyr block
 print*, 'l', l, 'tyr', tyr
       call advance_to_locator(nout,l,tyr)
 print*, 'l', l, 'tyr', tyr
-      l=tyr
-      do i=1,ntr
-         call typen(l,nout,1)
-         l=l+1
-      enddo
+      call write_integer_list(nout,l,ntr)
 
       !--lsig block
 print*, 'l', l, 'lsig', lsig
       call advance_to_locator(nout,l,lsig)
 print*, 'l', l, 'lsig', lsig
-      do i=1,ntr
-         call typen(l,nout,1)
-         l=l+1
-      enddo
+      call write_integer_list(nout,l,ntr)
 
       !--sig block
 print*, 'l', l, 'sig', sig
       call advance_to_locator(nout,l,sig)
 print*, 'l', l, 'sig', sig
       do i=1,ntr
-         call typen(l,nout,1)
-         l=l+1
+         call write_integer(nout,l)
          ne=nint(xss(l))
-         call typen(l,nout,1)
-         l=l+1
-         do j=1,ne
-            call typen(l,nout,2)
-            l=l+1
-         enddo
+         call write_integer(nout,l)
+         call write_real_list(nout,l,ne)
       enddo
    endif
 
