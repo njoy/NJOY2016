@@ -12792,7 +12792,7 @@ contains
    ! externals
    integer::nout
    ! internals
-   integer::n,i,l,lnu,m,nc,j,nrr,ne,nn,ll,k,np,nw,rlocator,slocator
+   integer::n,i,l,lnu,m,nc,j,nrr,ne,nn,ll,k,np,nw,locator
    integer::ly,lnw,law,net,nmu,kk,nep,nure,nurb,mftype
    integer::nyp,ntro,jj,ir,nyh,li,ii,ntrh
 
@@ -12984,54 +12984,59 @@ print*, 'l', l, 'dlw', dlw
       do i=1,nr
          ly=nint(xss(tyr+i-1))
          ly=iabs(ly)
-         if (ly.gt.100) then
-            l=ly-100+dlw-1  ! call advance_to_locator?
+         if (ly.gt.100) then                           ! energy dependent yield
+print*, 'l', l, 'dlw+ly-101', dlw+ly-101
+            call advance_to_locator(nout,l,dlw+ly-101) ! dlw=jed=jxs(11)
+print*, 'l', l, 'dlw+ly-101', dlw+ly-101
             nrr=nint(xss(l))
-            call typen(l,nout,1)
+            call typen(l,nout,1)                       ! NR
             l=l+1
             if (nrr.gt.0) then
                n=2*nrr
-               do j=1,n
+               do j=1,n                                ! NBT and INT (each NR values)
                   call typen(l,nout,1)
                   l=l+1
                enddo
             endif
             ne=nint(xss(l))
-            call typen(l,nout,1)
+            call typen(l,nout,1)                       ! NE
             l=l+1
             n=2*ne
-            do j=1,n
+            do j=1,n                                   ! E and Y (each NE values)
                call typen(l,nout,2)
                l=l+1
             enddo
          endif
 
          !--loop over laws
+print*, 'l', l, 'dlw+nint(xss(ldlw+i-1)-1)', dlw+nint(xss(ldlw+i-1)-1)
+         call advance_to_locator(nout,l,dlw+nint(xss(ldlw+i-1))-1) ! dlw=jed=jxs(11)
+print*, 'l', l, 'dlw+nint(xss(ldlw+i-1)-1)', dlw+nint(xss(ldlw+i-1)-1)
          lnw=1
          do while (lnw.gt.0)
             lnw=nint(xss(l))
-            call typen(l,nout,1)
+            call typen(l,nout,1)                       ! LNW
             l=l+1
             law=nint(xss(l))
-            call typen(l,nout,1)
+            call typen(l,nout,1)                       ! LAW
             l=l+1
-            call typen(l,nout,1)
+            call typen(l,nout,1)                       ! IDAT
             l=l+1
             nrr=nint(xss(l))
-            call typen(l,nout,1)
+            call typen(l,nout,1)                       ! NR
             l=l+1
             if (nrr.gt.0) then
                n=2*nrr
-               do j=1,n
+               do j=1,n                                ! NBT and INT (NR values)
                   call typen(l,nout,1)
                   l=l+1
                enddo
             endif
             ne=nint(xss(l))
-            call typen(l,nout,1)
+            call typen(l,nout,1)                       ! NE
             l=l+1
             n=2*ne
-            do j=1,n
+            do j=1,n                                   ! E and P (each NE values)
                call typen(l,nout,2)
                l=l+1
             enddo
@@ -13203,44 +13208,42 @@ print*, 'l', l, 'dlw', dlw
             !--law 44
             else if (law.eq.44) then
                nrr=nint(xss(l))
-               call typen(l,nout,1)
+               call typen(l,nout,1)                       ! NR
                l=l+1
                if (nrr.gt.0) then
                   n=2*nrr
-                  do j=1,n
+                  do j=1,n                                ! NBT and INT (NR values)
                      call typen(l,nout,1)
                      l=l+1
                   enddo
                endif
                ne=nint(xss(l))
-               call typen(l,nout,1)
+               call typen(l,nout,1)                       ! NE
                l=l+1
-               do j=1,ne ! the incident energy values
+               do j=1,ne                                  ! Ein (NE values)
                   call typen(l,nout,2)
                   l=l+1
                enddo
-               slocator=l ! index for the location of the secondary distribution
-               do j=1,ne  ! the locators for the secondary distributions
+               locator=l
+               do j=1,ne ! L (NE values), sec. energy distribution locations
                   call typen(l,nout,1)
                   l=l+1
                enddo
                do j=1,ne
-                  call typen(l,nout,1) ! interpolation flag INTT
+print*, 'l', l, 'dlw+nint(xss(locator))-1', dlw+nint(xss(locator))-1
+                  call advance_to_locator(nout,l,dlw+nint(xss(locator))-1) ! dlw=jed=jxs(11)
+print*, 'l', l, 'dlw+nint(xss(locator))-1', dlw+nint(xss(locator))-1
+                  call typen(l,nout,1)                    ! INTT
                   l=l+1
                   np=nint(xss(l))
-                  call typen(l,nout,1) ! number of energy points
+                  call typen(l,nout,1)                    ! NP
                   l=l+1
-                  if (j.ne.ne) then
-                    ! remaining number of points up to the next locator
-                    n=nint(xss(slocator+1))-nint(xss(slocator))-2
-                  else
-                    n=5*np
-                  endif
-                  do k=1,n ! secondary energy, pdf, cdf, r, a
+                  n=5*np
+                  do k=1,n ! Eout, PDF, CDF, R, A (each NE values)
                      call typen(l,nout,2)
                      l=l+1
                   enddo
-                  slocator=slocator+1
+                  locator=locator+1
                enddo
 
             !--law 61
@@ -14785,38 +14788,33 @@ print*, 'l', l, 'yp', yp
                      endif
                   enddo
                   if (n2big.gt.0) then
-print*, e, n2big, epmax, intt
                      write(nsyso,'(''   consis:'',&
                        &'' shifting eprimes greater than epmax'',&
                        &'' and renorming the distribution'')')
-if (mt.eq.5) print*, xss(loci)
-do j=nn-n2big,nn
-  if (mt.eq.5) print*, j, xss(j+loci), xss(j+nn+loci), xss(j+2*nn+loci)
-enddo
-                     nnew=nn-n2big+1
-                     xss(loci)=nnew
-                     xss(loci+nnew)=sigfig(epmax,7,-1)
-                     if (intt.eq.1) then
+                     ishift=n2big-1
+                     nnew=nn-ishift
+                     xss(loci)=nnew                    ! NE
+                     xss(loci+nnew)=sigfig(epmax,7,-1) ! last secondary energy
+                     if (intt.eq.1) then               ! histogram
                        p=(1.0-xss(loci+nnew-1+2*nn))&
                          /(xss(loci+nnew)-xss(loci+nnew-1))
-                       xss(loci+nnew-1+nn)=p
-                       xss(loci+nnew+nn)=p
-                     else
+                       xss(loci+nnew-1+nn)=p           ! pdf, second last energy
+                       xss(loci+nnew+nn)=p             ! pdf, last energy
+                     else                              ! linear
                        p=2.0*(1.0-xss(loci+nnew-1+2*nn))&
                              /(xss(loci+nnew)-xss(loci+nnew-1))&
                          -xss(loci+nnew-1+nn)
-                       xss(loci+nnew+nn)=p
+                       xss(loci+nnew+nn)=p             ! pdf, last energy
                      endif
-                     xss(loci+nnew+2*nn)=1.0
-                     do j=nnew+1,nn
-                       xss(loci+j)=0.0      ! Eprime
-                       xss(loci+j+nn)=0.0   ! pdf
-                       xss(loci+j+2*nn)=1.0 ! cdf
-                       xss(loci+j+3*nn)=0.0 ! precompound fraction
-                       xss(loci+j+4*nn)=0.0 ! slope
+                     xss(loci+nnew+2*nn)=1.0           ! cdf, last energy
+                     do j=nnew+1,nn                    ! expunge points above
+                       xss(loci+j)=0.0                 ! Eprime
+                       xss(loci+j+nn)=0.0              ! pdf
+                       xss(loci+j+2*nn)=0.0            ! cdf
+                       xss(loci+j+3*nn)=0.0            ! precompound fraction
+                       xss(loci+j+4*nn)=0.0            ! slope
                      enddo
-                     if (nnew.ne.nn) then
-                       ishift=n2big-1
+                     if (nnew.ne.nn) then              ! move values if required
                        do i=1,4
                          do j=i*nnew+1,5*nn
                            xss(loci+j)=xss(loci+j+ishift)
@@ -14826,10 +14824,6 @@ enddo
                          xss(loci+j)=0.0
                        enddo
                      endif
-if (mt.eq.5) print*, xss(loci)
-do j=nn-n2big,nn
-  if (mt.eq.5) print*, j, xss(j+loci), xss(j+nn+loci), xss(j+2*nn+loci)
-enddo
                   endif
                enddo
 
