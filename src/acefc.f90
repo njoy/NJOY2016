@@ -53,7 +53,7 @@ module acefc
    ! File 6 parameters
    integer::ipnu,jpnu,nkk
    real(kr),allocatable,dimension(:)::e1456,p1456nu
-   real(kr),allocatable,dimension(:)::p16456nu,p6456nu
+   !real(kr),allocatable,dimension(:)::p16456nu,p6456nu
    integer::nsix,n16
 
    ! particle production information (from common/ace8/)
@@ -209,7 +209,7 @@ contains
    call atend(mscr,0)
 
    !--load ace data into memory.
-   call acelod(mscr,nedis,suff,matd,tempd,newfor,mcnpx,ismooth)
+   call acelod(mscr,suff,matd,tempd,newfor,mcnpx,ismooth)
 
    !--print ace file.
    if (iprint.gt.0) call aceprt(hk)
@@ -356,6 +356,7 @@ contains
    mfs(nxc)=1
    mts(nxc)=451
    ! save number of card images for descriptive data only for mt=451
+   ncds=0
    if (npend.gt.0) ncds=nwd+2
    if (npend.lt.0) ncds=nwd/17+2
    ncs(nxc)=ncds
@@ -816,8 +817,8 @@ contains
    integer,parameter::maxscr=2000
    real(kr),parameter::xmax=2.e7_kr
    real(kr),parameter::errlim=1.e-5_kr
-   real(kr),parameter::stpmax=1.25e0_kr
-   integer,parameter::nc=4
+   !real(kr),parameter::stpmax=1.25e0_kr
+   !integer,parameter::nc=4
 
    !--initialize
    if (allocated(scr)) deallocate(scr)
@@ -1082,6 +1083,8 @@ contains
    !--initialize
    inew=iabs(inew)
    nscr=iabs(nscr)
+   e1=zero
+   e2=zero
    if (nin.lt.0) nscr=-nscr
    call openz(-inew,1)
    call openz(-iold,1)
@@ -1937,7 +1940,7 @@ contains
    character(60)::string
    real(kr)::dzap,test,zap,e1,e2,f,ei,ep,epn,ss,ff,dmu
    real(kr)::b(50)
-   real(kr)::y,enext
+   !real(kr)::y,enext
    real(kr),dimension(:),allocatable::tab1
    real(kr),dimension(:),allocatable::scr
    integer,parameter::nwmaxn=65000
@@ -1962,6 +1965,8 @@ contains
    nsc=1
    npt=mcoars+1
    nwmax=nwmaxn
+   intep=0
+   ne1=0
    call ptinit
    allocate(scr(nwmax))
    write(nsyso,'(/)')
@@ -2642,6 +2647,7 @@ contains
 
    !--work with list record read in topfil
    nord=n1h
+   fl=0
    do j=1,nord
       fl(j)=scr(6+j)
    enddo
@@ -2852,6 +2858,9 @@ contains
    real(kr)::x(imax),y(imax)
    real(kr),parameter::err=0.01e0_kr
 
+   ! initialise
+   jn=0
+
    !--work with tab1 or list record read in topfil
    if (mfh.eq.6) then
       nr=1
@@ -2963,6 +2972,12 @@ contains
    ! set area of back angles to be omitted from distribution
    real(kr),parameter::aback=1.e-4_kr
    real(kr),parameter::zero=0
+
+   ! initialise
+   intmu=0
+   nmu=0
+   nw=0
+   slpe=0
 
    !--work on tab1 record read (or constructed) by topfil
    t=a(1)
@@ -3334,6 +3349,9 @@ contains
    real(kr)::p(65)
    real(kr),parameter::zero=0
 
+   ! initialise
+   acos=0
+
    !--start the conversion process
    ndebug=nsyso
    ndebug=0
@@ -3580,6 +3598,8 @@ contains
    call tpidio(nf12c,0,0,scr,nb,nw)
    i16=0
    ntape=0
+   nsave=0
+   nk=0
    l=1
    if (mf1x(1).eq.0.and.iopp.ne.0) write(nsyso,&
      '(/'' message from gamsum---file 12 not found.'')')
@@ -3613,7 +3633,11 @@ contains
    else
       call gety1(e,enxt,jdis,x,nf12c,scr)
    endif
+   jscr2=0
    idone=0
+   jw=0
+   k=0
+   kk=0
    do while (idone.eq.0)
       call gety2(e,thresh,idis,y,nin,scr(jscr))
       if (iopp.ne.0) then
@@ -3845,7 +3869,7 @@ contains
    real(kr),dimension(:),allocatable::scr
    character(4)::blank='    '
    real(kr),parameter::etop=1.e10_kr
-   real(kr),parameter::emax=2.e7_kr
+   !real(kr),parameter::emax=2.e7_kr
    real(kr),parameter::zero=0
 
    !--set up size and storage, and assign i/o units
@@ -4502,7 +4526,7 @@ contains
    real(kr),dimension(:),allocatable::egn,egg
    real(kr),dimension(:),allocatable::ee,eb
    real(kr),dimension(:),allocatable::sig
-   integer,parameter::maxsig=10000
+   !integer,parameter::maxsig=10000
    real(kr),parameter::elo=1.e-5_kr
    real(kr),parameter::ehi=2.e7_kr
    real(kr),parameter::zero=0
@@ -4520,6 +4544,10 @@ contains
    allocate(scr(nwamax))
    nsmax=5000
    allocate(sig(nsmax))
+
+   ! initialise
+   ngg=0
+   nggp1=0
 
    !--write the isotropic mf14/mt1 for the multigroup photons
    if (nin.ne.0) then
@@ -4819,7 +4847,7 @@ contains
    return
    end subroutine gamout
 
-   subroutine acelod(nin,nedis,suff,matd,tempd,newfor,mcnpx,ismooth)
+   subroutine acelod(nin,suff,matd,tempd,newfor,mcnpx,ismooth)
    !-------------------------------------------------------------------
    ! Load data in ace format from the input file.
    !-------------------------------------------------------------------
@@ -4828,7 +4856,7 @@ contains
    use util ! repoz,dater,error,skiprz,sigfig
    use endf ! provides endf routines and variables
    ! externals
-   integer::nin,nedis,matd,newfor,mcnpx,ismooth
+   integer::nin,matd,newfor,mcnpx,ismooth
    real(kr)::suff,tempd
    ! internals
    integer::nwscr,nnu,nnup,kfis,mtnr,mtntr,i,nnud,nnf
@@ -4854,6 +4882,8 @@ contains
    real(kr),parameter::zero=0
 
    !--initialize
+   inow=0
+   nnex=0
    nwscr=10000
    allocate(scr(nwscr))
    do i=1,8
@@ -5297,6 +5327,7 @@ contains
    ir=0
 
    !--read and store cross sections producing incident particle
+   iskip=-1
    mt=-1
    do while (mt.lt.mtnr)
       call contio(nin,0,0,scr,nb,nw)
@@ -5790,7 +5821,7 @@ contains
 
                !--store neutron angular distributions
                if (izai.eq.1) then
-                  call acensd(ir,next,scr,nin,awp,ltt3,lttn,&
+                  call acensd(ir,next,scr,nin,ltt3,lttn,&
                     ltt,last,law,ne,ie,il,iso,newfor)
 
                !--treat charged-particle elastic
@@ -6212,7 +6243,7 @@ contains
    return
    end subroutine acelod
 
-   subroutine acensd(ir,next,scr,nin,awp,ltt3,lttn,ltt,last,law,&
+   subroutine acensd(ir,next,scr,nin,ltt3,lttn,ltt,last,law,&
       ne,ie,il,iso,newfor)
    !-------------------------------------------------------------------
    ! Process this neutron scattering distribution.
@@ -6224,7 +6255,6 @@ contains
    ! externals
    integer::ir,next,nin,ltt3,lttn,ltt,last,law,ne,ie,il,iso,newfor
    real(kr)::scr(*)
-   real(kr)::awp
    ! internals
    integer::idone,j,nb,nw,lang,iint,nn,kk,nmu,m,n,i,ne1,ii,ll
    real(kr)::sum,renorm
@@ -6233,6 +6263,7 @@ contains
 
    idone=0
    ne1=0
+   nmu=0
    do while (idone.eq.0)
       do j=1,ne
          if (newfor.eq.0) then
@@ -6971,12 +7002,12 @@ contains
    integer::ki,iso,ik3,ii1,ia,ll,intmu,nmu,imu,mus,npep,intep
    integer::last,nx,ix
    integer::jp,jpn,jpp
-   integer::nxyz1,nxyz2,nxyz3,nxyz4
+   !integer::nxyz1,nxyz2,nxyz3,nxyz4
    real(kr)::test,eemx,yield,xnext,xx,yy,y,xn,eyl,gyl,en
    real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee
    real(kr)::ep,e,bzro,sfe,sfo,bbi,fbarcm,delfcm,akal,rkal
    real(kr)::emu1,emu2,fbl,ffl,fbcm,ffcm,akak,del,av,renorm
-   real(kr)::zap,aa,test1,test2,test3,ex,fx,cx,cxx,val,dx
+   real(kr)::zap,aa,test1,test2,test3,ex,fx,cx,cxx,val
    real(kr)::e1,p1,e2,p2
    integer::loc(5)
    character(60)::strng
@@ -6984,8 +7015,8 @@ contains
    integer,parameter::nwscr=18000
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::small=1.e-30_kr
-   real(kr),parameter::eps=.001e0_kr
-   real(kr),parameter::tmin=1.e-6_kr
+   !real(kr),parameter::eps=.001e0_kr
+   !real(kr),parameter::tmin=1.e-6_kr
    real(kr),parameter::etop=1.e10_kr
    real(kr),parameter::up=1.00001e0_kr
    real(kr),parameter::elow=1.e-5_kr
@@ -7010,6 +7041,11 @@ contains
    ik=0
    idone=0
    ikk=0
+   m=0
+   igyl=0
+   yield=0
+   last=0
+   nexd=0
    do while (idone.eq.0)
       ikk=ikk+1
       call tab1io(nin,0,0,scr(jscr),nb,nw)
@@ -7820,6 +7856,9 @@ contains
    real(kr),parameter::umin=.96e0_kr
    real(kr),parameter::zero=0
 
+   ! initialise
+   test=0
+
    !--adaptive reconstruction of angular distribution
    ii=0
    ! prime the adaptive stack
@@ -8025,7 +8064,7 @@ contains
    integer::next,matd,ngmt,nin
    ! internals
    integer::nesp,nex,j,nwords,kgmt,mfd,mtd,mtdnc,nb,nw
-   integer::nk,mto,ik,ifini,jscr,idone,lf,lp,m,n,nn,nnn,jnt,i
+   integer::nk,mto,ik,ifini,jscr,idone,lf,lp,m,n,nn,jnt,i
    integer::ie,je,jn,jfirst,jlast,nlast,law,lff,li,ni,ii,mmm
    integer::ne,lc,imu,nexl,nc,ic,nexd,k,lep,nd,na,ncyc,ki
    integer::nyp,mtl,loct,nd0,mtdold
@@ -8055,6 +8094,7 @@ contains
    allocate(scr(nwscr))
    allocate(dise(ndise))
    dise=zero
+   nexd=0
 
    !--loop over photon production reactions
    kgmt=0
@@ -8984,6 +9024,20 @@ contains
    !--allocate scratch storage
    allocate(scr(nwscr))
 
+   ! initialise
+   aprime=0
+   chkl=0
+   suml=0
+   iaa=0
+   k=0
+   lld=0
+   lle=0
+   ne=0
+   pp1l=0
+   pp2l=0
+   q=0
+   ubar=0
+
    iza=nint(za)
    emc2=amassn*amu*clight*clight/ev/emev
 
@@ -9024,6 +9078,8 @@ contains
    endif
 
    !--count up productions
+   ip=0
+   thresh=0
    ntro=ptype+ntype
    ploct=ntro+ntype
    do i=1,ntype
@@ -12007,6 +12063,7 @@ contains
    enddo
 
    !--print energy-dependent photon production yields
+   kl=0
    if (nindx.ne.0) then
       if (ipy.gt.0) write(nsyso,'(''1''/&
         &'' photon production yields''/&
@@ -12804,7 +12861,7 @@ contains
    ! If the current position is not equal to the locator position, the
    ! function will advance l until it is equal to the locator position.
    ! It will write the values in the xss array while advancing to the
-   ! new position. 
+   ! new position.
    !-------------------------------------------------------------------
    ! externals
    integer::nout,l,locator
@@ -12830,20 +12887,6 @@ contains
 
    return
    end subroutine write_integer
-
-   subroutine write_real(nout,l)
-   !-------------------------------------------------------------------
-   ! Write a real value at the position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l
-
-   call typen(l,nout,2)
-   l=l+1
-
-   return
-   end subroutine write_real
 
    subroutine write_integer_list(nout,l,n)
    !-------------------------------------------------------------------
@@ -15390,6 +15433,14 @@ print*, 'l', l, 'yp', yp
    ipcol=2
    iwcol=3
 
+   ! iniatialise
+   k=0
+   kf=0
+   kc=0
+   iif=0
+   iic=0
+   mtl=0
+
    !--start the viewr input text
    call openz(nout,1)
    write(nout,'(''1 2 .30'',i3,''/'')') ipcol
@@ -16966,6 +17017,7 @@ print*, 'l', l, 'yp', yp
    real(kr),parameter::zero=0
    integer,parameter::nden=4000
    mtlast=0
+   mtl=0
    ilev=0
 
    !--loop over the inelastic levels
@@ -17343,6 +17395,9 @@ print*, 'l', l, 'yp', yp
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
 
+   ! initialise
+   it=0
+
    !--loop over angular distributions
    nr1=nr+1
    do nn=1,nr1
@@ -17551,11 +17606,11 @@ print*, 'l', l, 'yp', yp
    integer::l,j,kf,n,i,ne,major,minor,it,nr1
    character(1)::qu=''''
    real(kr),parameter::big=1.0e10_kr
-   real(kr),parameter::small=1.e-12_kr
-   real(kr),parameter::ten=10.e0_kr
+   !real(kr),parameter::small=1.e-12_kr
+   !real(kr),parameter::ten=10.e0_kr
    real(kr),parameter::step=1.2e0_kr
-   real(kr),parameter::zero=0
-   real(kr),parameter::one=1.e0_kr
+   !real(kr),parameter::zero=0
+   !real(kr),parameter::one=1.e0_kr
 
    !--set up the page for the total nubar curve
    xmin=big
@@ -18128,8 +18183,8 @@ print*, 'l', l, 'yp', yp
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,x,y,decay,frac,xtag,ytag
    character(1)::qu=''''
    real(kr),parameter::big=1.0e10_kr
-   real(kr),parameter::small=1.e-12_kr
-   real(kr),parameter::ten=10.e0_kr
+   !real(kr),parameter::small=1.e-12_kr
+   !real(kr),parameter::ten=10.e0_kr
    real(kr),parameter::step=1.2e0_kr
    real(kr),parameter::scale=1.e2_kr
    real(kr),parameter::zero=0
@@ -18339,6 +18394,8 @@ print*, 'l', l, 'yp', yp
    enddo
    egmth=0
    egm14=0
+   s=0
+   iimax=0
 
    !--loop over reactions
    if (ntrp.ne.0) then
@@ -19595,6 +19652,7 @@ print*, 'l', l, 'yp', yp
    real(kr),parameter::one=1
 
    !--initialize
+   inow=0
    if (ep.lt.zero) then
       intmu=nint(a7(loci))
       nmu=nint(a7(loci+1))
