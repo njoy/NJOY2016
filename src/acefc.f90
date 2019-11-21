@@ -9121,7 +9121,7 @@ contains
       do while (xss(esz+it-1).lt.thresh*(1-delt))
          it=it+1
       enddo
-      hpd=next
+      hpd=next                            ! ixs values are being set
       xss(ploct+10*(itype-1))=hpd
       xss(hpd)=it
       xss(hpd+1)=nes-it+1
@@ -9134,7 +9134,7 @@ contains
       sigh=lsigh+ntrh
       xss(ploct+10*(itype-1)+4)=sigh
       next=sigh
-      do ie=it,nes
+      do ie=it,nes                        ! initialise xs and heating to 0.0
          xss(hpd+2+ie-it)=0
          xss(hpd+2+(nes-it+1)+ie-it)=0
       enddo
@@ -9951,7 +9951,7 @@ contains
                xss(next+5)=1
                next=next+2+2*2
                xss(last+2)=next-dlwh+1
-               xss(next)=0
+               xss(next)=0     ! q is zero for mt102
                xss(next+1)=awi/(awr+awi)
                next=next+2
                ! add in contribution to heating
@@ -12956,10 +12956,12 @@ if (l.lt.locator) print*, 'gap found!'
    ! internals
    integer::n,i,l,lnu,m,nc,j,nrr,ne,nn,ll,k,np,nw
    integer::ly,lnw,law,net,nmu,kk,nep,nure,nurb,mftype
-   integer::nyp,ntro,jj,ir,nyh,li,ii,ntrh
+   integer::nyp,jj,ir,nyh,li,ii,ntrh
+   integer::hpd, mtrh, tyrh, lsigh, sigh, landh, andh, ldlwh, dlwh, yh ! IXS
    integer::rlocator  ! locator index for reaction data
    integer::ielocator ! locator index for incident energy data
    integer::oelocator ! locator index for outgoing energy data
+   integer::plocator  ! locator index for the particle IXS array
 
    ! initialise starting position
    l=1
@@ -13307,6 +13309,9 @@ print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                ielocator=l
                call write_integer_list(nout,l,ne)     ! L (NE values)
                do j=1,ne
+print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
+                  call advance_to_locator(nout,l,dlw+nint(xss(ielocator))-1) ! dlw=jed=jxs(11)
+print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call write_integer(nout,l)          ! INTMU
                   nmu=nint(xss(l))
                   call write_integer(nout,l)          ! NMU
@@ -13314,6 +13319,9 @@ print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                   oelocator=l
                   call write_integer_list(nout,l,nmu) ! L (NMU values)
                   do k=1,nmu
+print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
+                     call advance_to_locator(nout,l,dlw+nint(xss(oelocator))-1) ! dlw=jed=jxs(11)
+print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                      call write_integer(nout,l)       ! INTEP
                      nep=nint(xss(l))
                      call write_integer(nout,l)       ! NPEP
@@ -13577,6 +13585,8 @@ print*, 'law', law
                call write_real(nout,l)               ! EG
 
             !--law 4 and law 44
+            ! this piece is NOT compatible with LAW=44 (need two additional
+            ! arrays for r and a), potential issue?
             else if (law.eq.4.or.law.eq.44) then
                nrr=nint(xss(l))
                call write_integer(nout,l)               ! NR
@@ -13615,330 +13625,311 @@ print*, 'l', l, 'yp', yp
    !--particle production blocks
    if (ntype.gt.0) then
 
-      !--ptype, ntro, and ixs arrays
-      do i=1,ntype
-         call typen(l,nout,1)
-         l=l+1
-      enddo
-      ntro=l
-      do i=1,ntype
-         call typen(l,nout,1)
-         l=l+1
-      enddo
-      nw=10*ntype
-      do i=1,nw
-         call typen(l,nout,1)
-         l=l+1
-      enddo
+      !--PTYPE
+print*, 'l', l, 'ptype', ptype
+      call advance_to_locator(nout,l,ptype)
+print*, 'l', l, 'ptype', ptype
+      call write_integer_list(nout,l,ntype)    ! IP (ntype values)
+
+      !--NTRO
+print*, 'l', l, 'ntro', ntro
+      call advance_to_locator(nout,l,ntro)
+print*, 'l', l, 'ntro', ntro
+      call write_integer_list(nout,l,ntype)    ! NP (ntype values)
+
+      !--IXS
+print*, 'l', l, 'ploct', ploct
+      call advance_to_locator(nout,l,ploct)
+print*, 'l', l, 'ploct', ploct
+      plocator=l
+      call write_integer_list(nout,l,10*ntype) ! IXS array (10 values) for each IP
 
       !--loop over particle types
       do i=1,ntype
 
+print*, 'particle', nint(xss(ptype+i-1))
+
+         ! IXS array entries
+         hpd=nint(xss(plocator))
+         mtrh=nint(xss(plocator+1))
+         tyrh=nint(xss(plocator+2))
+         lsigh=nint(xss(plocator+3))
+         sigh=nint(xss(plocator+4))
+         landh=nint(xss(plocator+5))
+         andh=nint(xss(plocator+6))
+         ldlwh=nint(xss(plocator+7))
+         dlwh=nint(xss(plocator+8))
+         yh=nint(xss(plocator+9))
+
          !--hpd block
-         call typen(l,nout,1)
-         l=l+1
+print*, 'l', l, 'hpd', hpd
+         call advance_to_locator(nout,l,hpd)
+print*, 'l', l, 'hpd', hpd
+         call write_integer(nout,l)              ! IE
          ne=nint(xss(l))
-         call typen(l,nout,1)
-         l=l+1
+         call write_integer(nout,l)              ! NE
          if (ne.ne.0) then
-            nw=2*ne
-            do j=1,nw
-               call typen(l,nout,2)
-               l=l+1
-            enddo
-            ntrh=nint(xss(ntro-1+i))
+            call write_real_list(nout,l,2*ne)    ! sigma, H (each NE values)
+
+            ntrh=nint(xss(ntro+i-1)) ! number of reactions for this particle type
 
             !--mtrh block
-            do k=1,ntrh
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+print*, 'l', l, 'mtrh', mtrh
+            call advance_to_locator(nout,l,mtrh)
+print*, 'l', l, 'mtrh', mtrh
+            call write_integer_list(nout,l,ntrh) ! MT (ntrh values)
 
             !--tyrh block
-            do k=1,ntrh
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+print*, 'l', l, 'tyrh', tyrh
+            call advance_to_locator(nout,l,tyrh)
+print*, 'l', l, 'tyrh', tyrh
+            call write_integer_list(nout,l,ntrh) ! TYR (ntrh values)
 
             !--lsigh block
-            do k=1,ntrh
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+print*, 'l', l, 'lsigh', lsigh
+            call advance_to_locator(nout,l,lsigh)
+print*, 'l', l, 'lsigh', lsigh
+            rlocator=l
+            call write_integer_list(nout,l,ntrh) ! L (ntrh values)
 
-            !--sigh block
+            !--sigh block - format equal to sigp block, only MFMULT=12 allowed
+print*, 'l', l, 'sigh', sigh
+            call advance_to_locator(nout,l,sigh)
+print*, 'l', l, 'sigh', sigh
             do j=1,ntrh
-               call typen(l,nout,1)
-               l=l+1
-               call typen(l,nout,1)
-               l=l+1
+print*, 'l', l, 'sigh+nint(xss(rlocator))-1', sigh+nint(xss(rlocator))-1
+               call advance_to_locator(nout,l,sigh+nint(xss(rlocator))-1)
+print*, 'l', l, 'sigh+nint(xss(rlocator))-1', sigh+nint(xss(rlocator))-1
+
+               call write_integer(nout,l)           ! MFTYPE=12 only
+               call write_integer(nout,l)           ! MTMULT
                nrr=nint(xss(l))
-               call typen(l,nout,1)
-               l=l+1
+               call write_integer(nout,l)           ! NR
                if (nrr.gt.0) then
-                  n=2*nrr
-                  do jj=1,n
-                     call typen(l,nout,1)
-                     l=l+1
-                  enddo
+                  call write_integer_list(nout,l,2*nrr) ! NBT, INT (each NR values)
                endif
                ne=nint(xss(l))
-               call typen(l,nout,1)
-               l=l+1
-               nw=2*ne
-               do k=1,nw
-                  call typen(l,nout,2)
-                  l=l+1
-               enddo
+               call write_integer(nout,l)           ! NE
+               call write_real_list(nout,l,2*ne)    ! E, Y (each NE values)
+               rlocator=rlocator+1
             enddo
 
             !--landh block
+print*, 'l', l, 'landh', landh
+            call advance_to_locator(nout,l,landh)
+print*, 'l', l, 'landh', landh
             li=l-1
-            do k=1,ntrh
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+            rlocator=l
+            call write_integer_list(nout,l,ntrh) ! L (ntrh values)
 
-            !--andh block
+            !--andh block - format equal to and block
+print*, 'l', l, 'andh', andh
+            call advance_to_locator(nout,l,andh)
+print*, 'l', l, 'andh', andh
             do ir=1,ntrh
-               nn=nint(xss(li+ir))
+               nn=nint(xss(rlocator))               ! relative locator position
                if (nn.gt.0) then
+print*, 'l', l, 'andh+nint(xss(rlocator))-1', andh+nn-1
+                  call advance_to_locator(nout,l,andh+nn-1)
+print*, 'l', l, 'andh+nint(xss(rlocator))-1', andh+nn-1
                   ne=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
+                  call write_integer(nout,l)                 ! NE
+                  call write_real_list(nout,l,ne)            ! E (NE values)
+                  ielocator=l
+                  call write_integer_list(nout,l,ne)         ! L (NE values)
                   do j=1,ne
-                     call typen(l,nout,2)
-                     l=l+1
-                  enddo
-                  ll=l-1
-                  do j=1,ne
-                     call typen(l,nout,1)
-                     l=l+1
-                  enddo
-                  do j=1,ne
-                     nn=nint(xss(ll+j))
-                     if (nn.gt.0) then
-                        do k=1,33
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                     else if (nn.lt.0) then
-                        call typen(l,nout,1)
-                        l=l+1
+                     nn=nint(xss(ielocator))                 ! relative locator position
+print*, 'l', l, 'andh+iabs(nint(xss(ielocator)))-1', andh+iabs(nn)-1
+                     call advance_to_locator(nout,l,andh+iabs(nn)-1)
+print*, 'l', l, 'andh+iabs(nint(xss(ielocator)))-1', andh+iabs(nn)-1
+                     if (nn.gt.0) then                    ! 32 equiprobable bins
+                        call write_real_list(nout,l,33)
+                     else if (nn.lt.0) then               ! tabulated angular
+                        call write_integer(nout,l)        ! JJ - interpolation flag
                         np=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
-                        nw=3*np
-                        do k=1,nw
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
+                        call write_integer(nout,l)        ! NP
+                        call write_real_list(nout,l,3*np) ! CS, PDF, CDF (each NP values)
                      endif
+                     ielocator=ielocator+1
                   enddo
                endif
+               rlocator=rlocator+1
             enddo
 
             !--ldlwh block
-            li=l-1
-            do k=1,ntrh
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+print*, 'l', l, 'ldlwh', ldlwh
+            call advance_to_locator(nout,l,ldlwh)
+print*, 'l', l, 'ldlwh', ldlwh
+            rlocator=l
+            call write_integer_list(nout,l,ntrh) ! L (ntrh values)
 
-            !--dlwh block
+            !--dlwh block - format equal to dlw block
+print*, 'l', l, 'dlwh', dlwh
+            call advance_to_locator(nout,l,dlwh)
+print*, 'l', l, 'dlwh', dlwh
             do ii=1,ntrh
-               nn=nint(xss(li+ii))
+               nn=nint(xss(rlocator))               ! relative locator position
                if (nn.gt.0) then
-                  call typen(l,nout,1)
-                  l=l+1
+print*, 'l', l, 'dlwh+nint(xss(rlocator))-1', dlwh+nn-1
+                  call advance_to_locator(nout,l,dlwh+nn-1)
+print*, 'l', l, 'dlwh+nint(xss(rlocator))-1', dlwh+nn-1
+                  call write_integer(nout,l)            ! LNW
                   law=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
-                  call typen(l,nout,1)
-                  l=l+1
+print*, 'law', law
+                  call write_integer(nout,l)            ! LAW
+                  call write_integer(nout,l)            ! IDAT
                   nrr=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
-                  if (nrr.ne.0) then
-                     nw=2*nrr
-                     do k=1,nw
-                        call typen(l,nout,1)
-                        l=l+1
-                     enddo
+                  call write_integer(nout,l)               ! NR
+                  if (nrr.gt.0) then
+                     call write_integer_list(nout,l,2*nrr) ! NBT, INT (each NR values)
                   endif
                   ne=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
-                  nw=2*ne
-                  do k=1,nw
-                     call typen(l,nout,2)
-                     l=l+1
-                  enddo
+                  call write_integer(nout,l)            ! NE
+                  call write_real_list(nout,l,2*ne)     ! E and P (each NE values)
+
+                  !--law 4
                   if (law.eq.4) then
                      nrr=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     ne=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     do k=1,ne
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                     do k=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                     enddo
-                     do k=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                        np=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
-                        nw=3*np
-                        do kk=1,nw
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                     enddo
-                  else if (law.eq.44) then
-                     nrr=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     ne=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     do k=1,ne
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                     do k=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                     enddo
-                     do j=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                        np=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
-                        nw=5*np
-                        do k=1,nw
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                     enddo
-                  else if (law.eq.33) then
-                     call typen(l,nout,2)
-                     l=l+1
-                     call typen(l,nout,2)
-                     l=l+1
-                  else if (law.eq.66) then
-                     call typen(l,nout,1)
-                     l=l+1
-                     call typen(l,nout,2)
-                     l=l+1
-                     call typen(l,nout,1)
-                     l=l+1
-                     nn=nint(xss(l))
-                     n=3*nn
-                     call typen(l,nout,1)
-                     l=l+1
-                     do k=1,n
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                  else if (law.eq.61) then
-                     nrr=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     if (nrr.ne.0) then
-                        n=2*nrr
-                        do j=1,n
-                           call typen(l,nout,1)
-                           l=l+1
-                        enddo
+                     call write_integer(nout,l)               ! NR
+                     if (nrr.gt.0) then
+                        call write_integer_list(nout,l,2*nrr) ! NBT, INT (each NR values)
                      endif
                      ne=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
+                     call write_integer(nout,l)            ! NE
+                     call write_real_list(nout,l,ne)       ! E (NE values)
+                     ielocator=l
+                     call write_integer_list(nout,l,ne)    ! L (NE values)
                      do j=1,ne
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                     do j=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                     enddo
-                     do j=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call write_integer(nout,l)         ! INTT
                         np=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
-                        n=3*np
-                        do k=1,n
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                        do k=1,np
-                           call typen(l,nout,1)
-                           l=l+1
-                        enddo
-                        do k=1,np
-                           call typen(l,nout,1)
-                           l=l+1
-                           nmu=nint(xss(l))
-                           call typen(l,nout,1)
-                           l=l+1
-                           nw=3*nmu
-                           do kk=1,nw
-                              call typen(l,nout,2)
-                              l=l+1
-                           enddo
-                        enddo
+                        call write_integer(nout,l)         ! NP
+                        call write_real_list(nout,l,3*np)  ! Eout, PDF, CDF (each NP values)
+                        ielocator=ielocator+1
                      enddo
-                  else if (law.eq.67) then
+
+                  !--law 44
+                  else if (law.eq.44) then
+                     nrr=nint(xss(l))
+                     call write_integer(nout,l)               ! NR
+                     if (nrr.gt.0) then
+                        call write_integer_list(nout,l,2*nrr) ! NBT, INT (each NR values)
+                     endif
+                     ne=nint(xss(l))
+                     call write_integer(nout,l)            ! NE
+                     call write_real_list(nout,l,ne)       ! E (NE values)
+                     ielocator=l
+                     call write_integer_list(nout,l,ne)    ! L (NE values)
                      do j=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call write_integer(nout,l)         ! INTT
+                        np=nint(xss(l))
+                        call write_integer(nout,l)         ! NP
+                        call write_real_list(nout,l,5*np)  ! Eout, PDF, CDF, R, A (each NP values)
+                        ielocator=ielocator+1
+                     enddo
+
+                  !--law 33
+                  else if (law.eq.33) then
+                     call write_real(nout,l)
+                     call write_real(nout,l)
+
+                  !--law 61
+                  else if (law.eq.61) then
+                     nrr=nint(xss(l))
+                     call write_integer(nout,l)               ! NR
+                     if (nrr.gt.0) then
+                        call write_integer_list(nout,l,2*nrr) ! NBT, INT (each NR values)
+                     endif
+                     ne=nint(xss(l))
+                     call write_integer(nout,l)            ! NE
+                     call write_real_list(nout,l,ne)       ! E (NE values)
+                     ielocator=l
+                     call write_integer_list(nout,l,ne)    ! L (NE values)
+                     do j=1,ne
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call write_integer(nout,l)         ! INTT
+                        np=nint(xss(l))
+                        call write_integer(nout,l)         ! NP
+                        call write_real_list(nout,l,3*np)  ! Eout, PDF, CDF (each NP values)
+                        oelocator=l
+                        call write_integer_list(nout,l,np) ! L (NP values)
+                        do k=1,np
+print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
+                           call advance_to_locator(nout,l,dlwh+nint(xss(oelocator))-1)
+print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
+                           call write_integer(nout,l)         ! JJ
+                           nmu=nint(xss(l))
+                           call write_integer(nout,l)         ! NMU
+                           call write_real_list(nout,l,3*nmu) ! Mu, PDF, CDF (each NMU values)
+                           oelocator=oelocator+1
+                        enddo
+                        ielocator=ielocator+1
+                     enddo
+
+                  !--law 66
+                  else if (law.eq.66) then
+                     call write_integer(nout,l)            ! NPSX
+                     call write_real(nout,l)               ! AP
+                     call write_integer(nout,l)            ! INTT
+                     np=nint(xss(l))
+                     call write_integer(nout,l)            ! NP
+                     call write_real_list(nout,l,3*np)     ! xi, PDF, CDF (each NP values)
+
+                  !--law 67
+                  else if (law.eq.67) then
+                     nrr=nint(xss(l))
+                     call write_integer(nout,l)               ! NR
+                     if (nrr.gt.0) then
+                        call write_integer_list(nout,l,2*nrr) ! NBT, INT (each NR values)
+                     endif
+                     ne=nint(xss(l))
+                     call write_integer(nout,l)             ! NE
+                     call write_real_list(nout,l,ne)        ! E (NE values)
+                     ielocator=l
+                     call write_integer_list(nout,l,ne)     ! L (NE values)
+                     do j=1,ne
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
+print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
+                        call write_integer(nout,l)          ! INTMU
                         nmu=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
+                        call write_integer(nout,l)          ! NMU
+                        call write_real_list(nout,l,ne)     ! MU (NMU values)
+                        oelocator=l
+                        call write_integer_list(nout,l,nmu) ! L (NMU values)
                         do k=1,nmu
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                        do k=1,nmu
-                           call typen(l,nout,1)
-                           l=l+1
-                        enddo
-                        do k=1,nmu
-                           call typen(l,nout,1)
-                           l=l+1
+print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
+                           call advance_to_locator(nout,l,dlwh+nint(xss(oelocator))-1)
+print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
+                           call write_integer(nout,l)       ! INTEP
                            nep=nint(xss(l))
-                           call typen(l,nout,1)
-                           l=l+1
-                           nn=3*nep
-                           do n=1,nn
-                              call typen(l,nout,2)
-                              l=l+1
-                           enddo
+                           call write_integer(nout,l)       ! NPEP
+                           call write_real_list(nout,l,3*nep) ! Eout, PDF, CDF (each NMU values)
+                           oelocator=oelocator+1
                         enddo
+                        ielocator=ielocator+1
                      enddo
                   endif
                endif
+               rlocator=rlocator+1
             enddo
 
-            !--yh block
+            !--yh block - similar to yp
+print*, 'l', l, 'yh', yh
+            call advance_to_locator(nout,l,yh)
+print*, 'l', l, 'yh', yh
             nyh=nint(xss(l))
-            call typen(l,nout,1)
-            l=l+1
-            do k=1,nyh
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+            call write_integer(nout,l)            ! NYP
+            call write_integer_list(nout,l,nyp)   ! MTY (NYP values)
          endif
+         plocator=plocator+10
       enddo
    endif
    call typen(0,nout,3)
