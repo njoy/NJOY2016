@@ -14259,6 +14259,7 @@ print*, 'l', l, 'yh', yh
    real(kr),parameter::oplus=1.000001e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
+   character(120)::text
 
    write(nsyso,'(/'' ace consistency checks''/&
                  &'' ----------------------'')')
@@ -14505,12 +14506,14 @@ print*, 'l', l, 'yh', yh
                      ep=xss(j+loci)
                      c=xss(j+2*nn+loci)
                      if (ep.gt.epmax.and.q.lt.zero) then
-                        write(nsyso,&
-                          '(''   consis:'',&
-                          &'' ep.gt.epmax'',1p,e13.6,&
-                          &'' with q.lt.0 for '',a,&
-                          &'' at e '',e14.6,'' ->'',e13.6)')&
-                          epmax,name(1:ll),e,ep
+                        write(text,'(''   consis:'',&
+                                    &'' ep.gt.epmax'',1p,e13.6,&
+                                    &'' with q.lt.0 for '',a,&
+                                    &'' mt'',1p,i0,&
+                                    &'' law '',1p,i0,&
+                                    &'' at e'',e13.6,'' -> eprime'',e13.6)')&
+                                    epmax,name(1:ll),mt,law,e,ep
+                        write(nsyso,'(a)') text
                         n2big=n2big+1
                         nerr=nerr+1
                      endif
@@ -14531,25 +14534,47 @@ print*, 'l', l, 'yh', yh
                      clast=c
                   enddo
                   if (n2big.gt.0) then
-                     write(nsyso,'(''   consis:'',&
-                       &'' shifting eprimes greater than epmax'',&
-                       &'' and renorming the distribution'')')
-                     do j=nn-n2big+1,nn
-                        ishift=j-nn-1
-                        ep=xss(j+loci)
-                        xss(j+loci)=sigfig(epmax,7,ishift)
-                        if (intt.eq.1) then
-                           p=(xss(j+2*nn+loci)-xss(j-1+2*nn+loci))&
-                             /(xss(j+loci)-xss(j-1+loci))
-                           xss(j-1+nn+loci)=p
-                           xss(j+nn+loci)=p
-                        else
-                           p=2*(xss(j+2*nn+loci)-xss(j-1+2*nn+loci))&
-                             /(xss(j+loci)-xss(j-1+loci))&
-                             -xss(j-1+nn+loci)
-                           xss(j+nn+loci)=p
-                        endif
+                     ishift=n2big-1
+                     if (ishift.eq.zero) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' shifting one eprime greater than epmax'',&
+                          &'' and renorming the distribution'')')
+                     else
+                        write(nsyso,'(''   consis:'',&
+                          &'' shifting one eprime greater than epmax,'',&
+                          &'' removing '',i0,'' eprimes'',&
+                          &'' and renorming the distribution'')') ishift
+                     endif
+                     nnew=nn-ishift
+                     xss(loci)=nnew                    ! NE
+                     xss(loci+nnew)=sigfig(epmax,7,-1) ! last secondary energy
+                     if (intt.eq.1) then               ! histogram
+                       p=(1.0-xss(loci+nnew-1+2*nn))&
+                         /(xss(loci+nnew)-xss(loci+nnew-1))
+                       xss(loci+nnew-1+nn)=p           ! pdf, second last energy
+                       xss(loci+nnew+nn)=p             ! pdf, last energy
+                     else                              ! linear
+                       p=2.0*(1.0-xss(loci+nnew-1+2*nn))&
+                             /(xss(loci+nnew)-xss(loci+nnew-1))&
+                         -xss(loci+nnew-1+nn)
+                       xss(loci+nnew+nn)=p             ! pdf, last energy
+                     endif
+                     xss(loci+nnew+2*nn)=1.0           ! cdf, last energy
+                     do j=nnew+1,nn                    ! expunge points above
+                       xss(loci+j)=0.0                 ! Eprime
+                       xss(loci+j+nn)=0.0              ! pdf
+                       xss(loci+j+2*nn)=0.0            ! cdf
                      enddo
+                     if (nnew.ne.nn) then              ! move values if required
+                       do i=1,2
+                         do j=i*nnew+1,3*nn
+                           xss(loci+j)=xss(loci+j+ishift)
+                         enddo
+                       enddo
+                       do j=3*nnew+1,3*nn
+                         xss(loci+j)=0.0
+                       enddo
+                     endif
                   endif
                enddo
 
@@ -14585,31 +14610,26 @@ print*, 'l', l, 'yh', yh
                      c=xss(j+2*nn+loci)
                      r=xss(j+3*nn+loci)
                      if (ep.gt.epmax) then
+                        write(text,'(''   consis:'',&
+                                    &'' ep.gt.epmax'',1p,e13.6,&
+                                    &'' with q.lt.0 for '',a,&
+                                    &'' mt'',1p,i0,&
+                                    &'' law '',1p,i0,&
+                                    &'' at e'',e13.6,'' -> eprime'',e13.6)')&
+                                    epmax,name(1:ll),mt,law,e,ep
                         if (mt.ne.5.and.q.lt.0) then
-                           write(nsyso,'(''   consis:'',&
-                             &'' ep.gt.epmax'',1p,e13.6,&
-                             &'' with q.lt.0 for '',a,&
-                             &'' at e'',e14.6,'' ->'',e13.6)')&
-                             epmax,name(1:ll),e,ep
+                           write(nsyso,'(a)') text
                            n2big=n2big+1
                            nerr=nerr+1
                         else if (mt.eq.5.and.aw0.lt.180.) then
-                           write(nsyso,'(''   consis:'',&
-                             &'' ep.gt.epmax'',1p,e13.6,&
-                             &'' with q.lt.0 for '',a,&
-                             &'' at e'',e14.6,'' ->'',e13.6)')&
-                             epmax,name(1:ll),e,ep
+                           write(nsyso,'(a)') text
                            write(nsyso,'(''   consis:'',&
                              &''   awr.lt.180'',&
                              &''---this is probably an error.'')')
                            n2big=n2big+1
                            nerr=nerr+1
                         else if (mt.eq.5.and.aw0.ge.180.) then
-                           write(nsyso,'(''   consis:'',&
-                             &'' ep.gt.epmax'',1p,e13.6,&
-                             &'' with q.lt.0 for '',a,&
-                             &'' at e'',e14.6,'' ->'',e13.6)')&
-                             epmax,name(1:ll),e,ep
+                           write(nsyso,'(a)') text
                            write(nsyso,&
                              &'(''   consis: awr.ge.180---'',&
                              &''there could be a legitimate'',&
@@ -14642,9 +14662,17 @@ print*, 'l', l, 'yh', yh
                      endif
                   enddo
                   if (n2big.gt.0) then
-                     write(nsyso,'(''   consis:'',&
-                       &'' shifting eprimes greater than epmax'',&
-                       &'' and renorming the distribution'')')
+                     ishift=n2big-1
+                     if (ishift.eq.zero) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' shifting one eprime greater than epmax'',&
+                          &'' and renorming the distribution'')')
+                     else
+                        write(nsyso,'(''   consis:'',&
+                          &'' shifting one eprime greater than epmax,'',&
+                          &'' removing '',i0,'' eprimes'',&
+                          &'' and renorming the distribution'')') ishift
+                     endif
                      ishift=n2big-1
                      nnew=nn-ishift
                      xss(loci)=nnew                    ! NE
