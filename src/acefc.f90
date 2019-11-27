@@ -12865,14 +12865,25 @@ contains
    ! It will write the values in the xss array while advancing to the
    ! new position.
    !-------------------------------------------------------------------
+   use util
    ! externals
    integer::nout,l,locator
+   ! internals
+   character(66)::text
 
-if (l.lt.locator) print*, 'gap found!'
-   do while (l.lt.locator)
-      call typen(l,nout,1)
-      l=l+1
-   enddo
+   if (l.lt.locator) then
+      write(text,'(''expected xss index ('',i6,'') greater than '',&
+                   &''current index ('',i6,'')'')') locator, l
+      call mess('change',text,'xss array was padded accordingly')
+      do while (l.lt.locator)
+         call typen(l,nout,1)
+         l=l+1
+      enddo
+   else if (l.gt.locator) then
+      write(text,'(''expected xss index ('',i6,'') less than '',&
+                   &''current index ('',i6,'')'')') locator, l
+      call error('change',text,'this may be a serious problem')
+   endif
 
    return
    end subroutine advance_to_locator
@@ -12951,17 +12962,19 @@ if (l.lt.locator) print*, 'gap found!'
    ! If nout.eq.1, integer fields are changed to real in memory
    !    (fields are assumed to contain mixed reals and integers).
    !-------------------------------------------------------------------
+   use util ! provides error
    ! externals
    integer::nout
    ! internals
-   integer::n,i,l,lnu,m,nc,j,nrr,ne,nn,ll,k,np,nw
-   integer::ly,lnw,law,net,nmu,kk,nep,nure,nurb,mftype
-   integer::nyp,jj,ir,nyh,li,ii,ntrh
+   integer::n,i,l,lnu,m,nc,j,nrr,ne,nn,k,np
+   integer::ly,lnw,law,net,nmu,nep,nure,nurb,mftype
+   integer::nyp,ir,nyh,ii,ntrh
    integer::hpd, mtrh, tyrh, lsigh, sigh, landh, andh, ldlwh, dlwh, yh ! IXS
    integer::rlocator  ! locator index for reaction data
    integer::ielocator ! locator index for incident energy data
    integer::oelocator ! locator index for outgoing energy data
    integer::plocator  ! locator index for the particle IXS array
+   character(66)::text
 
    ! initialise starting position
    l=1
@@ -13315,7 +13328,7 @@ print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call write_integer(nout,l)          ! INTMU
                   nmu=nint(xss(l))
                   call write_integer(nout,l)          ! NMU
-                  call write_real_list(nout,l,ne)     ! MU (NMU values)
+                  call write_real_list(nout,l,nmu)    ! MU (NMU values)
                   oelocator=l
                   call write_integer_list(nout,l,nmu) ! L (NMU values)
                   do k=1,nmu
@@ -13330,6 +13343,9 @@ print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                   enddo
                   ielocator=ielocator+1
                enddo
+            else
+               write(text,'(''Undefined law for dlw block: '',i3)') law
+               call error('change',text,' ')
             endif
          enddo
          rlocator=rlocator+1
@@ -13608,6 +13624,9 @@ print*, 'l', l, 'dlwp+nint(xss(ielocator))-1', dlwp+nint(xss(ielocator))-1
                   call write_real_list(nout,l,3*np)  ! Eout, PDF, CDF (each NP values)
                   ielocator=ielocator+1
                enddo
+            else
+               write(text,'(''Undefined law for dlwp block: '',i3)') law
+               call error('change',text,' ')
             endif
          enddo
          rlocator=rlocator+1
@@ -13718,7 +13737,6 @@ print*, 'l', l, 'sigh+nint(xss(rlocator))-1', sigh+nint(xss(rlocator))-1
 print*, 'l', l, 'landh', landh
             call advance_to_locator(nout,l,landh)
 print*, 'l', l, 'landh', landh
-            li=l-1
             rlocator=l
             call write_integer_list(nout,l,ntrh) ! L (ntrh values)
 
@@ -13901,7 +13919,7 @@ print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call write_integer(nout,l)          ! INTMU
                         nmu=nint(xss(l))
                         call write_integer(nout,l)          ! NMU
-                        call write_real_list(nout,l,ne)     ! MU (NMU values)
+                        call write_real_list(nout,l,nmu)    ! MU (NMU values)
                         oelocator=l
                         call write_integer_list(nout,l,nmu) ! L (NMU values)
                         do k=1,nmu
@@ -13916,6 +13934,9 @@ print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
                         enddo
                         ielocator=ielocator+1
                      enddo
+                   else
+                      write(text,'(''Undefined law for dlwh block: '',i3)') law
+                      call error('change',text,' ')
                   endif
                endif
                rlocator=rlocator+1
@@ -13927,7 +13948,7 @@ print*, 'l', l, 'yh', yh
 print*, 'l', l, 'yh', yh
             nyh=nint(xss(l))
             call write_integer(nout,l)            ! NYP
-            call write_integer_list(nout,l,nyp)   ! MTY (NYP values)
+            call write_integer_list(nout,l,nyh)   ! MTY (NYP values)
          endif
          plocator=plocator+10
       enddo
