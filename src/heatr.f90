@@ -2791,6 +2791,14 @@ contains
    awp=c2h
    law=l2h
    l=l+nw
+
+   !--error for awp=0. for non photons
+   if (zap.ne.0.and.awp.eq.0) then
+     write(strng,'(''awp is zero for for mt'',i3,'' particle '',i5)')&
+       mth,nint(zap)
+     call error('sixbar',strng,' ')
+   endif
+
    do while (nb.ne.0)
       call moreio(nin,0,0,c(l),nb,nw)
       l=l+nw
