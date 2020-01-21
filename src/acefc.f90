@@ -7032,6 +7032,10 @@ contains
       endif
       if (ikk.eq.nk) idone=1
    enddo
+   if (ik.eq.0) then
+      write(strng,'(''outgoing'',i6,'' mt '',i3)') izai,mt
+      call error('acelf6','could not find required mf6 subsection',strng)
+   endif
    if (ik.gt.1) write(nsyso,&
      '(/'' multiple mf6 subsections found for mt='',i3)') mth
    if (ivar.eq.1) write(nsyso,&
