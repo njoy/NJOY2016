@@ -12988,9 +12988,7 @@ contains
 
    !--write nu block
    if (nu.ne.0) then
-print*, 'l', l, 'nu', nu
       call advance_to_locator(nout,l,nu)
-print*, 'l', l, 'nu', nu
       lnu=nint(xss(l))
       if (lnu.gt.0) then  ! either prompt or total nu
         m=1
@@ -13022,38 +13020,26 @@ print*, 'l', l, 'nu', nu
    if (ntr.ne.0) then
 
       !--mtr block
-print*, 'l', l, 'mtr', mtr
       call advance_to_locator(nout,l,mtr)
-print*, 'l', l, 'mtr', mtr
       call write_integer_list(nout,l,ntr)
 
       !--lqr block
-print*, 'l', l, 'lqr', lqr
       call advance_to_locator(nout,l,lqr)
-print*, 'l', l, 'lqr', lqr
       call write_real_list(nout,l,ntr)
 
       !--tyr block
-print*, 'l', l, 'tyr', tyr
       call advance_to_locator(nout,l,tyr)
-print*, 'l', l, 'tyr', tyr
       call write_integer_list(nout,l,ntr)
 
       !--lsig block
-print*, 'l', l, 'lsig', lsig
       call advance_to_locator(nout,l,lsig)
-print*, 'l', l, 'lsig', lsig
       rlocator=l
       call write_integer_list(nout,l,ntr)
 
       !--sig block
-print*, 'l', l, 'sig', sig
       call advance_to_locator(nout,l,sig)
-print*, 'l', l, 'sig', sig
       do i=1,ntr
-print*, 'l', l, 'sig+nint(xss(rlocator))-1', sig+nint(xss(rlocator))-1
          call advance_to_locator(nout,l,sig+nint(xss(rlocator))-1) ! sig=jxs(7)
-print*, 'l', l, 'sig+nint(xss(rlocator))-1', sig+nint(xss(rlocator))-1
          call write_integer(nout,l)
          ne=nint(xss(l))
          call write_integer(nout,l)
@@ -13063,23 +13049,17 @@ print*, 'l', l, 'sig+nint(xss(rlocator))-1', sig+nint(xss(rlocator))-1
    endif
 
    !--land block
-print*, 'l', l, 'land', land
    call advance_to_locator(nout,l,land)
-print*, 'l', l, 'land', land
    n=nr+1
    rlocator=l
    call write_integer_list(nout,l,n)
 
    !--and block
-print*, 'l', l, 'and', and
    call advance_to_locator(nout,l,and)
-print*, 'l', l, 'and', and
    do i=1,n                                         ! loop over every reaction
       nn=nint(xss(rlocator))                        ! relative locator position
       if (nn.gt.0) then
-print*, 'l', l, 'and+nint(xss(rlocator))-1', and+nn-1
          call advance_to_locator(nout,l,and+nn-1)
-print*, 'l', l, 'and+nint(xss(rlocator))-1', and+nn-1
          ne=nint(xss(l))
          call write_integer(nout,l)                 ! NE
          call write_real_list(nout,l,ne)            ! E (NE values)
@@ -13088,9 +13068,7 @@ print*, 'l', l, 'and+nint(xss(rlocator))-1', and+nn-1
          do j=1,ne
             nn=nint(xss(ielocator))                 ! relative locator position
             if (nn.ne.0) then
-print*, 'l', l, 'and+iabs(nint(xss(ielocator)))-1', and+iabs(nn)-1
                call advance_to_locator(nout,l,and+iabs(nn)-1)
-print*, 'l', l, 'and+iabs(nint(xss(ielocator)))-1', and+iabs(nn)-1
                if (nn.ge.0) then                    ! 32 equiprobable bins
                   call write_real_list(nout,l,33)
                else                                 ! tabulated angular
@@ -13110,23 +13088,17 @@ print*, 'l', l, 'and+iabs(nint(xss(ielocator)))-1', and+iabs(nn)-1
    if (nr.ne.0) then
 
       !--ldlw block
-print*, 'l', l, 'ldlw', ldlw
       call advance_to_locator(nout,l,ldlw)
-print*, 'l', l, 'ldlw', ldlw
       rlocator=l
       call write_integer_list(nout,l,nr)          ! L (NR values)
 
       !--dlw block
-print*, 'l', l, 'dlw', dlw
       call advance_to_locator(nout,l,dlw)
-print*, 'l', l, 'dlw', dlw
       do i=1,nr
          ly=nint(xss(tyr+i-1))
          ly=iabs(ly)
          if (ly.gt.100) then                      ! energy dependent yield
-print*, 'l', l, 'dlw+ly-101', dlw+ly-101
             call advance_to_locator(nout,l,dlw+ly-101) ! dlw=jed=jxs(11)
-print*, 'l', l, 'dlw+ly-101', dlw+ly-101
             nrr=nint(xss(l))
             call write_integer(nout,l)               ! NR
             if (nrr.gt.0) then
@@ -13138,15 +13110,12 @@ print*, 'l', l, 'dlw+ly-101', dlw+ly-101
          endif
 
          !--loop over laws
-print*, 'l', l, 'dlw+nint(xss(rlocator))-1', dlw+nint(xss(rlocator))-1
          call advance_to_locator(nout,l,dlw+nint(xss(rlocator))-1) ! dlw=jxs(11)
-print*, 'l', l, 'dlw+nint(xss(rlocator))-1', dlw+nint(xss(rlocator))-1
          lnw=1
          do while (lnw.gt.0)
             lnw=nint(xss(l))
             call write_integer(nout,l)            ! LNW
             law=nint(xss(l))
-print*, 'law', law
             call write_integer(nout,l)            ! LAW
             call write_integer(nout,l)            ! IDAT
             nrr=nint(xss(l))
@@ -13190,9 +13159,7 @@ print*, 'law', law
                ielocator=l
                call write_integer_list(nout,l,ne)    ! L (NE values)
                do j=1,ne
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call advance_to_locator(nout,l,dlw+nint(xss(ielocator))-1) ! dlw=jed=jxs(11)
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call write_integer(nout,l)         ! INTT
                   np=nint(xss(l))
                   call write_integer(nout,l)         ! NP
@@ -13259,9 +13226,7 @@ print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                ielocator=l
                call write_integer_list(nout,l,ne)    ! L (NE values)
                do j=1,ne
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call advance_to_locator(nout,l,dlw+nint(xss(ielocator))-1) ! dlw=jed=jxs(11)
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call write_integer(nout,l)         ! INTT
                   np=nint(xss(l))
                   call write_integer(nout,l)         ! NP
@@ -13282,9 +13247,7 @@ print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                ielocator=l
                call write_integer_list(nout,l,ne)    ! L (NE values)
                do j=1,ne
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call advance_to_locator(nout,l,dlw+nint(xss(ielocator))-1) ! dlw=jed=jxs(11)
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call write_integer(nout,l)         ! INTT
                   np=nint(xss(l))
                   call write_integer(nout,l)         ! NP
@@ -13292,9 +13255,7 @@ print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   oelocator=l
                   call write_integer_list(nout,l,np) ! L (NP values)
                   do k=1,np
-print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                      call advance_to_locator(nout,l,dlw+nint(xss(oelocator))-1) ! dlw=jed=jxs(11)
-print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                      call write_integer(nout,l)         ! JJ
                      nmu=nint(xss(l))
                      call write_integer(nout,l)         ! NMU
@@ -13326,9 +13287,7 @@ print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                ielocator=l
                call write_integer_list(nout,l,ne)     ! L (NE values)
                do j=1,ne
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call advance_to_locator(nout,l,dlw+nint(xss(ielocator))-1) ! dlw=jed=jxs(11)
-print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   call write_integer(nout,l)          ! INTMU
                   nmu=nint(xss(l))
                   call write_integer(nout,l)          ! NMU
@@ -13336,9 +13295,7 @@ print*, 'l', l, 'dlw+nint(xss(ielocator))-1', dlw+nint(xss(ielocator))-1
                   oelocator=l
                   call write_integer_list(nout,l,nmu) ! L (NMU values)
                   do k=1,nmu
-print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                      call advance_to_locator(nout,l,dlw+nint(xss(oelocator))-1) ! dlw=jed=jxs(11)
-print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
                      call write_integer(nout,l)       ! INTEP
                      nep=nint(xss(l))
                      call write_integer(nout,l)       ! NPEP
@@ -13358,9 +13315,7 @@ print*, 'l', l, 'dlw+nint(xss(oelocator))-1', dlw+nint(xss(oelocator))-1
 
    !--unresolved-range probability-table block
    if (iurpt.gt.0) then
-print*, 'l', l, 'iurpt', iurpt
       call advance_to_locator(nout,l,iurpt)
-print*, 'l', l, 'iurpt', iurpt
       nure=nint(xss(l))
       call write_integer(nout,l)            ! N
       nurb=nint(xss(l))
@@ -13376,9 +13331,7 @@ print*, 'l', l, 'iurpt', iurpt
    if (ndnf.ne.0) then
 
       !--DNU - delayed nubar
-print*, 'l', l, 'nud', nud
       call advance_to_locator(nout,l,nud)
-print*, 'l', l, 'nud', nud
       lnu=nint(xss(l))
       call write_integer(nout,l)                ! LNU (only 2 is allowed)
       nrr=nint(xss(l))
@@ -13391,9 +13344,7 @@ print*, 'l', l, 'nud', nud
       call write_real_list(nout,l,2*ne)         ! E, NU (each NE values)
 
       !--BDD - precursor data
-print*, 'l', l, 'dndat', dndat
       call advance_to_locator(nout,l,dndat)
-print*, 'l', l, 'dndat', dndat
       do i=1,ndnf
          call write_real(nout,l)                ! DEC
          nrr=nint(xss(l))
@@ -13407,20 +13358,14 @@ print*, 'l', l, 'dndat', dndat
       enddo
 
       !--DNEDL - precursor energy distribution locators
-print*, 'l', l, 'ldnd', ldnd
       call advance_to_locator(nout,l,ldnd)
-print*, 'l', l, 'ldnd', ldnd
       rlocator=l
       call write_integer_list(nout,l,ndnf)         ! L (NR values)
 
       !--DNED - precursor energy distributions
-print*, 'l', l, 'dnd', dnd
       call advance_to_locator(nout,l,dnd)
-print*, 'l', l, 'dnd', dnd
       do i=1,ndnf
-print*, 'l', l, 'dnd+nint(xss(rlocator))-1', dnd+nint(xss(rlocator))-1
          call advance_to_locator(nout,l,dnd+nint(xss(rlocator))-1) ! dnd=jxs(27)
-print*, 'l', l, 'dnd+nint(xss(rlocator))-1', dnd+nint(xss(rlocator))-1
          call write_integer(nout,l)            ! LNW
          call write_integer(nout,l)            ! LAW
          call write_integer(nout,l)            ! IDAT
@@ -13445,9 +13390,7 @@ print*, 'l', l, 'dnd+nint(xss(rlocator))-1', dnd+nint(xss(rlocator))-1
          ielocator=l
          call write_integer_list(nout,l,ne)    ! L (NE values)
          do j=1,ne
-print*, 'l', l, 'dnd+nint(xss(ielocator))-1', dnd+nint(xss(ielocator))-1
             call advance_to_locator(nout,l,dnd+nint(xss(ielocator))-1) ! dnd=jed=jxs(27)
-print*, 'l', l, 'dnd+nint(xss(ielocator))-1', dnd+nint(xss(ielocator))-1
             call write_integer(nout,l)         ! INTT
             np=nint(xss(l))
             call write_integer(nout,l)         ! NP
@@ -13460,9 +13403,7 @@ print*, 'l', l, 'dnd+nint(xss(ielocator))-1', dnd+nint(xss(ielocator))-1
 
    !--gpd block
    if (gpd.ne.0) then
-print*, 'l', l, 'gpd', gpd
       call advance_to_locator(nout,l,gpd)
-print*, 'l', l, 'gpd', gpd
       call write_real_list(nout,l,nes)
       if (mtrp.gt.gpd+nes) then
          call write_real_list(nout,l,20*30)
@@ -13473,26 +13414,18 @@ print*, 'l', l, 'gpd', gpd
    if (ntrp.ne.0) then
 
       !--mtrp block
-print*, 'l', l, 'mtrp', mtrp
       call advance_to_locator(nout,l,mtrp)
-print*, 'l', l, 'mtrp', mtrp
       call write_integer_list(nout,l,ntrp)
 
       !--lsigp block
-print*, 'l', l, 'lsigp', lsigp
       call advance_to_locator(nout,l,lsigp)
-print*, 'l', l, 'lsigp', lsigp
       rlocator=l
       call write_integer_list(nout,l,ntrp)
 
       !--sigp block
-print*, 'l', l, 'sigp', sigp
       call advance_to_locator(nout,l,sigp)
-print*, 'l', l, 'sigp', sigp
       do i=1,ntrp
-print*, 'l', l, 'sigp+nint(xss(rlocator))-1', sigp+nint(xss(rlocator))-1
          call advance_to_locator(nout,l,sigp+nint(xss(rlocator))-1) ! sigp=jxs(15)
-print*, 'l', l, 'sigp+nint(xss(rlocator))-1', sigp+nint(xss(rlocator))-1
 
          mftype=nint(xss(l))
          call write_integer(nout,l)              ! MFTYPE
@@ -13516,22 +13449,16 @@ print*, 'l', l, 'sigp+nint(xss(rlocator))-1', sigp+nint(xss(rlocator))-1
       enddo
 
       !--landp block
-print*, 'l', l, 'landp', landp
       call advance_to_locator(nout,l,landp)
-print*, 'l', l, 'landp', landp
       rlocator=l
       call write_integer_list(nout,l,ntrp)
 
       !--andp block
-print*, 'l', l, 'andp', andp
       call advance_to_locator(nout,l,andp)
-print*, 'l', l, 'andp', andp
       do i=1,ntrp
          nn=nint(xss(rlocator))                     ! relative locator position
          if (nn.gt.0) then
-print*, 'l', l, 'andp+nint(xss(rlocator))-1', andp+nn-1
             call advance_to_locator(nout,l,andp+nn-1)
-print*, 'l', l, 'andp+nint(xss(rlocator))-1', andp+nn-1
             ne=nint(xss(l))
             call write_integer(nout,l)              ! NE
             call write_real_list(nout,l,ne)         ! E (NE values)
@@ -13540,9 +13467,7 @@ print*, 'l', l, 'andp+nint(xss(rlocator))-1', andp+nn-1
             do j=1,ne
                nn=nint(xss(ielocator))              ! relative locator position
                if (nn.gt.0) then
-print*, 'l', l, 'andp+nint(xss(ielocator))-1', andp+nn-1
                   call advance_to_locator(nout,l,andp+nn-1)
-print*, 'l', l, 'andp+nint(xss(ielocator))-1', andp+nn-1
                   call write_real_list(nout,l,33)   ! 32 equiprobable bins
                endif
                ielocator=ielocator+1
@@ -13552,28 +13477,21 @@ print*, 'l', l, 'andp+nint(xss(ielocator))-1', andp+nn-1
       enddo
 
       !--ldlwp block
-print*, 'l', l, 'ldlwp', ldlwp
       call advance_to_locator(nout,l,ldlwp)
-print*, 'l', l, 'ldlwp', ldlwp
       rlocator=l
       call write_integer_list(nout,l,ntrp)
 
       !--dlwp block
-print*, 'l', l, 'dlwp', dlwp
       call advance_to_locator(nout,l,dlwp)
-print*, 'l', l, 'dlwp', dlwp
       do i=1,ntrp
 
          !--loop over laws
-print*, 'l', l, 'dlwp+nint(xss(rlocator))-1', dlwp+nint(xss(rlocator))-1
          call advance_to_locator(nout,l,dlwp+nint(xss(rlocator))-1) ! dlwp=jxs(19)
-print*, 'l', l, 'dlwp+nint(xss(rlocator))-1', dlwp+nint(xss(rlocator))-1
          lnw=1
          do while (lnw.ne.0)
             lnw=nint(xss(l))
             call write_integer(nout,l)            ! LNW
             law=nint(xss(l))
-print*, 'law', law
             call write_integer(nout,l)            ! LAW
             call write_integer(nout,l)            ! IDAT
             nrr=nint(xss(l))
@@ -13619,9 +13537,7 @@ print*, 'law', law
                ielocator=l
                call write_integer_list(nout,l,ne)    ! L (NE values)
                do j=1,ne
-print*, 'l', l, 'dlwp+nint(xss(ielocator))-1', dlwp+nint(xss(ielocator))-1
                   call advance_to_locator(nout,l,dlwp+nint(xss(ielocator))-1) ! dlwp=jed=jxs(19)
-print*, 'l', l, 'dlwp+nint(xss(ielocator))-1', dlwp+nint(xss(ielocator))-1
                   call write_integer(nout,l)         ! INTT
                   np=nint(xss(l))
                   call write_integer(nout,l)         ! NP
@@ -13637,9 +13553,7 @@ print*, 'l', l, 'dlwp+nint(xss(ielocator))-1', dlwp+nint(xss(ielocator))-1
       enddo
 
       !--yp block
-print*, 'l', l, 'yp', yp
       call advance_to_locator(nout,l,yp)
-print*, 'l', l, 'yp', yp
       nyp=nint(xss(l))
       call write_integer(nout,l)            ! NYP
       call write_integer_list(nout,l,nyp)   ! MTY (NYP values)
@@ -13649,28 +13563,20 @@ print*, 'l', l, 'yp', yp
    if (ntype.gt.0) then
 
       !--PTYPE
-print*, 'l', l, 'ptype', ptype
       call advance_to_locator(nout,l,ptype)
-print*, 'l', l, 'ptype', ptype
       call write_integer_list(nout,l,ntype)    ! IP (ntype values)
 
       !--NTRO
-print*, 'l', l, 'ntro', ntro
       call advance_to_locator(nout,l,ntro)
-print*, 'l', l, 'ntro', ntro
       call write_integer_list(nout,l,ntype)    ! NP (ntype values)
 
       !--IXS
-print*, 'l', l, 'ploct', ploct
       call advance_to_locator(nout,l,ploct)
-print*, 'l', l, 'ploct', ploct
       plocator=l
       call write_integer_list(nout,l,10*ntype) ! IXS array (10 values) for each IP
 
       !--loop over particle types
       do i=1,ntype
-
-print*, 'particle', nint(xss(ptype+i-1))
 
          ! IXS array entries
          hpd=nint(xss(plocator))
@@ -13685,9 +13591,7 @@ print*, 'particle', nint(xss(ptype+i-1))
          yh=nint(xss(plocator+9))
 
          !--hpd block
-print*, 'l', l, 'hpd', hpd
          call advance_to_locator(nout,l,hpd)
-print*, 'l', l, 'hpd', hpd
          call write_integer(nout,l)              ! IE
          ne=nint(xss(l))
          call write_integer(nout,l)              ! NE
@@ -13697,32 +13601,22 @@ print*, 'l', l, 'hpd', hpd
             ntrh=nint(xss(ntro+i-1)) ! number of reactions for this particle type
 
             !--mtrh block
-print*, 'l', l, 'mtrh', mtrh
             call advance_to_locator(nout,l,mtrh)
-print*, 'l', l, 'mtrh', mtrh
             call write_integer_list(nout,l,ntrh) ! MT (ntrh values)
 
             !--tyrh block
-print*, 'l', l, 'tyrh', tyrh
             call advance_to_locator(nout,l,tyrh)
-print*, 'l', l, 'tyrh', tyrh
             call write_integer_list(nout,l,ntrh) ! TYR (ntrh values)
 
             !--lsigh block
-print*, 'l', l, 'lsigh', lsigh
             call advance_to_locator(nout,l,lsigh)
-print*, 'l', l, 'lsigh', lsigh
             rlocator=l
             call write_integer_list(nout,l,ntrh) ! L (ntrh values)
 
             !--sigh block - format equal to sigp block, only MFMULT=12 allowed
-print*, 'l', l, 'sigh', sigh
             call advance_to_locator(nout,l,sigh)
-print*, 'l', l, 'sigh', sigh
             do j=1,ntrh
-print*, 'l', l, 'sigh+nint(xss(rlocator))-1', sigh+nint(xss(rlocator))-1
                call advance_to_locator(nout,l,sigh+nint(xss(rlocator))-1)
-print*, 'l', l, 'sigh+nint(xss(rlocator))-1', sigh+nint(xss(rlocator))-1
 
                call write_integer(nout,l)           ! MFTYPE=12 only
                call write_integer(nout,l)           ! MTMULT
@@ -13738,22 +13632,16 @@ print*, 'l', l, 'sigh+nint(xss(rlocator))-1', sigh+nint(xss(rlocator))-1
             enddo
 
             !--landh block
-print*, 'l', l, 'landh', landh
             call advance_to_locator(nout,l,landh)
-print*, 'l', l, 'landh', landh
             rlocator=l
             call write_integer_list(nout,l,ntrh) ! L (ntrh values)
 
             !--andh block - format equal to and block
-print*, 'l', l, 'andh', andh
             call advance_to_locator(nout,l,andh)
-print*, 'l', l, 'andh', andh
             do ir=1,ntrh
                nn=nint(xss(rlocator))               ! relative locator position
                if (nn.gt.0) then
-print*, 'l', l, 'andh+nint(xss(rlocator))-1', andh+nn-1
                   call advance_to_locator(nout,l,andh+nn-1)
-print*, 'l', l, 'andh+nint(xss(rlocator))-1', andh+nn-1
                   ne=nint(xss(l))
                   call write_integer(nout,l)                 ! NE
                   call write_real_list(nout,l,ne)            ! E (NE values)
@@ -13761,9 +13649,7 @@ print*, 'l', l, 'andh+nint(xss(rlocator))-1', andh+nn-1
                   call write_integer_list(nout,l,ne)         ! L (NE values)
                   do j=1,ne
                      nn=nint(xss(ielocator))                 ! relative locator position
-print*, 'l', l, 'andh+iabs(nint(xss(ielocator)))-1', andh+iabs(nn)-1
                      call advance_to_locator(nout,l,andh+iabs(nn)-1)
-print*, 'l', l, 'andh+iabs(nint(xss(ielocator)))-1', andh+iabs(nn)-1
                      if (nn.gt.0) then                    ! 32 equiprobable bins
                         call write_real_list(nout,l,33)
                      else if (nn.lt.0) then               ! tabulated angular
@@ -13779,25 +13665,18 @@ print*, 'l', l, 'andh+iabs(nint(xss(ielocator)))-1', andh+iabs(nn)-1
             enddo
 
             !--ldlwh block
-print*, 'l', l, 'ldlwh', ldlwh
             call advance_to_locator(nout,l,ldlwh)
-print*, 'l', l, 'ldlwh', ldlwh
             rlocator=l
             call write_integer_list(nout,l,ntrh) ! L (ntrh values)
 
             !--dlwh block - format equal to dlw block
-print*, 'l', l, 'dlwh', dlwh
             call advance_to_locator(nout,l,dlwh)
-print*, 'l', l, 'dlwh', dlwh
             do ii=1,ntrh
                nn=nint(xss(rlocator))               ! relative locator position
                if (nn.gt.0) then
-print*, 'l', l, 'dlwh+nint(xss(rlocator))-1', dlwh+nn-1
                   call advance_to_locator(nout,l,dlwh+nn-1)
-print*, 'l', l, 'dlwh+nint(xss(rlocator))-1', dlwh+nn-1
                   call write_integer(nout,l)            ! LNW
                   law=nint(xss(l))
-print*, 'law', law
                   call write_integer(nout,l)            ! LAW
                   call write_integer(nout,l)            ! IDAT
                   nrr=nint(xss(l))
@@ -13822,9 +13701,7 @@ print*, 'law', law
                      ielocator=l
                      call write_integer_list(nout,l,ne)    ! L (NE values)
                      do j=1,ne
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call write_integer(nout,l)         ! INTT
                         np=nint(xss(l))
                         call write_integer(nout,l)         ! NP
@@ -13845,9 +13722,7 @@ print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                      ielocator=l
                      call write_integer_list(nout,l,ne)    ! L (NE values)
                      do j=1,ne
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call write_integer(nout,l)         ! INTT
                         np=nint(xss(l))
                         call write_integer(nout,l)         ! NP
@@ -13873,9 +13748,7 @@ print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                      ielocator=l
                      call write_integer_list(nout,l,ne)    ! L (NE values)
                      do j=1,ne
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call write_integer(nout,l)         ! INTT
                         np=nint(xss(l))
                         call write_integer(nout,l)         ! NP
@@ -13883,9 +13756,7 @@ print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         oelocator=l
                         call write_integer_list(nout,l,np) ! L (NP values)
                         do k=1,np
-print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
                            call advance_to_locator(nout,l,dlwh+nint(xss(oelocator))-1)
-print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
                            call write_integer(nout,l)         ! JJ
                            nmu=nint(xss(l))
                            call write_integer(nout,l)         ! NMU
@@ -13917,9 +13788,7 @@ print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
                      ielocator=l
                      call write_integer_list(nout,l,ne)     ! L (NE values)
                      do j=1,ne
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call advance_to_locator(nout,l,dlwh+nint(xss(ielocator))-1)
-print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         call write_integer(nout,l)          ! INTMU
                         nmu=nint(xss(l))
                         call write_integer(nout,l)          ! NMU
@@ -13927,9 +13796,7 @@ print*, 'l', l, 'dlwh+nint(xss(ielocator))-1', dlwh+nint(xss(ielocator))-1
                         oelocator=l
                         call write_integer_list(nout,l,nmu) ! L (NMU values)
                         do k=1,nmu
-print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
                            call advance_to_locator(nout,l,dlwh+nint(xss(oelocator))-1)
-print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
                            call write_integer(nout,l)       ! INTEP
                            nep=nint(xss(l))
                            call write_integer(nout,l)       ! NPEP
@@ -13947,9 +13814,7 @@ print*, 'l', l, 'dlwh+nint(xss(oelocator))-1', dlwh+nint(xss(oelocator))-1
             enddo
 
             !--yh block - similar to yp
-print*, 'l', l, 'yh', yh
             call advance_to_locator(nout,l,yh)
-print*, 'l', l, 'yh', yh
             nyh=nint(xss(l))
             call write_integer(nout,l)            ! NYP
             call write_integer_list(nout,l,nyh)   ! MTY (NYP values)
