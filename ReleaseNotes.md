@@ -1,6 +1,16 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.55](https://github.com/njoy/NJOY2016/pull/146)
+For incident alpha particles, acer assumes that when MT22 is present, the MF6 entry also contains the outgoing alphas for this reaction. When an evaluation is incomplete because this outgoing particle is missing from the MF6 section, this is not detected and thus results in a corrupted ace file. This can generally happen for any incident particle type. This release detects the absence of the outgoing particle and terminates NJOY gracefully.
+
+This release addresses issue [\#143](https://github.com/njoy/NJOY2016/issues/143).
+
+## [NJOY2016.54](https://github.com/njoy/NJOY2016/pull/145)
+A division by zero can occur in HEATR when the atomic mass of the outgoing particles in MF6 subsections in zero. As it is impossible to recover from this (i.e. we cannot guess the atomic weight the evaluator wanted to use), this release allows NJOY to exit gracefully and report the MT number and secondary particle that caused the issue.
+
+This pull request addresses issue [\#144](https://github.com/njoy/NJOY2016/issues/144).
+
 ## [NJOY2016.53](https://github.com/njoy/NJOY2016/pull/141)
 In an initial proposal for NJOY2016.51, the number of za values to be read (the nza variable) was explicitly requested in the input. This was removed in favor of reading 16 values by default and then determining how many were given. This proves problematic for NJOY21. As a result, specifying nza is now mandatory again.
 
