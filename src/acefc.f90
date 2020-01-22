@@ -53,7 +53,6 @@ module acefc
    ! File 6 parameters
    integer::ipnu,jpnu,nkk
    real(kr),allocatable,dimension(:)::e1456,p1456nu
-   !real(kr),allocatable,dimension(:)::p16456nu,p6456nu
    integer::nsix,n16
 
    ! particle production information (from common/ace8/)
@@ -817,8 +816,6 @@ contains
    integer,parameter::maxscr=2000
    real(kr),parameter::xmax=2.e7_kr
    real(kr),parameter::errlim=1.e-5_kr
-   !real(kr),parameter::stpmax=1.25e0_kr
-   !integer,parameter::nc=4
 
    !--initialize
    if (allocated(scr)) deallocate(scr)
@@ -1940,7 +1937,6 @@ contains
    character(60)::string
    real(kr)::dzap,test,zap,e1,e2,f,ei,ep,epn,ss,ff,dmu
    real(kr)::b(50)
-   !real(kr)::y,enext
    real(kr),dimension(:),allocatable::tab1
    real(kr),dimension(:),allocatable::scr
    integer,parameter::nwmaxn=65000
@@ -3869,7 +3865,6 @@ contains
    real(kr),dimension(:),allocatable::scr
    character(4)::blank='    '
    real(kr),parameter::etop=1.e10_kr
-   !real(kr),parameter::emax=2.e7_kr
    real(kr),parameter::zero=0
 
    !--set up size and storage, and assign i/o units
@@ -4526,7 +4521,6 @@ contains
    real(kr),dimension(:),allocatable::egn,egg
    real(kr),dimension(:),allocatable::ee,eb
    real(kr),dimension(:),allocatable::sig
-   !integer,parameter::maxsig=10000
    real(kr),parameter::elo=1.e-5_kr
    real(kr),parameter::ehi=2.e7_kr
    real(kr),parameter::zero=0
@@ -7002,7 +6996,6 @@ contains
    integer::ki,iso,ik3,ii1,ia,ll,intmu,nmu,imu,mus,npep,intep
    integer::last,nx,ix
    integer::jp,jpn,jpp
-   !integer::nxyz1,nxyz2,nxyz3,nxyz4
    real(kr)::test,eemx,yield,xnext,xx,yy,y,xn,eyl,gyl,en
    real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee
    real(kr)::ep,e,bzro,sfe,sfo,bbi,fbarcm,delfcm,akal,rkal
@@ -7015,8 +7008,6 @@ contains
    integer,parameter::nwscr=18000
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::small=1.e-30_kr
-   !real(kr),parameter::eps=.001e0_kr
-   !real(kr),parameter::tmin=1.e-6_kr
    real(kr),parameter::etop=1.e10_kr
    real(kr),parameter::up=1.00001e0_kr
    real(kr),parameter::elow=1.e-5_kr
@@ -17248,11 +17239,7 @@ contains
    integer::l,j,kf,n,i,ne,major,minor,it,nr1
    character(1)::qu=''''
    real(kr),parameter::big=1.0e10_kr
-   !real(kr),parameter::small=1.e-12_kr
-   !real(kr),parameter::ten=10.e0_kr
    real(kr),parameter::step=1.2e0_kr
-   !real(kr),parameter::zero=0
-   !real(kr),parameter::one=1.e0_kr
 
    !--set up the page for the total nubar curve
    xmin=big
@@ -17825,8 +17812,6 @@ contains
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,x,y,decay,frac,xtag,ytag
    character(1)::qu=''''
    real(kr),parameter::big=1.0e10_kr
-   !real(kr),parameter::small=1.e-12_kr
-   !real(kr),parameter::ten=10.e0_kr
    real(kr),parameter::step=1.2e0_kr
    real(kr),parameter::scale=1.e2_kr
    real(kr),parameter::zero=0
