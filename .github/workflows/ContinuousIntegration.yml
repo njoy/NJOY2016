@@ -18,6 +18,8 @@ jobs:
       run: ls
     - name: mkdir bin
       run: mkdir bin; cd bin
+    - name: ls-bin
+      run: ls; ls ..; pwd
     - name: cmake
       run: cmake ..  
     - name: make
