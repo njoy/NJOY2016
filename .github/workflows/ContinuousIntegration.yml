@@ -13,17 +13,17 @@ jobs:
     name: "Testing"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
     - name: Install gfortran
       run: sudo apt-get install gfortran
+    - uses: actions/checkout@v2
     - name: mkdir bin
       run: mkdir bin 
     - name: cmake
       run: cmake ..  
       working-directory: ./bin
     - name: make
-      run: make
+      run: make -j
       working-directory: ./bin
-    - name: make test
-      run: make test
+    - name: ctest
+      run: ctest -j
       working-directory: ./bin
