@@ -23,7 +23,7 @@ jobs:
     - name: ls-bin
       run: ls
     - name: ls..-bin
-      run ls ..
+      run: ls ..
     - name: cmake
       run: cmake ..  
     - name: make
