@@ -20,6 +20,8 @@ jobs:
       run: |
         mkdir bin 
         cd bin
+    - name: cd bin
+      run: cd bin
     - name: pwd-bin
       run: pwd
     - name: ls-bin
