@@ -17,14 +17,13 @@ jobs:
     - name: ls
       run: ls
     - name: mkdir bin
-      run: 
-      - mkdir bin
-      - cd bin
+      run: mkdir bin; cd bin
+    - name: pwd-bin
+      run: pwd
     - name: ls-bin
-      run: 
-      - ls
-      - ls ..
-      - pwd
+      run: ls
+    - name: ls..-bin
+      run ls ..
     - name: cmake
       run: cmake ..  
     - name: make
