@@ -8,13 +8,13 @@ on:
   pull_request: 
     branches: '*'
 
-strategy:
-  matrix:
-    os: [ubuntu-18.04, macOS]
 
 jobs:
+  strategy:
+    matrix:
+      os: [ubuntu-18.04, macOS]
   build:
-    name: "Testing"
+    name: "Testing ${{matrix.os}}"
     runs-on: ${{matrix.os}}
     steps:
     - name: Install gfortran
