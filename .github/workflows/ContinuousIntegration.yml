@@ -19,6 +19,7 @@ jobs:
     - name: mkdir bin
       run: |
         mkdir bin 
+        ls
         cd bin
     - name: cd bin
       run: cd bin
