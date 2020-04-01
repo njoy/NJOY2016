@@ -5,10 +5,10 @@ name: Continuous Integration
 on: 
   push:
     branches: 
-      - *
+    - *
   pull_request: 
     branches: 
-      - *
+    - *
 
 jobs:
   build:
@@ -19,8 +19,7 @@ jobs:
   - name: mkdir bin
     run: mkdir bin; cd bin
   - name: cmake
-    run: cmake ..
-  - name: make
+    run: cmake ..  - name: make
     run: make
   - name: make test
     run: make test
