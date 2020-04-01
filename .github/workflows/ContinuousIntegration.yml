@@ -15,7 +15,7 @@ strategy:
 jobs:
   build:
     name: "Testing"
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
     steps:
     - name: Install gfortran
       run: sudo apt-get install gfortran
