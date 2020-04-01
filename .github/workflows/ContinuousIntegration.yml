@@ -10,15 +10,15 @@ on:
 
 jobs:
   build:
-  name: "Testing"
-  runs-on: ubuntu-latest
-  steps:
-  - uses: actions/checkout@v2
-  - name: mkdir bin
-    run: mkdir bin; cd bin
-  - name: cmake
-    run: cmake ..  
-  - name: make
-    run: make
-  - name: make test
-    run: make test
+    name: "Testing"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: mkdir bin
+      run: mkdir bin; cd bin
+    - name: cmake
+      run: cmake ..  
+    - name: make
+      run: make
+    - name: make test
+      run: make test
