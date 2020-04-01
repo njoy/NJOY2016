@@ -14,24 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: ls
-      run: ls
     - name: mkdir bin
-      run: |
-        mkdir bin 
-        ls
-        cd bin
-    - name: cd bin
-      run: cd bin
-    - name: pwd-bin
-      run: pwd
-    - name: ls-bin
-      run: ls
-    - name: ls..-bin
-      run: ls ..
+      run: mkdir bin 
     - name: cmake
       run: cmake ..  
+      working-directory: ./bin
     - name: make
       run: make
+      working-directory: ./bin
     - name: make test
       run: make test
+      working-directory: ./bin
