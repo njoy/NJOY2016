@@ -15,12 +15,13 @@ jobs:
       matrix:
         os: [ubuntu-18.04, macOS]
     steps:
-    - name: gfortran
+    - name: gfortran for Linux
       if: matrix.os == 'ubuntu-18.04'
       run: |
         which gfortran-9
         gfortran-9 --version
-      else: matrix.os == 'macOS'
+    - name: gfortran for Mac
+      if: matrix.os == 'macOS'
       run: |
         which gfortran
         gfortran --version
