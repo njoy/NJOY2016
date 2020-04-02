@@ -8,9 +8,10 @@ on:
   pull_request: 
     branches: '*'
 
+env:
+  vFortran: gfortran-8
+
 jobs:
-  env:
-    vFortran: gfortran-8
   build:
     runs-on: ${{matrix.os}}
     strategy:
@@ -19,7 +20,6 @@ jobs:
         build_type: [ Debug, Release ]
 
     steps:
-
     - name: which gfortran
       run: |
         which #{{env.vFortran}}
