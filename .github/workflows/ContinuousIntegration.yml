@@ -16,9 +16,14 @@ jobs:
         os: [ubuntu-18.04, macOS]
     steps:
     - name: gfortran
+      if: matrix.os == 'ubuntu-18.04'
+      run: |
+        which gfortran-9
+        gfortran-9 --version
+      if: matrix.os == 'macOS'
       run: |
         which gfortran
-        gofrtran --version
+        gfortran --version
     # - name: Install gfortran for Linux
     #   if: matrix.os == 'ubuntu-18.04'
     #   run: sudo apt-get install gfortran
