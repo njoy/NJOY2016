@@ -13,12 +13,12 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-18.04, macos-10.15]
         include:
         - os: ubuntu-latest
-          vFortran: gfortran-9
+          vFortran: gfortran-8
         - os: macos-latest
-          vFortran: gfortran
+          vFortran: gfortran-8
         build_type: [ Debug, Release ]
 
     steps:
@@ -36,5 +36,5 @@ jobs:
       run: make -j
       working-directory: ./bin
     - name: ctest
-      run: ctest -j
+      run: ctest -V -j
       working-directory: ./bin
