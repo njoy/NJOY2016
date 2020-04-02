@@ -1,7 +1,7 @@
 # GitHub workflow to enable continuous integratoin
 name: Continuous Integration
 
-# This workflow is triggered on pushes to the repository.
+# This workflow is triggered on pushes and pull requests to the repository.
 on: [ push, pull_request ]
 
 jobs:
@@ -19,18 +19,14 @@ jobs:
         which ${{matrix.vFortran}}
         ${{matrix.vFortran}} --version
     - uses: actions/checkout@v2
-    - name: git status
-      run: | 
-        git status
-        git log
-    # - name: mkdir bin
-    #   run: mkdir bin 
-    # - name: cmake
-    #   run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..  
-    #   working-directory: ./bin
-    # - name: make
-    #   run: make -j
-    #   working-directory: ./bin
-    # - name: ctest
-    #   run: ctest -j
-    #   working-directory: ./bin
+    - name: mkdir bin
+      run: mkdir bin 
+    - name: cmake
+      run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..  
+      working-directory: ./bin
+    - name: make
+      run: make -j
+      working-directory: ./bin
+    - name: ctest
+      run: ctest -j
+      working-directory: ./bin
