@@ -22,13 +22,13 @@ jobs:
     steps:
     - name: which gfortran
       run: |
-        which #{{env.vFortran}}
-        #{{env.vFortran}} --version
+        which #{{vFortran}}
+        #{{vFortran}} --version
     - uses: actions/checkout@v2
     - name: mkdir bin
       run: mkdir bin 
     - name: cmake
-      run: cmake -D CMAKE_Fortran_COMPILER=`which ${{env.vFortran}}` -D CMAKE_BUILD_TYPE=${{env.build_type}} ..  
+      run: cmake -D CMAKE_Fortran_COMPILER=`which ${{vFortran}}` -D CMAKE_BUILD_TYPE=${{env.build_type}} ..  
       working-directory: ./bin
     - name: make
       run: make -j
