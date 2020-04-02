@@ -13,18 +13,20 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ubuntu-18.04, macOS]
+        os: [ubuntu-latest, macos-latest]
+        include:
+        - os: ubuntu-latest
+          env: 
+            FORTRAN: gfortran-9
+        - os: macos-latest
+          env: 
+            FORTRAN: gfortran
+
     steps:
-    - name: gfortran for Linux
-      if: matrix.os == 'ubuntu-18.04'
+    - name: which gfortran
       run: |
-        which gfortran-9
-        gfortran-9 --version
-    - name: gfortran for Mac
-      if: matrix.os == 'macOS'
-      run: |
-        which gfortran
-        gfortran --version
+        which $FORTRAN
+        $FORTRAN --version
     # - name: Install gfortran for Linux
     #   if: matrix.os == 'ubuntu-18.04'
     #   run: sudo apt-get install gfortran
