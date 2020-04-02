@@ -15,18 +15,22 @@ jobs:
       matrix:
         os: [ubuntu-18.04, macOS]
     steps:
-    - name: Install gfortran for Linux
-      if: matrix.os == 'ubuntu-18.04'
-      run: sudo apt-get install gfortran
-    - uses: actions/checkout@v2
-    - name: mkdir bin
-      run: mkdir bin 
-    - name: cmake
-      run: cmake ..  
-      working-directory: ./bin
-    - name: make
-      run: make -j
-      working-directory: ./bin
-    - name: ctest
-      run: ctest -j
-      working-directory: ./bin
+    - name: gfortran
+      run: |
+        which gfortran
+        gofrtran --version
+    # - name: Install gfortran for Linux
+    #   if: matrix.os == 'ubuntu-18.04'
+    #   run: sudo apt-get install gfortran
+    # - uses: actions/checkout@v2
+    # - name: mkdir bin
+    #   run: mkdir bin 
+    # - name: cmake
+    #   run: cmake ..  
+    #   working-directory: ./bin
+    # - name: make
+    #   run: make -j
+    #   working-directory: ./bin
+    # - name: ctest
+    #   run: ctest -j
+    #   working-directory: ./bin
