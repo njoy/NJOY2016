@@ -19,7 +19,7 @@ jobs:
           vFortran: gfortran-9
         - os: macos-latest
           vFortran: gfortran
-        # build_type: [ Debug, Release ]
+        build_type: [ Debug, Release ]
 
     steps:
     - name: which gfortran
@@ -30,11 +30,11 @@ jobs:
     - name: mkdir bin
       run: mkdir bin 
     - name: cmake
-      run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` ..  
+      run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..  
       working-directory: ./bin
     - name: make
       run: make -j
       working-directory: ./bin
-    # - name: ctest
-    #   run: ctest -j
-    #   working-directory: ./bin
+    - name: ctest
+      run: ctest -j
+      working-directory: ./bin
