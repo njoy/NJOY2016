@@ -15,7 +15,8 @@ jobs:
       matrix:
         os: [ubuntu-18.04, macOS]
     steps:
-    - name: Install gfortran
+    - name: Install gfortran for Linux
+      if: matrix.os == 'ubuntu-18.04'
       run: sudo apt-get install gfortran
     - uses: actions/checkout@v2
     - name: mkdir bin
