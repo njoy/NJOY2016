@@ -16,11 +16,9 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         include:
         - os: ubuntu-latest
-          env: 
-            vFortran: gfortran-9
+          vFortran: gfortran-9
         - os: macos-latest
-          env: 
-            vFortran: gfortran
+          vFortran: gfortran
 
     steps:
     - name: which gfortran
