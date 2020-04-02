@@ -24,10 +24,10 @@ jobs:
     steps:
       - name: compgen
         run: compgen -c | grep gfortran
-    # - name: which gfortran
-    #   run: |
-    #     which ${{matrix.vFortran}}
-    #     ${{matrix.vFortran}} --version
+    - name: which gfortran
+      run: |
+        which gfortran-8
+        gfortran-8 --version
     # - uses: actions/checkout@v2
     # - name: mkdir bin
     #   run: mkdir bin 
