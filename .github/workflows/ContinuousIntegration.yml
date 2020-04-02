@@ -32,5 +32,5 @@ jobs:
       run: make -j
       working-directory: ./bin
     - name: ctest
-      run: ctest -V -j
+      run: ctest -j
       working-directory: ./bin
