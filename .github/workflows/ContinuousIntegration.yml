@@ -25,8 +25,8 @@ jobs:
     steps:
     - name: which gfortran
       run: |
-        which ${{vFortran}}
-        ${{vFortran}} --version
+        which ${{matrix.vFortran}}
+        ${{matrix.vFortran}} --version
     # - name: Install gfortran for Linux
     #   if: matrix.os == 'ubuntu-18.04'
     #   run: sudo apt-get install gfortran
