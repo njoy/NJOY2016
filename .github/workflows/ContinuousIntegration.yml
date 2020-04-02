@@ -17,16 +17,16 @@ jobs:
         include:
         - os: ubuntu-latest
           env: 
-            FORTRAN: gfortran-9
+            vFortran: gfortran-9
         - os: macos-latest
           env: 
-            FORTRAN: gfortran
+            vFortran: gfortran
 
     steps:
     - name: which gfortran
       run: |
-        which $FORTRAN
-        $FORTRAN --version
+        which ${{vFortran}}
+        ${{vFortran}} --version
     # - name: Install gfortran for Linux
     #   if: matrix.os == 'ubuntu-18.04'
     #   run: sudo apt-get install gfortran
