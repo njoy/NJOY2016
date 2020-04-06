@@ -1,6 +1,7 @@
 module acedo
    ! provides ace dosimetry formats for acer
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -24,10 +25,6 @@ module acedo
 
    ! parameters for dosimetry jxs block
    integer::lone,jxs2,mtr,jxs4,jxs5,lsig,sigd,jxsd(14),end,jxsd2(10)
-
-   ! main ace container array
-   integer,parameter::nxss=4999000
-   real(kr)::xss(nxss)
 
 contains
 
@@ -61,6 +58,7 @@ contains
    jxs4=0
    jxs5=0
    jxsd2=0
+   xss=0
 
    !--allocate scratch storage
    nwscr=250000
@@ -626,4 +624,3 @@ contains
    end subroutine typen
 
 end module acedo
-

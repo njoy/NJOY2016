@@ -1,6 +1,7 @@
 module acepn
    ! provides photonuclear options for acer
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -20,10 +21,6 @@ module acepn
 
    ! parameters for photonuclear jxs block
    integer::esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(21)
-
-   ! storage array for ace data
-   integer,parameter::nxss=999000
-   real(kr)::xss(nxss)
 
 contains
 
@@ -80,6 +77,7 @@ contains
 
    nxsd=0
    jxsd=0
+   xss=0
 
    !--allocate scratch storage
    nwscr=50000
@@ -3477,4 +3475,3 @@ contains
    end subroutine ascll
 
 end module acepn
-

@@ -1,6 +1,7 @@
 module acefc
    ! provides fast continuous options for acer
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -80,10 +81,6 @@ module acefc
 
    ! storage for ptleg data
    real(kr),dimension(:),allocatable::xat
-
-   ! main container array for fast continuous data
-   integer,parameter::nxss=20000000
-   real(kr)::xss(nxss)
 
 contains
 

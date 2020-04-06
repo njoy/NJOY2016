@@ -1,6 +1,7 @@
 module acepa
    ! provides ACE photo-atomic routines for acer
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -21,9 +22,7 @@ module acepa
    ! parameters for photoatomic jxs block
    integer::eszg,jinc,jcoh,jflo,lhnm,jxsd(27)
 
-   ! main container array for ace data
-   real(kr),dimension(:),allocatable::xss
-   integer,parameter::nxss=999000
+   ! parameter for scratch array
    integer,parameter::nwscr=50000
 
 contains
@@ -69,12 +68,10 @@ contains
 
    nxsd=0
    jxsd=0
+   xss=0
 
    !--allocate scratch storage
    allocate(scr(nwscr))
-
-   !--allocate main container array
-   allocate(xss(nxss))
 
    !--assign input file
    call openz(nin,0)
@@ -1047,4 +1044,3 @@ contains
    end subroutine typen
 
 end module acepa
-

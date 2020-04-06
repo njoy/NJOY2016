@@ -1,6 +1,7 @@
 module aceth
    ! provides thermal ace stuff
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -22,8 +23,6 @@ module aceth
    integer::itie,itix,itxe,itce,itcx,itca,jxsd(26)
 
    ! body of the ace data
-   integer,parameter::nxss=9000000
-   real(kr)::xss(nxss)
    integer::nei
    real(kr),dimension(5000)::wt
    integer,dimension(5000)::ndp
@@ -79,6 +78,7 @@ contains
    !--process the thermal data
    nxsd=0
    jxsd=0
+   xss=0
    ninmax=500000
    call openz(nin,0)
    nscr=iabs(nscr)
@@ -2217,4 +2217,3 @@ contains
    end subroutine typen
 
 end module aceth
-

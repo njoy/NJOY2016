@@ -5,6 +5,10 @@ module acecm
    implicit none
    private
 
+   ! main ace container array
+   integer,parameter,public::nxss=20000000
+   real(kr),public::xss(nxss)
+
    !--Public routines
    public mtname,ptleg2,pttab2,bachaa,eavl
 
@@ -599,4 +603,3 @@ contains
    end function fi2
 
 end module acecm
-
