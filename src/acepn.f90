@@ -59,7 +59,7 @@ contains
    real(kr)::ee,amass,avadd,avlab,avll,test,rkal,akal
    real(kr)::eavi,avl,avcm,sign,dele,avav,zaid,gl,awp,awr,q
    real(kr)::awprec,awpp
-   integer,parameter::mmax=80
+   integer,parameter::mmax=1000
    integer::mfm(mmax),mtm(mmax),nr6(mmax)
    real(kr)::fnubar(300)
    character(8)::hdt
@@ -72,6 +72,7 @@ contains
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
    integer,parameter::ni=64
+   character(66)::text
    emc2=amassn*amu*clight*clight/ev/emev
    tvn=1
 
@@ -144,7 +145,7 @@ contains
       mtd=nint(scr(i+3))
       if (mfd.eq.1.and.mtd.eq.452) mt452=1
       if (mfd.eq.1.and.mtd.eq.456) mt456=1
-      if (mfd.ge.3.and.(mtd.lt.3.or.mtd.gt.4)) then
+      if (mfd.ge.3.and.(mtd.eq.2.or.mtd.gt.4)) then
          if (mfd.eq.3) ntr=ntr+1
          if (mtd.eq.2) ielas=1
          if (mfd.eq.3.and.(mtd.ge.600.and.mtd.le.649)) mt103=1
@@ -238,7 +239,7 @@ contains
    do while (mfh.ne.0)
       call contio(nin,0,0,scr,nb,nw)
       if (mfh.ne.0) then
-         if (mth.ne.3.and.mth.ne.4) then
+         if (mth.eq.2.or.mth.gt.4) then
             if (mth.eq.103.and.mt103.ne.0) go to 99
             if (mth.eq.104.and.mt104.ne.0) go to 99
             if (mth.eq.105.and.mt105.ne.0) go to 99
@@ -320,7 +321,7 @@ contains
 
          !--file 4
          if (mfh.eq.4) then
-            nneut=nneut+1
+            if (mth.ge.50.and.mth.le.91) nneut=nneut+1
             mtt=0
             ir=0
             do while (mtt.ne.mth)
@@ -529,9 +530,14 @@ contains
                        nr6(ii)=nr6(ii)+1
                   enddo
 
+               !--unknown distribution
+               else if (law.eq.0) then
+                  write(text,'(''recoil'',i6,'' in MT'',I4)')izap,mth
+                  call mess('acephn','no heating info for ',text)
                !--this law is not currently handled
                else
-                  call mess('acephn','file 6 law not coded',' ')
+                  write(text,'(''particle '',i5,'' law'',I4)')izap,law
+                  call mess('acephn','file 6 law not coded for ',text)
                endif
             enddo
          endif
@@ -903,8 +909,8 @@ contains
                      ne=nint(scr(ll+5))
                      xss(nex)=ne
                      ie=nex
-                     il=ie+ne
-                     nex=il+ne+1
+                     il=ie+ne          ! index before the locators for the outgoing distributions
+                     nex=il+ne+1       ! first outgoing distribution
                      llht=lld
                      lld=llht+8+2*ne
                      scr(llht)=0
@@ -946,33 +952,33 @@ contains
                            scr(lld+7)=iint
                            call pttab2(scr(lld))
                         endif
-                        xss(ie+iie)=sigfig(scr(lld+1)/emev,7,0)
+                        xss(ie+iie)=sigfig(scr(lld+1)/emev,7,0) ! E(iie)
                         m=nint(scr(lld+4))
                         n=nint(scr(lld+5))
-                        xss(il+iie)=nex-andp+1
+                        xss(il+iie)=nex-andp+1                  ! L(iie)
                         xss(il+iie)=-xss(il+iie)
                         intt=nint(scr(lld+7))
-                        xss(nex)=intt
-                        xss(nex+1)=n
+                        xss(nex)=intt                           ! intt
+                        xss(nex+1)=n                            ! number outgoing energy values
                         if (nex+2+3*n.gt.nxss) call error('acephn',&
                           'insufficient storage for',&
                           ' angular distributions.')
                         do ii=1,n
                            xss(nex+1+ii)=&
-                             sigfig(scr(lld+4+2*m+2*ii),7,0)
+                             sigfig(scr(lld+4+2*m+2*ii),7,0)    ! Eout(ii)
                            xss(nex+1+n+ii)=&
-                             sigfig(scr(lld+5+2*m+2*ii),7,0)
+                             sigfig(scr(lld+5+2*m+2*ii),7,0)    ! PDF(ii)
                            if (xss(nex+1+n+ii).lt.rmin)&
-                             xss(nex+1+n+ii)=0
+                             xss(nex+1+n+ii)=0                  ! PDF(ii)
                            if (ii.eq.1) then
-                              xss(nex+1+2*n+ii)=0
+                              xss(nex+1+2*n+ii)=0               ! CDF(1)
                               ubar=0
                            endif
                            if (ii.gt.1.and.intt.eq.1) then
                               sum=xss(nex+1+2*n+ii-1)&
                                 +xss(nex+1+n+ii-1)&
                                 *(xss(nex+1+ii)-xss(nex+1+ii-1))
-                              xss(nex+1+2*n+ii)=sum
+                              xss(nex+1+2*n+ii)=sum             ! CDF(ii)
                               ubar=ubar&
                                 +xss(nex+1+n+ii-1)&
                                 *(xss(nex+1+ii)-xss(nex+1+ii-1))&
@@ -982,7 +988,7 @@ contains
                               sum=xss(nex+1+2*n+ii-1)&
                                +(xss(nex+1+n+ii)+xss(nex+1+n+ii-1))&
                                *(xss(nex+1+ii)-xss(nex+1+ii-1))/2
-                              xss(nex+1+2*n+ii)=sum
+                              xss(nex+1+2*n+ii)=sum             ! CDF(ii)
                               ubar=ubar&
                                 +(xss(nex+1+n+ii)+xss(nex+1+n+ii-1))&
                                 *(xss(nex+1+ii)-xss(nex+1+ii-1))&
@@ -993,11 +999,11 @@ contains
                         renorm=one/xss(nex+1+3*n)
                         do ii=1,n
                            xss(nex+1+n+ii)=&
-                             sigfig(renorm*xss(nex+1+n+ii),7,0)
+                             sigfig(renorm*xss(nex+1+n+ii),7,0)    ! PDF(ii)
                            xss(nex+1+2*n+ii)=&
-                             sigfig(renorm*xss(nex+1+2*n+ii),9,0)
+                             sigfig(renorm*xss(nex+1+2*n+ii),9,0)  ! CDF(ii)
                         enddo
-                        nex=nex+2+3*n
+                        nex=nex+2+3*n       ! index for the next distribution
                         e=xss(ie+iie)
                         scr(llht+6+2*iie)=e
                         scr(llht+7+2*iie)=(awr-awpp)*(e+q)/awr
@@ -1463,7 +1469,8 @@ contains
                            enddo
                            scr(llh+6+2*ie)=ee
                            scr(llh+7+2*ie)=avlab
-                           nex=nex+2+(2*na+3)*ng
+                           !nex=nex+2+(2*na+3)*ng
+                           nex=nex+2+(3)*ng
                         enddo
                         !add in contribution to heating
                         !for this subsection
@@ -2337,7 +2344,7 @@ print*, "andp", andp, "l", l
             call advance_to_locator(nout,l,andp)
             do i=1,ntrp
                nn=nint(xss(rlocator))                     ! relative locator position
-print*, "i", i, "nint(xss(rlocator))", nint(xss(rlocator))
+print*, "i", i, "nint(xss(rlocator))", nint(xss(rlocator)), "mt", nint(xss(mtrp+i-1))
                if (nn.gt.0) then
 print*, "andp+nint(xss(rlocator))-1", andp+nint(xss(rlocator))-1, "l", l
                   call advance_to_locator(nout,l,andp+nn-1)
@@ -2345,7 +2352,7 @@ print*, "andp+nint(xss(rlocator))-1", andp+nint(xss(rlocator))-1, "l", l
                   call write_integer(nout,l)              ! NE
                   call write_real_list(nout,l,ne)         ! E (NE values)
                   ielocator=l
-                  call write_integer_list(nout,l,ntrp)
+                  call write_integer_list(nout,l,ne)      ! L (NE values)
                   do j=1,ne
                      nn=nint(xss(ielocator))              ! relative locator position
 print*, "andp+iabs(nint(xss(ielocator)))-1", andp+iabs(nint(xss(ielocator)))-1, "l", l
@@ -3140,7 +3147,8 @@ print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
                   nn=nint(xss(loci+1))
                   if (nn.gt.2) then
                      loci=loci+1
-                     do j=1,nn
+                     !--skip first two point that may be pseudo-threshold
+                     do j=3,nn
                         ep=xss(loci+j)
                         pd=xss(loci+nn+j)
                         if (pd.lt.zmin) zmin=pd
