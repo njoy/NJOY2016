@@ -2147,9 +2147,11 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::l,n,ne,ip,ntri,mftype,nr,li,ir,nn,ll,k,np,nw
+   integer::l,n,ne,ip,mftype,nr,li,ir,nn,ll,k,np,nw
    integer::ii,lnw,law,kk,nern,lrec,j,i
+   integer::ipt, ntrp, pxs, phn, mtrp, tyrp, lsigp, sigp, landp, andp, ldlwp, dlwp ! IXS
    integer::rlocator  ! locator index for reaction data
+   integer::plocator  ! locator index for the particle IXS array
    character(66)::text
 
    integer::ner=1
@@ -2223,170 +2225,109 @@ print*, "sig+nint(xss(rlocator))-1", sig+nint(xss(rlocator))-1, "l", l
          rlocator=rlocator+1
       enddo
 
-      !--ixs arrays
-      l=ixsa
-      n=neixs*ntype
-      do i=1,n
-         call typen(l,nout,1)
-         l=l+1
-      enddo
+      !--particle production blocks
+      if (ntype.gt.0) then
 
-      !--loop over the ntype productions
-      do ip=1,ntype
-         ntri=nint(xss(ixsa+neixs*(ip-1)+1))
+         !--ixs arrays
+print*, "ixsa", ixsa, "l", l
+         call advance_to_locator(nout,l,ixsa)
+         plocator=l
+         call write_integer_list(nout,l,neixs*ntype) ! IXS array (neixs values) for each IP
 
-         !--pxs block
-         call typen(l,nout,1)
-         l=l+1
-         ne=nint(xss(l))
-         call typen(l,nout,1)
-         l=l+1
-         do j=1,ne
-            call typen(l,nout,2)
-            l=l+1
-         enddo
+         !--loop over the ntype productions
+         do ip=1,ntype
 
-         !--phn block
-         call typen(l,nout,1)
-         l=l+1
-         ne=nint(xss(l))
-         call typen(l,nout,1)
-         l=l+1
-         do j=1,ne
-            call typen(l,nout,2)
-            l=l+1
-         enddo
+            ! IXS array entries
+            ipt=nint(xss(plocator))
+            ntrp=nint(xss(plocator+1))
+            pxs=nint(xss(plocator+2))
+            phn=nint(xss(plocator+3))
+            mtrp=nint(xss(plocator+4))
+            tyrp=nint(xss(plocator+5))
+            lsigp=nint(xss(plocator+6))
+            sigp=nint(xss(plocator+7))
+            landp=nint(xss(plocator+8))
+            andp=nint(xss(plocator+9))
+            ldlwp=nint(xss(plocator+10))
+            dlwp=nint(xss(plocator+11))
 
-         !--mtrp block
-         do i=1,ntri
+print*, "ipt", ipt
+print*, "ntrp", ntrp
+print*, "pxs", pxs
+print*, "phn", phn
+print*, "mtrp", mtrp
+print*, "tyrp", tyrp
+print*, "lsigp", lsigp
+print*, "sigp", sigp
+print*, "landp", landp
+print*, "andp", andp
+print*, "ldlwp", ldlwp
+print*, "dlwp", dlwp
+
+            !--pxs block
             call typen(l,nout,1)
             l=l+1
-         enddo
-
-         !--tyrp block
-         do i=1,ntri
+            ne=nint(xss(l))
             call typen(l,nout,1)
             l=l+1
-         enddo
+            do j=1,ne
+               call typen(l,nout,2)
+               l=l+1
+            enddo
 
-         !--lsigp block
-         do i=1,ntri
+            !--phn block
             call typen(l,nout,1)
             l=l+1
-         enddo
-
-         !--sigp block
-         do i=1,ntri
-            mftype=nint(xss(l))
+            ne=nint(xss(l))
             call typen(l,nout,1)
             l=l+1
-            if (mftype.eq.13) then
+            do j=1,ne
+               call typen(l,nout,2)
+               l=l+1
+            enddo
+
+            !--mtrp block
+            do i=1,ntrp
                call typen(l,nout,1)
                l=l+1
-               ne=nint(xss(l))
+            enddo
+
+            !--tyrp block
+            do i=1,ntrp
                call typen(l,nout,1)
                l=l+1
-               do j=1,ne
-                  call typen(l,nout,2)
+            enddo
+
+            !--lsigp block
+            do i=1,ntrp
+               call typen(l,nout,1)
+               l=l+1
+            enddo
+
+            !--sigp block
+            do i=1,ntrp
+               mftype=nint(xss(l))
+               call typen(l,nout,1)
+               l=l+1
+               if (mftype.eq.13) then
+                  call typen(l,nout,1)
                   l=l+1
-               enddo
-            else
-               call typen(l,nout,1)
-               l=l+1
-               nr=nint(xss(l))
-               call typen(l,nout,1)
-               l=l+1
-               if (nr.gt.0) then
-                  n=2*nr
-                  do j=1,n
-                     call typen(l,nout,1)
+                  ne=nint(xss(l))
+                  call typen(l,nout,1)
+                  l=l+1
+                  do j=1,ne
+                     call typen(l,nout,2)
                      l=l+1
                   enddo
-               endif
-               ne=nint(xss(l))
-               call typen(l,nout,1)
-               l=l+1
-               n=2*ne
-               do j=1,n
-                  call typen(l,nout,2)
-                  l=l+1
-               enddo
-            endif
-         enddo
-
-         !--landp block
-         li=l-1
-         do i=1,ntri
-            call typen(l,nout,1)
-            l=l+1
-         enddo
-
-         !--andp block
-         do ir=1,ntri
-            nn=nint(xss(li+ir))
-            if (nn.gt.0) then
-               ne=nint(xss(l))
-               call typen(l,nout,1)
-               l=l+1
-               do j=1,ne
-                  call typen(l,nout,2)
-                  l=l+1
-               enddo
-               ll=l-1
-               do j=1,ne
-                  call typen(l,nout,1)
-                  l=l+1
-               enddo
-               do j=1,ne
-                  nn=nint(xss(ll+j))
-                  if (nn.gt.0) then
-                     do k=1,33
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                  else if (nn.lt.0) then
-                     call typen(l,nout,1)
-                     l=l+1
-                     np=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     nw=3*np
-                     do k=1,nw
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                  endif
-               enddo
-            endif
-         enddo
-
-         !--ldlwp block
-         li=l-1
-         do ii=1,ntri
-            call typen(l,nout,1)
-            l=l+1
-         enddo
-
-         !--dlwlp block
-         do ii=1,ntri
-            nn=nint(xss(li+ii))
-            if (nn.gt.0) then
-               lnw=1
-               do while (lnw.ne.0)
-                  lnw=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
-                  law=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
+               else
                   call typen(l,nout,1)
                   l=l+1
                   nr=nint(xss(l))
                   call typen(l,nout,1)
                   l=l+1
-                  if (nr.ne.0) then
-                     nw=2*nr
-                     do k=1,nw
+                  if (nr.gt.0) then
+                     n=2*nr
+                     do j=1,n
                         call typen(l,nout,1)
                         l=l+1
                      enddo
@@ -2394,72 +2335,87 @@ print*, "sig+nint(xss(rlocator))-1", sig+nint(xss(rlocator))-1, "l", l
                   ne=nint(xss(l))
                   call typen(l,nout,1)
                   l=l+1
-                  nw=2*ne
-                  do k=1,nw
+                  n=2*ne
+                  do j=1,n
                      call typen(l,nout,2)
                      l=l+1
                   enddo
-                  if (law.eq.4) then
-                     nr=nint(xss(l))
+               endif
+            enddo
+
+            !--landp block
+            li=l-1
+            do i=1,ntrp
+               call typen(l,nout,1)
+               l=l+1
+            enddo
+
+            !--andp block
+            do ir=1,ntrp
+               nn=nint(xss(li+ir))
+               if (nn.gt.0) then
+                  ne=nint(xss(l))
+                  call typen(l,nout,1)
+                  l=l+1
+                  do j=1,ne
+                     call typen(l,nout,2)
+                     l=l+1
+                  enddo
+                  ll=l-1
+                  do j=1,ne
                      call typen(l,nout,1)
                      l=l+1
-                     ne=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     do k=1,ne
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                     do k=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                     enddo
-                     do k=1,ne
+                  enddo
+                  do j=1,ne
+                     nn=nint(xss(ll+j))
+                     if (nn.gt.0) then
+                        do k=1,33
+                           call typen(l,nout,2)
+                           l=l+1
+                        enddo
+                     else if (nn.lt.0) then
                         call typen(l,nout,1)
                         l=l+1
                         np=nint(xss(l))
                         call typen(l,nout,1)
                         l=l+1
                         nw=3*np
-                        do kk=1,nw
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                     enddo
-                  else if (law.eq.44) then
-                     nr=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     ne=nint(xss(l))
-                     call typen(l,nout,1)
-                     l=l+1
-                     do k=1,ne
-                        call typen(l,nout,2)
-                        l=l+1
-                     enddo
-                     do k=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                     enddo
-                     do j=1,ne
-                        call typen(l,nout,1)
-                        l=l+1
-                        np=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
-                        nw=5*np
                         do k=1,nw
                            call typen(l,nout,2)
                            l=l+1
                         enddo
-                     enddo
-                  else if (law.eq.7.or.law.eq.9) then
+                     endif
+                  enddo
+               endif
+            enddo
+
+            !--ldlwp block
+            li=l-1
+            do ii=1,ntrp
+               call typen(l,nout,1)
+               l=l+1
+            enddo
+
+            !--dlwlp block
+            do ii=1,ntrp
+               nn=nint(xss(li+ii))
+               if (nn.gt.0) then
+                  lnw=1
+                  do while (lnw.ne.0)
+                     lnw=nint(xss(l))
+                     call typen(l,nout,1)
+                     l=l+1
+                     law=nint(xss(l))
+                     call typen(l,nout,1)
+                     l=l+1
+                     call typen(l,nout,1)
+                     l=l+1
                      nr=nint(xss(l))
                      call typen(l,nout,1)
                      l=l+1
-                     if (nr.gt.0) then
-                        n=2*nr
-                        do j=1,n
+                     if (nr.ne.0) then
+                        nw=2*nr
+                        do k=1,nw
                            call typen(l,nout,1)
                            l=l+1
                         enddo
@@ -2467,28 +2423,102 @@ print*, "sig+nint(xss(rlocator))-1", sig+nint(xss(rlocator))-1, "l", l
                      ne=nint(xss(l))
                      call typen(l,nout,1)
                      l=l+1
-                     n=2*ne
-                     do j=1,n
+                     nw=2*ne
+                     do k=1,nw
                         call typen(l,nout,2)
                         l=l+1
                      enddo
-                     call typen(l,nout,2)
-                     l=l+1
-                  else if (law.eq.33) then
-                     call typen(l,nout,2)
-                     l=l+1
-                     call typen(l,nout,2)
-                     l=l+1
-                  else
-                     write(text,'(''Undefined law for dlwlp block: '',i3)') law
-                     call error('change',text,' ')
-                  endif
-               enddo
-            endif
+                     if (law.eq.4) then
+                        nr=nint(xss(l))
+                        call typen(l,nout,1)
+                        l=l+1
+                        ne=nint(xss(l))
+                        call typen(l,nout,1)
+                        l=l+1
+                        do k=1,ne
+                           call typen(l,nout,2)
+                           l=l+1
+                        enddo
+                        do k=1,ne
+                           call typen(l,nout,1)
+                           l=l+1
+                        enddo
+                        do k=1,ne
+                           call typen(l,nout,1)
+                           l=l+1
+                           np=nint(xss(l))
+                           call typen(l,nout,1)
+                           l=l+1
+                           nw=3*np
+                           do kk=1,nw
+                              call typen(l,nout,2)
+                              l=l+1
+                           enddo
+                        enddo
+                     else if (law.eq.44) then
+                        nr=nint(xss(l))
+                        call typen(l,nout,1)
+                        l=l+1
+                        ne=nint(xss(l))
+                        call typen(l,nout,1)
+                        l=l+1
+                        do k=1,ne
+                           call typen(l,nout,2)
+                           l=l+1
+                        enddo
+                        do k=1,ne
+                           call typen(l,nout,1)
+                           l=l+1
+                        enddo
+                        do j=1,ne
+                           call typen(l,nout,1)
+                           l=l+1
+                           np=nint(xss(l))
+                           call typen(l,nout,1)
+                           l=l+1
+                           nw=5*np
+                           do k=1,nw
+                              call typen(l,nout,2)
+                              l=l+1
+                           enddo
+                        enddo
+                     else if (law.eq.7.or.law.eq.9) then
+                        nr=nint(xss(l))
+                        call typen(l,nout,1)
+                        l=l+1
+                        if (nr.gt.0) then
+                           n=2*nr
+                           do j=1,n
+                              call typen(l,nout,1)
+                              l=l+1
+                           enddo
+                        endif
+                        ne=nint(xss(l))
+                        call typen(l,nout,1)
+                        l=l+1
+                        n=2*ne
+                        do j=1,n
+                           call typen(l,nout,2)
+                           l=l+1
+                        enddo
+                        call typen(l,nout,2)
+                        l=l+1
+                     else if (law.eq.33) then
+                        call typen(l,nout,2)
+                        l=l+1
+                        call typen(l,nout,2)
+                        l=l+1
+                     else
+                        write(text,'(''Undefined law for dlwlp block: '',i3)') law
+                        call error('change',text,' ')
+                     endif
+                  enddo
+               endif
+            enddo
+            plocator=plocator+neixs
+         !--continue loop over productions
          enddo
-
-      !--continue loop over productions
-      enddo
+      endif
       call typen(0,nout,3)
       nern=0
       lrec=0
