@@ -2400,30 +2400,22 @@ print*, "law", law
                      !--law 4
                      if (law.eq.4) then
                         nr=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
+                        call write_integer(nout,l)               ! NR
+                        if (nr.gt.0) then
+                           call write_integer_list(nout,l,2*nr)  ! NBT, INT (each NR values)
+                        endif
                         ne=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
-                        do k=1,ne
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                        do k=1,ne
-                           call typen(l,nout,1)
-                           l=l+1
-                        enddo
-                        do k=1,ne
-                           call typen(l,nout,1)
-                           l=l+1
+                        call write_integer(nout,l)            ! NE
+                        call write_real_list(nout,l,ne)       ! E (NE values)
+                        ielocator=l
+                        call write_integer_list(nout,l,ne)    ! L (NE values)
+                        do j=1,ne
+                           call advance_to_locator(nout,l,dlwp+nint(xss(ielocator))-1)
+                           call write_integer(nout,l)         ! INTT
                            np=nint(xss(l))
-                           call typen(l,nout,1)
-                           l=l+1
-                           nw=3*np
-                           do kk=1,nw
-                              call typen(l,nout,2)
-                              l=l+1
-                           enddo
+                           call write_integer(nout,l)         ! NP
+                           call write_real_list(nout,l,3*np)  ! Eout, PDF, CDF (each NP values)
+                           ielocator=ielocator+1
                         enddo
 
                      !--law 44
@@ -2451,25 +2443,14 @@ print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
                      !--law 7 or 9
                      else if (law.eq.7.or.law.eq.9) then
                         nr=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
+                        call write_integer(nout,l)               ! NR
                         if (nr.gt.0) then
-                           n=2*nr
-                           do j=1,n
-                              call typen(l,nout,1)
-                              l=l+1
-                           enddo
+                           call write_integer_list(nout,l,2*nr) ! NBT, INT (each NR values)
                         endif
                         ne=nint(xss(l))
-                        call typen(l,nout,1)
-                        l=l+1
-                        n=2*ne
-                        do j=1,n
-                           call typen(l,nout,2)
-                           l=l+1
-                        enddo
-                        call typen(l,nout,2)
-                        l=l+1
+                        call write_integer(nout,l)            ! NE
+                        call write_real_list(nout,l,2*ne)     ! E, theta (each NE values)
+                        call write_real(nout,l)               ! U
 
                      !--law 33
                      else if (law.eq.33) then
@@ -2478,7 +2459,7 @@ print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
 
                      ! unknown law
                      else
-                        write(text,'(''Undefined law for dlwlp block: '',i3)') law
+                        write(text,'(''Undefined law for dlwp block: '',i3)') law
                         call error('phnout',text,' ')
                      endif
                   enddo
