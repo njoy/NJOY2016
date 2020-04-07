@@ -272,3 +272,15 @@ title: NJOY2016 Test Descriptions
 - test 52: LAW=5 LTP=1 for identical particles with a spin s = 0.5 (as expected, this remains the same before and after the fix)
 - test 53: LAW=5 LTP=1 for identical particles with a spin s = 1 (this changes due to the fix but the original file does no have NaN values, as expected)
 - test 54: LAW=5 LTP=1 for different particles (as expected, this remains the same before and after the fix)
+
+## Test Problem 55
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/56/input)]
+
+  This test relates to changes made to an ACE file by the consistency checks when a checker `ACER` run is requested. NJOY only rarely modifies data. It does so for secondary particle distributions that use LAW=4 (isotropic angular distribution and continuous tabulated energy distributions) or LAW=44 (Kalbach-Mann). Under some circumstances, these changes used to introduce peaks in the data that obscured the plots.
+
+## Test Problem 56
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/56/input)]
+
+  This test is added following issues in processing photonuclear data in `ACER`. This test uses the ENDF/B-VIII.0 photonuclear evaluation for U235.
