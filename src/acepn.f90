@@ -2150,6 +2150,7 @@ contains
    integer::l,n,ne,ip,ntri,mftype,nr,li,ir,nn,ll,k,np,nw
    integer::ii,lnw,law,kk,nern,lrec,j,i
    integer::rlocator  ! locator index for reaction data
+   character(66)::text
 
    integer::ner=1
    integer::nbw=1
@@ -2478,6 +2479,9 @@ print*, "sig+nint(xss(rlocator))-1", sig+nint(xss(rlocator))-1, "l", l
                      l=l+1
                      call typen(l,nout,2)
                      l=l+1
+                  else
+                     write(text,'(''Undefined law for dlwlp block: '',i3)') law
+                     call error('change',text,' ')
                   endif
                enddo
             endif
