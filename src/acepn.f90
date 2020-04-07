@@ -2265,85 +2265,69 @@ print*, "ldlwp", ldlwp
 print*, "dlwp", dlwp
 
             !--pxs block
-            call typen(l,nout,1)
-            l=l+1
+print*, "pxs", pxs, "l", l
+            call advance_to_locator(nout,l,pxs)
+            call write_integer(nout,l)
             ne=nint(xss(l))
-            call typen(l,nout,1)
-            l=l+1
-            do j=1,ne
-               call typen(l,nout,2)
-               l=l+1
-            enddo
+            call write_integer(nout,l)
+            call write_real_list(nout,l,ne)
 
             !--phn block
-            call typen(l,nout,1)
-            l=l+1
+print*, "phn", phn, "l", l
+            call advance_to_locator(nout,l,phn)
+            call write_integer(nout,l)
             ne=nint(xss(l))
-            call typen(l,nout,1)
-            l=l+1
-            do j=1,ne
-               call typen(l,nout,2)
-               l=l+1
-            enddo
+            call write_integer(nout,l)
+            call write_real_list(nout,l,ne)
 
             !--mtrp block
-            do i=1,ntrp
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+print*, "mtrp", mtrp, "l", l
+            call advance_to_locator(nout,l,mtrp)
+            call write_integer_list(nout,l,ntrp) ! MT (ntrp values)
 
             !--tyrp block
-            do i=1,ntrp
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+print*, "tyrp", tyrp, "l", l
+            call advance_to_locator(nout,l,tyrp)
+            call write_integer_list(nout,l,ntrp) ! TYR (ntrp values)
 
             !--lsigp block
-            do i=1,ntrp
-               call typen(l,nout,1)
-               l=l+1
-            enddo
+print*, "lsigp", lsigp, "l", l
+            call advance_to_locator(nout,l,lsigp)
+            rlocator=l
+            call write_integer_list(nout,l,ntrp) ! L (ntrp values)
 
             !--sigp block
+print*, "sigp", sigp, "l", l
+            call advance_to_locator(nout,l,sigp)
             do i=1,ntrp
+print*, "sigp+nint(xss(rlocator))-1", sigp+nint(xss(rlocator))-1, "l", l
+               call advance_to_locator(nout,l,sigp+nint(xss(rlocator))-1)
+
                mftype=nint(xss(l))
-               call typen(l,nout,1)
-               l=l+1
-               if (mftype.eq.13) then
-                  call typen(l,nout,1)
-                  l=l+1
+print*, "mftype", mftype
+               call write_integer(nout,l)              ! MFTYPE
+               if (mftype.eq.13) then                  ! MF=13
+                  call write_integer(nout,l)           ! IE
                   ne=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
-                  do j=1,ne
-                     call typen(l,nout,2)
-                     l=l+1
-                  enddo
+                  call write_integer(nout,l)           ! NE
+                  call write_real_list(nout,l,ne)      ! sigma (NE values)
                else
-                  call typen(l,nout,1)
-                  l=l+1
+                  call write_integer(nout,l)           ! MTMULT
                   nr=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
+                  call write_integer(nout,l)           ! NR
                   if (nr.gt.0) then
-                     n=2*nr
-                     do j=1,n
-                        call typen(l,nout,1)
-                        l=l+1
-                     enddo
+                     call write_integer_list(nout,l,2*nr) ! NBT, INT (each NR values)
                   endif
                   ne=nint(xss(l))
-                  call typen(l,nout,1)
-                  l=l+1
-                  n=2*ne
-                  do j=1,n
-                     call typen(l,nout,2)
-                     l=l+1
-                  enddo
+                  call write_integer(nout,l)           ! NE
+                  call write_real_list(nout,l,2*ne)    ! E, Y (each NE values)
                endif
+               rlocator=rlocator+1
             enddo
 
             !--landp block
+print*, "landp", landp, "l", l
+            call advance_to_locator(nout,l,landp)
             li=l-1
             do i=1,ntrp
                call typen(l,nout,1)
@@ -2351,6 +2335,8 @@ print*, "dlwp", dlwp
             enddo
 
             !--andp block
+print*, "andp", andp, "l", l
+            call advance_to_locator(nout,l,andp)
             do ir=1,ntrp
                nn=nint(xss(li+ir))
                if (nn.gt.0) then
@@ -2390,13 +2376,17 @@ print*, "dlwp", dlwp
             enddo
 
             !--ldlwp block
+print*, "ldlwp", ldlwp, "l", l
+            call advance_to_locator(nout,l,ldlwp)
             li=l-1
             do ii=1,ntrp
                call typen(l,nout,1)
                l=l+1
             enddo
 
-            !--dlwlp block
+            !--dlwp block
+print*, "dlwp", dlwp, "l", l
+            call advance_to_locator(nout,l,dlwp)
             do ii=1,ntrp
                nn=nint(xss(li+ii))
                if (nn.gt.0) then

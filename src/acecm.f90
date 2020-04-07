@@ -621,7 +621,7 @@ contains
    if (l.lt.locator) then
       write(text,'(''expected xss index ('',i6,'') greater than '',&
                    &''current index ('',i6,'')'')') locator, l
-      call mess('change',text,'xss array was padded accordingly')
+      call mess('advance',text,'xss array was padded accordingly')
       do while (l.lt.locator)
          call typen(l,nout,1)
          l=l+1
@@ -629,7 +629,7 @@ contains
    else if (l.gt.locator) then
       write(text,'(''expected xss index ('',i6,'') less than '',&
                    &''current index ('',i6,'')'')') locator, l
-      call error('change',text,'this may be a serious problem')
+      call error('advance',text,'this may be a serious problem')
    endif
    return
    end subroutine advance_to_locator
