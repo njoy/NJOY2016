@@ -6,15 +6,15 @@ on: [push, pull_request]
 
 jobs:
   build:
-  name: Testing
-  runs-on: ubunto-latest
-  steps:
-  - name: actions/checkout@master
-  - name: mkdir bin
-    run: mkdir bin; cd bin
-  - name: cmake
-    run: cmake ..
-  - name: make
-    run: make
-  - name: make test
-    run: make test
+    name: Testing
+    runs-on: ubuntu-latest
+    steps:
+    - name: actions/checkout@master
+    - name: mkdir bin
+      run: mkdir bin; cd bin
+    - name: cmake
+      run: cmake ..
+    - name: make
+      run: make
+    - name: make test
+      run: make test
