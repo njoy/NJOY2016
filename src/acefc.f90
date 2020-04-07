@@ -12879,6 +12879,7 @@ contains
    l=1
 
    !--write esz block
+   call advance_to_locator(nout,l,esz)
    call write_real_list(nout,l,5*nes)
 
    !--write nu block
