@@ -2149,6 +2149,7 @@ contains
    ! internals
    integer::l,n,ne,ip,ntri,mftype,nr,li,ir,nn,ll,k,np,nw
    integer::ii,lnw,law,kk,nern,lrec,j,i
+   integer::rlocator  ! locator index for reaction data
 
    integer::ner=1
    integer::nbw=1
@@ -2173,48 +2174,52 @@ contains
         esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
 
       !--esz block
-      l=esz
-      n=2*nes
-      if (els.gt.0) n=n+nes
-      if (thn.gt.0) n=n+nes
-      do i=1,n
-         call typen(l,nout,2)
-         l=l+1
-      enddo
+      l=1
+print*, "esz", esz, "l", l
+      call advance_to_locator(nout,l,esz)
+      call write_real_list(nout,l,2*nes)   ! energies and total cross section (2*nes values)
+
+      !--els block
+      if (els.ne.0) then
+print*, "nes", nes, "l", l
+         call advance_to_locator(nout,l,els)
+         call write_real_list(nout,l,nes)  ! elastic cross section (nes values)
+      endif
+
+      !--thn block
+      if (thn.ne.0) then
+print*, "thn", thn, "l", l
+         call advance_to_locator(nout,l,thn)
+         call write_real_list(nout,l,nes)  ! non-elastic cross section (nes values)
+      endif
 
       !--mtr block
-      l=mtr
-      do i=1,ntr
-         call typen(l,nout,1)
-         l=l+1
-      enddo
+print*, "mtr", mtr, "l", l
+      call advance_to_locator(nout,l,mtr)
+      call write_integer_list(nout,l,ntr)
 
       !--lqr block
-      l=lqr
-      do i=1,ntr
-         call typen(l,nout,2)
-         l=l+1
-      enddo
+print*, "lqr", lqr, "l", l
+call advance_to_locator(nout,l,lqr)
+call write_real_list(nout,l,ntr)
 
       !--lsig block
-      l=lsig
-      do i=1,ntr
-         call typen(l,nout,1)
-         l=l+1
-      enddo
+print*, "lsig", lsig, "l", l
+      call advance_to_locator(nout,l,lsig)
+      rlocator=l
+      call write_integer_list(nout,l,ntr)
 
       !--sig block
-      l=sig
+print*, "sig", sig, "l", l
+      call advance_to_locator(nout,l,sig)
       do i=1,ntr
-         call typen(l,nout,1)
-         l=l+1
+print*, "sig+nint(xss(rlocator))-1", sig+nint(xss(rlocator))-1, "l", l
+         call advance_to_locator(nout,l,sig+nint(xss(rlocator))-1) ! sig=jxs(7)
+         call write_integer(nout,l)
          ne=nint(xss(l))
-         call typen(l,nout,1)
-         l=l+1
-         do j=1,ne
-            call typen(l,nout,2)
-            l=l+1
-         enddo
+         call write_integer(nout,l)
+         call write_real_list(nout,l,ne)
+         rlocator=rlocator+1
       enddo
 
       !--ixs arrays
