@@ -13701,6 +13701,8 @@ contains
                         enddo
                         ielocator=ielocator+1
                      enddo
+
+                   ! unknown law
                    else
                       write(text,'(''Undefined law for dlwh block: '',i3)') law
                       call error('change',text,' ')
