@@ -321,7 +321,7 @@ contains
 
          !--file 4
          if (mfh.eq.4) then
-            if (mth.ge.50.and.mth.le.91) nneut=nneut+1
+            nneut=nneut+1
             mtt=0
             ir=0
             do while (mtt.ne.mth)
@@ -1469,8 +1469,8 @@ contains
                            enddo
                            scr(llh+6+2*ie)=ee
                            scr(llh+7+2*ie)=avlab
-                           !nex=nex+2+(2*na+3)*ng
-                           nex=nex+2+(3)*ng
+                           nex=nex+2+(2*na+3)*ng
+                           !nex=nex+2+(3)*ng
                         enddo
                         !add in contribution to heating
                         !for this subsection
