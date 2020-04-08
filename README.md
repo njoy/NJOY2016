@@ -1,3 +1,5 @@
+![](https://github.com/njoy/NJOY2016/workflows/Continuous%20Integration/badge.svg)
+
 # NJOY2016
 
  The NJOY Nuclear Data Processing System is a modular computer code designed to read evaluated data in ENDF format, transform the data in various ways, and output the results as libraries designed to be used in various applications. Each module performs a well defined processing task. The modules are essentially independent programs, and they communicate with each other using input and output files, plus a very few common variables.
