@@ -1380,11 +1380,17 @@ contains
                            xss(lle+ne+ie-1)=nex-dlwp+1
                            nd=nint(scr(lld+2))
                            na=nint(scr(lld+3))
+                           ncyc=na+2
                            if (lang.eq.1) then
                               xss(last+1)=4
                               xss(landp+jp-1)=0
+                              if (na.ne.0) then
+                                write(text,'(''particle'',i6,'' in MT'',i4,'' at ee='',e10.4)')izap,mth,scr(lld+1)
+                                call mess('acephn','law=1 lang=1 angular distributions reset to isotropic',&
+                                  text)
+                                na=0
+                              endif
                            endif
-                           ncyc=na+2
                            ng=nint(scr(lld+5))
                            xss(nex)=lep+10*nd
                            xss(nex+1)=ng
@@ -1470,7 +1476,6 @@ contains
                            scr(llh+6+2*ie)=ee
                            scr(llh+7+2*ie)=avlab
                            nex=nex+2+(2*na+3)*ng
-                           !nex=nex+2+(3)*ng
                         enddo
                         !add in contribution to heating
                         !for this subsection
