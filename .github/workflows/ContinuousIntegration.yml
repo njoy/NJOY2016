@@ -1,7 +1,7 @@
 # GitHub workflow to enable continuous integratoin
 name: Continuous Integration
 
-# This workflow is triggered on pushes and pull requests to the repository.
+# This workflow is triggered on pushes and pull requests to the master branch
 on: 
   push:
     branches: '*'
