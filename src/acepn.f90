@@ -1318,11 +1318,12 @@ contains
                   if (izap.ne.ip) then
                      call skip6(nin,0,0,scr,law)
                   else
-                     xss(ldlwp+jp-1)=nex-dlwp+1
+                     xss(ldlwp+jp-1)=nex-dlwp+1  ! locator, points to LNW
                      last=nex
-                     xss(nex)=0
-                     xss(nex+1)=0
-                     nex=nex+3
+                     xss(last)=0                 ! LNW
+                     xss(last+1)=0               ! LAW set to 0
+                     xss(last+2)=0               ! IDAT set to 0
+                     nex=nex+3                   ! nex points to NR
 
                      !--we can only process law=1, 2, and 4 currently
                      if (law.ne.1.and.law.ne.2.and.law.ne.4) then
@@ -1330,22 +1331,31 @@ contains
                           ' law=2, or law=4 currently')
                         call skip6(nin,0,0,scr,law)
                      else if (law.eq.1) then
-                        xss(landp+jp-1)=-1
                         ll=jscr
-                        xss(last+1)=44
                         call tab2io(nin,0,0,scr(ll),nb,nw)
                         lang=nint(scr(ll+2))
                         lep=nint(scr(ll+3))
                         ne=nint(scr(ll+5))
-                        xss(nex)=0
-                        lee=nex
-                        xss(nex+1)=2
-                        nex=nex+2+2*2
-                        xss(last+2)=nex-dlwp+1
-                        xss(nex)=0
-                        xss(nex+1)=ne
-                        lle=nex+2
-                        nex=lle+2*ne
+                        if (lang.eq.1) then
+                           xss(last+1)=61      ! LAW
+                        else if (lang.eq.2) then
+                           xss(last+1)=44      ! LAW
+                        else
+                           write(text,'(''lang='',i3,'' not supported for law='',i2)')lang,law
+                           call error('acephn',text,'')
+                        endif
+                        xss(landp+jp-1)=-1     ! angular included in energy distribution
+                        xss(nex)=0             ! NR set to 0
+                        lee=nex                ! lee points to NR
+                        xss(nex+1)=2           ! NBT(1) set to 2
+                        nex=nex+2+2*2          ! nex points to LDAT(1)
+                        xss(last+2)=nex-dlwp+1 ! IDAT
+                        xss(nex)=0             ! LDAT(1) = NR set to 0
+                        xss(nex+1)=ne          ! LDAT(2) = NE set to ne
+                        lle=nex+2              ! lle points to LDAT(3) = E(1)
+                        nex=lle+2*ne           ! nex points to start of first distribution
+
+                        ! scr(llh) up to scr(lld-1) is set up for heating
                         llh=ll
                         scr(llh)=0
                         scr(llh+1)=0
@@ -1356,7 +1366,11 @@ contains
                         scr(llh+6)=ne
                         scr(llh+7)=2
                         lld=llh+8+2*ne
+
+                        ! go over each incident energy value
                         do ie=1,ne
+
+                           ! read distribition, store starting at scr(lld)
                            ll=lld
                            call listio(nin,0,0,scr(ll),nb,nw)
                            ll=ll+nw
@@ -1368,19 +1382,12 @@ contains
                               if (ll.gt.nwscr) call error('acephn',&
                                   'scr array overflow in file 6 list',' ')
                            enddo
-                           if (ie.eq.1) then
-                              xss(lee+2)=sigfig(scr(lld+1)/emev,7,0)
-                              xss(lee+4)=1
-                           else if (ie.eq.ne) then
-                              xss(lee+3)=sigfig(scr(lld+1)/emev,7,0)
-                              xss(lee+5)=1
-                           endif
-                           xss(lle+ie-1)=sigfig(scr(lld+1)/emev,7,0)
-                           ee=xss(lle+ie-1)
-                           xss(lle+ne+ie-1)=nex-dlwp+1
                            nd=nint(scr(lld+2))
                            na=nint(scr(lld+3))
+                           ng=nint(scr(lld+5))
                            ncyc=na+2
+
+                           ! reset law and locator for lang=1 - TEMPORARY
                            if (lang.eq.1) then
                               xss(last+1)=4
                               xss(landp+jp-1)=0
@@ -1391,17 +1398,36 @@ contains
                                 na=0
                               endif
                            endif
-                           ng=nint(scr(lld+5))
-                           xss(nex)=lep+10*nd
-                           xss(nex+1)=ng
+
+                           ! set energy range and probability for this law
+                           ! only first and last incident energy needed
+                           ! probability set to 1 all energies
+                           if (ie.eq.1) then
+                              xss(lee+2)=sigfig(scr(lld+1)/emev,7,0)
+                              xss(lee+4)=1
+                           else if (ie.eq.ne) then
+                              xss(lee+3)=sigfig(scr(lld+1)/emev,7,0)
+                              xss(lee+5)=1
+                           endif
+
+                           ! set incident energy and locator for the current distribution
+                           xss(lle+ie-1)=sigfig(scr(lld+1)/emev,7,0) ! Ein(ie)
+                           ee=xss(lle+ie-1)
+                           xss(lle+ne+ie-1)=nex-dlwp+1! locator for distribution
+                           xss(nex)=lep+10*nd    ! INTT for this secondary energy distribution
+                           xss(nex+1)=ng         ! NP
+
                            amass=awp*emc2
                            avadd=ee/(awr*emc2)
                            avlab=0
                            avll=0
+
+                           ! go over the outgoing energies
                            do ig=1,ng
-                              ! distribution
+                              ! outgoing energy
                               xss(nex+1+ig)=&
                                 sigfig(scr(lld+6+ncyc*(ig-1))/emev,7,0)
+                              ! pdf
                               if (ig.le.nd) then
                                 xss(nex+1+ig+ng)=&
                                   sigfig(scr(lld+7+ncyc*(ig-1)),7,0)
@@ -1412,7 +1438,9 @@ contains
                               test=xss(nex+1+ig+ng)
                               if (test.gt.zero.and.test.lt.small)&
                                 xss(nex+1+ig+ng)=small
+                              ! cdf
                               if (ig.eq.1) then
+                                 ! initial value
                                  if (nd.eq.0) then
                                     xss(nex+1+ig+2*ng)=0
                                  else
@@ -1420,28 +1448,37 @@ contains
                                                   scr(lld+7+ncyc*(ig-1))
                                  endif
                               elseif (ig.le.nd) then
+                                 ! discrete photon
                                  xss(nex+1+ig+2*ng)=xss(nex+ig+2*ng)+&
                                                   scr(lld+7+ncyc*(ig-1))
                               elseif (ig.eq.nd+1) then
+                                 ! start of continuum
                                  xss(nex+1+ig+2*ng)=xss(nex+ig+2*ng)
                               endif
-                              if (ig.gt.nd+1.and.lep.eq.1)&
-                                xss(nex+1+ig+2*ng)=xss(nex+ig+2*ng)&
-                                +scr(lld+7+ncyc*(ig-2))&
-                                *(scr(lld+6+ncyc*(ig-1))&
-                                -scr(lld+6+ncyc*(ig-2)))
-                              if (ig.gt.nd+1.and.lep.eq.2)&
-                                xss(nex+1+ig+2*ng)=xss(nex+ig+2*ng)&
-                                +((scr(lld+7+ncyc*(ig-2))&
-                                +scr(lld+7+ncyc*(ig-1)))/2)&
-                                *(scr(lld+6+ncyc*(ig-1))&
-                                -scr(lld+6+ncyc*(ig-2)))
+                              if (ig.gt.nd+1) then
+                                 ! continuum
+                                 if (lep.eq.1) then
+                                    ! histogram
+                                    xss(nex+1+ig+2*ng)=xss(nex+ig+2*ng)&
+                                       +scr(lld+7+ncyc*(ig-2))&
+                                       *(scr(lld+6+ncyc*(ig-1))&
+                                       -scr(lld+6+ncyc*(ig-2)))
+                                 elseif (lep.eq.2) then
+                                    ! lin-lin
+                                    xss(nex+1+ig+2*ng)=xss(nex+ig+2*ng)&
+                                       +((scr(lld+7+ncyc*(ig-2))&
+                                       +scr(lld+7+ncyc*(ig-1)))/2)&
+                                       *(scr(lld+6+ncyc*(ig-1))&
+                                       -scr(lld+6+ncyc*(ig-2)))
+                                 endif
+                              endif
                               if (lang.eq.2) then
+                                 ! kalbach-mann
                                  rkal=scr(lld+8+ncyc*(ig-1))
-                                 xss(nex+1+ig+3*ng)=sigfig(rkal,7,0)
                                  ep=xss(nex+1+ig)
                                  akal=bachaa(izai,izap,za,ee,ep)
-                                 xss(nex+1+ig+4*ng)=sigfig(akal,7,0)
+                                 xss(nex+1+ig+3*ng)=sigfig(rkal,7,0) ! r
+                                 xss(nex+1+ig+4*ng)=sigfig(akal,7,0) ! a
                               endif
                               ! average lab energy
                               if (ig.ne.1) then
