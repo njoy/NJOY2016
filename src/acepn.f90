@@ -48,7 +48,7 @@ contains
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
    integer::k,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
    integer::ll,lep,ne,llh,lld,ie,np,ip,mtt,lct,ii
-   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang
+   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang,lleg,ileg
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
    integer::lee,lle,nd,na,ncyc,ng,ig,nnr,nnp,mf,mt
    integer::ipt,ntrp,pxs,phn,mtrp,tyrp,lsigp,sigp,landp,andp,ldlwp,dlwp
@@ -1387,18 +1387,6 @@ contains
                            ng=nint(scr(lld+5))
                            ncyc=na+2
 
-                           ! reset law and locator for lang=1 - TEMPORARY
-                           if (lang.eq.1) then
-                              xss(last+1)=4
-                              xss(landp+jp-1)=0
-                              if (na.ne.0) then
-                                write(text,'(''particle'',i6,'' in MT'',i4,'' at ee='',e10.4)')izap,mth,scr(lld+1)
-                                call mess('acephn','law=1 lang=1 angular distributions reset to isotropic',&
-                                  text)
-                                na=0
-                              endif
-                           endif
-
                            ! set energy range and probability for this law
                            ! only first and last incident energy needed
                            ! probability set to 1 all energies
@@ -1479,6 +1467,20 @@ contains
                                  akal=bachaa(izai,izap,za,ee,ep)
                                  xss(nex+1+ig+3*ng)=sigfig(rkal,7,0) ! r
                                  xss(nex+1+ig+4*ng)=sigfig(akal,7,0) ! a
+                              else
+
+                                ! reset law and locator for lang=1 - TEMPORARY
+                                if (lang.eq.1) then
+                                   xss(last+1)=4
+                                   xss(landp+jp-1)=0
+                                   if (na.ne.0) then
+                                     write(text,'(''particle'',i6,'' in MT'',i4,'' at ee='',e10.4)')izap,mth,scr(lld+1)
+                                     call mess('acephn','law=1 lang=1 angular distributions reset to isotropic',&
+                                       text)
+                                     na=0
+                                   endif
+                                endif
+
                               endif
                               ! average lab energy
                               if (ig.ne.1) then
