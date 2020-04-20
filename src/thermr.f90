@@ -1508,7 +1508,7 @@ contains
    real(kr)::b,diff,enow,ep,sabmin,tev,ylast
    real(kr)::u,xl,yl,sum
    real(kr)::tone,elo
-   integer,parameter::ngrid=118
+   integer,parameter::ngrid=134
    integer,parameter::nlmax=65
    integer,parameter::nemax=5000
    integer,parameter::mumax=300
@@ -1540,7 +1540,11 @@ contains
      1.42e0_kr,1.55e0_kr,1.70e0_kr,1.855e0_kr,2.02e0_kr,2.18e0_kr,&
      2.36e0_kr,2.59e0_kr,2.855e0_kr,3.12e0_kr,3.42e0_kr,3.75e0_kr,&
      4.07e0_kr,4.46e0_kr,4.90e0_kr,5.35e0_kr,5.85e0_kr,6.40e0_kr,&
-     7.00e0_kr,7.65e0_kr,8.40e0_kr,9.15e0_kr,9.85e0_kr,10.00e0_kr/)
+     7.00e0_kr,7.65e0_kr,8.40e0_kr,9.15e0_kr,10.00e0_kr,&
+     11.00e0_kr,12.50e0_kr,14.00e0_kr,16.50e0_kr,19.50e0_kr,&
+     23.00e0_kr,27.00e0_kr,31.50e0_kr,36.50e0_kr,42.00e0_kr,&
+     48.00e0_kr,54.50e0_kr,61.50e0_kr,69.00e0_kr,77.00e0_kr,&
+     88.50e0_kr,100.0e0_kr/)
    real(kr),parameter::unity=1.0e0_kr
    real(kr),parameter::sabflg=-225.e0_kr
    real(kr),parameter::eps=1.e-4_kr
