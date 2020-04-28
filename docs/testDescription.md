@@ -78,7 +78,7 @@ title: NJOY2016 Test Descriptions
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/13/input)]
 
-  This case demonstrates the modern MCNP formats using <sup>61</sup>Ni from ENDF/B-VI.  Note that `ACER` is run twice, once to prepare the ACE file, and again to do consistency checking and to prepare detailed [plots](https://raw.githubusercontent.com/njoy/NJOY2016/master/docs/tests/13/referenceTape36.pdf). 
+  This case demonstrates the modern MCNP formats using <sup>61</sup>Ni from ENDF/B-VI.  Note that `ACER` is run twice, once to prepare the ACE file, and again to do consistency checking and to prepare detailed [plots](https://raw.githubusercontent.com/njoy/NJOY2016/master/docs/tests/13/referenceTape36.pdf).
 
 ## Test Problem 14
 
@@ -125,7 +125,7 @@ title: NJOY2016 Test Descriptions
 ## Test Problem 21
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/21/input)]
- 
+
   This test case was developed to check if NaNs were "calculated" in `PURR`. This problem was discovered by Dave Brown and Paul Romano and was fixed in [Pull Request 18](https://github.com/njoy/NJOY2016/pull/18). This test was created in an attempt to prevent this from happening again. (No guarantees.)
 
 ## Test Problem 22
@@ -221,3 +221,54 @@ title: NJOY2016 Test Descriptions
 
   The tests cover all possible combinations of the competition flags (no competition, only inelastic competition, only absorption competition and both) for each possible value of the LSSF flag (0 or 1). These tests are related to test 31.
 
+## Test Problem 43-44
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/43/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/44/input)]
+
+  Tests 43 and 44 were added to test an issue encountered when using `BROADR`. A high value of thnmax close to the upper energy value of the energy range lead to `BROADR` crashing. This appeared to happen when the actual temperature was zero (in that case, broadr will only thin the cross sections) and non zero (in which case broadr will apply broadening). Both cases needed their own fix so a specific test for each was added to detect this problem in the future.
+
+## Test Problem 45
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/45/input)]
+
+  This test was added following an issue identified in `GASPR` concerning the charged particle production cross sections when the original ENDF tape does not contain the summation cross section when individual levels are present. This lead to double counting of these levels. This test was added to detect this problem in the future.
+
+## Test Problem 46
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/46/input)]
+
+  This test was added following a fix in `ERRORR`. NJOY set the number of subsections to be treated for MF34 to 1, even though the ENDF-6 format allows using more than 1 subsection in MF34. This test was added to detect this problem in the future.
+
+## Test Problem 47
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/47/input)]
+
+  This test is added following a change in `GROUPR` for the MF6 MT18 part of the GENDF file. Versions prior to NJOY 2016.49 only gave the infinite dilute fission matrix, independent of the number of sigma0 values requested by the user. This test runs two `GROUPR` runs, one with only infinite dilute and another one with two sigma0 values (including infinite dilute). The test also contains `ERRORR` runs for MF35 covariances to verify that the `ERRORR` module still gives the same results (only infinite dilute data is used) when using either of the produced GENDF files.
+
+## Test Problem 48
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/48/input)]
+
+  This test is added following issues in processing photoatomic data in `ACER` (see issues [\#91](https://github.com/njoy/NJOY2016/issues/91) and  [\#135](https://github.com/njoy/NJOY2016/issues/135)). The problems were caused by truncation to 7 significant digits (knowing that the ENDF/B-VIII.0 files often go to 9 significant digits) and array sizes that were too small for the current data. This test was added to detect this problem in the future.
+
+## Test Problem 49
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/49/input)]
+
+  This test is added following the change in how additional za values are handled in `ACER`. Previously, only 3 were allowed even though thermal scattering ACE file sometimes need more of them (e.g. Zr in ZrH). The user can now specify up to 16 values (the actual number of za values that the ACE file can store). The changes were made to be backwards compatible (test 25 ensures this).
+
+## Test Problem 50-54
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/50/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/51/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/52/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/53/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/54/input)]
+
+  These tests were added following issue [\#138](https://github.com/njoy/NJOY2016/issues/91) in which a charged particle ACE file is produced with NaN values due to an error in the Coulomb elastic scattering cross section for identical particles. These 5 tests cover most of the different possibilities we may encounter:
+- test 50: LAW=5 LTP=12 for identical particles with a spin s = 0 (this file produces NaN values)
+- test 51: LAW=5 LTP=12 for different particles (as expected, this remains the same before and after the fix)
+- test 52: LAW=5 LTP=1 for identical particles with a spin s = 0.5 (as expected, this remains the same before and after the fix)
+- test 53: LAW=5 LTP=1 for identical particles with a spin s = 1 (this changes due to the fix but the original file does no have NaN values, as expected)
+- test 54: LAW=5 LTP=1 for different particles (as expected, this remains the same before and after the fix)

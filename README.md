@@ -1,10 +1,13 @@
+![](https://github.com/njoy/NJOY2016/workflows/Continuous%20Integration/badge.svg)
+
 # NJOY2016
-[![Build Status](https://travis-ci.org/njoy/NJOY2016.svg?branch=master)](https://travis-ci.org/njoy/NJOY2016)
 
  The NJOY Nuclear Data Processing System is a modular computer code designed to read evaluated data in ENDF format, transform the data in various ways, and output the results as libraries designed to be used in various applications. Each module performs a well defined processing task. The modules are essentially independent programs, and they communicate with each other using input and output files, plus a very few common variables.
 
 ## Documentation
 The documentation for NJOY2016 is found in the [NJOY2016-manual](https://github.com/njoy/NJOY2016-manual) repository. There, you can find a [pre-compiled PDF](https://github.com/njoy/NJOY2016-manual/raw/master/njoy16.pdf) of the manual.
+
+Please refer to the [Release Notes](ReleaseNotes.md) to see what has changed from one version to the next.
 
 ## Installation
 Instructions for the installation of NJOY2016 are found on our page, [Obtaining and Installing NJOY](https://njoy.github.io/Build/index.html).

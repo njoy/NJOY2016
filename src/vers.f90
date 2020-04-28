@@ -6,4 +6,3 @@ module version
    character(8),public::vers='2016.57'
    character(8),public::vday='01May20'
 end module version
-

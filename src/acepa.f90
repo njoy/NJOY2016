@@ -24,6 +24,7 @@ module acepa
    ! main container array for ace data
    real(kr),dimension(:),allocatable::xss
    integer,parameter::nxss=999000
+   integer,parameter::nwscr=50000
 
 contains
 
@@ -42,7 +43,7 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::nb,nw,nwscr,l,iza,idis,iinc,icoh,iabs,ipair,next
+   integer::nb,nw,l,iza,idis,iinc,icoh,iabs,ipair,next
    integer::i,ip,ir,nr,np,iz
    real(kr)::e,enext,s,v,vnext,v2,en,heat,siginc,zaid,tot
    character(8)::hdt
@@ -70,7 +71,6 @@ contains
    jxsd=0
 
    !--allocate scratch storage
-   nwscr=1000
    allocate(scr(nwscr))
 
    !--allocate main container array
@@ -103,13 +103,13 @@ contains
    call gety1(e,enext,idis,s,nin,scr)
    enext=emin
    do while (enext.lt.emax)
-      e=sigfig(enext,7,0)
+      e=sigfig(enext,9,0)
       if (idis.ne.0) then
-         e=sigfig(e,7,-1)
+         e=sigfig(e,9,-1)
          call gety1(e,enext,idis,s,nin,scr)
          l=l+1
          xss(l)=e
-         e=sigfig(e,7,+2)
+         e=sigfig(e,9,+2)
       endif
       call gety1(e,enext,idis,s,nin,scr)
       l=l+1
@@ -181,10 +181,12 @@ contains
    call contio(nin,0,0,scr,nb,nw)
    z=nint(scr(1)/1000)
    call tab1io(nin,0,0,scr,nb,nw)
-   l=1
+   l=1+nw
    do while (nb.ne.0)
-      l=l+nw
+      if (l.gt.nwscr) call error('acepho',&
+              'storage exceeded for the coherent form factors',' ')
       call moreio(nin,0,0,scr(l),nb,nw)
+      l=l+nw
    enddo
    ip=2
    ir=1
@@ -212,10 +214,12 @@ contains
    call findf(matd,27,504,nin)
    call contio(nin,0,0,scr,nb,nw)
    call tab1io(nin,0,0,scr,nb,nw)
-   l=1
+   l=1+nw
    do while (nb.ne.0)
-      l=l+nw
+      if (l.gt.nwscr) call error('acepho',&
+              'storage exceeded for the incoherent scattering function',' ')
       call moreio(nin,0,0,scr(l),nb,nw)
+      l=l+nw
    enddo
    ip=2
    ir=1
@@ -514,7 +518,7 @@ contains
    real(kr)::a(*)
    ! internals
    integer::loc(50)
-   integer::iz,nw,nb,nss,ll,iss,ntr,kk,idis,i,jj,n,mm
+   integer::iz,nw,nb,nss,ll,iss,ntr,idis,i,jj,n,mm
    real(kr)::e,en,sig,slo,shi,ek,rhok,sum1,sum2
    real(kr)::el2,pl2,el3,pl3,tot,y,phi,rholt,elav,denom
    real(kr)::wt,ylt,flt,sum11,sum12,sum21,sum22,phik
@@ -541,17 +545,20 @@ contains
    ll=1
    do iss=1,nss
       loc(iss)=ll
+      if (ll.gt.nwscr) call error('alax',&
+              'storage exceeded for the atomic relaxation data',' ')
       call listio(nlax,0,0,a(ll),nb,nw)
       ntr=n2h
       ll=ll+nw
       do while (nb.ne.0)
+         if (ll.gt.nwscr) call error('alax',&
+                 'storage exceeded for the atomic relaxation data',' ')
          call moreio(nlax,0,0,a(ll),nb,nw)
          ll=ll+nw
       enddo
    enddo
 
    !--read in the photoionization cross section for the material
-   kk=ll
    call openz(nin,0)
    call tpidio(nin,0,0,a(ll),nb,nw)
   210 call contio(nin,0,0,a(ll),nb,nw)
