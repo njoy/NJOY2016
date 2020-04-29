@@ -155,11 +155,11 @@ contains
    !
    ! 9/17/2012 ... important changes
    ! - ngout = input gendf input tape
-   !           -  this tape may contain multiple temperatures,
-   !              multiple Legendre moments and multiple sigma-0
-   !              data, but ...
-   !              - only the first (infinitely dilute) sigma-0
-   !                data will be used.
+   !           - this tape may contain multiple temperatures,
+   !             multiple Legendre moments and multiple sigma-0
+   !             data, but ...
+   !           - only the first (infinitely dilute) sigma-0
+   !             data will be used.
    !
    ! - card 3 is now REQUIRED and the specified temperature must
    !   be one of those on the gendf tape.
@@ -194,8 +194,8 @@ contains
    !    iprint  print option (0/1=minimum/maximum) (default=1)
    !    irelco  covariance form (0/1=absolute/relative) (default=1)
    !
-   !  card 3    *** REQIURED for njoy2012_0917 & later ***
-   !    mprint  print option for group averaging (0=min., 1=max.)
+   !  card 3    (*** REQUIRED for njoy2012 and later ***)
+   !    mprint  print option for group averaging (0/1=min (default)/max)
    !    tempin  temperature (default=300)
    !
    !---for endf/b version 4 (iverf=4) only--------------------------
@@ -335,7 +335,7 @@ contains
    !      30           ukaea 1025-group structure  (30 MeV)
    !      31           ukaea 1067-group structure (200 MeV)
    !      32           ukaea 1102-group structure   (1 GeV)
-   !      33           ukaea  142-group structure (200 MeV)   
+   !      33           ukaea  142-group structure (200 MeV)
    !      34           lanl 618-group structure
    !
    !      iwt          meaning
@@ -9630,8 +9630,8 @@ contains
    !    30      UKAEA 1025-group structure
    !    31      UKAEA 1067-group structure
    !    32      UKAEA 1102-group structure
-   !    33      UKAEA  142-group structure   
-   !    34      LANL 618-group structure   
+   !    33      UKAEA  142-group structure
+   !    34      LANL 618-group structure
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
@@ -11029,4 +11029,3 @@ contains
    end subroutine ngchk
 
 end module errorm
-
