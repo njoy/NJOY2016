@@ -155,11 +155,11 @@ contains
    !
    ! 9/17/2012 ... important changes
    ! - ngout = input gendf input tape
-   !           -  this tape may contain multiple temperatures,
-   !              multiple Legendre moments and multiple sigma-0
-   !              data, but ...
-   !              - only the first (infinitely dilute) sigma-0
-   !                data will be used.
+   !           - this tape may contain multiple temperatures,
+   !             multiple Legendre moments and multiple sigma-0
+   !             data, but ...
+   !           - only the first (infinitely dilute) sigma-0
+   !             data will be used.
    !
    ! - card 3 is now REQUIRED and the specified temperature must
    !   be one of those on the gendf tape.
@@ -185,7 +185,7 @@ contains
    !  card 2
    !    matd    material to be processed
    !    ign     neutron group option
-   !            (ign definition same as groupr, except ign=19,
+   !            (ign definition same as groupr, except ign=-1,
    !            which means read in an energy grid, as in ign=1,
    !            and supplement this with the endf covariance grid
    !            within the range of the user-specified energies)
@@ -194,8 +194,8 @@ contains
    !    iprint  print option (0/1=minimum/maximum) (default=1)
    !    irelco  covariance form (0/1=absolute/relative) (default=1)
    !
-   !  card 3    *** REQIURED for njoy2012_0917 & later ***
-   !    mprint  print option for group averaging (0=min., 1=max.)
+   !  card 3    (*** REQUIRED for njoy2012 and later ***)
+   !    mprint  print option for group averaging (0/1=min (default)/max)
    !    tempin  temperature (default=300)
    !
    !---for endf/b version 4 (iverf=4) only--------------------------
@@ -285,7 +285,7 @@ contains
    !    entries on card 11.  the group xsec tape ngout must include
    !    all covariance reactions in matd, plus matc(1)-mtc(1).
    !
-   !  card 12a (for ign eq 1 or ign eq 19)
+   !  card 12a (for ign eq 1 or ign eq -1)
    !    ngn     number of groups
    !  card 12b
    !    egn     ngn+1 group bounds (ev)
@@ -302,6 +302,8 @@ contains
    !      ign          meaning
    !      ---          -------
    !       1           arbitrary structure (read in)
+   !      -1           arbitrary structure (read in), supplemented with endf
+   !                   covariance grid
    !       2           csewg 239-group structure
    !       3           lanl 30-group structure
    !       4           anl 27-group structure
@@ -318,8 +320,23 @@ contains
    !      15           sand-iia 640-group structure
    !      16           vitamin-e 174-group structure
    !      17           vitamin-j 175-group structure
-   !      18           xmas 172-group structure
-   !      19           read in, supplemented with endf covariance grid
+   !      18           xmas nea-lanl
+   !      19           ecco  33-group structure
+   !      20           ecco 1968-group structure
+   !      21           tripoli 315-group structure
+   !      22           xmas lwpc 172-group structure
+   !      23           vit-j lwpc 175-group structure
+   !      24           shem cea 281-group structure
+   !      25           shem epm 295-group structure
+   !      26           shem cea/epm 361-group structure
+   !      27           shem epm 315-group structure
+   !      28           rahab aecl 89-group structure
+   !      29           ccfe   660-group structure  (30 MeV)
+   !      30           ukaea 1025-group structure  (30 MeV)
+   !      31           ukaea 1067-group structure (200 MeV)
+   !      32           ukaea 1102-group structure   (1 GeV)
+   !      33           ukaea  142-group structure (200 MeV)
+   !      34           lanl 618-group structure
    !
    !      iwt          meaning
    !      ---          -------
@@ -455,6 +472,11 @@ contains
    if (iwt.le.0) then
       call mess ('errorj','input weighting function not supported',&
                  'switching to default, iwt=6')
+      iwt=6
+   endif
+   if (ign.eq.19) then
+      call mess ('errorr','neutron group structure option 19 has been ',&
+                 'changed, you may want to use -1 instead')
       iwt=6
    endif
    mprint=0
@@ -903,7 +925,7 @@ contains
       write(strng,'(''no data on file for mfcov='',i3)') mfcov
       call mess('errorr',strng,'processing terminated')
       !--skip remaining errorr input (if any)
-      if (ign.eq.1.or.ign.eq.19) then
+      if (abs(ign).eq.1) then
          read(nsysi,*) ng
          ngp=ng+1
          read(nsysi,*) (dmy,i=1,ngp)
@@ -967,7 +989,7 @@ contains
 
    ntape=-10 !careful ... must match ngout (grpav) and ntp (colaps)!
    call openz(ntape,1)
-   call egngpn
+   call egngpn(ign,ngn,egn)
 
    !--if an mfcov=34 job, check various mf4 and mf34 flags to see
    !  whether a gendf tape is required.
@@ -9569,549 +9591,60 @@ contains
    return
    end subroutine epanel
 
-   subroutine egngpn
-   !--------------------------------------------------------------------
+   subroutine egngpn(ign,ngn,egn)
+   !-------------------------------------------------------------------
    ! Generate requested neutron group structure or read in from
-   ! the system input file in the form of an ENDF list record.
+   ! the system input file in the form of an ENDF list record
    !
    !    ign     meaning
    !    ---     ---------------------------------------
-   !     1      arbitrary structure (read in)
-   !     2      csewg 239 group structure
-   !     3      lanl 30 group structure
-   !     4      anl 27 group structure
-   !     5      rrd 50 group structure
-   !     6      gam-i 68 group structure
-   !     7      gam-ii 100 group structure
-   !     8      laser-thermos 35 group
-   !     9      epri-cpm 69 group structure
-   !    10      lanl 187-group structure
-   !    11      lanl 70-group structure
-   !    12      sand-ii 620-group structure
-   !    13      lanl 80-group structure
-   !    14      eurlib 100-group structure
-   !    15      sand-iia 640-group structure
-   !    16      vitamin-e 174-group structure
-   !    17      vitamin-j 175-group structure
-   !    18      xmas 172-group structure
-   !    19      read in, supplemented with endf covariance grid
+   ! abs(1)     arbitrary structure (read in)
+   !     2      CSEWG 239 group structure
+   !     3      LANL 30 group structure
+   !     4      ANL 27 group structure
+   !     5      RRD 50 group structure
+   !     6      GAM-I 68 group structure
+   !     7      GAM-II 100 group structure
+   !     8      LASER-THERMOS 35 group
+   !     9      EPRI-CPM/WIMS 69 group structure
+   !    10      LANL 187-group structure
+   !    11      LANL 70-group structure
+   !    12      SAND-II 620-group structure
+   !    13      LANL 80-group structure
+   !    14      EURLIB 100-group structure
+   !    15      SAND-IIA 640-group structure
+   !    16      VITAMIN-E 174-group structure
+   !    17      VITAMIN-J 175-group structure
+   !    18      XMAS 172-group structure
+   !    19      ECCO  33-group structure
+   !    20      ECCO 1968-group structure
+   !    21      TRIPOLI 315-group structure
+   !    22      XMASLWC 172-group structure
+   !    23      VIT-J lwpc 175-group structure
+   !    24      SHEM CEA 281-group structure
+   !    25      SHEM EPM 295-group structure
+   !    26      SHEM CEA/EPM 361-group structure
+   !    27      SHEM EPM 315-group structure
+   !    28      RAHAB AECL 89-group structure
+   !    29      CCFE   660-group structure
+   !    30      UKAEA 1025-group structure
+   !    31      UKAEA 1067-group structure
+   !    32      UKAEA 1102-group structure
+   !    33      UKAEA  142-group structure
+   !    34      LANL 618-group structure
    !
-   !--------------------------------------------------------------------
-   use mainio ! provides nsysi,nsyso,nsyse
-   use util ! provides error,sigfig
+   !-------------------------------------------------------------------
+   use mainio ! provides nsyso
+   use util   ! provides error
+   use groupm ! provides gengpn
+   ! externals
+   integer::ign,ngn
+   real(kr),dimension(:),allocatable::egn
    ! internals
-   integer::lflag,ngp,i,ig,n1,n2,n,ic
-   real(kr)::u,du,delta,ew,ewmin
-   real(kr),dimension(241),parameter::gl2=(/&
-     27.631e0_kr,17.0e0_kr,16.75e0_kr,16.588e0_kr,16.5e0_kr,16.3e0_kr,&
-     16.25e0_kr,16.0e0_kr,15.75e0_kr,15.5e0_kr,15.25e0_kr,15.e0_kr,&
-     14.75e0_kr,14.5e0_kr,14.25e0_kr,14.e0_kr,13.75e0_kr,13.5e0_kr,&
-     13.25e0_kr,13.e0_kr,12.75e0_kr,12.5e0_kr,12.25e0_kr,12.e0_kr,&
-     11.75e0_kr,11.5e0_kr,11.25e0_kr,11.e0_kr,10.75e0_kr,10.5e0_kr,&
-     10.25e0_kr,10.e0_kr,9.75e0_kr,9.5e0_kr,9.25e0_kr,9.e0_kr,&
-     8.9e0_kr,8.8e0_kr,8.75e0_kr,8.7e0_kr,8.6e0_kr,8.5e0_kr,8.4e0_kr,&
-     8.3e0_kr,8.25e0_kr,8.2e0_kr,8.1583e0_kr,8.1e0_kr,8.e0_kr,&
-     7.9e0_kr,7.8e0_kr,7.75e0_kr,7.7e0_kr,7.6e0_kr,7.5e0_kr,&
-     7.375e0_kr,7.25e0_kr,7.125e0_kr,7.e0_kr,6.875e0_kr,6.75e0_kr,&
-     6.625e0_kr,6.5e0_kr,6.375e0_kr,6.25e0_kr,6.15e0_kr,6.125e0_kr,&
-     6.05e0_kr,6.025e0_kr,6.e0_kr,5.95e0_kr,5.875e0_kr,5.75e0_kr,&
-     5.675e0_kr,5.65e0_kr,5.625e0_kr,5.5e0_kr,5.375e0_kr,5.25e0_kr,&
-     5.175e0_kr,5.125e0_kr,5.075e0_kr,5.e0_kr,4.875e0_kr,4.75e0_kr,&
-     4.625e0_kr,4.5e0_kr,4.45e0_kr,4.4e0_kr,4.35e0_kr,4.3e0_kr,&
-     4.25e0_kr,4.2e0_kr,4.15e0_kr,4.125e0_kr,4.1e0_kr,4.075e0_kr,&
-     4.05e0_kr,4.e0_kr,3.95e0_kr,3.9e0_kr,3.85e0_kr,3.8e0_kr,&
-     3.75e0_kr,3.7e0_kr,3.65e0_kr,3.6e0_kr,3.575e0_kr,3.55e0_kr,&
-     3.525e0_kr,3.5e0_kr,3.475e0_kr,3.45e0_kr,3.4e0_kr,3.35e0_kr,&
-     3.3e0_kr,3.25e0_kr,3.2e0_kr,3.15e0_kr,3.1e0_kr,3.05e0_kr,&
-     3.e0_kr,2.975e0_kr,2.95e0_kr,2.925e0_kr,2.9e0_kr,2.85e0_kr,&
-     2.8e0_kr,2.75e0_kr,2.7e0_kr,2.65e0_kr,2.6e0_kr,2.55e0_kr,&
-     2.5e0_kr,2.45e0_kr,2.4e0_kr,2.35e0_kr,2.3417e0_kr,2.325e0_kr,&
-     2.3e0_kr,2.25e0_kr,2.2e0_kr,2.15e0_kr,2.125e0_kr,2.1e0_kr,&
-     2.05e0_kr,2.e0_kr,1.95e0_kr,1.9e0_kr,1.875e0_kr,1.85e0_kr,&
-     1.825e0_kr,1.8e0_kr,1.75e0_kr,1.7e0_kr,1.675e0_kr,1.65e0_kr,&
-     1.625e0_kr,1.6e0_kr,1.55e0_kr,1.5e0_kr,1.4833e0_kr,1.4667e0_kr,&
-     1.45e0_kr,1.4417e0_kr,1.4333e0_kr,1.4167e0_kr,1.4e0_kr,1.35e0_kr,&
-     1.3e0_kr,1.25e0_kr,1.2e0_kr,1.175e0_kr,1.15e0_kr,1.125e0_kr,&
-     1.1e0_kr,1.05e0_kr,1.e0_kr,.95e0_kr,.9e0_kr,.85e0_kr,.8e0_kr,&
-     .775e0_kr,.75e0_kr,.725e0_kr,.7e0_kr,.65e0_kr,.6e0_kr,.55e0_kr,&
-     .525e0_kr,.5e0_kr,.475e0_kr,.45e0_kr,.425e0_kr,.41667e0_kr,&
-     .40833e0_kr,.4e0_kr,.375e0_kr,.35e0_kr,.325e0_kr,.3e0_kr,&
-     .275e0_kr,.25e0_kr,.225e0_kr,.2e0_kr,.175e0_kr,.15e0_kr,&
-     .125e0_kr,.1e0_kr,.075e0_kr,.05e0_kr,.025e0_kr,0.e0_kr,&
-     -.025e0_kr,-.05e0_kr,-.075e0_kr,-.1e0_kr,-.125e0_kr,-.15e0_kr,&
-     -.175e0_kr,-.2e0_kr,-.225e0_kr,-.25e0_kr,-.275e0_kr,-.3e0_kr,&
-     -.325e0_kr,-.35e0_kr,-.375e0_kr,-.4e0_kr,-.425e0_kr,-.45e0_kr,&
-     -.475e0_kr,-.5e0_kr,-.525e0_kr,-.55e0_kr,-.575e0_kr,-.6e0_kr,&
-     -.625e0_kr,-.65e0_kr,-.675e0_kr,-.69167e0_kr/)
-   real(kr),dimension(31),parameter::eg3=(/&
-     1.39e-4_kr,1.52e-1_kr,4.14e-1_kr,1.13e0_kr,3.06e0_kr,8.32e0_kr,&
-     2.26e1_kr,6.14e1_kr,1.67e2_kr,4.54e2_kr,1.235e3_kr,3.35e3_kr,&
-     9.12e3_kr,2.48e4_kr,6.76e4_kr,1.84e5_kr,3.03e5_kr,5.00e5_kr,&
-     8.23e5_kr,1.353e6_kr,1.738e6_kr,2.232e6_kr,2.865e6_kr,3.68e6_kr,&
-     6.07e6_kr,7.79e6_kr,1.00e7_kr,1.20e7_kr,1.35e7_kr,1.50e7_kr,&
-     1.70e7_kr/)
-   real(kr),dimension(28),parameter::gl4=(/&
-      14.5e0_kr,13.0e0_kr,12.5e0_kr,12.0e0_kr,11.5e0_kr,11.0e0_kr,&
-      10.5e0_kr,10.0e0_kr,9.5e0_kr,9.0e0_kr,8.5e0_kr,8.0e0_kr,&
-      7.5e0_kr,7.0e0_kr,6.5e0_kr,6.0e0_kr,5.5e0_kr,5.0e0_kr,4.5e0_kr,&
-      4.0e0_kr,3.5e0_kr,3.0e0_kr,2.5e0_kr,2.0e0_kr,1.5e0_kr,1.0e0_kr,&
-      0.5e0_kr,0.0e0_kr/)
-   real(kr),dimension(51),parameter::gl5=(/&
-      27.631e0_kr,16.5e0_kr,16.e0_kr,15.5e0_kr,15.e0_kr,14.5e0_kr,&
-      14.e0_kr,13.5e0_kr,13.e0_kr,12.5e0_kr,12.e0_kr,11.5e0_kr,&
-      11.e0_kr,10.5e0_kr,10.25e0_kr,10.e0_kr,9.75e0_kr,9.5e0_kr,&
-      9.25e0_kr,9.e0_kr,8.75e0_kr,8.5e0_kr,8.25e0_kr,8.e0_kr,&
-      7.75e0_kr,7.5e0_kr,7.25e0_kr,7.e0_kr,6.75e0_kr,6.5e0_kr,&
-      6.25e0_kr,6.e0_kr,5.75e0_kr,5.5e0_kr,5.25e0_kr,5.e0_kr,&
-      4.75e0_kr,4.5e0_kr,4.25e0_kr,4.e0_kr,3.75e0_kr,3.5e0_kr,&
-      3.25e0_kr,3.e0_kr,2.5e0_kr,2.e0_kr,1.5e0_kr,1.e0_kr,.5e0_kr,&
-      0.e0_kr,-.6917e0_kr/)
-   real(kr),dimension(36),parameter::eg6=(/&
-     .253e-3_kr,.2277e-2_kr,.6325e-2_kr,.12397e-1_kr,.20493e-1_kr,&
-     .30613e-1_kr,.42757e-1_kr,.56925e-1_kr,.81972e-1_kr,.11159e0_kr,&
-     .14573e0_kr,.18444e0_kr,.2277e0_kr,.25104e0_kr,.27053e0_kr,&
-     .29075e0_kr,.30113e0_kr,.32064e0_kr,.35768e0_kr,.41704e0_kr,&
-     .50326e0_kr,.62493e0_kr,.78211e0_kr,.95070e0_kr,.10137e+1_kr,&
-     .10428e+1_kr,.10525e+1_kr,.10624e+1_kr,.10722e+1_kr,&
-     .10987e+1_kr,.11664e+1_kr,.13079e+1_kr,.14575e+1_kr,.1595e+1_kr,&
-     .17262e+1_kr,.1855e+1_kr/)
-   real(kr),dimension(70),parameter::eg9=(/&
-     1.e-5_kr,.005e0_kr,.01e0_kr,.015e0_kr,.02e0_kr,.025e0_kr,&
-     .03e0_kr,.035e0_kr,.042e0_kr,.05e0_kr,.058e0_kr,.067e0_kr,&
-     .08e0_kr,.1e0_kr,.14e0_kr,.18e0_kr,.22e0_kr,.25e0_kr,&
-     .28e0_kr,.3e0_kr,.32e0_kr,.35e0_kr,.4e0_kr,.5e0_kr,.625e0_kr,&
-     .78e0_kr,.85e0_kr,.91e0_kr,.95e0_kr,.972e0_kr,.996e0_kr,&
-     1.02e0_kr,1.045e0_kr,1.071e0_kr,1.097e0_kr,1.123e0_kr,1.15e0_kr,&
-     1.3e0_kr,1.5e0_kr,2.1e0_kr,2.6e0_kr,3.3e0_kr,4.e0_kr,9.877e0_kr,&
-     15.968e0_kr,27.7e0_kr,48.052e0_kr,75.501e0_kr,148.728e0_kr,&
-     367.262e0_kr,906.898e0_kr,1425.1e0_kr,2239.45e0_kr,3519.1e0_kr,&
-     5530.e0_kr,9118.e0_kr,1.503e4_kr,2.478e4_kr,4.085e4_kr,&
-     6.734e4_kr,1.11e5_kr,1.83e5_kr,3.025e5_kr,5.e5_kr,8.21e5_kr,&
-     1.353e6_kr,2.231e6_kr,3.679e6_kr,6.0655e6_kr,1.e7_kr/)
-   real(kr),dimension(48),parameter::eg10a=(/&
-     1.e-5_kr,2.5399e-4_kr,7.6022e-4_kr,2.2769e-3_kr,6.3247e-3_kr,&
-     .012396e0_kr,.020492e0_kr,.0255e0_kr,.030612e0_kr,.0355e0_kr,&
-     .042755e0_kr,.05e0_kr,.056922e0_kr,.067e0_kr,.081968e0_kr,&
-     .11157e0_kr,.14572e0_kr,.1523e0_kr,.18443e0_kr,.22769e0_kr,&
-     .25103e0_kr,.27052e0_kr,.29074e0_kr,.30112e0_kr,.32063e0_kr,&
-     .35767e0_kr,.41499e0_kr,.50323e0_kr,.62506e0_kr,.78208e0_kr,&
-     .83368e0_kr,.87642e0_kr,.91e0_kr,.95065e0_kr,.971e0_kr,&
-     .992e0_kr,1.0137e0_kr,1.0427e0_kr,1.0525e0_kr,1.0623e0_kr,&
-     1.0722e0_kr,1.0987e0_kr,1.1254e0_kr,1.1664e0_kr,1.3079e0_kr,&
-     1.4574e0_kr,1.5949e0_kr,1.7261e0_kr/)
-   real(kr),dimension(13),parameter::eg10b=(/&
-     1.1e7_kr,1.2e7_kr,1.3e7_kr,1.35e7_kr,1.375e7_kr,1.394e7_kr,&
-     1.42e7_kr,1.442e7_kr,1.464e7_kr,1.5e7_kr,1.6e7_kr,1.7e7_kr,&
-     2.e7_kr/)
-   real(kr),dimension(71),parameter::eg11=(/10.677e0_kr,61.4421e0_kr,&
-     101.301e0_kr,130.073e0_kr,167.017e0_kr,214.454e0_kr,275.365e0_kr,&
-     353.575e0_kr,453.999e0_kr,582.947e0_kr,748.518e0_kr,961.117e0_kr,&
-     1089.09e0_kr,1234.1e0_kr,1398.42e0_kr,1584.61e0_kr,1795.6e0_kr,&
-     2034.68e0_kr,2305.6e0_kr,2612.59e0_kr,2960.45e0_kr,3354.63e0_kr,&
-     3801.29e0_kr,4307.43e0_kr,4880.95e0_kr,5530.84e0_kr,6267.27e0_kr,&
-     7101.74e0_kr,8047.33e0_kr,9118.82e0_kr,10333.3e0_kr,11708.8e0_kr,&
-     13267.8e0_kr,15034.4e0_kr,17036.2e0_kr,19304.5e0_kr,21874.9e0_kr,&
-     24787.5e0_kr,28087.9e0_kr,31827.8e0_kr,40867.7e0_kr,52475.2e0_kr,&
-     67379.5e0_kr,86517.e0_kr,111090.e0_kr,142642.e0_kr,183156.e0_kr,&
-     235178.e0_kr,301974.e0_kr,387742.e0_kr,439369.e0_kr,497871.e0_kr,&
-     564161.e0_kr,639279.e0_kr,724398.e0_kr,820850.e0_kr,930145.e0_kr,&
-     1053990.e0_kr,1194330.e0_kr,1353350.e0_kr,1737740.e0_kr,&
-     2231300.e0_kr,2865050.e0_kr,3678790.e0_kr,4723670.e0_kr,&
-     6065310.e0_kr,7788010.e0_kr,1.e7_kr,1.28403e7_kr,1.64872e7_kr,&
-     2.e7_kr/)
-   real(kr),parameter::u80a=.6931472e0_kr
-   real(kr),dimension(80),parameter::u80=(/&
-     .1681472e0_kr,.125e0_kr,.1e0_kr,.125e0_kr,.175e0_kr,.25e0_kr,&
-     .25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,&
-     .125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,&
-     .125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.25e0_kr,.25e0_kr,&
-     .25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,&
-     .25e0_kr,.125e0_kr,.075e0_kr,.05e0_kr,.125e0_kr,.125e0_kr,&
-     .125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,&
-     .125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,&
-     .125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,&
-     .125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,.125e0_kr,&
-     .25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.25e0_kr,.5e0_kr,.5e0_kr,&
-     .5e0_kr,.5e0_kr,.5e0_kr,.5e0_kr,.5e0_kr,.5e0_kr,.5e0_kr,1.e0_kr,&
-     1.e0_kr,1.e0_kr,7.e0_kr/)
-   real(kr),dimension(8),parameter::deltl=(/&
-     5.e0_kr,7.5e0_kr,10.e0_kr,15.e0_kr,20.e0_kr,25.e0_kr,30.e0_kr,&
-     40.e0_kr/)
-   integer,dimension(9),parameter::ndelta=(/2,6,10,19,23,28,36,40,46/)
-   integer,dimension(19),parameter::ig14=(/&
-     2,9,13,15,17,23,25,55,60,61,63,64,65,93,94,95,99,100,101/)
-   real(kr),dimension(19),parameter::gl14=(/&
-     .1e0_kr,.05e0_kr,.1e0_kr,.05e0_kr,.1e0_kr,.05e0_kr,.1e0_kr,&
-     .25e0_kr,.2e0_kr,.05e0_kr,.075e0_kr,.125e0_kr,.25e0_kr,&
-     .5e0_kr,.25e0_kr,.5e0_kr,.588e0_kr,.412e0_kr,10.631e0_kr/)
-   real(kr),dimension(175),parameter::gl15=(/&
-     1.0e-5_kr,1.0e-1_kr,4.1399e-1_kr,5.3158e-1_kr,6.8256e-1_kr,8.7642e-1_kr,&
-     1.1254e0_kr,1.4450e0_kr,1.8554e0_kr,2.3824e0_kr,3.0590e0_kr,3.9279e0_kr,&
-     5.0435e0_kr,6.4760e0_kr,8.3153e0_kr,1.0677e1_kr,1.3710e1_kr,1.7603e1_kr,&
-     2.2603e1_kr,2.9023e1_kr,3.7267e1_kr,4.7851e1_kr,6.1442e1_kr,7.8893e1_kr,&
-     1.0130e2_kr,1.3007e2_kr,1.6702e2_kr,2.1445e2_kr,2.7536e2_kr,3.5358e2_kr,&
-     4.5400e2_kr,5.8295e2_kr,7.4852e2_kr,9.6112e2_kr,1.2341e3_kr,1.5846e3_kr,&
-     2.0347e3_kr,2.2487e3_kr,2.4852e3_kr,2.6126e3_kr,2.7465e3_kr,3.0354e3_kr,&
-     3.3546e3_kr,3.7074e3_kr,4.3074e3_kr,5.5308e3_kr,7.1017e3_kr,9.1188e3_kr,&
-     1.0595e4_kr,1.1709e4_kr,1.5034e4_kr,1.9305e4_kr,2.1875e4_kr,2.3579e4_kr,&
-     2.4176e4_kr,2.4788e4_kr,2.6058e4_kr,2.7000e4_kr,2.8500e4_kr,3.1828e4_kr,&
-     3.4307e4_kr,4.0868e4_kr,4.6309e4_kr,5.2475e4_kr,5.6562e4_kr,6.7379e4_kr,&
-     7.2000e4_kr,7.9500e4_kr,8.2500e4_kr,8.6517e4_kr,9.8037e4_kr,1.1109e5_kr,&
-     1.1679e5_kr,1.2277e5_kr,1.2907e5_kr,1.3569e5_kr,1.4264e5_kr,1.4996e5_kr,&
-     1.5764e5_kr,1.6573e5_kr,1.7422e5_kr,1.8316e5_kr,1.9255e5_kr,2.0242e5_kr,&
-     2.1280e5_kr,2.2371e5_kr,2.3518e5_kr,2.4724e5_kr,2.7324e5_kr,2.8725e5_kr,&
-     2.9452e5_kr,2.9720e5_kr,2.9850e5_kr,3.0197e5_kr,3.3373e5_kr,3.6883e5_kr,&
-     3.8774e5_kr,4.0762e5_kr,4.5049e5_kr,4.9787e5_kr,5.2340e5_kr,5.5023e5_kr,&
-     5.7844e5_kr,6.0810e5_kr,6.3928e5_kr,6.7206e5_kr,7.0651e5_kr,7.4274e5_kr,&
-     7.8082e5_kr,8.2085e5_kr,8.6294e5_kr,9.0718e5_kr,9.6164e5_kr,1.0026e6_kr,&
-     1.1080e6_kr,1.1648e6_kr,1.2246e6_kr,1.2873e6_kr,1.3534e6_kr,1.4227e6_kr,&
-     1.4957e6_kr,1.5724e6_kr,1.6530e6_kr,1.7377e6_kr,1.8268e6_kr,1.9205e6_kr,&
-     2.0190e6_kr,2.1225e6_kr,2.2313e6_kr,2.3069e6_kr,2.3457e6_kr,2.3653e6_kr,&
-     2.3852e6_kr,2.4660e6_kr,2.5924e6_kr,2.7253e6_kr,2.8650e6_kr,3.0119e6_kr,&
-     3.1664e6_kr,3.3287e6_kr,3.6788e6_kr,4.0657e6_kr,4.4933e6_kr,4.7237e6_kr,&
-     4.9659e6_kr,5.2205e6_kr,5.4881e6_kr,5.7695e6_kr,6.0653e6_kr,6.3763e6_kr,&
-     6.5924e6_kr,6.7032e6_kr,7.0469e6_kr,7.4082e6_kr,7.7880e6_kr,8.1873e6_kr,&
-     8.6071e6_kr,9.0484e6_kr,9.5123e6_kr,1.0000e7_kr,1.0513e7_kr,1.1052e7_kr,&
-     1.1618e7_kr,1.2214e7_kr,1.2523e7_kr,1.3499e7_kr,1.3840e7_kr,1.4191e7_kr,&
-     1.4550e7_kr,1.4918e7_kr,1.5683e7_kr,1.6487e7_kr,1.6905e7_kr,1.7333e7_kr,&
-     1.9640e7_kr/)
-   real(kr),dimension(173),parameter::gl18=(/&
-     1.96403e+7_kr,1.73325e+7_kr,1.49182e+7_kr,1.38403e+7_kr,1.16183e+7_kr,&
-     1.00000e+7_kr,8.18731e+6_kr,6.70320e+6_kr,6.06531e+6_kr,5.48812e+6_kr,&
-     4.49329e+6_kr,3.67879e+6_kr,3.01194e+6_kr,2.46597e+6_kr,2.23130e+6_kr,&
-     2.01897e+6_kr,1.65299e+6_kr,1.35335e+6_kr,1.22456e+6_kr,1.10803e+6_kr,&
-     1.00259e+6_kr,9.07180e+5_kr,8.20850e+5_kr,6.08101e+5_kr,5.50232e+5_kr,&
-     4.97871e+5_kr,4.50492e+5_kr,4.07622e+5_kr,3.01974e+5_kr,2.73237e+5_kr,&
-     2.47235e+5_kr,1.83156e+5_kr,1.22773e+5_kr,1.11090e+5_kr,8.22975e+4_kr,&
-     6.73795e+4_kr,5.51656e+4_kr,4.08677e+4_kr,3.69786e+4_kr,2.92830e+4_kr,&
-     2.73944e+4_kr,2.47875e+4_kr,1.66156e+4_kr,1.50344e+4_kr,1.11378e+4_kr,&
-     9.11882e+3_kr,7.46586e+3_kr,5.53084e+3_kr,5.00451e+3_kr,3.52662e+3_kr,&
-     3.35463e+3_kr,2.24867e+3_kr,2.03468e+3_kr,1.50733e+3_kr,1.43382e+3_kr,&
-     1.23410e+3_kr,1.01039e+3_kr,9.14242e+2_kr,7.48518e+2_kr,6.77287e+2_kr,&
-     4.53999e+2_kr,3.71703e+2_kr,3.04325e+2_kr,2.03995e+2_kr,1.48625e+2_kr,&
-     1.36742e+2_kr,9.16609e+1_kr,7.56736e+1_kr,6.79041e+1_kr,5.55951e+1_kr,&
-     5.15780e+1_kr,4.82516e+1_kr,4.55174e+1_kr,4.01690e+1_kr,3.72665e+1_kr,&
-     3.37201e+1_kr,3.05113e+1_kr,2.76077e+1_kr,2.49805e+1_kr,2.26033e+1_kr,&
-     1.94548e+1_kr,1.59283e+1_kr,1.37096e+1_kr,1.12245e+1_kr,9.90555e+0_kr,&
-     9.18981e+0_kr,8.31529e+0_kr,7.52398e+0_kr,6.16012e+0_kr,5.34643e+0_kr,&
-     5.04348e+0_kr,4.12925e+0_kr,4.00000e+0_kr,3.38075e+0_kr,3.30000e+0_kr,&
-     2.76792e+0_kr,2.72000e+0_kr,2.60000e+0_kr,2.55000e+0_kr,2.36000e+0_kr,&
-     2.13000e+0_kr,2.10000e+0_kr,2.02000e+0_kr,1.93000e+0_kr,1.84000e+0_kr,&
-     1.75500e+0_kr,1.67000e+0_kr,1.59000e+0_kr,1.50000e+0_kr,1.47500e+0_kr,&
-     1.44498e+0_kr,1.37000e+0_kr,1.33750e+0_kr,1.30000e+0_kr,1.23500e+0_kr,&
-     1.17000e+0_kr,1.15000e+0_kr,1.12535e+0_kr,1.11000e+0_kr,1.09700e+0_kr,&
-     1.07100e+0_kr,1.04500e+0_kr,1.03500e+0_kr,1.02000e+0_kr,9.96000e-1_kr,&
-     9.86000e-1_kr,9.72000e-1_kr,9.50000e-1_kr,9.30000e-1_kr,9.10000e-1_kr,&
-     8.60000e-1_kr,8.50000e-1_kr,7.90000e-1_kr,7.80000e-1_kr,7.05000e-1_kr,&
-     6.25000e-1_kr,5.40000e-1_kr,5.00000e-1_kr,4.85000e-1_kr,4.33000e-1_kr,&
-     4.00000e-1_kr,3.91000e-1_kr,3.50000e-1_kr,3.20000e-1_kr,3.14500e-1_kr,&
-     3.00000e-1_kr,2.80000e-1_kr,2.48000e-1_kr,2.20000e-1_kr,1.89000e-1_kr,&
-     1.80000e-1_kr,1.60000e-1_kr,1.40000e-1_kr,1.34000e-1_kr,1.15000e-1_kr,&
-     1.00001e-1_kr,9.50000e-2_kr,8.00000e-2_kr,7.70000e-2_kr,6.70000e-2_kr,&
-     5.80000e-2_kr,5.00000e-2_kr,4.20000e-2_kr,3.50000e-2_kr,3.00000e-2_kr,&
-     2.50000e-2_kr,2.00000e-2_kr,1.50000e-2_kr,1.00000e-2_kr,6.90000e-3_kr,&
-     5.00000e-3_kr,3.00000e-3_kr,1.00001e-5_kr/)
-   real(kr),parameter::e620a=1.e-4_kr
-   real(kr),parameter::e620b=2.8e-4_kr
-   real(kr),parameter::gamiia=27.631e0_kr
-   real(kr),parameter::gamiib=-0.53063e0_kr
-   real(kr),parameter::ezero=1.e7_kr
-   real(kr),parameter::tenth=0.10e0_kr
-   real(kr),parameter::eighth=0.125e0_kr
-   real(kr),parameter::quart=0.25e0_kr
-   real(kr),parameter::bgam2=27.631021e0_kr
-   real(kr),parameter::tgam2=-0.53062825e0_kr
-   real(kr),parameter::u187a=-15.5e0_kr
-   real(kr),parameter::u187b=-14.125e0_kr
-   real(kr),parameter::u187c=-5.875e0_kr
-   real(kr),parameter::e187d=2.6058e4_kr
-   real(kr),parameter::e187e=6.868e0_kr
-   real(kr),parameter::sanda=1.e-4_kr
-   real(kr),parameter::sandb=1.e-6_kr
-   real(kr),parameter::sandc=2.8e-4_kr
-   real(kr),parameter::sandd=1.e6_kr
-   real(kr),parameter::sande=1.e5_kr
-   real(kr),parameter::uu80=.6931472e0_kr
-   real(kr),parameter::e175=1.284e7_kr
+   integer::ig,ngp
+   real(kr)::ew,ewmin
 
-   !--select structure
-   lflag=0
-
-   !--group structure is read in (free format)
-   if (ign.eq.1.or.ign.eq.19) then
-      read(nsysi,*) ngn
-      ngp=ngn+1
-      nwgp=ngp
-      if (allocated(egn)) deallocate(egn)
-      allocate(egn(nwgp))
-      read(nsysi,*) (egn(i),i=1,ngp)
-      do i=1,ngp
-         egn(i)=sigfig(egn(i),5,0)
-      enddo
-      do i=1,ngn
-         if (egn(i).gt.egn(i+1)) call error('egngpn',&
-           'read-in group structure is out of order.',' ')
-         enddo
-
-   !--csewg 239 group structure
-   else if (ign.eq.2) then
-      ngn=240
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,ngp
-         egn(ig)=gl2(ig)
-      enddo
-      lflag=1
-
-   !--lanl 30 group structure
-   else if (ign.eq.3) then
-      ngn=30
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,ngp
-         egn(ig)=eg3(ig)
-      enddo
-
-   !--anl 27 group structure
-   else if (ign.eq.4) then
-      ngn=27
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,ngp
-         egn(ig)=gl4(ig)
-      enddo
-      lflag=1
-
-   !--rrd 50 group structure
-   else if (ign.eq.5) then
-      ngn=50
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,ngp
-         egn(ig)=gl5(ig)
-      enddo
-      lflag=1
-
-   !--gam-i 68 group structure
-   else if (ign.eq.6) then
-      ngn=68
-      ngp=ngn+1
-      allocate(egn(ngp))
-      u=-quart
-      du=quart
-      do ig=1,ngp
-         u=u+du
-         egn(70-ig)=u
-      enddo
-      lflag=1
-
-   !--gam-ii 100 group structure
-   else if (ign.eq.7) then
-      ngn=100
-      ngp=ngn+1
-      allocate(egn(ngp))
-      u=-4*tenth
-      du=tenth
-      do ig=1,99
-         u=u+du
-         egn(101-ig)=u
-         if (ig.eq.49) du=quart
-      enddo
-      egn(1)=gamiia
-      ! upper limit changed to 17 mev.
-      egn(101)=gamiib
-      lflag=1
-
-   !--laser-thermos 35 group structure
-   else if (ign.eq.8) then
-      ngn=35
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,ngp
-         egn(ig)=eg6(ig)
-      enddo
-
-   !--epri-cpm 69 group structure
-   else if (ign.eq.9) then
-      ngn=69
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,ngp
-         egn(ig)=eg9(ig)
-      enddo
-
-   !--lanl 187-group structure
-   else if (ign.eq.10) then
-      ngn=187
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,48
-         egn(ig)=eg10a(ig)
-      enddo
-      u=u187a
-      do ig=49,59
-         egn(ig)=ezero*exp(u)
-         u=u+eighth
-      enddo
-      egn(60)=e187e
-      u=u187b
-      do ig=61,126
-         egn(ig)=ezero*exp(u)
-         u=u+eighth
-      enddo
-      egn(127)=e187d
-      u=u187c
-      do ig=128,175
-         egn(ig)=ezero*exp(u)
-         u=u+eighth
-      enddo
-      do ig=176,188
-         egn(ig)=eg10b(ig-175)
-      enddo
-
-   !--lanl 70 group structure
-   else if (ign.eq.11) then
-      ngn=70
-      ngp=ngn+1
-      allocate(egn(ngp))
-      do ig=1,ngp
-         egn(ig)=eg11(ig)
-      enddo
-
-   !--sand-ii 620-group structure
-   else if (ign.eq.12.or.ign.eq.15) then
-      ngn=620
-      if (ign.eq.15) ngn=640
-      ngp=ngn+1
-      allocate(egn(ngp))
-      egn(1)=e620a
-      ! generate the first 45 boundaries
-      do i=1,8
-         delta=deltl(i)/1000000
-         n1=ndelta(i)
-         n2=ndelta(i+1)-1
-         do n=n1,n2
-            egn(n)=egn(n-1)+delta
-         enddo
-      enddo
-      ! correct group 21
-      egn(21)=e620b
-      ! groups 46 to 450 are multiples of previous groups
-      do i=46,450
-         egn(i)=egn(i-45)*10
-      enddo
-      ! groups 451 through 620 have constant spacing of 1.e5
-      egn(451)=1000000
-      do i=452,ngp
-         egn(i)=egn(i-1)+100000
-      enddo
-
-   !--lanl 80-group structure
-   else if (ign.eq.13) then
-      ngn=80
-      ngp=ngn+1
-      allocate(egn(ngp))
-      u=u80a
-      do ig=1,ngp
-         egn(82-ig)=ezero*exp(u)
-         if (ig.le.ngn) u=u-u80(ig)
-      enddo
-      egn(81)=2*ezero
-
-   !--eurlib 100-group structure
-   else if (ign.eq.14) then
-      ngn=100
-      ngp=ngn+1
-      allocate(egn(ngp))
-      egn(101)=-4*tenth
-      ic=0
-      do ig=2,101
-         if (ig.eq.ig14(ic+1)) ic=ic+1
-         egn(102-ig)=egn(103-ig)+gl14(ic)
-      enddo
-      lflag=1
-
-   !--vitamin-e 174- and vitamin-j 175-group structures (ornl-5510)
-   else if (ign.eq.16.or.ign.eq.17) then
-      ngn=174
-      if(ign.eq.16)allocate(egn(ngn+1))
-      if(ign.eq.17)allocate(egn(ngn+2))
-      do ig=1,175
-         egn(ig)=gl15(ig)
-      enddo
-      if (ign.eq.17) then
-         ngn=175
-         egn(166)=e175
-         do ig=167,176
-            egn(ig)=gl15(ig-1)
-         enddo
-      endif
-
-   !--xmas 172-group structure
-   else if (ign.eq.18) then
-      ngn=172
-      allocate(egn(ngn+1))
-      do ig=1,173
-         egn(ig)=gl18(174-ig)
-      enddo
-
-   !--illegal ign
-   else
-      call error('egngpn','illegal group structure requested.',' ')
-   endif
-
-   !--convert lethargy grid to energies
-   if (lflag.eq.1) then
-      ngp=ngn+1
-      do ig=1,ngp
-         egn(ig)=sigfig(ezero*exp(-egn(ig)),7,0)
-      enddo
-   endif
-
-   !--display group structure
-   if (ign.ne.19) then
-      if (ign.eq.1) write(nsyso,'(/&
-        &'' neutron group structure......read in'')')
-      if (ign.eq.2) write(nsyso,'(/&
-        &'' neutron group structure......csewg 240 group'')')
-      if (ign.eq.3) write(nsyso,'(/&
-        &'' neutron group structure......lanl 30 group'')')
-      if (ign.eq.4) write(nsyso,'(/&
-        &'' neutron group structure......anl 27 group'')')
-      if (ign.eq.5) write(nsyso,'(/&
-        &'' neutron group structure......rrd 50 group'')')
-      if (ign.eq.6) write(nsyso,'(/&
-        &'' neutron group structure......gam-i 68 group'')')
-      if (ign.eq.7) write(nsyso,'(/&
-        &'' neutron group structure......gam-ii 100 group'')')
-      if (ign.eq.8) write(nsyso,'(/&
-        &'' neutron group structure......laser-thermos 35 group'')')
-      if (ign.eq.9) write(nsyso,'(/&
-        &'' neutron group structure......epri-cpm 69 group'')')
-      if (ign.eq.10) write(nsyso,'(/&
-        &'' neutron group structure......lanl 187-group'')')
-      if (ign.eq.11) write(nsyso,'(/&
-        &'' neutron group structure......lanl 70-group'')')
-      if (ign.eq.12) write(nsyso,'(/&
-        &'' neutron group structure......sand-ii 620 group'')')
-      if (ign.eq.13) write(nsyso,'(/&
-        &'' neutron group structure......lanl 80-group'')')
-      if (ign.eq.14) write(nsyso,'(/&
-        &'' neutron group structure......eurlib 100-group'')')
-      if (ign.eq.15) write(nsyso,'(/&
-        &'' neutron group structure......sand-iia 640-group'')')
-      if (ign.eq.16) write(nsyso,'(/,&
-        &'' neutron group structure......vitamin-e 174-group'')')
-      if (ign.eq.17) write(nsyso,'(/,&
-        &'' neutron group structure......vitamin-j 175-group'')')
-      if (ign.eq.18) write(nsyso,'(/,&
-        &'' neutron group structure......xmas 172-group'')')
-      write(nsyso,'('' '')')
-      do ig=1,ngn
-         write(nsyso,'(1x,i5,2x,1p,e12.5,''  -  '',e12.5)')&
-           ig,egn(ig),egn(ig+1)
-      enddo
-   endif
+   call gengpn(ign,ngn,egn)
    ewmin=1.05e0_kr
    do ig=1,ngn
       if (egn(ig+1).lt.0.1e0_kr) then
@@ -10125,11 +9658,11 @@ contains
 
    !--prepare union of users grid with endf covariance grid.
    ngp=ngn+1
-   do i=1,ngp
-      egn(i)=sigfig(egn(i),ndig,0)
+   do ig=1,ngp
+      egn(ig)=sigfig(egn(ig),ndig,0)
    enddo
    call uniong(nendf)
-   if (ign.eq.19) then
+   if (ign.eq.-1) then
       write(nsyso,'(/&
         &'' union structure (= user structure) has'',i5,&
         &'' groups''/)') nunion
@@ -11496,4 +11029,3 @@ contains
    end subroutine ngchk
 
 end module errorm
-
