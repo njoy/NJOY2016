@@ -2255,8 +2255,8 @@ print*, "mtr", mtr, "l", l
 
       !--lqr block
 print*, "lqr", lqr, "l", l
-call advance_to_locator(nout,l,lqr)
-call write_real_list(nout,l,ntr)
+      call advance_to_locator(nout,l,lqr)
+      call write_real_list(nout,l,ntr)
 
       !--lsig block
 print*, "lsig", lsig, "l", l
