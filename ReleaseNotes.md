@@ -1,6 +1,11 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.57](https://github.com/njoy/NJOY2016/pull/160)
+This release adds a number of new predefined group structures to GROUPR and ERRORR. The code used to generate these group structures is now shared between both modules.
+
+Please note: the meaning of ign=19 in ERRORR has changed. Previously, this meant to use a user defined structure, supplemented with the group structure read from the covariance file. This option is still available as ign=-1.
+
 ## [NJOY2016.56](https://github.com/njoy/NJOY2016/pull/147)
 This relates to changes made by the consistency checks when a checker acer run is requested. NJOY only rarely modifies data. It does so for secondary particle distributions that use LAW=4 (isotropic angular distribution and continuous tabulated energy distributions) or LAW=44 (Kalbach-Mann).
 
