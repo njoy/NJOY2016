@@ -272,3 +272,9 @@ title: NJOY2016 Test Descriptions
 - test 52: LAW=5 LTP=1 for identical particles with a spin s = 0.5 (as expected, this remains the same before and after the fix)
 - test 53: LAW=5 LTP=1 for identical particles with a spin s = 1 (this changes due to the fix but the original file does no have NaN values, as expected)
 - test 54: LAW=5 LTP=1 for different particles (as expected, this remains the same before and after the fix)
+
+## Test Problem 59
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/59/input)]
+
+  This test is added following an issue in `MODER` converting MF28 data (atomic relaxation data) (see issue [\#162](https://github.com/njoy/NJOY2016/issues/162)). Conversion of MF28 data was not coded. This test verifies that the conversion to and from binary produces the same file, and that the conversion to binary still allows the data to be used (in `ACER` in this test). Test 48 served as a basis for this test.
