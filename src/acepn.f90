@@ -2198,12 +2198,13 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::l,n,ne,ip,mftype,nr,li,ir,nn,ll,k,np,nw
+   integer::l,n,ne,ip,mftype,nr,li,ir,nn,ll,k,np,nw,nmu,nrr
    integer::ii,lnw,law,kk,nern,lrec,j,i
    integer::ipt, ntrp, pxs, phn, mtrp, tyrp, lsigp, sigp, landp, andp, ldlwp, dlwp ! IXS
    integer::rlocator  ! locator index for reaction data
    integer::plocator  ! locator index for the particle IXS array
    integer::ielocator ! locator index for incident energy data
+   integer::oelocator ! locator index for outgoing energy data
    character(66)::text
 
    integer::ner=1
@@ -2488,6 +2489,39 @@ print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
                            np=nint(xss(l))
                            call write_integer(nout,l)         ! NP
                            call write_real_list(nout,l,5*np)  ! Eout, PDF, CDF, R, A (each NP values)
+                           ielocator=ielocator+1
+                        enddo
+
+                     !--law 61
+                     else if (law.eq.61) then
+                        nrr=nint(xss(l))
+                        call write_integer(nout,l)               ! NR
+                        if (nrr.gt.0) then
+                           call write_integer_list(nout,l,2*nrr) ! NBT, INT (each NR values)
+                        endif
+                        ne=nint(xss(l))
+                        call write_integer(nout,l)            ! NE
+                        call write_real_list(nout,l,ne)       ! E (NE values)
+                        ielocator=l
+                        call write_integer_list(nout,l,ne)    ! L (NE values)
+                        do j=1,ne
+print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
+                           call advance_to_locator(nout,l,dlwp+nint(xss(ielocator))-1)
+                           call write_integer(nout,l)         ! INTT
+                           np=nint(xss(l))
+                           call write_integer(nout,l)         ! NP
+                           call write_real_list(nout,l,3*np)  ! Eout, PDF, CDF (each NP values)
+                           oelocator=l
+                           call write_integer_list(nout,l,np) ! L (NP values)
+                           do k=1,np
+print*, "dlwp+nint(xss(oelocator))-1", dlwp+nint(xss(oelocator))-1, "l", l
+                              call advance_to_locator(nout,l,dlwp+nint(xss(oelocator))-1)
+                              call write_integer(nout,l)         ! JJ
+                              nmu=nint(xss(l))
+                              call write_integer(nout,l)         ! NMU
+                              call write_real_list(nout,l,3*nmu) ! Mu, PDF, CDF (each NMU values)
+                              oelocator=oelocator+1
+                           enddo
                            ielocator=ielocator+1
                         enddo
 
