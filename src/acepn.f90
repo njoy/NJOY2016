@@ -1756,6 +1756,7 @@ contains
    integer::m,ii,imt,naa,ie,mt,l1,l2,ne,ll,nbina,nbin1
    integer::intt,np,ln,law,l3,loci,nn,nd
    integer::ipt,ntrp,pxs,phn,mtrp,tyrp,lsigp,sigp,landp,andp,ldlwp,dlwp
+   integer::ip,locj,intmu,nmu,imu
    real(kr)::e,xs,heat,e2
    integer::imn(8),imx(8),loc(8)
    character(10)::name,title(16)
@@ -2135,6 +2136,59 @@ contains
                     e2,intt,nd,nn,(xss(j+loci),xss(j+nn+loci),&
                     xss(j+2*nn+loci),xss(j+3*nn+loci),&
                     xss(j+4*nn+loci),j=1,nn)
+                  l=l+4*nn
+               enddo
+               l2=l
+
+            !--law 61
+            else if (law.eq.61) then
+               ne=nint(xss(l3+1))
+               l=l3+2+2*ne
+               do ie=1,ne
+                  e2=xss(l3+2+ie-1)
+                  loci=nint(xss(l3+2+ne+ie-1))+dlwp-1
+                  intt=mod(nint(xss(loci)),10)
+                  nd=nint(xss(loci)/10)
+                  nn=nint(xss(loci+1))
+                  loci=loci+1
+                  write(nsyso,'(/6x,'' incident energy = '',1p,e14.6,&
+                    &''   intt ='',i2,''    nd = '',i4,''    np = '',&
+                    &i4)') e2,intt,nd,nn
+                  do ip=1,nn
+                     write(nsyso,'(/&
+                       &6x,'' secondary energy = '',1p,e14.6/&
+                       &6x,''              pdf = '',e14.6/&
+                       &6x,''              cdf = '',e14.6)
+                       xss(ip+loci),xss(ip+nn+loci),xss(ip+2*nn+loci)
+                     locj=nint(xss(ip+3*nn+loci)+dlwp)
+                     if (locj.ne.0) then
+                        intmu=nint(xss(locj))
+                        nmu=nint(xss(locj+1))
+                        write(nsyso,'(&
+                          &6x,''            intmu = '',i8/&
+                          &6x,''              nmu = '',i8/&
+                          &''         cosine           pdf           cdf'',&
+                          &''        cosine           pdf           cdf''/&
+                          &''   ------------  ------------  ------------'',&
+                          &''  ------------  ------------  ------------'')')&
+                          intmu,nmu
+                        do imu=1,nmu,2
+                           if (imu.eq.nmu) then
+                              write(nsyso,'(1x,1p,3e14.6)')&
+                                xss(locj+1+imu),xss(locj+1+nmu+imu),&
+                                xss(locj+1+2*nmu+imu)
+                           else
+                              write(nsyso,'(1x,1p,6e14.6)')&
+                                xss(locj+1+imu),xss(locj+1+nmu+imu),&
+                                xss(locj+1+2*nmu+imu),xss(locj+1+imu+1),&
+                                xss(locj+1+nmu+imu+1),&
+                                xss(locj+1+2*nmu+imu+1)
+                           endif
+                        enddo
+                      else
+                        write(nsyso,'('' angular distribution is isotropic'')
+                      endif
+                  enddo
                   l=l+4*nn
                enddo
                l2=l
