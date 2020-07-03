@@ -538,13 +538,15 @@ contains
    integer::izn(16)
    real(kr)::awn(16)
    ! internals
-   integer::l,j,n,max,iza,i
+!!   integer::l,j,n,max,iza,i
+   integer::l,j,n,max,i
+   integer::indx,idiff,isuff,lenhz
    integer::izo(16)
    real(kr)::awo(16)
    character(70)::hko
-   real(kr)::zaid
-   character(3)::ht
-   character(9)::str
+!!   real(kr)::zaid
+!!   character(3)::ht
+!!   character(9)::str
    real(kr),parameter::zero=0
 
    integer,parameter::ner=1
@@ -596,24 +598,49 @@ contains
       call closz(-nin)
    endif
 
+!!   !--adjust zaid
+!!   if (mcnpx.gt.0) then
+!!       read(hz,'(f10.0,a3)') zaid,ht
+!!   else
+!!       read(hz,'(a9,a1)') str,ht
+!!       if (ht(1:1).ne.'t') then
+!!          read(hz,'(f9.0,a1)') zaid,ht
+!!       endif
+!!   endif
+!!   if (suff.ge.zero.and.ht(1:1).ne.'t') then
+!!      iza=nint(zaid)
+!!      zaid=iza+suff
+!!      if (mcnpx.gt.0) then
+!!          write(hz,'(f10.3,a3)') zaid,ht
+!!      else
+!!          write(hz,'(f9.2,a1)') zaid,ht
+!!      endif
+!!   endif
+
    !--adjust zaid
-   if (mcnpx.gt.0) then
-       read(hz,'(f10.0,a3)') zaid,ht
-   else
-       read(hz,'(a9,a1)') str,ht
-       if (ht(1:1).ne.'t') then
-          read(hz,'(f9.0,a1)') zaid,ht
-       endif
-   endif
-   if (suff.ge.zero.and.ht(1:1).ne.'t') then
-      iza=nint(zaid)
-      zaid=iza+suff
-      if (mcnpx.gt.0) then
-          write(hz,'(f10.3,a3)') zaid,ht
-      else
-          write(hz,'(f9.2,a1)') zaid,ht
-      endif
-   endif
+     lenhz=len_trim(hz)
+     if (mcnpx.gt.0) then
+        if (suff.ge.0._kr) then                    !test for new suffix
+           isuff=nint(1000*suff)                   !
+           indx=index(hz,".",.TRUE.)               !
+           write(hz(indx+1:indx+3),'(i3.3)')isuff  !insert the new suffix
+        endif
+        indx=12
+     else
+        if (suff.ge.0._kr) then                    !test for new suffix
+           isuff=nint(100*suff)                    !
+           indx=index(hz,".",.TRUE.)               !
+           write(hz(indx+1:indx+2),'(i2.2)')isuff  !insert the new suffix
+        endif
+        indx=10
+     endif
+     if (lenhz.lt.indx) then
+        idiff=indx-lenhz
+        do i=indx,indx-lenhz+1,-1                  !push the string to the right ...
+           hz(i:i)=hz(i-idiff:i-idiff)             !"t" ends in column 10 or 12 ...
+        enddo                                      !depending on mcnpx
+        hz(1:idiff)=" "
+     endif
 
    !--adjust comment and (iz,aw) list
    if (len_trim(hk).eq.0) then
