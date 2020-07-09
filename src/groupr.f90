@@ -66,6 +66,7 @@ module groupm
    real(kr)::spi
    real(kr)::emaxx,ebeg
    integer::lfs,isom
+   integer::izar
 
    ! unresolved resonance parameters
    integer::nunr,intunr,lrp,lssf
@@ -647,6 +648,7 @@ contains
       else
          itmp=mfd/10000000
          itmp=(mfd-10000000*itmp)/10
+         izar=itmp
          lfs=mfd-(10000000*(mfd/10000000)+10*itmp)
          isom=lfs
          if (lfs.lt.10) then
@@ -659,6 +661,7 @@ contains
       if (mfd.eq.40000000) then ! fission special case for mf10
          izam=-1
       else
+         izar=(mfd-((mfd/1000000)*1000000))/10
          if (lfs.lt.10) then
             izam=mod(mfd,10000000)+lfs
          else
@@ -6598,17 +6601,18 @@ contains
       awr=sigma(2)
       if (awrp.ne.zero) awr=awr/awrp
       if (mf.eq.10) then
-         nfs=n1h
+         nfs=n1h                                     !# of tab1's to check
          jfs=-1
          do i=1,nfs
             call tab1io(nsig,0,0,sigma,nb,nw)
-            if (l2h.eq.lfs) jfs=i
+            if (l1h.eq.izar .and. l2h.eq.lfs) jfs=i  !id the one we want ...
             do while (nb.ne.0)
                call moreio(nsig,0,0,sigma,nb,nw)
             enddo
          enddo
          if (jfs.lt.0) then
-            write(strng,'("can''t find mf,mt,lfs = ",3i4)')mf,mt,lfs
+            write(strng,'("can''t find mf,mt,izar,lfs = ",3i9,i5)')&
+                                       mf,mt,izar,lfs
             call error('getsig',strng,' ')
          endif
          nskip=jfs-1

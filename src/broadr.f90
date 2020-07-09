@@ -252,8 +252,12 @@ contains
       call contio(nendf,0,0,scr,nb,nw)
       if (c2h.gt.zero) emax=c2h
    endif
-   if (abs(thnmx).ge.0.9999*emax) call error('broadr',&
-      'max. energy is too large for this input file','')
+   if (abs(thnmx).gt.emax) then
+       thnmx=0.9999_kr*emax
+       call mess('broadr','reset thnmx to just less than input file''s emax','')
+   endif
+!!!   if (abs(thnmx).ge.0.9999*emax) call error('broadr',&
+!!!      'max. energy is too large for this input file','')
    !--jump to the end of mf1/mt451
    call tosend(nendf,0,0,scr)
    !--read input file nu-bar, if present
