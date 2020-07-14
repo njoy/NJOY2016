@@ -950,6 +950,7 @@ contains
    !    materials from card 10 at tempin, infinitely dilute and p1.
    !  - if mfcov=35, we already did this.
    if (ngout.ne.0 .and. mfcov.ne.35) then
+        write(nsyso,'(" calling ngchk.")')
       call ngchk
       ngout=nscr5  !make ngout point to condensed gendf tape
    endif
@@ -1084,7 +1085,7 @@ contains
    ! externals
    integer::neki
    ! internals
-   integer::nb,nw,nwscr,ir,nmtt,nsub,i,isub,izap
+   integer::nb,nw,nwscr,ir,nmtt,nsub,nssub,i,isub,izap
    integer::mat1,mt1,iok,nmtp,nc,ni,ic,lty,l,nt,matstd,mtstd
    integer::jtop,j,ii,nx,lb,nec,iloc,nl
    integer::ik,nr,irs,ilo,ihi,ntr,nim,ixm,ider,nder
@@ -1103,6 +1104,12 @@ contains
    real(kr),parameter::small5=1.e-5_kr
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::zero=0
+
+      write(nsyso,'(//," in gridd.  iread,nmt,nmt1 = ",3i10)')iread,nmt,nmt1
+      if (nmt .gt. 0) then
+          write(nsyso,'(12x,"mats:  ",10i5)')mats(1:nmt)
+          write(nsyso,'(12x,"mts:   ",10i5)')mts(1:nmt)
+      endif
 
    !--allocate storage and initialize.
    if (iread.ne.1) then
@@ -1144,7 +1151,7 @@ contains
 
    !--loop over sections.
   110 continue
-   call contio(nendf,0,0,scr,nb,nw)
+   call contio(nendf,0,0,scr,nb,nw)  !read "HEAD" record (= FEND when mfh=0)
    if (mfh.eq.0.and.iread.eq.1) then
       deallocate(scr)
       go to 610
@@ -1160,16 +1167,17 @@ contains
    izap=0
    nfs=1
    if (mfcov.eq.35) then
-      nsub=n1h
+      nsub=n1h      !mf35 NK (subsections)
    else
-      nsub=n2h  !NMT1 in the manual
+      nsub=n2h      !mf33 NL (subsections); mf34 NMT1
       if (mfcov.eq.40) then
          za=c1h
-         nfs=n1h
+         nfs=n1h    !mf40 NS (subsections, 1 per LFS)
          nsub=1
          call contio(nendf,0,0,scr,nb,nw)
          lfs=l2h
          izap=10*l1h+l2h
+         nssub=n2h  !mf40 NL (sub-subsections)
       endif
    endif
    if (nsub.eq.0) go to 410
@@ -1206,6 +1214,12 @@ contains
       if (mth.eq.mt2) nsub=nl*(nl+1)/2
    endif
 
+      if (nmt1 .gt. 0) then
+          write(nsyso,'(12x,"starting subsection loop.  nmt,nmt1,nmtt = ",3i10)')&
+                                                        nmt,nmt1,nmtt
+          write(nsyso,'(12x,"mats:  ",10i5)')mats(1:nmt1)
+          write(nsyso,'(12x,"mts:   ",10i5)')mts(1:nmt1)
+      endif
    !--loop over subsections
    do 310 ilfs=1,nfs
    do 300 isub=1,nsub
@@ -10779,12 +10793,15 @@ contains
    real(kr),dimension(:),allocatable::gscr,scr1,scrl
    integer,dimension(:),allocatable::matsofar
 
+!!!         write(nsyso,'(" starting ngchk.  iread =",i0)')iread
    matds=matd
    if (nmt1.gt.0) then
       if (allocated(matsofar)) deallocate(matsofar)
       allocate(matsofar(nmt1+1))
       matsofar(1:nmt1+1)=0
+!!!         write(nsyso,'(" nmt1 =",i5,", mats(1:nmt1) = ",10i5)')nmt1,mats(1:nmt1)
    endif
+!!!         if(nmt1.eq.0)write(nsyso,'(" nmt1 = 0")')
 
    nscr5=18
    if (ngout.lt.0) nscr5=-18
@@ -10798,8 +10815,10 @@ contains
    mloop=0
    call tpidio(ngout,nscr5,0,t,nt,ntwds)
   100 continue
+!!!      write(nsyso,'(" passing 100 continue (maybe again).")')
    iloop=iloop+1
    call contio(ngout,0,0,c1,nb,nw)
+!!!          write(nsyso,'(" c1:  ",2(1pe12.5),4i11)')c1(1:2),nint(c1(3:6))
    if (iloop.eq.1.and.nint(c1(5)).ne.-1) then
       write(strng,'("ngout = ",i2," is not a gendf tape")')ngout
       call error('ngchk',strng,'')
@@ -10810,6 +10829,8 @@ contains
    endif
    if (math.eq.0) goto 100
    if (math.ne.matd) then
+!!!           write(nsyso,'(" math,matd =",2i5,", reset iloop and try again.")')&
+!!!                           math,matd
       call tomend(ngout,0,0,t)
       iloop=0
       goto 100
@@ -10886,7 +10907,7 @@ contains
       i=i+nw
       call moreio(0,nscr5,0,gscr(i),nb,nw)
    enddo
-   call afend(nscr5,0)            !mf1/mt451 done, but no send card used
+   call afend(nscr5,0)             !mf1/mt451 done, but no send card used
 
    call contio(ngout,0,0,c1,nb,nw) !read mf1/mt451 fend record
    call contio(ngout,0,0,c1,nb,nw) !first cont record of next mf
@@ -10990,15 +11011,18 @@ contains
    !   -  write material end record on the condensed GENDF tape
    call amend(nscr5,0)
 
-   if (nmt1.ne.0) then
-   !-- rewind the input GENDF tape
+   !-- all done when iread0 or 1 bu if iread=2 there may be more
+   !   materials to add to the condensed gendf tape.
+   if (iread.eq.2 .and. nmt1.ne.0) then
+      !-- rewind the input GENDF tape
       call repoz(ngout)
   500 continue
       mloop=mloop+1
       matsofar(mloop)=matd
+!!!         write(nsyso,'(" comparing mloop and nmt1 ...",2i5)')mloop,nmt1
       if (mloop.le.nmt1) then
-      !-- check nmt1 list for more materials ... but don't process
-      !   any matn more than once.
+         !-- check nmt1 mats list for more materials ... but don't
+         !   process any matn more than once.
          matd=mats(mloop)
          do i=1,mloop
             if (matd.eq.matsofar(i))goto 500
