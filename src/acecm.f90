@@ -599,7 +599,7 @@ contains
    return
    end function fi2
 
-   subroutine newsuff(mcnpx,isuff,hz)
+   subroutine newsuff(mcnpx,suff,hz)
    !
    !--update the zaid suffix
    !
@@ -632,14 +632,14 @@ contains
    ! external variables ...
    character(len=13)::hz
    integer::mcnpx
-   integer::isuff
+   real(kr)::suff
 
    ! local variables ...
    integer::i
    integer::indx,idiff,lenhz
 
-   lenhz=len_trim(hz)                              !# of characters in the zaid
-   indx=index(hz,".",.TRUE.)                       !locate the last .
+   lenhz=len_trim(hz)                                  !# of characters in the zaid
+   indx=index(hz,".",.TRUE.)                           !locate the last .
 
    if (indx.lt.1 .or. indx.gt.7) then
       call mess('newsuff','zaid name is nonstandard, no change made','')
@@ -647,9 +647,9 @@ contains
    endif
 
    if (mcnpx.gt.0) then
-      write(hz(indx+1:indx+3),'(i3.3)')1000*isuff  !insert the new suffix
+      write(hz(indx+1:indx+3),'(i3.3)')nint(1000*suff) !insert the new suffix
    else
-      write(hz(indx+1:indx+2),'(i2.2)')100*isuff   !insert the new suffix
+      write(hz(indx+1:indx+2),'(i2.2)')nint(100*suff)  !insert the new suffix
    endif
 
    indx=10

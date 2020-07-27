@@ -593,10 +593,7 @@ contains
    endif
 
    !--adjust zaid
-   if (suff.ge. 0._kr) then
-      isuff=nint(suff)
-      call newsuff(mcnpx,isuff,hz)
-   endif
+   if (suff.ge. 0._kr) call newsuff(mcnpx,suff,hz)
 
    !--adjust comment and (iz,aw) list
    if (len_trim(hk).eq.0) then
