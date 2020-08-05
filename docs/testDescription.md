@@ -284,3 +284,7 @@ This test was added to following issue [\#124](https://github.com/njoy/NJOY2016/
 ## Test Problem 61
 
 This test was added to following issue [\#163](https://github.com/njoy/NJOY2016/issues/163). Whenever an `ACER` check run changed the library suffix, it was ignored. This has been fixed now and this test was added to validate the fix.
+
+## Test Problem 62
+
+This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/issues/173). For a new d+He3 evaluation, the ACE file produced by NJOY2016 still has a few NaN values appearing in it. This problem was due to an array index overflow in acecpe.
