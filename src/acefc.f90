@@ -6429,8 +6429,8 @@ contains
    scr(llht+6)=ne
    scr(llht+7)=5
    lld=llht+8+2*ne
-   if (jsmax.lt.ne) then
-      call error('acecpe','insufficient storage: jsmax < ne, increase jsmax',' ')
+   if (ne.gt.jsmax) then
+      call error('acecpe','too many energy points, increase jsmax',' ')
    endif
    do j=1,ne
       ll=lld
@@ -7897,7 +7897,7 @@ contains
          ! use top point in stack.
          ii=ii+1
          if (ii.gt.maxang) call error('ptlegc',&
-           'too many coulomb angles',' ')
+           'too many coulomb angles, increase maxang',' ')
          aco(ii)=x(i)
          cprob(ii)=y(i)
          i=i-1
