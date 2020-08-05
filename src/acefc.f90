@@ -6412,10 +6412,13 @@ contains
    real(kr)::amass,e,f,xelas,cumm,amul,smul,sigcl,ratr,ratrl
    real(kr)::eht,amuu,pmu,ai,at,zt,zi,cc1,ee,cc2,wn,eta
    real(kr)::sigc,signi,signow,h,en
-   integer,parameter::jsmax=500
-   real(kr)::xxs(jsmax),yys(jsmax)
+   real(kr),allocatable,dimension(:)::xxs,yys
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::fm=1.e-12_kr
+
+   !--allocate scratch storage area
+   allocate(xxs(ne))
+   allocate(yys(ne))
 
    write(nsyso,'(/'' working on charged-particle elastic'')')
    amass=awr/awp
@@ -6429,9 +6432,6 @@ contains
    scr(llht+6)=ne
    scr(llht+7)=5
    lld=llht+8+2*ne
-   if (ne.gt.jsmax) then
-      call error('acecpe','too many energy points, increase jsmax',' ')
-   endif
    do j=1,ne
       ll=lld
       call listio(nin,0,0,scr(ll),nb,nw)
@@ -6571,6 +6571,8 @@ contains
         xss(esz+nes+j),xss(esz+3*nes+j),h
       xss(esz+4*nes+j)=sigfig(h,7,0)
    enddo
+   deallocate(xxs)
+   deallocate(yys)
    return
    end subroutine acecpe
 
