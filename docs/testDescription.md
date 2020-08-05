@@ -266,9 +266,21 @@ title: NJOY2016 Test Descriptions
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/53/input)]
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/54/input)]
 
-  These tests were added following issue [\#138](https://github.com/njoy/NJOY2016/issues/91) in which a charged particle ACE file is produced with NaN values due to an error in the Coulomb elastic scattering cross section for identical particles. These 5 tests cover most of the different possibilities we may encounter:
+  These tests were added following issue [\#138](https://github.com/njoy/NJOY2016/issues/138) in which a charged particle ACE file is produced with NaN values due to an error in the Coulomb elastic scattering cross section for identical particles. These 5 tests cover most of the different possibilities we may encounter:
 - test 50: LAW=5 LTP=12 for identical particles with a spin s = 0 (this file produces NaN values)
 - test 51: LAW=5 LTP=12 for different particles (as expected, this remains the same before and after the fix)
 - test 52: LAW=5 LTP=1 for identical particles with a spin s = 0.5 (as expected, this remains the same before and after the fix)
 - test 53: LAW=5 LTP=1 for identical particles with a spin s = 1 (this changes due to the fix but the original file does no have NaN values, as expected)
 - test 54: LAW=5 LTP=1 for different particles (as expected, this remains the same before and after the fix)
+
+## Test Problem 55-59
+
+Currently assigned in unmerged fixes
+
+## Test Problem 60
+
+This test was added to following issue [\#124](https://github.com/njoy/NJOY2016/issues/124) following processing issues using IRDFF-II ENDF files.
+
+## Test Problem 61
+
+This test was added to following issue [\#163](https://github.com/njoy/NJOY2016/issues/163). Whenever an `ACER` check run changed the library suffix, it was ignored. This has been fixed now and this test was added to validate the fix.
