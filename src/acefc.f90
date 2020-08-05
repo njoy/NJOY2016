@@ -6412,9 +6412,13 @@ contains
    real(kr)::amass,e,f,xelas,cumm,amul,smul,sigcl,ratr,ratrl
    real(kr)::eht,amuu,pmu,ai,at,zt,zi,cc1,ee,cc2,wn,eta
    real(kr)::sigc,signi,signow,h,en
-   real(kr)::xxs(200),yys(200)
+   real(kr),allocatable,dimension(:)::xxs,yys
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::fm=1.e-12_kr
+
+   !--allocate scratch storage area
+   allocate(xxs(ne))
+   allocate(yys(ne))
 
    write(nsyso,'(/'' working on charged-particle elastic'')')
    amass=awr/awp
@@ -6567,6 +6571,8 @@ contains
         xss(esz+nes+j),xss(esz+3*nes+j),h
       xss(esz+4*nes+j)=sigfig(h,7,0)
    enddo
+   deallocate(xxs)
+   deallocate(yys)
    return
    end subroutine acecpe
 
@@ -6587,7 +6593,7 @@ contains
    real(kr)::dy,test,xm,ym,yt,dele,ta11
    character(60)::strng
    integer,parameter::ismax=20
-   integer,parameter::jsmax=200
+   integer,parameter::jsmax=500
    real(kr)::xs(ismax),ys(ismax),xxs(jsmax),yys(jsmax)
    real(kr),dimension(:),allocatable::scr
    integer,parameter::nwscr=5000
@@ -7893,7 +7899,7 @@ contains
          ! use top point in stack.
          ii=ii+1
          if (ii.gt.maxang) call error('ptlegc',&
-           'too many coulomb angles',' ')
+           'too many coulomb angles, increase maxang',' ')
          aco(ii)=x(i)
          cprob(ii)=y(i)
          i=i-1
