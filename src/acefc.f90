@@ -6412,7 +6412,8 @@ contains
    real(kr)::amass,e,f,xelas,cumm,amul,smul,sigcl,ratr,ratrl
    real(kr)::eht,amuu,pmu,ai,at,zt,zi,cc1,ee,cc2,wn,eta
    real(kr)::sigc,signi,signow,h,en
-   real(kr)::xxs(200),yys(200)
+   integer,parameter::jsmax=500
+   real(kr)::xxs(jsmax),yys(jsmax)
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::fm=1.e-12_kr
 
@@ -6428,6 +6429,9 @@ contains
    scr(llht+6)=ne
    scr(llht+7)=5
    lld=llht+8+2*ne
+   if (jsmax.lt.ne) then
+      call error('acecpe','insufficient storage: jsmax < ne, increase jsmax',' ')
+   endif
    do j=1,ne
       ll=lld
       call listio(nin,0,0,scr(ll),nb,nw)
@@ -6587,7 +6591,7 @@ contains
    real(kr)::dy,test,xm,ym,yt,dele,ta11
    character(60)::strng
    integer,parameter::ismax=20
-   integer,parameter::jsmax=200
+   integer,parameter::jsmax=500
    real(kr)::xs(ismax),ys(ismax),xxs(jsmax),yys(jsmax)
    real(kr),dimension(:),allocatable::scr
    integer,parameter::nwscr=5000
