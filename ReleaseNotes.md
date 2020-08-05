@@ -1,7 +1,7 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
-## [NJOY2016.60](https://github.com/njoy/NJOY2016/pull/xxx)
+## [NJOY2016.60](https://github.com/njoy/NJOY2016/pull/172)
 When processing new incident charged particle ENDF files, NaN values were discovered in the ACE files. This appeared to be due to an array index overflow. A parameter for the size was added so that we can more easily resize the array, and an error message was added to detect similar issues in the future.
 
 ## [NJOY2016.59](https://github.com/njoy/NJOY2016/pull/170)
