@@ -1,0 +1,23 @@
+
+ njoy 2019.01  31Aug19                                       11/11/19 17:23:26
+ *****************************************************************************
+
+Run Title: Enh: Al-27 (self-atom in AlGaN) ENDF/B-VIII.0; NRT damage energy; Ed = 25.0 eV; 
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.1s
+
+ ---message from rdf2bw---calculation of angular distribution not installed.
+
+ broadr...                                                                0.6s
+
+ heatr...                                                                 0.8s
+ Threshold displacement energy replaced with   19.00000    
+ Lattice atomic mass replaced with   26.74894     nmass
+ Lattice atomic number replaced with   13.00000    
+
+ groupr...                                                                8.8s
+                                                                          9.0s
+ *****************************************************************************

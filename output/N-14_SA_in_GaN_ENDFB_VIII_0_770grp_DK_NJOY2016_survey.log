@@ -1,0 +1,72 @@
+
+ njoy 2019.01  31Aug19                                       11/05/19 21:17:17
+ *****************************************************************************
+
+Run Title: Enh: N-14 (self-atom in GaN) ENDF/B-VIII.0; displacement kerma; Ed = 0.00 eV; Ro
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.1s
+
+ broadr...                                                                0.2s
+
+ heatr...                                                                 0.3s
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 600
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 601
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 602
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 603
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 604
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 605
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 606
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 650
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 651
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 652
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 653
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 700
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 701
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 800
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 801
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 802
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 803
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 804
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 805
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 806
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 807
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 808
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 809
+
+ ---message from hinit---mf4 and 6 missing, isotropy assumed for mt 810
+
+ ---message from hinit---mf6, mt 16 does not give recoil za=  7013
+                          one-particle recoil approx. used.
+ Threshold displacement energy replaced with   0.000000    
+ Lattice atomic mass replaced with   13.88611     nmass
+ Lattice atomic number replaced with   7.000000    
+
+ groupr...                                                                2.3s
+                                                                          2.4s
+ *****************************************************************************

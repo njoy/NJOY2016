@@ -1,0 +1,79 @@
+-1
+ Si-28 ENDF/B-VIII.0; displacement kerma; Ed = 0.00 eV; Z/A modification; 770-grp; 293.6K, 20.45C; 2200 m/s; 0.0253 eV
+ 7 0 0 0 1 0 0 0 0
+    00.0   28.085   14.0 
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "Ed study using ENDF/B-VIII.0 Si-28 in SAND-II 640-grp"
+'#'	cp \sync_Projects-Git\xsec\ENDFB-VIII-0\ENDF-B-VIII.0_neutrons\n-014_Si_028.endf  tape20
+'#'	echo " icon(1)=7: Displacement kerma treatment, i.e. no threshold"
+'#'	echo " icon(5)=1: Modification of Ed, lattice atom mass and Z"
+'#'     echo "            use elemental silicon, in amu, for lattice atomic weight"
+'#'	echo " icon(8)=0: Use built-in Robinson partition function"
+'#'	echo " icon(9)=0: Full Robinson treatment of recoil particles"
+'#'	echo " Temperature broadened to 300K"
+'#'     echo " SAND-IV 770-group output"
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"                                             
+moder
+ 20 -21
+reconr
+ -21 -22
+ 'pendf tape for n + 14-Si-28 from ...'/
+ 1425 2 0
+ .005 0 6 /
+ 'n + 14-Si-28 from ENDF/B-VIII.0'/
+ 'processed by NJOY-2012'/
+ 0/
+broadr
+ -21 -22 -23
+ 1425 1 0 0    0.
+ .01  1.e+6 /
+ 293.6
+ 0/
+heatr
+ -21 -23 -24 25
+ 1425 13 0 0 0 1 /
+ 301 302 303 304 305 401 402 442 443 444 445 446 447/
+groupr
+ -21 -24 0 28
+ 1425 24 2 4 0 1 1 1/
+ *groupr: 770-group SAND-IV
+ 293.6                                                      
+ 1.0e10
+ 0.1   0.025   100000.  1400000.0 /
+ 3 301 'Heat Production'/
+ 3 302 'Elastic Kerma'/
+ 3 303 'Non-elastic Kerma'/
+ 3 304 'Inelastic Kerma'/
+ 3 401 'Disappearance Kerma'/
+ 3 402 'Capture Kerma'/
+ 3 442 'Total Photon Kerma (ev-b)'/
+ 3 443 'Kinematic Kerma'/   
+ 3 444 '444 Damage Kerma'/
+ 3 445 '445 Damage Kerma'/
+ 3 446 '446 Damage Kerma'/
+ 3 447 '447 Damage Kerma'/
+ 3 1 'total'/  
+ 3 2 'elast'/ 
+ 3 4 'inel'/
+ 3 102 'n,g'/
+ 3 103 'n,p' /
+ 3 104 'n,d' /
+ 3 107 'n,a' /  
+ 3  16 'n,2n' /
+ 3  22 'n,2a' /
+ 3  28 'n,np' /
+ 3  51 'inel_51' /
+ 3   5 'else' /  
+ 3  91 'inel-cont' /
+  0 /
+  0 /
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'     cp output             \sync_Projects-Git\NJOY-2012\output\Si-28_ENDFB_VIII_0_770grp_DK_survey.out
+'@'	cp tape28             \sync_Projects-Git\NJOY-2012\groupr\Si-28_ENDFB_VIII_0_770grp_DK_survey
+'@'	echo "
+'@'	echo "This ends the post-process command stream"

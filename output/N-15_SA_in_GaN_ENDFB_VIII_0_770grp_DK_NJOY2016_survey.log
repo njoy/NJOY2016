@@ -1,0 +1,35 @@
+
+ njoy 2019.01  31Aug19                                       11/05/19 21:16:21
+ *****************************************************************************
+
+Run Title: Enh: N-15 (self-atom in GaN) ENDF/B-VIII.0; displacement kerma; Ed = 0.00 eV; Ro
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.0s
+
+ broadr...                                                                0.1s
+
+ heatr...                                                                 0.2s
+ Threshold displacement energy replaced with   0.000000    
+ Lattice atomic mass replaced with   13.88611     nmass
+ Lattice atomic number replaced with   7.000000    
+
+ ---message from gheat---no file 12 for this material.
+
+ groupr...                                                                0.3s
+
+ ---message from conver---cannot do complete particle production for mt= 16
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 22
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 28
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 91
+                          only mf4/mf5 provided
+                                                                          0.4s
+ *****************************************************************************

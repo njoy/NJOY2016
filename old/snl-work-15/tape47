@@ -1,0 +1,4366 @@
+%!PS-Adobe-
+%%BoundingBox:    36   36  576  756
+%%Pages: (atend)
+%%Orientation: Landscape
+2 setlinecap
+%%Page:   1   1
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   576.00    36.00 moveto
+   0.360 setlinewidth
+   576.00   756.00 lineto
+    36.00   756.00 lineto
+    36.00    36.00 lineto
+   576.00    36.00 lineto
+gsave 1.000 0.871 0.678 setrgbcolor fill grestore
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   288.00   225.36 moveto
+   0.360 setlinewidth
+   288.00   585.36 lineto
+    44.64   585.36 lineto
+    44.64   225.36 lineto
+   288.00   225.36 lineto
+ gsave clip newpath
+    68.40   272.88 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    68.40   277.28 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    68.40   281.69 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    68.40   286.09 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    68.40   290.49 moveto
+/Symbol findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(m) show
+    68.40   299.62 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    68.40   304.02 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(v) show
+    68.40   311.94 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(s) show
+    68.40   319.86 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(.) show
+    68.40   324.26 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    68.40   328.67 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(E) show
+    68.40   339.23 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    68.40   343.64 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(f) show
+    68.40   348.04 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(o) show
+    68.40   356.85 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(r) show
+    68.40   362.12 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+( ) show
+    60.48   366.53 moveto
+/Helvetica findfont [  -0.00  11.09 -11.09   0.00 0. 0.] makefont setfont
+(2) show
+    60.48   372.69 moveto
+/Helvetica findfont [  -0.00  11.09 -11.09   0.00 0. 0.] makefont setfont
+(3) show
+    60.48   378.86 moveto
+/Helvetica findfont [  -0.00  11.09 -11.09   0.00 0. 0.] makefont setfont
+(8) show
+    68.40   385.02 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(U) show
+    68.40   396.46 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(\() show
+    68.40   401.73 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(m) show
+    68.40   414.93 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(t) show
+    68.40   419.33 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(2) show
+    68.40   428.14 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(5) show
+    68.40   436.94 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(1) show
+    68.40   445.75 moveto
+/Helvetica findfont [  -0.00  15.84 -15.84   0.00 0. 0.] makefont setfont
+(\)) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   288.72 moveto
+   224.64   553.68 lineto
+    84.24   553.68 lineto
+    84.24   288.72 lineto
+   224.64   288.72 lineto
+gsave 1.000 1.000 1.000 setrgbcolor fill grestore
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   288.72 moveto
+   1.930 setlinewidth
+   224.64   553.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   325.76 moveto
+   0.965 setlinewidth
+   232.56   325.76 lineto
+   245.23   315.90 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   245.23   322.94 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   238.90   329.99 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(3) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   378.75 moveto
+   232.56   378.75 lineto
+   245.23   368.89 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   245.23   375.94 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   238.90   382.98 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(4) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   431.75 moveto
+   232.56   431.75 lineto
+   245.23   421.88 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   245.23   428.93 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   238.90   435.97 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(5) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   484.74 moveto
+   232.56   484.74 lineto
+   245.23   474.87 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   245.23   481.92 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   238.90   488.96 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(6) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   537.73 moveto
+   232.56   537.73 lineto
+   245.23   527.87 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   245.23   534.91 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   238.90   541.96 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(7) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   288.72 moveto
+   1.930 setlinewidth
+    84.24   553.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   325.76 moveto
+   0.965 setlinewidth
+    76.32   325.76 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   378.75 moveto
+    76.32   378.75 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   431.75 moveto
+    76.32   431.75 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   484.74 moveto
+    76.32   484.74 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   537.73 moveto
+    76.32   537.73 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   288.72 moveto
+   1.930 setlinewidth
+    84.24   288.72 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   288.72 moveto
+   0.965 setlinewidth
+   224.64   280.80 lineto
+   229.39   254.53 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   229.39   261.57 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   223.06   268.62 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(-) show
+   223.06   272.00 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(3) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   177.84   288.72 moveto
+   177.84   280.80 lineto
+   182.59   254.53 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   182.59   261.57 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   176.26   268.62 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(-) show
+   176.26   272.00 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(2) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   131.04   288.72 moveto
+   131.04   280.80 lineto
+   135.79   254.53 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+   135.79   261.57 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+   129.46   268.62 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(-) show
+   129.46   272.00 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(1) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   288.72 moveto
+    84.24   280.80 lineto
+    88.99   254.53 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(1) show
+    88.99   261.57 moveto
+/Helvetica findfont [  -0.00  12.67 -12.67   0.00 0. 0.] makefont setfont
+(0) show
+    82.66   268.62 moveto
+/Helvetica findfont [  -0.00  10.14 -10.14   0.00 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   553.68 moveto
+   1.930 setlinewidth
+    84.24   553.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   224.64   553.68 moveto
+   0.965 setlinewidth
+   224.64   561.60 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   177.84   553.68 moveto
+   177.84   561.60 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   131.04   553.68 moveto
+   131.04   561.60 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+    84.24   553.68 moveto
+    84.24   561.60 lineto
+%gset
+stroke
+newpath
+ 0.000 0.000 0.882 setrgbcolor
+   224.64   288.72 moveto
+   0.360 setlinewidth
+   224.64   553.68 lineto
+    84.24   553.68 lineto
+    84.24   288.72 lineto
+   224.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.882 setrgbcolor
+   224.64   307.59 moveto
+   1.930 setlinewidth
+   199.98   307.59 lineto
+   199.98   330.62 lineto
+   193.80   330.62 lineto
+   193.80   353.58 lineto
+   181.28   353.58 lineto
+   181.28   376.63 lineto
+   163.48   376.63 lineto
+   163.48   399.66 lineto
+   144.63   399.66 lineto
+   144.63   422.73 lineto
+   126.96   422.73 lineto
+   126.96   445.78 lineto
+   116.66   445.78 lineto
+   116.66   457.26 lineto
+   110.50   457.26 lineto
+   110.50   468.79 lineto
+   105.15   468.79 lineto
+   105.15   480.25 lineto
+   100.12   480.25 lineto
+   100.12   491.70 lineto
+    96.12   491.70 lineto
+    96.12   497.46 lineto
+    93.27   497.46 lineto
+    93.27   503.22 lineto
+    90.59   503.22 lineto
+    90.59   508.96 lineto
+    88.71   508.96 lineto
+    88.71   514.72 lineto
+    87.34   514.72 lineto
+    87.34   526.24 lineto
+    87.03   526.24 lineto
+    87.03   531.98 lineto
+    87.12   531.98 lineto
+    87.12   537.73 lineto
+    86.94   537.73 lineto
+    86.94   541.93 lineto
+    86.52   541.93 lineto
+    86.52   544.64 lineto
+    86.13   544.64 lineto
+    86.13   547.06 lineto
+    85.76   547.06 lineto
+    85.76   549.94 lineto
+   224.64   549.94 lineto
+stroke grestore newpath
+%gend
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   594.00   315.36 moveto
+   0.360 setlinewidth
+   594.00    72.00 lineto
+   234.00    72.00 lineto
+   234.00   315.36 lineto
+   594.00   315.36 lineto
+ gsave clip newpath
+   546.48    95.76 moveto
+/Symbol findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(D) show
+   536.79    95.76 moveto
+/Symbol findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(m) show
+   527.66    95.76 moveto
+/Symbol findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(/) show
+   523.26    95.76 moveto
+/Symbol findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(m) show
+   514.13    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+( ) show
+   509.73    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(v) show
+   501.81    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(s) show
+   493.89    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(.) show
+   489.49    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+( ) show
+   485.08    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(E) show
+   474.52    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+( ) show
+   470.12    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(f) show
+   465.71    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(o) show
+   456.90    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(r) show
+   451.63    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+( ) show
+   447.23    87.84 moveto
+/Helvetica findfont [ -11.09  -0.00   0.00 -11.09 0. 0.] makefont setfont
+(2) show
+   441.06    87.84 moveto
+/Helvetica findfont [ -11.09  -0.00   0.00 -11.09 0. 0.] makefont setfont
+(3) show
+   434.90    87.84 moveto
+/Helvetica findfont [ -11.09  -0.00   0.00 -11.09 0. 0.] makefont setfont
+(8) show
+   428.73    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(U) show
+   417.30    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(\() show
+   412.02    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(m) show
+   398.83    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(t) show
+   394.42    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(2) show
+   385.62    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(5) show
+   376.81    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(1) show
+   368.00    95.76 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(\)) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   252.00 moveto
+   530.64   111.60 lineto
+   265.68   111.60 lineto
+   265.68   252.00 lineto
+   530.64   252.00 lineto
+gsave 1.000 1.000 1.000 setrgbcolor fill grestore
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   252.00 moveto
+   1.930 setlinewidth
+   265.68   252.00 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   493.60   252.00 moveto
+   0.965 setlinewidth
+   493.60   259.92 lineto
+   503.46   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   496.42   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   489.37   266.26 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(3) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   440.61   252.00 moveto
+   440.61   259.92 lineto
+   450.47   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   443.42   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   436.38   266.26 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(4) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   387.61   252.00 moveto
+   387.61   259.92 lineto
+   397.48   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   390.43   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   383.39   266.26 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(5) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   334.62   252.00 moveto
+   334.62   259.92 lineto
+   344.49   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   337.44   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   330.40   266.26 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(6) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   281.63   252.00 moveto
+   281.63   259.92 lineto
+   291.49   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   284.45   272.59 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   277.40   266.26 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(7) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   111.60 moveto
+   1.930 setlinewidth
+   265.68   111.60 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   493.60   111.60 moveto
+   0.965 setlinewidth
+   493.60   103.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   440.61   111.60 moveto
+   440.61   103.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   387.61   111.60 moveto
+   387.61   103.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   334.62   111.60 moveto
+   334.62   103.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   281.63   111.60 moveto
+   281.63   103.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   252.00 moveto
+   1.930 setlinewidth
+   530.64   111.60 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   252.00 moveto
+   0.965 setlinewidth
+   538.56   252.00 lineto
+   564.83   256.75 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   557.79   256.75 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   550.74   250.42 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(-) show
+   547.36   250.42 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(1) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   205.20 moveto
+   538.56   205.20 lineto
+   564.83   209.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   557.79   209.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   550.74   203.62 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   158.40 moveto
+   538.56   158.40 lineto
+   564.83   163.15 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   557.79   163.15 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   550.74   156.82 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(1) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   111.60 moveto
+   538.56   111.60 lineto
+   564.83   116.35 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   557.79   116.35 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   550.74   110.02 moveto
+/Helvetica findfont [ -10.14  -0.00   0.00 -10.14 0. 0.] makefont setfont
+(2) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   265.68   252.00 moveto
+   1.930 setlinewidth
+   265.68   111.60 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   265.68   252.00 moveto
+   0.965 setlinewidth
+   257.76   252.00 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   265.68   205.20 moveto
+   257.76   205.20 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   265.68   158.40 moveto
+   257.76   158.40 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   265.68   111.60 moveto
+   257.76   111.60 lineto
+%gset
+stroke
+newpath
+ 0.000 0.000 0.882 setrgbcolor
+   530.64   252.00 moveto
+   0.360 setlinewidth
+   530.64   111.60 lineto
+   265.68   111.60 lineto
+   265.68   252.00 lineto
+   530.64   252.00 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.882 setrgbcolor
+   511.77   251.98 moveto
+   1.930 setlinewidth
+   511.77   149.70 lineto
+   488.74   149.70 lineto
+   488.74   126.36 lineto
+   465.78   126.36 lineto
+   465.78   129.07 lineto
+   442.73   129.07 lineto
+   442.73   132.39 lineto
+   419.70   132.39 lineto
+   419.70   137.12 lineto
+   396.63   137.12 lineto
+   396.63   144.07 lineto
+   373.58   144.07 lineto
+   373.58   157.13 lineto
+   362.10   157.13 lineto
+   362.10   176.32 lineto
+   350.57   176.32 lineto
+   350.57   174.07 lineto
+   339.11   174.07 lineto
+   339.11   186.35 lineto
+   327.66   186.35 lineto
+   327.66   185.80 lineto
+   321.90   185.80 lineto
+   321.90   184.77 lineto
+   316.14   184.77 lineto
+   316.14   189.38 lineto
+   310.40   189.38 lineto
+   310.40   198.62 lineto
+   304.64   198.62 lineto
+   304.64   210.00 lineto
+   293.12   210.00 lineto
+   293.12   204.73 lineto
+   287.38   204.73 lineto
+   287.38   196.00 lineto
+   281.63   196.00 lineto
+   281.63   194.06 lineto
+   277.43   194.06 lineto
+   277.43   197.09 lineto
+   274.72   197.09 lineto
+   274.72   200.96 lineto
+   272.30   200.96 lineto
+   272.30   207.70 lineto
+   269.42   207.70 lineto
+   269.42   251.98 lineto
+stroke grestore newpath
+%gend
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   270.00   172.80 moveto
+   0.360 setlinewidth
+   270.00   100.80 lineto
+    26.64   100.80 lineto
+    26.64   172.80 lineto
+   270.00   172.80 lineto
+ gsave clip newpath
+   222.48   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(O) show
+   213.24   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(r) show
+   209.28   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(d) show
+   202.68   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(i) show
+   200.04   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(n) show
+   193.43   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   186.83   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(t) show
+   183.53   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   176.92   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   173.62   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   167.68   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(c) show
+   161.74   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   155.13   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(l) show
+   152.49   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   145.89   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   139.95   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   136.65   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   130.04   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(r) show
+   126.09   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   119.48   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   116.18   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(%) show
+   105.62   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   102.31   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(r) show
+    98.36   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+    91.75   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(l) show
+    89.12   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+    82.51   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(t) show
+    79.21   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(i) show
+    76.57   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(v) show
+    70.63   124.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   222.48   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   216.54   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(t) show
+   213.24   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   206.63   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(n) show
+   200.03   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(d) show
+   193.42   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   186.82   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(r) show
+   182.86   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(d) show
+   176.25   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   172.95   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(d) show
+   166.35   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   159.74   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(v) show
+   153.80   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(i) show
+   151.16   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   144.56   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(t) show
+   141.26   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(i) show
+   138.62   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(o) show
+   132.01   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(n) show
+   125.41   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   122.11   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   115.50   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(n) show
+   108.90   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(d) show
+   102.29   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+    98.99   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(m) show
+    89.09   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(u) show
+    82.49   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(-) show
+    78.53   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(b) show
+    71.92   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+    65.32   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(r) show
+    61.36   143.57 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(.) show
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   270.00   226.80 moveto
+   270.00   154.80 lineto
+    26.64   154.80 lineto
+    26.64   226.80 lineto
+   270.00   226.80 lineto
+ gsave clip newpath
+   222.48   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(A) show
+   214.56   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(b) show
+   207.95   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   202.01   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(c) show
+   196.07   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(i) show
+   193.43   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   187.49   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   181.55   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   174.95   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   171.65   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   165.71   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(c) show
+   159.77   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   153.16   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(l) show
+   150.52   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   143.92   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(s) show
+   137.98   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   134.67   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(a) show
+   128.07   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(r) show
+   124.11   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   117.51   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+   114.21   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+   107.60   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(n) show
+   101.00   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+    94.39   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(r) show
+    90.43   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(g) show
+    83.83   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(y) show
+    77.89   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+( ) show
+    74.59   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(\() show
+    70.63   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(e) show
+    64.02   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(V) show
+    56.10   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(\)) show
+    52.14   178.56 moveto
+/Helvetica findfont [ -11.88  -0.00   0.00 -11.88 0. 0.] makefont setfont
+(.) show
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   594.00   225.36 moveto
+   594.00   585.36 lineto
+   234.00   585.36 lineto
+   234.00   225.36 lineto
+   594.00   225.36 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+gsave 1.000 1.000 1.000 setrgbcolor fill grestore
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   1.930 setlinewidth
+   530.64   553.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   265.68   288.72 moveto
+   265.68   553.68 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   265.68   288.72 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   553.68 moveto
+   265.68   553.68 lineto
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   758.56   549.94 moveto
+   0.000 setlinewidth
+   695.93   549.94 lineto
+   695.93   549.94 lineto
+   672.87   549.94 lineto
+   672.87   549.94 lineto
+   649.76   549.94 lineto
+   649.76   549.94 lineto
+   626.84   549.94 lineto
+   626.84   549.94 lineto
+   603.82   549.94 lineto
+   603.82   549.94 lineto
+   580.82   549.94 lineto
+   580.82   549.94 lineto
+   557.82   549.94 lineto
+   557.82   549.94 lineto
+   534.79   549.94 lineto
+   534.79   549.94 lineto
+   511.77   549.94 lineto
+   511.77   307.59 lineto
+   488.74   307.59 lineto
+   488.74   307.59 lineto
+   465.78   307.59 lineto
+   465.78   307.59 lineto
+   442.73   307.59 lineto
+   442.73   307.59 lineto
+   419.70   307.59 lineto
+   419.70   307.59 lineto
+   396.63   307.59 lineto
+   396.63   307.59 lineto
+   373.58   307.59 lineto
+   373.58   307.59 lineto
+   362.10   307.59 lineto
+   362.10   307.59 lineto
+   350.57   307.59 lineto
+   350.57   307.59 lineto
+   339.11   307.59 lineto
+   339.11   307.59 lineto
+   327.66   307.59 lineto
+   327.66   307.59 lineto
+   321.90   307.59 lineto
+   321.90   307.59 lineto
+   316.14   307.59 lineto
+   316.14   307.59 lineto
+   310.40   307.59 lineto
+   310.40   307.59 lineto
+   304.64   307.59 lineto
+   304.64   307.59 lineto
+   293.12   307.59 lineto
+   293.12   307.59 lineto
+   287.38   307.59 lineto
+   287.38   307.59 lineto
+   281.63   307.59 lineto
+   281.63   307.59 lineto
+   277.43   307.59 lineto
+   277.43   307.59 lineto
+   274.72   307.59 lineto
+   274.72   307.59 lineto
+   272.30   307.59 lineto
+   272.30   307.59 lineto
+   269.42   307.59 lineto
+   269.42    60.80 lineto
+   272.30    60.80 lineto
+   272.30    60.80 lineto
+   274.72    60.80 lineto
+   274.72    60.80 lineto
+   277.43    60.80 lineto
+   277.43    60.80 lineto
+   281.63    60.80 lineto
+   281.63    60.80 lineto
+   287.38    60.80 lineto
+   287.38    60.80 lineto
+   293.12    60.80 lineto
+   293.12    60.80 lineto
+   304.64    60.80 lineto
+   304.64    60.80 lineto
+   310.40    60.80 lineto
+   310.40    60.80 lineto
+   316.14    60.80 lineto
+   316.14    60.80 lineto
+   321.90    60.80 lineto
+   321.90    60.80 lineto
+   327.66    60.80 lineto
+   327.66    60.80 lineto
+   339.11    60.80 lineto
+   339.11    60.80 lineto
+   350.57    60.80 lineto
+   350.57    60.80 lineto
+   362.10    60.80 lineto
+   362.10    60.80 lineto
+   373.58    60.80 lineto
+   373.58    60.80 lineto
+   396.63    60.80 lineto
+   396.63    60.80 lineto
+   419.70    60.80 lineto
+   419.70    60.80 lineto
+   442.73    60.80 lineto
+   442.73    60.80 lineto
+   465.78    60.80 lineto
+   465.78    60.80 lineto
+   488.74    60.80 lineto
+   488.74    60.80 lineto
+   511.77    60.80 lineto
+   511.77    60.80 lineto
+   534.79    60.80 lineto
+   534.79    60.80 lineto
+   557.82    60.80 lineto
+   557.82    60.80 lineto
+   580.82    60.80 lineto
+   580.82    60.80 lineto
+   603.82    60.80 lineto
+   603.82    60.80 lineto
+   626.84    60.80 lineto
+   626.84    60.80 lineto
+   649.76    60.80 lineto
+   649.76    60.80 lineto
+   672.87    60.80 lineto
+   672.87    60.80 lineto
+   695.93    60.80 lineto
+   695.93    60.80 lineto
+   758.56    60.80 lineto
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   457.26 moveto
+   0.000 setlinewidth
+   488.74   457.26 lineto
+   488.74   457.26 lineto
+   465.78   457.26 lineto
+   465.78   457.26 lineto
+   442.73   457.26 lineto
+   442.73   457.26 lineto
+   419.70   457.26 lineto
+   419.70   457.26 lineto
+   396.63   457.26 lineto
+   396.63   457.26 lineto
+   373.58   457.26 lineto
+   373.58   457.26 lineto
+   362.10   457.26 lineto
+   362.10   307.59 lineto
+   373.58   307.59 lineto
+   373.58   307.59 lineto
+   396.63   307.59 lineto
+   396.63   307.59 lineto
+   419.70   307.59 lineto
+   419.70   307.59 lineto
+   442.73   307.59 lineto
+   442.73   307.59 lineto
+   465.78   307.59 lineto
+   465.78   307.59 lineto
+   488.74   307.59 lineto
+   488.74   307.59 lineto
+   511.77   307.59 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   468.79 moveto
+   0.000 setlinewidth
+   488.74   468.79 lineto
+   488.74   468.79 lineto
+   465.78   468.79 lineto
+   465.78   468.79 lineto
+   442.73   468.79 lineto
+   442.73   468.79 lineto
+   419.70   468.79 lineto
+   419.70   457.26 lineto
+   442.73   457.26 lineto
+   442.73   457.26 lineto
+   465.78   457.26 lineto
+   465.78   457.26 lineto
+   488.74   457.26 lineto
+   488.74   457.26 lineto
+   511.77   457.26 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   480.25 moveto
+   0.000 setlinewidth
+   488.74   480.25 lineto
+   488.74   480.25 lineto
+   465.78   480.25 lineto
+   465.78   480.25 lineto
+   442.73   480.25 lineto
+   442.73   480.25 lineto
+   419.70   480.25 lineto
+   419.70   480.25 lineto
+   396.63   480.25 lineto
+   396.63   468.79 lineto
+   419.70   468.79 lineto
+   419.70   468.79 lineto
+   442.73   468.79 lineto
+   442.73   468.79 lineto
+   465.78   468.79 lineto
+   465.78   468.79 lineto
+   488.74   468.79 lineto
+   488.74   468.79 lineto
+   511.77   468.79 lineto
+gsave 0.529 0.000 0.000 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   491.70 moveto
+   0.000 setlinewidth
+   488.74   491.70 lineto
+   488.74   491.70 lineto
+   465.78   491.70 lineto
+   465.78   491.70 lineto
+   442.73   491.70 lineto
+   442.73   491.70 lineto
+   419.70   491.70 lineto
+   419.70   491.70 lineto
+   396.63   491.70 lineto
+   396.63   491.70 lineto
+   373.58   491.70 lineto
+   373.58   480.25 lineto
+   362.10   480.25 lineto
+   362.10   468.79 lineto
+   373.58   468.79 lineto
+   373.58   468.79 lineto
+   396.63   468.79 lineto
+   396.63   480.25 lineto
+   419.70   480.25 lineto
+   419.70   480.25 lineto
+   442.73   480.25 lineto
+   442.73   480.25 lineto
+   465.78   480.25 lineto
+   465.78   480.25 lineto
+   488.74   480.25 lineto
+   488.74   480.25 lineto
+   511.77   480.25 lineto
+gsave 0.686 0.125 0.125 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   503.22 moveto
+   0.000 setlinewidth
+   488.74   503.22 lineto
+   488.74   503.22 lineto
+   465.78   503.22 lineto
+   465.78   503.22 lineto
+   442.73   503.22 lineto
+   442.73   526.24 lineto
+   419.70   526.24 lineto
+   419.70   526.24 lineto
+   396.63   526.24 lineto
+   396.63   526.24 lineto
+   373.58   526.24 lineto
+   373.58   508.96 lineto
+   362.10   508.96 lineto
+   362.10   503.22 lineto
+   373.58   503.22 lineto
+   373.58   491.70 lineto
+   396.63   491.70 lineto
+   396.63   491.70 lineto
+   419.70   491.70 lineto
+   419.70   491.70 lineto
+   442.73   491.70 lineto
+   442.73   491.70 lineto
+   465.78   491.70 lineto
+   465.78   491.70 lineto
+   488.74   491.70 lineto
+   488.74   491.70 lineto
+   511.77   491.70 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   508.96 moveto
+   0.000 setlinewidth
+   488.74   508.96 lineto
+   488.74   508.96 lineto
+   465.78   508.96 lineto
+   465.78   508.96 lineto
+   442.73   508.96 lineto
+   442.73   503.22 lineto
+   465.78   503.22 lineto
+   465.78   503.22 lineto
+   488.74   503.22 lineto
+   488.74   503.22 lineto
+   511.77   503.22 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   514.72 moveto
+   0.000 setlinewidth
+   488.74   514.72 lineto
+   488.74   514.72 lineto
+   465.78   514.72 lineto
+   465.78   514.72 lineto
+   442.73   514.72 lineto
+   442.73   508.96 lineto
+   465.78   508.96 lineto
+   465.78   508.96 lineto
+   488.74   508.96 lineto
+   488.74   508.96 lineto
+   511.77   508.96 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   526.24 moveto
+   0.000 setlinewidth
+   488.74   526.24 lineto
+   488.74   526.24 lineto
+   465.78   526.24 lineto
+   465.78   526.24 lineto
+   442.73   526.24 lineto
+   442.73   514.72 lineto
+   465.78   514.72 lineto
+   465.78   514.72 lineto
+   488.74   514.72 lineto
+   488.74   514.72 lineto
+   511.77   514.72 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   541.93 moveto
+   0.000 setlinewidth
+   488.74   541.93 lineto
+   488.74   541.93 lineto
+   465.78   541.93 lineto
+   465.78   541.93 lineto
+   442.73   541.93 lineto
+   442.73   537.73 lineto
+   419.70   537.73 lineto
+   419.70   537.73 lineto
+   396.63   537.73 lineto
+   396.63   537.73 lineto
+   373.58   537.73 lineto
+   373.58   526.24 lineto
+   396.63   526.24 lineto
+   396.63   526.24 lineto
+   419.70   526.24 lineto
+   419.70   526.24 lineto
+   442.73   526.24 lineto
+   442.73   526.24 lineto
+   465.78   526.24 lineto
+   465.78   526.24 lineto
+   488.74   526.24 lineto
+   488.74   526.24 lineto
+   511.77   526.24 lineto
+gsave 0.686 0.125 0.125 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   544.64 moveto
+   0.000 setlinewidth
+   488.74   544.64 lineto
+   488.74   544.64 lineto
+   465.78   544.64 lineto
+   465.78   544.64 lineto
+   442.73   544.64 lineto
+   442.73   541.93 lineto
+   465.78   541.93 lineto
+   465.78   541.93 lineto
+   488.74   541.93 lineto
+   488.74   541.93 lineto
+   511.77   541.93 lineto
+gsave 0.922 0.765 0.765 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   547.06 moveto
+   0.000 setlinewidth
+   488.74   547.06 lineto
+   488.74   547.06 lineto
+   465.78   547.06 lineto
+   465.78   544.64 lineto
+   488.74   544.64 lineto
+   488.74   544.64 lineto
+   511.77   544.64 lineto
+gsave 0.686 0.922 0.686 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   511.77   549.94 moveto
+   0.000 setlinewidth
+   488.74   549.94 lineto
+   488.74   549.94 lineto
+   465.78   549.94 lineto
+   465.78   547.06 lineto
+   488.74   547.06 lineto
+   488.74   547.06 lineto
+   511.77   547.06 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   465.78   547.06 moveto
+   0.000 setlinewidth
+   442.73   547.06 lineto
+   442.73   547.06 lineto
+   419.70   547.06 lineto
+   419.70   544.64 lineto
+   442.73   544.64 lineto
+   442.73   544.64 lineto
+   465.78   544.64 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   465.78   549.94 moveto
+   0.000 setlinewidth
+   442.73   549.94 lineto
+   442.73   549.94 lineto
+   419.70   549.94 lineto
+   419.70   549.94 lineto
+   396.63   549.94 lineto
+   396.63   549.94 lineto
+   373.58   549.94 lineto
+   373.58   549.94 lineto
+   362.10   549.94 lineto
+   362.10   549.94 lineto
+   350.57   549.94 lineto
+   350.57   547.06 lineto
+   362.10   547.06 lineto
+   362.10   544.64 lineto
+   373.58   544.64 lineto
+   373.58   547.06 lineto
+   396.63   547.06 lineto
+   396.63   547.06 lineto
+   419.70   547.06 lineto
+   419.70   547.06 lineto
+   442.73   547.06 lineto
+   442.73   547.06 lineto
+   465.78   547.06 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   442.73   541.93 moveto
+   0.000 setlinewidth
+   419.70   541.93 lineto
+   419.70   541.93 lineto
+   396.63   541.93 lineto
+   396.63   537.73 lineto
+   419.70   537.73 lineto
+   419.70   537.73 lineto
+   442.73   537.73 lineto
+gsave 0.784 0.157 0.118 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   442.73   544.64 moveto
+   0.000 setlinewidth
+   419.70   544.64 lineto
+   419.70   544.64 lineto
+   396.63   544.64 lineto
+   396.63   541.93 lineto
+   419.70   541.93 lineto
+   419.70   541.93 lineto
+   442.73   541.93 lineto
+gsave 0.686 0.922 0.686 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   419.70   468.79 moveto
+   0.000 setlinewidth
+   396.63   468.79 lineto
+   396.63   468.79 lineto
+   373.58   468.79 lineto
+   373.58   457.26 lineto
+   396.63   457.26 lineto
+   396.63   457.26 lineto
+   419.70   457.26 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   419.70   547.06 moveto
+   0.000 setlinewidth
+   396.63   547.06 lineto
+   396.63   547.06 lineto
+   373.58   547.06 lineto
+   373.58   544.64 lineto
+   396.63   544.64 lineto
+   396.63   544.64 lineto
+   419.70   544.64 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   396.63   541.93 moveto
+   0.000 setlinewidth
+   373.58   541.93 lineto
+   373.58   537.73 lineto
+   396.63   537.73 lineto
+gsave 0.843 0.353 0.353 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   396.63   544.64 moveto
+   0.000 setlinewidth
+   373.58   544.64 lineto
+   373.58   541.93 lineto
+   396.63   541.93 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   468.79 moveto
+   0.000 setlinewidth
+   362.10   468.79 lineto
+   362.10   457.26 lineto
+   373.58   457.26 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   491.70 moveto
+   0.000 setlinewidth
+   362.10   491.70 lineto
+   362.10   480.25 lineto
+   373.58   480.25 lineto
+gsave 0.843 0.353 0.353 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   503.22 moveto
+   0.000 setlinewidth
+   362.10   503.22 lineto
+   362.10   526.24 lineto
+   350.57   526.24 lineto
+   350.57   491.70 lineto
+   339.11   491.70 lineto
+   339.11   491.70 lineto
+   327.66   491.70 lineto
+   327.66   468.79 lineto
+   321.90   468.79 lineto
+   321.90   468.79 lineto
+   316.14   468.79 lineto
+   316.14   468.79 lineto
+   310.40   468.79 lineto
+   310.40   468.79 lineto
+   304.64   468.79 lineto
+   304.64   468.79 lineto
+   293.12   468.79 lineto
+   293.12   457.26 lineto
+   304.64   457.26 lineto
+   304.64   445.78 lineto
+   310.40   445.78 lineto
+   310.40   457.26 lineto
+   316.14   457.26 lineto
+   316.14   445.78 lineto
+   321.90   445.78 lineto
+   321.90   445.78 lineto
+   327.66   445.78 lineto
+   327.66   457.26 lineto
+   339.11   457.26 lineto
+   339.11   457.26 lineto
+   350.57   457.26 lineto
+   350.57   457.26 lineto
+   362.10   457.26 lineto
+   362.10   491.70 lineto
+   373.58   491.70 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   514.72 moveto
+   0.000 setlinewidth
+   362.10   514.72 lineto
+   362.10   508.96 lineto
+   373.58   508.96 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   526.24 moveto
+   0.000 setlinewidth
+   362.10   526.24 lineto
+   362.10   514.72 lineto
+   373.58   514.72 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   537.73 moveto
+   0.000 setlinewidth
+   362.10   537.73 lineto
+   362.10   526.24 lineto
+   373.58   526.24 lineto
+gsave 0.784 0.157 0.118 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   541.93 moveto
+   0.000 setlinewidth
+   362.10   541.93 lineto
+   362.10   537.73 lineto
+   373.58   537.73 lineto
+gsave 0.922 0.765 0.765 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   373.58   544.64 moveto
+   0.000 setlinewidth
+   362.10   544.64 lineto
+   362.10   541.93 lineto
+   373.58   541.93 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   362.10   399.66 moveto
+   0.000 setlinewidth
+   350.57   399.66 lineto
+   350.57   307.59 lineto
+   362.10   307.59 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   362.10   445.78 moveto
+   0.000 setlinewidth
+   350.57   445.78 lineto
+   350.57   399.66 lineto
+   362.10   399.66 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   362.10   457.26 moveto
+   0.000 setlinewidth
+   350.57   457.26 lineto
+   350.57   445.78 lineto
+   362.10   445.78 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   362.10   541.93 moveto
+   0.000 setlinewidth
+   350.57   541.93 lineto
+   350.57   544.64 lineto
+   339.11   544.64 lineto
+   339.11   549.94 lineto
+   327.66   549.94 lineto
+   327.66   541.93 lineto
+   339.11   541.93 lineto
+   339.11   537.73 lineto
+   350.57   537.73 lineto
+   350.57   526.24 lineto
+   362.10   526.24 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   362.10   547.06 moveto
+   0.000 setlinewidth
+   350.57   547.06 lineto
+   350.57   541.93 lineto
+   362.10   541.93 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   422.73 moveto
+   0.000 setlinewidth
+   339.11   422.73 lineto
+   339.11   307.59 lineto
+   350.57   307.59 lineto
+gsave 0.529 0.000 0.000 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   457.26 moveto
+   0.000 setlinewidth
+   339.11   457.26 lineto
+   339.11   445.78 lineto
+   327.66   445.78 lineto
+   327.66   307.59 lineto
+   339.11   307.59 lineto
+   339.11   422.73 lineto
+   350.57   422.73 lineto
+gsave 0.686 0.125 0.125 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   497.46 moveto
+   0.000 setlinewidth
+   339.11   497.46 lineto
+   339.11   491.70 lineto
+   350.57   491.70 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   503.22 moveto
+   0.000 setlinewidth
+   339.11   503.22 lineto
+   339.11   497.46 lineto
+   350.57   497.46 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   508.96 moveto
+   0.000 setlinewidth
+   339.11   508.96 lineto
+   339.11   526.24 lineto
+   327.66   526.24 lineto
+   327.66   491.70 lineto
+   339.11   491.70 lineto
+   339.11   503.22 lineto
+   350.57   503.22 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   526.24 moveto
+   0.000 setlinewidth
+   339.11   526.24 lineto
+   339.11   508.96 lineto
+   350.57   508.96 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   537.73 moveto
+   0.000 setlinewidth
+   339.11   537.73 lineto
+   339.11   541.93 lineto
+   327.66   541.93 lineto
+   327.66   526.24 lineto
+   339.11   526.24 lineto
+   339.11   526.24 lineto
+   350.57   526.24 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   547.06 moveto
+   0.000 setlinewidth
+   339.11   547.06 lineto
+   339.11   544.64 lineto
+   350.57   544.64 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   350.57   549.94 moveto
+   0.000 setlinewidth
+   339.11   549.94 lineto
+   339.11   547.06 lineto
+   350.57   547.06 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   339.11   457.26 moveto
+   0.000 setlinewidth
+   327.66   457.26 lineto
+   327.66   445.78 lineto
+   339.11   445.78 lineto
+gsave 0.843 0.353 0.353 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   327.66   445.78 moveto
+   0.000 setlinewidth
+   321.90   445.78 lineto
+   321.90   445.78 lineto
+   316.14   445.78 lineto
+   316.14   457.26 lineto
+   310.40   457.26 lineto
+   310.40   445.78 lineto
+   304.64   445.78 lineto
+   304.64   457.26 lineto
+   293.12   457.26 lineto
+   293.12   376.63 lineto
+   304.64   376.63 lineto
+   304.64   307.59 lineto
+   310.40   307.59 lineto
+   310.40   376.63 lineto
+   316.14   376.63 lineto
+   316.14   307.59 lineto
+   321.90   307.59 lineto
+   321.90   307.59 lineto
+   327.66   307.59 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   327.66   480.25 moveto
+   0.000 setlinewidth
+   321.90   480.25 lineto
+   321.90   468.79 lineto
+   327.66   468.79 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   327.66   491.70 moveto
+   0.000 setlinewidth
+   321.90   491.70 lineto
+   321.90   491.70 lineto
+   316.14   491.70 lineto
+   316.14   491.70 lineto
+   310.40   491.70 lineto
+   310.40   491.70 lineto
+   304.64   491.70 lineto
+   304.64   491.70 lineto
+   293.12   491.70 lineto
+   293.12   480.25 lineto
+   304.64   480.25 lineto
+   304.64   480.25 lineto
+   310.40   480.25 lineto
+   310.40   468.79 lineto
+   316.14   468.79 lineto
+   316.14   480.25 lineto
+   321.90   480.25 lineto
+   321.90   480.25 lineto
+   327.66   480.25 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   327.66   526.24 moveto
+   0.000 setlinewidth
+   321.90   526.24 lineto
+   321.90   526.24 lineto
+   316.14   526.24 lineto
+   316.14   526.24 lineto
+   310.40   526.24 lineto
+   310.40   526.24 lineto
+   304.64   526.24 lineto
+   304.64   526.24 lineto
+   293.12   526.24 lineto
+   293.12   491.70 lineto
+   304.64   491.70 lineto
+   304.64   491.70 lineto
+   310.40   491.70 lineto
+   310.40   491.70 lineto
+   316.14   491.70 lineto
+   316.14   491.70 lineto
+   321.90   491.70 lineto
+   321.90   491.70 lineto
+   327.66   491.70 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   327.66   541.93 moveto
+   0.000 setlinewidth
+   321.90   541.93 lineto
+   321.90   541.93 lineto
+   316.14   541.93 lineto
+   316.14   537.73 lineto
+   310.40   537.73 lineto
+   310.40   541.93 lineto
+   304.64   541.93 lineto
+   304.64   537.73 lineto
+   293.12   537.73 lineto
+   293.12   526.24 lineto
+   304.64   526.24 lineto
+   304.64   526.24 lineto
+   310.40   526.24 lineto
+   310.40   526.24 lineto
+   316.14   526.24 lineto
+   316.14   526.24 lineto
+   321.90   526.24 lineto
+   321.90   526.24 lineto
+   327.66   526.24 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   327.66   549.94 moveto
+   0.000 setlinewidth
+   321.90   549.94 lineto
+   321.90   549.94 lineto
+   316.14   549.94 lineto
+   316.14   549.94 lineto
+   310.40   549.94 lineto
+   310.40   549.94 lineto
+   304.64   549.94 lineto
+   304.64   549.94 lineto
+   293.12   549.94 lineto
+   293.12   547.06 lineto
+   287.38   547.06 lineto
+   287.38   547.06 lineto
+   281.63   547.06 lineto
+   281.63   549.94 lineto
+   277.43   549.94 lineto
+   277.43   549.94 lineto
+   274.72   549.94 lineto
+   274.72   549.94 lineto
+   272.30   549.94 lineto
+   272.30   526.24 lineto
+   269.42   526.24 lineto
+   269.42   491.70 lineto
+   272.30   491.70 lineto
+   272.30   491.70 lineto
+   274.72   491.70 lineto
+   274.72   491.70 lineto
+   277.43   491.70 lineto
+   277.43   514.72 lineto
+   281.63   514.72 lineto
+   281.63   526.24 lineto
+   287.38   526.24 lineto
+   287.38   526.24 lineto
+   293.12   526.24 lineto
+   293.12   537.73 lineto
+   304.64   537.73 lineto
+   304.64   541.93 lineto
+   310.40   541.93 lineto
+   310.40   537.73 lineto
+   316.14   537.73 lineto
+   316.14   541.93 lineto
+   321.90   541.93 lineto
+   321.90   541.93 lineto
+   327.66   541.93 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   321.90   480.25 moveto
+   0.000 setlinewidth
+   316.14   480.25 lineto
+   316.14   468.79 lineto
+   321.90   468.79 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   316.14   376.63 moveto
+   0.000 setlinewidth
+   310.40   376.63 lineto
+   310.40   307.59 lineto
+   316.14   307.59 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   310.40   480.25 moveto
+   0.000 setlinewidth
+   304.64   480.25 lineto
+   304.64   480.25 lineto
+   293.12   480.25 lineto
+   293.12   468.79 lineto
+   304.64   468.79 lineto
+   304.64   468.79 lineto
+   310.40   468.79 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   304.64   376.63 moveto
+   0.000 setlinewidth
+   293.12   376.63 lineto
+   293.12   307.59 lineto
+   304.64   307.59 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   293.12   445.78 moveto
+   0.000 setlinewidth
+   287.38   445.78 lineto
+   287.38   445.78 lineto
+   281.63   445.78 lineto
+   281.63   376.63 lineto
+   277.43   376.63 lineto
+   277.43   307.59 lineto
+   281.63   307.59 lineto
+   281.63   307.59 lineto
+   287.38   307.59 lineto
+   287.38   307.59 lineto
+   293.12   307.59 lineto
+gsave 0.686 0.125 0.125 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   293.12   457.26 moveto
+   0.000 setlinewidth
+   287.38   457.26 lineto
+   287.38   457.26 lineto
+   281.63   457.26 lineto
+   281.63   445.78 lineto
+   287.38   445.78 lineto
+   287.38   445.78 lineto
+   293.12   445.78 lineto
+gsave 0.784 0.157 0.118 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   293.12   468.79 moveto
+   0.000 setlinewidth
+   287.38   468.79 lineto
+   287.38   468.79 lineto
+   281.63   468.79 lineto
+   281.63   480.25 lineto
+   277.43   480.25 lineto
+   277.43   491.70 lineto
+   274.72   491.70 lineto
+   274.72   491.70 lineto
+   272.30   491.70 lineto
+   272.30   491.70 lineto
+   269.42   491.70 lineto
+   269.42   480.25 lineto
+   272.30   480.25 lineto
+   272.30   480.25 lineto
+   274.72   480.25 lineto
+   274.72   468.79 lineto
+   277.43   468.79 lineto
+   277.43   457.26 lineto
+   281.63   457.26 lineto
+   281.63   457.26 lineto
+   287.38   457.26 lineto
+   287.38   457.26 lineto
+   293.12   457.26 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   293.12   491.70 moveto
+   0.000 setlinewidth
+   287.38   491.70 lineto
+   287.38   491.70 lineto
+   281.63   491.70 lineto
+   281.63   491.70 lineto
+   277.43   491.70 lineto
+   277.43   480.25 lineto
+   281.63   480.25 lineto
+   281.63   468.79 lineto
+   287.38   468.79 lineto
+   287.38   468.79 lineto
+   293.12   468.79 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   293.12   526.24 moveto
+   0.000 setlinewidth
+   287.38   526.24 lineto
+   287.38   526.24 lineto
+   281.63   526.24 lineto
+   281.63   503.22 lineto
+   277.43   503.22 lineto
+   277.43   491.70 lineto
+   281.63   491.70 lineto
+   281.63   491.70 lineto
+   287.38   491.70 lineto
+   287.38   491.70 lineto
+   293.12   491.70 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   293.12   549.94 moveto
+   0.000 setlinewidth
+   287.38   549.94 lineto
+   287.38   549.94 lineto
+   281.63   549.94 lineto
+   281.63   547.06 lineto
+   287.38   547.06 lineto
+   287.38   547.06 lineto
+   293.12   547.06 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   281.63   422.73 moveto
+   0.000 setlinewidth
+   277.43   422.73 lineto
+   277.43   376.63 lineto
+   281.63   376.63 lineto
+gsave 0.784 0.157 0.118 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   281.63   445.78 moveto
+   0.000 setlinewidth
+   277.43   445.78 lineto
+   277.43   422.73 lineto
+   281.63   422.73 lineto
+gsave 0.843 0.353 0.353 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   281.63   457.26 moveto
+   0.000 setlinewidth
+   277.43   457.26 lineto
+   277.43   445.78 lineto
+   281.63   445.78 lineto
+gsave 0.922 0.765 0.765 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   281.63   508.96 moveto
+   0.000 setlinewidth
+   277.43   508.96 lineto
+   277.43   503.22 lineto
+   281.63   503.22 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   281.63   514.72 moveto
+   0.000 setlinewidth
+   277.43   514.72 lineto
+   277.43   508.96 lineto
+   281.63   508.96 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   277.43   376.63 moveto
+   0.000 setlinewidth
+   274.72   376.63 lineto
+   274.72   307.59 lineto
+   277.43   307.59 lineto
+gsave 0.922 0.765 0.765 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   277.43   422.73 moveto
+   0.000 setlinewidth
+   274.72   422.73 lineto
+   274.72   376.63 lineto
+   277.43   376.63 lineto
+gsave 0.686 0.922 0.686 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   277.43   445.78 moveto
+   0.000 setlinewidth
+   274.72   445.78 lineto
+   274.72   422.73 lineto
+   277.43   422.73 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   277.43   457.26 moveto
+   0.000 setlinewidth
+   274.72   457.26 lineto
+   274.72   445.78 lineto
+   277.43   445.78 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   277.43   468.79 moveto
+   0.000 setlinewidth
+   274.72   468.79 lineto
+   274.72   468.79 lineto
+   272.30   468.79 lineto
+   272.30   457.26 lineto
+   274.72   457.26 lineto
+   274.72   457.26 lineto
+   277.43   457.26 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   274.72   353.58 moveto
+   0.000 setlinewidth
+   272.30   353.58 lineto
+   272.30   307.59 lineto
+   274.72   307.59 lineto
+gsave 0.686 0.922 0.686 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   274.72   399.66 moveto
+   0.000 setlinewidth
+   272.30   399.66 lineto
+   272.30   353.58 lineto
+   274.72   353.58 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   274.72   445.78 moveto
+   0.000 setlinewidth
+   272.30   445.78 lineto
+   272.30   399.66 lineto
+   274.72   399.66 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   274.72   457.26 moveto
+   0.000 setlinewidth
+   272.30   457.26 lineto
+   272.30   468.79 lineto
+   269.42   468.79 lineto
+   269.42   353.58 lineto
+   272.30   353.58 lineto
+   272.30   445.78 lineto
+   274.72   445.78 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   274.72   480.25 moveto
+   0.000 setlinewidth
+   272.30   480.25 lineto
+   272.30   468.79 lineto
+   274.72   468.79 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   272.30   353.58 moveto
+   0.000 setlinewidth
+   269.42   353.58 lineto
+   269.42   307.59 lineto
+   272.30   307.59 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   272.30   480.25 moveto
+   0.000 setlinewidth
+   269.42   480.25 lineto
+   269.42   468.79 lineto
+   272.30   468.79 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   272.30   537.73 moveto
+   0.000 setlinewidth
+   269.42   537.73 lineto
+   269.42   526.24 lineto
+   272.30   526.24 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   530.64   288.72 moveto
+   0.360 setlinewidth
+   530.64   553.68 lineto
+   265.68   553.68 lineto
+   265.68   288.72 lineto
+   530.64   288.72 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   272.30   549.94 moveto
+   0.000 setlinewidth
+   269.42   549.94 lineto
+   269.42   537.73 lineto
+   272.30   537.73 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   522.00   628.56 moveto
+   0.360 setlinewidth
+   522.00   556.56 lineto
+   -70.56   556.56 lineto
+   -70.56   628.56 lineto
+   522.00   628.56 lineto
+ gsave clip newpath
+   474.48   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(C) show
+   463.04   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(o) show
+   454.24   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(r) show
+   448.96   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(r) show
+   443.69   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(e) show
+   434.88   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(l) show
+   431.36   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(a) show
+   422.56   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(t) show
+   418.15   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(i) show
+   414.64   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(o) show
+   405.83   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(n) show
+   397.02   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+( ) show
+   392.62   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(M) show
+   379.42   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(a) show
+   370.62   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(t) show
+   366.21   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(r) show
+   360.94   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(i) show
+   357.42   580.32 moveto
+/Helvetica findfont [ -15.84  -0.00   0.00 -15.84 0. 0.] makefont setfont
+(x) show
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   531.00   754.56 moveto
+   531.00   574.56 lineto
+   405.00   574.56 lineto
+   405.00   754.56 lineto
+   531.00   754.56 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   467.64   606.24 lineto
+   436.68   606.24 lineto
+   436.68   691.20 lineto
+   467.64   691.20 lineto
+gsave 1.000 1.000 1.000 setrgbcolor fill grestore
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   1.930 setlinewidth
+   436.68   691.20 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   606.24 moveto
+   436.68   606.24 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   467.64   606.24 lineto
+   491.59   695.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   484.54   695.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   481.02   695.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   491.59   678.96 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   484.54   678.96 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   481.02   678.96 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(2) show
+   491.59   661.97 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   484.54   661.97 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   481.02   661.97 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(4) show
+   491.59   644.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   484.54   644.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   481.02   644.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(6) show
+   491.59   627.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   484.54   627.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   481.02   627.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(8) show
+   491.59   610.99 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   484.54   610.99 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   481.02   610.99 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   436.68   691.20 moveto
+   436.68   606.24 lineto
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   0.360 setlinewidth
+   467.64   606.24 lineto
+   436.68   606.24 lineto
+   436.68   691.20 lineto
+   467.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   0.000 setlinewidth
+   436.68   691.20 lineto
+   436.68   691.12 lineto
+   467.64   691.12 lineto
+   467.64   691.20 lineto
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   0.360 setlinewidth
+   467.64   606.24 lineto
+   436.68   606.24 lineto
+   436.68   691.20 lineto
+   467.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.12 moveto
+   0.000 setlinewidth
+   436.68   691.12 lineto
+   436.68   682.70 lineto
+   467.64   682.70 lineto
+   467.64   691.12 lineto
+gsave 0.686 0.922 0.686 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   0.360 setlinewidth
+   467.64   606.24 lineto
+   436.68   606.24 lineto
+   436.68   691.20 lineto
+   467.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   682.70 moveto
+   0.000 setlinewidth
+   436.68   682.70 lineto
+   436.68   674.21 lineto
+   467.64   674.21 lineto
+   467.64   682.70 lineto
+gsave 0.431 0.824 0.431 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   0.360 setlinewidth
+   467.64   606.24 lineto
+   436.68   606.24 lineto
+   436.68   691.20 lineto
+   467.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   674.21 moveto
+   0.000 setlinewidth
+   436.68   674.21 lineto
+   436.68   665.71 lineto
+   467.64   665.71 lineto
+   467.64   674.21 lineto
+gsave 0.314 0.627 0.314 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   0.360 setlinewidth
+   467.64   606.24 lineto
+   436.68   606.24 lineto
+   436.68   691.20 lineto
+   467.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   665.71 moveto
+   0.000 setlinewidth
+   436.68   665.71 lineto
+   436.68   640.22 lineto
+   467.64   640.22 lineto
+   467.64   665.71 lineto
+gsave 0.251 0.490 0.251 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   691.20 moveto
+   0.360 setlinewidth
+   467.64   606.24 lineto
+   436.68   606.24 lineto
+   436.68   691.20 lineto
+   467.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   467.64   640.22 moveto
+   0.000 setlinewidth
+   436.68   640.22 lineto
+   436.68   606.16 lineto
+   467.64   606.16 lineto
+   467.64   640.22 lineto
+gsave 0.176 0.353 0.176 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   432.00   754.56 moveto
+   0.360 setlinewidth
+   432.00   574.56 lineto
+   306.00   574.56 lineto
+   306.00   754.56 lineto
+   432.00   754.56 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   368.64   606.24 lineto
+   337.68   606.24 lineto
+   337.68   691.20 lineto
+   368.64   691.20 lineto
+gsave 1.000 1.000 1.000 setrgbcolor fill grestore
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   1.930 setlinewidth
+   337.68   691.20 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   606.24 moveto
+   337.68   606.24 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   368.64   606.24 lineto
+   392.59   695.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   385.54   695.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   382.02   695.95 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   396.81   678.96 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(-) show
+   392.59   678.96 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   385.54   678.96 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   382.02   678.96 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(2) show
+   396.81   661.97 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(-) show
+   392.59   661.97 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   385.54   661.97 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   382.02   661.97 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(4) show
+   396.81   644.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(-) show
+   392.59   644.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   385.54   644.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   382.02   644.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(6) show
+   396.81   627.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(-) show
+   392.59   627.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+   385.54   627.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   382.02   627.98 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(8) show
+   396.81   610.99 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(-) show
+   392.59   610.99 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(1) show
+   385.54   610.99 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(.) show
+   382.02   610.99 moveto
+/Helvetica findfont [ -12.67  -0.00   0.00 -12.67 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   337.68   691.20 moveto
+   337.68   606.24 lineto
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   0.360 setlinewidth
+   368.64   606.24 lineto
+   337.68   606.24 lineto
+   337.68   691.20 lineto
+   368.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   0.000 setlinewidth
+   337.68   691.20 lineto
+   337.68   691.12 lineto
+   368.64   691.12 lineto
+   368.64   691.20 lineto
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   0.360 setlinewidth
+   368.64   606.24 lineto
+   337.68   606.24 lineto
+   337.68   691.20 lineto
+   368.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.12 moveto
+   0.000 setlinewidth
+   337.68   691.12 lineto
+   337.68   682.70 lineto
+   368.64   682.70 lineto
+   368.64   691.12 lineto
+gsave 0.922 0.765 0.765 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   0.360 setlinewidth
+   368.64   606.24 lineto
+   337.68   606.24 lineto
+   337.68   691.20 lineto
+   368.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   682.70 moveto
+   0.000 setlinewidth
+   337.68   682.70 lineto
+   337.68   674.21 lineto
+   368.64   674.21 lineto
+   368.64   682.70 lineto
+gsave 0.843 0.353 0.353 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   0.360 setlinewidth
+   368.64   606.24 lineto
+   337.68   606.24 lineto
+   337.68   691.20 lineto
+   368.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   674.21 moveto
+   0.000 setlinewidth
+   337.68   674.21 lineto
+   337.68   665.71 lineto
+   368.64   665.71 lineto
+   368.64   674.21 lineto
+gsave 0.784 0.157 0.118 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   0.360 setlinewidth
+   368.64   606.24 lineto
+   337.68   606.24 lineto
+   337.68   691.20 lineto
+   368.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   665.71 moveto
+   0.000 setlinewidth
+   337.68   665.71 lineto
+   337.68   640.22 lineto
+   368.64   640.22 lineto
+   368.64   665.71 lineto
+gsave 0.686 0.125 0.125 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+%gset
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   691.20 moveto
+   0.360 setlinewidth
+   368.64   606.24 lineto
+   337.68   606.24 lineto
+   337.68   691.20 lineto
+   368.64   691.20 lineto
+ gsave clip newpath
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   368.64   640.22 moveto
+   0.000 setlinewidth
+   337.68   640.22 lineto
+   337.68   606.16 lineto
+   368.64   606.16 lineto
+   368.64   640.22 lineto
+gsave 0.529 0.000 0.000 setrgbcolor fill grestore
+%cclip
+gsave clip newpath
+stroke grestore
+%nclip
+newpath
+stroke grestore newpath
+%gend
+stroke grestore newpath
+%gend
+stroke
+showpage
+%endp
+%gdone
+%%Trailer
+%%Pages: 1
+%%EOF

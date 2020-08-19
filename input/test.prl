@@ -1,0 +1,7 @@
+!/usr/bin/perl
+#
+# usage: test.prl {job}
+#
+# check number of input arguments
+#
+  print "Usage: test \n";

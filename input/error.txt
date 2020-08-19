@@ -1,0 +1,2 @@
+1) bash export does note work in script, but it does interactively
+2) 

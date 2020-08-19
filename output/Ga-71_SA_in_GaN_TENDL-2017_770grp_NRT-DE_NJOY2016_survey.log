@@ -1,0 +1,24 @@
+
+ njoy 2019.01  31Aug19                                       11/05/19 21:20:24
+ *****************************************************************************
+
+Run Title: Enh: Ga-71 (self-atom in GaN) TENDL-2017; NRT damage energy; Ed = 19.0 eV; Robin
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.2s
+
+ broadr...                                                                0.5s
+
+ heatr...                                                                 0.9s
+
+ ---message from hinit---mf6, mt102 does not give recoil za= 31072
+                          photon momentum recoil used.
+ Threshold displacement energy replaced with   19.00000    
+ Lattice atomic mass replaced with   69.12194     nmass
+ Lattice atomic number replaced with   31.00000    
+
+ groupr...                                                                8.0s
+                                                                          8.3s
+ *****************************************************************************

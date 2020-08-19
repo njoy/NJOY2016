@@ -1,0 +1,29 @@
+#! /bin/bash -f
+#
+# NJOY-2016 Unix shell
+#
+# Note: Linux invocation
+#
+#echo 
+#echo "# NJOY-2016 bash script called with arguments ---> ${@}     "
+#echo "#             \$1 -----------------------------> $1       "
+#echo 
+#ls -la #
+#
+SYSTEMTYPE=unix
+#export SYSTEMTYPE
+# 
+# AGENCY must be only 3 characters
+AGENCY=snl
+#export AGENCY
+#
+echo 
+echo " Calling location is: $(pwd)"
+echo " AGENCY = $AGENCY"
+echo " SYSTEMTYPE = $SYSTEMTYPE"
+echo 
+perl njoy-2016.prl $1 
+#echo " post prl $1" 
+echo 
+exit #
+   

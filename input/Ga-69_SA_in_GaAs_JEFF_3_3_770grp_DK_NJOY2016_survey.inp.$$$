@@ -1,0 +1,71 @@
+Enh: Ga-69 (self-atom in GaAs) ENDF/B-VIII.0; displacement kerma; Ed = 0.00 eV; Robinson; Z/A modification; 770-grp; 293.6K, 20.45C; 2200 m/s; 0.0253 eV
+ 0 0 0
+ 7 0 0 0 1 0 0 0 0 0
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "Ga-69 in GaAs displacement kerma using JEFF-3.3 / TENDL-2015 in SAND-IV 770-grp"
+'#'	cp /mnt/g/sync_Projects-Git/xsec/JEFF_3_3/neutron/ENDF6/31-Ga-69g.jeff33  tape20
+'#'	echo " icntrl(1)=7: Displacement kerma treatment, i.e. no threshold"
+'#'	echo " icntrl(5)=1: Modification of Ed, lattice atom mass and Z"
+'#'     echo "            use elemental silicon, in amu, for lattice atomic weight"
+'#'	echo " icntrl(8)=0: Use built-in Robinson partition function"
+'#'	echo " icntrl(9)=0: Full Robinson treatment of recoil particles"
+'#'	echo " Temperature broadened to 293.6K - room temperature, 2200 m/s Maxwellian distribution neutrons"
+'#'     echo " SAND-IV 770-group output"
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"                                             
+moder
+ 20 -21
+reconr
+ -21 -22
+ 'pendf tape for n + 31-Ga-69 from ...'/
+ 3125 2 0
+ 0.001 0.0 /
+ 'n + 31-Ga-69 from JEFF-3.3 / TENDL-2015'/
+ 'processed by NJOY-2016'/
+ 0/
+broadr
+ -21 -22 -23
+ 3125 1 0 0  0.0 /
+ .001 6.5e+6/
+ 293.6
+ 0/
+heatr
+ -21 -23 -24 25 
+ 3125 6 0 0 0 2 00.0  0 69.723   31.0 /
+ 303 442 443 444 445 447/
+groupr
+ -21 -24 0 28
+ 3125 24 0 4 0 1 1 1/
+ 'groupr: 770-group SAND-IV'
+ 293.6                                                      
+ 1.0e10
+ 0.1   0.0253   100000.  1400000.0 /
+ 3 301 'Heat Production'/
+ 3 303 'Non-elastic Kerma'/
+ 3 442 'Total Photon Kerma (ev-b)'/
+ 3 443 'Kinematic Kerma'/   
+ 3 444 '444 Damage Kerma'/
+ 3 445 '445 Damage Kerma'/
+ 3 447 '447 Damage Kerma'/
+ 3 1 'total'/  
+ 3 2 'elast'/ 
+ 3 4 'inel'/
+ 3 102 'n,g'/
+ 3 103 'n,p' /
+ 3 107 'n,a' /  
+ 3  16 'n,2n' /
+ 3  22 'n,2a' /
+ 3  28 'n,np' /
+ 3  51 'inel_51' /
+ 3  91 'inel-cont' /
+  0 /
+  0 /
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'     cp output             /mnt/g/sync_Linux/NJOY-2016/output/Ga-69_SA_in_GaAs_JEFF_3_3_770grp_DK_NJOY2016_survey.out
+'@'	cp tape28             /mnt/g/sync_Linux/NJOY-2016/groupr/Ga-69_SA_in_GaAs_JEFF_3_3_770grp_DK_NJOY2016_survey
+'@'	echo "
+'@'	echo "This ends the post-process command stream"

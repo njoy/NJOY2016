@@ -1,0 +1,23 @@
+Test of isolated input stream
+moder
+ 20 -21
+reconr
+ -21 -22
+'PENDF TAPE FOR Cu63(n,2n) FROM format TAPE'/
+ 2925 3/
+ .005 0.0 /
+'Cu63 xsec'/
+'PROCESSED BY THE NJOY-2012 NUCLEAR DATA PROCESSING SYSTEM'/
+'SEE ORIGINAL TAPE FOR DETAILS OF EVALUATION'/
+ 0/
+groupr
+ -21 -22 0 25
+ 2925 15 0 4 0 1 1 1/
+ *groupr: 640-group SAND-II
+ 000.                                                      
+ 1.0e10
+ 0.1   0.025   100000.  1400000.0 /
+ 3 16 'n,2n' /
+  0 /
+  0 /
+stop

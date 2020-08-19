@@ -1,0 +1,1 @@
+/usr/bin/f95    CMakeFiles/njoy_executable.dir/src/main.f90.o  -o njoy -Wl,-rpath,/mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/bin: libnjoy.so 

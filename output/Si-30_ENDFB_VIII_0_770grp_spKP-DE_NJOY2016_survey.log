@@ -1,0 +1,24 @@
+
+ njoy 2019.01  31Aug19                                       11/05/19 21:13:36
+ *****************************************************************************
+
+Run Title: Enh: Si-30 ENDF/B-VIII.0; sharp threshold Kinchin-Pease damage energy; Ed = 20.5
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.1s
+
+ ---message from rdf2bw---calculation of angular distribution not installed.
+
+ broadr...                                                                0.2s
+
+ heatr...                                                                 0.4s
+ Threshold displacement energy replaced with   20.50000    
+ Lattice atomic mass replaced with   27.84289     nmass
+ Lattice atomic number replaced with   14.00000    
+
+ groupr...                                                                4.1s
+
+ ***error in findf*** mat1431 mf 3 mt104 not on tape  24
+ 
