@@ -288,3 +288,9 @@ This test was added to following issue [\#163](https://github.com/njoy/NJOY2016/
 ## Test Problem 62
 
 This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/issues/173). For a new d+He3 evaluation, the ACE file produced by NJOY2016 still has a few NaN values appearing in it. This problem was due to an array index overflow in acecpe.
+
+## Test Problem 63
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/63/input)]
+
+Tests 63 was added as a consequence of issue [\#178](https://github.com/njoy/NJOY2016/issues/178). It verifies that setting nunx in PURR to anything other than the default value does not break downstream processing (in this case up to ACER and VIEWR). The input file is equivalent to the input file for test 35 (with the exception of nunx which is set to 2).
