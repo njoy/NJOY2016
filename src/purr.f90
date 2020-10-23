@@ -288,7 +288,6 @@ contains
       ie=ie+nstep
       if (ie.gt.nunr) ie=nunr
       ez=eunr(ie)
-      print*, "288 ie", ie, "ez", ez
       bkgz(1)=sb(ie)
       bkgz(2)=sb(nunr+ie)
       bkgz(3)=sb(nunr*2+ie)
@@ -434,13 +433,13 @@ contains
       a(l)=sigz(i)
    enddo
    call repoz(-nscr)
+   ie=1-nstep
    do while (ie.lt.nunr)
       ie=ie+nstep
       if (ie.gt.nunr) ie=nunr
       read(nscr) ez
       read(nscr) (((tabl(i,j,k),i=1,nbin),j=1,5),k=1,ntemp)
       read(nscr) (((sigu(i,j,k),i=1,5),j=1,nsigz),k=1,ntemp)
-      print*, "437 ie", ie, "ez", ez
       l=l+1
       a(l)=eunr(ie)
       do ix=1,5
@@ -487,13 +486,13 @@ contains
    a(n+11)=nunx
    n=n+11
    call repoz(-nscr)
+   ie=1-nstep
    do while (ie.lt.nunr)
       ie=ie+nstep
       if (ie.gt.nunr) ie=nunr
       read(nscr) ez
       read(nscr) (((tabl(i,j,k),i=1,nbin),j=1,5),k=1,ntemp)
       read(nscr) (((sigu(i,j,k),i=1,5),j=1,nsigz),k=1,ntemp)
-      print*, "488 ie", ie, "ez", ez
       n=n+1
       a(n)=sigfig(eunr(ie),7,0)
       n1=n
