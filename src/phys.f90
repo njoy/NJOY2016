@@ -17,7 +17,7 @@ module physics
 !    speed of light, atomic mass unit in eV, Planck's constant and
 !    the fine structure constant.
 !  - other values are given in terms of the above.
-   real(kr),parameter,public::pi=3.14159265359e0_kr     !
+   real(kr),parameter,public::pi=3.141592653589793235e0_kr     !
    real(kr),parameter,public::euler=0.55721566490153286e0_kr !
    real(kr),parameter,public::bk=8.617333262e-5_kr         !eV/degK
    real(kr),parameter,public::ev=1.602176634e-12_kr     !erg/eV
@@ -33,10 +33,10 @@ module physics
 ! *   fortran naming convention that would have considered a     *
 ! *   name of the form "massn" to be an integer variable.        *
 ! ****************************************************************
-   real(kr),parameter,public::amassn=1.00866491560e0_kr !neutron
+   real(kr),parameter,public::amassn=1.00866491595e0_kr !neutron
    real(kr),parameter,public::amassp=1.007276466621e0_kr !proton
    real(kr),parameter,public::amassd=2.013553212745e0_kr !deuteron
-   real(kr),parameter,public::amasst=3.01550071517e0   !triton
+   real(kr),parameter,public::amasst=3.01550071621e0_kr  !triton
    real(kr),parameter,public::amassh=3.014932247175e0_kr !helion (3)
    real(kr),parameter,public::amassa=4.001506179127e0_kr  !alpha
    real(kr),parameter,public::amasse=5.48579909065e-4_kr  !electron
