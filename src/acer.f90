@@ -144,7 +144,7 @@ contains
    !    matd     material to be processed
    !    tempd    temperature desired (kelvin) (default=300)
    ! card 6
-   !    newfor   use new cummulative angle distributions,
+   !    newfor   use new cumulative angle distributions,
    !               law 61, and outgoing particle distributions.
    !               (0=no, 1=yes, default=1)
    !    iopp     detailed photons (0=no, 1=yes, default=1)
@@ -174,6 +174,7 @@ contains
    !    matd     material to be processed
    !    tempd    temperature desired (kelvin) (default=300)
    !    tname    thermal zaid name ( 6 char max, def=za)
+   !    nza      number of moderator component za values (default=3, max=16)
    ! card 8a
    !    iza      moderator component za values (up to a maximum of 16 values,
    !             must be terminated by /)
@@ -358,14 +359,22 @@ contains
    else if (iopt.eq.2) then
       tempd=300
       tscr=' '
-      nza=16
-      read(nsysi,*) matd,tempd,tscr
+      nza=3
+      read(nsysi,*) matd,tempd,tscr,nza
       nch=0
       do i=1,6
          if (tscr(i:i).ne.' ') nch=i
       enddo
       tname='      '
       if (nch.gt.0) tname(7-nch:6)=tscr(1:nch)
+      write(nsyso,'(&
+        &'' mat to be processed .................. '',i10/&
+        &'' temperature .......................... '',1p,e10.3/&
+        &'' thermal name ......................... '',4x,a6)')&
+        matd,tempd,tname
+      if (nza.lt.1.or.nza.gt.16) then
+         call error('acer','between 1 and 16 za value must be given.',' ')
+      endif
       do i=1,nza
          izn(i)=0
       enddo
@@ -377,17 +386,9 @@ contains
          endif
       enddo
       write(nsyso,'(&
-        &'' mat to be processed .................. '',i10/&
-        &'' temperature .......................... '',1p,e10.3/&
-        &'' thermal name ......................... '',4x,a6/&
-        &'' number moderator component za values . '',i10)')&
-        matd,tempd,tname,nza
-      write(nsyso,'(&
+        &'' number moderator component za values . '',i10/&
         &'' iza   ................................ '',i10/&
-        &(40x,i10))') (izn(i),i=1,nza)
-      if (nza.eq.zero) then
-         call error('acer','at least one za value must be given.',' ')
-      endif
+        &(40x,i10))') nza,(izn(i),i=1,nza)
       do i=1,nza
          if (izn(i).le.zero) then
             call error('acer','found invalid za numbers in izn.',' ')
