@@ -15,7 +15,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/referenceTape93"
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/referenceTape99"
                "${CMAKE_CURRENT_BINARY_DIR}/referenceTape99" COPYONLY )
-	     
+
 configure_file("${RESOURCES}/J33U238"
                "${CMAKE_CURRENT_BINARY_DIR}/tape21" COPYONLY )
 
@@ -26,5 +26,5 @@ configure_file("${RESOURCES}/J33Pu239"
                "${CMAKE_CURRENT_BINARY_DIR}/tape23" COPYONLY )
 
 add_test( NAME "Test17"
-          COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
+          COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )

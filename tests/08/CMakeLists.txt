@@ -10,5 +10,5 @@ configure_file("${RESOURCES}/eni61"
                "${CMAKE_CURRENT_BINARY_DIR}/tape20" COPYONLY )
 
 add_test( NAME "Test08"
-          COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
+          COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )

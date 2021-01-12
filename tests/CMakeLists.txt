@@ -1,10 +1,3 @@
-if ( NOT PYTHON_EXECUTABLE )
-  find_package( PythonInterp )
-  if ( NOT PYTHONINTERP_FOUND )
-    message( FATAL_ERROR "Python interpeter installation was not found." )
-  endif()
-endif()
-
 set( RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/resources" )
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/execute.py"
@@ -68,4 +61,3 @@ add_subdirectory( "55" )
 add_subdirectory( "60" )
 add_subdirectory( "61" )
 add_subdirectory( "62" )
-
