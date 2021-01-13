@@ -1,7 +1,7 @@
 
 cmake_minimum_required( VERSION 3.2 )
 
-find_package( Python3 3.5 )
+find_package( Python3 3.5 REQUIRED )
 
 set( CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configuration types" FORCE )
 
