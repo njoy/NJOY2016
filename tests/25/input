@@ -30,7 +30,7 @@ acer
  2 1 1 .10 1                             / Card2
  'H in H20 @300K from ENDF/B-VIII.0b6'   / Card3
  1001 0.9991673                          / Card4
- 125 300 'lwtr'                          / Card8
+ 125 300 'lwtr' 1                        / Card8
  1001                                    / Card8a
  222 20 0 0 1 10. 0                      / Card9
 acer
@@ -38,7 +38,7 @@ acer
  2 1 1 .11 1                             / Card2
  'H in H20 @400K from ENDF/B-VIII.0b6'   / Card3
  1001 0.9991673                          / Card4
- 125 400 'lwtr'                          / Card8
+ 125 400 'lwtr' 1                        / Card8
  1001                                    / Card8a
  222 20 0 0 1 10. 1                      / Card9
 acer
@@ -46,7 +46,7 @@ acer
  2 1 1 .12 1                             / Card2
  'H in H20 @500K from ENDF/B-VIII.0b6'   / Card3
  1001 0.9991673                          / Card4
- 125 500 'lwtr'                          / Card8
+ 125 500 'lwtr' 1                        / Card8
  1001                                    / Card8a
  222 20 0 0 1 10. 2                      / Card9
 stop

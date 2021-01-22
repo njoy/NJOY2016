@@ -1,5 +1,7 @@
 set( RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/resources" )
 
+find_package( Python3 3.5 REQUIRED )
+
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/execute.py"
                "${CMAKE_CURRENT_BINARY_DIR}/execute.py" COPYONLY )
 
