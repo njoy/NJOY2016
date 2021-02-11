@@ -14152,6 +14152,8 @@ contains
    integer::ipt,mtrh,nmtr
    integer::hpd,lsigh,sigh,ldlwh,dlwh,nj
    integer::locl(20)
+   integer::nure,nurb,lurt,luri,lura,lurf,ib
+   integer::nerrtb,nerrxt,nerrxe,nerrxf,nerrxg,nerrxh
    real(kr)::thresh,elast,e,aprime,q,epmax,clast,ep,c,p,r
    real(kr)::cclast,co,cc,gsum,ss,y,gg,sum,frac,x,xlast
    character(10)::name
@@ -14669,6 +14671,71 @@ contains
                enddo
             endif
          enddo
+      enddo
+   endif
+
+   !--check unresolved-range probability tables
+   if (iurpt.ne.0) then
+      write(nsyso,'(/'' check probability tables''/&
+      &'' ------------------------'')')
+      nure=nint(xss(iurpt))
+      nurb=nint(xss(iurpt+1))
+      lurt=nint(xss(iurpt+2))
+      luri=nint(xss(iurpt+3))
+      lura=nint(xss(iurpt+4))
+      lurf=nint(xss(iurpt+5))
+      write(nsyso,'(/''     number of energies: '',i6/&
+                    &''     number of bins:     '',i6/&
+                    &''     interpolation law:  '',i6/&
+                    &''     inelastic reaction: '',i6/&
+                    &''     absorption reaction:'',i6)')&
+                    & nure,nurb,lurt,luri,lura
+      if (lurf.eq.0) write(nsyso,'(&
+                    &''     tables are cross sections (lssf=0)'')')
+      if (lurf.eq.1) write(nsyso,'(&
+                    &''     tables are factors (lssf=1)'')')
+      do ie=1,nure
+         write(nsyso,'(/'' energy='',1p,e14.6)') xss(iurpt+5+ie)
+         nerrtb=0
+         nerrxt=0
+         nerrxe=0
+         nerrxf=0
+         nerrxg=0
+         nerrxh=0
+         ll=iurpt+5+nure+(ie-1)*6*nurb
+         do ib=1,nurb
+           if (xss(ll+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative probability value='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+ib),ib
+             nerrtb=nerrtb+1
+           endif
+           if (xss(ll+nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative total cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+nurb+ib),ib
+             nerrxt=nerrxt+1
+           endif
+           if (xss(ll+2*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative elastic cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+2*nurb+ib),ib
+             nerrxe=nerrxe+1
+           endif
+           if (xss(ll+3*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative fission cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+3*nurb+ib),ib
+             nerrxf=nerrxf+1
+           endif
+           if (xss(ll+4*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative capture cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+4*nurb+ib),ib
+             nerrxg=nerrxg+1
+           endif
+           if (xss(ll+5*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative heating cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+5*nurb+ib),ib
+             nerrxh=nerrxh+1
+           endif
+         enddo
+         nerr=nerr+nerrtb+nerrxt+nerrxe+nerrxf+nerrxg+nerrxh
       enddo
    endif
 
