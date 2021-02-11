@@ -1939,7 +1939,7 @@ contains
    real(kr)::b(50)
    real(kr),dimension(:),allocatable::tab1
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwmaxn=65000
+   integer,parameter::nwmaxn=650000
    real(kr),parameter::big=1.e9_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
@@ -10232,7 +10232,7 @@ contains
                                  else
                                     intmu=lang-10
                                     nmu=na/2
-                                    llx=lld+6
+                                    llx=lld+6+(ig-1)*(2+2*nmu)
                                  endif
                                  xss(next+1+3*ng+ig)=nexcd-dlwh+1
                                  xss(nexcd)=intmu
