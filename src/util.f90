@@ -269,6 +269,9 @@ contains
    ! Find na elements of array a from
    ! core buffer and associated binary tape.
    !--------------------------------------------------------------------
+   use mainio ! provides nsyso
+!   use endf ! provides endf routines and variables
+   use snl     ! provides SNL
    ! externals
    integer::i,na,ntape,nbuf
    real(kr)::a(na),buf(nbuf)
@@ -285,6 +288,12 @@ contains
       k=k+1
       a(j)=buf(k)
    enddo
+
+   if (imode(3) .lt. -1) then
+     write (nsyso,2301) na, inow, a(1), a(2), a(na) 
+ 2301 format (/,1x, 'finda io retrievial exit ', 2i6, 3g14.7)
+   endif
+
    return
    end subroutine finda
 

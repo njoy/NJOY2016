@@ -19,4 +19,5 @@ module snl
    real(kr):: energy_let(175), xinc_let(175,25) 
    real(kr):: upper_let(175,25)
    real(kr):: energy_dam(1000), value_dam(1000)
+   real(kr):: pe_archive, pe_store, pe_trial
 end module snl

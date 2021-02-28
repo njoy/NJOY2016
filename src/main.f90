@@ -121,7 +121,7 @@ program njoy
 !
 !         imode(1) =   0    not used
 !         imode(2) =   0    not used
-!         imode(3) =   0    not used
+!         imode(3) =   0    default
 !                     <0    enhanced levels of debug print-out
 !
 ! Item 2: implement optional read of control flags based on title card format (icntrl)
@@ -262,13 +262,13 @@ program njoy
      write (nsyso,'(  ''    icntrl: '', 10i2,/)') (icntrl(jk), jk=1,10)
    endif
 
-   do jk = 1, 2
+   do jk = 1, 2 
      if ( imode(jk) .ne. 0) then 
         write (nsyso,'(''imode control logic input error for flag: '', i3)') jk
      endif
    enddo
    if ( imode(3) .ne. 0) then 
-        write (nsyso,'(''imode(3) debug print control logic flag set: '', i3)') imode(3)
+        write (nsyso,'(/,''imode(3) debug printer control logic flag set: '', i3,/)') imode(3)
    endif
 
    if ( icntrl(1) .eq. 0) then 

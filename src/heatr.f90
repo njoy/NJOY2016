@@ -104,7 +104,7 @@ contains
    !    al_new   lattice atom atomic mass
    !             (default from ENDF file header cards)
    !                if positive, units of amu
-   !                if negtive,units of neutron mass
+   !                if negative, units of neutron mass
    !                Note, NJOY HEATR module uses logic based on ENDF-6 format/definitions,
    !                i.e. neutron mass is used.
    !    zl_new   lattice atom atomic number
@@ -130,10 +130,10 @@ contains
    !             Note, the damage energy formulation is determined by icntrl(1) entry:
    !               icntrl(1) =  0    output displacement energy (with lower imtegration bound of Ed) - NJOY default
    !                                     (redundant with icntrl(1)=8 option)
-   !                            5    output NRT damage energy (break = 2*Ed/beta)
-   !                            6    output original 3-level Kinchin-Pease damage energy (break = 2*Ed, no beta=0.8 factor)
-   !                            7    output displacement kerma (i.e. Ed = 0 eV, no break)
-   !                            8    output sharp transition Kinchin-Pease damage energy - no transistion region (break = Ed)
+   !                            5    output NRT damage energy (breakpoint = 2*Ed/beta)
+   !                            6    output original 3-level Kinchin-Pease damage energy (breakpoint = 2*Ed, no beta=0.8 factor)
+   !                            7    output displacement kerma (i.e. Ed = 0 eV, no breakpoint)
+   !                            8    output sharp transition Kinchin-Pease damage energy - no transistion region (breakpoint = Ed)
    !          cards 4 and 5 for nqa gt 0 only
    ! card 4
    !    mta      mt numbers for users q values
@@ -169,6 +169,11 @@ contains
    write(nsyso,&
      '(/'' heatr...prompt kerma'',48x,f8.1,''s'')') time
    write(nsyse,'(/'' heatr...'',60x,f8.1,''s'')') time
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) imode(3)
+2301 format (/,1x, 'HEATR debug print invoked ', i3, /)
+   endif
 
    !--read user input.
    nplot=0
@@ -317,15 +322,15 @@ contains
         &'' lattice atom atomic mass ............. '',g14.7&
         &)') al_new_temp
    endif
-   amu_over_nmass =  931.5 / 939.6
+   amu_over_nmass =  931.49410242 / 939.56542052
    if ( al_new_temp .lt. 0.0) then
 !      input nmass
-        al_new_amu = abs(al_new_temp) / amu_over_nmass
+        al_new_amu = abs(al_new_temp) * amu_over_nmass
         al_new_nmass = abs(al_new_temp)
    else
 !      input amu
        al_new_amu = al_new_temp
-       al_new_nmass = al_new_temp * amu_over_nmass
+       al_new_nmass = al_new_temp / amu_over_nmass
    endif
    al_new = al_new_nmass
    write (nsyso, 1903) break_new, al_new_amu,  &
@@ -1062,6 +1067,7 @@ contains
    use mainio ! provides nsyso
    use util   ! provides error,mess,loada,finda,skiprz,sigfig
    use endf   ! provides endf routines and variables
+   use snl     ! provides SNL
    ! externals
    integer::iold,inew,nscr,nend4,nend6,local
    ! internals
@@ -1113,6 +1119,12 @@ contains
    allocate(scr(npage+50))
    allocate(bufo(nbuf))
    allocate(bufn(nbuf))
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) 
+2301 format (/,1x, 'NHEAT entry ', /)
+   endif
+
    awfac=1/awr
    aw1fac=1/(awr+1)
    npkk=npk
@@ -1142,6 +1154,12 @@ contains
 
    !--loop over non-redundant mt-s in file 3.
   105 continue
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,3402) irec
+3402 format (1x, ' nheat-105 ', i6)
+   endif
+
    call contio(nin,0,0,scr,nb,nw)
    if (mfh.eq.0) go to 300
    if (mth.eq.0) go to 105
@@ -1393,6 +1411,18 @@ contains
      &14x,''e'',10x,''qbar'',10x,''ebar'',9x,''yield'',10x,&
      &''xsec'',7x,''heating'',8x,''damage'')') mtd,izap
   182 continue
+
+   if (imode(3) .lt. 0 .and. mtd.eq. 102 ) then
+     write (nsyso,3309) icon, irec
+3309 format (/,1x, 'file six nheat mt=102, title write ', 2i6,/)
+   endif
+
+!
+!  Temporary code fix to reset irec and correct multiplicity for MF6 MT102 recoils [PJG 9/14/2020]
+!  No - this puts it into an infinite loop
+!
+!   irec = 0
+
    ipx=2
    irx=1
    ipfr=2
@@ -1414,6 +1444,12 @@ contains
    e=c(1)
    e=sigfig(e,9,0)
    if (new6.eq.1) c(npkk)=0
+
+   if (imode(3) .lt. 0 .and. e .le. 1.01E-5 ) then
+     write (nsyso,7309) e, mth, mtd, mfh, matd
+7309 format (/,1x, 'file six nheat heating loop ', g14.6, 6i6,/)
+   endif
+
    if (mtd.ne.2) go to 193
    if (e.lt.elst.and.nn.lt.ne) go to 193
    if (ilist.gt.ilmax) call error('nheat','storage exceeded.',' ')
@@ -1444,6 +1480,12 @@ contains
    endif
    elst=elst-elst/10000000
   193 continue
+
+   if (imode(3) .lt. 0 .and. mtd .eq. 102 ) then
+     write (nsyso,3307) e, thresh, icon
+3307 format (/,1x, 'nheat heating increment-B thresh', 2g14.7, i6)
+   endif
+
    if (e.lt.thresh) go to 290
    call gety1(e,enext,idis,y,nin,b)
    ! check for energy-dependent q
@@ -1454,6 +1496,12 @@ contains
          q=q0
       endif
    endif
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,3306) e, ebar, dame, za, awr, icon
+3306 format (1x, 'NHEAT location check ', 5g14.7, i6)
+   endif
+
    if (icon.eq.1) call disbar(e,ebar,dame,q,za,awr,&
      nend4,matd,mtd,a,nwa)
    if (icon.eq.2) call conbar(e,ebar,dame,nendf,nscr,matd,mtd,&
@@ -1516,12 +1564,26 @@ contains
       else
          h=h0*y
       endif
+
+   if (imode(3) .lt. 0 .and. mtd .eq. 102 .and. e .lt. 1.e-4) then
+     write (nsyso,4303) e, h, ebar, yld, y, q0, h0, dame, icon
+4303 format (/,1x, 'nheat heating increment-C ', 8g14.7, i6)
+   endif
+
    else
       if ((mtd.lt.18.or.mtd.gt.21).and.mtd.ne.38) then
          h=ebar*yld*y
       else
          h=h0*y
       endif
+
+   if (imode(3) .lt. 0 .and. mtd .eq. 102 .and. e .lt. 1.e-4) then
+     write (nsyso,2303) e, h, ebar, yld, y, dame, icon, npkk
+2303 format (/,1x, 'nheat heating increment-A ', 6g14.7, 2i6)
+   elseif (imode(3) .lt. 0 .and. mtd .eq. 102 .and. e .gt. 9.6E6 .and. e .lt. 10.2E6) then
+     write (nsyso,2303) e, h, ebar, yld, y, dame, icon, npkk
+   endif
+
       dame=dame*y
       c(npkk)=c(npkk)+h
       if (izap.eq.0) c(npkk-1)=c(npkk-1)+h
@@ -1549,6 +1611,14 @@ contains
    yp=sigfig(y,9,0)
    hp=sigfig(h,9,0)
    damep=sigfig(dame,9,0)
+
+   if (imode(3) .lt. 0 .and. mtd .eq. 102 .and. e .lt. 1.e-4) then
+     write (nsyso,2302) e, yp, hp, damep, c(2), h, ebal6, c(npkk), c(npkk-1), c(npkkk), npkk, npkkk
+2302 format (1x, 'file six nheat mt=102, e <= 1.e-5 accumulated heating ', 10g14.7, 2i6)
+   elseif (imode(3) .lt. 0 .and. mtd .eq. 102 .and. e .gt. 9.6e6 .and. e .lt. 10.2E6) then
+     write (nsyso,2302) e, yp, hp, damep, c(2), h, ebal6, c(npkk), c(npkk-1), c(npkkk), npkk, npkkk
+   endif
+
    ebal6p=sigfig(ebal6,9,0)
    if (iprint.ne.1.or.abs(e-elist(ilist)).gt.small*e&
      .or.y.le.smin) go to 199
@@ -1559,14 +1629,29 @@ contains
    else
       write(nsyso,'(1x,1p,7e14.4)') e,ebarp,yldp,yp,hp,damep
    endif
+
+   if (imode(3) .lt. 0 .and. mtd.eq. 102 ) then
+     write (nsyso,3308)  e, ebarp, yldp, yp, hp
+3308 format (1x, 'file six nheat mt=102, before 198 ', 5g14.7)
+   endif
+
    go to 199
   198 continue
+
+   if (imode(3) .lt. 0 .and. mtd .eq. 102 .and. e .le. 1.e-5) then
+     write (nsyso,3302) e, yp, hp, damep
+3302 format (1x, 'file six nheat mt=102-B, e <= 1.e-5 accumulated heating ', 4g14.7)
+   elseif (imode(3) .lt. 0 .and. mtd .eq. 102 .and. e .gt. 9.6e6 .and. e .lt. 10.2e6) then
+     write (nsyso,3302) e, yp, hp, damep
+   endif
+
    if (idame.eq.0) then
       write(nsyso,'(1x,1p,7e14.4)') e,q0,ebarp,yldp,yp,hp
    else
       write(nsyso,'(1x,1p,7e14.4)') e,q0,ebarp,yldp,yp,hp,damep
    endif
   199 continue
+
    if (abs(ebal6).ge.100*y) then
       if (iprint.eq.1.and.abs(e-elist(ilist)).le.small*e&
         .and.y.gt.smin) then
@@ -1581,8 +1666,24 @@ contains
       ! partial kermas
       do ii=1,nmt
          indxx=imt(ii)
+
+   if (imode(3) .lt. 0 .and. e .le. 1.e-5) then
+     write (nsyso,8302) e, c(indxx), dame, indxx
+8302 format (1x, 'file six nheat mt=447-A:  ', 3g14.7, 2x, i6)
+   elseif (imode(3) .lt. 0 .and. e .gt. 9.6e6 .and. e .lt. 10.2e6) then
+     write (nsyso,8302) e, c(indxx), dame, indxx
+   endif
+
          if (mtp(indxx).ge.444) c(indxx)=c(indxx)+dame
          if (mtp(indxx).lt.442) c(indxx)=c(indxx)+h+ebal6
+
+   if (imode(3) .lt. 0 .and. e .le. 1.e-5) then
+     write (nsyso,8572) e, c(indxx), dame, h, ebal6, indxx
+8572 format (1x, 'file six nheat look ', 5g14.7, 2x, i6)
+   elseif (imode(3) .lt. 0 .and. e .gt. 9.6e6 .and. e .lt. 10.2e6) then
+     write (nsyso,8572) e, c(indxx), dame, h, ebal6, indxx
+   endif
+
       enddo
    endif
 
@@ -1598,6 +1699,14 @@ contains
    hmin=y*e*aw1fac
    tt=q+awr*e*aw1fac
    hmax=hmin+y*tt*tt*rtm/2
+
+   if (imode(3) .lt. 0 .and. e .le. 1.e-5) then
+     write (nsyso,8372) e, hmax, hmin, y, aw1fac, awr, q, tt, rtm
+8372 format (1x, 'nheat capture heating limits: ', 9g14.7, 2x, i6)
+   elseif (imode(3) .lt. 0 .and. e .gt. 9.5E6 .and. e .lt. 10.1E6) then
+     write (nsyso,8372) e, hmax, hmin, y, aw1fac, awr, q, tt, rtm
+   endif
+
    go to 285
   220 continue
    if (mtd.ge.51.and.mtd.lt.91) go to 221
@@ -1673,6 +1782,12 @@ contains
    go to 286
   284 continue
    c(indxx)=c(indxx)+hmax
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,3319) c(indxx), c(indxx+2*npkt), c(indxx+npkt), hmax, hmin, indxx , npkt
+3319 format (1x, ' c-look-1 ', 5g14.7, 2i9)
+   endif
+
   286 continue
 
    !--store results on scratch and go to next energy.
@@ -1712,6 +1827,12 @@ contains
         &''   generating recoil with one-particle approx.'')')
       if (mth.eq.102 ) write(nsyso,'(/&
         &''   generating recoil from photon momentum.'')')
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,3301) irec, mt6no(i6g)
+3301 format (1x, ' nheat enerating recoil ', 2i6)
+   endif
+
       irec=mt6no(i6g)
       call skiprz(nin,-2)
       call findf(matd,3,mtd,nin)
@@ -1817,6 +1938,8 @@ contains
    ! Compute damage energy for capture reactions.
    !-------------------------------------------------------------------
    use endf    ! provides iverf,terp1
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::mtd
    real(kr)::ee,dame,q,za,awr
@@ -1824,6 +1947,7 @@ contains
    integer::iq,iz
    real(kr)::e,zx,ax,denom,z,en,aw1fac
    real(kr)::damn,daml,el,er,ea,ec,et
+   real(kr):: er_low, er_high
    real(kr),dimension(4),parameter::qp=(/&
       -.86114e0_kr,-.33998e0_kr,.33998e0_kr,.86114e0_kr/)
    real(kr),dimension(4),parameter::qw=(/&
@@ -1836,7 +1960,12 @@ contains
    real(kr),parameter::zero=0
    save en,damn,el,daml
    save zx,ax,denom,z,aw1fac
+   save er_low, er_high
 
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) ee, en, q, za, awr, mtd
+2301 format (1x, 'CAPDAM entry-mod ', 5g14.7, i6)
+   endif
    !--initialize
    e=ee
    if (e.eq.zero) then
@@ -1860,6 +1989,10 @@ contains
       damn=df(en,z-zx,awr+1-ax,z,awr)
       dame=0
       aw1fac=1/(awr+1)
+
+      er_low = 0
+      er_high = 0
+
       return
    endif
 
@@ -1869,6 +2002,9 @@ contains
    if (ee.ge.en*(1-eps)) then
       el=en
       daml=damn
+
+      er_low = er_high
+
       e=step*el
       if (e.lt.ee*(1-eps)) e=(1-eps)*ee
       dame=0
@@ -1876,8 +2012,22 @@ contains
          ! capture followed by gamma emission
          er=e*aw1fac
          ea=awr*er+q
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,9302) er, e, aw1fac, awr, q, ea
+9302 format (1x, 'CAPDAM damage partial ', 8g14.7)
+   endif
+
          er=er+ea*ea*rtm/2
          dame=df(er,z,awr+1,z,awr)
+
+         er_high = er
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,4302) e, er, dame, aw1fac, awr, rtm, ea, q
+4302 format (1x, 'CAPDAM damage default increment ', 8g14.7)
+   endif
+
       else if (ax.ne.zero) then
          ! capture followed by particle emission
          ec=econ*zx*z*denom
@@ -1888,15 +2038,35 @@ contains
             do iq=1,nq
                er=(et-2*sqrt(et*ax*ea)*qp(iq)+ax*ea)*aw1fac
                dame=dame+qw(iq)*df(er,z-zx,awr+1-ax,z,awr)/2
+
+               if (imode(3) .lt. 0) then
+                   write (nsyso,4301) iq, er, dame
+4301               format (1x, 'CAPDAM damage increment ', i6, 2g14.7)
+               endif
+
             enddo
          endif
       endif
       en=e
       damn=dame
+
+      er_high = er
+
    endif
 
    !--interpolate for damage energy
    call terp1(el,daml,en,damn,ee,dame,2)
+
+   !-- if new grid point not defined, e is not defined, so, interpolate for recoil energy
+   if ( er .lt. 1.0E-10) then
+       call terp1(el,er_low,en,er_high,ee,er,2)
+   endif
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,5301) ee, er, dame, nq
+5301 format (1x, 'CAPDAM exit ', 3g14.7, i6)
+   endif
+
    return
    end subroutine capdam
 
@@ -1971,6 +2141,11 @@ contains
    real(kr),parameter::zero=0
    save imiss,thresh,awp,afact,arat
    save en,cn,el,cl,z,daml,damn,enx,enext
+
+   if (imode(3) .lt. -1) then
+     write (nsyso,2301) ee,q,za,awr,matd,mtd
+2301 format (/,1x, 'DISBAR entry ', 4g14.7, 2i6,/)
+   endif
 
    !--initialize if e=0.
    e=ee
@@ -2129,8 +2304,11 @@ contains
    data jloop_al, jloop_zl, jloop_de /0, 0, 0/
    real(kr):: over_ride, critical_mass
    ! internals
+!
 !  break_i is the intermediate break point for the dpa model
-   real(kr):: break_i, dam_tabular
+!  e       is the energy of the recoil ion
+! 
+   real(kr):: break_i, dam_tabular, damage_energy
    real(kr)::el,rel,denom,fl,ep,dam
    real(kr),parameter::twothd=.666666667e0_kr
    real(kr),parameter::threeq=.75e0_kr
@@ -2143,6 +2321,11 @@ contains
    real(kr),parameter::zero=0
    save rel,fl
 
+   if (imode(3) .lt. -1) then
+     write (nsyso,2301) e,zr_in,ar_in,zl_in,al_in
+2301 format (/,1x, 'DF entry ', 5g14.7,/)
+   endif
+
    zr = zr_in
    ar = ar_in
    zl = zl_in
@@ -2153,7 +2336,7 @@ contains
 !  added logic for expaned damage functions
 ! 
    if ( icntrl(5) .ne. 0 ) then
-!        over-ride displacement threshold if icon(5) set
+!        over-ride displacement threshold if icntrl(5) set
       break = displace_th
 !        notify user first time over-ride takes place
       if (jloop_de .le. 0) write (nsyso,2034) break
@@ -2223,7 +2406,7 @@ contains
          icode = 3
          dam_tabular = fitmd(e, ndamage, energy_dam, value_dam, icode)
          write (nsyso, 7823) e, dam/e, dam_tabular, zr, ar, zl, al
- 7823    format (1x, 'icon(8) damage partition ', 7g14.7)
+ 7823    format (1x, 'icntrl(8) damage partition ', 7g14.7)
          dam = dam_tabular*e
          df = dam
       endif
@@ -2237,41 +2420,45 @@ contains
          endif
       endif
    endif
+   damage_energy = dam
 !
 !  Add logic to address various damage energy interpretations
 !
       if ( icntrl(1) .eq. 0) then
 !
-!       Normal/default NJOY operation
-!               - identical to icntrl(1)=8 sharp Kinchin-Pease model
-!
+!          return the damage energy 
+!  
         threshold_factor = 1.0
         df = dam
 !
       elseif ( icntrl(1) .eq. 5) then
 !
-!       NRT damage energy model
-!           three interval threshold model
-!           transitions at Ed and 2*Ed/beta, where beta = 0.8
+!          return the NRT damage energy model
+!               three interval threshold model
+!               transitions at Ed and 2*Ed/beta, where beta = 0.8
 !
-        if ( e .lt. break) then
+        if ( damage_energy .lt. break) then
            dam = 0.0
            df  = 0.0
            threshold_factor = 1.0
-        elseif ( e .lt. break_i) then
+        elseif ( damage_energy .lt. break_i) then
            if ( dam .le. 0.0) then
-             threshold_factor = 0.0
+             threshold_factor = 1.0
+             df = 0.0
+             dam = 0.0
            else
 !
-!            for DE correspondign to 1 dpa, 
+!            for DE corresponding to 1 dpa, 
 !                remove damage energy and set to energy for one Frenkel pair, i.e. 2*Ed/beta
 !
              threshold_factor = 2.0*break/0.8/dam
            endif
            df = threshold_factor*dam
+           dam = df
         else
            threshold_factor = 1.0
            df = threshold_factor*dam
+           dam = df
         endif
 !
       elseif ( icntrl(1) .eq. 6) then
@@ -2280,11 +2467,11 @@ contains
 !           three interval threshold model
 !           transitions at Ed and 2*Ed
 !
-        if ( e .lt. break) then
+        if ( damage_energy .lt. break) then
            dam = 0.0
            df  = 0.0
            threshold_factor = 1.0
-        elseif ( e .lt. 2.0*break) then
+        elseif ( damage_energy .lt. 2.0*break) then
            if ( dam .le. 0.0) then
              threshold_factor = 0.0
            else
@@ -2310,7 +2497,7 @@ contains
         endif
         df = dam
 !        write (nsyso, 3441) e, dam
- 3441   format (1x, 'df icon(1)=7 set: ', g14.7)
+ 3441   format (1x, 'df icntrl(1)=7 set: ', g14.7)
 !
       elseif (icntrl(1) .eq. 8) then
 !
@@ -2318,7 +2505,7 @@ contains
 !           two interval threshold model
 !           transitions at Ed
 !
-        if ( e .lt. break) then
+        if ( damage_energy .lt. break) then
            dam = 0.0
            df  = 0.0
            threshold_factor = 1.0
@@ -2328,9 +2515,7 @@ contains
         endif
       endif
 !
-!
 !    Add over-ride logic to produce a dpa rather than a damage energy
-!       -- not yet debugged --
 !
       if ( icntrl(1) .eq. 6 .and. icntrl(10) .eq. 1 .and. break .gt. 0.0) then
 !        conversion from damage energy to Kinchin-Pease dpa
@@ -2345,11 +2530,13 @@ contains
          over_ride = 1.0
 !         if( jloop_de .lt. 20) write (nsyso, 8001) jloop_de, &
 !     &           e, dam, df, over_ride, break
- 8001    format (1x, 'Function df icon(8) process: ', i5, 1x, 5g14.7)
+ 8001    format (1x, 'Function df icntrl(8) process: ', i5, 1x, 5g14.7)
       endif
-!      write (nsyso, 6711) e, dam, df, dam/e, break, break_i, zl, &
-!  &                  al, zr, ar, threshold_factor, icon(1)
- 6711 format (1x, 'DF exit debug: ', 11g14.7, 2x, i5)
+      if ( imode(3) .le. -3) then
+        write (nsyso, 6711) e, df, dam, dam/e, break, break_i, zl, &
+  &                  al, zr, ar, threshold_factor, icntrl(1)
+ 6711   format (1x, 'DF exit debug: ', 11g14.7, 2x, i5)
+      endif
    return
    end function df
 
@@ -2434,6 +2621,8 @@ contains
    !-------------------------------------------------------------------
    use util ! provides error
    use endf ! provides endf routines and variables
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::nin,nscr,matd,mtd,ncmax,nbmax
    real(kr)::e,ebar,dame,c(ncmax),b(nbmax),yld,q
@@ -2452,6 +2641,11 @@ contains
    real(kr),parameter::zero=0
    save nktot,awr,awfac,aw1fac,z,za,mtt
    save loc,d1,d2,e1,e2,mf1,mt1
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) e,matd,mtd
+2301 format (/,1x, 'CONBAR entry ', g14.7, 2i6,/)
+   endif
 
    !--initialize if e=0.
    if (e.eq.zero) then
@@ -2677,6 +2871,8 @@ contains
    !-------------------------------------------------------------------
    use util ! provides error
    use endf ! provides endf routines and variables
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::idis,mat,mf,mt,itape,na
    real(kr)::e,enext,yld,a(*)
@@ -2686,6 +2882,11 @@ contains
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::zero=0
    save lnu,ip,ir
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) e, enext, yld, mt
+2301 format (1x, 'HGTYLD entry ', 3g14.7, i6)
+   endif
 
    !--initialize.
    if (e.eq.zero) then
@@ -2980,6 +3181,8 @@ contains
    ! can be computed using abs(law) as the interpolation law).
    !-------------------------------------------------------------------
    use util ! provides error
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::law
    real(kr)::f,a(*)
@@ -2987,6 +3190,7 @@ contains
    integer::nr,np,ibase,ir,nbt,inn,ncyc,i
    real(kr)::xh,xhsq,yh,xl,xlsq,delxsq,yl,b
    real(kr)::alxl,alxh,alyl,alyh
+   real(kr)::photon_count
 
    !--initialize.
    nbt=0
@@ -2994,6 +3198,7 @@ contains
      call error('tabbar','coded for lf=1 and lf=5 only.',' ')
    if (law.ge.0) then
       f=0
+      photon_count = 0.0
       nr=nint(a(5))
       np=nint(a(6))
       ibase=6+2*nr
@@ -3003,6 +3208,7 @@ contains
       ncyc=2
    else
       f=0
+      photon_count = 0.0
       np=nint(a(6))
       inn=iabs(law)
       ncyc=nint(a(4))+2
@@ -3021,6 +3227,7 @@ contains
       delxsq=xhsq-xlsq
       yl=yh
       yh=a(ibase+ncyc*(i-1)+2)
+
       if (law.gt.0.and.i.gt.nbt) then
          ir=ir+1
          nbt=nint(a(ibase+2*ir-1))
@@ -3031,11 +3238,13 @@ contains
          !--y is a constant.
          if (inn.eq.1) then
             f=f+yl*delxsq/2
+            photon_count = photon_count + (xh-xl)*(yh+yl)/2.
 
          !--y is linear in x.
          else if (inn.eq.2) then
             b=(yh-yl)/(xh-xl)
             f=f+((yl-xl*b)*delxsq/2+b*(xh*xhsq-xl*xlsq)/3)
+            photon_count = photon_count + (xh-xl)*(yh+yl)/2.
 
          !--y is linear in ln(x)
          else if (inn.eq.3) then
@@ -3043,6 +3252,7 @@ contains
             alxh=log(xh)
             b=(yh-yl)/(alxh-alxl)
             f=f+(yl-b*alxl+b/2)*delxsq/2+b*(xhsq*alxh-xlsq*alxl)/2
+            photon_count = photon_count + (xh-xl)*(yh+yl)/2.
 
          !--ln(y) is linear in x
          else if (inn.eq.4) then
@@ -3050,6 +3260,7 @@ contains
             alyh=log(yh)
             b=(alyh-alyl)/(xh-xl)
             f=f+(yh*(b*xh-1)-yl*(b*xl-1))/b**2
+            photon_count = photon_count + (xh-xl)*(yh+yl)/2.
 
          !--ln(y) is linear in ln(x)
          else if (inn.eq.5) then
@@ -3059,8 +3270,15 @@ contains
             alyh=log(yh)
             b=(alyh-alyl)/(alxh-alxl)
             f=f+yl*xlsq*((xh/xl)**(b+2)-1)/(b+2)
+            photon_count = photon_count + (xh-xl)*(yh+yl)/2.
          endif
       endif
+
+      if (imode(3) .lt. 0) then
+        write (nsyso,2306) i, inn, xl, xh, yl, yh, f, photon_count
+2306    format (1x, 'TABBAR accumulation ', 2i5, 6g14.7)
+      endif
+
    enddo
    return
    end subroutine tabbar
@@ -3124,6 +3342,8 @@ contains
    !-------------------------------------------------------------------
    use util ! provides skiprz,mess
    use endf ! provides endf routines and variables
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::nin,n2,j6,irec,jrec,ncmax,nbmax,nscr,iflag
    real(kr)::e,ebar,yld,dame
@@ -3141,9 +3361,20 @@ contains
    save elo,ehi,flo,fhi,dlo,dhi
    save disc102,zp,ap,zt,at
 
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) e, disc102, elo,ehi,flo,fhi,dlo,dhi, pe, yld, disc102, mth, irec, jrec
+2301 format (1x, 'SIXBAR entry ', 11g14.7, 3i6)
+   endif
+
    !--initialize for this subsection when e=0.
    if (e.gt.zero) go to 300
    if (irec.eq.0) go to 110
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,5865) e, irec, jrec
+5865 format (1x, 'SIXBAR irec step-D ', g14.7, 2i6)
+   endif
+
    if (jrec.gt.0) irec=jrec
 
    !--for recoils, back up to the driving particle,
@@ -3166,6 +3397,11 @@ contains
    if (jrec.eq.irec) then
       irec=0
       jrec=0
+   endif
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,5861) e, c(1), c(2), irec, jrec
+5861 format (1x, 'SIXBAR irec step-A ', 3g14.7, 2i6)
    endif
 
    !--start reading in the desired subsection
@@ -3211,6 +3447,12 @@ contains
    if (law.ne.4) go to 210
    irec=j6-1
    jrec=j6+1
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,5862) e, irec, jrec
+5862 format (1x, 'SIXBAR irec step-B ', g14.7, 2i6)
+   endif
+
    go to 100
 
    !--continue processing this subsection
@@ -3295,11 +3537,53 @@ contains
 
    !--compute low values of ebar and dame
   290 continue
+
+   if (imode(3) .lt. 0 .and. mth .eq. 102) then
+     write (nsyso,4342) elo, flo, dlo, ebar, yld, zap, c(1), c(2), c(iraw), irec, iraw
+4342 format (1x, 'Before GETSIX call from SIXBAR at low return: ', 9g14.7, 2i6)
+   endif
+
    if (mth.ne.102.or.(zap.eq.0.and.irec.eq.0)) then
       call getsix(elo,flo,dlo,c(iraw),law,lang,lep,irec)
+
+      if (imode(3) .lt. 0) then
+        write (nsyso,4341) elo, flo, dlo, ebar, yld
+4341    format (1x, 'SIXBAR low return after GETSIX ', 5g14.7)
+      endif
+
    else
       ztt=int(zat/1000)
-      call tabsq6(flo,dlo,c(iraw),law,ztt,awrt)
+
+      if (mth .eq. 102 .and. irec .gt. 0) then 
+          if (imode(3) .lt. 0) then
+             write (nsyso,5341) pe_archive, pe_store
+5341         format (1x, 'SIXBAR low return pe reset ', 2g14.7)
+          endif
+
+!          ip=2
+!          ir=1
+!          call terpa(pe_trial,e,eihi,idisc,c(1),ip,ir)
+
+          if (imode(3) .lt. 0 .and. e .le. 1.E-4) then
+             write (nsyso,9306) e, irec, pe_trial, disc102, mth, eihi, c(1), idisc, ip, ir
+9306         format (1x, 'SIXBAR low pe_trial terpa reset ', e14.7, i6, 2g14.7, i6, 2g14.7, 3i6)
+          endif
+         
+      endif
+
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2331) e, flo, dlo, ebar, yld, pe_archive, pe_store
+2331 format (1x, 'Before TABSQ6 low call in SIXBAR ', 7g14.7)
+   endif
+
+      call tabsq6(e, flo,dlo,c(iraw),law,ztt,awrt)
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2311) e, flo, dlo, ebar, yld, c(iraw), iraw
+2311 format (1x, 'TABSQ6 low return in SIXBAR ', 6g14.7, i6)
+   endif
+
    endif
    if ((mth.ge.18.and.mth.le.21).or.mth.eq.38) then
       matd=math
@@ -3311,6 +3595,12 @@ contains
       ! ... but when nply.ne.0, use prompt neutron data only.
       call hgtyld(e,enext,idis,yld,matd,mf1,mt1,nscr,b,nbmax)
    endif
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2371) flo, dlo, ebar, yld, irec
+2371 format (1x, 'SIXBAR low value exit ', 4g14.7, i6)
+   endif
+
    return
 
   295 continue
@@ -3326,10 +3616,44 @@ contains
    ip=2
    ir=1
    call terpa(pe,e,eihi,idisc,c(1),ip,ir)
-   if (irec.gt.0) pe=1
+
+   if (imode(3) .lt. 0 .and. e .le. 1.E-3) then
+     write (nsyso,8306) e, irec, pe, disc102, mth, eihi, c(1), c(2), idisc, ip, ir
+8306 format (1x, 'SIXBAR pe over-ride after terpa ', e14.7, i6, 2g14.7, i6, 3g14.7, 3i6)
+   endif
+
+!   Temporary change to fix MF12 capture gamma total kerma and displacement kerma
+!   inhibit normal coding to stop multiplicity change in MF12 capture gamma case 
+!   but - permit this for MF6 cases.
+!   Inhibited!
+!   [PJG, 9/14/2020]
+!
+!     Legacy code:
+       pe_archive = pe
+       if (irec.gt.0) pe=1
+       pe_store = pe
+!     Replacement code:
+!        if ( irec.gt.0 .and. mth .ne. 102) pe = 1
+!        if ( irec.gt. 0 .and. mth .eq. 102 .and. mfd .eq. 0) pe = 1
+        if ( irec.gt.0 .and. mth .eq. 102 .and. e .le. 0.101E-4) then
+            write (nsyso,5356) e, pe, pe_archive, irec, mth, mfd
+5356       format (1x, '*** Warning ***: temporary pe over-ride xonsidered ', 3e14.7, 3i6)
+        endif 
+!   End of temporary change
+
+   if (imode(3) .lt. 0 .and. e .le. 1.E-4) then
+     write (nsyso,8305) e, irec, pe, pe_archive
+8305 format (1x, 'SIXBAR loc-8305 ', e14.7, i6, 2g14.7)
+   endif
 
    !--is desired energy in current panel
   305 continue
+
+   if (imode(3) .lt. 0 .and. e .le. 1.e-4) then
+     write (nsyso,2305) e, disc102, ehi, nne, ne, law, irec
+2305 format (1x, 'SIXBAR loc-305 ', 3g14.7, 4i6)
+   endif
+
    if (e.lt.ehi*(1-small)) go to 400
    if (nne.eq.1) go to 310
    if (nne.eq.ne.and.e.le.ehi*(1+small)) go to 400
@@ -3340,6 +3664,11 @@ contains
    elo=ehi
    flo=fhi
    dlo=dhi
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,4311) elo, flo, dlo
+4311 format (1x, 'SIXBAR low fill ', 2g14.7)
+   endif
 
    !--read in new data for high energy
    !--laws 1, 2, and 5.
@@ -3383,7 +3712,19 @@ contains
       call getsix(ehi,fhi,dhi,c(iraw),law,lang,lep,irec)
    else
       ztt=int(zat/1000)
-      call tabsq6(fhi,dhi,c(iraw),law,ztt,awrt)
+      call tabsq6(e, fhi,dhi,c(iraw),law,ztt,awrt)
+
+      if (imode(3) .lt. 0) then
+        write (nsyso,2401) e, fhi, dhi, c(iraw), law
+2401    format (1x, 'TABSQ6 high return in SIXBAR ', 4g14.7, i6)
+      endif
+
+!     Code change: PJG 9/21/2020
+!     flo/dlo was not set correctly in above logic because pe was not properly defined at call
+!     so, we reset flo/dlo to the fhi/dhi values here
+      call tabsq6(e, flo,dlo,c(iraw),law,ztt,awrt)
+!     end code change
+
    endif
    go to 305
 
@@ -3392,6 +3733,12 @@ contains
    if (law.ne.3.and.law.ne.6) go to 420
    c(iraw+1)=e
    call getsix(e,f,d,c(iraw),law,lang,lep,irec)
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,5863) e, irec, jrec
+5863 format (1x, 'SIXBAR irec step-C ', g14.7, 2i6)
+   endif
+
    ebar=f
    yld=pe
    dame=pe*d
@@ -3401,6 +3748,12 @@ contains
   420 continue
    if (nne.eq.1) go to 450
    call terp1(elo,flo,ehi,fhi,e,s,intl)
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,7311) elo, flo, ehi, fhi, e, s, pe, pe_archive
+7311 format (1x, 'SIXBAR terp for s ', 8g14.7)
+   endif
+
    ebar=s
    yld=pe
    if ((mth.ge.18.and.mth.le.21).or.mth.eq.38) then
@@ -3410,12 +3763,30 @@ contains
       call hgtyld(e,enext,idis,yld,matd,mf1,mt1,nscr,b,nbmax)
    endif
    call terp1(elo,dlo,ehi,dhi,e,d,intl)
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,7312) elo, dlo, ehi, dhi, e, d, pe, pe_archive
+7312 format (1x, 'SIXBAR terp for d ', 8g14.7)
+   endif
+
    dame=pe*d
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2304) e, ebar, yld, dame, pe, d, s, irec
+2304 format (1x, 'SIXBAR exit ', 7g14.7, i6)
+   endif
+
    return
 
    !--discrete relativistic capture gamma
   430 call hgam102(e,ebar,dame,disc102,c,irec,zp,ap,zt,at)
    yld=1
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2302) e, ebar, dame, yld
+2302 format (1x, 'SIXBAR discrete capture gamma exit ', 4g14.7)
+   endif
+
    return
 
    !--return zeros outside range of table
@@ -3433,6 +3804,8 @@ contains
    ! numbers for the recoil due to a single emission of the particle.
    !-------------------------------------------------------------------
    use mathm ! provides legndr
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::law,lang,lep,irec
    real(kr)::e,ebar,dame,c(*)
@@ -3440,6 +3813,7 @@ contains
    integer::nl,l,i,nd,na,nep,ncyc,iq,ia,nld,il,nmu,imu
    integer::nr,np,next,ibase,iint
    real(kr)::zp,zt,ap,at,summ,epnext,el,fl,dy,da,xm
+   real(kr):: delta_d, delta_h
    real(kr)::epn,ym,test,en,f,f1,h,d,xl,yl,xx,yy
    real(kr)::x2,zpp,ztt,b,er,t1,t2,thresh,beta
    real(kr)::afact,arec,u,e2,ul,fn,dl,hl,f2
@@ -3499,6 +3873,11 @@ contains
    integer,parameter::imax=10
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) e, ebar, zap, law, lct
+2301 format (1x, 'GETSIX entry ', 3g14.7, 2i6)
+   endif
 
    !--branch to appropriate law
    zp=int(zap/1000)
@@ -3614,6 +3993,12 @@ contains
       yy=c(l+1)
       x2=xx
       if (irec.eq.0) then
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,3329) i, xx, yy
+3329 format (1x, 'GETSIX energy partial increment-A1 ', i6, 2g14.7)
+   endif
+
          en=yy*xx
          zpp=int(zap/1000)
          ztt=int(zat/1000)
@@ -3634,6 +4019,12 @@ contains
             f=f+qw(iq)*b*df(er,zp,ap,zt,at)
          enddo
          x2=en
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2329) i, en, yy
+2329 format (1x, 'GETSIX energy partial increment-A2 ', i6, 2g14.7)
+   endif
+
          en=en*yy
          f2=f
          f=f*yy
@@ -3641,6 +4032,12 @@ contains
       if (i.le.nd) then
          h=h+en
          d=d+f
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2309) i, nd, h, en, d, f
+2309 format (1x, 'GETSIX energy increment-A ', 2i6, 4g14.7)
+   endif
+
       else if (i.eq.nd+1) then
          xl=xx
          yl=yy
@@ -3649,10 +4046,25 @@ contains
       else
          if (lep.eq.1) t1=x2*yl+el
          if (lep.gt.1) t1=en+el
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2379) i, lep, t1, x2, yl, el, xx, xl, t1/2, (xx-xl)
+2379 format (1x, 'GETSIX energy partial increment-B ', 2i6, 8g14.7)
+   endif
+
+
+         delta_h = (xx-xl)*t1/2
          h=h+(xx-xl)*t1/2
          if (lep.eq.1) t2=f2*yl+fl
          if (lep.gt.1) t2=f+fl
+         delta_d = (xx-xl)*t2/2
          d=d+(xx-xl)*t2/2
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2319) i, nd, lep, h, delta_h, d, delta_d, xx, xl, t1
+2319 format (1x, 'GETSIX energy increment-B ', 3i6, 7g14.7)
+   endif
+
          xl=xx
          yl=yy
          el=en
@@ -3661,6 +4073,12 @@ contains
    enddo
    ebar=h
    dame=d
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2305) e, ebar, dame, nd, na, nep, irec
+2305 format (1x, 'GETSIX exit-400 ', 3g14.7, 4i6)
+   endif
+
    return
 
    !--laws 2 and 3.
@@ -3786,6 +4204,12 @@ contains
       hl=h
       dl=d
    enddo
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2302) e, ebar, dame, law
+2302 format (1x, 'GETSIX exit ', 3g14.7, i6)
+   endif
+
    return
    end subroutine getsix
 
@@ -4487,28 +4911,44 @@ contains
    return
    end function h6psp
 
-   subroutine tabsq6(g,h,a,law,z,awr)
+   subroutine tabsq6(e_incident, g,h,a,law,z,awr)
    !-------------------------------------------------------------------
    ! Compute average of photon recoil energy from capture and
    ! corresponding damage energy for File 6 capture photons
    !-------------------------------------------------------------------
    use endf ! provides terp1
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::law
    real(kr)::g,h,a(*),z,awr
+   real(kr):: e_incident
    ! internals
    integer::nd,np,ncyc,ibase,inn,nc,i,j
    real(kr)::ein,rein,x,y,xr,awc,xh,yh,xl,yl,dx,s
+   real(kr):: g_prime, h_prime, max_intensity, xr_prime
    integer,parameter::nq=4
+   integer:: ichange_flag
+   real(kr):: total_discrete_gamma_energy, total_continuum_gamma_energy, total_gamma_energy
+   real(kr):: partial_sum, discrete_sum, s_discrete, s_continuum
+   real(kr):: g_prime_discrete, h_prime_discrete, g_prime_continuum, h_prime_continuum
    real(kr),dimension(nq),parameter::qp=(/&
      -.86114e0_kr,-.33998e0_kr,.33998e0_kr,.86114e0_kr/)
    real(kr),dimension(nq),parameter::qw=(/&
      .34785e0_kr,.65215e0_kr,.65215e0_kr,.34785e0_kr/)
+   data ichange_flag /0/
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) g, h, a(1), law, z, awr, pe_archive, pe_store
+2301 format (1x, 'TABSQ6 entry ', 3g14.7, i6, 4g14.7)
+   endif
 
    !--initialize
    ein=2*tm
    rein=1/ein
    g=0
+   g_prime = 0
+   h_prime = 0
    h=0
    s=0
    nd=nint(a(3))
@@ -4518,17 +4958,55 @@ contains
    inn=2
 
    !--accumulate contributions from discrete levels
+   total_gamma_energy = 0.0
+   total_discrete_gamma_energy = 0.0
+   total_continuum_gamma_energy = 0.0
    if (nd.ne.0) then
+
+!    precompute discrete intensity sum and maximum intensity
+     discrete_sum = 0.0
+     max_intensity = 0.0
+     do i = 1,nd
+       discrete_sum = discrete_sum + a(ibase+ncyc*(i-1)+2)
+       max_intensity = max(max_intensity,a(ibase+ncyc*(i-1)+2))
+     enddo
+
       do i=1,nd
          x=a(ibase+ncyc*(i-1)+1)
          y=a(ibase+ncyc*(i-1)+2)
          xr=x*x*rein
+         xr_prime = xr
+!       
+!        over-ride xr to include base capture recoil energy
+!        xr_prime = xr + e_incident/(awr+1.)
+!
          g=g+xr*y
+         g_prime = g_prime + xr_prime*y
          awc=awr+1
          h=h+df(xr,z,awc,z,awr)*y
+         h_prime = h_prime + df(xr_prime,z,awc,z,awr)*y
          s=s+y
+
+         if (imode(3) .lt. 0) then
+           write (nsyso,2306) i, x, y, xr, rein, g, h, s, g_prime, h_prime, discrete_sum,  &
+              max_intensity, pe_archive, pe_store
+2306       format (1x, 'TABSQ6 discrete level entry ', i5, 13g14.7)
+         endif
+         total_discrete_gamma_energy = total_discrete_gamma_energy + x*y
+
       enddo
    endif
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2303) g, h, s, total_discrete_gamma_energy, nd, np
+2303 format (1x, 'TABSQ6 discrete level sum ', 4g14.7, 2i6)
+   endif
+   g_prime_discrete = g_prime
+   h_prime_discrete = h_prime
+   s_discrete = s
+   g_prime_continuum = 0.0
+   h_prime_continuum = 0.0
+   s_continuum = 0.0
 
    !--accumulate contributions from continuum
    if (np.gt.nd) then
@@ -4541,6 +5019,7 @@ contains
          xh=a(ibase+ncyc*(i-1)+1)
          yl=yh
          yh=a(ibase+ncyc*(i-1)+2)
+         partial_sum = 0.0
          if (xl.ne.xh) then
             dx=xh-xl
             do j=1,nq
@@ -4549,15 +5028,90 @@ contains
                xr=x*x*rein
                g=g+qw(j)*xr*dx*y
                h=h+qw(j)*df(xr,z,awr+1,z,awr)*dx*y
+
+!              Note: proper g_prime may not be computed by baseline appraoch.
+!                    Tally discrete and continuum g/h contributions separately
+!                      since they scale slightly differently.
+
+               xr_prime = xr
+!       
+!              over-ride xr to include base capture recoil energy
+!              xr_prime = xr + e_incident/(awr+1.)
+!
+               g_prime = g_prime + qw(j)*xr_prime*dx*y
+               h_prime = h_prime + qw(j)*df(xr_prime,z,awr+1,z,awr)*dx*y
+
+               g_prime_continuum = g_prime_continuum + qw(j)*xr_prime*dx*y
+               h_prime_continuum = h_prime_continuum + qw(j)*df(xr_prime,z,awr+1,z,awr)*dx*y
+
+               s_continuum=s_continuum+qw(j)*dx*y
+
                s=s+qw(j)*dx*y
+               partial_sum = partial_sum + qw(j)*dx*y
+
+               if (imode(3) .lt. 0 ) then
+!                   write (nsyso,8336) j, g, g_prime, g_prime_continuum, h, h_prime, & 
+!                        h_prime_continuum, qw(j), xr, xr_prime, &
+!                        dx, y, s, s_continuum
+8336               format (1x, 'TABSQ6 continuum level g/h_prime/continuum loop ', i5, 13g14.7)
+               endif
+
             enddo
+            total_continuum_gamma_energy = total_continuum_gamma_energy + partial_sum
          endif
+
+         if (imode(3) .lt. 0 ) then
+            write (nsyso,2336) i, xl, xh, yl, yh, g, g_prime, g_prime_continuum, h, h_prime, & 
+                  h_prime_continuum, s, &
+                  total_continuum_gamma_energy, partial_sum
+2336        format (1x, 'TABSQ6 continuum level entry ', i5, 13g14.7)
+         endif
+
       enddo
+   endif
+   
+   total_gamma_energy = total_discrete_gamma_energy + total_continuum_gamma_energy
+   if (imode(3) .lt. 0) then
+     write (nsyso,2304) g, g_prime, h, h_prime, s, total_gamma_energy, nc
+2304 format (1x, 'TABSQ6 discrete+continuum level sum ', 6g14.7, i6)
+     write (nsyso, 2314) g_prime_discrete, h_prime_discrete, g_prime_continuum, h_prime_continuum, s, &
+        s_discrete, s_continuum, pe_archive
+2314 format (1x, 'TABSQ6 altered sum: ', 8g14.7)
    endif
 
    !--finished
    g=g/s
+   g_prime = g_prime_discrete*pe_archive + g_prime_continuum*pe_archive/s
+!   g_prime = g_prime_discrete*pe_archive + g_prime_continuum
    h=h/s
+   h_prime = h_prime_discrete*pe_archive + h_prime_continuum*pe_archive/s
+!   h_prime = h_prime_discrete*pe_archive + h_prime_continuum
+
+   if (imode(3) .lt. 0 .and. ichange_flag .lt. 10) then
+     write (nsyso,8702) ichange_flag, g_prime_discrete*pe_archive, g_prime_continuum*pe_archive/s, &
+         h_prime_discrete*pe_archive, &
+         h_prime_continuum*pe_archive/s, s, pe_archive
+8702 format (1x, 'Note: TABSQ6 disc/cont partition of recoil and damage energies: ', i6, 9g14.7)
+   endif
+
+!  code modifications to correct multiphoton MF6 kerma calculation
+!  change by PJG 9/19/2020
+
+   if (imode(3) .lt. 0 .and. ichange_flag .lt. 10) then
+     ichange_flag = ichange_flag + 1
+     write (nsyso,2702) ichange_flag, g, g_prime, h, h_prime, s, pe_archive, pe_store, xr, xr_prime
+2702 format (1x, 'Warning: code modification taking affect for neutron kerma ', i6, 9g14.7)
+   endif
+   g = g_prime
+   h = h_prime
+
+!  end code modification section
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2302) g, g_prime, h, h_prime, s, xr, xr_prime
+2302 format (1x, 'TABSQ6 exit ', 9g14.7)
+   endif
+
    return
    end subroutine tabsq6
 
@@ -5393,11 +5947,18 @@ contains
    ! given in mf6/mt102 for ENDF/B-VII neutron + H-1.
    !-------------------------------------------------------------------
    ! externals
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    integer::irec
    real(kr)::e,ebar,dame,disc102,zp,ap,zt,at
    real(kr)::c(*)
    ! internals
    real(kr)::er,eg2
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) e
+2301 format (/,1x, 'HGAM102 entry ', 4g14.7, /)
+   endif
 
    if (irec.eq.0) then
       ebar=disc102+e*awr/(1+awr)
@@ -5418,6 +5979,7 @@ contains
    !-------------------------------------------------------------------
    use util ! provides error,mess,loada,finda,sigfig
    use mainio ! provides nsyso
+   use snl     ! provides SNL
    use endf ! provides endf routines and variables
    ! externals
    integer::iold,inew,nscr
@@ -5426,6 +5988,7 @@ contains
    integer::lo,mfx,mtx,mtd,jdis,ilist,nwd,lp,lqx,idis
    integer::i,ipx,irx,nmt,mty,idx,ii,indxx,it,isave,jerr,nd
    real(kr)::afact,aw1fac,z,e,dame
+   real(kr):: h_prior
    real(kr)::cerr,enxt,el,elow,ehigh,test,thresh
    real(kr)::egkr,ebar,egam,edam,damn,enext,enx,egk
    real(kr)::h,hk,cfix,eava,ebarp,xp,yp,hp,egamp,edamp
@@ -5447,6 +6010,11 @@ contains
    !--allocate buffers for loada/finda
    allocate(bufo(nbuf))
    allocate(bufn(nbuf))
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301)
+2301 format (/,1x, 'GHEAT entry ',/)
+   endif
 
    !--find first section of mf12 or mf13
    allocate(scr(npage+50))
@@ -5570,6 +6138,12 @@ contains
    call findf(matd,mfd,mtd,nin)
    call contio(nin,0,0,b,nb,nw)
    call gety2(e,enxt,idis,x,nin,b)
+
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,4231) e, x, b
+4231 format (1x, 'GHEAT x from gety2 ', 3g14.7)
+   endif
+
    if (mth.eq.102) then
       q=c2h
       if (nqa.gt.0) then
@@ -5618,15 +6192,41 @@ contains
    if (ik.eq.1) c(npkk)=0
    if (egkr.eq.zero)&
      call gambar(e,ebar,egam,edam,nendf,matd,mtx,d,nwd)
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,7331) e, ebar, egam, edam
+7331 format (1x, 'GHEAT gambar return ', 4g14.7)
+   endif
    if (mfd.eq.13) go to 170
    if (mth.ne.102) go to 164
    ! photon recoil correction
    if (egkr.ne.zero) call disgam(egkr,egam,edam,z,awr)
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,7332) e, egkr, egam, edam
+7332 format (1x, 'GHEAT disgam return ', 4g14.7)
+   elseif (imode(3) .lt. 0 .and. e .gt. 9.51e6 .and. e .lt. 10.1E6) then
+     write (nsyso,7332) e, egkr, egam, edam
+   endif
    h=egam*x*y
    hk=h
    c(npkk-1)=c(npkk-1)+x*y*ebar
+
+   if (imode(3) .lt. 0 .and. e .le. 1.e-4) then
+     write (nsyso,8332) e, c(npkk-1), x, y, ebar, egam, edam, h, y*egam, y*edam, npkk
+8332 format (1x, 'GHEAT c(npkk-1)a: ', 10g14.7, 2x, i6)
+   elseif (imode(3) .lt. 0 .and. e .ge. 9.52e6 .and. e .le. 10.1E6) then
+     write (nsyso,8332) e, c(npkk-1), x, y, ebar, egam, edam, h, y*egam, y*edam, npkk
+   endif
+
    c(npkk)=c(npkk)+y*ebar
    dame=edam*x*y
+
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,6331) dame, edam, x, y, idame, ik, nk
+6331 format (1x, 'GHEAT dame calc ', 4g14.7, 3i6)
+   elseif (imode(3) .lt. 0 .and. e .gt. 9.53E6 .and. e .lt. 10.1E6) then
+     write (nsyso,6331) dame, edam, x, y, idame, ik, nk
+   endif
+
    if (ik.eq.nk) then
       if (idame.gt.0) then
          call capdam(e,damn,q,za,awr,mth)
@@ -5634,10 +6234,17 @@ contains
       endif
       hk=hk-x*rtm*(q+e*awr*aw1fac)**2/2
       cfix=(e+q-e*aw1fac)*x
+      h_prior = h
       h=h-cfix
       c(npkk-2)=cfix-x*c(npkk)
       eava=afact*e+q
       cerr=100*(c(npkk)-eava)/eava
+      if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+        write (nsyso,6332) e, cfix, q, aw1fac, x, h, h_prior, c(npkk-2), x*c(npkk), hk, eava, npkk
+6332    format (1x, 'GHEAT hk calc ', 11g14.7, 2i6)
+      elseif (imode(3) .lt. 0 .and. e .gt. 9.53E6 .and. e .lt. 10.1E6) then
+        write (nsyso,6332) e, cfix, q, aw1fac, x, h, h_prior, c(npkk-2), x*c(npkk), hk, eava, npkk
+      endif
    endif
    ebarp=sigfig(ebar,9,0)
    xp=sigfig(x,9,0)
@@ -5654,6 +6261,12 @@ contains
    else
       write(nsyso,'(1x,1p,8e14.4)')&
         e,ebarp,egamp,edamp,xp,yp,hp,damep
+
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,2331) ik, egkr, e, yp, hp, damep
+2331 format (1x, 'GHEAT component echo ', i6, 5g14.7)
+   endif
+
    endif
    if (ik.eq.nk) write(nsyso,&
      '(1x,1p,e14.4,0p,f10.1,'' pc'')') e,cerr
@@ -5664,6 +6277,14 @@ contains
    if (mtd.eq.2) h=y*x*ebar
    c(npkk-1)=c(npkk-1)-h
    c(npkk)=c(npkk)+h
+
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,8331) e, c(npkk), h, egkr
+8331 format (1x, 'GHEAT h increment ', 4g14.7)
+   elseif (imode(3) .lt. 0 .and. e .ge. 9.52e6 .and. e .le. 10.1E6) then
+     write (nsyso,8331) e, c(npkk), h, egkr
+   endif
+
   166 continue
    hx=h
    c(2)=c(2)+h
@@ -5671,11 +6292,51 @@ contains
       do ii=1,nmt
          indxx=imt(ii)
          if (mtp(indxx).ge.444) c(indxx)=c(indxx)+dame
+
+         if ( imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .lt. 1.03e-5) then 
+              write (nsyso,6301) c(1), c(2), c(indxx), h, indxx, dame, y, x, ebar
+6301          format (1x, 'GHEAT partial sum-a-401: ', 4g14.7, i6, 4g14.6)
+         elseif (imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .ge. 9.52e6 .and. c(1) .le. 10.1E6) then
+              write (nsyso,6301) c(1), c(2), c(indxx), h, indxx, dame, y, x, ebar
+         endif
+         if ( imode(3) .lt. 0 .and. mtp(indxx) .eq. 442 .and. c(1) .lt. 1.03e-5) then 
+              write (nsyso,6302) c(1), c(2), c(indxx), h, indxx, dame, y, x, ebar
+6302          format (1x, 'GHEAT partial sum-a-442: ', 4g14.7, i6, 4g14.6)
+         elseif (imode(3) .lt. 0 .and. mtp(indxx) .eq. 442 .and. c(1) .ge. 9.52e6 .and. c(1) .le. 10.1E6) then
+              write (nsyso,6302) c(1), c(2), c(indxx), h, indxx, dame, y, x, ebar
+         endif
+
          if (mtp(indxx).lt.442) c(indxx)=c(indxx)+h
          if (mtp(indxx).eq.442) c(indxx)=c(indxx)-h
          if (mtp(indxx).eq.443.and.mth.eq.102) c(indxx)=c(indxx)+hk
+
+   if (imode(3) .lt. 0 .and. e .le. 1.e-5) then
+     write (nsyso,8302) e, c(indxx), h, hk, indxx, mth, mtp(indxx)
+8302 format (1x, 'c-look-2 ', 4g14.7, 2x, 3i6)
+   endif
+
       enddo
    endif
+
+         if ( imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .lt. 1.03e-5) then 
+              write (nsyso,6391) c(1), c(indxx), h
+6391          format (1x, 'GHEAT MF401 calc: ', 4g14.7)
+         elseif (imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .ge. 9.52e6 .and. c(1) .le. 10.1E6) then
+              write (nsyso,6391) c(1), c(indxx), h
+         endif
+         if ( imode(3) .lt. 0 .and. mtp(indxx) .eq. 442 .and. c(1) .lt. 1.03e-5) then 
+              write (nsyso,6392) c(1), c(indxx), h
+6392          format (1x, 'GHEAT MF442 calc: ', 4g14.7)
+        elseif (imode(3) .lt. 0 .and. mtp(indxx) .eq. 442 .and. c(1) .ge. 9.52e6 .and. c(1) .le. 10.1E6) then
+              write (nsyso,6392) c(1), c(indxx), h
+         endif
+         if ( imode(3) .lt. 0 .and. mtp(indxx) .eq. 447 .and. c(1) .lt. 1.03e-5) then 
+              write (nsyso,6393) c(1), c(indxx), h
+6393          format (1x, 'GHEAT MF447 calc: ', 4g14.7)
+        elseif (imode(3) .lt. 0 .and. mtp(indxx) .eq. 447 .and. c(1) .ge. 9.52e6 .and. c(1) .le. 10.1E6) then
+              write (nsyso,6393) c(1), c(indxx), h
+         endif
+
    if (iprint.eq.0.or.e.ne.elist(ilist)) go to 180
    if (mth.eq.102) go to 180
    if (ik.lt.nk.and.y.lt.smin) go to 180
@@ -5705,8 +6366,25 @@ contains
    if (nmt.gt.0) then
       do ii=1,nmt
          indxx=imt(ii)
+
+         if ( imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .lt. 1.03e-5) then 
+              write (nsyso,6102) c(1), c(2), c(indxx), h, indxx
+6102          format (1x, 'GHEAT partial sum-b: ', 4g14.7, i6)
+        elseif (imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .ge. 9.52e6 .and. c(1) .le. 10.1E6) then
+              write (nsyso,6102) c(1), c(2), c(indxx), h, indxx
+         endif
+
+
          if (mtp(indxx).lt.442) c(indxx)=c(indxx)+h
          if (mtp(indxx).eq.442) c(indxx)=c(indxx)-h
+
+         if ( imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .lt. 1.03e-5) then 
+              write (nsyso,6502) c(1), c(2), c(indxx), h, indxx
+6502          format (1x, 'GHEAT partial sum-f: ', 4g14.7, i6)
+        elseif (imode(3) .lt. 0 .and. mtp(indxx) .eq. 401 .and. c(1) .ge. 9.52e6 .and. c(1) .le. 10.1E6) then
+              write (nsyso,6502) c(1), c(2), c(indxx), h, indxx
+         endif
+
       enddo
    endif
    if (iprint.eq.0.or.abs(e-elist(ilist)).gt.small*e) go to 180
@@ -5798,6 +6476,8 @@ contains
    !-------------------------------------------------------------------
    use util ! provides error
    use endf ! provides endf routines and variables
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::nin,matd,mtd,nwamax
    real(kr)::e,ebar,esqb,esqd,a(*)
@@ -5811,6 +6491,11 @@ contains
    save lf,z,awr
    save jstart,jend,istart,ilo,ihi,nnt,ne,nne,inn,nbt
    save elo,ehi,flo,fhi,glo,ghi,hlo,hhi
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) e, matd, mtd
+2301 format (/,1x, 'GAMBAR entry ', g14.7, 2i6,/)
+   endif
 
    !--initialize if e=0.
    if (e.gt.zero) go to 110
@@ -5957,6 +6642,8 @@ contains
    ! corresponding damage energy for a tabulated section of File 15.
    !-------------------------------------------------------------------
    use endf ! provides terp1
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    ! externals
    integer::law
    real(kr)::g,h,a(*),z,awr
@@ -5968,6 +6655,11 @@ contains
      -.86114e0_kr,-.33998e0_kr,.33998e0_kr,.86114e0_kr/)
    real(kr),dimension(nq),parameter::qw=(/&
      .34785e0_kr,.65215e0_kr,.65215e0_kr,.34785e0_kr/)
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2301) awr
+2301 format (/,1x, 'TABSQR entry ', g14.7)
+   endif
 
    !--initialize
    ein=2*tm
@@ -6004,11 +6696,23 @@ contains
             g=g+qw(j)*xr*dx*y
             h=h+qw(j)*df(xr,z,awr+1,z,awr)*dx*y
             s=s+qw(j)*dx*y
+
+            if (imode(3) .lt. 0) then
+              write (nsyso,2392) xl, xh, yl, yh, g, h, s, xr
+2392          format (1x, 'TABSQR sum: ', 8g14.7)
+           endif
+
          enddo
       endif
    enddo
    g=g/s
    h=h/s
+
+   if (imode(3) .lt. 0) then
+     write (nsyso,2391) g, h, s
+2391 format (/,1x, 'TABSQR exit ', 7g14.7, /)
+   endif
+
    return
    end subroutine tabsqr
 
@@ -6017,9 +6721,16 @@ contains
    ! Compute recoil and damage energy of discrete capture photons.
    !-------------------------------------------------------------------
    ! externals
+   use mainio  ! provides nsysi,nsyso
+   use snl     ! provides SNL
    real(kr)::e,egam,edam,z,awr
    ! internals
    real(kr),parameter::zero=0
+
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,2301) e, z, awr, egam, edam
+2301 format (1x, 'DISGAM entry ', 5g14.7)
+   endif
 
    if (e.eq.zero) then
       return
@@ -6027,6 +6738,12 @@ contains
       egam=e*e*rtm/2
       edam=df(egam,z,awr+1,z,awr)
    endif
+
+   if (imode(3) .lt. 0 .and. e .lt. 1.e-4) then
+     write (nsyso,2302) e, egam, edam, rtm
+2302 format (1x, 'DISGAM exit ', 4g14.7)
+   endif
+
    return
    end subroutine disgam
 
@@ -6038,6 +6755,7 @@ contains
    use util ! provides openz,repoz,closz,error,sigfig
    use mainio ! provides nsyso
    use endf ! provides endf routines and variables
+   use snl     ! provides SNL
    ! externals
    integer::iold
    ! internals
@@ -6068,6 +6786,11 @@ contains
    ! allocate scratch storage for endf records and buffer
    allocate(scr(nwscr))
    allocate(buf(nbuf))
+
+   if (imode(3) .lt. 0 .and. c(1) .lt. 1.e-4) then
+     write (nsyso,1302) iold
+1302 format (1x, 'hout entry ', 3i6)
+   endif
 
    !--construct tab1 records for the kerma factors
    n=0
@@ -6155,6 +6878,12 @@ contains
       if (kchk.eq.1) write(nsyso,'(12x,''min'',1p,8e14.4)')&
         (c(npk+j),j=1,npktd)
       write(nsyso,'(1x,1p,9e14.4)') (c(j),j=1,npk)
+
+   if (imode(3) .lt. 0 .and. c(1) .lt. 1.e-4) then
+     write (nsyso,9302) c(1), c(2), c(3), c(4), c(5), c(6), c(npk+2), c(npk+npkt+2), npk, npktd
+9302 format (1x, 'final kerma 401 look ', 8g14.7, 2x, 2i6)
+   endif
+
       if (kchk.eq.1) write(nsyso,'(12x,''max'',1p,8e14.4)')&
         (c(npk+npkt+j),j=1,npktd)
       if (ihi.eq.1) write(nsyso,'(15x,8(6x,a4,4x))')&
