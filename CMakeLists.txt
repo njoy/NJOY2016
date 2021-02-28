@@ -167,6 +167,7 @@ add_library( njoy ${njoy_library_linkage}
              "${CMAKE_CURRENT_SOURCE_DIR}/src/reconr.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/resxsr.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/samm.f90"
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/snl.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/thermr.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/unresr.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/util.f90"

@@ -244,6 +244,7 @@ contains
    !     32           ukaea 1102-group structure   (1 GeV)
    !     33           ukaea  142-group structure (200 MeV)
    !     34           lanl 618-group structure
+   !     35           sand-iv 770-group structure
    !
    !     igg          meaning
    !     ---          -------
@@ -1604,6 +1605,7 @@ contains
    real(kr),dimension(:),allocatable::egn
    ! internals
    integer::lflag,ig,ngp,n1,n2,n,ic
+   integer::ngp_hold
    real(kr)::u,du,delta
    real(kr),dimension(241),parameter::gl2=(/&
      27.631e0_kr,17.0e0_kr,16.75e0_kr,16.588e0_kr,16.5e0_kr,16.3e0_kr,&
@@ -4076,6 +4078,7 @@ contains
    real(kr),parameter::sandc=2.8e-4_kr
    real(kr),parameter::sandd=1.e6_kr
    real(kr),parameter::sande=1.e5_kr
+   real(kr),parameter::sandf=1.e6_kr
    real(kr),parameter::uu80=.6931472e0_kr
    real(kr),parameter::e175=1.284e7_kr
 
@@ -4220,8 +4223,9 @@ contains
       enddo
 
    !--sand-ii 620- and 640-group structures
-   else if (ign.eq.12.or.ign.eq.15) then
+   else if (ign.eq.12.or.ign.eq.15 .or. ign.eq.24) then
       ngn=620
+      if (ign.eq.24) ngn=770
       if (ign.eq.15) ngn=640
       ngp=ngn+1
       allocate(egn(ngp))
@@ -4459,6 +4463,36 @@ contains
          egn(ig)=eg618(ig)
       enddo
 
+   !--sand-ii 770--group structures
+   else if (ign.eq.35) then
+      ngn=770
+      ngp=ngn+1
+      allocate(egn(ngp))
+      egn(1)=sanda
+      ! generate the first 45 boundaries
+      do ig=1,8
+         delta=deltl(ig)*sandb
+         n1=ndelta(ig)
+         n2=ndelta(ig+1)-1
+         do n=n1,n2
+            egn(n)=egn(n-1)+delta
+         enddo
+      enddo
+      ! correct group 21
+      egn(21)=sandc
+      ! groups 46 to 450 are multiples of previous groups
+      do ig=46,450
+         egn(ig)=egn(ig-45)*10
+      enddo
+      ! groups 451 through 620 have constant spacing of 1.e5
+      egn(451)=sandd
+      do ig=452,641
+         egn(ig)=egn(ig-1)+sande
+      enddo
+      do ig=642,ngp
+         egn(ig)=egn(ig-1)+sandf
+      enddo
+
    !--illegal ign
    else
       call error('gengpn','illegal group structure.',' ')
@@ -4539,6 +4573,8 @@ contains
      &  '' neutron group structure......ukaea 1102-group'')')
    if (ign.eq.33) write(nsyso,'(/&
      &  '' neutron group structure......ukaea 142-group'')')
+   if (ign.eq.35) write(nsyso,'(/&
+     &  '' neutron group structure......sand-iv 770-group'')')
    if (ign.ne.-1) then
       do ig=1,ngn
          write(nsyso,'(1x,i5,2x,1p,e12.5,''  - '',e12.5)')&

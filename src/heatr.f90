@@ -95,7 +95,20 @@ contains
    !             (default=0)
    !    iprint   print (0 min, 1 max, 2 check) (default=0)
    !    ed       displacement energy for damage
-   !             (default from built-in table)
+   !             (if negative, use default from built-in table)
+   !             Note, unlike in the original NJOY-2016 formulation, zero is now a valid entry 
+   !                   since it is used to generate the displacement kerma
+   !    idam_fnc flag for alternate treatment of damage partition function
+   !             (default is 0 for built-in Robinson partition function)
+   !             0 = Robinson partition function / 1 = read-in function
+   !    al_new   lattice atom atomic mass
+   !             (default from ENDF file header cards)
+   !                if positive, units of amu
+   !                if negtive,units of neutron mass
+   !                Note, NJOY HEATR module uses logic based on ENDF-6 format/definitions,
+   !                i.e. neutron mass is used.
+   !    zl_new   lattice atom atomic number
+   !             (default from ENDF file header cards)
    ! card 3      for npk gt 0 only
    !    mtk      mt numbers for partial kermas desired
    !             total (mt301) will be provided automatically.
@@ -114,6 +127,13 @@ contains
    !               445   elastic (mt2)
    !               446   inelastic (mt51 thru 91)
    !               447   disappearance (mt102 thru 120)
+   !             Note, the damage energy formulation is determined by icntrl(1) entry:
+   !               icntrl(1) =  0    output displacement energy (with lower imtegration bound of Ed) - NJOY default
+   !                                     (redundant with icntrl(1)=8 option)
+   !                            5    output NRT damage energy (break = 2*Ed/beta)
+   !                            6    output original 3-level Kinchin-Pease damage energy (break = 2*Ed, no beta=0.8 factor)
+   !                            7    output displacement kerma (i.e. Ed = 0 eV, no break)
+   !                            8    output sharp transition Kinchin-Pease damage energy - no transistion region (break = Ed)
    !          cards 4 and 5 for nqa gt 0 only
    ! card 4
    !    mta      mt numbers for users q values
@@ -125,10 +145,11 @@ contains
    !    qbar      tab1 record giving qbar versus e (1000 words max)
    !
    !-------------------------------------------------------------------
-   use mainio ! provides nsysi,nsyso
-   use util   ! provides timer,openz,error,mess,repoz,closz
-   use endf   ! provides endf routines and variables
+   use mainio  ! provides nsysi,nsyso
+   use util    ! provides timer,openz,error,mess,repoz,closz
+   use endf    ! provides endf routines and variables
    use physics ! provides amassn,amu,ev,clight
+   use snl     ! provides SNL
    ! internals
    integer::ntemp,local,npkk,i,nz,j,isave,iz,loc,nzq,nz0
    integer::nscr,nend4,nend6,iold,inew,itemp,idone,nb,nw
@@ -141,6 +162,7 @@ contains
    real(kr),parameter::qflag=-1.e-9_kr
    real(kr),parameter::zero=0
    integer,parameter::maxqbar=10000
+   real(kr) ::   al_new_temp, amu_over_nmass, al_new_amu, al_new_nmass
 
    !--start
    call timer(time)
@@ -160,15 +182,23 @@ contains
    ntemp=0
    local=0
    iprint=0
-   break=0
-   read(nsysi,*) matd,npk,nqa,ntemp,local,iprint,break
+   break=-1.0
+   idam_fnc = 0
+   al_new_temp = 0.0
+   zl_new = 0.0
+   read(nsysi,*) matd,npk,nqa,ntemp,local,iprint,break, idam_fnc, al_new_temp, zl_new
+   break_new = break
    kchk=0
    if (iprint.eq.2) kchk=1
    if (iprint.eq.2) iprint=1
    npkk=npk+3
    if (kchk.eq.1) npkk=3*npk+7
-   if (npkk.gt.npkmax) call error('heatr',&
-     'requested too many kerma mt-s (6+mt301 allowed).',' ')
+   if (npkk.gt.npkmax) then 
+      write (nsyso, 3981) iprint, kchk, npkk, npkmax, npk 
+ 3981 format (1x, 'HEATR requests too many kermas: ', 5i8)
+      call error('heatr',&
+        'requested too many kerma mt-s (6+mt301 allowed).',' ')
+   endif
    if (nqa.gt.nqamax)&
      call error('heatr','requested too many q values.',' ')
    if (npk.gt.0) then
@@ -252,14 +282,67 @@ contains
      &'' gamma heat (0 nonlocal, 1 local) ..... '',i10/&
      &'' print option (0 min, 1 more, 2 chk) .. '',i10)')&
      ntemp,local,iprint
-   if (break.eq.zero) then
+
+!  over-ride previous convevntion and permit a zero displacement threshold energy
+   if (break.lt.zero) then
       write(nsyso,'(&
         &'' damage displacement energy ...........    default'')')
    else
       write(nsyso,'(&
-        &'' damage displacement energy ........... '',f10.1,&
+        &'' damage displacement energy ........... '',f11.2,&
         &'' ev'')') break
    endif
+   displace_th = break_new
+
+   if ( idam_fnc .ne. icntrl(8)) then 
+      write(nsyso,'(&
+        &'' ERROR: icntrl(8) not equal to idam_fnc input flag'', 2i5)') icntrl(8), idam_fnc
+      call error('heatr','idam_fnc /= icntrl(8)',' ')
+   endif
+
+   if (zl_new.eq.zero) then
+      write(nsyso,'(&
+        &'' lattice atomic number ................    default'')')
+   else
+      write(nsyso,'(&
+        &'' lattice atom atomic number ........... '',f11.2&
+        & )') zl_new
+   endif
+
+   if (al_new_temp.eq.zero) then
+      write(nsyso,'(&
+        &'' lattice atomic mass ..................    default'')')
+   else
+      write(nsyso,'(&
+        &'' lattice atom atomic mass ............. '',g14.7&
+        &)') al_new_temp
+   endif
+   amu_over_nmass =  931.5 / 939.6
+   if ( al_new_temp .lt. 0.0) then
+!      input nmass
+        al_new_amu = abs(al_new_temp) / amu_over_nmass
+        al_new_nmass = abs(al_new_temp)
+   else
+!      input amu
+       al_new_amu = al_new_temp
+       al_new_nmass = al_new_temp * amu_over_nmass
+   endif
+   al_new = al_new_nmass
+   write (nsyso, 1903) break_new, al_new_amu,  &
+ &         al_new_nmass, zl_new
+ 1903  format (/,12x, 'dpa parameters changed = ', g14.7,&
+     &          '  ev ',/, &
+     &       12x, 'al parameter changed   = ', g14.7, ' amu',/,&
+     &       12x, '                       = ', g14.7, ' nmass',/, &
+     &       12x, 'zl parameter changed   = ', g14.7, &
+     &       '  Z  ',/)
+   if ( zl_new.ne.zero .or. al_new_temp.ne.zero) then
+     if ( icntrl(5) .ne. 1) then 
+        write (nsyso, 7903) icntrl(5)
+ 7903   format (12x, 'WARNING: icntrl(5) not set to 1, but lattice atom information changed ', i5)
+     endif 
+   endif
+
    if (ntemp.eq.0) ntemp=100
    if (npk.ge.3) write(nsyso,'(&
      &'' partial kerma mt-s desired ........... '',i10)') mtp(3)
@@ -326,7 +409,7 @@ contains
             rtm=1/tm
 
             !--check on default damage displacement energy
-            if (break.eq.zero) then
+            if (break.lt.zero) then
                iz=nint(za/1000)
                if (iz.eq.4) then
                   break=31
@@ -1822,11 +1905,14 @@ contains
    ! Compute ebar and damage energy for discrete scattering.
    !-------------------------------------------------------------------
    use endf ! provides iverf,terp1
+   use snl     ! provides SNL
+   use mainio  ! provide nsyso
    use mathm ! provides legndr
    use physics !get global physics and light particle mass constants
    ! externals
    integer::ntape,matd,mtd,nwa
    real(kr)::ee,ebar,dame,q,za,awr,a(*)
+   real(kr) :: edis_replace
    ! internals
    integer::imiss,i,mfd,nld,lcd,idis,iz,iq,il
    real(kr)::e,thresh,awp,afact,arat,en,cn,el,cl,z
@@ -1889,6 +1975,7 @@ contains
    !--initialize if e=0.
    e=ee
    if (e.eq.zero) then
+      edis_replace = edis
       imiss=0
       do i=1,nmiss4
          if (miss4(i).eq.mtd) imiss=1
@@ -1922,6 +2009,12 @@ contains
       el=0
       cl=0
       enx=0
+      if ( edis_replace .gt. break_new) then 
+         write (nsyso, 4581) edis_replace, break_new
+ 4581    format (/,1x, 'edis parameter in disbar over-ridden by displacement', &
+  &          ' threshold energy: ', 2g14.7)
+         edis_replace = break_new
+      endif
       if (idame.ne.0) then
          iz=nint(za/1000)
          z=iz
@@ -1929,7 +2022,15 @@ contains
          daml=damn
          if (mtd.eq.2) then
             daml=0
-            enx=edis*arat/(4*afact)
+!            enx=edis*arat/(4*afact)
+            enx=edis_replace*arat/(4*afact)
+!           write (nsyso, 2891) enx, edis_replace, arat, afact
+ 2891       format (1x, 'disbar enx set: ', 4g14.7)
+            if ( icntrl(1) .eq. 7) then
+               enx = 0.0
+!              write (nsyso, 6714) enx
+ 6714          format (1x, 'disbar enx over-ride ', g14.7)
+            endif
             damn=0
          endif
       endif
@@ -1975,6 +2076,8 @@ contains
    if (wbar.gt.qp(64)) wbar=qp(64)
    cn=(1+2*b*wbar+b*b)*afact
    if (idame.eq.0) go to 130
+!  write (nsyso, 7814) e, enx 
+ 7814   format (1x, 'disbar angle intg start', 4g14.7, 2i6, g14.7 )
    if (e.lt.enx*(1-small)) go to 130
 
    !--angle integration by gauss-legendre method.
@@ -1988,6 +2091,11 @@ contains
          f=f+(2*il-1)*fl(il)*p(il)/2
       enddo
       e2=e*(1-2*g*u+g*g)*afact/arat
+!     if ( iq .eq. 1) write (nsyso, 89) e, iq, nq, e2, awp, awr, &
+!     &   afact, arat,    &
+!     &   4.0*afact/arat, (1-2*g*u+g*g), g, u
+ 89   format (1x, 'Discrete scatter recoil energy: ', g14.7, 1x, &
+      & 2i5, 9g14.7)
       dame=dame+qw(iq)*f*df(e2,z,awr,z,awr)
    enddo
    if (dame.lt.zero) dame=zero
@@ -2000,18 +2108,29 @@ contains
    if (idame.gt.0) then
       call terp1(el,daml,en,damn,ee,dame,2)
    endif
+!   write (nsyso, 7813) damn, dame, ebar, ee, e, ce
+ 7813   format (1x, 'disbar exit', 6g14.7 )
    return
    end subroutine disbar
 
-   real(kr) function df(e,zr,ar,zl,al)
+   real(kr) function df(e,zr_in,ar_in,zl_in,al_in)
    !-------------------------------------------------------------------
    ! Damage function using the Lindhard partition of
    ! energy between atomic and electronic motion.
    ! Call with e=0 for each reaction to precompute the constants.
    !-------------------------------------------------------------------
+   use snl     ! provides SNL
+   use mainio  ! provides nsysi,nsyso,nsyse
    ! externals
+   real(kr):: zr_in, ar_in, zl_in, al_in
    real(kr)::e,zr,ar,zl,al
+   real(kr) :: threshold_factor
+   integer:: jloop_al, jloop_zl, jloop_de
+   data jloop_al, jloop_zl, jloop_de /0, 0, 0/
+   real(kr):: over_ride, critical_mass
    ! internals
+!  break_i is the intermediate break point for the dpa model
+   real(kr):: break_i, dam_tabular
    real(kr)::el,rel,denom,fl,ep,dam
    real(kr),parameter::twothd=.666666667e0_kr
    real(kr),parameter::threeq=.75e0_kr
@@ -2024,23 +2143,286 @@ contains
    real(kr),parameter::zero=0
    save rel,fl
 
+   zr = zr_in
+   ar = ar_in
+   zl = zl_in
+   al = al_in
+!  write (nsyso, 6712) zl, al, zr, ar, zl_new, al_new
+ 6712 format (1x,'DF entry: ', 6g14.7)
+!
+!  added logic for expaned damage functions
+! 
+   if ( icntrl(5) .ne. 0 ) then
+!        over-ride displacement threshold if icon(5) set
+      break = displace_th
+!        notify user first time over-ride takes place
+      if (jloop_de .le. 0) write (nsyso,2034) break
+      if (jloop_de .le. 0) write (6,2034) break
+ 2034  format (1x, 'Threshold displacement energy replaced with ', g14.7)
+       jloop_de = jloop_de + 1
+   endif
+   if (break .lt. 0.0) then
+       write (nsyso,9034) break, displace_th
+       write (6,9034) break, displace_th
+ 9034  format (1x, 'Invalid displace_th replaced ', 2g14.7)
+       displace_th = 25.
+       break = 25.0
+   endif
+   if ( icntrl(1) .eq. 7) then
+!    Output displacement kerma in MT=444, i.e. over-ride Ed with 0.0 eV
+       break = 0.0
+   endif
+   if ( al_new .gt. 0.0) then
+       al = al_new
+       jloop_al = jloop_al + 1
+       if ( jloop_al .le. 1) write (6,3034) al
+ 3034  format (1x, 'Lattice atomic mass replaced with ', g14.7 ' nmass')
+   endif
+   if ( zl_new .gt. 0.0) then
+       zl = zl_new
+       jloop_zl = jloop_zl + 1
+       if ( jloop_zl .le. 1) write (6,8034) zl
+ 8034  format (1x, 'Lattice atomic number replaced with ', g14.7)
+   endif
+   break_i = break
+   if ( icntrl(1) .eq. 6) then
+      break_i = 2.0*break
+   else if (icntrl(1) .eq. 5) then
+      break_i = 2.0*break/0.8
+   else if ( icntrl(1) .eq. 8) then
+      break_i = break
+   else if ( icntrl(1) .eq.0) then
+     break_i = 2.0*break/0.8
+   endif
+!
+! end of added damage logic section
+!
    if (zr.eq.zero) then
       df=0
+      dam = 0.0
    else if (e.le.zero) then
       el=c1*zr*zl*sqrt(zr**twothd+zl**twothd)*(ar+al)/al
       rel=1/el
       denom=(zr**twothd+zl**twothd)**threeq*ar**onep5*sqrt(al)
       fl=c2*zr**twothd*sqrt(zl)*(ar+al)**onep5/denom
       df=0
+      dam = 0.0
    else if (e.lt.break) then
       df=0
+      dam = 0.0
    else
+      el=c1*zr*zl*sqrt(zr**twothd+zl**twothd)*(ar+al)/al
+      rel=1/el
+      denom=(zr**twothd+zl**twothd)**threeq*ar**onep5*sqrt(al)
+      fl=c2*zr**twothd*sqrt(zl)*(ar+al)**onep5/denom
       ep=e*rel
       dam=e/(1+fl*(c3*ep**sixth+c4*ep**threeq+ep))
       df=dam
+      if ( icntrl(8) .eq.1) then
+!         dam_tabular = 1.0
+         icode = 3
+         dam_tabular = fitmd(e, ndamage, energy_dam, value_dam, icode)
+         write (nsyso, 7823) e, dam/e, dam_tabular, zr, ar, zl, al
+ 7823    format (1x, 'icon(8) damage partition ', 7g14.7)
+         dam = dam_tabular*e
+         df = dam
+      endif
+      if ( icntrl(9) .gt. 0) then
+         critical_mass = al - icntrl(9)*1.0
+         if (ar .le. critical_mass) then
+ !          turn-off damage energy from secondary charged particles
+ !          with mass less "i" less than the lattice atom
+            dam = 0.0
+            df = 0.0
+         endif
+      endif
    endif
+!
+!  Add logic to address various damage energy interpretations
+!
+      if ( icntrl(1) .eq. 0) then
+!
+!       Normal/default NJOY operation
+!               - identical to icntrl(1)=8 sharp Kinchin-Pease model
+!
+        threshold_factor = 1.0
+        df = dam
+!
+      elseif ( icntrl(1) .eq. 5) then
+!
+!       NRT damage energy model
+!           three interval threshold model
+!           transitions at Ed and 2*Ed/beta, where beta = 0.8
+!
+        if ( e .lt. break) then
+           dam = 0.0
+           df  = 0.0
+           threshold_factor = 1.0
+        elseif ( e .lt. break_i) then
+           if ( dam .le. 0.0) then
+             threshold_factor = 0.0
+           else
+!
+!            for DE correspondign to 1 dpa, 
+!                remove damage energy and set to energy for one Frenkel pair, i.e. 2*Ed/beta
+!
+             threshold_factor = 2.0*break/0.8/dam
+           endif
+           df = threshold_factor*dam
+        else
+           threshold_factor = 1.0
+           df = threshold_factor*dam
+        endif
+!
+      elseif ( icntrl(1) .eq. 6) then
+!
+!       Kinchin-Pease damage energy model
+!           three interval threshold model
+!           transitions at Ed and 2*Ed
+!
+        if ( e .lt. break) then
+           dam = 0.0
+           df  = 0.0
+           threshold_factor = 1.0
+        elseif ( e .lt. 2.0*break) then
+           if ( dam .le. 0.0) then
+             threshold_factor = 0.0
+           else
+             threshold_factor = 2.0*break/dam
+           endif
+           df = threshold_factor*dam
+        else
+           threshold_factor = 1.0
+           df = threshold_factor*dam
+        endif
+!
+      elseif (icntrl(1) .eq. 7) then
+!
+!       Displacement Kerma as output metric
+!           no threshold model
+!           full non-ionizing damage is scored for all enegies
+!
+        threshold_factor = 1.0
+        if ( break .gt. 0.0) then
+          write (nsyso, 3891) break, dam, icntrl(1)
+ 3891     format (1x, 'ERROR: displacement kerma requires zero ', &
+  &          'displacement threshold energy ', 2g14.7, i5)
+        endif
+        df = dam
+!        write (nsyso, 3441) e, dam
+ 3441   format (1x, 'df icon(1)=7 set: ', g14.7)
+!
+      elseif (icntrl(1) .eq. 8) then
+!
+!       Sharp transition Kinchin-Pease damage energy model
+!           two interval threshold model
+!           transitions at Ed
+!
+        if ( e .lt. break) then
+           dam = 0.0
+           df  = 0.0
+           threshold_factor = 1.0
+        else
+           threshold_factor = 1.0
+           df = threshold_factor*dam
+        endif
+      endif
+!
+!
+!    Add over-ride logic to produce a dpa rather than a damage energy
+!       -- not yet debugged --
+!
+      if ( icntrl(1) .eq. 6 .and. icntrl(10) .eq. 1 .and. break .gt. 0.0) then
+!        conversion from damage energy to Kinchin-Pease dpa
+         df = dam/(2.0*break)
+      elseif ( icntrl(1) .eq. 5 .and. icntrl(10) .eq. 1 .and. break .gt. 0.0) then
+!        conversion from damage energy to NRT dpa
+         df = 0.8*dam/(2.0*break)
+      elseif ( icntrl(1) .eq. 8 .and. icntrl(10) .eq. 1 .and. break .gt.0.0) then
+         df = dam/(2.0*break)
+      endif
+      if ( icntrl(8) .eq. 1) then
+         over_ride = 1.0
+!         if( jloop_de .lt. 20) write (nsyso, 8001) jloop_de, &
+!     &           e, dam, df, over_ride, break
+ 8001    format (1x, 'Function df icon(8) process: ', i5, 1x, 5g14.7)
+      endif
+!      write (nsyso, 6711) e, dam, df, dam/e, break, break_i, zl, &
+!  &                  al, zr, ar, threshold_factor, icon(1)
+ 6711 format (1x, 'DF exit debug: ', 11g14.7, 2x, i5)
    return
    end function df
+
+   real(kr) function fitmd( x, nx, xarray, yarray,icode)
+   use endf    ! provides iverf,terp1
+   real(kr):: x
+   integer:: nx, icode,idirection,ipick,ipick1,i
+   real(kr):: xarray(nx), yarray(nx)
+   real(kr):: x1, x2, y1, y2, y,place
+   real(kr):: log, exp
+!
+!  determine is xarray is increasing or deceasing
+!
+   ipick = 1
+ 101  continue
+   if ( xarray(ipick+1) .gt. xarray(ipick)) then
+         idirection = 1
+   elseif ( xarray(ipick+1) .lt. xarray(ipick)) then
+         idirection = -1
+   else
+         ipick = ipick + 1
+         if ( ipick .ge. nx) then
+!           all values are the same - return an answer
+            if ( x .eq. xarray(1)) then
+                fitmd = yarray(1)
+                return
+            endif
+            write (6,901)
+901         format (1x, 'error in fitmd - constant x ')
+            stop 'fitmd-cnst'
+         endif
+         go to 101
+   endif
+!
+!  check array bounds
+!
+   if ( (x .lt. xarray(1) .and. idirection .eq.  1) .or. &
+  &      (x .gt. xarray(1) .and. idirection .eq. -1)) then
+         fitmd = 0.0
+         return
+   endif
+   if ( (x .lt. xarray(nx) .and. idirection .eq. -1) .or. &
+  &      (x .gt. xarray(nx) .and. idirection .eq.  1)) then
+         fitmd = 0.0
+         return
+   endif
+!  bracket the array points
+!
+   ipick = 0
+   if ( idirection .eq. 1) then
+      do i=1,nx
+         place = x - xarray(i)
+         if ( place .lt. 0.0) go to 909
+         ipick = i
+      enddo
+   elseif ( idirection .eq. -1) then
+      do i=1,nx
+         place = xarray(i) - x
+         if ( place .lt. 0.0) go to 909
+         ipick = i
+      enddo
+   endif
+   stop 'fitmd-err'
+909 continue
+!
+!  perform interpolation
+!
+   ipick1 = ipick + 1
+   call terp1(xarray(ipick), yarray(ipick), xarray(ipick1), &
+  &           yarray(ipick1), x, y, icode)
+   fitmd = y
+   return
+   end function fitmd
 
    subroutine conbar(e,ebar,dame,nin,nscr,matd,mtd,&
      c,ncmax,b,nbmax,yld,q)

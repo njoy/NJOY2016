@@ -129,6 +129,9 @@ module errorm
    !integer::isammy=0 ! sammy processing off
    integer::isammy=1 ! sammy processing on
 
+   ! SNL-specific arrays
+   real:: covsnl(500,500), std(500), xsc(500), pstd(500), egnsnl(500)
+
 contains
 
    subroutine errorr
@@ -375,6 +378,11 @@ contains
    real(kr)::b(17),z(10)
    character(4)::id(17)
    real(kr)::rd(17)
+
+   ! SNL-specific parameter declarations
+   integer:: jk, jl, i1, i2
+   real:: zzap
+
    equivalence(id(1),rd(1))
    real(kr),dimension(:),allocatable::dict
    real(kr),dimension(:),allocatable::temp
@@ -420,6 +428,20 @@ contains
    nstan=0
    nscr5=0
    read(nsysi,*) nendf,npend,ngout,nout,nin,nstan
+
+   ! Use SNL-specific covariance output
+   open(unit=77,file='std.plot',status='unknown')
+   open(unit=78,file='lsl_interface.cov',status='unknown')
+ !  write(77,'(/'' Start file-77 '')') 
+ !  write(78,'(/'' Start file-78 '')') 
+   do jk = 1,500
+      std(jk) = 0.0
+      xsc(jk) = 0.0
+      do jl = 1,500
+         covsnl(jk,jl) = 0.0
+      end do
+   end do
+
    ngoutu=ngout
 
    if (nendf.eq.999) then
@@ -1051,7 +1073,10 @@ contains
    if (allocated(flx))  deallocate(flx)
    if (allocated(sig))  deallocate(sig)
    if (allocated(cov))  deallocate(cov)
-   if (allocated(egn))  deallocate(egn)
+
+!   SNL comment out this term
+!  if (allocated(egn))  deallocate(egn)
+
    if (allocated(lump)) deallocate(lump)
    if (allocated(iga))  deallocate(iga)
    if (allocated(un))   deallocate(un)
@@ -1073,6 +1098,101 @@ contains
    call closz(nout)
    call timer(time)
    write(nsyso,'(69x,f8.1,''s''/1x,77(''*''))') time
+
+   ! Wrap-up SNL-specific covariance output
+   !
+   ! finish special output for lsl interface
+   !
+   !         write (78, 7633) ngn
+   ! 7633    format (1x, 'test cov units ', i5)
+   !         do i1=1,ngn
+   !            write (78, 7634) i1
+   ! 7634       format (1x, 'cov row ', i8)
+   !            write(78,8990) (covsnl(i1,i2),i2=1,ngn)
+   !         enddo
+      do i1 = 1,ngn
+         zzap = covsnl(i1,i1)
+         if ( zzap.gt.0.0 ) then
+            std(i1) = sqrt(zzap)
+         else
+            std(i1) = 1.e-20
+         endif
+      end do
+      do i1 = 1,ngn
+         do i2 = i1,ngn
+            zzap = std(i1)*std(i2)
+            if ( zzap.gt.0.0 ) then
+               covsnl(i1,i2) = covsnl(i1,i2)/zzap
+            else
+               covsnl(i1,i2) = 0.0
+            endif
+            if ( i1 == i2) covsnl(i1,i2) = 1.
+         end do
+      end do
+   !
+   ! title cards
+   !
+      write(78,8562)
+ 8562 format(    '*cor    (library)    (mat.#)    (temp)k')
+   !
+   ! energy grid
+   !
+      write(78,8996)
+ 8996 format('*number of energies plus 1')
+      write(78,8995) ngn+1
+      write(78,8993)
+ 8993 format('*energy grid ( ev )')
+ 8995 format(i5)
+      write(78,8990) (egn(jk),jk=1,ngn+1)
+   !
+   ! cross section
+   !
+      write(78,8998)
+ 8998 format('*cross section ( barns )')
+      write(78,7454) (xsc(jk), jk=1,ngn)
+      do i1 = 1,ngn
+         zzap = xsc(i1)
+         if ( zzap.gt.0.0 ) then
+            pstd(i1) = 100.0*std(i1)
+         else
+            pstd(i1) = 1.0e-20
+         endif
+      end do
+   !
+   ! standard deviation
+   !
+      write(78,8991)
+ 8991 format('*% standard deviation')
+      write(78,8990) (pstd(i1),i1=1,ngn)
+   !
+   ! write standard deviation to another file for input
+   !   into a plotting package
+   !
+      write(77,9101)
+   9101 format(' standard deviation',/,&
+     &       ' (input is in _templegraph_ format)',/)
+      do i1 = 1,ngn
+         write(77,9102)egn(i1),pstd(i1)
+         write(77,9102)egn(i1+1),pstd(i1)
+      end do
+   9102 format(2(5x,1pe10.3))
+   close(unit=77)
+
+   !
+   ! correlation coefficients
+   !
+      write(78,8992)
+ 8992 format('*correlation coefficient -- upper triangular')
+      do i1 = 1,ngn
+   !         write(78,8990) (ifix(1000.0*cov(i1,i2)),i2=i1,ngn)
+         write(78,8990) ((1.0*covsnl(i1,i2)),i2=i1,ngn)
+      end do
+ 8990 format((1x,8(1pe10.3,1x)))
+ 7454 format((1x,1p8e10.3))
+ 7990 format((1x,15(i4,1x)))
+   close(unit=78)
+   if (allocated(egn))  deallocate(egn)
+
    return
    end subroutine errorr
 
@@ -6164,6 +6284,9 @@ contains
    do ig=1,ngn
       c(1)=csig(ig,1)
       write(nsyso,'(i5,1p,6e12.4)') ig,egn(ig),cflx(ig),c(1)
+
+      xsc(ig) = c(1)
+
    enddo
    if (nout.ne.0) call afend(nout,0)
 
@@ -7574,6 +7697,19 @@ contains
                if (nc.gt.6) nc=6
                write(nsyso,'(i4,i6,1p,6e11.3)')&
                  ig,ig2lo,(scr(ibase+i),i=1,nc)
+
+   !           SNL-specific relative covariance save
+               if ( ig.le.500.and.ig2lo+nc-1.le.500 ) then
+                 do i = 1,nc
+                  covsnl(ig,ig2lo+i-1) = scr(ibase+i)
+                  covsnl(ig2lo+i-1,ig) = covsnl(ig,ig2lo+i-1)
+                 end do
+               else
+                 write(78,9023) ig, ig2lo, nc
+ 9023            format(1x,'***error *** cov bounds exceeded', 5i7)
+                 stop 'cov bounds'
+               endif
+
                ibase=ibase+nc
                ig2lo=ig2lo+nc
                nw=nw-nc
@@ -7945,6 +8081,15 @@ contains
       enddo
       write(nsyso,'(i5,1p,6e12.4)')&
         ig,egn(ig),cflx(ig),(c(i),i=1,nmtend)
+
+      xsc(ig) = c(1)
+      if ( ig .eq. 1 .and. nmtend .ne. 1) then
+        write (nsyso, 781) nmtend
+ 781    format ( 1x, '*** SNL covariance processing warning ', &
+   &           /,1x, '*** multiple processed components incompatible' &
+   &            ' with lsl std/cov extraction ', i6)
+      endif
+
    enddo
    go to 510
   460 continue
@@ -10900,7 +11045,7 @@ contains
    iloop=iloop+1
    call contio(ngout,0,0,c1,nb,nw)
    if (iloop.eq.1.and.nint(c1(5)).ne.-1) then
-      write(strng,'("ngout = ",i2," is not a gendf tape")')ngout
+      write(strng,'("ngout = ",i2," is not a gendf tape, c1(5)= ", i5)')ngout, nint(c1(5))
       call error('ngchk',strng,'')
    endif
    if (math.eq.-1) then
@@ -11088,6 +11233,12 @@ contains
    !-- finished with all relevant mf's for this material ...
    !   -  write material end record on the condensed GENDF tape
    call amend(nscr5,0)
+   if ( nmt1 .ne. 0) then
+     write(nsyso,'(/'' SNL WARNING: ngchk null out multiple materials'' &
+  &                 , 2i5)') nmt1
+     goto 1900
+   endif
+
 
    if (nmt1.ne.0) then
    !-- rewind the input GENDF tape
@@ -11107,6 +11258,7 @@ contains
          goto 100
       endif
    endif
+ 1900 continue
 
    !-- all done ...
    !   - restore original matd

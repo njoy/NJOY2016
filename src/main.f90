@@ -94,6 +94,7 @@ program njoy
 !   endf        contains routines for handling ENDF files
 !   math        contains math routines used by other modules
 !   physics     contains common physics constants
+!   snl         contains parameters that support SNL-specific enhanced capabilities
 !
 !---input specifications (free format)----------------------------------
 !
@@ -109,6 +110,59 @@ program njoy
 ! instructions.
 !
 !-----------------------------------------------------------------------
+!
+! Add SNL-specific modifications
+!
+! Item 1: implement optional read of flow control flags based on title card format (imode)
+!
+!         Description of optional control imode flags
+!
+!         ************************************************
+!
+!         imode(1) =   0    not used
+!         imode(2) =   0    not used
+!         imode(3) =   0    not used
+!                     <0    enhanced levels of debug print-out
+!
+! Item 2: implement optional read of control flags based on title card format (icntrl)
+!
+!         Description of optional control icntrl flags
+!
+!         ************************************************
+!
+!         icntrl(1) =  0    output displacement energy (with lower imtegration bound of Ed) - NJOY default
+!                               (redundant with icntrl(1)=8 option)
+!                      1    output recoil energy instead of damage energy in df
+!                      2    BGR recoil energy threshold option
+!                      3    BGR LET threshold option
+!                      4    output LET instead of damage energy 
+!                      5    output NRT damage energy (break = 2*Ed/beta)
+!                      6    output original 3-level Kinchin-Pease damage energy (break = 2*Ed, no beta=0.8 factor))
+!                      7    output displacement kerma (i.e. Ed = 0 eV, no break)
+!                      8    output sharp transition Kinchin-Pease damage energy - no transistion region (break = Ed)
+!
+!         icntrl(2) =  1    punch pka spectra at epoint (na)
+!         icntrl(3) =  9    TENDL-2010 bypass File 32 format issue
+!         icntrl(4) =  1    apply damage efficiency factor to displacement partition (na)
+!         icntrl(5) =  1    modify displacement threshold and target mass/charge 
+!                      2    read-in BGR recoil threshold energy
+!                      3    read-in BGR LET threshold value
+!         icntrl(6) =  0    for ICON(1)=4, score LET for particles > d
+!                      1                                 particles > a
+!                      2                                 all particles
+!         icntrl(7) =  1    list reaction source for damage increments
+!         icntrl(8) =  0    use build-in Robinson function
+!                      1    use tabular function with variable threshold energy
+!         icntrl(9) =  0    full Robinson treatment   
+!                   =  i    ignore damage energy from charged particles
+!                             with atomic mass "i" less than the lattice atom
+!         icntrl(10)=  0    report damage energy - default
+!                   =  1    report dpa - converted from damage energy
+!
+!         ***************************************************
+!
+!
+!
    use version ! provides vers,vday
    use locale  ! provides lab,mx
    use mainio  ! provides nsysi,nsyso,nsyse
@@ -138,6 +192,8 @@ program njoy
    use purm    ! provides purr
    use leapm   ! provides leapr
    use gaspm   ! provides gaspr
+   
+   use snl     ! provides icntrl
 
    implicit none
    character(6)::module
@@ -145,6 +201,7 @@ program njoy
    character(8)::time
    character(28)::strng
    real(kr)::secs
+   integer:: jk
 
    !--set page size for blocked binary mode in module endf
    npage=(npage/102)*102
@@ -187,10 +244,88 @@ program njoy
 
    !--loop over the requested modules
    !--using nsysi from module mainio.
+   
+   run_title = 'Def: Placeholder for the default NJOY-2016 title'
+   do jk = 1, 40
+     icntrl(jk) = 0
+     imode(jk) = 0
+   enddo
+   
+   read (nsysi,'(a)') run_title
+   write (nsyse,'(/,''Run Title: '', a80,/)') run_title
+   write (nsyso,'(/,''Run Title: '', a80,/)') run_title
+   if ( run_title(1:4) .eq. 'Enh:') then
+     read (nsysi,'(3i2)') (imode(jk), jk=1,3)
+     read (nsysi,'(10i2)') (icntrl(jk), jk=1,10)
+     write (nsyso,'(''Enhanced control logic inputs:'')')
+     write (nsyso,'(/,''    imode:  '', 3i2)') (imode(jk), jk=1,3)
+     write (nsyso,'(  ''    icntrl: '', 10i2,/)') (icntrl(jk), jk=1,10)
+   endif
+
+   do jk = 1, 2
+     if ( imode(jk) .ne. 0) then 
+        write (nsyso,'(''imode control logic input error for flag: '', i3)') jk
+     endif
+   enddo
+   if ( imode(3) .ne. 0) then 
+        write (nsyso,'(''imode(3) debug print control logic flag set: '', i3)') imode(3)
+   endif
+
+   if ( icntrl(1) .eq. 0) then 
+        write (nsyso,'(''icntrl(1) control logic flag set for NJOY default (spKP-DE): '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 1) then
+        write (nsyso,'(''icntrl(1) control logic flag not implemented 1: '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 2) then
+        write (nsyso,'(''icntrl(1) control logic flag not implemented 1: '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 3) then
+        write (nsyso,'(''icntrl(1) control logic flag not implemented 1: '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 4) then
+        write (nsyso,'(''icntrl(1) control logic flag not implemented 1: '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 5) then
+        write (nsyso,'(''icntrl(1) control logic flag set for NRT-DE: '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 6) then
+        write (nsyso,'(''icntrl(1) control logic flag set for origKP-DE: '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 7) then
+        write (nsyso,'(''icntrl(1) control logic flag set for displacement kerma: '', i3)') icntrl(1)
+   elseif (icntrl(1) .eq. 8) then
+        write (nsyso,'(''icntrl(1) control logic flag set for spKP-DE: '', i3)') icntrl(1)
+   else
+        write (nsyso,'(''icntrl(1) control logic flag not implemented:    1 '', i5)') icntrl(1)
+   endif
+   do jk = 2, 4
+     if ( icntrl(jk) .ne. 0) then 
+        write (nsyso,'(''icntrl control logic flag not implemented: '', 2i5)') jk, icntrl(jk)
+     endif
+   enddo
+   if ( icntrl(5) .eq. 1) then 
+!     read-in replacement lattice ion mass/charge
+        write (nsyso,'(''icntrl(5) control logic flag set to lattice atom read-in: '', i5)') icntrl(5)
+   elseif ( icntrl(5) .gt. 1) then
+        write (nsyso,'(''icntrl control logic flag not implemented:    5 '', i5)') icntrl(5)
+   elseif ( icntrl(5) .lt. 0) then
+        write (nsyso,'(''icntrl control logic flag not implemented:    5 '', i5)') icntrl(5)
+   endif
+   do jk = 6, 9
+     if ( icntrl(jk) .ne. 0) then 
+        write (nsyso,'(''icntrl control logic flag not implemented: '', 2i5)') jk, icntrl(jk)
+     endif
+   enddo
+   if ( icntrl(10) .eq. 0) then 
+        write (nsyso,'(''icntrl(10) control logic flag set for damage energy: '', i3)') icntrl(10)
+   elseif (icntrl(10) .eq. 1) then
+        write (nsyso,'(''icntrl(10) control logic flag set for dpa: '', i3)') icntrl(10)
+   else
+        write (nsyso,'(''icntrl(10) control logic flag not implemented:    10 '', i5)') icntrl(10)
+   endif
+   
    do
       read(nsysi,*) module
       if (module.eq.'stop') exit
       select case(module)
+
+      case ('#')     ! pre-process instruction; nothing to do
+
+      case ('@')     ! post-process instruction; nothing to do
 
       case('reconr') ! reconstruct pointwise cross-sections
          call reconr

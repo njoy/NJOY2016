@@ -11,7 +11,7 @@ module locale
    ! use 1 and 2 instead of 4 and 8 for these two kinds.
    implicit none
    private
-   character(8),public::lab='lanl t2'
+   character(8),public::lab='snl RES'
    character(8),public::mx='        '
    integer,parameter,public::kr=selected_real_kind(12,300)
    integer,parameter,public::k4=4
