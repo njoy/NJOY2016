@@ -530,7 +530,8 @@ contains
    !-------------------------------------------------------------------
    ! Print and or edit an ACE thermal file.
    !-------------------------------------------------------------------
-   use util ! provides closz
+   use util  ! provides closz
+   use acecm ! provides newsuff
    ! externals
    integer::itype,nin,nout,ndir,iprint,nplot,mcnpx,nxtra
    real(kr)::suff
@@ -538,13 +539,11 @@ contains
    integer::izn(16)
    real(kr)::awn(16)
    ! internals
-   integer::l,j,n,max,iza,i
+   integer::l,j,n,max,i
+   integer::indx,idiff,isuff,lenhz
    integer::izo(16)
    real(kr)::awo(16)
    character(70)::hko
-   real(kr)::zaid
-   character(3)::ht
-   character(9)::str
    real(kr),parameter::zero=0
 
    integer,parameter::ner=1
@@ -569,10 +568,7 @@ contains
       n=(len2+3)/4
       n=n-1
       l=0
-      do i=1,n
-         read (nin,'(4e20.0)') (xss(l+j),j=1,4)
-         l=l+4
-      enddo
+      read (nin,'(4e20.0)') xss(1:len2)
 
    !--read type 2 ace format file
    else if (itype.eq.2) then
@@ -597,23 +593,7 @@ contains
    endif
 
    !--adjust zaid
-   if (mcnpx.gt.0) then
-       read(hz,'(f10.0,a3)') zaid,ht
-   else
-       read(hz,'(a9,a1)') str,ht
-       if (ht(1:1).ne.'t') then
-          read(hz,'(f9.0,a1)') zaid,ht
-       endif
-   endif
-   if (suff.ge.zero.and.ht(1:1).ne.'t') then
-      iza=nint(zaid)
-      zaid=iza+suff
-      if (mcnpx.gt.0) then
-          write(hz,'(f10.3,a3)') zaid,ht
-      else
-          write(hz,'(f9.2,a1)') zaid,ht
-      endif
-   endif
+   if (suff.ge. 0._kr) call newsuff(mcnpx,suff,hz)
 
    !--adjust comment and (iz,aw) list
    if (len_trim(hk).eq.0) then

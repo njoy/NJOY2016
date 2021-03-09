@@ -23,5 +23,5 @@ configure_file("${RESOURCES}/n-094_Pu_239-ENDF8.0-Beta6.endf"
                "${CMAKE_CURRENT_BINARY_DIR}/tape20" COPYONLY )
 
 add_test( NAME "Test27"
-          COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
+          COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )

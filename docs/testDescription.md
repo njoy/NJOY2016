@@ -266,7 +266,7 @@ title: NJOY2016 Test Descriptions
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/53/input)]
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/54/input)]
 
-  These tests were added following issue [\#138](https://github.com/njoy/NJOY2016/issues/91) in which a charged particle ACE file is produced with NaN values due to an error in the Coulomb elastic scattering cross section for identical particles. These 5 tests cover most of the different possibilities we may encounter:
+  These tests were added following issue [\#138](https://github.com/njoy/NJOY2016/issues/138) in which a charged particle ACE file is produced with NaN values due to an error in the Coulomb elastic scattering cross section for identical particles. These 5 tests cover most of the different possibilities we may encounter:
 - test 50: LAW=5 LTP=12 for identical particles with a spin s = 0 (this file produces NaN values)
 - test 51: LAW=5 LTP=12 for different particles (as expected, this remains the same before and after the fix)
 - test 52: LAW=5 LTP=1 for identical particles with a spin s = 0.5 (as expected, this remains the same before and after the fix)
@@ -279,8 +279,30 @@ title: NJOY2016 Test Descriptions
 
   This test relates to changes made to an ACE file by the consistency checks when a checker `ACER` run is requested. NJOY only rarely modifies data. It does so for secondary particle distributions that use LAW=4 (isotropic angular distribution and continuous tabulated energy distributions) or LAW=44 (Kalbach-Mann). Under some circumstances, these changes used to introduce peaks in the data that obscured the plots.
 
-## Test Problem 56
+## Test Problem 56-58
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/56/input)]
 
-  This test is added following issues in processing photonuclear data in `ACER`. This test uses the ENDF/B-VIII.0 photonuclear evaluation for U235.
+  This test is added following issues in processing photonuclear data in `ACER`. These test uses the ENDF/B-VIII.0 photonuclear evaluation for U235 and Pb209, and the IAEA photonuclear evaluation for Co59.
+
+## Test Problem 59
+
+Currently assigned in unmerged fixes
+
+## Test Problem 60
+
+This test was added to following issue [\#124](https://github.com/njoy/NJOY2016/issues/124) following processing issues using IRDFF-II ENDF files.
+
+## Test Problem 61
+
+This test was added to following issue [\#163](https://github.com/njoy/NJOY2016/issues/163). Whenever an `ACER` check run changed the library suffix, it was ignored. This has been fixed now and this test was added to validate the fix.
+
+## Test Problem 62
+
+This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/issues/173). For a new d+He3 evaluation, the ACE file produced by NJOY2016 still has a few NaN values appearing in it. This problem was due to an array index overflow in acecpe.
+
+## Test Problem 63
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/63/input)]
+
+Tests 63 was added as a consequence of issue [\#178](https://github.com/njoy/NJOY2016/issues/178). It verifies that setting nunx in PURR to anything other than the default value does not break downstream processing (in this case up to ACER and VIEWR). The input file is equivalent to the input file for test 35(with the exception of nunx which is set to 2).

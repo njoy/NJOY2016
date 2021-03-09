@@ -14,5 +14,5 @@ configure_file("${RESOURCES}/atrelax-092_U_000-ENDF8.0.endf"
                "${CMAKE_CURRENT_BINARY_DIR}/tape21" COPYONLY )
 
 add_test( NAME "Test48"
-          COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
+          COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )

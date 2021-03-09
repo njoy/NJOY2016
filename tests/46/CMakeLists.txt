@@ -3,10 +3,10 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/input"
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/referenceTape34"
                "${CMAKE_CURRENT_BINARY_DIR}/referenceTape34" COPYONLY )
-	     
+
 configure_file("${RESOURCES}/n-026_Fe_056-JEFF3.3.endf"
                "${CMAKE_CURRENT_BINARY_DIR}/tape20" COPYONLY )
 
 add_test( NAME "Test46"
-          COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
+          COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )
