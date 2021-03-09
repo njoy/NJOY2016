@@ -31,8 +31,8 @@ jobs:
       run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..
       working-directory: ./bin
     - name: make
-      run: make -j
+      run: make -j2
       working-directory: ./bin
     - name: ctest
-      run: ctest -j
+      run: ctest -j2
       working-directory: ./bin
