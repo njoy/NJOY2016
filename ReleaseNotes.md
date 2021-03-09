@@ -2,7 +2,7 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.62](https://github.com/njoy/NJOY2016/pull/191)
-This adds a number of changes to NJOY2016 contributed by the Toshihiko Kawano, Bob McFarlane, IAEA and CIEMAT. In particular, the following changes were made:
+This adds a number of changes to NJOY2016 contributed by Toshihiko Kawano, Bob McFarlane, IAEA and CIEMAT. In particular, the following changes were made:
   - fixed an issue in PURR when nunx is not set to the default value (when nunx is set to anything else but 0 or the number of energy points in the unresolved energy region, purr will now properly calculate the probability tables for the given number of tables spread out over the entire unresolved resonance region)
   - fixed an issue in RECONR where the wrong channel radius was used for the calculation of the phase shift
   - array sizes were increased
