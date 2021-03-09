@@ -4,9 +4,11 @@ name: Continuous Integration
 # This workflow is triggered on pushes and pull requests to the repository.
 on:
   push:
-    branches: '*'
+    branches: '**'
   pull_request:
-    branches: 'master'
+    branches:
+      - 'master'
+      - 'develop'
 
 jobs:
   build:
