@@ -10,5 +10,5 @@ configure_file("${RESOURCES}/n-047_Ag_109-ENDF8.0.endf"
                "${CMAKE_CURRENT_BINARY_DIR}/tape20" COPYONLY )
 
 add_test( NAME "Test63"
-          COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
+          COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )
