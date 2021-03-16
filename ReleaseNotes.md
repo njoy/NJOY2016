@@ -1,6 +1,14 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.62](https://github.com/njoy/NJOY2016/pull/191)
+This adds a number of changes to NJOY2016 contributed by Toshihiko Kawano, Bob McFarlane, IAEA and CIEMAT. In particular, the following changes were made:
+  - fixed an issue in PURR when nunx is not set to the default value (when nunx is set to anything else but 0 or the number of energy points in the unresolved energy region, purr will now properly calculate the probability tables for the given number of tables spread out over the entire unresolved resonance region)
+  - fixed an issue in RECONR where the wrong channel radius was used for the calculation of the phase shift
+  - array sizes were increased
+  - additional allocated arrays are now deallocated at the end of the subroutine in which they were created
+  - added consistency checking for probability tables in ACER for continuous energy libraries
+
 ## [NJOY2016.61](https://github.com/njoy/NJOY2016/pull/140)
 This updates the physical constants used in NJOY2016 to the CODATA2018 values recommended in the [ENDF-6 Formats Manual](https://www.nndc.bnl.gov/csewg/docs/endf-manual.pdf). The manual was updated through a format proposal at CSEWG and merged in the official repository in commit [28aca81c](https://git.nndc.bnl.gov/endf/format/endf6man/-/commit/28aca81c23d96ed783efde7f3759477972040efb).
 
