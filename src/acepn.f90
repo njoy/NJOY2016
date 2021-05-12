@@ -2387,45 +2387,37 @@ contains
 
       !--esz block
       l=1
-print*, "esz", esz, "l", l
       call advance_to_locator(nout,l,esz)
       call write_real_list(nout,l,2*nes)   ! energies and total cross section (2*nes values)
 
       !--els block
       if (els.ne.0) then
-print*, "nes", nes, "l", l
          call advance_to_locator(nout,l,els)
          call write_real_list(nout,l,nes)  ! elastic cross section (nes values)
       endif
 
       !--thn block
       if (thn.ne.0) then
-print*, "thn", thn, "l", l
          call advance_to_locator(nout,l,thn)
          call write_real_list(nout,l,nes)  ! non-elastic cross section (nes values)
       endif
 
       !--mtr block
-print*, "mtr", mtr, "l", l
       call advance_to_locator(nout,l,mtr)
       call write_integer_list(nout,l,ntr)
 
       !--lqr block
-print*, "lqr", lqr, "l", l
       call advance_to_locator(nout,l,lqr)
       call write_real_list(nout,l,ntr)
 
       !--lsig block
-print*, "lsig", lsig, "l", l
       call advance_to_locator(nout,l,lsig)
       rlocator=l
       call write_integer_list(nout,l,ntr)
 
       !--sig block
-print*, "sig", sig, "l", l
       call advance_to_locator(nout,l,sig)
       do i=1,ntr
-print*, "sig+nint(xss(rlocator))-1", sig+nint(xss(rlocator))-1, "l", l
          call advance_to_locator(nout,l,sig+nint(xss(rlocator))-1) ! sig=jxs(7)
          call write_integer(nout,l)
          ne=nint(xss(l))
@@ -2438,7 +2430,6 @@ print*, "sig+nint(xss(rlocator))-1", sig+nint(xss(rlocator))-1, "l", l
       if (ntype.gt.0) then
 
          !--ixs arrays
-print*, "ixsa", ixsa, "l", l
          call advance_to_locator(nout,l,ixsa)
          plocator=l
          call write_integer_list(nout,l,neixs*ntype) ! IXS array (neixs values) for each IP
@@ -2460,21 +2451,7 @@ print*, "ixsa", ixsa, "l", l
             ldlwp=nint(xss(plocator+10))
             dlwp=nint(xss(plocator+11))
 
-print*, "ipt", ipt
-print*, "ntrp", ntrp
-print*, "pxs", pxs
-print*, "phn", phn
-print*, "mtrp", mtrp
-print*, "tyrp", tyrp
-print*, "lsigp", lsigp
-print*, "sigp", sigp
-print*, "landp", landp
-print*, "andp", andp
-print*, "ldlwp", ldlwp
-print*, "dlwp", dlwp
-
             !--pxs block
-print*, "pxs", pxs, "l", l
             call advance_to_locator(nout,l,pxs)
             call write_integer(nout,l)
             ne=nint(xss(l))
@@ -2482,7 +2459,6 @@ print*, "pxs", pxs, "l", l
             call write_real_list(nout,l,ne)
 
             !--phn block
-print*, "phn", phn, "l", l
             call advance_to_locator(nout,l,phn)
             call write_integer(nout,l)
             ne=nint(xss(l))
@@ -2490,30 +2466,24 @@ print*, "phn", phn, "l", l
             call write_real_list(nout,l,ne)
 
             !--mtrp block
-print*, "mtrp", mtrp, "l", l
             call advance_to_locator(nout,l,mtrp)
             call write_integer_list(nout,l,ntrp) ! MT (ntrp values)
 
             !--tyrp block
-print*, "tyrp", tyrp, "l", l
             call advance_to_locator(nout,l,tyrp)
             call write_integer_list(nout,l,ntrp) ! TYR (ntrp values)
 
             !--lsigp block
-print*, "lsigp", lsigp, "l", l
             call advance_to_locator(nout,l,lsigp)
             rlocator=l
             call write_integer_list(nout,l,ntrp) ! L (ntrp values)
 
             !--sigp block
-print*, "sigp", sigp, "l", l
             call advance_to_locator(nout,l,sigp)
             do i=1,ntrp
-print*, "sigp+nint(xss(rlocator))-1", sigp+nint(xss(rlocator))-1, "l", l
                call advance_to_locator(nout,l,sigp+nint(xss(rlocator))-1)
 
                mftype=nint(xss(l))
-print*, "mftype", mftype
                call write_integer(nout,l)              ! MFTYPE
                if (mftype.eq.13) then                  ! MF=13
                   call write_integer(nout,l)           ! IE
@@ -2535,19 +2505,15 @@ print*, "mftype", mftype
             enddo
 
             !--landp block
-print*, "landp", landp, "l", l
             call advance_to_locator(nout,l,landp)
             rlocator=l
             call write_integer_list(nout,l,ntrp)
 
             !--andp block
-print*, "andp", andp, "l", l
             call advance_to_locator(nout,l,andp)
             do i=1,ntrp
                nn=nint(xss(rlocator))                     ! relative locator position
-print*, "i", i, "nint(xss(rlocator))", nint(xss(rlocator)), "mt", nint(xss(mtrp+i-1))
                if (nn.gt.0) then
-print*, "andp+nint(xss(rlocator))-1", andp+nint(xss(rlocator))-1, "l", l
                   call advance_to_locator(nout,l,andp+nn-1)
                   ne=nint(xss(l))
                   call write_integer(nout,l)              ! NE
@@ -2556,7 +2522,6 @@ print*, "andp+nint(xss(rlocator))-1", andp+nint(xss(rlocator))-1, "l", l
                   call write_integer_list(nout,l,ne)      ! L (NE values)
                   do j=1,ne
                      nn=nint(xss(ielocator))              ! relative locator position
-print*, "andp+iabs(nint(xss(ielocator)))-1", andp+iabs(nint(xss(ielocator)))-1, "l", l
                      call advance_to_locator(nout,l,andp+iabs(nn)-1)
                      if (nn.gt.0) then                    ! 32 equiprobable bins
                         call write_real_list(nout,l,33)
@@ -2573,19 +2538,15 @@ print*, "andp+iabs(nint(xss(ielocator)))-1", andp+iabs(nint(xss(ielocator)))-1, 
             enddo
 
             !--ldlwp block
-print*, "ldlwp", ldlwp, "l", l
             call advance_to_locator(nout,l,ldlwp)
             rlocator=l
             call write_integer_list(nout,l,ntrp)
 
             !--dlwp block
-print*, "dlwp", dlwp, "l", l
             call advance_to_locator(nout,l,dlwp)
             do i=1,ntrp
                nn=nint(xss(rlocator))                     ! relative locator position
-print*, "i", i, "nint(xss(rlocator))", nint(xss(rlocator))
                if (nn.gt.0) then
-print*, "dlwp+nint(xss(rlocator))-1", dlwp+nint(xss(rlocator))-1, "l", l
                   call advance_to_locator(nout,l,dlwp+nn-1)
                   lnw=1
                   do while (lnw.ne.0)
@@ -2602,8 +2563,6 @@ print*, "dlwp+nint(xss(rlocator))-1", dlwp+nint(xss(rlocator))-1, "l", l
                      ne=nint(xss(l))
                      call write_integer(nout,l)            ! NE
                      call write_real_list(nout,l,2*ne)     ! E and P (each NE values)
-
-print*, "law", law
 
                      !--law 4
                      if (law.eq.4) then
@@ -2639,7 +2598,6 @@ print*, "law", law
                         ielocator=l
                         call write_integer_list(nout,l,ne)    ! L (NE values)
                         do j=1,ne
-print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
                            call advance_to_locator(nout,l,dlwp+nint(xss(ielocator))-1)
                            call write_integer(nout,l)         ! INTT
                            np=nint(xss(l))
@@ -2661,7 +2619,6 @@ print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
                         ielocator=l
                         call write_integer_list(nout,l,ne)    ! L (NE values)
                         do j=1,ne
-print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
                            call advance_to_locator(nout,l,dlwp+nint(xss(ielocator))-1)
                            call write_integer(nout,l)         ! INTT
                            np=nint(xss(l))
@@ -2670,7 +2627,6 @@ print*, "dlwp+nint(xss(ielocator))-1", dlwp+nint(xss(ielocator))-1, "l", l
                            oelocator=l
                            call write_integer_list(nout,l,np) ! L (NP values)
                            do k=1,np
-print*, "dlwp+nint(xss(oelocator))-1", dlwp+nint(xss(oelocator))-1, "l", l
                               call advance_to_locator(nout,l,dlwp+nint(xss(oelocator))-1)
                               call write_integer(nout,l)         ! JJ
                               nmu=nint(xss(l))
