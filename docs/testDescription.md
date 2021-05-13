@@ -305,4 +305,4 @@ This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/63/input)]
 
-Tests 63 was added as a consequence of issue [\#178](https://github.com/njoy/NJOY2016/issues/178). It verifies that setting nunx in PURR to anything other than the default value does not break downstream processing (in this case up to ACER and VIEWR). The input file is equivalent to the input file for test 35(with the exception of nunx which is set to 2).
+Tests 63 was added as a consequence of issue [\#178](https://github.com/njoy/NJOY2016/issues/178). It verifies that setting nunx in PURR to anything other than the default value does not break downstream processing (in this case up to ACER and VIEWR). The input file is equivalent to the input file for test 35 (with the exception of nunx which is set to 2).
