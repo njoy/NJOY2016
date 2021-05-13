@@ -2,11 +2,13 @@
 name: Continuous Integration
 
 # This workflow is triggered on pushes and pull requests to the repository.
-on: 
+on:
   push:
-    branches: '*'
-  pull_request: 
-    branches: 'master'
+    branches: '**'
+  pull_request:
+    branches:
+      - 'master'
+      - 'develop'
 
 jobs:
   build:
@@ -15,7 +17,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04, macos-10.15]
         build_type: [ Debug, Release ]
-        vFortran: [ gfortran-8 ]
+        vFortran: [ gfortran-9 ]
 
     steps:
     - name: which gfortran
@@ -24,13 +26,13 @@ jobs:
         ${{matrix.vFortran}} --version
     - uses: actions/checkout@v2
     - name: mkdir bin
-      run: mkdir bin 
+      run: mkdir bin
     - name: cmake
-      run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..  
+      run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..
       working-directory: ./bin
     - name: make
-      run: make -j
+      run: make -j2
       working-directory: ./bin
     - name: ctest
-      run: ctest -j
+      run: ctest -j2
       working-directory: ./bin

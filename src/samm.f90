@@ -3221,7 +3221,7 @@ contains
                     ishift(ipx,ier),&
                     iffy,eta,sinphx,cosphx,dphix,jdopha)
                   jdopha=1
-                  call pghcou(rho,lsp,bound(i,n,ier),hrx,hix,px,dpx,dsx,&
+                  call pghcou(rhof,lsp,bound(i,n,ier),hrx,hix,px,dpx,dsx,&
                     ishift(ipx,ier),iffy,eta,sinphi(i,ier),&
                     cosphi(i,ier),dphi(i,ier),jdopha)
                endif

@@ -8,5 +8,5 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/referenceTape34"
                "${CMAKE_CURRENT_BINARY_DIR}/referenceTape34" COPYONLY )
 
 add_test( NAME "Test33"
-          COMMAND ${PYTHON_EXECUTABLE} "../execute.py"
+          COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )

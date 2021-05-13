@@ -277,6 +277,7 @@ contains
 
    !--compute unresolved resonance cross-sections
    !--for all grid points, temperatures, and sigma zero values.
+   if ((nunx.eq.0).or.(nunx.gt.nunr)) nunx=nunr
    if (nunx.eq.1) nunx=2
    nstep=nunr/(nunx-1)
    if (nstep.lt.1) nstep=1
@@ -301,7 +302,7 @@ contains
       call timer(time)
       write(nsyse,'(2x,i5," of ",i5,&
             &" loops done for all temps & sig0s.",19x,f8.1,"s")')&
-            &ie,nunr,time
+            &ie,nunx,time
 
       !--write bondarenko data and probability table to scratch file.
       write(nscr) ez
@@ -358,9 +359,9 @@ contains
    call dictio(nin,0,0,d,nb,nw)
    j=0
    newmat=0
-   ncds=nsigz+nunr*(1+5*nsigz)
+   ncds=nsigz+nunx*(1+5*nsigz)
    ncds=2+(ncds-1)/6
-   nc153=(1+6*nbin)*nunr
+   nc153=(1+6*nbin)*nunx
    nc153=2+(nc153-1)/6
    do 240 i=1,nw,6
    if (newmat.gt.0) go to 220
@@ -424,15 +425,18 @@ contains
    a(l+7)=0
    a(l+8)=5
    a(l+9)=nsigz
-   a(l+10)=nsigz+nunr*(1+5*nsigz)
-   a(l+11)=nunr
+   a(l+10)=nsigz+nunx*(1+5*nsigz)
+   a(l+11)=nunx
    l=l+11
    do i=1,nsigz
       l=l+1
       a(l)=sigz(i)
    enddo
    call repoz(-nscr)
-   do ie=1,nunr
+   ie=1-nstep
+   do while (ie.lt.nunr)
+      ie=ie+nstep
+      if (ie.gt.nunr) ie=nunr
       read(nscr) ez
       read(nscr) (((tabl(i,j,k),i=1,nbin),j=1,5),k=1,ntemp)
       read(nscr) (((sigu(i,j,k),i=1,5),j=1,nsigz),k=1,ntemp)
@@ -478,79 +482,82 @@ contains
    a(n+7)=0
    a(n+8)=lssf
    a(n+9)=0
-   a(n+10)=(1+6*nbin)*nunr
-   a(n+11)=nunr
+   a(n+10)=(1+6*nbin)*nunx
+   a(n+11)=nunx
    n=n+11
    call repoz(-nscr)
-   do 320 ie=1,nunr
-   read(nscr) ez
-   read(nscr) (((tabl(i,j,k),i=1,nbin),j=1,5),k=1,ntemp)
-   read(nscr) (((sigu(i,j,k),i=1,5),j=1,nsigz),k=1,ntemp)
-   n=n+1
-   a(n)=sigfig(eunr(ie),7,0)
-   n1=n
-   do i=1,5
+   ie=1-nstep
+   do while (ie.lt.nunr)
+      ie=ie+nstep
+      if (ie.gt.nunr) ie=nunr
+      read(nscr) ez
+      read(nscr) (((tabl(i,j,k),i=1,nbin),j=1,5),k=1,ntemp)
+      read(nscr) (((sigu(i,j,k),i=1,5),j=1,nsigz),k=1,ntemp)
+      n=n+1
+      a(n)=sigfig(eunr(ie),7,0)
+      n1=n
+      do i=1,5
+         do j=1,nbin
+            n=n+1
+            a(n)=sigfig(tabl(j,i,it),7,0)
+         enddo
+      enddo
       do j=1,nbin
          n=n+1
-         a(n)=sigfig(tabl(j,i,it),7,0)
+         a(n)=0
       enddo
-   enddo
-   do j=1,nbin
-      n=n+1
-      a(n)=0
-   enddo
-   do i=2,5
+      do i=2,5
+         do j=1,nbin
+            l=n1+j+nbin*(i-1)
+            if (lssf.eq.1) then
+               if (sigu(i-1,1,1).ne.0) then
+                  a(l)=a(l)/sigu(i-1,1,1)
+               else
+                  a(l)=1
+               endif
+            endif
+            a(l)=sigfig(a(l),7,0)
+         enddo
+      enddo
       do j=1,nbin
-         l=n1+j+nbin*(i-1)
-         if (lssf.eq.1) then
-            if (sigu(i-1,1,1).ne.0) then
-               a(l)=a(l)/sigu(i-1,1,1)
-            else
+         l=n1+j+5*nbin
+         if (ihave.eq.1) then
+            if (lssf.eq.1) then
                a(l)=1
+            else
+               a(l)=heat(1,ie,it)/sigu(1,1,1)
+               endif
+         else if (ihave.eq.2) then
+            a(l)=a(l)+(heat(1,ie,it)-heat(2,ie,it)-heat(3,ie,it)-heat(4,ie,it))
+            h=heat(2,ie,it)
+            if (lssf.eq.1) then
+               h=h*a(n1+j+2*nbin)
+            else if (sigu(2,1,1).ne.zero) then
+               h=h*a(n1+j+2*nbin)/sigu(2,1,1)
             endif
+            a(l)=a(l)+h
+            h=heat(3,ie,it)
+            if (lssf.eq.1) then
+               h=h*a(n1+j+3*nbin)
+            else if (sigu(3,1,1).ne.zero) then
+               h=h*a(n1+j+3*nbin)/sigu(3,1,1)
+            endif
+            a(l)=a(l)+h
+            h=heat(4,ie,it)
+            if (lssf.eq.1) then
+               h=h*a(n1+j+4*nbin)
+            elseif (sigu(4,1,1).ne.zero) then
+               h=h*a(n1+j+4*nbin)/sigu(4,1,1)
+            endif
+            a(l)=a(l)+h
+            if (a(n1+j+nbin).ne.zero) a(l)=a(l)/a(n1+j+nbin)
+            if (lssf.eq.1) a(l)=a(l)/heat(1,ie,it)
          endif
-         a(l)=sigfig(a(l),7,0)
       enddo
    enddo
-   do j=1,nbin
-      l=n1+j+5*nbin
-      if (ihave.eq.1) then
-         if (lssf.eq.1) then
-            a(l)=1
-         else
-            a(l)=heat(1,ie,it)/sigu(1,1,1)
-            endif
-      else if (ihave.eq.2) then
-         a(l)=a(l)+(heat(1,ie,it)-heat(2,ie,it)-heat(3,ie,it)-heat(4,ie,it))
-         h=heat(2,ie,it)
-         if (lssf.eq.1) then
-            h=h*a(n1+j+2*nbin)
-         else if (sigu(2,1,1).ne.zero) then
-            h=h*a(n1+j+2*nbin)/sigu(2,1,1)
-         endif
-         a(l)=a(l)+h
-         h=heat(3,ie,it)
-         if (lssf.eq.1) then
-            h=h*a(n1+j+3*nbin)
-         else if (sigu(3,1,1).ne.zero) then
-            h=h*a(n1+j+3*nbin)/sigu(3,1,1)
-         endif
-         a(l)=a(l)+h
-         h=heat(4,ie,it)
-         if (lssf.eq.1) then
-            h=h*a(n1+j+4*nbin)
-         elseif (sigu(4,1,1).ne.zero) then
-            h=h*a(n1+j+4*nbin)/sigu(4,1,1)
-         endif
-         a(l)=a(l)+h
-         if (a(n1+j+nbin).ne.zero) a(l)=a(l)/a(n1+j+nbin)
-         if (lssf.eq.1) a(l)=a(l)/heat(1,ie,it)
-      endif
-   enddo
-  320 continue
    call contio(0,nout,0,a(iscr),nb,nw)
    lstart=iscr+6
-   nwds=6*nbin*nunr
+   nwds=6*nbin*nunx
    nw=nwds
    if (nw.gt.npage+6) nw=npage+6
    call listio(0,nout,0,a(lstart),nb,nw)
@@ -574,7 +581,7 @@ contains
    !--write report of calculation
    call timer(time)
    write(nsyso,'(/'' generated cross sections at '',i3,&
-     &'' points'',30x,f8.1,''s'')') nunr,time
+     &'' points'',30x,f8.1,''s'')') nunx,time
    deallocate(sb)
    go to 110
 
@@ -2895,4 +2902,3 @@ contains
    end function rann
 
 end module purm
-
