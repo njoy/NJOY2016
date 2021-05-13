@@ -1,6 +1,12 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.64](https://github.com/njoy/NJOY2016/pull/xxx)
+This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library and the mixed mode elastic scattering ENDF format introduced in the ENDF format in November 2020.
+
+The following is an overview of the major changes made to NJOY for this update:
+  - fixed an issue with MODER not being able to handle MF28 (atomic relaxation data) when converting ASCII to binary
+
 ## [NJOY2016.63](https://github.com/njoy/NJOY2016/pull/193)
 This fixes a bug in ERRORR when using the `999` option. When using this option, the input and output tapes are not closed in Fortran. This causes problems in NJOY21 as the output from ERRORR isn't completely written to disk before the next module starts. This update simply closes files `nitape` and `notape` which resolves the issue.
 
