@@ -1,6 +1,7 @@
 module aceth
    ! provides thermal ace stuff
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -22,8 +23,6 @@ module aceth
    integer::itie,itix,itxe,itce,itcx,itca,jxsd(26)
 
    ! body of the ace data
-   integer,parameter::nxss=9000000
-   real(kr)::xss(nxss)
    integer::nei
    real(kr),dimension(5000)::wt
    integer,dimension(5000)::ndp
@@ -79,6 +78,7 @@ contains
    !--process the thermal data
    nxsd=0
    jxsd=0
+   xss=0
    ninmax=500000
    call openz(nin,0)
    nscr=iabs(nscr)
@@ -2037,7 +2037,8 @@ contains
    !-------------------------------------------------------------------
    ! Write thermal ACE data to output and directory files.
    !-------------------------------------------------------------------
-   use util ! provides openz,closz
+   use util  ! provides openz,closz,error
+   use acecm ! provides write routines
    ! externals
    integer::itype,nout,ndir,mcnpx
    integer::izn(16)
@@ -2169,32 +2170,4 @@ contains
    return
    end subroutine throut
 
-   subroutine typen(l,nout,iflag)
-   !-------------------------------------------------------------------
-   ! Write an integer or a real number to a Type-1 ACE file,
-   ! or (if nout=0) convert real to integer for type-3 output,
-   ! or (if nout=1) convert integer to real for type-3 input.
-   ! Use iflag.eq.1 to write an integer (i20).
-   ! Use iflag.eq.2 to write a real number (1pe20.11).
-   ! Use iflag.eq.3 to write partial line at end of file.
-   !-------------------------------------------------------------------
-   ! externals
-   integer::l,nout,iflag
-   ! internals
-   integer::i,j
-   character(20)::hl(4)
-   save hl,i
-
-   if (iflag.eq.3.and.nout.gt.1.and.i.lt.4) then
-      write(nout,'(4a20)') (hl(j),j=1,i)
-   else
-      i=mod(l-1,4)+1
-      if (iflag.eq.1) write(hl(i),'(i20)') nint(xss(l))
-      if (iflag.eq.2) write(hl(i),'(1p,e20.11)') xss(l)
-      if (i.eq.4) write(nout,'(4a20)') (hl(j),j=1,i)
-   endif
-   return
-   end subroutine typen
-
 end module aceth
-

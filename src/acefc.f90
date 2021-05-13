@@ -1,6 +1,7 @@
 module acefc
    ! provides fast continuous options for acer
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -80,10 +81,6 @@ module acefc
 
    ! storage for ptleg data
    real(kr),dimension(:),allocatable::xat
-
-   ! main container array for fast continuous data
-   integer,parameter::nxss=20000000
-   real(kr)::xss(nxss)
 
 contains
 
@@ -12797,7 +12794,8 @@ contains
    !-------------------------------------------------------------------
    ! Write ACE data out in desired format.
    !-------------------------------------------------------------------
-   use util ! provides openz,closz,error
+   use util  ! provides openz,closz,error
+   use acecm ! provides write routines
    ! externals
    integer::itype,nace,ndir,mcnpx
    character(70)::hk
@@ -12895,101 +12893,6 @@ contains
    return
    end subroutine aceout
 
-   subroutine advance_to_locator(nout,l,locator)
-   !-------------------------------------------------------------------
-   ! Advance to the next locator position from the current position l.
-   ! If the current position is not equal to the locator position, the
-   ! function will advance l until it is equal to the locator position.
-   ! It will write the values in the xss array while advancing to the
-   ! new position.
-   !-------------------------------------------------------------------
-   use util
-   ! externals
-   integer::nout,l,locator
-   ! internals
-   character(66)::text
-
-   if (l.lt.locator) then
-      write(text,'(''expected xss index ('',i6,'') greater than '',&
-                   &''current index ('',i6,'')'')') locator, l
-      call mess('change',text,'xss array was padded accordingly')
-      do while (l.lt.locator)
-         call typen(l,nout,1)
-         l=l+1
-      enddo
-   else if (l.gt.locator) then
-      write(text,'(''expected xss index ('',i6,'') less than '',&
-                   &''current index ('',i6,'')'')') locator, l
-      call error('change',text,'this may be a serious problem')
-   endif
-
-   return
-   end subroutine advance_to_locator
-
-   subroutine write_integer(nout,l)
-   !-------------------------------------------------------------------
-   ! Write an integer value at the position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l
-
-   call typen(l,nout,1)
-   l=l+1
-
-   return
-   end subroutine write_integer
-
-   subroutine write_real(nout,l)
-   !-------------------------------------------------------------------
-   ! Write a real value at the position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l
-
-   call typen(l,nout,2)
-   l=l+1
-
-   return
-   end subroutine write_real
-
-   subroutine write_integer_list(nout,l,n)
-   !-------------------------------------------------------------------
-   ! Write n integer values from position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l,n
-   ! internals
-   integer::i
-
-   do i=1,n
-      call typen(l,nout,1)
-      l=l+1
-   enddo
-
-   return
-   end subroutine write_integer_list
-
-   subroutine write_real_list(nout,l,n)
-   !-------------------------------------------------------------------
-   ! Write n real values from position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l,n
-   ! internals
-   integer::i
-
-   do i=1,n
-      call typen(l,nout,2)
-      l=l+1
-   enddo
-
-   return
-   end subroutine write_real_list
-
    subroutine change(nout)
    !-------------------------------------------------------------------
    ! Change ACE data fields from integer to real or vice versa.
@@ -13000,7 +12903,8 @@ contains
    ! If nout.eq.1, integer fields are changed to real in memory
    !    (fields are assumed to contain mixed reals and integers).
    !-------------------------------------------------------------------
-   use util ! provides error
+   use util  ! provides openz,closz,error
+   use acecm ! provides write routines
    ! externals
    integer::nout
    ! internals
@@ -13018,6 +12922,7 @@ contains
    l=1
 
    !--write esz block
+   call advance_to_locator(nout,l,esz)
    call write_real_list(nout,l,5*nes)
 
    !--write nu block
@@ -13839,6 +13744,8 @@ contains
                         enddo
                         ielocator=ielocator+1
                      enddo
+
+                   ! unknown law
                    else
                       write(text,'(''Undefined law for dlwh block: '',i3)') law
                       call error('change',text,' ')
@@ -13861,39 +13768,13 @@ contains
    return
    end subroutine change
 
-   subroutine typen(l,nout,iflag)
-   !-------------------------------------------------------------------
-   ! Write an integer or a real number to a Type-1 ACE file,
-   ! or (if nout=0) convert real to integer for type-3 output,
-   ! or (if nout=1) convert integer to real for type-3 input.
-   ! Use iflag.eq.1 to write an integer (i20).
-   ! Use iflag.eq.2 to write a real number (1pe20.11).
-   ! Use iflag.eq.3 to write partial line at end of file.
-   !-------------------------------------------------------------------
-   ! externals
-   integer::l,nout,iflag
-   ! internals
-   integer::i,j
-   character(20)::hl(4)
-   save hl,i
-
-   if (iflag.eq.3.and.nout.gt.1.and.i.lt.4) then
-      write(nout,'(4a20)') (hl(j),j=1,i)
-   else
-      i=mod(l-1,4)+1
-      if (iflag.eq.1) write(hl(i),'(i20)') nint(xss(l))
-      if (iflag.eq.2) write(hl(i),'(1p,e20.11)') xss(l)
-      if (i.eq.4) write(nout,'(4a20)') (hl(j),j=1,i)
-   endif
-   return
-   end subroutine typen
-
    subroutine acefix(nin,itype,nout,ndir,iprint,nplot,suff,&
      nxtra,hk,izn,awn,mcnpx)
    !-------------------------------------------------------------------
    ! Print or edit ACE files.
    !-------------------------------------------------------------------
-   use util ! provides openz,closz,error
+   use util  ! provides openz,closz
+   use acecm ! provides write routines
    ! externals
    integer::nin,itype,nout,ndir,iprint,nplot,nxtra,mcnpx
    real(kr)::suff
