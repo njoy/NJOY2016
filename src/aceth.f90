@@ -2045,7 +2045,8 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::l,ne,n,nexe,nern,lrec,ll,nn,i
+   integer::l,ne,n,nexe,nern,lrec,ll,nn,i,nprime
+   integer::locator  ! locator index
    integer::ner=1
    integer::nbw=1
 
@@ -2071,52 +2072,60 @@ contains
         len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
         itie,itix,itxe,itce,itcx,itca,jxsd
 
+print*, 'len2',len2
+print*, 'idpni',idpni
+print*, 'nil',nil
+print*, 'nieb',nieb
+print*, 'idpnc',idpnc
+print*, 'ncl',ncl
+print*, 'ifeng',ifeng
+print*, 'nxsd',nxsd
+print*, 'itie',itie
+print*, 'itix',itix
+print*, 'itxe',itxe
+print*, 'itce',itce
+print*, 'itcx',itcx
+print*, 'itca',itca
+
       !--itie block
-      l=itie
+      l=1
+print*, 'advance to locator', l, itie
+      call advance_to_locator(nout,l,itie)
       ne=nint(xss(l))
-      call typen(l,nout,1)
-      l=l+1
-      n=2*ne
-      do i=1,n
-         call typen(l,nout,2)
-         l=l+1
-      enddo
+      call write_integer(nout,l)            ! NE
+      call write_real_list(nout,l,2*ne)     ! E (NE values), xs (NE values)
 
       !--itxe block
-      l=itxe
-      if (ifeng.le.1) then
-         n=ne*nieb*(nil+2)
-         do i=1,n
-            call typen(l,nout,2)
-            l=l+1
-         enddo
+print*, 'advance to locator', l, itxe
+      call advance_to_locator(nout,l,itxe)
+      if (ifeng.le.1) then                  ! equal probable cosine or discrete cosine distributions
+         call write_real_list(nout,l,ne*nieb*(nil+2)) ! NE lists of NIEB*(NMU+1)=NIEB*(NIL+2) since NMU=NIL+1
       else
-         n=2*ne
+         locator=1
+         call write_integer_list(nout,l,2*ne) ! L (NE values), Nprime (NE values)
          do i=1,ne
-            n=n+nint(xss(l+ne+i-1))*(nil+2)
-         enddo
-         do i=1,n
-            call typen(l,nout,2)
-            l=l+1
+print*, 'advance to locator', l, nint(xss(itxe+locator-1))+1
+            call advance_to_locator(nout,l,nint(xss(itxe+locator-1))+1)
+            nprime=nint(xss(itxe+ne+i-1))
+            call write_real_list(nout,l,nprime*(nil+2)) ! NPRIME*(NMU+3)=NPRIME*(NIL+2) since NMU=NIL-1
+            locator=locator+1
          enddo
       endif
 
       !--itce block
       if (itce.ne.0) then
-         l=itce
+print*, 'advance to locator', l, itce
+         call advance_to_locator(nout,l,itce)
          ne=nint(xss(l))
          nexe=ne
-         call typen(l,nout,1)
-         l=l+1
-         n=2*ne
-         do i=1,n
-            call typen(l,nout,2)
-            l=l+1
-         enddo
+         call write_integer(nout,l)            ! NE
+         call write_real_list(nout,l,2*ne)     ! E (NE values), P (NE values)
       endif
 
       !--itca block
       if (itce.ne.0.and.ncl.ne.-1) then
+print*, 'advance to locator', l, itca
+         call advance_to_locator(nout,l,itca)
          n=nexe*(ncl+1)
          do i=1,n
             call typen(l,nout,2)
