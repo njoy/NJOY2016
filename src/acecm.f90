@@ -30,7 +30,7 @@ contains
      '(n,2n)iso ','(n,abs)   ','(n,n*)p   ','(n,n*)2a  ','(n,2n)2a  ',&
      '(n,x)     ','(n,n*)d   ','(n,n*)t   ','(n,n*)he3 ','(n,n*)d2a ',&
      '(n,n*)t2a ','(n,4n)    ','(n,3nf)   ','(n,x)     ','(n,x)     ',&
-     '(n,2np)   ','(n,3np)   ','(n,x)     ','(n,2np)   ','(n,npa)   ',&
+     '(n,2np)   ','(n,3np)   ','(n,x)     ','(n,n2p)   ','(n,npa)   ',&
      '(n,2/2*1) ','(n,2/2*2) ','(n,2/2*3) ','(n,2/2*4) ','(n,n*0)   ',& !50
      '(n,n*1)   ','(n,n*2)   ','(n,n*3)   ','(n,n*4)   ','(n,n*5)   ',&
      '(n,n*6)   ','(n,n*7)   ','(n,n*8)   ','(n,n*9)   ','(n,n*10)  ',&
@@ -654,7 +654,7 @@ contains
 
    indx=10
    if (mcnpx.gt.0) indx=12
- 
+
    if (lenhz.lt.indx) then
       idiff=indx-lenhz
       do i=indx,indx-lenhz+1,-1            !push the string to the right so
@@ -667,4 +667,3 @@ contains
    end subroutine newsuff
 
 end module acecm
-
