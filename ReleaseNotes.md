@@ -7,7 +7,7 @@ This constitutes a major update of NJOY to accommodate the latest IAEA photonucl
 The following is an overview of the major changes made to NJOY for this update:
   - additional verification to ACE files (locator positions, etc.) when they are written out has been generalised to all ACE types (previous this was only available for the continuous energy ACE files)
   - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=4)
-  - thermal scattering ACE files now support mixed mode elatic scattering (both coherent and incoherent elastic scattering are used), with appropriate updates to THERMR and MODER
+  - thermal scattering ACE files now support mixed mode elastic scattering (both coherent and incoherent elastic scattering are used), with appropriate updates to THERMR and MODER
 
 In addition, the following minor issues were fixed as well:
   - fixed a typo in a reaction name printed by the ACER output (issue #195)
