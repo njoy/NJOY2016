@@ -2,9 +2,10 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.64](https://github.com/njoy/NJOY2016/pull/xxx)
-This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library and the mixed mode elastic scattering ENDF format introduced in the ENDF format in November 2020.
+This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
 
 The following is an overview of the major changes made to NJOY for this update:
+  - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=4)
 
 In addition, the following minor issues were fixed as well:
   - fixed a typo in a reaction name printed by the ACER output (issue #195)
