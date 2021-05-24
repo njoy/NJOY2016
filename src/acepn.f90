@@ -531,6 +531,20 @@ contains
                        nr6(ii)=nr6(ii)+1
                   enddo
 
+                  ! read subsections until we're back at the right one
+                  ir=1
+                  do while (ir.lt.ik)
+                     ir=ir+1
+                     call tab1io(nin,0,0,scr,nb,nw)
+                     law=nint(scr(4))
+                     jscr=1+nw
+                     do while (nb.ne.0)
+                        call moreio(nin,0,0,scr(jscr),nb,nw)
+                        jscr=jscr+nw
+                     enddo
+                     call skip6(nin,0,0,scr,law)
+                  enddo
+
                !--this law is not currently handled
                else
                   call mess('acephn','file 6 law not coded',' ')
@@ -3477,4 +3491,3 @@ contains
    end subroutine ascll
 
 end module acepn
-
