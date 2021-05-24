@@ -931,7 +931,7 @@ contains
                      scr(llht+5)=ne
                      scr(llht+6)=ne
                      scr(llht+7)=2
-                     if (izarec.eq.0) then
+                     if (izarec.eq.-1) then
                         awpp=awp
                      else
                         awpp=awprec
@@ -941,7 +941,7 @@ contains
                         call listio(nin,0,0,scr(ll),nb,nw)
                         lang=nint(scr(lld+2))
                         if (lang.eq.0) then
-                           if (izarec.ne.0) then
+                           if (izarec.ne.-1) then
                               nl=nint(scr(lld+5))
                               do iil=1,nl
                                  if (mod(iil,2).eq.1) then
