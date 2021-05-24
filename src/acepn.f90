@@ -888,8 +888,8 @@ contains
 
                   !--special steps for two-body recoil
                   !--back up to the corresponding law=2 distr.
-                  izarec=0
-                  awprec=0
+                  izarec=-1
+                  awprec=-1
                   if (izap.eq.ip.and.law.eq.4) then
                      izarec=izap
                      awprec=awp
