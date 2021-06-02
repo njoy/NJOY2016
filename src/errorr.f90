@@ -1767,7 +1767,7 @@ contains
    integer::mat2,mt2,nlg1,nlg2,ld,ld1,izap,izero
    real(kr)::eg,xcv,time,de,flux,dne
    character(70)::strng,strng2
-   integer,parameter::locm=30
+   integer,parameter::locm=100
    integer::loc(locm)
    real(kr),dimension(:),allocatable::sig1,scr2,scr
    real(kr),dimension(:),allocatable::alp1,alp2
@@ -1853,6 +1853,7 @@ contains
    call findf(matd,mfcov,0,nendf)
   140 continue
    call contio(nendf,0,0,scr,nb,nw)
+print*, math, mfh, mth
    if (math.lt.1) go to 700
    if (math.ne.matd) go to 700
    if (mth.eq.0) go to 140
@@ -1943,6 +1944,7 @@ contains
 
    !--loop over different covariance matrices for this reaction
    do 650 il=1,nl
+print*, "looping ", il, nl
    if (mfcov.eq.35) then
       mat1=0
       mt1=mth
@@ -1961,8 +1963,15 @@ contains
          mt1=l2h
       endif
       if (mt1.eq.0) call error('covcal','illegal mt1=0.',' ')
-      nc=n1h
-      ni=n2h
+      if (mfcov.eq.34) then
+         nc=0
+         ni=n2h
+      else
+         nc=n1h
+         ni=n2h
+      endif
+print*, "C1, C2, L1, L2, N1, N2", c1h, c2h, l1h, l2h, n1h, n2h
+print*, "nc, ni ", nc, ni
    endif
    if (ni.gt.locm) call error('covcal','storage exceeded in loc.',' ')
    iok=1
@@ -2021,6 +2030,7 @@ contains
    loc(li)=l
    call listio(nendf,0,0,scr(l),nb,nw)
    np=n1h
+   print*, "np", np
    if (l2h.eq.6) scr(l+2)=(n1h-1)/n2h
    scr(l+4)=ltyi
    l=l+nw
@@ -2030,6 +2040,7 @@ contains
       call moreio(nendf,0,0,scr(l),nb,nw)
       l=l+nw
    enddo
+   print*, "list ", scr(loc(li)+5+1), scr(loc(li)+5+2), "...", scr(loc(li)+5+np-1), scr(loc(li)+5+np)
    locli=loc(li)+5
    if (mfcov.eq.35) then
       call sumchk(scr(loc(li)))
@@ -2042,7 +2053,10 @@ contains
   320 continue
    if (iok.eq.0) go to 600
    if (mfcov.eq.34) then
-      if (ld.gt.legord.or.ld1.gt.legord) go to 650
+      if (ld.gt.legord.or.ld1.gt.legord) then
+         print*, "skipping to the end of the loop"
+         go to 650
+      endif
    endif
 
    !--retrieve sigma for mt1, either from ngout or sig.
