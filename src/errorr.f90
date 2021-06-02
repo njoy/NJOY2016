@@ -2051,7 +2051,10 @@ print*, "nc, ni ", nc, ni
    enddo
    if (li.lt.ni) go to 290
   320 continue
-   if (iok.eq.0) go to 600
+   if (iok.eq.0) then
+      print*, "going to 600"
+      go to 600
+   endif
    if (mfcov.eq.34) then
       if (ld.gt.legord.or.ld1.gt.legord) then
          print*, "skipping to the end of the loop"
@@ -7216,6 +7219,7 @@ print*, "nc, ni ", nc, ni
 
    !--loop over list records
   220 continue
+print*, "looping over list"
    call listio(nscr1,0,0,scr,nb,nwds)
    if (mfcov.eq.35) then
       if (ifissp-1.ne.nm) then
@@ -7231,9 +7235,11 @@ print*, "nc, ni ", nc, ni
       ld=nint(c1h)
       ld1=nint(c2h)
       ld0=ld*100+ld1
+print*, "ld, ld1, ldlst", ld, ld1, ldlst
       if (ld0.ne.ldlst) k=1
       if (isd.ne.1) go to 225
       if (ld0.ne.ldlst) nmd=nmd+1
+print*, "nmd, nmt1d", nmd, nmt1d
       if (mt1.eq.mts(ixp).and.mat1.eq.mats(ixp)) go to 225
       write(strng,'(''ld='',i3,''  ld1='',i3,''  mt1='',i3)') ld,ld1,mt1
       call error('covout','illegal condition for sad.',strng)
