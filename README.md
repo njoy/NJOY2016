@@ -10,7 +10,7 @@ The documentation for NJOY2016 is found in the [NJOY2016-manual](https://github.
 Please refer to the [Release Notes](ReleaseNotes.md) to see what has changed from one version to the next.
 
 ## Installation
-Instructions for the installation of NJOY2016 are found on our page, [Obtaining and Installing NJOY](https://njoy.github.io/Build/index.html).
+Instructions for the installation of NJOY2016 are found on our page, [Obtaining and Installing NJOY](https://docs.njoy21.io/install.html).
 
 ## Modules
 +  `NJOY` directs the flow of data through the other modules and contains a library of common functions and subroutines used by the other modules.
