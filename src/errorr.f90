@@ -1958,18 +1958,15 @@ print*, "looping ", il, nl
          mt1=mt2
          ld=l1h
          ld1=l2h
-      else
-         mat1=l1h
-         mt1=l2h
-      endif
-      if (mt1.eq.0) call error('covcal','illegal mt1=0.',' ')
-      if (mfcov.eq.34) then
          nc=0
          ni=n2h
       else
+         mat1=l1h
+         mt1=l2h
          nc=n1h
          ni=n2h
       endif
+      if (mt1.eq.0) call error('covcal','illegal mt1=0.',' ')
 print*, "C1, C2, L1, L2, N1, N2", c1h, c2h, l1h, l2h, n1h, n2h
 print*, "nc, ni ", nc, ni
    endif
