@@ -1,6 +1,33 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.65](https://github.com/njoy/NJOY2016/pull/xxx)
+This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library and the mixed mode elastic scattering ENDF format introduced in the ENDF format in November 2020.
+
+The following is an overview of the major changes made to NJOY for this update:
+
+In addition, the following minor issues were fixed as well:
+  - fixed a typo in a reaction name printed by the ACER output (issue #195)
+
+## [NJOY2016.64](https://github.com/njoy/NJOY2016/pull/202)
+This fixes a bug in ACER when producing photonuclear ACE files using some TENDL2019 evaluations. The use of LAW=4 in MF6 of these evaluations lead to corrupted ACE files related to incorrect logic in counting secondary particle producing reactions.
+
+This release addresses issue [\#201](https://github.com/njoy/NJOY2016/issues/201).
+
+## [NJOY2016.63](https://github.com/njoy/NJOY2016/pull/193)
+This fixes a bug in ERRORR when using the `999` option. When using this option, the input and output tapes are not closed in Fortran. This causes problems in NJOY21 as the output from ERRORR isn't completely written to disk before the next module starts. This update simply closes files `nitape` and `notape` which resolves the issue.
+
+In addition, some logic statements in the GROUPR conver and ACER convr subroutines have been corrected to fix failures in the test
+suite when building in Debug mode.
+
+## [NJOY2016.62](https://github.com/njoy/NJOY2016/pull/191)
+This adds a number of changes to NJOY2016 contributed by Toshihiko Kawano, Bob McFarlane, IAEA and CIEMAT. In particular, the following changes were made:
+  - fixed an issue in PURR when nunx is not set to the default value (when nunx is set to anything else but 0 or the number of energy points in the unresolved energy region, purr will now properly calculate the probability tables for the given number of tables spread out over the entire unresolved resonance region)
+  - fixed an issue in RECONR where the wrong channel radius was used for the calculation of the phase shift
+  - array sizes were increased
+  - additional allocated arrays are now deallocated at the end of the subroutine in which they were created
+  - added consistency checking for probability tables in ACER for continuous energy libraries
+
 ## [NJOY2016.61](https://github.com/njoy/NJOY2016/pull/140)
 This updates the physical constants used in NJOY2016 to the CODATA2018 values recommended in the [ENDF-6 Formats Manual](https://www.nndc.bnl.gov/csewg/docs/endf-manual.pdf). The manual was updated through a format proposal at CSEWG and merged in the official repository in commit [28aca81c](https://git.nndc.bnl.gov/endf/format/endf6man/-/commit/28aca81c23d96ed783efde7f3759477972040efb).
 

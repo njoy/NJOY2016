@@ -432,6 +432,8 @@ contains
          goto 1000
       else
          call covadd(iadd,iaddmt,5,nitape,notape)
+         call closz(nitape)
+         call closz(notape)
          return
       endif
       call error('errorr','errorr in 999 option',' ')
