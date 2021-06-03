@@ -1853,7 +1853,6 @@ contains
    call findf(matd,mfcov,0,nendf)
   140 continue
    call contio(nendf,0,0,scr,nb,nw)
-print*, math, mfh, mth
    if (math.lt.1) go to 700
    if (math.ne.matd) go to 700
    if (mth.eq.0) go to 140
@@ -1944,7 +1943,6 @@ print*, math, mfh, mth
 
    !--loop over different covariance matrices for this reaction
    do 650 il=1,nl
-print*, "looping ", il, nl
    if (mfcov.eq.35) then
       mat1=0
       mt1=mth
@@ -1967,8 +1965,6 @@ print*, "looping ", il, nl
          ni=n2h
       endif
       if (mt1.eq.0) call error('covcal','illegal mt1=0.',' ')
-print*, "C1, C2, L1, L2, N1, N2", c1h, c2h, l1h, l2h, n1h, n2h
-print*, "nc, ni ", nc, ni
    endif
    if (ni.gt.locm) call error('covcal','storage exceeded in loc.',' ')
    iok=1
@@ -2027,7 +2023,6 @@ print*, "nc, ni ", nc, ni
    loc(li)=l
    call listio(nendf,0,0,scr(l),nb,nw)
    np=n1h
-   print*, "np", np
    if (l2h.eq.6) scr(l+2)=(n1h-1)/n2h
    scr(l+4)=ltyi
    l=l+nw
@@ -2037,7 +2032,6 @@ print*, "nc, ni ", nc, ni
       call moreio(nendf,0,0,scr(l),nb,nw)
       l=l+nw
    enddo
-   print*, "list ", scr(loc(li)+5+1), scr(loc(li)+5+2), "...", scr(loc(li)+5+np-1), scr(loc(li)+5+np)
    locli=loc(li)+5
    if (mfcov.eq.35) then
       call sumchk(scr(loc(li)))
@@ -2048,15 +2042,9 @@ print*, "nc, ni ", nc, ni
    enddo
    if (li.lt.ni) go to 290
   320 continue
-   if (iok.eq.0) then
-      print*, "going to 600"
-      go to 600
-   endif
+   if (iok.eq.0) go to 600
    if (mfcov.eq.34) then
-      if (ld.gt.legord.or.ld1.gt.legord) then
-         print*, "skipping to the end of the loop"
-         go to 650
-      endif
+      if (ld.gt.legord.or.ld1.gt.legord)  go to 650
    endif
 
    !--retrieve sigma for mt1, either from ngout or sig.
@@ -7216,7 +7204,6 @@ print*, "nc, ni ", nc, ni
 
    !--loop over list records
   220 continue
-print*, "looping over list"
    call listio(nscr1,0,0,scr,nb,nwds)
    if (mfcov.eq.35) then
       if (ifissp-1.ne.nm) then
@@ -7232,11 +7219,9 @@ print*, "looping over list"
       ld=nint(c1h)
       ld1=nint(c2h)
       ld0=ld*100+ld1
-print*, "ld, ld1, ldlst", ld, ld1, ldlst
       if (ld0.ne.ldlst) k=1
       if (isd.ne.1) go to 225
       if (ld0.ne.ldlst) nmd=nmd+1
-print*, "nmd, nmt1d", nmd, nmt1d
       if (mt1.eq.mts(ixp).and.mat1.eq.mats(ixp)) go to 225
       write(strng,'(''ld='',i3,''  ld1='',i3,''  mt1='',i3)') ld,ld1,mt1
       call error('covout','illegal condition for sad.',strng)
