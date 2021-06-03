@@ -2044,7 +2044,7 @@ contains
   320 continue
    if (iok.eq.0) go to 600
    if (mfcov.eq.34) then
-      if (ld.gt.legord.or.ld1.gt.legord)  go to 650
+      if (ld.gt.legord.or.ld1.gt.legord) go to 650
    endif
 
    !--retrieve sigma for mt1, either from ngout or sig.
