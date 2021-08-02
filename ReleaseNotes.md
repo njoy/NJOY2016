@@ -10,6 +10,7 @@ In addition, the following minor issues were fixed as well:
   - fixed a typo in a reaction name printed by the ACER output (issue #195)
   - fixed a crash in ERRORR using ENDF/B-VIII.0 U235 for MF34 covariance data (issues #122 and #203)
   - increased the size of an array when processing photonuclear ACE files (issue #204)
+  - extended the CLAW (iwt=9,10) weight function to cover 1e-5 -- 2e7 eV
 
 Notes:
   - While the second fix no longer results in a crash of NJOY, the resulting covariance matrix is not correct since only the first subsubsection is added to the output (NJOY still calculates the matrices for each subsubsection - see issue #205)
