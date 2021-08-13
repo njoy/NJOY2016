@@ -6,6 +6,7 @@ This constitutes a major update of NJOY to accommodate the latest IAEA photonucl
 
 The following is an overview of the major changes made to NJOY for this update:
   - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=4)
+  - Some photonuclear libraries use MF6/MT18 but with a neutron multiplicity equal to 1 instead of nubar. A warning is now printed when this is encountered and the multiplicity is replaced with the appropriate nubar data.
 
 In addition, the following minor issues were fixed as well:
   - fixed a typo in a reaction name printed by the ACER output (issue #195)
