@@ -16899,14 +16899,14 @@ newpath
 (\() show
     94.32   304.88 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
-(n) show
-    94.32   316.89 moveto
+(z) show
+    94.32   315.68 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (,) show
-    94.32   322.89 moveto
+    94.32   321.68 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (x) show
-    94.32   333.69 moveto
+    94.32   332.48 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
 stroke

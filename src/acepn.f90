@@ -42,7 +42,7 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::nin,nb,nw,nwscr,nx,mtx,ielas,mf4,mf6,mt452,mt456
+   integer::nin,nb,nw,nwscr,nx,mtx,ielas,mf4,mf6,mt452,mt456,mtxnu
    integer::mt103,mt104,mt105,mt106,mt107
    integer::i,mfd,mtd,l,mttot,idis,nex,nexc,ir,j,idone,nnex,n
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
@@ -172,15 +172,30 @@ contains
    enddo
 
    !--save the nubar tabulation, if present
+   mtxnu=0
    if (mt452.eq.1) then
       call findf(matd,1,452,nin)
       call contio(nin,0,0,scr,nb,nw)
+      ! if polynomial representation is used, we will need to linearise
+      ! for now: error out and wait for this to come up to actually implement it
+      if (scr(4).eq.1) then
+        call error('acephn','mf=1/mt=452 uses polynomial representation.',&
+        'this is currently unsupported for photonuclear ACE files.')
+      endif
       call tab1io(nin,0,0,fnubar,nb,nw)
+      mtxnu=452
    endif
    if (mt456.eq.1) then
       call findf(matd,1,456,nin)
       call contio(nin,0,0,scr,nb,nw)
+      ! if polynomial representation is used, we will need to linearise
+      ! for now: error out and wait for this to come up to actually implement it
+      if (scr(4).eq.1) then
+        call error('acephn','mf=1/mt=456 uses polynomial representation.',&
+        'this is currently unsupported for photonuclear ACE files.')
+      endif
       call tab1io(nin,0,0,fnubar,nb,nw)
+      mtxnu=456
    endif
 
    !--locate and store energy grid of total cross section
@@ -325,6 +340,9 @@ contains
 
          !--file 4
          if (mfh.eq.4) then
+            ! file 4 is only to be used for secondary neutrons so if a reaction
+            ! is present in mf4, it describes secondary neutrons so every
+            ! reaction is counted
             nneut=nneut+1
             mtt=0
             ir=0
@@ -344,19 +362,41 @@ contains
             lct=nint(scr(4))
             nk=nint(scr(5))
             ik=0
+            ! as long as there are reaction products in the mf6 entry
             do while (ik.lt.nk)
                ik=ik+1
                lly=1
+               ! read the multiplicity
                call tab1io(nin,0,0,scr,nb,nw)
-               izap=nint(scr(1))
-               law=nint(scr(4))
                jscr=1+nw
                do while (nb.ne.0)
                   call moreio(nin,0,0,scr(jscr),nb,nw)
                   jscr=jscr+nw
                enddo
+               ! retrieve izap and the law
+               izap=nint(scr(1))
+               law=nint(scr(4))
+               ! count particle producing reactions
+               if (izap.eq.1) nneut=nneut+1
+               if (izap.eq.0) nphot=nphot+1
+               if (izap.eq.1001) nprot=nprot+1
+               if (izap.eq.1002) ndeut=ndeut+1
+               if (izap.eq.1003) ntrit=ntrit+1
+               if (izap.eq.2003) nhe3=nhe3+1
+               if (izap.eq.2004) nhe4=nhe4+1
+               ! if this is fission, check if the multiplicity is equal to nubar
+               ! issue a warning if this is not the case and replace the yield
+               if (mth.eq.18.and.izap.eq.1.and.mtxnu.gt.0) then
+                  ! check yield != nubar
+                  if (scr(6+2*nint(scr(5))+2).ne.fnubar(6+2*nint(fnubar(5))+2)) then
+                    write(text,'(''the multiplicity will be replaced with nubar from mf=1/mt='',i3,''.'')')mtxnu
+                    call mess('acephn','mf=6/mt=18 neutron multiplicity not consistent with nubar.',text)
+                  endif
+                  call copynubar(scr,fnubar,jscr)
+               endif
                mtt=0
                ir=0
+               ! look for the corresponding reaction in the XSS array
                do while (mtt.ne.mth)
                   ir=ir+1
                   mtt=nint(xss(mtr+ir-1))
@@ -366,13 +406,6 @@ contains
                   iaa=nint(xss(k))
                enddo
                thresh=xss(esz+iaa-1)
-               if (izap.eq.1) nneut=nneut+1
-               if (izap.eq.0) nphot=nphot+1
-               if (izap.eq.1001) nprot=nprot+1
-               if (izap.eq.1002) ndeut=ndeut+1
-               if (izap.eq.1003) ntrit=ntrit+1
-               if (izap.eq.2003) nhe3=nhe3+1
-               if (izap.eq.2004) nhe4=nhe4+1
 
                !--for particles
                !--check for production thresholds
@@ -690,7 +723,7 @@ contains
       call repoz(nin)
       jp=0
 
-      !--here for mf4/5 representations
+      !--here for mf4/5 representations - i.e. neutrons only
       if (mf4.eq.1) then
          do i=1,mtx
             if (mfm(i).eq.4.and.ip.eq.1) then
@@ -734,13 +767,27 @@ contains
                   enddo
                   nex=nex+4+2*ne
                else
+                  ! get the yield, these reactions ONLY produce neutrons
                   y=1
-                  if (mt.eq.16) y=2
-                  if (mt.eq.17) y=3
+                  if (mt.eq.16) then
+                     y=2
+                  elseif (mt.eq.17) then
+                     y=3
+                  elseif (mt.eq.37) then
+                     y=4
+                  elseif (mt.eq.152) then
+                     y=5
+                  elseif (mt.eq.153) then
+                     y=6
+                  elseif (mt.eq.160) then
+                     y=7
+                  elseif (mt.eq.152) then
+                     y=8
+                  endif
                   do j=iaa,nes
+                     e=xss(esz+j-1)
                      ss=xss(2+k+j-iaa)
                      tt=xss(pxs+2+j-it)+y*ss
-                     xss(pxs+2+j-it)=sigfig(tt,7,0)
                      xss(pxs+2+j-it)=sigfig(tt,7,0)
                      if (xss(tot+j-1).ne.zero)&
                        xss(thn+j-1)=xss(thn+j-1)&
@@ -750,8 +797,8 @@ contains
                   xss(nex+1)=mt
                   xss(nex+2)=0
                   xss(nex+3)=2
-                  xss(nex+4)=sigfig(xss(esz+iaa-1)/emev,7,0)
-                  xss(nex+5)=sigfig(xss(esz+nes-1)/emev,7,0)
+                  xss(nex+4)=sigfig(xss(esz+iaa-1),7,0)
+                  xss(nex+5)=sigfig(xss(esz+nes-1),7,0)
                   xss(nex+6)=y
                   xss(nex+7)=y
                   nex=nex+8
@@ -782,17 +829,25 @@ contains
                ik=0
                do while (ik.lt.nk)
                   ik=ik+1
+                  ! read the multiplicity
                   call tab1io(nin,0,0,scr,nb,nw)
-                  izap=nint(scr(1))
-                  law=nint(scr(4))
                   jscr=1+nw
                   do while (nb.ne.0)
                      call moreio(nin,0,0,scr(jscr),nb,nw)
                      jscr=jscr+nw
                   enddo
+                  ! retrieve izap and the law
+                  izap=nint(scr(1))
+                  law=nint(scr(4))
 
                   !--find the desired particle
                   if (izap.eq.ip) then
+
+                     ! if this is fission, replace the yield with the nubar - as before
+                     if (mth.eq.18.and.izap.eq.1.and.mtxnu.gt.0) then
+                        call copynubar(scr,fnubar,jscr)
+                     endif
+
                      jp=jp+1
                      xss(mtrp+jp-1)=mth
                      xss(lsigp+jp-1)=nex-sigp+1
@@ -812,6 +867,15 @@ contains
                         tt=xss(pxs+2+i-it)+y*ss
                         xss(pxs+2+i-it)=sigfig(tt,7,0)
                      enddo
+
+                     ! the next piece of code assumes the yield is given
+                     ! using one lin-lin interpolation region
+                     ! for now: error out and wait for this to come up to actually implement it
+                     nr=nint(scr(5))
+                     if (nr.gt.1) then
+                        write(text,'(''no linearised multiplicity for izap='',i4,'' in mf=6/mt='',i3,''.'')')izap,mth
+                        call mess('acephn',text,'this is currently unsupported for photonuclear ACE files.')
+                     endif
 
                      !--store the yield
                      xss(nex)=6
@@ -1258,7 +1322,21 @@ contains
                         call terpa(y,e,en,idis,fnubar,ipp,irr)
                      else
                         y=1
-                        if (mth.eq.16) y=2
+                        if (mt.eq.16) then
+                           y=2
+                        elseif (mt.eq.17) then
+                           y=3
+                        elseif (mt.eq.37) then
+                           y=4
+                        elseif (mt.eq.152) then
+                           y=5
+                        elseif (mt.eq.153) then
+                           y=6
+                        elseif (mt.eq.160) then
+                           y=7
+                        elseif (mt.eq.152) then
+                           y=8
+                        endif
                      endif
                      call terpa(theta,e,en,idis,scr,npp,nrr)
                      x=0
@@ -1313,20 +1391,27 @@ contains
                ik=0
                do while (ik.lt.nk)
                   ik=ik+1
+                  ! read the multiplicity
                   call tab1io(nin,0,0,scr,nb,nw)
-                  izap=nint(scr(1))
-                  awp=scr(2)
-                  law=nint(scr(4))
                   jscr=1+nw
                   do while (nb.ne.0)
                      call moreio(nin,0,0,scr(jscr),nb,nw)
                      jscr=jscr+nw
-                     if (jscr.gt.nwscr) call error('acephn',&
-                                   'scr array overflow in file 6 tab1',' ')
                   enddo
+                  ! retrieve izap, awp and the law
+                  izap=nint(scr(1))
+                  awp=scr(2)
+                  law=nint(scr(4))
+
                   if (izap.ne.ip) then
                      call skip6(nin,0,0,scr,law)
                   else
+
+                     ! if this is fission, replace the yield with the nubar - as before
+                     if (mth.eq.18.and.izap.eq.1.and.mtxnu.gt.0) then
+                        call copynubar(scr,fnubar,jscr)
+                     endif
+
                      xss(ldlwp+jp-1)=nex-dlwp+1  ! locator, points to LNW
                      last=nex
       write(nsyso,'(7x,"***mt=",i3,", xss(ldlwp+jp-1)=xss(",i10,") =",i10)')mt,ldlwp+jp-1,nex-dlwp+1
@@ -3636,5 +3721,36 @@ contains
    amin=ten**amin
    return
    end subroutine ascll
+
+   subroutine copynubar(scr,fnubar,jscr)
+   !-------------------------------------------------------------------
+   ! Copy the content of the nubar table to the scr array
+   !-------------------------------------------------------------------
+   ! externals
+   real(kr)::scr(*)
+   real(kr)::fnubar(*)
+   integer::jscr
+   ! internals
+   integer::ii,nrr,npp
+
+   ! replace the yield with the nubar
+   nrr=nint(fnubar(5))
+   npp=nint(fnubar(6))
+   scr(5)=nrr
+   scr(6)=npp
+   do ii=1,nrr
+      scr(5+2*ii)=fnubar(5+2*ii)
+      scr(6+2*ii)=fnubar(6+2*ii)
+   enddo
+   do ii=1,npp
+      scr(5+2*nrr+2*ii)=fnubar(5+2*nrr+2*ii)
+      scr(6+2*nrr+2*ii)=fnubar(6+2*nrr+2*ii)
+   enddo
+
+   ! set the scr array index to the appropriate value
+   jscr=6+2*nrr+2*npp+1
+
+   return
+   end subroutine copynubar
 
 end module acepn
