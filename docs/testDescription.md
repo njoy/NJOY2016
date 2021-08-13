@@ -291,13 +291,19 @@ Currently assigned in unmerged fixes
 
 ## Test Problem 60
 
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/60/input)]
+
 This test was added to following issue [\#124](https://github.com/njoy/NJOY2016/issues/124) following processing issues using IRDFF-II ENDF files.
 
 ## Test Problem 61
 
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/61/input)]
+
 This test was added to following issue [\#163](https://github.com/njoy/NJOY2016/issues/163). Whenever an `ACER` check run changed the library suffix, it was ignored. This has been fixed now and this test was added to validate the fix.
 
 ## Test Problem 62
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/62/input)]
 
 This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/issues/173). For a new d+He3 evaluation, the ACE file produced by NJOY2016 still has a few NaN values appearing in it. This problem was due to an array index overflow in acecpe.
 
@@ -306,3 +312,9 @@ This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/63/input)]
 
 Tests 63 was added as a consequence of issue [\#178](https://github.com/njoy/NJOY2016/issues/178). It verifies that setting nunx in PURR to anything other than the default value does not break downstream processing (in this case up to ACER and VIEWR). The input file is equivalent to the input file for test 35 (with the exception of nunx which is set to 2).
+
+## Test Problem 65
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/65/input)]
+
+Tests 65 was added as a consequence of issue [\#214](https://github.com/njoy/NJOY2016/issues/214). It verifies that the yield (and production cross section) for secondary neutrons produced after photo-fission is equal to nubar when the evaluation uses an MF6/MT18 section for the PFNS in which the neutron yield is set to 1 instead of nubar.
