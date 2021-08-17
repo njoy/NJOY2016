@@ -1,6 +1,11 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.65](https://github.com/njoy/NJOY2016/pull/215)
+This fixes a bug in ACER when producing ACE files using ACELAW=33. The associated probability was printed incorrectly and some of the values for this ACELAW were calculated incorrectly (applies to continuous energy neutron and charged particle files and photonuclear files).
+
+This release addresses issue [\#212](https://github.com/njoy/NJOY2016/issues/212).
+
 ## [NJOY2016.64](https://github.com/njoy/NJOY2016/pull/202)
 This fixes a bug in ACER when producing photonuclear ACE files using some TENDL2019 evaluations. The use of LAW=4 in MF6 of these evaluations lead to corrupted ACE files related to incorrect logic in counting secondary particle producing reactions.
 
