@@ -1080,8 +1080,15 @@ contains
             xss(nex+5)=1
             nex=nex+2+2*2
             xss(last+2)=nex-dlwp+1
+            ! amass=awr/awi
+            ! aprime=awp/awi
+            ! xss(nex)=sigfig((1+amass)*(-q)/amass,7,0)
+            ! xss(nex+1)=&
+            !  sigfig(amass*(amass+1-aprime)/(1+amass)**2,7,0)
+            ! with awi = 0 for photons
+            awp=1 ! MF4 is for outgoing neutrons
             xss(nex)=sigfig(-q,7,0)
-            xss(nex+1)=sigfig(awr/(1+awr),7,0)
+            xss(nex+1)=sigfig((awr-awp)/awr,7,0)
             nex=nex+2
             ! neutron ebar for this reaction
             ! and local heating from recoil+photon
@@ -1520,8 +1527,14 @@ contains
                         xss(nex+5)=1
                         nex=nex+2+2*2
                         xss(last+2)=nex-dlwp+1
+                        ! amass=awr/awi
+                        ! aprime=awp/awi
+                        ! xss(nex)=sigfig((1+amass)*(-q)/amass,7,0)
+                        ! xss(nex+1)=&
+                        !  sigfig(amass*(amass+1-aprime)/(1+amass)**2,7,0)
+                        ! with awi = 0 for photons
                         xss(nex)=sigfig(-q,7,0)
-                        xss(nex+1)=sigfig(awr/(1+awr),7,0)
+                        xss(nex+1)=sigfig((awr-awp)/awr,7,0)
                         nex=nex+2
                         call tab2io(nin,0,0,scr(ll),nb,nw)
                         lep=nint(scr(ll+3))
@@ -1548,8 +1561,14 @@ contains
                         xss(nex+5)=1
                         nex=nex+2+2*2
                         xss(last+2)=nex-dlwp+1
+                        ! amass=awr/awi
+                        ! aprime=awp/awi
+                        ! xss(nex)=sigfig((1+amass)*(-q)/amass,7,0)
+                        ! xss(nex+1)=&
+                        !  sigfig(amass*(amass+1-aprime)/(1+amass)**2,7,0)
+                        ! with awi = 0 for photons
                         xss(nex)=sigfig(-q,7,0)
-                        xss(nex+1)=sigfig(awr/(1+awr),7,0)
+                        xss(nex+1)=sigfig((awr-awp)/awr,7,0)
                         nex=nex+2
                      endif
                   endif
