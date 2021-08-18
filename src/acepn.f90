@@ -673,10 +673,7 @@ contains
 
    !--loop over each of the ntype productions
    !--to build the production data.
-               write(nsyso,'(" ntype =",i3)')ntype
-               write(nsyso,'(" n,ph,p,d,t,he3,he4 =",7i5)')nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
    do itype=1,ntype
-               write(nsyso,'(" ***itype loop.  itype =",i3)')itype
       ipt=nint(xss(ixsa+neixs*(itype-1)))
       ntrp=nint(xss(ixsa+neixs*(itype-1)+1))
       if (ipt.eq.1) ip=1
@@ -1106,7 +1103,6 @@ contains
       dlwp=ldlwp+ntrp
       xss(ixsa+neixs*(itype-1)+11)=dlwp
       nex=dlwp
-               write(nsyso,'(4x,"***ldlwp=",i10,", nex = dlwp = ",i10)')ldlwp,dlwp
 
       !--energy distributions from discrete levels in file 4.
       !--only neutron producing reactions are given here.
@@ -1368,7 +1364,6 @@ contains
       if (mf6.ne.0) then
          jp=0
          do i=1,ntrp
-   write(nsyso,'(7x,"mf6 do i=1,ntrp loop.  i=",i3,", nex=",i10)')i,nex
             mt=nint(xss(mtrp+i-1))
             do j=1,mtx
                if (mfm(j).eq.6.and.mtm(j).eq.mt) jp=i
@@ -1414,8 +1409,6 @@ contains
 
                      xss(ldlwp+jp-1)=nex-dlwp+1  ! locator, points to LNW
                      last=nex
-      write(nsyso,'(7x,"***mt=",i3,", xss(ldlwp+jp-1)=xss(",i10,") =",i10)')mt,ldlwp+jp-1,nex-dlwp+1
-      write(nsyso,'(10x,"saving last = nex = ",i10)')nex
                      xss(last)=0                 ! LNW
                      xss(last+1)=0               ! LAW set to 0
                      xss(last+2)=0               ! IDAT set to 0
@@ -1440,33 +1433,22 @@ contains
                            write(text,'(''lang='',i3,'' not supported for law='',i2)')lang,law
                            call error('acephn',text,'')
                         endif
-      write(nsyso,'(13x," 4xss(",i7,")=",i5," ... LAW")')last+1,nint(xss(last+1))
                         xss(landp+jp-1)=-1     ! angular included in energy distribution
-      write(nsyso,'(16x," 5xss(",i7,")=",i5)')landp+jp-1,nint(xss(landp+jp-1))
                         nr=0
                         xss(nex)=nr            ! NR set to 0
-      write(nsyso,'(13x," 6xss(",i7,")=",i5," ... Table F.66 NR")')nex,nint(xss(nex))
                         lee=nex                ! lee points to NR
-      write(nsyso,'(10x,"saving lee = nex = ",i10)')nex
                         nex=nex+2*nr+1
                         nle=2
                         xss(nex)=nle           ! number of energies, NE, default to 2
-      write(nsyso,'(13x," 7xss(",i7,")=",i5," ... NE")')nex,nint(xss(nex))
                         nex=nex+1+2*nle        ! leaving room for E(1:2), P(1:2).  nex points to LDAT(1)
-      write(nsyso,'(13x," update nex from ",i7," to ",i7)')nex-1-2*nle,nex
                         xss(last+2)=nex-dlwp+1 ! IDAT
-      write(nsyso,'(13x," 8xss(",i7,")=",i5," ... IDAT")')last+2,nint(xss(last+2))
                         nr=0
                         xss(nex)=nr            ! LDAT(1) = NR set to 0
-      write(nsyso,'(13x," 9xss(",i7,")=",i5," ... Table F.66d NR")')nex,nint(xss(nex))
                         nex=nex+1+2*nr
                         xss(nex)=ne            ! LDAT(2) = NE set to number of incident energies
-      write(nsyso,'(13x,"10xss(",i7,")=",i5," ... Table 66d NE")')nex,nint(xss(nex))
                         nex=nex+1
                         lle=nex                ! lle points to LDAT(3) = E(1)
-      write(nsyso,'(10x,"saving lle = nex = ",i10)')nex
                         nex=lle+2*ne           ! nex points to start of first distribution
-      write(nsyso,'(16x,"update nex = lle+2*ne = ",i10)')nex
 
                         ! scr(llh) up to scr(lld-1) is set up for heating
                         llh=ll
@@ -1507,25 +1489,18 @@ contains
                            if (ie.eq.1) then
                               xss(lee+2)=sigfig(scr(lld+1)/emev,7,0)
                               xss(lee+4)=1
-      write(nsyso,'(13x,"11xss(",i7,")=",2(1pe12.5)," ...Table F.66 E(1),P(1)")')lee+2,xss(lee+2)*emev,xss(lee+4)
                            else if (ie.eq.ne) then
                               xss(lee+3)=sigfig(scr(lld+1)/emev,7,0)
                               xss(lee+5)=1
-      write(nsyso,'(13x,"11xss(",i7,")=",2(1pe12.5)," ...Table F.66 E(2),P(2)")')lee+3,xss(lee+3)*emev,xss(lee+5)
                            endif
 
                            ! set incident energy and locator for the current distribution
                            xss(lle+ie-1)=sigfig(scr(lld+1)/emev,7,0) ! Ein(ie)
-      write(nsyso,'(/,13x,"12xss(",i7,")=",1pe12.5," ...Table F.66d E(",i3," of ",i3")")')lle+ie-1,xss(lle+ie-1),ie,ne
                            ee=xss(lle+ie-1)
                            xss(lle+ne+ie-1)=nex-dlwp+1  ! locator for distribution
-      write(nsyso,'(13x,"13xss(",i7,")=",i12," ...Table F.66d L(",i3," of ",i3")")')lle+ne+ie-1,nint(xss(lle+ne+ie-1)),ie,ne
                            xss(nex)=lep+10*nd           ! INTT for this secondary energy distribution
-      write(nsyso,'(13x,"14xss(",i7,")=",i12," ...Table F.66d Law61 INTT''")')nex,nint(xss(nex))
                            xss(nex+1)=ng                 ! NP
-      write(nsyso,'(13x,"15xss(",i7,")=",i12," ...Table F.66d Law61 NP")')nex+1,nint(xss(nex+1))
                            if (lang.eq.1) nexc=nex+2+4*ng ! only needed if law=61
-      if(lang.eq.1)write(nsyso,'(14x,"define nexc ... ",i7)')nexc
 
                            amass=awp*emc2
                            avadd=ee/(awr*emc2)
@@ -1591,20 +1566,8 @@ contains
                                  xss(nex+1+ig+4*ng)=sigfig(akal,7,0) ! a
                               else
 
-                                 ! reset law and locator for lang=1 - TEMPORARY
                                  if (lang.eq.1) then
-!
-!!                                    xss(last+1)=4      ! reset LAW, now 4
-!!                                    xss(landp+jp-1)=0  ! reset angular distribution flag, now all isotropic
-!!                                    if (nna.ne.0) then
-!!                                        write(text,'(''particle'',i6,'' in MT'',i4,'' at ee='',e10.4)')izap,mth,scr(lld+1)
-!!                                        call mess('acephn','law=1 lang=1 angular distributions reset to isotropic',&
-!!                                                  text)
-!!                                        nna=0
-!!                                    endif
-!
                                     xss(nex+1+ig+3*ng)=nexc-dlwp+1  !pointer to angdist table
-   write(nsyso,'(5x,"angdist index and array value is nex+ig3*ng = ",2i7)')nex+1+ig+3*ng,nexc-dlwp+1
                                     ! convert lang=1 list in scr to a normalized P(1) to P(NA) list for ptleg2
                                     scr(ll)=0
                                     scr(ll+1)=scr(lld+6+ncyc*(ig-1))        !EOUT(ig)
@@ -1624,10 +1587,8 @@ contains
 
                                     intmu=2
                                     xss(nexc)=intmu
-   write(nsyso,'(6x,"index = nexc   = ",i7,", array value = intmu = ",i7)')nexc,intmu
                                     nmu=nint(scr(ll+5))
                                     xss(nexc+1)=nmu
-   write(nsyso,'(6x,"index = nexc+1 = ",i7,", array value =   nmu = ",i7)')nexc+1,nmu
                                     do imu=1,nmu
                                        xss(nexc+1+imu)=sigfig(scr(ll+6+2*imu),7,0)
                                        xss(nexc+1+nmu+imu)=sigfig(scr(ll+7+2*imu),7,0)
@@ -1644,7 +1605,6 @@ contains
                                                         sigfig(xss(nexc+1+2*nmu+imu),7,0)
                                        endif
                                     enddo
-   write(nsyso,'(6x,"update nexc from ",i7," to ",i7)')nexc,nexc+2+3*nmu
                                     nexc=nexc+2+3*nmu
                                  endif
 
@@ -1671,16 +1631,6 @@ contains
                                  avlab=avlab+avav*dele
                                  avll=avl
                               endif
-   if(ig.eq.ng)then
-     write(nsyso,'(4x,"secondary energy (EOUT) array, index limits are",i7,":",i7)')nex+2,nex+1+ng
-     write(nsyso,'(5(1x,1pe14.5))')xss(nex+2:nex+1+ng)
-     write(nsyso,'(4x,"PDF array,                     index limits are",i7,":",i7)')nex+ng+2,nex+1+2*ng
-     write(nsyso,'(5(1x,1pe14.5))')xss(nex+ng+2:nex+1+2*ng)
-     write(nsyso,'(4x,"CDF array,                     index limits are",i7,":",i7)')nex+2*ng+2,nex+1+3*ng
-     write(nsyso,'(5(1x,1pe14.5))')xss(nex+2*ng+2:nex+1+3*ng)
-     write(nsyso,'(4x,"LC array,                      index limits are",i7,":",i7)')nex+3*ng+2,nex+1+4*ng
-     write(nsyso,'(5(1x,i14))')nint(xss(nex+3*ng+2:nex+1+4*ng))
-  endif
                            enddo  !end of loop over secondary energies
                            ! renormalize cummulative probabilities
                            renorm=one/xss(nex+1+3*ng)
@@ -1694,11 +1644,9 @@ contains
                            scr(llh+7+2*ie)=avlab
                            if(lang.eq.1)then
                               nex=nexc
-  write(nsyso,'(6x,"advance nex to ",i7)')nex
                            else
                               nex=nex+2+(2*na+3)*ng
                            endif
-!                           nex=nex+2+(2*nna+3)*ng
                         enddo  !end of loop over incident energies
 
                         !add in contribution to heating
