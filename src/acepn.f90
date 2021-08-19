@@ -567,10 +567,25 @@ contains
                        nr6(ii)=nr6(ii)+1
                   enddo
 
+                  ! read subsections until we're back at the right one
+                  ir=1
+                  do while (ir.lt.ik)
+                     ir=ir+1
+                     call tab1io(nin,0,0,scr,nb,nw)
+                     law=nint(scr(4))
+                     jscr=1+nw
+                     do while (nb.ne.0)
+                        call moreio(nin,0,0,scr(jscr),nb,nw)
+                        jscr=jscr+nw
+                     enddo
+                     call skip6(nin,0,0,scr,law)
+                  enddo
+
                !--unknown distribution
                else if (law.eq.0) then
                   write(text,'(''recoil'',i6,'' in MT'',I4)')izap,mth
                   call mess('acephn','no heating info for ',text)
+
                !--this law is not currently handled
                else
                   write(text,'(''particle '',i5,'' law'',I4)')izap,law
@@ -946,8 +961,8 @@ contains
 
                   !--special steps for two-body recoil
                   !--back up to the corresponding law=2 distr.
-                  izarec=0
-                  awprec=0
+                  izarec=-1
+                  awprec=-1
                   if (izap.eq.ip.and.law.eq.4) then
                      izarec=izap
                      awprec=awp
@@ -989,7 +1004,7 @@ contains
                      scr(llht+5)=ne
                      scr(llht+6)=ne
                      scr(llht+7)=2
-                     if (izarec.eq.0) then
+                     if (izarec.eq.-1) then
                         awpp=awp
                      else
                         awpp=awprec
@@ -999,7 +1014,7 @@ contains
                         call listio(nin,0,0,scr(ll),nb,nw)
                         lang=nint(scr(lld+2))
                         if (lang.eq.0) then
-                           if (izarec.ne.0) then
+                           if (izarec.ne.-1) then
                               nl=nint(scr(lld+5))
                               do iil=1,nl
                                  if (mod(iil,2).eq.1) then
@@ -1424,11 +1439,11 @@ contains
                         call tab2io(nin,0,0,scr(ll),nb,nw)
                         lang=nint(scr(ll+2))
                         lep=nint(scr(ll+3))
-                        ne=nint(scr(ll+5))     ! number of incident energies
-                        if (lang.eq.1) then
-                           xss(last+1)=61      ! LAW
-                        else if (lang.eq.2) then
-                           xss(last+1)=44      ! LAW
+                        ne=nint(scr(ll+5))       ! number of incident energies
+                        if (lang.eq.1) then      ! legendre polynomials to law=61
+                           xss(last+1)=61        ! LAW
+                        else if (lang.eq.2) then ! Kalbach-Mann to law=44
+                           xss(last+1)=44        ! LAW
                         else
                            write(text,'(''lang='',i3,'' not supported for law='',i2)')lang,law
                            call error('acephn',text,'')
