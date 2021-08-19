@@ -319,6 +319,12 @@ Tests 63 was added as a consequence of issue [\#178](https://github.com/njoy/NJO
 
 Tests 64 was added as a consequence of issue [\#201](https://github.com/njoy/NJOY2016/issues/201). Incorrect skipping of MF6 subsections with LAW=4 caused a reaction count issue for the secondary particles, resulting in a corrupt ACE file.
 
+## Test Problem 65
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/65/input)]
+
+Tests 65 was added as a consequence of issue [\#122](https://github.com/njoy/NJOY2016/issues/122) and [\#203](https://github.com/njoy/NJOY2016/issues/203). When using an MF34 with multiple subsubsections, the calculation now runs to completion.
+
 ## Test Problem 66
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/66/input)]

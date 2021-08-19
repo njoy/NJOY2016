@@ -148,7 +148,7 @@ contains
       mtd=nint(scr(i+3))
       if (mfd.eq.1.and.mtd.eq.452) mt452=1
       if (mfd.eq.1.and.mtd.eq.456) mt456=1
-      if (mfd.ge.3.and.(mtd.eq.2.or.mtd.gt.4)) then
+      if (mfd.ge.3.and.mfd.lt.30.and.(mtd.eq.2.or.mtd.gt.4)) then
          if (mfd.eq.3) ntr=ntr+1
          if (mtd.eq.2) ielas=1
          if (mfd.eq.3.and.(mtd.ge.600.and.mtd.le.649)) mt103=1
