@@ -9977,13 +9977,16 @@ contains
                xss(next)=0
                xss(next+1)=2
                xss(next+2)=sigfig(xss(esz+it-1),7,0)
-               xss(next+3)=1
-               xss(next+4)=sigfig(xss(esz+nes-1),7,0)
+               xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+               xss(next+4)=1
                xss(next+5)=1
                next=next+2+2*2
                xss(last+2)=next-dlwh+1
-               xss(next)=0     ! q is zero for mt102
-               xss(next+1)=awi/(awr+awi)
+               amass=awr/awi
+               aprime=awp/awi
+               xss(next)=sigfig((1+amass)*(-q)/amass,7,0)
+               xss(next+1)=&
+                 sigfig(amass*(amass+1-aprime)/(1+amass)**2,7,0)
                next=next+2
                ! add in contribution to heating
                naa=nint(xss(hpd+1))
@@ -10105,13 +10108,17 @@ contains
                      xss(next)=0
                      xss(next+1)=2
                      xss(next+2)=sigfig(xss(esz+it-1),7,0)
-                     xss(next+3)=1
-                     xss(next+4)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+4)=1
                      xss(next+5)=1
                      next=next+2+2*2
                      xss(last+2)=next-dlwh+1
-                     xss(next)=0
-                     xss(next+1)=awi/(awr+awi)
+                     amass=awr/awi
+                     aprime=awp/awi
+                     xss(next)=sigfig((1+amass)*(-q)/amass,7,0)
+                     xss(next+1)=&
+                       sigfig(amass*(amass+1-aprime)/(1+amass)**2,7,0)
+
                      next=next+2
                      ! add in contribution to heating
                      naa=nint(xss(hpd+1))

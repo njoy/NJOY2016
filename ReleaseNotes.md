@@ -14,6 +14,7 @@ In addition, the following minor issues were fixed as well:
   - fixed a crash in ERRORR using ENDF/B-VIII.0 U235 for MF34 covariance data (issues #122 and #203)
   - increased the size of an array when processing photonuclear ACE files (issue #204)
   - extended the CLAW (iwt=9,10) weight function to cover 1e-5 -- 2e7 eV
+  - fixed issues with ACELAW=33 for continuous energy neutron, charged particle and photonuclear files (issue #212)
 
 Notes:
   - While the second minor fix no longer results in a crash of NJOY, the resulting covariance matrix is not correct since only the first subsubsection is added to the output (NJOY still calculates the matrices for each subsubsection - see issue #205)
