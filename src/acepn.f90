@@ -2289,7 +2289,6 @@ contains
             else if (law.eq.61) then
                ne=nint(xss(l3+1))
                l=l3+2+2*ne
-    write(nsyso,'(" l3,l3+1,ne,l = ",4i10)')l3,l3+1,ne,l
                do ie=1,ne
                   e2=xss(l3+2+ie-1)
                   loci=nint(xss(l3+2+ne+ie-1))+dlwp-1
@@ -2307,7 +2306,6 @@ contains
                        &6x,''              cdf = '',e14.6)')&
                        xss(ip+loci),xss(ip+nn+loci),xss(ip+2*nn+loci)
                      locj=nint(xss(ip+3*nn+loci)+dlwp-1)
-    write(nsyso,'("loci,locj = ",2i10)')loci,locj
                      if (locj.ne.0) then
                         intmu=nint(xss(locj))
                         nmu=nint(xss(locj+1))
