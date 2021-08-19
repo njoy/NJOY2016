@@ -395,6 +395,7 @@ contains
    call skiprz(nin,-1)
 
    !--set up for elastic calculation
+   lthr=0
    if (iverf.ge.6.and.nendf.ne.0) then
       call findf(matde,7,0,nendf)
       call contio(nendf,0,0,scr,nb,nw)
@@ -417,10 +418,13 @@ contains
    endif
 
    !--compute thermal elastic cross sections
-   if (icoh.gt.0.and.icoh.le.10) then
+   if (icoh.gt.0.and.icoh.le.10) then        ! only coherent
       call coh(icoh,itemp,iold,inew,np,nex)
-   else if (icoh.gt.10) then
+   else if (icoh.gt.10.and.icoh.le.20) then  ! only incoherent
       call iel(icoh,itemp,iold,inew,np,nex)
+   else if (lthr.gt.20) then                 ! both coherent and incoherent
+     call coh(10,itemp,iold,inew,np,nex)
+     call iel(20,itemp,iold,inew,np,nex)
    endif
 
    !--write new pendf tape.
@@ -465,7 +469,7 @@ contains
 
    subroutine rdelas(temp,lthr,nin,nwds)
    !-------------------------------------------------------------------
-   ! Read in elastic data (coherent or incoherent) for the
+   ! Read in elastic data (coherent or incoherent or both) for the
    ! desired temperature from an ENDF6 format file.
    !-------------------------------------------------------------------
    use util ! provides error
@@ -474,7 +478,7 @@ contains
    integer::lthr,nin,nwds
    real(kr)::temp
    ! internals
-   integer::l,np,nr,lt,nb,nw,k,i
+   integer::l,np,nr,lt,nb,nw,k,i,j,ifound
    real(kr)::tnow
    real(kr),dimension(:),allocatable::a
    integer,parameter::na=10000
@@ -482,12 +486,14 @@ contains
    !--temp storage to read in data
    allocate(a(na))
 
-   !--read in main record
+   !--initialise
+   ifound=0
+
+   !--read the first table in MF7 MT2
+   !  this is S(E) for the first temperature for coherent or mixed mode
+   !  this is W'(T) for incoherent
    l=1
    call tab1io(nin,0,0,a(l),nb,nw)
-   np=n2h
-   nr=n1h
-   lt=l1h
    l=l+nw
    do while (nb.ne.0)
       call moreio(nin,0,0,a(l),nb,nw)
@@ -495,34 +501,70 @@ contains
       if (l.gt.na) call error('rdelas',&
         'too much elastic data','increase na')
    enddo
+
+   !--get table parameters
+   np=n2h
+   nr=n1h
+   lt=l1h
+
+   !--current size of the array
    nwds=l-1
+
+   !--read temperatures for coherent elastic or mixed mode
    if (lthr.ne.2) then
+
+      !--current temperature
       tnow=a(1)
 
-      !--search for desired temperature
-      do while (abs(tnow-temp).ge.temp/1000+5)
-         if (lt.eq.0.or.tnow.gt.temp)&
-           call error('rdelas','desired temp not found.',' ')
-         lt=lt-1
+      !--loop over the available temperatures and find the one we need
+      do j=1,lt-1
+
+         !--read list of S values for this temperature
          l=nwds+1
          call listio(nin,0,0,a(l),nb,nw)
-         tnow=a(l)
          l=l+nw
          do while (nb.ne.0)
             call moreio(nin,0,0,a(l),nb,nw)
             l=l+nw
          enddo
-         l=nwds+6
-         k=6+2*nr
-         do i=1,np
-            l=l+1
-            k=k+2
-            a(k)=a(l)
-         enddo
+
+         !--verify if this is the one we need and store S(E) if it is
+         tnow=a(nwds+1)
+         if (abs(tnow-temp).ge.temp/1000+5) then
+
+print*, tnow
+            ifound=1
+            l=nwds+6
+            k=6+2*nr
+            do i=1,np
+               l=l+1
+               k=k+2
+               a(k)=a(l)
+print*, k, a(k)
+            enddo
+         endif
       enddo
    endif
 
+   !--read the W'(T) data for mixed mode
+   if (lthr.eq.3) then
+
+     l=nwds+1
+     call tab1io(nin,0,0,a(l),nb,nw)
+     l=l+nw
+     do while (nb.ne.0)
+        call moreio(nin,0,0,a(l),nb,nw)
+        l=l+nw
+        if (l.gt.na) call error('rdelas',&
+          'too much elastic data','increase na')
+     enddo
+     nwds=l-1
+   endif
+
    !--move data to global fl array
+   !--lthr=1: fl is a single table of S(E) for coherent elastic
+   !--lthr=2: fl is a single table of W'(T) for incoherent elastic
+   !--lthr=3: fl is a table of S(E) and a table of W'(T) for mixed mode
    allocate(fl(nwds))
    do l=1,nwds
       fl(l)=a(l)
@@ -1823,7 +1865,7 @@ contains
    beta(21)=100
    beta(22)=120
    beta(23)=140
-   beta(24)=160   
+   beta(24)=160
    beta(25)=180
    beta(26)=200
    beta(27)=250
@@ -3320,4 +3362,3 @@ contains
    end subroutine tpend
 
 end module thermm
-
