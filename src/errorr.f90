@@ -1767,7 +1767,7 @@ contains
    integer::mat2,mt2,nlg1,nlg2,ld,ld1,izap,izero
    real(kr)::eg,xcv,time,de,flux,dne
    character(70)::strng,strng2
-   integer,parameter::locm=30
+   integer,parameter::locm=100
    integer::loc(locm)
    real(kr),dimension(:),allocatable::sig1,scr2,scr
    real(kr),dimension(:),allocatable::alp1,alp2
@@ -1956,13 +1956,15 @@ contains
          mt1=mt2
          ld=l1h
          ld1=l2h
+         nc=0
+         ni=n2h
       else
          mat1=l1h
          mt1=l2h
+         nc=n1h
+         ni=n2h
       endif
       if (mt1.eq.0) call error('covcal','illegal mt1=0.',' ')
-      nc=n1h
-      ni=n2h
    endif
    if (ni.gt.locm) call error('covcal','storage exceeded in loc.',' ')
    iok=1

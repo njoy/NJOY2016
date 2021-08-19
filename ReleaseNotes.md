@@ -1,11 +1,28 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
-## [NJOY2016.64](https://github.com/njoy/NJOY2016/pull/xxx)
-This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library and the mixed mode elastic scattering ENDF format introduced in the ENDF format in November 2020.
+## [NJOY2016.65](https://github.com/njoy/NJOY2016/pull/xxx)
+This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
 
 The following is an overview of the major changes made to NJOY for this update:
+  - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=1 LANG=1)
+  - Some photonuclear libraries use MF6/MT18 but with a neutron multiplicity equal to 1 instead of nubar. A warning is now printed when this is encountered and the multiplicity is replaced with the appropriate nubar data.
+  - The XSS array and its size is now set in the common acecm module. Writing out the ACE file and locator checking for photonuclear files has been enabled as well (previously only available for incident neutron and charged particle ACE files).
+
+In addition, the following minor issues were fixed as well:
+  - fixed a typo in a reaction name printed by the ACER output (issue #195)
+  - fixed a crash in ERRORR using ENDF/B-VIII.0 U235 for MF34 covariance data (issues #122 and #203)
+  - increased the size of an array when processing photonuclear ACE files (issue #204)
+  - extended the CLAW (iwt=9,10) weight function to cover 1e-5 -- 2e7 eV
   - fixed an issue with MODER not being able to handle MF28 (atomic relaxation data) when converting ASCII to binary
+
+Notes:
+  - While the second minor fix no longer results in a crash of NJOY, the resulting covariance matrix is not correct since only the first subsubsection is added to the output (NJOY still calculates the matrices for each subsubsection - see issue #205)
+
+## [NJOY2016.64](https://github.com/njoy/NJOY2016/pull/202)
+This fixes a bug in ACER when producing photonuclear ACE files using some TENDL2019 evaluations. The use of LAW=4 in MF6 of these evaluations lead to corrupted ACE files related to incorrect logic in counting secondary particle producing reactions.
+
+This release addresses issue [\#201](https://github.com/njoy/NJOY2016/issues/201).
 
 ## [NJOY2016.63](https://github.com/njoy/NJOY2016/pull/193)
 This fixes a bug in ERRORR when using the `999` option. When using this option, the input and output tapes are not closed in Fortran. This causes problems in NJOY21 as the output from ERRORR isn't completely written to disk before the next module starts. This update simply closes files `nitape` and `notape` which resolves the issue.

@@ -1,0 +1,38 @@
+moder
+20 -21
+reconr
+-21 -22
+'ENDF/B-VIII.0 U235 with MF34 MT2 using multiple subsections' /
+9228 0 /
+0.001 /
+0/
+broadr /
+-21 -22 -23
+9228 /
+0.001 /
+293.6 /
+0/
+groupr /
+-21 -23 0 31/
+9228 3 0  2 5 /
+'MG ENDF/B-VIII.0 U235 with MF34 MT2 using multiple subsections' /
+293.6 /
+1e+10 /
+3/
+3 251/
+0/
+0/
+errorr
+-21 0 31 41 /
+9228 3 2 /
+1  293.6 /
+0 34 /
+covr
+ 41 0 51 /
+ 1 /
+ /
+ /
+9228 0 0 0 /
+viewr
+51 61
+stop

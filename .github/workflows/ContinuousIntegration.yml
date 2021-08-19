@@ -2,7 +2,10 @@
 name: Continuous Integration
 
 # This workflow is triggered on pushes and pull requests to the repository.
+# This workflow will also run each Monday on the default branch (i.e. master)
 on:
+  schedule:
+    - cron: '0 0 * * 1'
   push:
     branches: '**'
   pull_request:
