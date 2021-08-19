@@ -55,7 +55,6 @@ contains
    integer::izarec,nl,iil,nexn,nexd,ki
    integer::nle
    integer::imu,intmu,nmu
-   integer::nna
    real(kr)::emc2,e,enext,s,y,ynext,heat,en,ep,g,h,epl
    real(kr)::tneut,tphot,tprot,tdeut,ttrit,the3,the4,thresh
    real(kr)::ss,tt,ubar,sum,renorm,ebar,hh,u,theta,x,anorm
@@ -1494,7 +1493,6 @@ contains
                            enddo
                            nd=nint(scr(lld+2))
                            na=nint(scr(lld+3))
-                     nna=na
                            ng=nint(scr(lld+5))
                            ncyc=na+2
 
@@ -1628,7 +1626,6 @@ contains
                               if (ig.ne.1) then
                                  eavi=xss(nex+1+ig)
                                  if (lang.ne.2.or.na.eq.0) then
-!                                 if (lang.ne.2.or.nna.eq.0) then
                                     avl=eavi
                                  else
                                     avcm=sqrt(2*eavi/amass)
