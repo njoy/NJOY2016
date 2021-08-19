@@ -1,0 +1,33 @@
+-- moder
+moder
+20 -30
+-- reconr
+reconr
+-30 -21/
+'Ra226 from TENDL2019 photonuclear data' /
+8834 /
+0.001 /
+0/
+-- acer
+acer
+-30 -21 0 31 32                                                 / Card 1
+5 1 1 .31                                                       / Card 2
+'Ra226 from TENDL2019 photonuclear data'                        / Card 3
+8834                                                            / Card 12
+-- acer check/plot/correct
+acer
+0 31 33 34 35
+7 1 1 -1/
+'Ra226 from TENDL2019 photonuclear data - check tape 1'
+-- acer check/plot/correct
+acer
+0 34 36 37 38
+7 1 1 -1/
+'Ra226 from TENDL2019 photonuclear data - check tape 2'
+-- viewr plots from check tape 1
+viewr
+33 43
+-- viewr plots from check tape 2
+viewr
+36 46
+stop

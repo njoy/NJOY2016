@@ -201,6 +201,8 @@ contains
    if (izai.gt.1) then
       if (mt.eq.4) then
          name='(z,n)    '
+      elseif (mt.eq.5) then
+         name='(z,x)    '
       elseif ((izai.eq.1001.and.mt.eq.103).or.&
               (izai.eq.1002.and.mt.eq.104).or.&
               (izai.eq.1003.and.mt.eq.105).or.&
