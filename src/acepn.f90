@@ -46,7 +46,7 @@ contains
    integer::mt103,mt104,mt105,mt106,mt107
    integer::i,mfd,mtd,l,mttot,idis,nex,nexc,ir,j,idone,nnex,n
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
-   integer::k,ia,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
+   integer::k,ia,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp,na
    integer::ll,lll,lep,ne,llh,lld,ie,np,ip,mtt,lct,ii
    integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang,lleg,ileg
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
@@ -461,11 +461,12 @@ contains
                      enddo
                      e=c2h
                      heat=0
+                     na=nint(scr(lld+3))
                      np=nint(scr(lld+5))
                      call terpa(y,e,en,idis,scr(lly),npp,nrr)
                      do ip=1,np
-                        ep=scr(lld+4+2*ip)
-                        g=scr(lld+5+2*ip)
+                        ep=scr(lld+6+(na+2)*(ip-1))
+                        g=scr(lld+7+(na+2)*(ip-1))
                         if (ip.gt.1) then
                            heat=heat+(ep-epl)*gl*(ep+epl)/2
                         endif
