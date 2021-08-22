@@ -3066,6 +3066,7 @@ contains
    nw=6*nx
    if (iinc.gt.0) nw=nw+12
    if (icoh.gt.0) nw=nw+12
+   if (icoh.gt.20) nw=nw+12
    allocate(dicn(nw))
    allocate(sav(6))
    nc=nx

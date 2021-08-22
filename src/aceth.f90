@@ -17,10 +17,10 @@ module aceth
    real(kr)::aw0,tz
 
    ! ace nxs parameters for thermal data
-   integer::len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd(9)
+   integer::len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd(8)
 
    ! ace jxs parameters for thermal data
-   integer::itie,itix,itxe,itce,itcx,itca,jxsd(26)
+   integer::itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd(23)
 
    ! body of the ace data
    integer::nei
@@ -41,7 +41,7 @@ contains
    use endf ! provides endf routines and variables
    ! externals
    integer::nin,nace,ndir,matd
-   integer::mti,nbin,mte,ielas,nmix,iwt,iprint,mcnpx
+   integer::mti,nbin,mte,mtec,mtei,ielas,nmix,iwt,iprint,mcnpx
    real(kr)::tempd,suff,emax
    integer::izn(16)
    real(kr)::awn(16)
@@ -79,7 +79,7 @@ contains
    nxsd=0
    jxsd=0
    xss=0
-   ninmax=500000
+   ninmax=5000000
    call openz(nin,0)
    nscr=iabs(nscr)
    if (nin.lt.0) nscr=-nscr
@@ -94,7 +94,7 @@ contains
    nw=npage+50
    allocate(xs(nw))
    allocate(six(ninmax))
-   nwscr=500000
+   nwscr=5000000
    allocate(scr(nwscr))
 
    !--determine what endf version is being used
@@ -127,12 +127,27 @@ contains
       if (delta.ge.ttol) call tomend(nin,0,0,xs)
    enddo
 
-   !--copy incoherent (and coherent elastic) cross section to nscr
+   !--copy incoherent inelastic cross section to nscr
    call findf(matd,3,mti,nin)
    call contio(nin,0,nscr,xs,nb,nw)
    call tosend(nin,0,nscr,xs)
-   if (mte.ne.0.and.ielas.ne.0) then
-      call findf(matd,3,mte,nin)
+
+   !--determine mt numbers for coherent and incoherent elastic
+   mtec=0
+   mtei=0
+   if (mte.ne.0) then
+      if (ielas.eq.0.or.ielas.eq.2) then
+         mtec=mte
+         if (ielas.eq.2) mtei=mte+1
+      else
+         mtei=mte
+      endif
+   endif
+
+   !--copy incoherent elastic if it is present
+   !--coherent elastic (Bragg edges) needs additional processing
+   if (mtei.ne.0) then
+      call findf(matd,3,mtei,nin)
       call contio(nin,0,nscr,xs,nb,nw)
       call tosend(nin,0,nscr,xs)
    endif
@@ -162,18 +177,20 @@ contains
 
    !--check for elastic data
    if (mte.eq.0) then
-      write(nout) mte,mte
+      ! size of the coherent and incoherent elastic blocks are all zero
+      write(nout) 0,0
+      write(nout) 0,0
    else
 
       !--process coherent reaction if requested
-      if (ielas.eq.0) then
-         call findf(matd,3,mte,nin)
+      if (mtec.ne.0) then
+         call findf(matd,3,mtec,nin)
          call contio(nin,0,0,scr,nb,nw)
-           e=0
-            call gety1(e,enext,idis,x,nin,scr)
-            nea=0
+         e=0
+         call gety1(e,enext,idis,x,nin,scr)
 
          !--locate bragg edges and compute cumulative probabilities
+         loc=1
          j=0
          clast=0
          idone=0
@@ -188,29 +205,32 @@ contains
                   j=j+1
                   if (2*j.gt.ninmax) call error('acesix',&
                     'storage six exceeded for coherent reactions.',' ')
-                  six(1+2*(j-1))=e
-                  six(1+2*(j-1)+1)=cnow
+                  six(loc)=e
+                  six(loc+1)=cnow
                   clast=cnow
+                  loc=loc+2
                endif
             endif
          enddo
 
          !--write out coherent reaction record
          nee=j
-         nw=2*nee
-         write(nout) nee,nea
-         write(nout) (six(1-1+i),i=1,nw)
+         write(nout) nee,0
+         write(nout) (six(i),i=1,2*nee)
+      else
+         write(nout) 0,0
+      endif
 
       !--incoherent elastic
-      else
-         call findf(matd,6,mte,nin)
+      if (mtei.ne.0) then
+         call findf(matd,6,mtei,nin)
          call contio(nin,0,0,scr,nb,nw)
          call tab1io(nin,0,0,scr,nb,nw)
          call tab2io(nin,0,0,scr,nb,nw)
          nee=nint(scr(6))
          neie=0
          call repoz(nscr)
-         call findf(matd,3,mte,nscr)
+         call findf(matd,3,mtei,nscr)
          call contio(nscr,0,0,xs,nb,nw)
          e=0
          call gety1(e,enext,idis,x,nscr,xs)
@@ -251,6 +271,8 @@ contains
          nea=nea-1
          write(nout) neie,nea
          write(nout) (six(i),i=1,loc)
+      else
+         write(nout) 0,0
       endif
    endif
 
@@ -563,8 +585,8 @@ contains
       endif
       read (nin,'(4(i7,f11.0))') (izo(i),awo(i),i=1,16)
       read (nin,'(8i9)')&
-        len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-        itie,itix,itxe,itce,itcx,itca,jxsd
+        len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+        itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       n=(len2+3)/4
       n=n-1
       l=0
@@ -574,12 +596,12 @@ contains
    else if (itype.eq.2) then
       if (mcnpx.eq.0) then
         read(nin) hz(1:10),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-          itie,itix,itxe,itce,itcx,itca,jxsd
+          len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+          itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       else
         read(nin) hz(1:13),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-          itie,itix,itxe,itce,itcx,itca,jxsd
+          len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+          itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       endif
       n=(len2+ner-1)/ner
       l=0
@@ -628,14 +650,14 @@ contains
    integer::izn(16)
    character(6)::tname
    ! internals
-   integer::nwscr,nw,i,loc,indx,j,k,jang
-   integer::nee,nea,nce,nie
+   integer::nwscr,nw,i,loc,indx,j,k,jang,start,middle
+   integer::nee,nea
    character(8)::hdt
    real(kr),dimension(:),allocatable::scr
    real(kr),parameter::emev=1.e6_kr
 
    !--initialize
-   nwscr=500000
+   nwscr=5000000
    allocate(scr(nwscr))
    write(hm,'(''   mat'',i4)') matd
    tz=tempd*bk/emev
@@ -648,76 +670,157 @@ contains
    hd='  '//hdt
    ncl=0
    idpni=3
+   idpnc=0
    ifeng=0
    if (iwt.eq.0) ifeng=1
    if (iwt.eq.2) ifeng=2
    call repoz(-nin)
 
-   !--read elastic pointers
-   read(nin) nee,nea
-   nce=nee
-   nie=nei
-
    !--assign pointers in xss array
    itie=1
-   itix=itie+1+nie
-   itxe=itix+nie
-   if (ifeng.gt.1) len2=len2+2*nie
-   len2=len2+itxe-1
-   if (nee.gt.0) then
-      itce=len2+1
-      itcx=itce+nee+1
-      len2=itcx+nee-1
-   endif
+   itix=itie+1+nei
+   itxe=itix+nei
+   itce=0
+   itcx=0
    itca=0
-   if (nee.gt.0.and.nea.gt.0) then
-      itca=itcx+nee
-      len2=itca+nee*nea-1
-   endif
+   itcei=0
+   itcxi=0
+   itcai=0
+
+   !--xss length
+   if (ifeng.gt.1) len2=len2+2*nei
+   len2=len2+itxe-1
    if (len2.gt.nxss) then
       write(nsyso,'(i10)') len2
       call error('thrlod','xss too small',' ')
    endif
 
-   !--check for elastic data
-   if (nee.ne.0) then
-      xss(itce)=nce
+   !--read first elastic block - coherent elastic
+   nee=0
+   nea=0
+   read(nin) nee,nea
 
-      !--process coherent elastic data
-      if (nea.le.0) then
-         ncl=-1
-         idpnc=4
-         nw=2*nee
-         if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
-         read(nin) (scr(i),i=1,nw)
-         do i=1,nee
-            xss(i+itce)=scr(1+2*(i-1))/emev
-            xss(i+nee+itce)=scr(2+2*(i-1))/emev/nmix
-         enddo
+print*, "coherent elastic ", nee, nea
 
-      !--process incoherent elastic data
-      else
-         ncl=nea-1
-         idpnc=3
-         nw=nee*(2+nea)
-         if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
-         read(nin) (scr(i),i=1,nw)
-         loc=itca-1
-         indx=1
-         do i=1,nee
-            xss(itce+i)=scr(indx)/emev
-            xss(itce+nee+i)=scr(indx+1)/nmix
-            do j=1,nea
-               xss(j+loc)=scr(indx+1+j)
-            enddo
-            loc=loc+nea
-            indx=indx+nea+2
-         enddo
-      endif
+   !--assign pointers in xss array
+   if (nee.gt.0) then
+
+     !--set idpnc value
+     idpnc=4
+
+     !--assign pointers in xss array
+     itce=len2+1
+     itcx=itce+nee+1
+     itca=0
+print*, itce,itcx,itca
+     !--xss length
+     len2=len2+2*nee+1
+     if (len2.gt.nxss) then
+        write(nsyso,'(i10)') len2
+        call error('thrlod','xss too small',' ')
+     endif
+print*, len2
+
+     !--nxs values
+     ncl=-1
+
+     !--fill xss array
+     xss(itce)=nee
+     nw=2*nee
+     if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
+     read(nin) (scr(i),i=1,nw)
+     do i=1,nee
+        xss(i+itce)=scr(1+2*(i-1))/emev
+        xss(i+nee+itce)=scr(2+2*(i-1))/emev/nmix
+     enddo
+
    endif
 
+   !--read second elastic block - incoherent elastic
+   nee=0
+   nea=0
+   start=0
+   middle=0
+   read(nin) nee,nea
+
+print*, "incoherent elastic ", nee, nea
+
+   !--assign pointers in xss array
+   if (nee.gt.0) then
+
+     if (idpnc.eq.0) then
+
+        !--set idpnc value
+        idpnc=3
+
+        !--assign pointers in xss array
+        itce=len2+1
+        itcx=itce+nee+1
+        itca=itcx+nee
+
+        !--xss length
+        len2=itca+nee*nea-1
+        if (len2.gt.nxss) then
+           write(nsyso,'(i10)') len2
+           call error('thrlod','xss too small',' ')
+        endif
+
+        !--nxs values
+        ncl=nea-1
+
+        !--set indices
+        start=itce
+        middle=itca
+
+     else
+
+        !--set idpnc value
+        idpnc=5
+
+        !--assign pointers in xss array
+        itcei=len2+1
+        itcxi=itcei+nee+1
+        itcai=itcxi+nee
+
+        !--xss length
+        len2=itcai+nee*nea-1
+        if (len2.gt.nxss) then
+           write(nsyso,'(i10)') len2
+           call error('thrlod','xss too small',' ')
+        endif
+
+        !--nxs values
+        ncli=nea-1
+
+        !--set indices
+        start=itcei
+        middle=itcai
+
+     endif
+
+     !--fill xss array
+     xss(start)=nee
+     nw=nee*(2+nea)
+     if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
+     read(nin) (scr(i),i=1,nw)
+     loc=middle-1
+     indx=1
+     do i=1,nee
+        xss(start+i)=scr(indx)/emev
+        xss(start+nee+i)=scr(indx+1)/nmix
+        do j=1,nea
+           xss(j+loc)=scr(indx+1+j)
+        enddo
+        loc=loc+nea
+        indx=indx+nea+2
+     enddo
+
+   endif
+
+
+print*, "incoherent inelastic "
+
    !--process inelastic data
-   nie=nei
    nieb=nbini
    if (ifeng.le.1) then
       nil=nang-1
@@ -733,7 +836,7 @@ contains
       read(nin) (scr(j),j=1,nw)
       nw=nw-2
       xss(itie+i)=scr(1)/emev
-      xss(itie+nie+i)=scr(2)/nmix
+      xss(itie+nei+i)=scr(2)/nmix
       if (ifeng.gt.1) then
          xss(itxe-1+i)=indx
          xss(itxe-1+nei+i)=nw/(nang+3)
@@ -2069,8 +2172,8 @@ contains
       endif
       write(nout,'(4(i7,f11.0))') (izn(i),awn(i),i=1,16)
       write(nout,'(8i9)') &
-        len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-        itie,itix,itxe,itce,itcx,itca,jxsd
+        len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+        itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
 
 print*, 'len2',len2
 print*, 'idpni',idpni
@@ -2079,6 +2182,7 @@ print*, 'nieb',nieb
 print*, 'idpnc',idpnc
 print*, 'ncl',ncl
 print*, 'ifeng',ifeng
+print*, 'ncli',ncli
 print*, 'nxsd',nxsd
 print*, 'itie',itie
 print*, 'itix',itix
@@ -2086,9 +2190,13 @@ print*, 'itxe',itxe
 print*, 'itce',itce
 print*, 'itcx',itcx
 print*, 'itca',itca
+print*, 'itcei',itcei
+print*, 'itcxi',itcxi
+print*, 'itcai',itcai
 
       !--itie block
       l=1
+print*, 'itie block'
 print*, 'advance to locator', l, itie
       call advance_to_locator(nout,l,itie)
       ne=nint(xss(l))
@@ -2096,6 +2204,7 @@ print*, 'advance to locator', l, itie
       call write_real_list(nout,l,2*ne)     ! E (NE values), xs (NE values)
 
       !--itxe block
+print*, 'itxe block'
 print*, 'advance to locator', l, itxe
       call advance_to_locator(nout,l,itxe)
       if (ifeng.le.1) then                  ! equal probable cosine or discrete cosine distributions
@@ -2114,6 +2223,7 @@ print*, 'advance to locator', l, nint(xss(itxe+locator-1))+1
 
       !--itce block
       if (itce.ne.0) then
+print*, 'itce block'
 print*, 'advance to locator', l, itce
          call advance_to_locator(nout,l,itce)
          ne=nint(xss(l))
@@ -2123,10 +2233,34 @@ print*, 'advance to locator', l, itce
       endif
 
       !--itca block
-      if (itce.ne.0.and.ncl.ne.-1) then
+      if (itca.ne.0) then
+print*, 'itca block'
 print*, 'advance to locator', l, itca
          call advance_to_locator(nout,l,itca)
          n=nexe*(ncl+1)
+         do i=1,n
+            call typen(l,nout,2)
+            l=l+1
+         enddo
+      endif
+
+      !--itcei block
+      if (itcei.ne.0) then
+print*, 'itcei block'
+print*, 'advance to locator', l, itcei
+         call advance_to_locator(nout,l,itcei)
+         ne=nint(xss(l))
+         nexe=ne
+         call write_integer(nout,l)            ! NE
+         call write_real_list(nout,l,2*ne)     ! E (NE values), P (NE values)
+      endif
+
+      !--itcai block
+      if (itcai.ne.0) then
+print*, 'itcai block'
+print*, 'advance to locator', l, itcai
+         call advance_to_locator(nout,l,itcai)
+         n=nexe*(ncli+1)
          do i=1,n
             call typen(l,nout,2)
             l=l+1
@@ -2144,13 +2278,13 @@ print*, 'advance to locator', l, itca
       if (mcnpx.eq.0) then
          write(nout) hz(1:10),aw0,tz,hd,hk,hm,&
             (izn(i),awn(i),i=1,16),&
-           len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-           itie,itix,itxe,itce,itcx,itca,jxsd
+           len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+           itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       else
          write(nout) hz(1:13),aw0,tz,hd,hk,hm,&
             (izn(i),awn(i),i=1,16),&
-           len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-           itie,itix,itxe,itce,itcx,itca,jxsd
+           len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+           itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       endif
       ll=0
       nn=len2
