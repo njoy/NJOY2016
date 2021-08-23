@@ -869,8 +869,8 @@ print*, "incoherent inelastic "
    ! externals
    character(70)::hk
    ! internals
-   integer::nie,nee,loc,nang,nbini,nln,lim,lim1,i,lines
-   integer::j,k,nea,ncol,npg,ipg,indx,mcol,ifini,ne
+   integer::nie,nee,neei,loc,nang,nbini,nln,lim,lim1,i,lines
+   integer::j,k,nea,ncol,npg,ipg,indx,mcol,ifini,ne,start,middle
    integer::ind(4)
    real(kr)::b(4),c(4)
    character(10),parameter::labl1='bragg edge'
@@ -884,7 +884,9 @@ print*, "incoherent inelastic "
    !--print thermal header information
    nie=nint(xss(itie))
    nee=0
+   neei=0
    if (itce.gt.0) nee=nint(xss(itce))
+   if (itcei.gt.0) neei=nint(xss(itcei))
    write(nsyso,'(''1''///////&
      &38x,''zaid'',1x,a13/39x,''awr'',f10.3/&
      &38x,''temp'',1p,e10.2/38x,''date'',a10/39x,''mat'',a10/&
@@ -896,14 +898,16 @@ print*, "incoherent inelastic "
      &6x,''*                     *'',8x,''idpnc'',i10/&
      &6x,''*     processed by    *'',10x,''ncl'',i10/&
      &6x,''*                     *'',8x,''ifeng'',i10/&
-     &6x,''*        njoy         *''/&
-     &6x,''*                     *'',9x,''itie'',i10/&
-     &6x,''***********************'',9x,''itix'',i10/&
-     &38x,''itxe'',i10/38x,''itce'',i10/38x,''itcx'',i10/&
-     &38x,''itca'',i10//39x,''nie'',i10/39x,''nee'',i10///&
+     &6x,''*        njoy         *'',9x,''ncli'',i10/&
+     &6x,''*                     *''/&
+     &6x,''***********************'',9x,''itie'',i10/&
+     &38x,''itix'',i10/38x,''itxe'',i10/38x,''itce'',i10/&
+     &38x,''itcx'',i10/38x,''itca'',i10/37x,''itcei'',i10/&
+     &37x,''itcxi'',i10/37x,''itcai'',i10//39x,''nie'',i10/&
+     &39x,''nee'',i10/38x,''neei'',i10///&
      &6x,''hk---'',a70)')&
      hz,aw0,tz,hd,hm,len2,idpni,nil,nieb,idpnc,ncl,&
-     ifeng,itie,itix,itxe,itce,itcx,itca,nie,nee,hk
+     ifeng,ncli,itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,nie,nee,neei,hk
 
    !--print inelastic data
    loc=itxe-1
@@ -973,41 +977,9 @@ print*, "incoherent inelastic "
    enddo
 
    !--check for elastic data
-   if (nee.eq.0) return
+   if (idpnc.eq.0) return
 
-   !--print incoherent elastic data
-   if (idpnc.ne.4) then
-      nea=ncl+1
-      write(nsyso,'(''1''/&
-        &'' incoherent elastic data - equally probable angles''/&
-        &'' -------------------------------------------------''/)')
-      write(nsyso,'(/&
-        &9x,''incident'',9x,''cross''/&
-        &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
-      lines=7
-      nln=(nea+8)/9
-      lim=nea
-      if (nea.gt.8) lim=8
-      lim1=lim+1
-      loc=itca-1
-      do i=1,nee
-         if ((lines+nln).gt.58) then
-            write(nsyso,'(''1'')')
-            write(nsyso,'(/&
-              &9x,''incident'',9x,''cross''/&
-              &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
-            lines=4
-         endif
-         write(nsyso,'(/2x,i3,1x,1p,e12.4,3x,e12.4,3x,0p,8f10.4)')&
-           i,xss(itce+i),xss(itce+nee+i),(xss(loc+j),j=1,lim)
-         if (nea.gt.8) write(nsyso,'(36x,8f10.4)')&
-           (xss(loc+j),j=lim1,nea)
-         loc=loc+nea
-         lines=lines+nln
-      enddo
-
-   !--print coherent elastic data
-   else
+   if (idpnc.eq.4.or.idpnc.eq.5) then
       write(nsyso,'(''1''/&
         &'' coherent elastic data - bragg edges and cumulative '',&
         &''intensity''/&
@@ -1063,6 +1035,45 @@ print*, "incoherent inelastic "
             endif
          enddo
          if (ifini.eq.0) indx=itce+1+200*ipg
+      enddo
+   endif
+
+   !--print incoherent elastic data
+   if (idpnc.eq.3.or.idpnc.eq.5) then
+      start=itce
+      middle=itca
+      nea=ncl+1
+      if (idpnc.eq.5) then
+         start=itcei
+         middle=itcai
+         nea=ncli+1
+      endif
+      write(nsyso,'(''1''/&
+        &'' incoherent elastic data - equally probable angles''/&
+        &'' -------------------------------------------------''/)')
+      write(nsyso,'(/&
+        &9x,''incident'',9x,''cross''/&
+        &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
+      lines=7
+      nln=(nea+8)/9
+      lim=nea
+      if (nea.gt.8) lim=8
+      lim1=lim+1
+      loc=middle-1
+      do i=1,neei
+         if ((lines+nln).gt.58) then
+            write(nsyso,'(''1'')')
+            write(nsyso,'(/&
+              &9x,''incident'',9x,''cross''/&
+              &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
+            lines=4
+         endif
+         write(nsyso,'(/2x,i3,1x,1p,e12.4,3x,e12.4,3x,0p,8f10.4)')&
+           i,xss(start+i),xss(start+neei+i),(xss(loc+j),j=1,lim)
+         if (nea.gt.8) write(nsyso,'(36x,8f10.4)')&
+           (xss(loc+j),j=lim1,nea)
+         loc=loc+nea
+         lines=lines+nln
       enddo
    endif
    return
