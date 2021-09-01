@@ -31,4 +31,10 @@ acer
  128 400 'd-lid'                            / Card8
  1002                                       / Card8a
  221 20 222 2 1 10. 0                       / Card9
+acer
+ 0 70 55 71 76 /
+ 7 1 1 -1/
+ 'Pu239 IAEA photonuclear data - check tape 1'
+viewr
+ 55 56
 stop
