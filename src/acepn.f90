@@ -46,7 +46,7 @@ contains
    integer::mt103,mt104,mt105,mt106,mt107
    integer::i,mfd,mtd,l,mttot,idis,nex,nexc,ir,j,idone,nnex,n
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
-   integer::k,ia,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp,na
+   integer::k,ia,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
    integer::ll,lll,lep,ne,llh,lld,ie,np,ip,mtt,lct,ii
    integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang,lleg,ileg
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
