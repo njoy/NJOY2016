@@ -332,3 +332,9 @@ Tests 65 was added as a consequence of issue [\#122](https://github.com/njoy/NJO
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/66/input)]
 
 Tests 66 was added as a consequence of issue [\#214](https://github.com/njoy/NJOY2016/issues/214). It verifies that the yield (and production cross section) for secondary neutrons produced after photo-fission is equal to nubar when the evaluation uses an MF6/MT18 section for the PFNS in which the neutron yield is set to 1 instead of nubar.
+
+## Test Problem 67
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/67/input)]
+
+Tests 67 was added to test the new mixed mode elastic scattering processing for thermal scattering data in THERMR and ACER, which is going to be introduced in ENDF/B-VIII.1.

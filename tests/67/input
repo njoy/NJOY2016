@@ -26,7 +26,7 @@ moder
 acer
  -30 -50 0 70 75                            / Card1
  2 1 1 .10 1                                / Card2
- 'D in LiD @400K from ENDF/B-VIII.1-beta'   / Card3
+ 'D in 7LiD @400K from ENDF/B-VIII.1-beta'  / Card3
  1002 0.9991673                             / Card4
  128 400 'd-lid'                            / Card8
  1002                                       / Card8a
@@ -34,7 +34,7 @@ acer
 acer
  0 70 55 71 76 /
  7 1 1 -1/
- 'D in LiD @400K from ENDF/B-VIII.1-beta - check tape 1'
+ 'D in 7LiD @400K from ENDF/B-VIII.1-beta - check tape 1'
 viewr
  55 56
 stop

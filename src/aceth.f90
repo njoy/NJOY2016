@@ -1139,7 +1139,7 @@ print*, "incoherent inelastic "
             j=j+1
             e1=xss(itce+j)
             x1=xss(itce+nee+j)
-            if (idpnc.eq.4) x1=x1/e1
+            if (idpnc.eq.4.or.idpnc.eq.5) x1=x1/e1
             e2=xss(itce+j+1)
             x2=xss(itce+nee+j+1)
             if (idpnc.eq.4.or.idpnc.eq.5) x2=x2/e2
@@ -1150,6 +1150,7 @@ print*, "incoherent inelastic "
             endif
          enddo
          if (idpnc.eq.5) then
+            j=0
             do while (j.lt.neei)
                j=j+1
                e1=xss(itcei+j)
@@ -1245,7 +1246,7 @@ print*, "incoherent inelastic "
       if (idpnc.eq.5) then
         write(nout,'(''3/'')')
         write(nout,'(''/'')')
-        write(nout,'(''/'')')
+        write(nout,'(''0 0 0 3/'')')
         write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
         write(nout,'(''0/'')')
         do i=1,neei
@@ -1271,11 +1272,23 @@ print*, "incoherent inelastic "
          if (e.ge.xss(itce+1)) then
             idone=1
          else
-            xs=xss(itie+nie+i)
-            write(nout,'(1p,2e14.6,''/'')') e,xs
+            xn=xss(itie+nie+i)
+            if (idpnc.eq.5) then
+               j=0
+               do while (j.lt.neei)
+                  j=j+1
+                  e1=xss(itcei+j)
+                  x1=xss(itcei+neei+j)
+                  e2=xss(itcei+j+1)
+                  x2=xss(itcei+neei+j+1)
+                  if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+               enddo
+            endif
+            tot=xn+xielas
+            write(nout,'(1p,2e14.6,''/'')') e,tot
          endif
       enddo
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
          e=xss(itce+1)-xss(itce+1)/1000
          j=0
          do while (j.lt.nie)
@@ -1286,13 +1299,26 @@ print*, "incoherent inelastic "
             x2=xss(itie+nie+j+1)
             if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
          enddo
-         tot=xn
+         if (idpnc.eq.5) then
+            j=0
+            do while (j.lt.neei)
+               j=j+1
+               e1=xss(itcei+j)
+               x1=xss(itcei+neei+j)
+               e2=xss(itcei+j+1)
+               x2=xss(itcei+neei+j+1)
+               if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+            enddo
+         endif
+         tot=xn+xielas
          write(nout,'(1p,2e14.6,''/'')') e,tot
       endif
       do i=1,nee
          e=xss(itce+i)
          xs=xss(itce+nee+i)
-         if (idpnc.eq.4) xs=xs/e
+         xn=0
+         xielas=0
+         if (idpnc.eq.4.or.idpnc.eq.5) xs=xs/e
          j=0
          do while (j.lt.nie)
             j=j+1
@@ -1302,9 +1328,20 @@ print*, "incoherent inelastic "
             x2=xss(itie+nie+j+1)
             if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
          enddo
-         tot=xs+xn
+         if (idpnc.eq.5) then
+            j=0
+            do while (j.lt.neei)
+               j=j+1
+               e1=xss(itcei+j)
+               x1=xss(itcei+neei+j)
+               e2=xss(itcei+j+1)
+               x2=xss(itcei+neei+j+1)
+               if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+            enddo
+         endif
+         tot=xs+xn+xielas
          write(nout,'(1p,2e14.6,''/'')') e,tot
-         if (i.lt.nee.and.idpnc.eq.4) then
+         if (i.lt.nee.and.(idpnc.eq.4.or.idpnc.eq.5)) then
             e=xss(itce+i+1)-xss(itce+i+1)/1000
             xs=xss(itce+nee+i)/e
             j=0
@@ -1316,11 +1353,22 @@ print*, "incoherent inelastic "
                x2=xss(itie+nie+j+1)
                if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
             enddo
-            tot=xs+xn
+            if (idpnc.eq.5) then
+               j=0
+               do while (j.lt.neei)
+                  j=j+1
+                  e1=xss(itcei+j)
+                  x1=xss(itcei+neei+j)
+                  e2=xss(itcei+j+1)
+                  x2=xss(itcei+neei+j+1)
+                  if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+               enddo
+            endif
+            tot=xs+xn+xielas
             write(nout,'(1p,2e14.6,''/'')') e,tot
          endif
       enddo
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
          do i=1,25
             e=e+e/10
             if (e.gt.xmax) exit
@@ -1334,9 +1382,39 @@ print*, "incoherent inelastic "
                x2=xss(itie+nie+j+1)
                if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
             enddo
-            tot=xs+xn
+            if (idpnc.eq.5) then
+               j=0
+               do while (j.lt.neei)
+                  j=j+1
+                  e1=xss(itcei+j)
+                  x1=xss(itcei+neei+j)
+                  e2=xss(itcei+j+1)
+                  x2=xss(itcei+neei+j+1)
+                  if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+               enddo
+            endif
+            tot=xs+xn+xielas
             write(nout,'(1p,2e14.6,''/'')') e,tot
          enddo
+      endif
+      if (idpnc.eq.5) then
+        do i=1,neei
+           if (e.lt.xss(itcei+i)) then
+              e=xss(itcei+i)
+              xielas=xss(itcei+neei+i)
+              j=0
+              do while (j.lt.nie)
+                 j=j+1
+                 e1=xss(itie+j)
+                 x1=xss(itie+nie+j)
+                 e2=xss(itie+j+1)
+                 x2=xss(itie+nie+j+1)
+                 if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
+              enddo
+              tot=xn+xielas
+              write(nout,'(1p,2e14.6,''/'')') e,tot
+         endif
+        enddo
       endif
       write(nout,'(''/'')')
    endif
@@ -1469,14 +1547,14 @@ print*, "incoherent inelastic "
    enddo
    write(nout,'(''/'')')
    if (nee.ne.0) then
-      write(nout,'(''2/'')')
-      write(nout,'(''/'')')
-      if (iwcol.eq.0) then
-         write(nout,'(''0 0 1/'')')
-      else
-         write(nout,'(''0 0 0 2/'')')
-      endif
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
+         write(nout,'(''2/'')')
+         write(nout,'(''/'')')
+         if (iwcol.eq.0) then
+            write(nout,'(''0 0 1/'')')
+         else
+            write(nout,'(''0 0 0 2/'')')
+         endif
          write(nout,'(a,''coherent elastic'',a,''/'')') qu,qu
          write(nout,'(''0/'')')
          e=xss(itce+1)
@@ -1504,7 +1582,16 @@ print*, "incoherent inelastic "
             write(nout,'(1p,2e14.6,''/'')') e,ubar
             e=e+e/50
          enddo
-      else
+         write(nout,'(''/'')')
+      endif
+      if (idpnc.eq.3) then
+         write(nout,'(''2/'')')
+         write(nout,'(''/'')')
+         if (iwcol.eq.0) then
+            write(nout,'(''0 0 1/'')')
+         else
+            write(nout,'(''0 0 0 2/'')')
+         endif
          write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
          write(nout,'(''0/'')')
          loc=itca-1
@@ -1517,8 +1604,30 @@ print*, "incoherent inelastic "
             write(nout,'(1p,2e14.6,''/'')') e,ubar
             loc=loc+ncl+1
          enddo
+         write(nout,'(''/'')')
       endif
-      write(nout,'(''/'')')
+      if (idpnc.eq.5) then
+         write(nout,'(''3/'')')
+         write(nout,'(''/'')')
+         if (iwcol.eq.0) then
+            write(nout,'(''0 0 2/'')')
+         else
+            write(nout,'(''0 0 0 3/'')')
+         endif
+         write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
+         write(nout,'(''0/'')')
+         loc=itcai-1
+         do i=1,nee
+            e=xss(itcei+i)
+            ubar=0
+            do j=1,ncli+1
+               ubar=ubar+xss(loc+j)/(ncli+1)
+            enddo
+            write(nout,'(1p,2e14.6,''/'')') e,ubar
+            loc=loc+ncli+1
+         enddo
+         write(nout,'(''/'')')
+      endif
    endif
 
    !--ebar plot
