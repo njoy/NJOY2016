@@ -1,0 +1,40 @@
+-- case 4: thermal scattering inelastic and coherent inelastic
+moder
+ 20 -30
+moder
+ 21 -40
+reconr
+ -30 -31 /
+ 'PENDF tape for ENDF/B-VIII.0 Al-27'/
+ 1325 2 0 /
+ 0.001 /
+ 'Al-27 from ENDF/B-VIII.0' /
+ 'processed at 0.1% tolerance' /
+ 0 /
+broadr
+ -30 -31 -32
+ 1325 1 /
+ 0.001 /
+ 400 /
+ 0 /
+thermr
+ -40 -32 -50 /
+ 53 1325 20 1 2 1 0 1 221 1 /
+ 400 /
+ 0.001 2.277 /
+moder
+ -50 60
+acer
+ -30 -50 0 70 75                            / Card1
+ 2 1 1 .10 0                                / Card2
+ 'Al-27 @400K from ENDF/B-VIII.0'           / Card3
+ 1325 400 'al-27'                            / Card8
+ 13027                                        / Card8a
+ 221 20 222 0 1 2.277 0                       / Card9
+acer
+ 0 70 55 71 76 /
+ 7 1 1 -1/
+ 'Al-27 @400K from ENDF/B-VIII.0 - check tape 1'
+viewr
+ 55 56
+stop
