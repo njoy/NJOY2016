@@ -1,3 +1,4 @@
+-- case 1: thermal scattering inelastic and mixed mode elastic (ENDF/B-VIII.1 option)
 moder
  20 -30
 moder
@@ -25,9 +26,8 @@ moder
  -50 60
 acer
  -30 -50 0 70 75                            / Card1
- 2 1 1 .10 1                                / Card2
+ 2 1 1 .10 0                                / Card2
  'D in 7LiD @400K from ENDF/B-VIII.1-beta'  / Card3
- 1002 0.9991673                             / Card4
  128 400 'd-lid'                            / Card8
  1002                                       / Card8a
  221 20 222 2 1 10. 0                       / Card9
