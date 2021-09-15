@@ -817,8 +817,8 @@ contains
                   xss(nex+1)=mt
                   xss(nex+2)=0
                   xss(nex+3)=2
-                  xss(nex+4)=sigfig(xss(esz+iaa-1),7,0)
-                  xss(nex+5)=sigfig(xss(esz+nes-1),7,0)
+                  xss(nex+4)=sigfig(xss(esz+iaa-1)/emev,7,0)
+                  xss(nex+5)=sigfig(xss(esz+nes-1)/emev,7,0)
                   xss(nex+6)=y
                   xss(nex+7)=y
                   nex=nex+8
