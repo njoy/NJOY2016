@@ -1617,7 +1617,7 @@ print*, "incoherent inelastic "
          write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
          write(nout,'(''0/'')')
          loc=itcai-1
-         do i=1,nee
+         do i=1,neei
             e=xss(itcei+i)
             ubar=0
             do j=1,ncli+1
