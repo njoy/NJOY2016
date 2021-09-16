@@ -4630,7 +4630,7 @@ contains
    ! internals
    integer::nneg,ntot,i,in,ig,inn,nss,iss,nb,nw,idis,it
    integer::imtr,itt,k,istart,iend,j,ib,isave,ir,ith
-   real(kr)::er,eg,en,e,thresh,sn,sg,enext
+   real(kr)::er,eg,en,e,thresh,sn,sg,enext,awrx,qx
    real(kr)::res(nsig+1),tot(10)
    real(kr)::aa(1)
    real(kr),dimension(:),allocatable::bufo,bufn,bufg,bufr
@@ -4703,6 +4703,13 @@ contains
    nsc=0
   210 continue
    call contio(nin,0,nscr,scr,nb,nw)
+   if (mfh.ne.23.and.awin.ne.zero) awrx=c2h/awin
+   qx=c2h
+   if (awin.ne.0) then
+       thr6=-qx*(awrx+1)/awrx
+   else
+       thr6=-qx
+   endif
    nss=1
    if (mfh.eq.10) nss=n1h
    iss=nss
@@ -5705,4 +5712,3 @@ contains
    end subroutine w
 
 end module reconm
-
