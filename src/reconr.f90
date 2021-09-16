@@ -4711,14 +4711,16 @@ contains
    go to 510
   220 continue
    if (mth.eq.0) go to 210
-   if (mfh.ne.23.and.awin.ne.zero) awrx=c2h/awin
-   qx=c2h
-   if (awin.ne.0) then
-       thr6=-qx*(awrx+1)/awrx
-   else
-       thr6=-qx
+   if (iss.eq.nss) then
+      if (mfh.ne.23.and.awin.ne.zero) awrx=c2h/awin
+      qx=c2h
+      if (awin.ne.0) then
+          thr6=-qx*(awrx+1)/awrx
+      else
+          thr6=-qx
+      endif
+      if (thr6.lt.zero) thr6=0
    endif
-   if (thr6.lt.zero) thr6=0
    e=0
    call gety1(e,thresh,idis,sn,nin,scr)
    thresh=sigfig(thresh,7,0)
