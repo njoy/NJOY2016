@@ -5035,9 +5035,6 @@ contains
             endif
             mtntr=mt
          endif
-
-print*, mf, mt, nr
-
       else if (izai.eq.1003) then
          if (mf.eq.3) then
             if (mt.ne.1.and.mt.ne.2.and.&
@@ -5868,7 +5865,6 @@ print*, mf, mt, nr
          mt518=0
          mt=nint(xss(mtr+i-1))
          q=xss(lqr+i-1)
-print*, mt, iza, izai
          do k=1,nxc
             if (mts(k).eq.mt) then
                if (mt.eq.18.and.mfs(k).eq.5.and.mt518.eq.0) then
