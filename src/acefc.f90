@@ -5035,6 +5035,9 @@ contains
             endif
             mtntr=mt
          endif
+
+print*, mf, mt, nr
+
       else if (izai.eq.1003) then
          if (mf.eq.3) then
             if (mt.ne.1.and.mt.ne.2.and.&
@@ -5380,7 +5383,7 @@ contains
          if (mt.eq.5.and.mt5p.eq.0) iskip=0
       else if (izai.eq.1002) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.32.or.mt.eq.35.or.&
+         if (mt.eq.2.or.mt.eq.11.or.mt.eq.32.or.mt.eq.35.or.&
            mt.eq.104.or.mt.eq.114.or.mt.eq.115.or.mt.eq.117.or.&
            mt.eq.157.or.mt.eq.158.or.mt.eq.169.or.&
            mt.eq.170.or.mt.eq.171.or.mt.eq.182.or.&
@@ -5865,6 +5868,7 @@ contains
          mt518=0
          mt=nint(xss(mtr+i-1))
          q=xss(lqr+i-1)
+print*, mt, iza, izai
          do k=1,nxc
             if (mts(k).eq.mt) then
                if (mt.eq.18.and.mfs(k).eq.5.and.mt518.eq.0) then
