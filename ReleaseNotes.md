@@ -2,7 +2,7 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.65](https://github.com/njoy/NJOY2016/pull/224)
-This release fixes a processing issue for the d+Pt184 from TENDL-2021 in ACER.
+This release fixes a processing issue for the d+Pt184 from TENDL-2021 in ACER. Some logic issue lead to MT11 being ignored as a deuteron producing reaction and this lead to processing problems in ACER.
 
 This release addresses issue [\#184](https://github.com/njoy/NJOY2016/issues/184) and [\#223](https://github.com/njoy/NJOY2016/issues/223).
 
