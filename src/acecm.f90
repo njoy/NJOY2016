@@ -7,7 +7,7 @@ module acecm
    private
 
    ! main ace container array
-   integer,parameter,public::nxss=20000000
+   integer,parameter,public::nxss=50000000
    real(kr),public::xss(nxss)
 
    !--Public routines

@@ -461,11 +461,12 @@ contains
                      enddo
                      e=c2h
                      heat=0
+                     na=nint(scr(lld+3))
                      np=nint(scr(lld+5))
                      call terpa(y,e,en,idis,scr(lly),npp,nrr)
                      do ip=1,np
-                        ep=scr(lld+4+2*ip)
-                        g=scr(lld+5+2*ip)
+                        ep=scr(lld+6+(na+2)*(ip-1))
+                        g=scr(lld+7+(na+2)*(ip-1))
                         if (ip.gt.1) then
                            heat=heat+(ep-epl)*gl*(ep+epl)/2
                         endif
@@ -541,7 +542,7 @@ contains
                      enddo
                      e=c2h
                      scr(llh+6+2*ie)=e
-                     scr(llh+7+2*ie)=awp*(e+q)/(awr-awp)
+                     scr(llh+7+2*ie)=awp*(e+q*emev)/(awr-awp)
                   enddo
                   mtt=0
                   ir=0
@@ -778,21 +779,29 @@ contains
                   enddo
                   nex=nex+4+2*ne
                else
-                  ! get the yield, these reactions ONLY produce neutrons
                   y=1
-                  if (mt.eq.16) then
+                  if (mth.eq.11.or.mth.eq.16.or.mth.eq.24.or.&
+                      mth.eq.30.or.mth.eq.41.or.mth.eq.154.or.&
+                      mth.eq.159.or.mth.eq.176.or.mth.eq.190.or.&
+                      (mth.ge.875.and.mth.le.891)) then
                      y=2
-                  elseif (mt.eq.17) then
+                  elseif (mth.eq.17.or.mth.eq.25.or.mth.eq.42.or.&
+                          mth.eq.157.or.mth.eq.172.or.mth.eq.177.or.&
+                          mth.eq.179.or.(mth.ge.181.and.mth.le.199)) then
                      y=3
-                  elseif (mt.eq.37) then
+                  elseif (mth.eq.37.or.mth.eq.156.or.mth.eq.165.or.&
+                          mth.eq.169.or.mth.eq.173.or.mth.eq.178.or.&
+                          (mth.ge.194.and.mth.le.196)) then
                      y=4
-                  elseif (mt.eq.152) then
+                  elseif (mth.eq.152.or.mth.eq.162.or.mth.eq.166.or.&
+                          mth.eq.170.or.mth.eq.174.or.mth.eq.200) then
                      y=5
-                  elseif (mt.eq.153) then
+                  elseif (mth.eq.153.or.mth.eq.163.or.mth.eq.167.or.&
+                          mth.eq.171.or.mth.eq.175) then
                      y=6
-                  elseif (mt.eq.160) then
+                  elseif (mth.eq.160.or.mth.eq.164.or.mth.eq.168) then
                      y=7
-                  elseif (mt.eq.152) then
+                  elseif (mth.eq.161) then
                      y=8
                   endif
                   do j=iaa,nes
@@ -808,8 +817,8 @@ contains
                   xss(nex+1)=mt
                   xss(nex+2)=0
                   xss(nex+3)=2
-                  xss(nex+4)=sigfig(xss(esz+iaa-1),7,0)
-                  xss(nex+5)=sigfig(xss(esz+nes-1),7,0)
+                  xss(nex+4)=sigfig(xss(esz+iaa-1)/emev,7,0)
+                  xss(nex+5)=sigfig(xss(esz+nes-1)/emev,7,0)
                   xss(nex+6)=y
                   xss(nex+7)=y
                   nex=nex+8
@@ -883,7 +892,7 @@ contains
                      ! using one lin-lin interpolation region
                      ! for now: error out and wait for this to come up to actually implement it
                      nr=nint(scr(5))
-                     if (nr.gt.1) then
+                     if (nr.gt.1.and.nint(scr(8)).ne.2) then
                         write(text,'(''no linearised multiplicity for izap='',i4,'' in mf=6/mt='',i3,''.'')')izap,mth
                         call mess('acephn',text,'this is currently unsupported for photonuclear ACE files.')
                      endif
@@ -1339,19 +1348,28 @@ contains
                         call terpa(y,e,en,idis,fnubar,ipp,irr)
                      else
                         y=1
-                        if (mt.eq.16) then
+                        if (mth.eq.11.or.mth.eq.16.or.mth.eq.24.or.&
+                            mth.eq.30.or.mth.eq.41.or.mth.eq.154.or.&
+                            mth.eq.159.or.mth.eq.176.or.mth.eq.190.or.&
+                            (mth.ge.875.and.mth.le.891)) then
                            y=2
-                        elseif (mt.eq.17) then
+                        elseif (mth.eq.17.or.mth.eq.25.or.mth.eq.42.or.&
+                                mth.eq.157.or.mth.eq.172.or.mth.eq.177.or.&
+                                mth.eq.179.or.(mth.ge.181.and.mth.le.199)) then
                            y=3
-                        elseif (mt.eq.37) then
+                        elseif (mth.eq.37.or.mth.eq.156.or.mth.eq.165.or.&
+                                mth.eq.169.or.mth.eq.173.or.mth.eq.178.or.&
+                                (mth.ge.194.and.mth.le.196)) then
                            y=4
-                        elseif (mt.eq.152) then
+                        elseif (mth.eq.152.or.mth.eq.162.or.mth.eq.166.or.&
+                                mth.eq.170.or.mth.eq.174.or.mth.eq.200) then
                            y=5
-                        elseif (mt.eq.153) then
+                        elseif (mth.eq.153.or.mth.eq.163.or.mth.eq.167.or.&
+                                mth.eq.171.or.mth.eq.175) then
                            y=6
-                        elseif (mt.eq.160) then
+                        elseif (mth.eq.160.or.mth.eq.164.or.mth.eq.168) then
                            y=7
-                        elseif (mt.eq.152) then
+                        elseif (mth.eq.161) then
                            y=8
                         endif
                      endif
