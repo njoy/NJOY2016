@@ -5377,7 +5377,7 @@ contains
          if (mt.eq.5.and.mt5p.eq.0) iskip=0
       else if (izai.eq.1002) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.32.or.mt.eq.35.or.&
+         if (mt.eq.2.or.mt.eq.11.or.mt.eq.32.or.mt.eq.35.or.&
            mt.eq.104.or.mt.eq.114.or.mt.eq.115.or.mt.eq.117.or.&
            mt.eq.157.or.mt.eq.158.or.mt.eq.169.or.&
            mt.eq.170.or.mt.eq.171.or.mt.eq.182.or.&
