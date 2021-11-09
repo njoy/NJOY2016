@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/tests/22
+# Install script for directory: /mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/tests/22
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

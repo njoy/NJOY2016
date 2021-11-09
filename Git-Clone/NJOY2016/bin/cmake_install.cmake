@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016
+# Install script for directory: /mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libnjoy.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/bin/libnjoy.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/bin/libnjoy.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libnjoy.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libnjoy.so")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -54,18 +54,21 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/njoy" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/njoy")
     file(RPATH_CHECK
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/njoy"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/bin/njoy")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/bin/njoy")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/njoy" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/njoy")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/njoy"
-         OLD_RPATH "/mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/bin:"
+         OLD_RPATH "/mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/bin:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/njoy")
@@ -75,7 +78,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/bin/tests/cmake_install.cmake")
+  include("/mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/bin/tests/cmake_install.cmake")
 
 endif()
 
@@ -87,5 +90,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/bin/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/bin/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

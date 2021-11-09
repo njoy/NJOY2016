@@ -4,8 +4,8 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 31Aug19   *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 11/05/19  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 21:18:30  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 11/08/21  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 23:10:16  *
  *                                         *              *                  *
  *****************************************************************************
 
@@ -17,7 +17,7 @@ Enhanced control logic inputs:
     icntrl:  7 0 0 0 1 0 0 0 0 0
 
 icntrl(1) control logic flag set for displacement kerma:   7
-icntrl control logic flag not yet tested:     5     1
+icntrl(5) control logic flag set to lattice atom read-in:     1
 icntrl(10) control logic flag set for damage energy:   0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
@@ -30,10 +30,10 @@ icntrl(10) control logic flag set for damage energy:   0
    TENDL-2017 gen. purp. file: neutron  + Ga- 69  1.e-5 eV - 200 MeV  
 
  using endf-6 format
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            0.2s
+ reconr...reconstruct pointwise cross sections in pendf format            0.1s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -147,7 +147,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =     114
  points in initial unionized grid             =     557
- points added by linearization                =     382                   0.2s
+ points added by linearization                =     382                   0.1s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -175,10 +175,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =     808
  final number of resonance points             =    7344
  number of points in final unionized grid     =    7726
-                                                                          0.4s
+                                                                          0.2s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 0.4s
+ broadr...doppler broadening of endf data                                 0.2s
 
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -22
@@ -200,7 +200,7 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    4.84600E+03 eV.
 
  final maximum energy for broadening/thinning =    4.84600E+03 eV
-                                                                          0.4s
+                                                                          0.2s
 
  broadened mat3125 from  0.0000E+00 to  2.9360E+02 k
          points in=   7726  points out=   6729
@@ -212,10 +212,10 @@ icntrl(10) control logic flag set for damage energy:   0
        thermal capture integral:  1.5587E+00
      capture resonance integral:  1.5986E+01
     -----------------------------------------
-                                                                          0.8s
+                                                                          0.5s
  *****************************************************************************
 
- heatr...prompt kerma                                                     0.8s
+ heatr...prompt kerma                                                     0.5s
 
  input endf unit ......................        -21
  input pendf unit .....................        -23
@@ -242,7 +242,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  ---message from hinit---mf6, mt102 does not give recoil za= 31070
                           photon momentum recoil used.
-                                                             temp 1       0.9s
+                                                             temp 1       0.5s
 
  edis parameter in disbar over-ridden by displacement threshold energy:   25.00000      0.000000    
  Threshold displacement energy replaced with   0.000000    
@@ -7496,7 +7496,7 @@ icntrl(10) control logic flag set for damage energy:   0
                                                      ebal   -3.9950E-02
      2.5000E+07    1.4682E+06    7.4521E-01    3.4893E-06    0.0000E+00    0.0000E+00
                                                      ebal    5.8650E-01
-                                                             temp 1       5.1s
+                                                             temp 1       2.6s
 
  photon energy (from yields) mf12, mt 51
               e          ebar          xsec         yield        energy       heating
@@ -15595,10 +15595,10 @@ icntrl(10) control logic flag set for damage energy:   0
      2.0000E+08    5.8939E+07    5.8922E+07    2.6608E+06    5.8939E+07    3.1764E+05    1.4157E+04    0.0000E+00
             max    5.8939E+07    5.8922E+07
 
-                                                                          7.2s
+                                                                          3.3s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             7.2s
+ groupr...compute self-shielded group-averaged cross-sections             3.3s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -24
@@ -16401,7 +16401,7 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
   n + 31-Ga-69 from TENDL-2017                                        
  
- group constants at t=2.936E+02 deg k                                     7.2s
+ group constants at t=2.936E+02 deg k                                     3.3s
  for mf  3 and mt301 Heat Production                                             
  
  enrgy  group constants at
@@ -17178,7 +17178,7 @@ icntrl(10) control logic flag set for damage energy:   0
    769    3.93185+7
    770    3.96111+7
  
- group constants at t=2.936E+02 deg k                                     7.2s
+ group constants at t=2.936E+02 deg k                                     3.4s
  for mf  3 and mt303 Non-elastic Kerma                                           
  
  enrgy  group constants at
@@ -17955,7 +17955,7 @@ icntrl(10) control logic flag set for damage energy:   0
    769    3.92880+7
    770    3.95810+7
  
- group constants at t=2.936E+02 deg k                                     7.3s
+ group constants at t=2.936E+02 deg k                                     3.4s
  for mf  3 and mt442 Total Photon Kerma (ev-b)                                   
  
  enrgy  group constants at
@@ -18732,7 +18732,7 @@ icntrl(10) control logic flag set for damage energy:   0
    769    3.00625+6
    770    2.99859+6
  
- group constants at t=2.936E+02 deg k                                     7.3s
+ group constants at t=2.936E+02 deg k                                     3.4s
  for mf  3 and mt443 Kinematic Kerma                                             
  
  enrgy  group constants at
@@ -19509,7 +19509,7 @@ icntrl(10) control logic flag set for damage energy:   0
    769    3.93185+7
    770    3.96111+7
  
- group constants at t=2.936E+02 deg k                                     7.3s
+ group constants at t=2.936E+02 deg k                                     3.4s
  for mf  3 and mt444 444 Damage Kerma                                            
  
  enrgy  group constants at
@@ -20286,7 +20286,7 @@ icntrl(10) control logic flag set for damage energy:   0
    769    3.33676+5
    770    3.33787+5
  
- group constants at t=2.936E+02 deg k                                     7.3s
+ group constants at t=2.936E+02 deg k                                     3.4s
  for mf  3 and mt445 445 Damage Kerma                                            
  
  enrgy  group constants at
@@ -21063,7 +21063,7 @@ icntrl(10) control logic flag set for damage energy:   0
    769    2.06456+4
    770    2.04418+4
  
- group constants at t=2.936E+02 deg k                                     7.3s
+ group constants at t=2.936E+02 deg k                                     3.4s
  for mf  3 and mt447 447 Damage Kerma                                            
  
  enrgy  group constants at
@@ -21720,7 +21720,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    1.16587+4
    650    1.16490+4
  
- group constants at t=2.936E+02 deg k                                     7.3s
+ group constants at t=2.936E+02 deg k                                     3.4s
  for mf  3 and mt  1 total                                                       
  
  enrgy  group constants at
@@ -23267,7 +23267,7 @@ icntrl(10) control logic flag set for damage energy:   0
    770    1.55676+0
   flx   1.8569-44
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt  2 elast                                                       
  
  enrgy  group constants at
@@ -24044,7 +24044,7 @@ icntrl(10) control logic flag set for damage energy:   0
    769    7.65023-1
    770    7.57919-1
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt  4 inel                                                        
  
  enrgy  group constants at
@@ -24274,7 +24274,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    1.85048-1
    650    1.80653-1
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt102 n,g                                                         
  
  enrgy  group constants at
@@ -24931,7 +24931,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    1.09106-4
    650    1.02518-4
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt103 n,p                                                         
  
  enrgy  group constants at
@@ -25178,7 +25178,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    1.41850-2
    650    1.36801-2
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt107 n,a                                                         
  
  enrgy  group constants at
@@ -25835,7 +25835,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    1.13788-3
    650    1.00340-3
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt 16 n,2n                                                        
  
  enrgy  group constants at
@@ -25948,7 +25948,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    2.61607-1
    650    2.22457-1
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt 22 n,2a                                                        
  
  enrgy  group constants at
@@ -26120,7 +26120,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    3.99715-2
    650    3.30323-2
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt 28 n,np                                                        
  
  enrgy  group constants at
@@ -26270,7 +26270,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    9.03101-2
    650    8.15317-2
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt 51 inel_51                                                     
  
  enrgy  group constants at
@@ -26500,7 +26500,7 @@ icntrl(10) control logic flag set for damage energy:   0
    649    2.8002-10
    650    1.6501-10
  
- group constants at t=2.936E+02 deg k                                     7.4s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  3 and mt 91 inel-cont                                                   
  
  enrgy  group constants at
@@ -26691,5 +26691,5 @@ icntrl(10) control logic flag set for damage energy:   0
    649    1.32863-1
    650    1.29609-1
  
-                                                                          7.4s
+                                                                          3.5s
  *****************************************************************************
