@@ -65,7 +65,7 @@ stop
 '@'	echo "This starts the post-process command stream"
 '@'	echo " "
 '@'	rm tape20
-'@'     cp output             /mnt/e/sync_sandialabs/NJOY2016/output/Ga-69_SA_in_GaAs_TENDL-2017_770grp_DK_NJOY2016_survey.out
-'@'	cp tape28             /mnt/e/sync_sandialabs/NJOY2016/groupr/Ga-69_SA_in_GaAs_TENDL-2017_770grp_DK_NJOY2016_survey
+'@'     cp output             /mnt/e/sync_sandialabs/NJOY2016/output/tst_03.out
+'@'	cp tape28             /mnt/e/sync_sandialabs/NJOY2016/groupr/tst_03
 '@'	echo "
 '@'	echo "This ends the post-process command stream"
