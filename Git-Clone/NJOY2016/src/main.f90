@@ -113,6 +113,9 @@ program njoy
 !
 ! Add SNL-specific modifications
 !
+! Item 0: Title card
+!         special flag for SNL new control integers flagged by the use of the "Enh:" in the first four characters
+!
 ! Item 1: implement optional read of flow control flags based on title card format (imode)
 !
 !         Description of optional control imode flags
@@ -121,7 +124,7 @@ program njoy
 !
 !         imode(1) =   0    not used
 !         imode(2) =   0    not used
-!         imode(3) =   0    not used
+!         imode(3) =   0    default
 !                     <0    enhanced levels of debug print-out
 !
 ! Item 2: implement optional read of control flags based on title card format (icntrl)
@@ -143,17 +146,18 @@ program njoy
 !
 !         icntrl(2) =  1    punch pka spectra at epoint (na)
 !         icntrl(3) =  9    TENDL-2010 bypass File 32 format issue
-!         icntrl(4) =  1    apply damage efficiency factor to displacement partition (na)
+!         icntrl(4) =  1    apply damage efficiency factor (to be read-in) to displacement partition
 !         icntrl(5) =  1    modify displacement threshold and target mass/charge 
 !                      2    read-in BGR recoil threshold energy
 !                      3    read-in BGR LET threshold value
-!         icntrl(6) =  0    for ICON(1)=4, score LET for particles > d
-!                      1                                 particles > a
-!                      2                                 all particles
+!         icntrl(6) =  0    for icntrl(1)=4, score LET for particles > d (not implemented)
+!                      1                                   particles > a (not implemented)
+!                      2                                   all particles (not implemented)
 !         icntrl(7) =  1    list reaction source for damage increments
 !         icntrl(8) =  0    use build-in Robinson function
-!                      1    use tabular function with variable threshold energy
-!         icntrl(9) =  0    full Robinson treatment   
+!                      1    use tabular function (to be read-in) with variable threshold energy
+!         icntrl(9)         Recoil particle-dependent damage partition function
+!                   =  0    full Robinson treatment   
 !                   =  i    ignore damage energy from charged particles
 !                             with atomic mass "i" less than the lattice atom
 !         icntrl(10)=  0    report damage energy - default
@@ -252,8 +256,8 @@ program njoy
    enddo
    
    read (nsysi,'(a)') run_title
-   write (nsyse,'(/,''Run Title: '', a80,/)') run_title
-   write (nsyso,'(/,''Run Title: '', a80,/)') run_title
+   write (nsyse,'(/,''Run Title:: '', a80,/)') run_title
+   write (nsyso,'(/,''Run Title:: '', a80,/)') run_title
    if ( run_title(1:4) .eq. 'Enh:') then
      read (nsysi,'(3i2)') (imode(jk), jk=1,3)
      read (nsysi,'(10i2)') (icntrl(jk), jk=1,10)
@@ -262,13 +266,13 @@ program njoy
      write (nsyso,'(  ''    icntrl: '', 10i2,/)') (icntrl(jk), jk=1,10)
    endif
 
-   do jk = 1, 2
+   do jk = 1, 2 
      if ( imode(jk) .ne. 0) then 
         write (nsyso,'(''imode control logic input error for flag: '', i3)') jk
      endif
    enddo
    if ( imode(3) .ne. 0) then 
-        write (nsyso,'(''imode(3) debug print control logic flag set: '', i3)') imode(3)
+        write (nsyso,'(/,''imode(3) debug printer control logic flag set: '', i3,/)') imode(3)
    endif
 
    if ( icntrl(1) .eq. 0) then 
@@ -292,22 +296,43 @@ program njoy
    else
         write (nsyso,'(''icntrl(1) control logic flag not implemented:    1 '', i5)') icntrl(1)
    endif
-   do jk = 2, 4
+   do jk = 2, 3
      if ( icntrl(jk) .ne. 0) then 
-        write (nsyso,'(''icntrl control logic flag not implemented: '', 2i5)') jk, icntrl(jk)
+        write (nsyso,'(''icntrl control logic flag not implemented yet: '', 2i5)') jk, icntrl(jk)
      endif
    enddo
+   if ( icntrl(4) .eq. 1) then 
+!     read-in recoil atom energy-dependent efficiency factor
+        write (nsyso,'(''icntrl(4) control logic flag set to damage efficiency factor read-in: '', i5)') icntrl(4)
+   elseif ( icntrl(4) .gt. 1) then
+        write (nsyso,'(''icntrl(4) control logic flag not implemented:    4 '', i5)') icntrl(5)
+   elseif ( icntrl(4) .lt. 0) then
+        write (nsyso,'(''icntrl(4) control logic flag not implemented:    4 '', i5)') icntrl(5)
+   endif
    if ( icntrl(5) .eq. 1) then 
 !     read-in replacement lattice ion mass/charge
         write (nsyso,'(''icntrl(5) control logic flag set to lattice atom read-in: '', i5)') icntrl(5)
    elseif ( icntrl(5) .gt. 1) then
-        write (nsyso,'(''icntrl control logic flag not implemented:    5 '', i5)') icntrl(5)
+        write (nsyso,'(''icntrl(5) control logic flag (a) not implemented:    5 '', i5)') icntrl(5)
    elseif ( icntrl(5) .lt. 0) then
-        write (nsyso,'(''icntrl control logic flag not implemented:    5 '', i5)') icntrl(5)
+        write (nsyso,'(''icntrl(5) control logic flag (b) not implemented:    5 '', i5)') icntrl(5)
    endif
-   do jk = 6, 9
+
+   do jk = 6, 7
      if ( icntrl(jk) .ne. 0) then 
-        write (nsyso,'(''icntrl control logic flag not implemented: '', 2i5)') jk, icntrl(jk)
+        write (nsyso,'(''icntrl(6/7) control logic flag (c) not implemented: '', 2i5)') jk, icntrl(jk)
+     endif
+   enddo
+
+   if ( icntrl(8) .eq. 1) then
+      write (nsyso,'(''icntrl(8) control logic flag set for user-input of damage parition function: '', i3)') icntrl(8)
+   elseif ( icntrl(8) .ne. 0 .and. icntrl(8) .ne. 1) then 
+      write (nsyso,'(''icntrl(8) control logic flag (d) not implemented: '', 2i5)') jk, icntrl(jk)
+   endif
+
+   do jk = 9, 9
+     if ( icntrl(jk) .ne. 0) then 
+        write (nsyso,'(''icntrl(9) control logic flag for low mass residual particles: '', i5)') icntrl(jk)
      endif
    enddo
    if ( icntrl(10) .eq. 0) then 

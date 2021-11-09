@@ -6186,6 +6186,10 @@ contains
       write(nsyso,'(i5,1p,6e12.4)') ig,egn(ig),cflx(ig),c(1)
 
       xsc(ig) = c(1)
+    ! for covariance of a spectrum - convert dn/dE into a number fraction
+      if ( mt .eq. 261) then
+        xsc(ig) = c(1)*cflx(ig)
+      endif
 
    enddo
    if (nout.ne.0) call afend(nout,0)
@@ -7948,11 +7952,18 @@ contains
          matp(i)=mats(i)
       endif
    enddo
+
+     if ( ic .eq. 0)  write (nsyso, 581) mts(1)
+ 581    format ( 1x, '*** SNL covariance processing note ', &
+   &           /,1x, '*** Processing of xsec/number-fraction' &
+   &            ' based on ', i6,/)
+
    if (ic.eq.0) write(nsyso,'(/&
      &'' table of multigroup cross sections''//&
      &'' group   lower       group     cross section''/&
      &''  no.    energy      flux  '',4x,4(a2,i3,7x))')&
      (hmt,mts(i),i=1,nmtend)
+
    if (ic.gt.0) write(nsyso,'(/&
      &'' table of multigroup cross sections''//&
      &'' group   lower       group     cross section''/&
@@ -7970,11 +7981,21 @@ contains
         ig,egn(ig),cflx(ig),(c(i),i=1,nmtend)
 
       xsc(ig) = c(1)
+
+      ! for spectrum covariance, convert dn/dE into a number fraction
+      if (mts(1) .eq. 261) then 
+         xsc(ig) = c(1)*cflx(ig)
+      endif
+
       if ( ig .eq. 1 .and. nmtend .ne. 1) then
         write (nsyso, 781) nmtend
  781    format ( 1x, '*** SNL covariance processing warning ', &
    &           /,1x, '*** multiple processed components incompatible' &
    &            ' with lsl std/cov extraction ', i6)
+!        write (nsyso, 581) mts(1)
+! 581    format ( 1x, '*** SNL covariance processing note ', &
+!   &           /,1x, '*** Processing of xsec/number-fraction' &
+!   &            ' based on ', i6)
       endif
 
    enddo

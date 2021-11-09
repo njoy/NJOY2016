@@ -435,6 +435,7 @@ CMakeFiles/njoy.dir/build: CMakeFiles/njoy.dir/src/unresr.f90.o.provides.build
 
 CMakeFiles/njoy.dir/src/util.f90.o: CMakeFiles/njoy.dir/locale.mod.stamp
 CMakeFiles/njoy.dir/src/util.f90.o: CMakeFiles/njoy.dir/mainio.mod.stamp
+CMakeFiles/njoy.dir/src/util.f90.o: CMakeFiles/njoy.dir/snl.mod.stamp
 CMakeFiles/njoy.dir/src/util.f90.o.provides.build: CMakeFiles/njoy.dir/util.mod.stamp
 CMakeFiles/njoy.dir/util.mod.stamp: CMakeFiles/njoy.dir/src/util.f90.o
 	$(CMAKE_COMMAND) -E cmake_copy_f90_mod fortran_modules/util.mod CMakeFiles/njoy.dir/util.mod.stamp GNU
