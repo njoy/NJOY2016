@@ -14317,7 +14317,7 @@
 /
 1  3/
 '<TENDL-2021 deuteron + Pt184>'/
-'<p>hoton emission for (n,x)     '/
+'<p>hoton emission for (z,x)     '/
 -1 2/
    0.000E+00   2.000E+01   1.000E+01/
 '<e>#L.3H.8]g#HXLX> (<m>e<v>)'/
@@ -36144,7 +36144,7 @@
 /
 1  3/
 '<TENDL-2021 deuteron + Pt184>'/
-'<p>hoton emission for (n,2np)   '/
+'<p>hoton emission for (n,n2p)   '/
 -1 2/
    0.000E+00   6.000E+00   2.000E+00/
 '<e>#L.3H.8]g#HXLX> (<m>e<v>)'/
@@ -84014,7 +84014,7 @@
 /
 1  3/
 '<TENDL-2021 deuteron + Pt184>'/
-'neutrons from (d,2np)   '/
+'neutrons from (d,n2p)   '/
 -1 2/
    0.000E+00   2.000E+01   1.000E+01/
 '<s>ec. <e>nergy'/
@@ -92734,7 +92734,7 @@
 /
 1  3/
 '<TENDL-2021 deuteron + Pt184>'/
-'protons from (d,2np)   '/
+'protons from (d,n2p)   '/
 -1 2/
    0.000E+00   2.000E+01   1.000E+01/
 '<s>ec. <e>nergy'/

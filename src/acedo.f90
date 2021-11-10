@@ -1,6 +1,7 @@
 module acedo
    ! provides ace dosimetry formats for acer
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -24,10 +25,6 @@ module acedo
 
    ! parameters for dosimetry jxs block
    integer::lone,jxs2,mtr,jxs4,jxs5,lsig,sigd,jxsd(14),end,jxsd2(10)
-
-   ! main ace container array
-   integer,parameter::nxss=4999000
-   real(kr)::xss(nxss)
 
 contains
 
@@ -61,6 +58,7 @@ contains
    jxs4=0
    jxs5=0
    jxsd2=0
+   xss=0
 
    !--allocate scratch storage
    nwscr=250000
@@ -484,7 +482,8 @@ contains
    !-------------------------------------------------------------------
    ! Write out the dosimetry file.
    !-------------------------------------------------------------------
-   use util ! provides openz,closz
+   use util  ! provides openz,closz,error
+   use acecm ! provides write routines
    ! externals
    integer::itype,nout,ndir,mcnpx
    integer::izn(16)
@@ -598,32 +597,4 @@ contains
    return
    end subroutine dosout
 
-   subroutine typen(l,nout,iflag)
-   !-------------------------------------------------------------------
-   ! Write an integer or a real number to a Type-1 ACE file,
-   ! or (if nout=0) convert real to integer for type-3 output,
-   ! or (if nout=1) convert integer to real for type-3 input.
-   ! Use iflag.eq.1 to write an integer (i20).
-   ! Use iflag.eq.2 to write a real number (1pe20.11).
-   ! Use iflag.eq.3 to write partial line at end of file.
-   !-------------------------------------------------------------------
-   ! externals
-   integer::l,nout,iflag
-   ! internals
-   integer::i,j
-   character(20)::hl(4)
-   save hl,i
-
-   if (iflag.eq.3.and.nout.gt.1.and.i.lt.4) then
-      write(nout,'(4a20)') (hl(j),j=1,i)
-   else
-      i=mod(l-1,4)+1
-      if (iflag.eq.1) write(hl(i),'(i20)') nint(xss(l))
-      if (iflag.eq.2) write(hl(i),'(1p,e20.11)') xss(l)
-      if (i.eq.4) write(nout,'(4a20)') (hl(j),j=1,i)
-   endif
-   return
-   end subroutine typen
-
 end module acedo
-

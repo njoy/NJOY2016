@@ -2,9 +2,12 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.66](https://github.com/njoy/NJOY2016/pull/xxx)
-This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library and the mixed mode elastic scattering ENDF format introduced in the ENDF format in November 2020.
+This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
 
 The following is an overview of the major changes made to NJOY for this update:
+  - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=1 LANG=1)
+  - Some photonuclear libraries use MF6/MT18 but with a neutron multiplicity equal to 1 instead of nubar. A warning is now printed when this is encountered and the multiplicity is replaced with the appropriate nubar data.
+  - The XSS array and its size is now set in the common acecm module. Writing out the ACE file and locator checking for photonuclear files has been enabled as well (previously only available for incident neutron and charged particle ACE files).
 
 In addition, the following minor issues were fixed as well:
   - fixed a typo in a reaction name printed by the ACER output (issue #195)
@@ -14,7 +17,7 @@ In addition, the following minor issues were fixed as well:
   - fixed issues with ACELAW=33 for continuous energy neutron, charged particle and photonuclear files (issue #212)
 
 Notes:
-  - While the second fix no longer results in a crash of NJOY, the resulting covariance matrix is not correct since only the first subsubsection is added to the output (NJOY still calculates the matrices for each subsubsection - see issue #205)
+  - While the second minor fix no longer results in a crash of NJOY, the resulting covariance matrix is not correct since only the first subsubsection is added to the output (NJOY still calculates the matrices for each subsubsection - see issue #205)
 
 ## [NJOY2016.65](https://github.com/njoy/NJOY2016/pull/224)
 This release fixes a processing issue for the d+Pt184 from TENDL-2021 in ACER. Some logic issue lead to MT11 being ignored as a deuteron producing reaction and this lead to processing problems in ACER.
