@@ -4711,7 +4711,7 @@ contains
    go to 510
   220 continue
    if (mth.eq.0) go to 210
-   if (iss.eq.nss) then
+   if (iss.eq.nss) then ! needed for MF10
       if (mfh.ne.23.and.awin.ne.zero) awrx=c2h/awin
       qx=c2h
       if (awin.ne.0) then
