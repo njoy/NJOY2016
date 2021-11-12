@@ -16,6 +16,7 @@ In addition, the following minor issues were fixed as well:
   - increased the size of an array when processing photonuclear ACE files (issue #204)
   - extended the CLAW (iwt=9,10) weight function to cover 1e-5 -- 2e7 eV
   - fixed issues with ACELAW=33 for continuous energy neutron, charged particle and photonuclear files (issue #212)
+  - fixed an issue when using the special charged particle interpolation law (INT=6) in RECONR
   - fixed an issue with MODER not being able to handle MF28 (atomic relaxation data) when converting ASCII to binary
 
 Notes:
