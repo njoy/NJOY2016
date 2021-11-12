@@ -528,6 +528,7 @@ contains
    iz=matd/100
 
    !--read in the atomic relaxation file for the desired material
+   call repoz(nin)
    call openz(nlax,0)
    call tpidio(nlax,0,0,a,nb,nw)
   110 call contio(nlax,0,0,a,nb,nw)

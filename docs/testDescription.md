@@ -287,7 +287,9 @@ title: NJOY2016 Test Descriptions
 
 ## Test Problem 59
 
-Currently assigned in unmerged fixes
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/59/input)]
+
+  This test is added following an issue in `MODER` converting MF28 data (atomic relaxation data) (see issue [\#162](https://github.com/njoy/NJOY2016/issues/162)). Conversion of MF28 data was not coded. This test verifies that the conversion to and from binary produces the same file, and that the conversion to binary still allows the data to be used (in `ACER` in this test). Test 48 served as a basis for this test.
 
 ## Test Problem 60
 

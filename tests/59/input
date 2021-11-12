@@ -1,0 +1,14 @@
+moder
+20 -30
+moder
+21 -31
+acer / Prepare ACE files
+-30 -31 0 27 28                                                 / Card 1
+4 0 1 .31                                                       / Card 2
+'U from ENDF/B-VIII.0 photoatomic data with atomic relaxation'  / Card 3
+9200                                                            / Card 11
+moder
+-30 40
+moder
+-31 41
+stop

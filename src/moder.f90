@@ -241,6 +241,8 @@ contains
       call file6(nin,nout,nscr,a)
    else if (mfh.eq.27) then
       call file3(nin,nout,nscr,a)
+   else if (mfh.eq.28) then
+      call file28(nin,nout,nscr,a)
    else if (mfh.eq.30) then
       call file1x(nin,nout,nscr,a)
    else if (mfh.eq.31) then
@@ -1304,6 +1306,28 @@ contains
    return
    end subroutine file15
 
+   subroutine file28(nin,nout,nscr,a)
+   !-------------------------------------------------------------------
+   ! Convert mode of File 28.
+   ! Atomic relaxation data.
+   !-------------------------------------------------------------------
+   use endf ! provides endf routines and variables
+   ! externals
+   integer::nin,nout,nscr
+   real(kr)::a(*)
+   ! internals
+   integer::nss,i,nb,nw
+
+   nss=n1h
+   do i=1,nss
+      call listio(nin,nout,nscr,a,nb,nw)
+      do while (nb.ne.0)
+         call moreio(nin,nout,nscr,a,nb,nw)
+      enddo
+   enddo
+   return
+   end subroutine file28
+
    subroutine file3x(nin,nout,nscr,a)
    !-------------------------------------------------------------------
    ! Convert mode of File 31 or File 33.
@@ -1665,4 +1689,3 @@ contains
    end subroutine glstio
 
 end module modem
-
