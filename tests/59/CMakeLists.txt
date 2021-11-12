@@ -13,6 +13,12 @@ configure_file("${RESOURCES}/photoat-092_U_000-ENDF8.0.endf"
 configure_file("${RESOURCES}/atrelax-092_U_000-ENDF8.0.endf"
                "${CMAKE_CURRENT_BINARY_DIR}/tape21" COPYONLY )
 
+configure_file("${RESOURCES}/photoat-092_U_000-ENDF8.0.endf"
+               "${CMAKE_CURRENT_BINARY_DIR}/referenceTape40" COPYONLY )
+
+configure_file("${RESOURCES}/atrelax-092_U_000-ENDF8.0.endf"
+               "${CMAKE_CURRENT_BINARY_DIR}/referenceTape41" COPYONLY )
+
 add_test( NAME "Test59"
           COMMAND ${Python3_EXECUTABLE} "../execute.py"
           WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" )
