@@ -24,8 +24,7 @@ jobs:
         ${{matrix.vFortran}} --version
     - uses: actions/checkout@v2
     - name: wipe and mkdir bin
-      run: rm -rf Git-Clone/NJOY2016/bin
-      run: mkdir Git-Clone/NJOY2016/bin 
+      run: rm -rf Git-Clone/NJOY2016/bin && mkdir Git-Clone/NJOY2016/bin 
     - name: cmake
       run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..  
       working-directory: ./Git-Clone/NJOY2016/bin
