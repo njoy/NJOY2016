@@ -700,8 +700,6 @@ contains
    nea=0
    read(nin) nee,nea
 
-print*, "coherent elastic ", nee, nea
-
    !--assign pointers in xss array
    if (nee.gt.0) then
 
@@ -712,14 +710,12 @@ print*, "coherent elastic ", nee, nea
      itce=len2+1
      itcx=itce+nee+1
      itca=0
-print*, itce,itcx,itca
      !--xss length
      len2=len2+2*nee+1
      if (len2.gt.nxss) then
         write(nsyso,'(i10)') len2
         call error('thrlod','xss too small',' ')
      endif
-print*, len2
 
      !--nxs values
      ncl=-1
@@ -742,8 +738,6 @@ print*, len2
    start=0
    middle=0
    read(nin) nee,nea
-
-print*, "incoherent elastic ", nee, nea
 
    !--assign pointers in xss array
    if (nee.gt.0) then
@@ -816,9 +810,6 @@ print*, "incoherent elastic ", nee, nea
      enddo
 
    endif
-
-
-print*, "incoherent inelastic "
 
    !--process inelastic data
    nieb=nbini
@@ -2333,37 +2324,14 @@ print*, "incoherent inelastic "
         len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
         itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
 
-print*, 'len2',len2
-print*, 'idpni',idpni
-print*, 'nil',nil
-print*, 'nieb',nieb
-print*, 'idpnc',idpnc
-print*, 'ncl',ncl
-print*, 'ifeng',ifeng
-print*, 'ncli',ncli
-print*, 'nxsd',nxsd
-print*, 'itie',itie
-print*, 'itix',itix
-print*, 'itxe',itxe
-print*, 'itce',itce
-print*, 'itcx',itcx
-print*, 'itca',itca
-print*, 'itcei',itcei
-print*, 'itcxi',itcxi
-print*, 'itcai',itcai
-
       !--itie block
       l=1
-print*, 'itie block'
-print*, 'advance to locator', l, itie
       call advance_to_locator(nout,l,itie)
       ne=nint(xss(l))
       call write_integer(nout,l)            ! NE
       call write_real_list(nout,l,2*ne)     ! E (NE values), xs (NE values)
 
       !--itxe block
-print*, 'itxe block'
-print*, 'advance to locator', l, itxe
       call advance_to_locator(nout,l,itxe)
       if (ifeng.le.1) then                  ! equal probable cosine or discrete cosine distributions
          call write_real_list(nout,l,ne*nieb*(nil+2)) ! NE lists of NIEB*(NMU+1)=NIEB*(NIL+2) since NMU=NIL+1
@@ -2371,7 +2339,6 @@ print*, 'advance to locator', l, itxe
          locator=1
          call write_integer_list(nout,l,2*ne) ! L (NE values), Nprime (NE values)
          do i=1,ne
-print*, 'advance to locator', l, nint(xss(itxe+locator-1))+1
             call advance_to_locator(nout,l,nint(xss(itxe+locator-1))+1)
             nprime=nint(xss(itxe+ne+i-1))
             call write_real_list(nout,l,nprime*(nil+2)) ! NPRIME*(NMU+3)=NPRIME*(NIL+2) since NMU=NIL-1
@@ -2381,8 +2348,6 @@ print*, 'advance to locator', l, nint(xss(itxe+locator-1))+1
 
       !--itce block
       if (itce.ne.0) then
-print*, 'itce block'
-print*, 'advance to locator', l, itce
          call advance_to_locator(nout,l,itce)
          ne=nint(xss(l))
          nexe=ne
@@ -2392,8 +2357,6 @@ print*, 'advance to locator', l, itce
 
       !--itca block
       if (itca.ne.0) then
-print*, 'itca block'
-print*, 'advance to locator', l, itca
          call advance_to_locator(nout,l,itca)
          n=nexe*(ncl+1)
          do i=1,n
@@ -2404,8 +2367,6 @@ print*, 'advance to locator', l, itca
 
       !--itcei block
       if (itcei.ne.0) then
-print*, 'itcei block'
-print*, 'advance to locator', l, itcei
          call advance_to_locator(nout,l,itcei)
          ne=nint(xss(l))
          nexe=ne
@@ -2415,8 +2376,6 @@ print*, 'advance to locator', l, itcei
 
       !--itcai block
       if (itcai.ne.0) then
-print*, 'itcai block'
-print*, 'advance to locator', l, itcai
          call advance_to_locator(nout,l,itcai)
          n=nexe*(ncli+1)
          do i=1,n
