@@ -23,6 +23,8 @@ jobs:
         which ${{matrix.vFortran}}
         ${{matrix.vFortran}} --version
     - uses: actions/checkout@v2
+    - name: change directory - Git-Clone/NJOY2016
+      run: cd Git-Clone/NJOY2016
     - name: mkdir bin
       run: mkdir bin 
     - name: cmake
