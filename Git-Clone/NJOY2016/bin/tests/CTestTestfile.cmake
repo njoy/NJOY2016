@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/tests
-# Build directory: /mnt/g/sync_Linux/NJOY-2016/Git-Clone/NJOY2016/bin/tests
+# Source directory: /mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/tests
+# Build directory: /mnt/e/sync_sandialabs/NJOY2016/Git-Clone/NJOY2016/bin/tests
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

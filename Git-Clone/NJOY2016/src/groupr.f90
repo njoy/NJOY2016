@@ -66,6 +66,7 @@ module groupm
    real(kr)::spi
    real(kr)::emaxx,ebeg
    integer::lfs,isom
+   integer::izar
 
    ! unresolved resonance parameters
    integer::nunr,intunr,lrp,lssf
@@ -486,15 +487,15 @@ contains
       if (diff.gt.1+eps) then
          if (c1h.gt.tempin) then
             write(strng,'(''unable to find mat='',i4,'' t='',&
-              &1p,e12.4)') matb,tempin
+              &1p,e12.4, 1x, e12.4)') matb,tempin, c1h
             call error('groupr',strng,' ')
          endif
          call tomend(npend,0,0,scr)
          call contio(npend,0,0,scr,nb,nw)
          if (math.ne.matb) then
             write(strng,'(&
-              &''unable to find mat='',i4,'' t='',1p,e12.4)')&
-              matb,tempin
+              &''unable to find mat='',i4,'' t='',1p,e12.4, 1x, i4)')&
+              matb,tempin, math
             call error('groupr',strng,' ')
          endif
       else
@@ -639,6 +640,7 @@ contains
       else
          itmp=mfd/10000000
          itmp=(mfd-10000000*itmp)/10
+         izar = itmp
          lfs=mfd-(10000000*(mfd/10000000)+10*itmp)
          isom=lfs
          if (lfs.lt.10) then
@@ -651,6 +653,7 @@ contains
       if (mfd.eq.40000000) then ! fission special case for mf10
          izam=-1
       else
+         izar=(mfd-((mfd/1000000)*1000000))/10
          if (lfs.lt.10) then
             izam=mod(mfd,10000000)+lfs
          else
@@ -4901,17 +4904,19 @@ contains
       awr=sigma(2)
       if (awrp.ne.zero) awr=awr/awrp
       if (mf.eq.10) then
-         nfs=n1h
+         nfs=n1h                                    !# of tab1's to check
          jfs=-1
          do i=1,nfs
             call tab1io(nsig,0,0,sigma,nb,nw)
-            if (l2h.eq.lfs) jfs=i
+            if (l1h.eq.izar .and. l2h.eq.lfs) jfs=i  !id the one we want ...
             do while (nb.ne.0)
                call moreio(nsig,0,0,sigma,nb,nw)
             enddo
          enddo
          if (jfs.lt.0) then
-            write(strng,'("can''t find mf,mt,lfs = ",3i4)')mf,mt,lfs
+            write(strng,'("can''t find mf,mt,izar,lfs = ",3i9,i5)')&
+
+                                       mf,mt,izar,lfs
             call error('getsig',strng,' ')
          endif
          nskip=jfs-1
@@ -10823,4 +10828,3 @@ contains
    end function f6psp
 
 end module groupm
-

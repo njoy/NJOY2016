@@ -19,4 +19,11 @@ module snl
    real(kr):: energy_let(175), xinc_let(175,25) 
    real(kr):: upper_let(175,25)
    real(kr):: energy_dam(1000), value_dam(1000)
+   real(kr):: pe_archive, pe_store, pe_trial
+!  Damage efficiency function
+   integer ::  npoints_eff
+   real(kr)::  eff_eng(250), eff_value(250)
+!  Partition function
+!    see ndamage; energy_dam; value_dam
+!
 end module snl
