@@ -1033,8 +1033,8 @@ contains
    else if (mth.eq.2.and.iverf.ge.6) then
       lthr=l1h
 
-      !--coherent (lthr=1)
-      if (lthr.eq.1) then
+      !--coherent (lthr=1) or mixed (lthr=3)
+      if (lthr.eq.1.or.lthr.eq.3) then
          call tab1io(nin,nout,nscr,a,nb,nw)
          lt=l1h
          do while (nb.ne.0)
@@ -1047,16 +1047,18 @@ contains
             enddo
             lt=lt-1
          enddo
+      endif
 
-      !--incoherent (lthr=2)
-      else if (lthr.eq.2) then
+      !--incoherent (lthr=2) or mixed (lthr=3)
+      if (lthr.eq.2.or.lthr.eq.3) then
          call tab1io(nin,nout,nscr,a,nb,nw)
          do while (nb.ne.0)
             call moreio(nin,nout,nscr,a,nb,nw)
          enddo
+      endif
 
       !--illegal lthr for mt=2
-      else
+      if (lthr.lt.1.or.lthr.gt.3) then
          write(strng,'(''illegal value of lthr='',i4)') lthr
          call error('file7',strng,' ')
       endif

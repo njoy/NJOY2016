@@ -7,7 +7,8 @@ This constitutes a major update of NJOY to accommodate the latest IAEA photonucl
 The following is an overview of the major changes made to NJOY for this update:
   - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=1 LANG=1)
   - Some photonuclear libraries use MF6/MT18 but with a neutron multiplicity equal to 1 instead of nubar. A warning is now printed when this is encountered and the multiplicity is replaced with the appropriate nubar data.
-  - The XSS array and its size is now set in the common acecm module. Writing out the ACE file and locator checking for photonuclear files has been enabled as well (previously only available for incident neutron and charged particle ACE files).
+  - thermal scattering ACE files now support mixed mode elastic scattering (both coherent and incoherent elastic scattering are used), with appropriate updates to THERMR and MODER
+  - The XSS array and its size is now set in the common acecm module. Writing out the ACE file and locator checking for photonuclear and thermal scattering files has been enabled as well (previously only available for incident neutron and charged particle ACE files).
 
 In addition, the following minor issues were fixed as well:
   - fixed a typo in a reaction name printed by the ACER output (issue #195)
