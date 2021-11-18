@@ -27,7 +27,6 @@ This release fixes a processing issue for the d+Pt184 from TENDL-2021 in ACER. S
 
 This release addresses issue [\#184](https://github.com/njoy/NJOY2016/issues/184) and [\#223](https://github.com/njoy/NJOY2016/issues/223).
 
-
 ## [NJOY2016.64](https://github.com/njoy/NJOY2016/pull/202)
 This fixes a bug in ACER when producing photonuclear ACE files using some TENDL2019 evaluations. The use of LAW=4 in MF6 of these evaluations lead to corrupted ACE files related to incorrect logic in counting secondary particle producing reactions.
 
