@@ -15,7 +15,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04, macos-10.15]
         build_type: [ Debug, Release ]
-        vFortran: [ gfortran-8 ]
+        vFortran: [ gfortran-9 ]
 
     steps:
     - name: which gfortran
@@ -23,14 +23,14 @@ jobs:
         which ${{matrix.vFortran}}
         ${{matrix.vFortran}} --version
     - uses: actions/checkout@v2
-    - name: mkdir bin
-      run: mkdir bin 
+    - name: wipe and mkdir bin
+      run: rm -rf Git-Clone/NJOY2016/bin && mkdir Git-Clone/NJOY2016/bin 
     - name: cmake
       run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..  
-      working-directory: ./bin
+      working-directory: ./Git-Clone/NJOY2016/bin
     - name: make
       run: make -j
-      working-directory: ./bin
+      working-directory: ./Git-Clone/NJOY2016/bin
     - name: ctest
       run: ctest -j
-      working-directory: ./bin
+      working-directory: ./Git-Clone/NJOY2016/bin
