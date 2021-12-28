@@ -1,0 +1,28 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 04:28:39
+ *****************************************************************************
+
+Run Title:: Enh: Ag109(n,g)Ag110m IRDFF-II covariance processing                            
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                2.2s
+
+ groupr...                                                                2.4s
+
+ errorr...                                                                2.5s
+
+ processing mat  4731
+ ---------------------
+  47-Ag-109 JAERI      EVAL-MAR87 LIU T.J.,T.NAKAGAWA,K.SHIBATA      
+
+ covariances calculated for  1 reactions and   10 groups                  2.5s
+
+ covr...                                                                  2.6s
+
+ ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.0873E-01
+
+ viewr...                                                                 2.6s
+                                                                          2.6s
+ *****************************************************************************

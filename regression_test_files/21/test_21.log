@@ -1,0 +1,467 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 03:59:33
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #21                                                        
+
+
+ reconr...                                                                0.0s
+
+ ---message from rdf2bw---calculation of angular distribution not installed.
+
+ broadr...                                                                3.0s
+
+ heatr...                                                                 6.1s
+
+ ---message from hinit---mf6, mt 16 does not give recoil za= 26057
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt 17 does not give recoil za= 26056
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt 37 does not give recoil za= 26055
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt 91 does not give recoil za= 26058
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt102 does not give recoil za= 26059
+                          photon momentum recoil used.
+
+ ---message from hinit---mf6, mt111 does not give recoil za= 24057
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt649 does not give recoil za= 25058
+                          one-particle recoil approx. used.
+
+ purr...                                                                 15.2s
+
+ mat = 2637                                                              15.2s
+
+ ---message from purr---total xs greater than its components at e=  5.0000E+05
+                          check evaluation file below competition
+
+ ---message from purr---total xs greater than its components at e=  6.0000E+05
+                          check evaluation file below competition
+
+ ---message from purr---total xs greater than its components at e=  7.2000E+05
+                          check evaluation file below competition
+      1 of    13 loops done for all temps & sig0s.                       32.5s
+      2 of    13 loops done for all temps & sig0s.                       50.5s
+      3 of    13 loops done for all temps & sig0s.                       68.2s
+      4 of    13 loops done for all temps & sig0s.                       85.6s
+      5 of    13 loops done for all temps & sig0s.                      102.9s
+      6 of    13 loops done for all temps & sig0s.                      120.4s
+      7 of    13 loops done for all temps & sig0s.                      137.9s
+      8 of    13 loops done for all temps & sig0s.                      155.7s
+      9 of    13 loops done for all temps & sig0s.                      173.6s
+     10 of    13 loops done for all temps & sig0s.                      191.5s
+     11 of    13 loops done for all temps & sig0s.                      209.5s
+     12 of    13 loops done for all temps & sig0s.                      227.9s
+     13 of    13 loops done for all temps & sig0s.                      246.8s
+
+ acer...                                                                247.0s
+
+ ---message from ptleg2---negative probs found
+                             3 for mt= 51 e= 1.500E+08
+
+ ---message from ptleg2---negative probs found
+                             3 for mt= 55 e= 1.000E+08
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 60 e= 8.000E+07
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=  5 e= 8.648E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt=  5 e= 1.267E+02
+
+ ---message from ptleg2---negative probs found
+                             4 for mt=  5 e= 1.354E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 16 e= 5.866E+01
+
+ ---message from ptleg2---negative probs found
+                             3 for mt= 16 e= 8.621E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 9.474E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 9.579E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.009E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.030E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 9.902E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 16 e= 1.101E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.146E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.157E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.076E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.135E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 16 e= 1.231E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 16 e= 1.137E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 16 e= 1.214E+02
+
+ ---message from ptleg2---negative probs found
+                             4 for mt= 16 e= 1.239E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.252E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 16 e= 1.278E+02
+
+ ---message from ptleg2---negative probs found
+                            53 for mt= 16 e= 1.329E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 17 e= 5.866E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 17 e= 7.958E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 17 e= 1.001E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 17 e= 1.100E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 17 e= 1.214E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 17 e= 1.239E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 17 e= 1.265E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 6.714E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 91 e= 7.206E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 91 e= 5.866E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 6.903E+01
+
+ ---message from ptleg2---negative probs found
+                             3 for mt= 91 e= 8.621E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 9.579E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 91 e= 9.790E+01
+
+ ---message from ptleg2---negative probs found
+                             3 for mt= 91 e= 1.101E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 1.146E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 1.088E+02
+
+ ---message from ptleg2---negative probs found
+                             4 for mt= 91 e= 1.195E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 1.243E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 1.255E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt= 91 e= 1.150E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 1.176E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt= 91 e= 1.214E+02
+
+ ---message from ptleg2---negative probs found
+                             3 for mt= 91 e= 1.278E+02
+
+ ---message from ptleg2---negative probs found
+                             9 for mt= 91 e= 1.329E+02
+
+ ---message from ptleg2---negative probs found
+                             5 for mt= 91 e= 1.354E+02
+
+ ---message from ptleg2---negative probs found
+                            25 for mt=111 e= 1.101E+02
+
+ ---message from ptleg2---negative probs found
+                            57 for mt=111 e= 1.159E+02
+
+ ---message from ptleg2---negative probs found
+                            45 for mt=111 e= 1.171E+02
+
+ ---message from ptleg2---negative probs found
+                            18 for mt=111 e= 1.195E+02
+
+ ---message from ptleg2---negative probs found
+                            42 for mt=111 e= 1.203E+02
+
+ ---message from ptleg2---negative probs found
+                            25 for mt=111 e= 1.214E+02
+
+ ---message from ptleg2---negative probs found
+                            28 for mt=111 e= 1.227E+02
+
+ ---message from ptleg2---negative probs found
+                            24 for mt=111 e= 1.239E+02
+
+ ---message from ptleg2---negative probs found
+                            35 for mt=111 e= 1.252E+02
+
+ ---message from ptleg2---negative probs found
+                            42 for mt=111 e= 1.265E+02
+
+ ---message from ptleg2---negative probs found
+                            38 for mt=111 e= 1.278E+02
+
+ ---message from ptleg2---negative probs found
+                            28 for mt=111 e= 1.291E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 6.366E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 8.907E+01
+
+ ---message from ptleg2---negative probs found
+                            24 for mt=649 e= 8.994E+01
+
+ ---message from ptleg2---negative probs found
+                            22 for mt=649 e= 9.080E+01
+
+ ---message from ptleg2---negative probs found
+                            68 for mt=649 e= 9.167E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 9.095E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 9.189E+01
+
+ ---message from ptleg2---negative probs found
+                            35 for mt=649 e= 9.663E+01
+
+ ---message from ptleg2---negative probs found
+                            10 for mt=649 e= 9.758E+01
+
+ ---message from ptleg2---negative probs found
+                            62 for mt=649 e= 9.853E+01
+
+ ---message from ptleg2---negative probs found
+                             3 for mt=649 e= 1.004E+02
+
+ ---message from ptleg2---negative probs found
+                            52 for mt=649 e= 1.014E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 7.622E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 9.682E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt=649 e= 9.991E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 1.020E+02
+
+ ---message from ptleg2---negative probs found
+                            46 for mt=649 e= 1.040E+02
+
+ ---message from ptleg2---negative probs found
+                            30 for mt=649 e= 1.051E+02
+
+ ---message from ptleg2---negative probs found
+                            36 for mt=649 e= 1.061E+02
+
+ ---message from ptleg2---negative probs found
+                            25 for mt=649 e= 1.071E+02
+
+ ---message from ptleg2---negative probs found
+                            55 for mt=649 e= 1.081E+02
+
+ ---message from ptleg2---negative probs found
+                            20 for mt=649 e= 1.092E+02
+
+ ---message from ptleg2---negative probs found
+                            47 for mt=649 e= 1.102E+02
+
+ ---message from ptleg2---negative probs found
+                            21 for mt=649 e= 1.112E+02
+
+ ---message from ptleg2---negative probs found
+                             3 for mt=649 e= 9.123E+01
+
+ ---message from ptleg2---negative probs found
+                            37 for mt=649 e= 1.090E+02
+
+ ---message from ptleg2---negative probs found
+                            38 for mt=649 e= 1.101E+02
+
+ ---message from ptleg2---negative probs found
+                            30 for mt=649 e= 1.113E+02
+
+ ---message from ptleg2---negative probs found
+                            36 for mt=649 e= 1.124E+02
+
+ ---message from ptleg2---negative probs found
+                            13 for mt=649 e= 1.135E+02
+
+ ---message from ptleg2---negative probs found
+                            36 for mt=649 e= 1.146E+02
+
+ ---message from ptleg2---negative probs found
+                            34 for mt=649 e= 1.157E+02
+
+ ---message from ptleg2---negative probs found
+                            81 for mt=649 e= 1.168E+02
+
+ ---message from ptleg2---negative probs found
+                            41 for mt=649 e= 1.179E+02
+
+ ---message from ptleg2---negative probs found
+                            38 for mt=649 e= 1.190E+02
+
+ ---message from ptleg2---negative probs found
+                            20 for mt=649 e= 1.202E+02
+
+ ---message from ptleg2---negative probs found
+                            41 for mt=649 e= 1.213E+02
+
+ ---message from ptleg2---negative probs found
+                            32 for mt=649 e= 1.159E+02
+
+ ---message from ptleg2---negative probs found
+                            10 for mt=649 e= 1.171E+02
+
+ ---message from ptleg2---negative probs found
+                            56 for mt=649 e= 1.183E+02
+
+ ---message from ptleg2---negative probs found
+                            13 for mt=649 e= 1.195E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=649 e= 1.207E+02
+
+ ---message from ptleg2---negative probs found
+                            50 for mt=649 e= 1.219E+02
+
+ ---message from ptleg2---negative probs found
+                            22 for mt=649 e= 1.231E+02
+
+ ---message from ptleg2---negative probs found
+                            30 for mt=649 e= 1.243E+02
+
+ ---message from ptleg2---negative probs found
+                            25 for mt=649 e= 1.255E+02
+
+ ---message from ptleg2---negative probs found
+                            15 for mt=649 e= 1.267E+02
+
+ ---message from ptleg2---negative probs found
+                            69 for mt=649 e= 1.279E+02
+
+ ---message from ptleg2---negative probs found
+                            22 for mt=649 e= 1.291E+02
+
+ ---message from ptleg2---negative probs found
+                            53 for mt=649 e= 1.303E+02
+
+ ---message from ptleg2---negative probs found
+                            32 for mt=649 e= 1.214E+02
+
+ ---message from ptleg2---negative probs found
+                            23 for mt=649 e= 1.227E+02
+
+ ---message from ptleg2---negative probs found
+                            14 for mt=649 e= 1.239E+02
+
+ ---message from ptleg2---negative probs found
+                            29 for mt=649 e= 1.252E+02
+
+ ---message from ptleg2---negative probs found
+                            49 for mt=649 e= 1.265E+02
+
+ ---message from ptleg2---negative probs found
+                            50 for mt=649 e= 1.278E+02
+
+ ---message from ptleg2---negative probs found
+                            43 for mt=649 e= 1.291E+02
+
+ ---message from ptleg2---negative probs found
+                            74 for mt=649 e= 1.303E+02
+
+ ---message from ptleg2---negative probs found
+                            30 for mt=649 e= 1.316E+02
+
+ ---message from ptleg2---negative probs found
+                            84 for mt=649 e= 1.329E+02
+
+ ---message from ptleg2---negative probs found
+                            38 for mt=649 e= 1.342E+02
+
+ ---message from ptleg2---negative probs found
+                            26 for mt=649 e= 1.354E+02
+
+ ---message from ptleg2---negative probs found
+                            22 for mt=649 e= 1.367E+02
+
+ ---message from ptleg2---negative probs found
+                            45 for mt=649 e= 1.380E+02
+
+ ---message from ptleg2---negative probs found
+                            57 for mt=649 e= 1.393E+02
+
+ ---message from ptleg2---negative probs found
+                            72 for mt=649 e= 1.406E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt=  5 e= 9.888E+01
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=  5 e= 9.800E+01
+
+ ---message from ptleg2---negative probs found
+                             2 for mt=  5 e= 1.064E+02
+
+ ---message from ptleg2---negative probs found
+                             1 for mt=  5 e= 1.100E+02
+
+ ---message from ptleg2---negative probs found
+                             2 for mt=  5 e= 1.150E+02
+                                                                        275.5s
+ *****************************************************************************

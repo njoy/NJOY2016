@@ -1,0 +1,55 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 04:10:32
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #35                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.1s
+
+ broadr...                                                                4.0s
+
+ purr...                                                                  9.4s
+
+ mat = 4731                                                               9.5s
+
+ ---message from purr---no heating found on pendf
+                          ur heating set to zero
+      1 of    20 loops done for all temps & sig0s.                       10.8s
+      2 of    20 loops done for all temps & sig0s.                       12.1s
+      3 of    20 loops done for all temps & sig0s.                       13.5s
+      4 of    20 loops done for all temps & sig0s.                       14.8s
+      5 of    20 loops done for all temps & sig0s.                       16.1s
+      6 of    20 loops done for all temps & sig0s.                       17.4s
+      7 of    20 loops done for all temps & sig0s.                       18.8s
+      8 of    20 loops done for all temps & sig0s.                       20.1s
+      9 of    20 loops done for all temps & sig0s.                       21.4s
+     10 of    20 loops done for all temps & sig0s.                       22.8s
+     11 of    20 loops done for all temps & sig0s.                       24.1s
+     12 of    20 loops done for all temps & sig0s.                       25.5s
+     13 of    20 loops done for all temps & sig0s.                       26.8s
+     14 of    20 loops done for all temps & sig0s.                       28.2s
+     15 of    20 loops done for all temps & sig0s.                       29.6s
+     16 of    20 loops done for all temps & sig0s.                       31.0s
+     17 of    20 loops done for all temps & sig0s.                       32.4s
+     18 of    20 loops done for all temps & sig0s.                       33.9s
+     19 of    20 loops done for all temps & sig0s.                       35.3s
+     20 of    20 loops done for all temps & sig0s.                       36.8s
+
+ moder...                                                                36.8s
+
+ acer...                                                                 37.5s
+
+ ---message from ptleg2---negative probs found
+                            13 for mt=  2 e= 1.700E+07
+
+ ---message from ptleg2---negative probs found
+                            11 for mt=  2 e= 1.800E+07
+
+ acer...                                                                 39.9s
+
+ viewr...                                                                61.8s
+                                                                         62.0s
+ *****************************************************************************

@@ -1,0 +1,53 @@
+moder
+ 20 -30
+moder 
+ 21 -40
+reconr
+ -30 -31 /
+ 'PENDF tape for ENDF/B-VIII.0b6 H-1'/
+ 125 2 0 /
+ 0.001 /
+ 'H-1 from ENDF/B-VIII.0b6' /
+ 'processed at 0.1% tolerance' /
+ 0 /
+broadr
+ -30 -31 -32
+ 125 3 /
+ 0.001 /
+ 300 400 500 /
+ 0 /
+heatr
+ -30 -32 -33 0/
+ 125 7 /
+ 302 303 304 318 402 443 444 /
+thermr
+ -40 -33 -50 /
+ 1 125 20 3 2 1 0 2 222 1 /
+ 300 400 500  /
+ 0.001 10. /
+acer
+ -30 -50 0 70 75                         / Card1
+ 2 1 1 .10 1                             / Card2
+ 'H in H20 @300K from ENDF/B-VIII.0b6'   / Card3
+ 1001 0.9991673                          / Card4
+ 125 300 'lwtr'                          / Card8
+ 1001                                    / Card8a
+ 222 20 0 0 1 10. 0                      / Card9
+acer
+ -30 -50 0 71 75                         / Card1
+ 2 1 1 .11 1                             / Card2
+ 'H in H20 @400K from ENDF/B-VIII.0b6'   / Card3
+ 1001 0.9991673                          / Card4
+ 125 400 'lwtr'                          / Card8
+ 1001                                    / Card8a
+ 222 20 0 0 1 10. 1                      / Card9
+acer
+ -30 -50 0 72 75                         / Card1
+ 2 1 1 .12 1                             / Card2
+ 'H in H20 @500K from ENDF/B-VIII.0b6'   / Card3
+ 1001 0.9991673                          / Card4
+ 125 500 'lwtr'                          / Card8
+ 1001                                    / Card8a
+ 222 20 0 0 1 10. 2                      / Card9
+stop
+

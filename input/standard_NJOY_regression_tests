@@ -1,0 +1,72 @@
+#! /bin/csh 
+#
+# standard NJOY regression tests - formatted for SNL-NJOY-2016 using a Unix shell
+#
+  echo ""
+  echo "Usage: standard_NJOY_regression_tests called with zero arguments"
+  echo ""
+#
+# Note: Generate the standard set of NJOY regression tests
+#       Later, add a comparison of output files
+#
+setenv SYSTEMTYPE unix
+# 
+# AGENCY must be only 3 characters
+#
+setenv AGENCY snl
+#
+# check number of input arguments
+#
+if ( $#argv > 0) then
+       echo "Usage: SNL-NJOY-2016 generation of manipulate-2020 regression examples called with Invalid number of arguments $#argv"
+else
+       ./njoy-2016  ../regression_test_files/01/test_01   
+       ./njoy-2016  ../regression_test_files/02/test_02
+       ./njoy-2016  ../regression_test_files/03/test_03
+       ./njoy-2016  ../regression_test_files/04/test_04
+       ./njoy-2016  ../regression_test_files/05/test_05
+       ./njoy-2016  ../regression_test_files/06/test_06
+       ./njoy-2016  ../regression_test_files/07/test_07
+       ./njoy-2016  ../regression_test_files/08/test_08
+       ./njoy-2016  ../regression_test_files/09/test_09
+       ./njoy-2016  ../regression_test_files/10/test_10
+       ./njoy-2016  ../regression_test_files/11/test_11
+       ./njoy-2016  ../regression_test_files/12/test_12
+       ./njoy-2016  ../regression_test_files/13/test_13
+       ./njoy-2016  ../regression_test_files/14/test_14
+       ./njoy-2016  ../regression_test_files/15/test_15
+       ./njoy-2016  ../regression_test_files/16/test_16
+       ./njoy-2016  ../regression_test_files/17/test_17
+       ./njoy-2016  ../regression_test_files/18/test_18
+       ./njoy-2016  ../regression_test_files/19/test_19
+       ./njoy-2016  ../regression_test_files/20/test_20
+       ./njoy-2016  ../regression_test_files/21/test_21
+       ./njoy-2016  ../regression_test_files/22/test_22
+       ./njoy-2016  ../regression_test_files/23/test_23
+       ./njoy-2016  ../regression_test_files/24/test_24
+#       echo "test25 gets stuck in thermr in infinite loop"
+#       ./njoy-2016  ../regression_test_files/25/test_25
+       ./njoy-2016  ../regression_test_files/26/test_26
+       ./njoy-2016  ../regression_test_files/27/test_27
+       ./njoy-2016  ../regression_test_files/28/test_28
+       ./njoy-2016  ../regression_test_files/29/test_29
+       ./njoy-2016  ../regression_test_files/30/test_30
+       ./njoy-2016  ../regression_test_files/31/test_31
+       ./njoy-2016  ../regression_test_files/32/test_32
+       ./njoy-2016  ../regression_test_files/33/test_33
+       ./njoy-2016  ../regression_test_files/34/test_34
+       ./njoy-2016  ../regression_test_files/35/test_35
+       ./njoy-2016  ../regression_test_files/36/test_36
+       ./njoy-2016  ../regression_test_files/37/test_37
+       ./njoy-2016  ../regression_test_files/38/test_38
+       ./njoy-2016  ../regression_test_files/39/test_39
+       ./njoy-2016  ../regression_test_files/40/test_40
+       ./njoy-2016  ../regression_test_files/41/test_41
+       ./njoy-2016  ../regression_test_files/42/test_42
+       ./njoy-2016  ../regression_test_files/43/test_43
+       ./njoy-2016  ../regression_test_files/44/test_44
+       ./njoy-2016  ../regression_test_files/45/test_45
+       ./njoy-2016  ../regression_test_files/46/test_46
+       ./njoy-2016  ../regression_test_files/47/test_47
+endif
+#

@@ -1,0 +1,45 @@
+errorr
+ 999     /  option to insert dummy file 33 data
+ +20 +21 /  input & output tapes
+   1     /  mt to insert,
+   2     /  continue mt list ...
+ 102     /
+ 600     /
+   0     /  terminate mt list with zero
+reconr
+ +21 +22 /
+ 'processing cl35 with rml'/
+ 1725 0 0 /
+ 0.01 /
+ 0 /
+broadr
+ +20 +22 +23 /
+ 1725 1 0 0 0 /
+ 0.01 /
+ 293.6 /
+ 0 /
+groupr
+ +20 +23 0 +91 /
+ 1725 4 0 2 1 1 1 1 /
+ 'test of cl35 with rml' /
+ 293.6 /
+ 1.0e10 /
+ 3 /
+ 3 251 'mubar' /
+ 3 252 'xi' /
+ 0 /
+ 0 /
+errorr
+ +21 0 +91 +25 0 0 /
+ 1725 4 2 1 1 /
+ 1 293.6/
+ 0 33 1 1 -1 /
+covr
+ +25 0 +26 /
+ 1 /
+ .01 /
+ 1 /
+ 1725 /
+viewr
+ +26 +27/
+stop

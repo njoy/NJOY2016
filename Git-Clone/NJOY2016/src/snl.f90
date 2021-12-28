@@ -10,6 +10,7 @@ module snl
    real(kr):: break_new, al_new, zl_new, dummy, al_old, zl_old
    integer:: ipun, len_file, ndamage, nldir, noptical, nfile2
    integer:: idam_fnc
+   integer:: SNL_enhanced_input_format
    real(kr):: epoint, ypoint, xthresh
    character(2):: media, izn
    character(1):: dot

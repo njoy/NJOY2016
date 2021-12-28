@@ -2314,7 +2314,7 @@ contains
       el=0
       cl=0
       enx=0
-      if ( edis_replace .gt. break_new) then 
+      if ( edis_replace .gt. break_new .and. SNL_enhanced_input_format .eq. 1) then 
          write (nsyso, 4581) edis_replace, break_new
  4581    format (/,1x, 'edis parameter in disbar over-ridden by displacement', &
   &          ' threshold energy: ', 2g14.7)

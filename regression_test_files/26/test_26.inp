@@ -1,0 +1,35 @@
+NJOY Regression Test #26
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "Standard NJOY regression test #26"
+'#'	cp ../regression_test_files/26/tape20  tape20
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"   
+moder
+ 20 -30
+reconr
+ -30 -31                                /
+ 'test heatr without mf1/mt458 section' /
+ 9455                                   /
+ 0.001                                  /
+ 0                                      /
+broadr
+ -30 -31 -32  /
+ 9455 1       /
+ 0.001        /
+ 293.6        /
+ 0            /
+heatr
+ -30 -32 -31 50 /
+ 9455 7  0 0 0 2 /
+ 302 303 304 318 442 443 444 /
+moder
+ -31 40
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'     cp output             ../regression_test_files/26/SNL-NJOY-2016_Test_26_Output
+'@'	cp tape40             ../regression_test_files/26/SNL-NJOY-2016_Test_26_Tape40
+'@'	echo "
+'@'	echo "This ends the post-process command stream"

@@ -441,7 +441,7 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
 #    run njoy-2016 executable
 #
      system("./$executable <input >log 2>output");
-
+#     exit;
 #
 #     save output files
 #

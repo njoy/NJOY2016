@@ -1,0 +1,50 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 03:47:47
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #11                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.0s
+
+ ---message from emerge---nonpositive elastic cross sections found.
+
+ broadr...                                                                0.1s
+      300.0 deg                                                           0.1s
+      900.0 deg                                                           0.2s
+     2100.0 deg                                                           0.3s
+
+ unresr...                                                                0.4s
+
+ thermr...                                                                0.5s
+
+ wrote thermal data for temp = 3.0000E+02                                 0.6s
+
+ wrote thermal data for temp = 9.0000E+02                                 0.7s
+
+ wrote thermal data for temp = 2.1000E+03                                 0.8s
+
+ groupr...                                                                0.8s
+
+ ---message from conver---cannot do complete particle production for mt= 16
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 17
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 91
+                          only mf4/mf5 provided
+
+ wimsr...                                                                 2.2s
+
+ ---message from wminit---mat 1050 has no mf3, mt252
+                          isotropic c.m.scattering will be assumed
+
+ ---message from xsecs---nu-bar calculated from fission matrix
+                          only prompt contribution available
+
+ moder...                                                                 2.2s
+                                                                          2.3s
+ *****************************************************************************

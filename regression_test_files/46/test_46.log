@@ -1,0 +1,32 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 04:17:41
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #46                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.2s
+
+ broadr...                                                                2.0s
+
+ groupr...                                                                3.0s
+
+ ---message from cm2lab---lab normalization problem
+                          mt=  5 e= 2.000E+07 lab sum= 0.983
+
+ errorr...                                                                7.9s
+
+ ---message from grpav4---collapsing NGOUT mf=3, mt=251 to the union grid
+
+ legendre group averaging completed                                       7.9s
+
+
+ processing mat  2631
+ ---------------------
+  26-Fe- 56 NRG,CEA    EVAL-FEB04 EUROPEAN JOINT COLLABORATION       
+
+ covariances calculated for  1 reactions and  271 groups                  8.0s
+                                                                          8.1s
+ *****************************************************************************

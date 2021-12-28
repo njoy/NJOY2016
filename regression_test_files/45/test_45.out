@@ -1,0 +1,224 @@
+1*****************************************************************************
+ *                                         *              *                  *
+ *   $$   $$       $$   $$$$$   $$    $$   *              *  vers: 2021.04   *
+ *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
+ *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
+ *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:17:36  *
+ *                                         *              *                  *
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #45                                                        
+
+icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
+icntrl(10) control logic flag set for damage energy:   0
+
+ moder...change the mode of an endf tape or njoy output tape              0.0s
+
+ input unit (+ for coded, - for bb) ...         20
+ output unit (+ for coded, - for bb) ..        -21
+
+ tape label
+ --------------------------------------
+  Retrieved by E4-Web: 2018/09/10,14:46:47                            
+
+ using endf-6 format
+                                                                          0.0s
+ *****************************************************************************
+
+ reconr...reconstruct pointwise cross sections in pendf format            0.0s
+
+ unit for endf tape ...................        -21
+ unit for pendf tape ..................        -22
+
+ label for pendf tape
+ ------------------------------------------------------------------
+                                                                     
+
+ tape label
+ ------------------------------------------------------------------
+ Retrieved by E4-Web: 2018/09/10,14:46:47                            
+
+ material to be processed .............        525
+ reconstruction tolerance .............      0.001
+ reconstruction temperature ...........       0.00k
+ resonance-integral-check tolerance ...      0.010
+ max resonance-integral error .........  5.000E-08
+
+ descriptive cards for pendf tape
+ ------------------------------------------------------------------
+                                                                     
+ 
+
+ processing mat  525 in endf-6 format
+ ------------------------------------------------------------------
+   5-B - 10 LANL       EVAL-FEB17 G.M.Hale                           
+
+
+ mat has no resonance parameters
+
+ changed threshold from 7.907138E+05 to 7.907139E+05 for mt 51.
+
+ changed threshold from 1.915446E+06 to 1.915447E+06 for mt 52.
+
+ changed threshold from 2.371316E+06 to 2.371317E+06 for mt 53.
+
+ changed threshold from 3.948451E+06 to 3.948452E+06 for mt 54.
+
+ changed threshold from 5.254914E+06 to 5.254915E+06 for mt 55.
+
+ changed threshold from 5.625092E+06 to 5.625093E+06 for mt 56.
+
+ changed threshold from 5.684092E+06 to 5.684093E+06 for mt 57.
+
+ changed threshold from 5.701813E+06 to 5.701814E+06 for mt 58.
+
+ changed threshold from 6.515808E+06 to 6.515809E+06 for mt 59.
+
+ changed threshold from 6.631935E+06 to 6.631936E+06 for mt 60.
+
+ changed threshold from 6.744431E+06 to 6.744432E+06 for mt 61.
+
+ changed threshold from 7.705000E+06 to 7.705154E+06 for mt 63.
+
+ changed threshold from 9.356000E+06 to 9.356258E+06 for mt 66.
+
+ changed threshold from 1.045700E+07 to 1.045700E+07 for mt 68.
+
+ changed threshold from 1.100700E+07 to 1.100737E+07 for mt 69.
+
+ changed threshold from 1.210800E+07 to 1.210811E+07 for mt 71.
+
+ changed threshold from 1.265800E+07 to 1.265848E+07 for mt 72.
+
+ changed threshold from 1.375900E+07 to 1.375921E+07 for mt 74.
+
+ changed threshold from 1.541000E+07 to 1.541032E+07 for mt 77.
+
+ changed threshold from 1.651100E+07 to 1.651105E+07 for mt 79.
+
+ changed threshold from 1.706100E+07 to 1.706142E+07 for mt 80.
+
+ changed threshold from 1.816200E+07 to 1.816216E+07 for mt 82.
+
+ changed threshold from 1.981300E+07 to 1.981326E+07 for mt 85.
+
+ changed threshold from 4.800000E+06 to 4.800311E+06 for mt104.
+
+ changed threshold from 3.458281E+06 to 3.458282E+06 for mt601.
+
+ changed threshold from 6.309584E+06 to 6.309585E+06 for mt602.
+
+ changed threshold from 6.311246E+06 to 6.311247E+06 for mt603.
+
+ changed threshold from 6.552747E+06 to 6.552748E+06 for mt604.
+
+ changed threshold from 6.645209E+06 to 6.645210E+06 for mt605.
+
+ number of user and resonance nodes           =       0
+ points in initial unionized grid             =     484
+ points added by linearization                =     530                   0.0s
+ number of points in final unionized grid     =    1014
+                                                                          0.1s
+ *****************************************************************************
+
+ broadr...doppler broadening of endf data                                 0.1s
+
+ unit for input endf tape .............        -21
+ unit for input pendf tape ............        -22
+ unit for output pendf tape ...........        -23
+ material to be processed .............        525
+ number of final temperatures .........          1
+ restart (0 no, 1 yes) ................          0
+ bootstrap (0 no, 1 yes) ..............          0
+ starting material temperature ........        0.0k
+ thinning tolerance ...................      0.001
+ max. energy ..........................  6.500E+06
+ errmax for thinning ..................  1.000E-02
+ errint for thinning ..................  5.000E-08
+ final temperatures ...................  2.936E+02
+
+
+ files are in endf-6 format
+
+ non-resonance nuclide, input pendf limit     =    2.00000E+07 eV.
+ - reset to    6.50000E+06 eV.
+
+ final maximum energy for broadening/thinning =    7.90706E+05 eV
+                                                                          0.1s
+
+ broadened mat 525 from  0.0000E+00 to  2.9360E+02 k
+         points in=   1014  points out=    941
+         mt   2 102 103 105 107 113 600 700 800 801
+
+    thermal quantities at 293.6 K = 0.0253 eV
+    -----------------------------------------
+           thermal capture xsec:  3.9608E-01
+       thermal capture integral:  3.5106E-01
+     capture resonance integral:  1.7807E-01
+    -----------------------------------------
+                                                                          0.2s
+ *****************************************************************************
+
+ gaspr...add gas production cross sections                                0.2s
+
+ units:   -21   -23   -22
+
+ the gas production threshold is  1.0000E-05 ev
+
+ found   941 points
+
+ pendf mt  mt203  mt204  mt205  mt206  mt207
+ ________  _____  _____  _____  _____  _____
+      55    0.0    0.0    0.0    0.0    1.0
+      56    0.0    0.0    0.0    0.0    1.0
+      58    0.0    0.0    0.0    0.0    1.0
+      59    0.0    0.0    0.0    0.0    1.0
+      60    0.0    0.0    0.0    0.0    1.0
+      61    0.0    0.0    0.0    0.0    1.0
+      62    0.0    1.0    0.0    0.0    2.0
+      63    0.0    0.0    0.0    0.0    1.0
+      64    0.0    1.0    0.0    0.0    2.0
+      65    1.0    0.0    0.0    0.0    0.0
+      66    0.0    0.0    0.0    0.0    1.0
+      67    0.0    0.0    0.0    0.0    1.0
+      68    0.0    1.0    0.0    0.0    2.0
+      69    0.0    0.0    0.0    0.0    1.0
+      70    0.0    1.0    0.0    0.0    2.0
+      71    0.0    1.0    0.0    0.0    2.0
+      72    0.0    0.0    0.0    0.0    1.0
+      73    0.0    1.0    0.0    0.0    2.0
+      74    0.0    1.0    0.0    0.0    2.0
+      75    0.0    0.0    0.0    0.0    1.0
+      76    0.0    1.0    0.0    0.0    2.0
+      77    0.0    1.0    0.0    0.0    2.0
+      78    1.0    0.0    0.0    0.0    0.0
+      79    0.0    1.0    0.0    0.0    2.0
+      80    0.0    1.0    0.0    0.0    2.0
+      81    0.0    1.0    0.0    0.0    2.0
+      82    0.0    0.0    0.0    0.0    1.0
+      83    0.0    1.0    0.0    0.0    2.0
+      84    0.0    1.0    0.0    0.0    2.0
+      85    0.0    0.0    0.0    0.0    1.0
+     103    1.0    0.0    0.0    0.0    0.0
+     104    0.0    1.0    0.0    0.0    0.0
+     105    0.0    0.0    1.0    0.0    2.0
+     107    0.0    0.0    0.0    0.0    1.0
+     113    0.0    0.0    1.0    0.0    2.0
+
+ *** means that the yield is energy dependent
+
+ found 1 temperatures
+                                                                          0.2s
+ *****************************************************************************
+
+ moder...change the mode of an endf tape or njoy output tape              0.2s
+
+ input unit (+ for coded, - for bb) ...        -22
+ output unit (+ for coded, - for bb) ..         40
+ tape id is blank
+
+ using endf-6 format
+                                                                          0.3s
+ *****************************************************************************

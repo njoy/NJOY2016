@@ -1,0 +1,45 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 04:14:38
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #40                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.2s
+
+ ---message from rdf2bw---calculation of angular distribution not installed.
+
+ broadr...                                                                1.1s
+
+ purr...                                                                  1.6s
+
+ mat = 2525                                                               1.6s
+
+ ---message from purr---no heating found on pendf
+                          ur heating set to zero
+      1 of    14 loops done for all temps & sig0s.                        2.9s
+      2 of    14 loops done for all temps & sig0s.                        4.2s
+      3 of    14 loops done for all temps & sig0s.                        5.5s
+      4 of    14 loops done for all temps & sig0s.                        6.8s
+      5 of    14 loops done for all temps & sig0s.                        8.2s
+      6 of    14 loops done for all temps & sig0s.                        9.5s
+      7 of    14 loops done for all temps & sig0s.                       10.9s
+      8 of    14 loops done for all temps & sig0s.                       12.3s
+      9 of    14 loops done for all temps & sig0s.                       13.7s
+     10 of    14 loops done for all temps & sig0s.                       15.1s
+     11 of    14 loops done for all temps & sig0s.                       16.5s
+     12 of    14 loops done for all temps & sig0s.                       18.0s
+     13 of    14 loops done for all temps & sig0s.                       19.5s
+     14 of    14 loops done for all temps & sig0s.                       20.9s
+
+ moder...                                                                21.0s
+
+ acer...                                                                 21.2s
+
+ acer...                                                                 25.2s
+
+ viewr...                                                                50.4s
+                                                                         51.2s
+ *****************************************************************************

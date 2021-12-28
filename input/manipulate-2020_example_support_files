@@ -1,0 +1,40 @@
+#! /bin/csh 
+#
+# SNL-NJOY-2016 generation of manipulate-2020 regression test examples Unix shell
+#
+  echo ""
+  echo "Usage: manipulate-2020_example_support_files called with zero arguments"
+  echo ""
+#
+# Note: Generate support files for the regression tests for manipulate-2020 
+#       Later, add a comparison of output files
+#
+setenv SYSTEMTYPE unix
+# 
+# AGENCY must be only 3 characters
+#
+setenv AGENCY snl
+#
+# check number of input arguments
+#
+if ( $#argv > 0) then
+       echo "Usage: SNL-NJOY-2016 generation of manipulate-2020 regression examples called with Invalid number of arguments $#argv"
+else
+       ./njoy-2016  Ag109_ng_IRDFF-II_cor                    
+       ./njoy-2016  Ag109g_IRDFF-II_640grp_xsec   
+       ./njoy-2016  S32_np_IRDFF-II_cor           
+       ./njoy-2016  S32p_IRDFF-II_640grp_xsec
+       ./njoy-2016  Co59_ng_IRDFF-II_cor   
+       ./njoy-2016  Co59g_IRDFF-II_640grp_xsec  
+       ./njoy-2016  Cf252_640nrg_IRDFF-II_MF33             
+       ./njoy-2016  U235_640nrg_IRDFF-II_MF33
+#       Note: The fixed.viewer file for the next two calculation needed to be supplied via a hand edit of the baseline viewer file
+#             This change reflects the error message in the input files regarding the bad standard deviation in the high eneryg portion of the source file
+       ./njoy-2016  Cf252_640nrg_IRDFF-II_MF33_fixed_viewer   
+       ./njoy-2016  U235_640nrg_IRDFF-II_MF33_fixed_viewer    
+#  
+       ./njoy-2016  Ni58_103_IRDFF-II_640grp_xsec                 
+       ./njoy-2016  Ni58_103_IRDFF-II_cor               
+       ./njoy-2016  Ni58_103_IRDFF-II_640grp_cov              
+endif
+#

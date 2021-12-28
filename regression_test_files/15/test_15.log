@@ -1,0 +1,1166 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 03:48:12
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #15                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.1s
+
+ broadr...                                                                8.3s
+
+ groupr...                                                               25.1s
+
+ ---message from conver---cannot do complete particle production for mt= 16
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 17
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 37
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 91
+                          only mf4/mf5 provided
+
+ errorr...                                                               25.8s
+
+ processing mat  9237
+ ---------------------
+  92-U -238 KYU+       EVAL-Mar00 T.Kawano et al.                    
+
+ covariances calculated for  3 reactions and   36 groups                 25.8s
+
+ errorr...                                                               25.8s
+
+ processing mat  9237
+ ---------------------
+  92-U -238 KYU+       EVAL-Mar00 T.Kawano et al.                    
+
+ ---message from rdgout---mf 3 mt 37 not found.
+                          calculation continued with sigma=0
+
+ covariances calculated for 36 reactions and  110 groups                 26.0s
+
+ ---message from rdgout---mf 3 mt 37 not found.
+                          calculation continued with sigma=0
+
+ Energy range :     1/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   26)   Resonance energy  6.6740000E+00
+Resonance number    1(/   26)   Width number 1
+Resonance number    1(/   26)   Width number 2
+Resonance number    2(/   26)   Resonance energy  2.0871000E+01
+Resonance number    2(/   26)   Width number 1
+Resonance number    2(/   26)   Width number 2
+Resonance number    3(/   26)   Resonance energy  3.6682000E+01
+Resonance number    3(/   26)   Width number 1
+Resonance number    3(/   26)   Width number 2
+Resonance number    4(/   26)   Resonance energy  6.6032000E+01
+Resonance number    4(/   26)   Width number 1
+Resonance number    4(/   26)   Width number 2
+Resonance number    5(/   26)   Resonance energy  1.0256000E+02
+Resonance number    5(/   26)   Width number 1
+Resonance number    5(/   26)   Width number 2
+Resonance number    6(/   26)   Resonance energy  1.1690200E+02
+Resonance number    6(/   26)   Width number 1
+Resonance number    6(/   26)   Width number 2
+Resonance number    7(/   26)   Resonance energy  1.8967000E+02
+Resonance number    7(/   26)   Width number 1
+Resonance number    7(/   26)   Width number 2
+Resonance number    8(/   26)   Resonance energy  2.0851000E+02
+Resonance number    8(/   26)   Width number 1
+Resonance number    8(/   26)   Width number 2
+Resonance number    9(/   26)   Resonance energy  2.3738000E+02
+Resonance number    9(/   26)   Width number 1
+Resonance number    9(/   26)   Width number 2
+Resonance number   10(/   26)   Resonance energy  2.7366000E+02
+Resonance number   10(/   26)   Width number 1
+Resonance number   10(/   26)   Width number 2
+Resonance number   11(/   26)   Resonance energy  3.4779000E+02
+Resonance number   11(/   26)   Width number 1
+Resonance number   11(/   26)   Width number 2
+Resonance number   12(/   26)   Resonance energy  4.1024000E+02
+Resonance number   12(/   26)   Width number 1
+Resonance number   12(/   26)   Width number 2
+Resonance number   13(/   26)   Resonance energy  5.1836000E+02
+Resonance number   13(/   26)   Width number 1
+Resonance number   13(/   26)   Width number 2
+Resonance number   14(/   26)   Resonance energy  5.3530000E+02
+Resonance number   14(/   26)   Width number 1
+Resonance number   14(/   26)   Width number 2
+Resonance number   15(/   26)   Resonance energy  5.8010000E+02
+Resonance number   15(/   26)   Width number 1
+Resonance number   15(/   26)   Width number 2
+Resonance number   16(/   26)   Resonance energy  5.9503000E+02
+Resonance number   16(/   26)   Width number 1
+Resonance number   16(/   26)   Width number 2
+Resonance number   17(/   26)   Resonance energy  6.1996000E+02
+Resonance number   17(/   26)   Width number 1
+Resonance number   17(/   26)   Width number 2
+Resonance number   18(/   26)   Resonance energy  6.6130000E+02
+Resonance number   18(/   26)   Width number 1
+Resonance number   18(/   26)   Width number 2
+Resonance number   19(/   26)   Resonance energy  6.9321000E+02
+Resonance number   19(/   26)   Width number 1
+Resonance number   19(/   26)   Width number 2
+Resonance number   20(/   26)   Resonance energy  8.2153000E+02
+Resonance number   20(/   26)   Width number 1
+Resonance number   20(/   26)   Width number 2
+Resonance number   21(/   26)   Resonance energy  8.5116600E+02
+Resonance number   21(/   26)   Width number 1
+Resonance number   21(/   26)   Width number 2
+Resonance number   22(/   26)   Resonance energy  8.5626000E+02
+Resonance number   22(/   26)   Width number 1
+Resonance number   22(/   26)   Width number 2
+Resonance number   23(/   26)   Resonance energy  9.0511000E+02
+Resonance number   23(/   26)   Width number 1
+Resonance number   23(/   26)   Width number 2
+Resonance number   24(/   26)   Resonance energy  9.3728000E+02
+Resonance number   24(/   26)   Width number 1
+Resonance number   24(/   26)   Width number 2
+Resonance number   25(/   26)   Resonance energy  9.5878800E+02
+Resonance number   25(/   26)   Width number 1
+Resonance number   25(/   26)   Width number 2
+Resonance number   26(/   26)   Resonance energy  9.9181000E+02
+Resonance number   26(/   26)   Width number 1
+Resonance number   26(/   26)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 34.4s
+
+ ---message from rpxlc12---sensitivity calculation continues             34.4s
+
+ ---message from rpxlc12---sensitivity calculation completed             34.4s
+
+ Energy range :     2/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   28)   Resonance energy  1.0546500E+03
+Resonance number    1(/   28)   Width number 1
+Resonance number    1(/   28)   Width number 2
+Resonance number    2(/   28)   Resonance energy  1.1092400E+03
+Resonance number    2(/   28)   Width number 1
+Resonance number    2(/   28)   Width number 2
+Resonance number    3(/   28)   Resonance energy  1.1404700E+03
+Resonance number    3(/   28)   Width number 1
+Resonance number    3(/   28)   Width number 2
+Resonance number    4(/   28)   Resonance energy  1.1678100E+03
+Resonance number    4(/   28)   Width number 1
+Resonance number    4(/   28)   Width number 2
+Resonance number    5(/   28)   Resonance energy  1.1773400E+03
+Resonance number    5(/   28)   Width number 1
+Resonance number    5(/   28)   Width number 2
+Resonance number    6(/   28)   Resonance energy  1.1949400E+03
+Resonance number    6(/   28)   Width number 1
+Resonance number    6(/   28)   Width number 2
+Resonance number    7(/   28)   Resonance energy  1.2452600E+03
+Resonance number    7(/   28)   Width number 1
+Resonance number    7(/   28)   Width number 2
+Resonance number    8(/   28)   Resonance energy  1.2672400E+03
+Resonance number    8(/   28)   Width number 1
+Resonance number    8(/   28)   Width number 2
+Resonance number    9(/   28)   Resonance energy  1.2731700E+03
+Resonance number    9(/   28)   Width number 1
+Resonance number    9(/   28)   Width number 2
+Resonance number   10(/   28)   Resonance energy  1.3939700E+03
+Resonance number   10(/   28)   Width number 1
+Resonance number   10(/   28)   Width number 2
+Resonance number   11(/   28)   Resonance energy  1.4055500E+03
+Resonance number   11(/   28)   Width number 1
+Resonance number   11(/   28)   Width number 2
+Resonance number   12(/   28)   Resonance energy  1.4282300E+03
+Resonance number   12(/   28)   Width number 1
+Resonance number   12(/   28)   Width number 2
+Resonance number   13(/   28)   Resonance energy  1.4740800E+03
+Resonance number   13(/   28)   Width number 1
+Resonance number   13(/   28)   Width number 2
+Resonance number   14(/   28)   Resonance energy  1.5228400E+03
+Resonance number   14(/   28)   Width number 1
+Resonance number   14(/   28)   Width number 2
+Resonance number   15(/   28)   Resonance energy  1.5980000E+03
+Resonance number   15(/   28)   Width number 1
+Resonance number   15(/   28)   Width number 2
+Resonance number   16(/   28)   Resonance energy  1.6228600E+03
+Resonance number   16(/   28)   Width number 1
+Resonance number   16(/   28)   Width number 2
+Resonance number   17(/   28)   Resonance energy  1.6380500E+03
+Resonance number   17(/   28)   Width number 1
+Resonance number   17(/   28)   Width number 2
+Resonance number   18(/   28)   Resonance energy  1.6628100E+03
+Resonance number   18(/   28)   Width number 1
+Resonance number   18(/   28)   Width number 2
+Resonance number   19(/   28)   Resonance energy  1.6889200E+03
+Resonance number   19(/   28)   Width number 1
+Resonance number   19(/   28)   Width number 2
+Resonance number   20(/   28)   Resonance energy  1.7099300E+03
+Resonance number   20(/   28)   Width number 1
+Resonance number   20(/   28)   Width number 2
+Resonance number   21(/   28)   Resonance energy  1.7560600E+03
+Resonance number   21(/   28)   Width number 1
+Resonance number   21(/   28)   Width number 2
+Resonance number   22(/   28)   Resonance energy  1.7825600E+03
+Resonance number   22(/   28)   Width number 1
+Resonance number   22(/   28)   Width number 2
+Resonance number   23(/   28)   Resonance energy  1.7830700E+03
+Resonance number   23(/   28)   Width number 1
+Resonance number   23(/   28)   Width number 2
+Resonance number   24(/   28)   Resonance energy  1.8461300E+03
+Resonance number   24(/   28)   Width number 1
+Resonance number   24(/   28)   Width number 2
+Resonance number   25(/   28)   Resonance energy  1.9028800E+03
+Resonance number   25(/   28)   Width number 1
+Resonance number   25(/   28)   Width number 2
+Resonance number   26(/   28)   Resonance energy  1.9172100E+03
+Resonance number   26(/   28)   Width number 1
+Resonance number   26(/   28)   Width number 2
+Resonance number   27(/   28)   Resonance energy  1.9690400E+03
+Resonance number   27(/   28)   Width number 1
+Resonance number   27(/   28)   Width number 2
+Resonance number   28(/   28)   Resonance energy  1.9749700E+03
+Resonance number   28(/   28)   Width number 1
+Resonance number   28(/   28)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 43.5s
+
+ ---message from rpxlc12---sensitivity calculation continues             43.5s
+
+ ---message from rpxlc12---sensitivity calculation completed             43.5s
+
+ Energy range :     3/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   31)   Resonance energy  2.0237500E+03
+Resonance number    1(/   31)   Width number 1
+Resonance number    1(/   31)   Width number 2
+Resonance number    2(/   31)   Resonance energy  2.0305400E+03
+Resonance number    2(/   31)   Width number 1
+Resonance number    2(/   31)   Width number 2
+Resonance number    3(/   31)   Resonance energy  2.0887400E+03
+Resonance number    3(/   31)   Width number 1
+Resonance number    3(/   31)   Width number 2
+Resonance number    4(/   31)   Resonance energy  2.0964900E+03
+Resonance number    4(/   31)   Width number 1
+Resonance number    4(/   31)   Width number 2
+Resonance number    5(/   31)   Resonance energy  2.1457500E+03
+Resonance number    5(/   31)   Width number 1
+Resonance number    5(/   31)   Width number 2
+Resonance number    6(/   31)   Resonance energy  2.1528400E+03
+Resonance number    6(/   31)   Width number 1
+Resonance number    6(/   31)   Width number 2
+Resonance number    7(/   31)   Resonance energy  2.1866700E+03
+Resonance number    7(/   31)   Width number 1
+Resonance number    7(/   31)   Width number 2
+Resonance number    8(/   31)   Resonance energy  2.2014900E+03
+Resonance number    8(/   31)   Width number 1
+Resonance number    8(/   31)   Width number 2
+Resonance number    9(/   31)   Resonance energy  2.2598100E+03
+Resonance number    9(/   31)   Width number 1
+Resonance number    9(/   31)   Width number 2
+Resonance number   10(/   31)   Resonance energy  2.2667300E+03
+Resonance number   10(/   31)   Width number 1
+Resonance number   10(/   31)   Width number 2
+Resonance number   11(/   31)   Resonance energy  2.2819100E+03
+Resonance number   11(/   31)   Width number 1
+Resonance number   11(/   31)   Width number 2
+Resonance number   12(/   31)   Resonance energy  2.3528600E+03
+Resonance number   12(/   31)   Width number 1
+Resonance number   12(/   31)   Width number 2
+Resonance number   13(/   31)   Resonance energy  2.3558100E+03
+Resonance number   13(/   31)   Width number 1
+Resonance number   13(/   31)   Width number 2
+Resonance number   14(/   31)   Resonance energy  2.3920600E+03
+Resonance number   14(/   31)   Width number 1
+Resonance number   14(/   31)   Width number 2
+Resonance number   15(/   31)   Resonance energy  2.4270200E+03
+Resonance number   15(/   31)   Width number 1
+Resonance number   15(/   31)   Width number 2
+Resonance number   16(/   31)   Resonance energy  2.4469100E+03
+Resonance number   16(/   31)   Width number 1
+Resonance number   16(/   31)   Width number 2
+Resonance number   17(/   31)   Resonance energy  2.4892700E+03
+Resonance number   17(/   31)   Width number 1
+Resonance number   17(/   31)   Width number 2
+Resonance number   18(/   31)   Resonance energy  2.5482400E+03
+Resonance number   18(/   31)   Width number 1
+Resonance number   18(/   31)   Width number 2
+Resonance number   19(/   31)   Resonance energy  2.5597700E+03
+Resonance number   19(/   31)   Width number 1
+Resonance number   19(/   31)   Width number 2
+Resonance number   20(/   31)   Resonance energy  2.5812000E+03
+Resonance number   20(/   31)   Width number 1
+Resonance number   20(/   31)   Width number 2
+Resonance number   21(/   31)   Resonance energy  2.5977200E+03
+Resonance number   21(/   31)   Width number 1
+Resonance number   21(/   31)   Width number 2
+Resonance number   22(/   31)   Resonance energy  2.6201800E+03
+Resonance number   22(/   31)   Width number 1
+Resonance number   22(/   31)   Width number 2
+Resonance number   23(/   31)   Resonance energy  2.6722000E+03
+Resonance number   23(/   31)   Width number 1
+Resonance number   23(/   31)   Width number 2
+Resonance number   24(/   31)   Resonance energy  2.6965800E+03
+Resonance number   24(/   31)   Width number 1
+Resonance number   24(/   31)   Width number 2
+Resonance number   25(/   31)   Resonance energy  2.7174300E+03
+Resonance number   25(/   31)   Width number 1
+Resonance number   25(/   31)   Width number 2
+Resonance number   26(/   31)   Resonance energy  2.7509300E+03
+Resonance number   26(/   31)   Width number 1
+Resonance number   26(/   31)   Width number 2
+Resonance number   27(/   31)   Resonance energy  2.8296100E+03
+Resonance number   27(/   31)   Width number 1
+Resonance number   27(/   31)   Width number 2
+Resonance number   28(/   31)   Resonance energy  2.8655100E+03
+Resonance number   28(/   31)   Width number 1
+Resonance number   28(/   31)   Width number 2
+Resonance number   29(/   31)   Resonance energy  2.8827600E+03
+Resonance number   29(/   31)   Width number 1
+Resonance number   29(/   31)   Width number 2
+Resonance number   30(/   31)   Resonance energy  2.9337500E+03
+Resonance number   30(/   31)   Width number 1
+Resonance number   30(/   31)   Width number 2
+Resonance number   31(/   31)   Resonance energy  2.9570400E+03
+Resonance number   31(/   31)   Width number 1
+Resonance number   31(/   31)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 53.1s
+
+ ---message from rpxlc12---sensitivity calculation continues             53.1s
+
+ ---message from rpxlc12---sensitivity calculation completed             53.1s
+
+ Energy range :     4/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   36)   Resonance energy  3.0036900E+03
+Resonance number    1(/   36)   Width number 1
+Resonance number    1(/   36)   Width number 2
+Resonance number    2(/   36)   Resonance energy  3.0286300E+03
+Resonance number    2(/   36)   Width number 1
+Resonance number    2(/   36)   Width number 2
+Resonance number    3(/   36)   Resonance energy  3.0597500E+03
+Resonance number    3(/   36)   Width number 1
+Resonance number    3(/   36)   Width number 2
+Resonance number    4(/   36)   Resonance energy  3.1099500E+03
+Resonance number    4(/   36)   Width number 1
+Resonance number    4(/   36)   Width number 2
+Resonance number    5(/   36)   Resonance energy  3.1491900E+03
+Resonance number    5(/   36)   Width number 1
+Resonance number    5(/   36)   Width number 2
+Resonance number    6(/   36)   Resonance energy  3.1788000E+03
+Resonance number    6(/   36)   Width number 1
+Resonance number    6(/   36)   Width number 2
+Resonance number    7(/   36)   Resonance energy  3.1890800E+03
+Resonance number    7(/   36)   Width number 1
+Resonance number    7(/   36)   Width number 2
+Resonance number    8(/   36)   Resonance energy  3.2060800E+03
+Resonance number    8(/   36)   Width number 1
+Resonance number    8(/   36)   Width number 2
+Resonance number    9(/   36)   Resonance energy  3.2264700E+03
+Resonance number    9(/   36)   Width number 1
+Resonance number    9(/   36)   Width number 2
+Resonance number   10(/   36)   Resonance energy  3.2489400E+03
+Resonance number   10(/   36)   Width number 1
+Resonance number   10(/   36)   Width number 2
+Resonance number   11(/   36)   Resonance energy  3.2796500E+03
+Resonance number   11(/   36)   Width number 1
+Resonance number   11(/   36)   Width number 2
+Resonance number   12(/   36)   Resonance energy  3.3123400E+03
+Resonance number   12(/   36)   Width number 1
+Resonance number   12(/   36)   Width number 2
+Resonance number   13(/   36)   Resonance energy  3.3218000E+03
+Resonance number   13(/   36)   Width number 1
+Resonance number   13(/   36)   Width number 2
+Resonance number   14(/   36)   Resonance energy  3.3336800E+03
+Resonance number   14(/   36)   Width number 1
+Resonance number   14(/   36)   Width number 2
+Resonance number   15(/   36)   Resonance energy  3.3557800E+03
+Resonance number   15(/   36)   Width number 1
+Resonance number   15(/   36)   Width number 2
+Resonance number   16(/   36)   Resonance energy  3.3896700E+03
+Resonance number   16(/   36)   Width number 1
+Resonance number   16(/   36)   Width number 2
+Resonance number   17(/   36)   Resonance energy  3.4090100E+03
+Resonance number   17(/   36)   Width number 1
+Resonance number   17(/   36)   Width number 2
+Resonance number   18(/   36)   Resonance energy  3.4364700E+03
+Resonance number   18(/   36)   Width number 1
+Resonance number   18(/   36)   Width number 2
+Resonance number   19(/   36)   Resonance energy  3.4578200E+03
+Resonance number   19(/   36)   Width number 1
+Resonance number   19(/   36)   Width number 2
+Resonance number   20(/   36)   Resonance energy  3.4857500E+03
+Resonance number   20(/   36)   Width number 1
+Resonance number   20(/   36)   Width number 2
+Resonance number   21(/   36)   Resonance energy  3.5617000E+03
+Resonance number   21(/   36)   Width number 1
+Resonance number   21(/   36)   Width number 2
+Resonance number   22(/   36)   Resonance energy  3.5740900E+03
+Resonance number   22(/   36)   Width number 1
+Resonance number   22(/   36)   Width number 2
+Resonance number   23(/   36)   Resonance energy  3.5947800E+03
+Resonance number   23(/   36)   Width number 1
+Resonance number   23(/   36)   Width number 2
+Resonance number   24(/   36)   Resonance energy  3.6233800E+03
+Resonance number   24(/   36)   Width number 1
+Resonance number   24(/   36)   Width number 2
+Resonance number   25(/   36)   Resonance energy  3.6300000E+03
+Resonance number   25(/   36)   Width number 1
+Resonance number   25(/   36)   Width number 2
+Resonance number   26(/   36)   Resonance energy  3.6932700E+03
+Resonance number   26(/   36)   Width number 1
+Resonance number   26(/   36)   Width number 2
+Resonance number   27(/   36)   Resonance energy  3.7168500E+03
+Resonance number   27(/   36)   Width number 1
+Resonance number   27(/   36)   Width number 2
+Resonance number   28(/   36)   Resonance energy  3.7342800E+03
+Resonance number   28(/   36)   Width number 1
+Resonance number   28(/   36)   Width number 2
+Resonance number   29(/   36)   Resonance energy  3.7651800E+03
+Resonance number   29(/   36)   Width number 1
+Resonance number   29(/   36)   Width number 2
+Resonance number   30(/   36)   Resonance energy  3.7820500E+03
+Resonance number   30(/   36)   Width number 1
+Resonance number   30(/   36)   Width number 2
+Resonance number   31(/   36)   Resonance energy  3.8581100E+03
+Resonance number   31(/   36)   Width number 1
+Resonance number   31(/   36)   Width number 2
+Resonance number   32(/   36)   Resonance energy  3.8730700E+03
+Resonance number   32(/   36)   Width number 1
+Resonance number   32(/   36)   Width number 2
+Resonance number   33(/   36)   Resonance energy  3.9022800E+03
+Resonance number   33(/   36)   Width number 1
+Resonance number   33(/   36)   Width number 2
+Resonance number   34(/   36)   Resonance energy  3.9151100E+03
+Resonance number   34(/   36)   Width number 1
+Resonance number   34(/   36)   Width number 2
+Resonance number   35(/   36)   Resonance energy  3.9400700E+03
+Resonance number   35(/   36)   Width number 1
+Resonance number   35(/   36)   Width number 2
+Resonance number   36(/   36)   Resonance energy  3.9548700E+03
+Resonance number   36(/   36)   Width number 1
+Resonance number   36(/   36)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 63.7s
+
+ ---message from rpxlc12---sensitivity calculation continues             63.7s
+
+ ---message from rpxlc12---sensitivity calculation completed             63.7s
+
+ Energy range :     5/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   30)   Resonance energy  4.0420800E+03
+Resonance number    1(/   30)   Width number 1
+Resonance number    1(/   30)   Width number 2
+Resonance number    2(/   30)   Resonance energy  4.0644000E+03
+Resonance number    2(/   30)   Width number 1
+Resonance number    2(/   30)   Width number 2
+Resonance number    3(/   30)   Resonance energy  4.0904900E+03
+Resonance number    3(/   30)   Width number 1
+Resonance number    3(/   30)   Width number 2
+Resonance number    4(/   30)   Resonance energy  4.1256900E+03
+Resonance number    4(/   30)   Width number 1
+Resonance number    4(/   30)   Width number 2
+Resonance number    5(/   30)   Resonance energy  4.1691000E+03
+Resonance number    5(/   30)   Width number 1
+Resonance number    5(/   30)   Width number 2
+Resonance number    6(/   30)   Resonance energy  4.1791800E+03
+Resonance number    6(/   30)   Width number 1
+Resonance number    6(/   30)   Width number 2
+Resonance number    7(/   30)   Resonance energy  4.2112000E+03
+Resonance number    7(/   30)   Width number 1
+Resonance number    7(/   30)   Width number 2
+Resonance number    8(/   30)   Resonance energy  4.2604700E+03
+Resonance number    8(/   30)   Width number 1
+Resonance number    8(/   30)   Width number 2
+Resonance number    9(/   30)   Resonance energy  4.3002000E+03
+Resonance number    9(/   30)   Width number 1
+Resonance number    9(/   30)   Width number 2
+Resonance number   10(/   30)   Resonance energy  4.3076000E+03
+Resonance number   10(/   30)   Width number 1
+Resonance number   10(/   30)   Width number 2
+Resonance number   11(/   30)   Resonance energy  4.3259000E+03
+Resonance number   11(/   30)   Width number 1
+Resonance number   11(/   30)   Width number 2
+Resonance number   12(/   30)   Resonance energy  4.3707000E+03
+Resonance number   12(/   30)   Width number 1
+Resonance number   12(/   30)   Width number 2
+Resonance number   13(/   30)   Resonance energy  4.4364000E+03
+Resonance number   13(/   30)   Width number 1
+Resonance number   13(/   30)   Width number 2
+Resonance number   14(/   30)   Resonance energy  4.5125000E+03
+Resonance number   14(/   30)   Width number 1
+Resonance number   14(/   30)   Width number 2
+Resonance number   15(/   30)   Resonance energy  4.5442000E+03
+Resonance number   15(/   30)   Width number 1
+Resonance number   15(/   30)   Width number 2
+Resonance number   16(/   30)   Resonance energy  4.5685000E+03
+Resonance number   16(/   30)   Width number 1
+Resonance number   16(/   30)   Width number 2
+Resonance number   17(/   30)   Resonance energy  4.5949000E+03
+Resonance number   17(/   30)   Width number 1
+Resonance number   17(/   30)   Width number 2
+Resonance number   18(/   30)   Resonance energy  4.6187800E+03
+Resonance number   18(/   30)   Width number 1
+Resonance number   18(/   30)   Width number 2
+Resonance number   19(/   30)   Resonance energy  4.6636000E+03
+Resonance number   19(/   30)   Width number 1
+Resonance number   19(/   30)   Width number 2
+Resonance number   20(/   30)   Resonance energy  4.6960000E+03
+Resonance number   20(/   30)   Width number 1
+Resonance number   20(/   30)   Width number 2
+Resonance number   21(/   30)   Resonance energy  4.7064000E+03
+Resonance number   21(/   30)   Width number 1
+Resonance number   21(/   30)   Width number 2
+Resonance number   22(/   30)   Resonance energy  4.7285700E+03
+Resonance number   22(/   30)   Width number 1
+Resonance number   22(/   30)   Width number 2
+Resonance number   23(/   30)   Resonance energy  4.7660000E+03
+Resonance number   23(/   30)   Width number 1
+Resonance number   23(/   30)   Width number 2
+Resonance number   24(/   30)   Resonance energy  4.8003000E+03
+Resonance number   24(/   30)   Width number 1
+Resonance number   24(/   30)   Width number 2
+Resonance number   25(/   30)   Resonance energy  4.8599000E+03
+Resonance number   25(/   30)   Width number 1
+Resonance number   25(/   30)   Width number 2
+Resonance number   26(/   30)   Resonance energy  4.8993000E+03
+Resonance number   26(/   30)   Width number 1
+Resonance number   26(/   30)   Width number 2
+Resonance number   27(/   30)   Resonance energy  4.9086100E+03
+Resonance number   27(/   30)   Width number 1
+Resonance number   27(/   30)   Width number 2
+Resonance number   28(/   30)   Resonance energy  4.9216000E+03
+Resonance number   28(/   30)   Width number 1
+Resonance number   28(/   30)   Width number 2
+Resonance number   29(/   30)   Resonance energy  4.9560800E+03
+Resonance number   29(/   30)   Width number 1
+Resonance number   29(/   30)   Width number 2
+Resonance number   30(/   30)   Resonance energy  4.9744000E+03
+Resonance number   30(/   30)   Width number 1
+Resonance number   30(/   30)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 71.5s
+
+ ---message from rpxlc12---sensitivity calculation continues             71.5s
+
+ ---message from rpxlc12---sensitivity calculation completed             71.5s
+
+ Energy range :     6/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   35)   Resonance energy  5.0072000E+03
+Resonance number    1(/   35)   Width number 1
+Resonance number    1(/   35)   Width number 2
+Resonance number    2(/   35)   Resonance energy  5.0365000E+03
+Resonance number    2(/   35)   Width number 1
+Resonance number    2(/   35)   Width number 2
+Resonance number    3(/   35)   Resonance energy  5.0406200E+03
+Resonance number    3(/   35)   Width number 1
+Resonance number    3(/   35)   Width number 2
+Resonance number    4(/   35)   Resonance energy  5.0749000E+03
+Resonance number    4(/   35)   Width number 1
+Resonance number    4(/   35)   Width number 2
+Resonance number    5(/   35)   Resonance energy  5.0888100E+03
+Resonance number    5(/   35)   Width number 1
+Resonance number    5(/   35)   Width number 2
+Resonance number    6(/   35)   Resonance energy  5.1189500E+03
+Resonance number    6(/   35)   Width number 1
+Resonance number    6(/   35)   Width number 2
+Resonance number    7(/   35)   Resonance energy  5.2434900E+03
+Resonance number    7(/   35)   Width number 1
+Resonance number    7(/   35)   Width number 2
+Resonance number    8(/   35)   Resonance energy  5.2603000E+03
+Resonance number    8(/   35)   Width number 1
+Resonance number    8(/   35)   Width number 2
+Resonance number    9(/   35)   Resonance energy  5.3105000E+03
+Resonance number    9(/   35)   Width number 1
+Resonance number    9(/   35)   Width number 2
+Resonance number   10(/   35)   Resonance energy  5.3458400E+03
+Resonance number   10(/   35)   Width number 1
+Resonance number   10(/   35)   Width number 2
+Resonance number   11(/   35)   Resonance energy  5.3543000E+03
+Resonance number   11(/   35)   Width number 1
+Resonance number   11(/   35)   Width number 2
+Resonance number   12(/   35)   Resonance energy  5.4207000E+03
+Resonance number   12(/   35)   Width number 1
+Resonance number   12(/   35)   Width number 2
+Resonance number   13(/   35)   Resonance energy  5.4310000E+03
+Resonance number   13(/   35)   Width number 1
+Resonance number   13(/   35)   Width number 2
+Resonance number   14(/   35)   Resonance energy  5.4629800E+03
+Resonance number   14(/   35)   Width number 1
+Resonance number   14(/   35)   Width number 2
+Resonance number   15(/   35)   Resonance energy  5.4842000E+03
+Resonance number   15(/   35)   Width number 1
+Resonance number   15(/   35)   Width number 2
+Resonance number   16(/   35)   Resonance energy  5.4891000E+03
+Resonance number   16(/   35)   Width number 1
+Resonance number   16(/   35)   Width number 2
+Resonance number   17(/   35)   Resonance energy  5.5305000E+03
+Resonance number   17(/   35)   Width number 1
+Resonance number   17(/   35)   Width number 2
+Resonance number   18(/   35)   Resonance energy  5.5525000E+03
+Resonance number   18(/   35)   Width number 1
+Resonance number   18(/   35)   Width number 2
+Resonance number   19(/   35)   Resonance energy  5.5788000E+03
+Resonance number   19(/   35)   Width number 1
+Resonance number   19(/   35)   Width number 2
+Resonance number   20(/   35)   Resonance energy  5.6381000E+03
+Resonance number   20(/   35)   Width number 1
+Resonance number   20(/   35)   Width number 2
+Resonance number   21(/   35)   Resonance energy  5.6504000E+03
+Resonance number   21(/   35)   Width number 1
+Resonance number   21(/   35)   Width number 2
+Resonance number   22(/   35)   Resonance energy  5.6737000E+03
+Resonance number   22(/   35)   Width number 1
+Resonance number   22(/   35)   Width number 2
+Resonance number   23(/   35)   Resonance energy  5.6834000E+03
+Resonance number   23(/   35)   Width number 1
+Resonance number   23(/   35)   Width number 2
+Resonance number   24(/   35)   Resonance energy  5.6967000E+03
+Resonance number   24(/   35)   Width number 1
+Resonance number   24(/   35)   Width number 2
+Resonance number   25(/   35)   Resonance energy  5.7332000E+03
+Resonance number   25(/   35)   Width number 1
+Resonance number   25(/   35)   Width number 2
+Resonance number   26(/   35)   Resonance energy  5.7574000E+03
+Resonance number   26(/   35)   Width number 1
+Resonance number   26(/   35)   Width number 2
+Resonance number   27(/   35)   Resonance energy  5.7900000E+03
+Resonance number   27(/   35)   Width number 1
+Resonance number   27(/   35)   Width number 2
+Resonance number   28(/   35)   Resonance energy  5.8144000E+03
+Resonance number   28(/   35)   Width number 1
+Resonance number   28(/   35)   Width number 2
+Resonance number   29(/   35)   Resonance energy  5.8278000E+03
+Resonance number   29(/   35)   Width number 1
+Resonance number   29(/   35)   Width number 2
+Resonance number   30(/   35)   Resonance energy  5.8391900E+03
+Resonance number   30(/   35)   Width number 1
+Resonance number   30(/   35)   Width number 2
+Resonance number   31(/   35)   Resonance energy  5.8613000E+03
+Resonance number   31(/   35)   Width number 1
+Resonance number   31(/   35)   Width number 2
+Resonance number   32(/   35)   Resonance energy  5.8732300E+03
+Resonance number   32(/   35)   Width number 1
+Resonance number   32(/   35)   Width number 2
+Resonance number   33(/   35)   Resonance energy  5.9188500E+03
+Resonance number   33(/   35)   Width number 1
+Resonance number   33(/   35)   Width number 2
+Resonance number   34(/   35)   Resonance energy  5.9758600E+03
+Resonance number   34(/   35)   Width number 1
+Resonance number   34(/   35)   Width number 2
+Resonance number   35(/   35)   Resonance energy  5.9969300E+03
+Resonance number   35(/   35)   Width number 1
+Resonance number   35(/   35)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 80.1s
+
+ ---message from rpxlc12---sensitivity calculation continues             80.1s
+
+ ---message from rpxlc12---sensitivity calculation completed             80.1s
+
+ Energy range :     7/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   37)   Resonance energy  6.0371300E+03
+Resonance number    1(/   37)   Width number 1
+Resonance number    1(/   37)   Width number 2
+Resonance number    2(/   37)   Resonance energy  6.0501000E+03
+Resonance number    2(/   37)   Width number 1
+Resonance number    2(/   37)   Width number 2
+Resonance number    3(/   37)   Resonance energy  6.0597600E+03
+Resonance number    3(/   37)   Width number 1
+Resonance number    3(/   37)   Width number 2
+Resonance number    4(/   37)   Resonance energy  6.0608000E+03
+Resonance number    4(/   37)   Width number 1
+Resonance number    4(/   37)   Width number 2
+Resonance number    5(/   37)   Resonance energy  6.0918900E+03
+Resonance number    5(/   37)   Width number 1
+Resonance number    5(/   37)   Width number 2
+Resonance number    6(/   37)   Resonance energy  6.1696000E+03
+Resonance number    6(/   37)   Width number 1
+Resonance number    6(/   37)   Width number 2
+Resonance number    7(/   37)   Resonance energy  6.1722000E+03
+Resonance number    7(/   37)   Width number 1
+Resonance number    7(/   37)   Width number 2
+Resonance number    8(/   37)   Resonance energy  6.1944000E+03
+Resonance number    8(/   37)   Width number 1
+Resonance number    8(/   37)   Width number 2
+Resonance number    9(/   37)   Resonance energy  6.1999800E+03
+Resonance number    9(/   37)   Width number 1
+Resonance number    9(/   37)   Width number 2
+Resonance number   10(/   37)   Resonance energy  6.2326600E+03
+Resonance number   10(/   37)   Width number 1
+Resonance number   10(/   37)   Width number 2
+Resonance number   11(/   37)   Resonance energy  6.2484000E+03
+Resonance number   11(/   37)   Width number 1
+Resonance number   11(/   37)   Width number 2
+Resonance number   12(/   37)   Resonance energy  6.3214100E+03
+Resonance number   12(/   37)   Width number 1
+Resonance number   12(/   37)   Width number 2
+Resonance number   13(/   37)   Resonance energy  6.3428100E+03
+Resonance number   13(/   37)   Width number 1
+Resonance number   13(/   37)   Width number 2
+Resonance number   14(/   37)   Resonance energy  6.3448800E+03
+Resonance number   14(/   37)   Width number 1
+Resonance number   14(/   37)   Width number 2
+Resonance number   15(/   37)   Resonance energy  6.4150000E+03
+Resonance number   15(/   37)   Width number 1
+Resonance number   15(/   37)   Width number 2
+Resonance number   16(/   37)   Resonance energy  6.4300700E+03
+Resonance number   16(/   37)   Width number 1
+Resonance number   16(/   37)   Width number 2
+Resonance number   17(/   37)   Resonance energy  6.4452300E+03
+Resonance number   17(/   37)   Width number 1
+Resonance number   17(/   37)   Width number 2
+Resonance number   18(/   37)   Resonance energy  6.4605200E+03
+Resonance number   18(/   37)   Width number 1
+Resonance number   18(/   37)   Width number 2
+Resonance number   19(/   37)   Resonance energy  6.5070600E+03
+Resonance number   19(/   37)   Width number 1
+Resonance number   19(/   37)   Width number 2
+Resonance number   20(/   37)   Resonance energy  6.5393800E+03
+Resonance number   20(/   37)   Width number 1
+Resonance number   20(/   37)   Width number 2
+Resonance number   21(/   37)   Resonance energy  6.5493500E+03
+Resonance number   21(/   37)   Width number 1
+Resonance number   21(/   37)   Width number 2
+Resonance number   22(/   37)   Resonance energy  6.5516700E+03
+Resonance number   22(/   37)   Width number 1
+Resonance number   22(/   37)   Width number 2
+Resonance number   23(/   37)   Resonance energy  6.6351700E+03
+Resonance number   23(/   37)   Width number 1
+Resonance number   23(/   37)   Width number 2
+Resonance number   24(/   37)   Resonance energy  6.6670000E+03
+Resonance number   24(/   37)   Width number 1
+Resonance number   24(/   37)   Width number 2
+Resonance number   25(/   37)   Resonance energy  6.7118300E+03
+Resonance number   25(/   37)   Width number 1
+Resonance number   25(/   37)   Width number 2
+Resonance number   26(/   37)   Resonance energy  6.7133600E+03
+Resonance number   26(/   37)   Width number 1
+Resonance number   26(/   37)   Width number 2
+Resonance number   27(/   37)   Resonance energy  6.7425100E+03
+Resonance number   27(/   37)   Width number 1
+Resonance number   27(/   37)   Width number 2
+Resonance number   28(/   37)   Resonance energy  6.7638200E+03
+Resonance number   28(/   37)   Width number 1
+Resonance number   28(/   37)   Width number 2
+Resonance number   29(/   37)   Resonance energy  6.7828200E+03
+Resonance number   29(/   37)   Width number 1
+Resonance number   29(/   37)   Width number 2
+Resonance number   30(/   37)   Resonance energy  6.8151900E+03
+Resonance number   30(/   37)   Width number 1
+Resonance number   30(/   37)   Width number 2
+Resonance number   31(/   37)   Resonance energy  6.8270600E+03
+Resonance number   31(/   37)   Width number 1
+Resonance number   31(/   37)   Width number 2
+Resonance number   32(/   37)   Resonance energy  6.8782000E+03
+Resonance number   32(/   37)   Width number 1
+Resonance number   32(/   37)   Width number 2
+Resonance number   33(/   37)   Resonance energy  6.8923500E+03
+Resonance number   33(/   37)   Width number 1
+Resonance number   33(/   37)   Width number 2
+Resonance number   34(/   37)   Resonance energy  6.8940100E+03
+Resonance number   34(/   37)   Width number 1
+Resonance number   34(/   37)   Width number 2
+Resonance number   35(/   37)   Resonance energy  6.9285100E+03
+Resonance number   35(/   37)   Width number 1
+Resonance number   35(/   37)   Width number 2
+Resonance number   36(/   37)   Resonance energy  6.9563700E+03
+Resonance number   36(/   37)   Width number 1
+Resonance number   36(/   37)   Width number 2
+Resonance number   37(/   37)   Resonance energy  6.9680300E+03
+Resonance number   37(/   37)   Width number 1
+Resonance number   37(/   37)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 88.5s
+
+ ---message from rpxlc12---sensitivity calculation continues             88.5s
+
+ ---message from rpxlc12---sensitivity calculation completed             88.5s
+
+ Energy range :     8/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   32)   Resonance energy  7.0126800E+03
+Resonance number    1(/   32)   Width number 1
+Resonance number    1(/   32)   Width number 2
+Resonance number    2(/   32)   Resonance energy  7.0259100E+03
+Resonance number    2(/   32)   Width number 1
+Resonance number    2(/   32)   Width number 2
+Resonance number    3(/   32)   Resonance energy  7.0639600E+03
+Resonance number    3(/   32)   Width number 1
+Resonance number    3(/   32)   Width number 2
+Resonance number    4(/   32)   Resonance energy  7.0733500E+03
+Resonance number    4(/   32)   Width number 1
+Resonance number    4(/   32)   Width number 2
+Resonance number    5(/   32)   Resonance energy  7.1261100E+03
+Resonance number    5(/   32)   Width number 1
+Resonance number    5(/   32)   Width number 2
+Resonance number    6(/   32)   Resonance energy  7.1465000E+03
+Resonance number    6(/   32)   Width number 1
+Resonance number    6(/   32)   Width number 2
+Resonance number    7(/   32)   Resonance energy  7.1877200E+03
+Resonance number    7(/   32)   Width number 1
+Resonance number    7(/   32)   Width number 2
+Resonance number    8(/   32)   Resonance energy  7.2031000E+03
+Resonance number    8(/   32)   Width number 1
+Resonance number    8(/   32)   Width number 2
+Resonance number    9(/   32)   Resonance energy  7.2181600E+03
+Resonance number    9(/   32)   Width number 1
+Resonance number    9(/   32)   Width number 2
+Resonance number   10(/   32)   Resonance energy  7.2376000E+03
+Resonance number   10(/   32)   Width number 1
+Resonance number   10(/   32)   Width number 2
+Resonance number   11(/   32)   Resonance energy  7.2502700E+03
+Resonance number   11(/   32)   Width number 1
+Resonance number   11(/   32)   Width number 2
+Resonance number   12(/   32)   Resonance energy  7.2864500E+03
+Resonance number   12(/   32)   Width number 1
+Resonance number   12(/   32)   Width number 2
+Resonance number   13(/   32)   Resonance energy  7.3524200E+03
+Resonance number   13(/   32)   Width number 1
+Resonance number   13(/   32)   Width number 2
+Resonance number   14(/   32)   Resonance energy  7.3732800E+03
+Resonance number   14(/   32)   Width number 1
+Resonance number   14(/   32)   Width number 2
+Resonance number   15(/   32)   Resonance energy  7.3998700E+03
+Resonance number   15(/   32)   Width number 1
+Resonance number   15(/   32)   Width number 2
+Resonance number   16(/   32)   Resonance energy  7.4189000E+03
+Resonance number   16(/   32)   Width number 1
+Resonance number   16(/   32)   Width number 2
+Resonance number   17(/   32)   Resonance energy  7.5226400E+03
+Resonance number   17(/   32)   Width number 1
+Resonance number   17(/   32)   Width number 2
+Resonance number   18(/   32)   Resonance energy  7.5401300E+03
+Resonance number   18(/   32)   Width number 1
+Resonance number   18(/   32)   Width number 2
+Resonance number   19(/   32)   Resonance energy  7.5610100E+03
+Resonance number   19(/   32)   Width number 1
+Resonance number   19(/   32)   Width number 2
+Resonance number   20(/   32)   Resonance energy  7.5922500E+03
+Resonance number   20(/   32)   Width number 1
+Resonance number   20(/   32)   Width number 2
+Resonance number   21(/   32)   Resonance energy  7.6167500E+03
+Resonance number   21(/   32)   Width number 1
+Resonance number   21(/   32)   Width number 2
+Resonance number   22(/   32)   Resonance energy  7.6245600E+03
+Resonance number   22(/   32)   Width number 1
+Resonance number   22(/   32)   Width number 2
+Resonance number   23(/   32)   Resonance energy  7.6819600E+03
+Resonance number   23(/   32)   Width number 1
+Resonance number   23(/   32)   Width number 2
+Resonance number   24(/   32)   Resonance energy  7.6990600E+03
+Resonance number   24(/   32)   Width number 1
+Resonance number   24(/   32)   Width number 2
+Resonance number   25(/   32)   Resonance energy  7.7337600E+03
+Resonance number   25(/   32)   Width number 1
+Resonance number   25(/   32)   Width number 2
+Resonance number   26(/   32)   Resonance energy  7.7807700E+03
+Resonance number   26(/   32)   Width number 1
+Resonance number   26(/   32)   Width number 2
+Resonance number   27(/   32)   Resonance energy  7.8073500E+03
+Resonance number   27(/   32)   Width number 1
+Resonance number   27(/   32)   Width number 2
+Resonance number   28(/   32)   Resonance energy  7.8107700E+03
+Resonance number   28(/   32)   Width number 1
+Resonance number   28(/   32)   Width number 2
+Resonance number   29(/   32)   Resonance energy  7.8423700E+03
+Resonance number   29(/   32)   Width number 1
+Resonance number   29(/   32)   Width number 2
+Resonance number   30(/   32)   Resonance energy  7.8470000E+03
+Resonance number   30(/   32)   Width number 1
+Resonance number   30(/   32)   Width number 2
+Resonance number   31(/   32)   Resonance energy  7.9092500E+03
+Resonance number   31(/   32)   Width number 1
+Resonance number   31(/   32)   Width number 2
+Resonance number   32(/   32)   Resonance energy  7.9788800E+03
+Resonance number   32(/   32)   Width number 1
+Resonance number   32(/   32)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                 95.0s
+
+ ---message from rpxlc12---sensitivity calculation continues             95.0s
+
+ ---message from rpxlc12---sensitivity calculation completed             95.0s
+
+ Energy range :     9/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   32)   Resonance energy  8.0352500E+03
+Resonance number    1(/   32)   Width number 1
+Resonance number    1(/   32)   Width number 2
+Resonance number    2(/   32)   Resonance energy  8.0474400E+03
+Resonance number    2(/   32)   Width number 1
+Resonance number    2(/   32)   Width number 2
+Resonance number    3(/   32)   Resonance energy  8.1040900E+03
+Resonance number    3(/   32)   Width number 1
+Resonance number    3(/   32)   Width number 2
+Resonance number    4(/   32)   Resonance energy  8.1380900E+03
+Resonance number    4(/   32)   Width number 1
+Resonance number    4(/   32)   Width number 2
+Resonance number    5(/   32)   Resonance energy  8.1402300E+03
+Resonance number    5(/   32)   Width number 1
+Resonance number    5(/   32)   Width number 2
+Resonance number    6(/   32)   Resonance energy  8.2046200E+03
+Resonance number    6(/   32)   Width number 1
+Resonance number    6(/   32)   Width number 2
+Resonance number    7(/   32)   Resonance energy  8.2157700E+03
+Resonance number    7(/   32)   Width number 1
+Resonance number    7(/   32)   Width number 2
+Resonance number    8(/   32)   Resonance energy  8.2247000E+03
+Resonance number    8(/   32)   Width number 1
+Resonance number    8(/   32)   Width number 2
+Resonance number    9(/   32)   Resonance energy  8.2625500E+03
+Resonance number    9(/   32)   Width number 1
+Resonance number    9(/   32)   Width number 2
+Resonance number   10(/   32)   Resonance energy  8.2900000E+03
+Resonance number   10(/   32)   Width number 1
+Resonance number   10(/   32)   Width number 2
+Resonance number   11(/   32)   Resonance energy  8.3265900E+03
+Resonance number   11(/   32)   Width number 1
+Resonance number   11(/   32)   Width number 2
+Resonance number   12(/   32)   Resonance energy  8.3282500E+03
+Resonance number   12(/   32)   Width number 1
+Resonance number   12(/   32)   Width number 2
+Resonance number   13(/   32)   Resonance energy  8.3566200E+03
+Resonance number   13(/   32)   Width number 1
+Resonance number   13(/   32)   Width number 2
+Resonance number   14(/   32)   Resonance energy  8.3998100E+03
+Resonance number   14(/   32)   Width number 1
+Resonance number   14(/   32)   Width number 2
+Resonance number   15(/   32)   Resonance energy  8.4099900E+03
+Resonance number   15(/   32)   Width number 1
+Resonance number   15(/   32)   Width number 2
+Resonance number   16(/   32)   Resonance energy  8.4624500E+03
+Resonance number   16(/   32)   Width number 1
+Resonance number   16(/   32)   Width number 2
+Resonance number   17(/   32)   Resonance energy  8.4959900E+03
+Resonance number   17(/   32)   Width number 1
+Resonance number   17(/   32)   Width number 2
+Resonance number   18(/   32)   Resonance energy  8.5306000E+03
+Resonance number   18(/   32)   Width number 1
+Resonance number   18(/   32)   Width number 2
+Resonance number   19(/   32)   Resonance energy  8.5553400E+03
+Resonance number   19(/   32)   Width number 1
+Resonance number   19(/   32)   Width number 2
+Resonance number   20(/   32)   Resonance energy  8.5932200E+03
+Resonance number   20(/   32)   Width number 1
+Resonance number   20(/   32)   Width number 2
+Resonance number   21(/   32)   Resonance energy  8.6109300E+03
+Resonance number   21(/   32)   Width number 1
+Resonance number   21(/   32)   Width number 2
+Resonance number   22(/   32)   Resonance energy  8.6375000E+03
+Resonance number   22(/   32)   Width number 1
+Resonance number   22(/   32)   Width number 2
+Resonance number   23(/   32)   Resonance energy  8.6527100E+03
+Resonance number   23(/   32)   Width number 1
+Resonance number   23(/   32)   Width number 2
+Resonance number   24(/   32)   Resonance energy  8.7102500E+03
+Resonance number   24(/   32)   Width number 1
+Resonance number   24(/   32)   Width number 2
+Resonance number   25(/   32)   Resonance energy  8.7318100E+03
+Resonance number   25(/   32)   Width number 1
+Resonance number   25(/   32)   Width number 2
+Resonance number   26(/   32)   Resonance energy  8.7708100E+03
+Resonance number   26(/   32)   Width number 1
+Resonance number   26(/   32)   Width number 2
+Resonance number   27(/   32)   Resonance energy  8.8204300E+03
+Resonance number   27(/   32)   Width number 1
+Resonance number   27(/   32)   Width number 2
+Resonance number   28(/   32)   Resonance energy  8.8444700E+03
+Resonance number   28(/   32)   Width number 1
+Resonance number   28(/   32)   Width number 2
+Resonance number   29(/   32)   Resonance energy  8.8561400E+03
+Resonance number   29(/   32)   Width number 1
+Resonance number   29(/   32)   Width number 2
+Resonance number   30(/   32)   Resonance energy  8.8881800E+03
+Resonance number   30(/   32)   Width number 1
+Resonance number   30(/   32)   Width number 2
+Resonance number   31(/   32)   Resonance energy  8.9456700E+03
+Resonance number   31(/   32)   Width number 1
+Resonance number   31(/   32)   Width number 2
+Resonance number   32(/   32)   Resonance energy  8.9630000E+03
+Resonance number   32(/   32)   Width number 1
+Resonance number   32(/   32)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                101.2s
+
+ ---message from rpxlc12---sensitivity calculation continues            101.2s
+
+ ---message from rpxlc12---sensitivity calculation completed            101.2s
+
+ Energy range :    10/   11
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+Resonance number    1(/   30)   Resonance energy  9.0173100E+03
+Resonance number    1(/   30)   Width number 1
+Resonance number    1(/   30)   Width number 2
+Resonance number    2(/   30)   Resonance energy  9.0362900E+03
+Resonance number    2(/   30)   Width number 1
+Resonance number    2(/   30)   Width number 2
+Resonance number    3(/   30)   Resonance energy  9.0561300E+03
+Resonance number    3(/   30)   Width number 1
+Resonance number    3(/   30)   Width number 2
+Resonance number    4(/   30)   Resonance energy  9.0918400E+03
+Resonance number    4(/   30)   Width number 1
+Resonance number    4(/   30)   Width number 2
+Resonance number    5(/   30)   Resonance energy  9.1413900E+03
+Resonance number    5(/   30)   Width number 1
+Resonance number    5(/   30)   Width number 2
+Resonance number    6(/   30)   Resonance energy  9.1650200E+03
+Resonance number    6(/   30)   Width number 1
+Resonance number    6(/   30)   Width number 2
+Resonance number    7(/   30)   Resonance energy  9.2154700E+03
+Resonance number    7(/   30)   Width number 1
+Resonance number    7(/   30)   Width number 2
+Resonance number    8(/   30)   Resonance energy  9.3608700E+03
+Resonance number    8(/   30)   Width number 1
+Resonance number    8(/   30)   Width number 2
+Resonance number    9(/   30)   Resonance energy  9.3817500E+03
+Resonance number    9(/   30)   Width number 1
+Resonance number    9(/   30)   Width number 2
+Resonance number   10(/   30)   Resonance energy  9.4154200E+03
+Resonance number   10(/   30)   Width number 1
+Resonance number   10(/   30)   Width number 2
+Resonance number   11(/   30)   Resonance energy  9.4204100E+03
+Resonance number   11(/   30)   Width number 1
+Resonance number   11(/   30)   Width number 2
+Resonance number   12(/   30)   Resonance energy  9.4688100E+03
+Resonance number   12(/   30)   Width number 1
+Resonance number   12(/   30)   Width number 2
+Resonance number   13(/   30)   Resonance energy  9.5287700E+03
+Resonance number   13(/   30)   Width number 1
+Resonance number   13(/   30)   Width number 2
+Resonance number   14(/   30)   Resonance energy  9.5744100E+03
+Resonance number   14(/   30)   Width number 1
+Resonance number   14(/   30)   Width number 2
+Resonance number   15(/   30)   Resonance energy  9.5861800E+03
+Resonance number   15(/   30)   Width number 1
+Resonance number   15(/   30)   Width number 2
+Resonance number   16(/   30)   Resonance energy  9.5947200E+03
+Resonance number   16(/   30)   Width number 1
+Resonance number   16(/   30)   Width number 2
+Resonance number   17(/   30)   Resonance energy  9.6281800E+03
+Resonance number   17(/   30)   Width number 1
+Resonance number   17(/   30)   Width number 2
+Resonance number   18(/   30)   Resonance energy  9.6310600E+03
+Resonance number   18(/   30)   Width number 1
+Resonance number   18(/   30)   Width number 2
+Resonance number   19(/   30)   Resonance energy  9.6802900E+03
+Resonance number   19(/   30)   Width number 1
+Resonance number   19(/   30)   Width number 2
+Resonance number   20(/   30)   Resonance energy  9.7248700E+03
+Resonance number   20(/   30)   Width number 1
+Resonance number   20(/   30)   Width number 2
+Resonance number   21(/   30)   Resonance energy  9.7409200E+03
+Resonance number   21(/   30)   Width number 1
+Resonance number   21(/   30)   Width number 2
+Resonance number   22(/   30)   Resonance energy  9.7655100E+03
+Resonance number   22(/   30)   Width number 1
+Resonance number   22(/   30)   Width number 2
+Resonance number   23(/   30)   Resonance energy  9.7743800E+03
+Resonance number   23(/   30)   Width number 1
+Resonance number   23(/   30)   Width number 2
+Resonance number   24(/   30)   Resonance energy  9.8314300E+03
+Resonance number   24(/   30)   Width number 1
+Resonance number   24(/   30)   Width number 2
+Resonance number   25(/   30)   Resonance energy  9.8506800E+03
+Resonance number   25(/   30)   Width number 1
+Resonance number   25(/   30)   Width number 2
+Resonance number   26(/   30)   Resonance energy  9.8664300E+03
+Resonance number   26(/   30)   Width number 1
+Resonance number   26(/   30)   Width number 2
+Resonance number   27(/   30)   Resonance energy  9.9036300E+03
+Resonance number   27(/   30)   Width number 1
+Resonance number   27(/   30)   Width number 2
+Resonance number   28(/   30)   Resonance energy  9.9322700E+03
+Resonance number   28(/   30)   Width number 1
+Resonance number   28(/   30)   Width number 2
+Resonance number   29(/   30)   Resonance energy  9.9560000E+03
+Resonance number   29(/   30)   Width number 1
+Resonance number   29(/   30)   Width number 2
+Resonance number   30(/   30)   Resonance energy  9.9836300E+03
+Resonance number   30(/   30)   Width number 1
+Resonance number   30(/   30)   Width number 2
+
+ ---message from rpxlc12---resonance parameter loop done                107.0s
+
+ ---message from rpxlc12---sensitivity calculation continues            107.0s
+
+ ---message from rpxlc12---sensitivity calculation completed            107.0s
+
+ Energy range :    11/   11
+ Unresolved resonance energy range.
+ ... ended.
+
+ errorr...                                                              107.8s
+
+ ---message from grpav4---collapsing NGOUT mf=3, mt=251 to the union grid
+
+ legendre group averaging completed                                     107.8s
+
+
+ processing mat  9237
+ ---------------------
+  92-U -238 KYU+       EVAL-Mar00 T.Kawano et al.                    
+
+ covariances calculated for  1 reactions and   56 groups                107.8s
+
+ covr...                                                                107.8s
+
+ ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
+
+ covr...                                                                107.8s
+
+ ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
+
+ covr...                                                                108.1s
+
+ ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
+
+ viewr...                                                               108.1s
+
+ viewr...                                                               108.2s
+
+ viewr...                                                               108.3s
+                                                                        108.3s
+ *****************************************************************************

@@ -1,0 +1,55 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 03:47:02
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #10                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.0s
+
+ ---message from emerge---nonpositive elastic cross sections found.
+
+ broadr...                                                                0.1s
+      300.0 deg                                                           0.1s
+      900.0 deg                                                           0.2s
+     2100.0 deg                                                           0.3s
+
+ unresr...                                                                0.4s
+
+ purr...                                                                  0.5s
+
+ mat = 1050                                                               0.5s
+
+ ---message from purr---no heating found on pendf
+                          ur heating set to zero
+      1 of    23 loops done for all temps & sig0s.                        2.2s
+      2 of    23 loops done for all temps & sig0s.                        4.0s
+      3 of    23 loops done for all temps & sig0s.                        5.7s
+      4 of    23 loops done for all temps & sig0s.                        7.4s
+      5 of    23 loops done for all temps & sig0s.                        9.1s
+      6 of    23 loops done for all temps & sig0s.                       10.7s
+      7 of    23 loops done for all temps & sig0s.                       12.4s
+      8 of    23 loops done for all temps & sig0s.                       14.1s
+      9 of    23 loops done for all temps & sig0s.                       15.8s
+     10 of    23 loops done for all temps & sig0s.                       17.5s
+     11 of    23 loops done for all temps & sig0s.                       19.2s
+     12 of    23 loops done for all temps & sig0s.                       21.0s
+     13 of    23 loops done for all temps & sig0s.                       22.7s
+     14 of    23 loops done for all temps & sig0s.                       24.4s
+     15 of    23 loops done for all temps & sig0s.                       26.2s
+     16 of    23 loops done for all temps & sig0s.                       27.9s
+     17 of    23 loops done for all temps & sig0s.                       29.6s
+     18 of    23 loops done for all temps & sig0s.                       31.4s
+     19 of    23 loops done for all temps & sig0s.                       33.2s
+     20 of    23 loops done for all temps & sig0s.                       35.0s
+     21 of    23 loops done for all temps & sig0s.                       36.8s
+     22 of    23 loops done for all temps & sig0s.                       38.6s
+     23 of    23 loops done for all temps & sig0s.                       40.4s
+
+ acer...                                                                 40.4s
+
+ moder...                                                                40.7s
+                                                                         40.9s
+ *****************************************************************************

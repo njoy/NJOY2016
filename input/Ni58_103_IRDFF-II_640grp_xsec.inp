@@ -1,0 +1,38 @@
+Enh: Ni58(n,p) IRDFF-II cross section processing
+ 0 0 0
+ 0 0 0 0 0 0 0 0 0 0
+'#'	echo "Start the pre-process command stream"
+'#'	echo " IRDFF-II Cross Section Analysis in SAND-II 640-grp"
+'#'     cp ../../xsec/IRDFF-II_release/IRDFF-II.endf tape20
+'#'	echo " "
+'#'	echo "Ends the pre-process command stream"     
+moder
+ 20 -21 /
+reconr
+ -21 -22 /
+ 'processing of Ni-58 of IRDFF-II'/
+ 2825 3 0 /
+ 0.001 293.6 /
+'Ni58 IRDFF-II'/
+'PROCESSED BY THE NJOY-2016 NUCLEAR DATA PROCESSING SYSTEM'/
+'SEE ORIGINAL TAPE FOR DETAILS OF EVALUATION'/
+ 0 /
+groupr
+ -21 -22 0 25 /
+ 2825 15 0 4 0 1 1 1 /
+ 'groupr: 640-group SAND-II' /
+ 293.6 /
+ 1.0e10 /
+ 0.1   0.025   100000.  1400000.0 /
+ 3 103 'n,p'/
+ 0 /
+ 0 /
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'     cp output             ../output/Ni58_103_IRDFF-II_640grp_xsec.out
+'@'	cp tape25             ../groupr/Ni58_103_IRDFF-II_640grp_xsec
+'@'	echo " "
+'@'	echo "This ends the post-process command stream"

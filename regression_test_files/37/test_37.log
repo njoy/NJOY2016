@@ -1,0 +1,45 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 04:12:21
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #37                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.1s
+
+ broadr...                                                                0.2s
+
+ purr...                                                                  0.3s
+
+ mat = 2722                                                               0.3s
+
+ ---message from purr---no heating found on pendf
+                          ur heating set to zero
+      1 of    16 loops done for all temps & sig0s.                        1.6s
+      2 of    16 loops done for all temps & sig0s.                        2.9s
+      3 of    16 loops done for all temps & sig0s.                        4.1s
+      4 of    16 loops done for all temps & sig0s.                        5.4s
+      5 of    16 loops done for all temps & sig0s.                        6.7s
+      6 of    16 loops done for all temps & sig0s.                        8.0s
+      7 of    16 loops done for all temps & sig0s.                        9.2s
+      8 of    16 loops done for all temps & sig0s.                       10.5s
+      9 of    16 loops done for all temps & sig0s.                       11.8s
+     10 of    16 loops done for all temps & sig0s.                       13.0s
+     11 of    16 loops done for all temps & sig0s.                       14.3s
+     12 of    16 loops done for all temps & sig0s.                       15.6s
+     13 of    16 loops done for all temps & sig0s.                       16.8s
+     14 of    16 loops done for all temps & sig0s.                       18.1s
+     15 of    16 loops done for all temps & sig0s.                       19.4s
+     16 of    16 loops done for all temps & sig0s.                       20.7s
+
+ moder...                                                                20.7s
+
+ acer...                                                                 20.9s
+
+ acer...                                                                 22.8s
+
+ viewr...                                                                31.2s
+                                                                         31.7s
+ *****************************************************************************
