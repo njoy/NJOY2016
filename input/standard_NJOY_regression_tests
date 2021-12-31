@@ -44,7 +44,7 @@ else
        ./njoy-2016  ../regression_test_files/22/test_22
        ./njoy-2016  ../regression_test_files/23/test_23
        ./njoy-2016  ../regression_test_files/24/test_24
-#       echo "test25 gets stuck in thermr in infinite loop"
+#       echo "test_25 gets stuck in thermr in infinite loop"
 #       ./njoy-2016  ../regression_test_files/25/test_25
        ./njoy-2016  ../regression_test_files/26/test_26
        ./njoy-2016  ../regression_test_files/27/test_27
@@ -53,7 +53,8 @@ else
        ./njoy-2016  ../regression_test_files/30/test_30
        ./njoy-2016  ../regression_test_files/31/test_31
        ./njoy-2016  ../regression_test_files/32/test_32
-       ./njoy-2016  ../regression_test_files/33/test_33
+#       echo "test_33 is suppressed because the output file is too large for GitHub"
+#       ./njoy-2016  ../regression_test_files/33/test_33
        ./njoy-2016  ../regression_test_files/34/test_34
        ./njoy-2016  ../regression_test_files/35/test_35
        ./njoy-2016  ../regression_test_files/36/test_36
