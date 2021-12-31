@@ -1,5 +1,5 @@
 
- njoy 2021.04  22Sept21                                      12/27/21 04:29:10
+ njoy 2021.04  22Sept21                                      12/31/21 03:48:31
  *****************************************************************************
 
 Run Title:: Enh: S32(n,p)P32 IRDFF-II covariance processing                                 
@@ -7,22 +7,22 @@ Run Title:: Enh: S32(n,p)P32 IRDFF-II covariance processing
 
  moder...                                                                 0.0s
 
- reconr...                                                                2.3s
+ reconr...                                                                2.2s
 
- groupr...                                                                2.4s
+ groupr...                                                                2.2s
 
- errorr...                                                                2.4s
+ errorr...                                                                2.2s
 
  processing mat  1625
  ---------------------
   16-S - 32 FEI        EVAL-Nov07 K.I.Zolotarev                      
 
- covariances calculated for  1 reactions and   49 groups                  2.4s
+ covariances calculated for  1 reactions and   49 groups                  2.3s
 
- covr...                                                                  2.4s
+ covr...                                                                  2.3s
 
  ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.0873E-01
 
- viewr...                                                                 2.4s
-                                                                          2.5s
+ viewr...                                                                 2.3s
+                                                                          2.3s
  *****************************************************************************
