@@ -1,24 +1,24 @@
-#!/bin/csh 
+#!/bin/bash 
 #
 # standard NJOY regression tests - formatted for SNL-NJOY-2016 using a Unix shell
 #
-  echo ""
-  echo "Usage: standard_NJOY_regression_tests called with zero arguments"
-  echo ""
+echo ""
+echo "Usage: standard_NJOY_regression_tests called with zero arguments"
+echo ""
 #
 # Note: Generate the standard set of NJOY regression tests
 #       Later, add a comparison of output files
 #
-setenv SYSTEMTYPE unix
+export SYSTEMTYPE=unix
 # 
 # AGENCY must be only 3 characters
 #
-setenv AGENCY snl
+export AGENCY=snl
 #
 # check number of input arguments
 #
-if ( $#argv > 0) then
-       echo "Usage: SNL-NJOY-2016 generation of manipulate-2020 regression examples called with Invalid number of arguments $#argv"
+if [ $# -ne 0 ]; then
+       echo "Usage: SNL-NJOY-2016 generation of manipulate-2020 regression examples called with Invalid number of arguments $#"
 else
        ./njoy-2016  ../regression_test_files/01/test_01   
        ./njoy-2016  ../regression_test_files/02/test_02
@@ -69,5 +69,5 @@ else
        ./njoy-2016  ../regression_test_files/45/test_45
        ./njoy-2016  ../regression_test_files/46/test_46
        ./njoy-2016  ../regression_test_files/47/test_47
-endif
+fi
 #
