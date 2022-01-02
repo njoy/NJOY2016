@@ -1,4 +1,4 @@
-#! /bin/csh 
+#!/bin/csh 
 #
 # standard NJOY regression tests - formatted for SNL-NJOY-2016 using a Unix shell
 #
