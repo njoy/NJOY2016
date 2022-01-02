@@ -31,6 +31,6 @@ jobs:
     - name: make
       run: make -j
       working-directory: ./Git-Clone/NJOY2016/bin
-    - name: ctest
-      run: ctest -j
-      working-directory: ./Git-Clone/NJOY2016/bin
+    - name: Regression Tests
+      run: ./standard_NJOY_regression_tests
+      working-directory: ./input
