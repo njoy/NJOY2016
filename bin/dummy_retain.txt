@@ -1,0 +1,1 @@
+Dummy file to retain bin directory within GitHub repository

@@ -1,0 +1,54 @@
+NJOY Regression Test #13
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "Standard NJOY regression test #13"
+'#'	cp ../regression_test_files/13/tape20  tape20
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"   
+moder
+ 20 -21/
+reconr
+ -21 -22/
+ 'pendf tape for endf/b-vi.1 28-ni-61a'/
+ 2834 1 0 /
+ .01/
+ '28-ni-61a from endf/b-vi.1 t124 (hetrick,fu;ornl)'/
+ 0/
+broadr
+ -21 -22 -23/
+ 2834 1/
+ .01/
+ 300/
+ 0/
+heatr
+ -21 -23 -24/
+ 2834 6 0 1 0 2/
+ 302 303 304 402 443 444/
+gaspr
+ -21 -24 -25/
+moder
+ -25 28/
+--
+acer
+ -21 -25 0 26 27
+ 1 0 1/
+ '28-ni-61a endf-vi.1 njoy2016'/
+ 2834 300./
+ /
+ /
+acer
+ 0 26 33 34 35
+ 7 1 2/
+ '28-ni-61a endf-vi.1 njoy2016'/
+viewr
+ 33 36/
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'     cp output             ../regression_test_files/01/SNL-NJOY-2016_Test_13_Output
+'@'	cp tape26             ../regression_test_files/01/SNL-NJOY-2016_Test_13_Tape26
+'@'	cp tape28             ../regression_test_files/01/SNL-NJOY-2016_Test_13_Tape28
+'@'	cp tape36             ../regression_test_files/01/SNL-NJOY-2016_Test_13_Tape36
+'@'	echo "
+'@'	echo "This ends the post-process command stream"

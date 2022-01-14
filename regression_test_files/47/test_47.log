@@ -1,0 +1,100 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 04:17:53
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #47                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.7s
+
+ ---message from rdf2bw---calculation of angular distribution not installed.
+
+ broadr...                                                               25.0s
+
+ unresr...                                                               37.5s
+
+ groupr...                                                               37.6s
+
+ ---message from conver---skipping new mf6/mt18 multiplicity section
+
+ groupr...                                                               43.7s
+
+ ---message from conver---skipping new mf6/mt18 multiplicity section
+
+ moder...                                                                50.0s
+
+ moder...                                                                50.0s
+
+ errorr...                                                               50.0s
+
+ ---message from errorr---mf35 processing with the mf6 spectrum matrix
+
+ processing mat  9437
+ ---------------------
+  94-Pu-239 LANL       EVAL-                  LANL, ORNL, et al.     
+
+ ---message from sumchk---zero-sum test failed
+                          applying normalization correction
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ covariances calculated for  1 reactions and  601 groups                 54.4s
+
+ covr...                                                                 54.5s
+
+ ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
+
+ viewr...                                                                54.5s
+
+ moder...                                                                54.5s
+
+ errorr...                                                               54.5s
+
+ ---message from errorr---mf35 processing with the mf6 spectrum matrix
+
+ processing mat  9437
+ ---------------------
+  94-Pu-239 LANL       EVAL-                  LANL, ORNL, et al.     
+
+ ---message from sumchk---zero-sum test failed
+                          applying normalization correction
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ covariances calculated for  1 reactions and  601 groups                 58.9s
+
+ covr...                                                                 59.0s
+
+ ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
+
+ viewr...                                                                59.0s
+
+ moder...                                                                59.0s
+                                                                         59.0s
+ *****************************************************************************

@@ -1,0 +1,185 @@
+1*****************************************************************************
+ *                                         *              *                  *
+ *   $$   $$       $$   $$$$$   $$    $$   *              *  vers: 2021.04   *
+ *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
+ *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
+ *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/25/21  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 20:10:59  *
+ *                                         *              *                  *
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #25                                                        
+
+icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
+icntrl(10) control logic flag set for damage energy:   0
+
+ moder...change the mode of an endf tape or njoy output tape              0.0s
+
+ input unit (+ for coded, - for bb) ...         20
+ output unit (+ for coded, - for bb) ..        -30
+
+ tape label
+ --------------------------------------
+   $Rev:: 1347     $  $Date:: 2017-09-28#$                            
+
+ using endf-6 format
+                                                                          0.1s
+ *****************************************************************************
+
+ moder...change the mode of an endf tape or njoy output tape              0.1s
+
+ input unit (+ for coded, - for bb) ...         21
+ output unit (+ for coded, - for bb) ..        -40
+
+ tape label
+ --------------------------------------
+   $Rev:: 1347     $  $Date:: 2017-09-28#$                            
+
+ using endf-6 format
+                                                                          0.1s
+ *****************************************************************************
+
+ reconr...reconstruct pointwise cross sections in pendf format            0.1s
+
+ unit for endf tape ...................        -30
+ unit for pendf tape ..................        -31
+
+ label for pendf tape
+ ------------------------------------------------------------------
+ PENDF tape for ENDF/B-VIII.0b6 H-1                                  
+
+ tape label
+ ------------------------------------------------------------------
+  $Rev:: 1347     $  $Date:: 2017-09-28#$                            
+
+ material to be processed .............        125
+ reconstruction tolerance .............      0.001
+ reconstruction temperature ...........       0.00k
+ resonance-integral-check tolerance ...      0.010
+ max resonance-integral error .........  5.000E-08
+
+ descriptive cards for pendf tape
+ ------------------------------------------------------------------
+ H-1 from ENDF/B-VIII.0b6                                            
+ processed at 0.1% tolerance                                         
+ 
+
+ processing mat  125 in endf-6 format
+ ------------------------------------------------------------------
+   1-H -  1 LANL       EVAL-JUL16 G.M.Hale                           
+
+
+ mat has no resonance parameters
+
+ number of user and resonance nodes           =       0
+ points in initial unionized grid             =     153
+ points added by linearization                =     542                   0.1s
+ number of points in final unionized grid     =     695
+                                                                          0.1s
+ *****************************************************************************
+
+ broadr...doppler broadening of endf data                                 0.1s
+
+ unit for input endf tape .............        -30
+ unit for input pendf tape ............        -31
+ unit for output pendf tape ...........        -32
+ material to be processed .............        125
+ number of final temperatures .........          3
+ restart (0 no, 1 yes) ................          0
+ bootstrap (0 no, 1 yes) ..............          0
+ starting material temperature ........        0.0k
+ thinning tolerance ...................      0.001
+ max. energy ..........................  6.500E+06
+ errmax for thinning ..................  1.000E-02
+ errint for thinning ..................  5.000E-08
+ final temperatures ...................  3.000E+02
+                                         4.000E+02
+                                         5.000E+02
+
+ files are in endf-6 format
+
+ non-resonance nuclide, input pendf limit     =    2.00000E+07 eV.
+ - reset to    6.50000E+06 eV.
+
+ final maximum energy for broadening/thinning =    6.50000E+06 eV
+                                                                          0.1s
+
+ broadened mat 125 from  0.0000E+00 to  3.0000E+02 k
+         points in=    695  points out=    631
+         mt   2 102
+                                                                          0.4s
+
+ broadened mat 125 from  0.0000E+00 to  4.0000E+02 k
+         points in=    695  points out=    631
+         mt   2 102
+                                                                          0.6s
+
+ broadened mat 125 from  0.0000E+00 to  5.0000E+02 k
+         points in=    695  points out=    631
+         mt   2 102
+                                                                          0.8s
+ *****************************************************************************
+
+ heatr...prompt kerma                                                     0.8s
+
+ input endf unit ......................        -30
+ input pendf unit .....................        -32
+ output pendf unit ....................        -33
+ mat to be processed ..................        125
+ no. temperatures (0=all) .............          0
+ gamma heat (0 nonlocal, 1 local) .....          0
+ print option (0 min, 1 more, 2 chk) ..          0
+ damage displacement energy ...........    default
+ lattice atomic number ................    default
+ lattice atomic mass ..................    default
+
+            dpa parameters changed =  -1.000000      ev 
+            al parameter changed   =   0.000000     amu
+                                   =   0.000000     nmass
+            zl parameter changed   =   0.000000      Z  
+
+ partial kerma mt-s desired ...........        302
+                                               303
+                                               304
+                                               318
+                                               402
+                                               443
+                                               444
+
+ default damage energy = 25.0 ev
+
+ ---message from hinit---mf6, mt102 has recoil with no spectrum
+                          photon momentum recoil used.
+                                                             temp 1       0.9s
+
+ edis parameter in disbar over-ridden by displacement threshold energy:   25.00000     -1.000000    
+
+ ---message from hinit---mf6, mt102 has recoil with no spectrum
+                          photon momentum recoil used.
+                                                             temp 2       0.9s
+
+ edis parameter in disbar over-ridden by displacement threshold energy:   25.00000     -1.000000    
+
+ ---message from hinit---mf6, mt102 has recoil with no spectrum
+                          photon momentum recoil used.
+                                                             temp 3       0.9s
+
+ edis parameter in disbar over-ridden by displacement threshold energy:   25.00000     -1.000000    
+
+                                                                          0.9s
+ *****************************************************************************
+
+ thermr...compute thermal scattering cross sections and distributions     0.9s
+
+ unit for endf tape ...................        -40
+ unit for input pendf tape ............        -33
+ unit for output pendf tape ...........        -50
+
+ material to be processed (endf) ......          1
+ material to be processed (pendf) .....        125
+ number of angle bins .................         20
+ number of temperatures ...............          3
+ inelastic option .....................          2
+ elastic option .......................          1
+ MF6 format option ....................          0

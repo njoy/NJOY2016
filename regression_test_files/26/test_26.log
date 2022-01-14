@@ -1,0 +1,35 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 04:06:03
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #26                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.0s
+
+ broadr...                                                                0.1s
+
+ heatr...                                                                 0.2s
+
+ ---message from hinit---mt458 is missing for this mat
+
+ ---message from hinit---mf6, mt 16 does not give recoil za= 94244
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt 91 does not give recoil za= 94245
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt102 does not give recoil za= 94246
+                          photon momentum recoil used.
+
+ ---message from hinit---mf6, mt649 does not give recoil za= 93245
+                          one-particle recoil approx. used.
+
+ ---message from hinit---mf6, mt849 does not give recoil za= 92242
+                          one-particle recoil approx. used.
+
+ moder...                                                                 0.5s
+                                                                          0.5s
+ *****************************************************************************

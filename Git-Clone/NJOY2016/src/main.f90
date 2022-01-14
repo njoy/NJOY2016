@@ -116,6 +116,13 @@ program njoy
 ! Item 0: Title card
 !         special flag for SNL new control integers flagged by the use of the "Enh:" in the first four characters
 !
+!         Description of optional control imode flags
+!
+!         ************************************************
+!
+!         SNL_enhanced_input_format = 0     Enhanced format off
+!         SNL_enhanced_input_format = 1     Enhanced format o  
+!
 ! Item 1: implement optional read of flow control flags based on title card format (imode)
 !
 !         Description of optional control imode flags
@@ -258,7 +265,9 @@ program njoy
    read (nsysi,'(a)') run_title
    write (nsyse,'(/,''Run Title:: '', a80,/)') run_title
    write (nsyso,'(/,''Run Title:: '', a80,/)') run_title
+   SNL_enhanced_input_format = 0
    if ( run_title(1:4) .eq. 'Enh:') then
+   SNL_enhanced_input_format = 1
      read (nsysi,'(3i2)') (imode(jk), jk=1,3)
      read (nsysi,'(10i2)') (icntrl(jk), jk=1,10)
      write (nsyso,'(''Enhanced control logic inputs:'')')
@@ -275,7 +284,7 @@ program njoy
         write (nsyso,'(/,''imode(3) debug printer control logic flag set: '', i3,/)') imode(3)
    endif
 
-   if ( icntrl(1) .eq. 0) then 
+   if ( icntrl(1) .eq. 0 .and. SNL_enhanced_input_format .eq. 1) then 
         write (nsyso,'(''icntrl(1) control logic flag set for NJOY default (spKP-DE): '', i3)') icntrl(1)
    elseif (icntrl(1) .eq. 1) then
         write (nsyso,'(''icntrl(1) control logic flag not implemented 1: '', i3)') icntrl(1)
@@ -335,7 +344,7 @@ program njoy
         write (nsyso,'(''icntrl(9) control logic flag for low mass residual particles: '', i5)') icntrl(jk)
      endif
    enddo
-   if ( icntrl(10) .eq. 0) then 
+   if ( icntrl(10) .eq. 0 .and. SNL_enhanced_input_format .eq. 1) then 
         write (nsyso,'(''icntrl(10) control logic flag set for damage energy: '', i3)') icntrl(10)
    elseif (icntrl(10) .eq. 1) then
         write (nsyso,'(''icntrl(10) control logic flag set for dpa: '', i3)') icntrl(10)

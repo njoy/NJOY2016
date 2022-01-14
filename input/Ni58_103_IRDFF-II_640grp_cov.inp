@@ -1,0 +1,58 @@
+ 0 
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "IRDFF-II Covariance Analysis"
+'#'	echo "This did not work: cp ../../xsec/IRDFF-II_release/IRDFF-II.endf tape20"
+'#'	cp ../../xsec/IRDFF-II_release/IRDFF-II.endf tape20
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"
+'moder'
+ 20  -21 
+'reconr'
+  -21  -22 
+'PENDF TAPE FOR natNi(n,X)Co58 FROM format TAPE'/
+  2825  3/
+ .001 293.6 /
+'Ni58 IRDFF-II'/
+'PROCESSED BY THE NJOY-2012 NUCLEAR DATA PROCESSING SYSTEM'/
+'SEE ORIGINAL TAPE FOR DETAILS OF EVALUATION'/
+ 0/
+'groupr'
+ -21 -22 0 25 /
+  2825 15 0 4 0 1  1 1 /
+'Ni58 Cross Sections (eV-b)'/
+ 293.6 /
+ 1.E10 /
+ 0.1   0.025   100000.  1400000.0 /
+ 3   /
+ 0/
+ 0/
+'errorr'
+  -21  -22 25 26 0 0/
+ 2825  19 6 1 1 /  
+ 1  293.6 /
+ 1 33 /
+ 1 /
+  103  /
+ 1 /
+ 0.0001  20000000. /
+'covr' 
+26 0 34/
+1/
+ /
+ /
+ 2825 103 2825 103/
+'viewr'
+34 35/
+'stop'
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'     cp output             ../output/Ni58_103_IRDFF-II_640grp_cov.out
+'@'     cp tape25             ../groupr/Ni58_103_IRDFF-II_640grp_cov.groupr
+'@'	cp tape35             ../correlation/Ni58_103_IRDFF-II_640grp_cov.eps
+'@'	cp tape34             ../output/viewr/Ni58_103_IRDFF-II_640grp._covviewr
+'@'	cp std.plot           ../correlation/Ni58_103_IRDFF-II_640grp_cov.std
+'@'	cp lsl_interface.cov  ../correlation/Ni58_103_IRDFF-II_640grp_cov.lsl
+'@'	echo " "
+'@'	echo "This ends the post-process command stream"
+'stop'

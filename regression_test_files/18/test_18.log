@@ -1,0 +1,48 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 03:55:56
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #18                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.0s
+
+ ---message from emerge---nonpositive elastic cross sections found.
+
+ broadr...                                                                0.1s
+
+ groupr...                                                                0.8s
+
+ ---message from conver---cannot do complete particle production for mt= 16
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 17
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 37
+                          only mf4/mf5 provided
+
+ ---message from conver---cannot do complete particle production for mt= 91
+                          only mf4/mf5 provided
+
+ errorr...                                                                0.8s
+
+ ---message from errorr---mf35 processing with the mf5 spectrum vector
+
+ processing mat  9999
+ ---------------------
+  98-Cf-252 SRL,LLNL+  EVAL-JUL76 Benjamin,McCrosson,Howerton,+      
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ covariances calculated for  1 reactions and   71 groups                  0.9s
+
+ covr...                                                                  0.9s
+
+ viewr...                                                                 0.9s
+                                                                          0.9s
+ *****************************************************************************

@@ -1,0 +1,23 @@
+
+ njoy 2021.04  22Sept21                                      12/27/21 03:46:56
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #09                                                        
+
+
+ moder...                                                                 0.0s
+
+ reconr...                                                                0.1s
+
+ broadr...                                                                0.1s
+
+ leapr...                                                                 0.1s
+
+ thermr...                                                                0.5s
+
+ ***warning***maximum value of beta limits the allowed energy transfer
+ the sct approx. will be used for transfers larger than  0.633 ev.
+
+ wrote thermal data for temp = 2.9600E+02                                 1.2s
+                                                                          1.2s
+ *****************************************************************************
