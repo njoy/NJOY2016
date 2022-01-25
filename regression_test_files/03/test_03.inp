@@ -53,7 +53,7 @@ stop
 '@'	echo " "
 '@'	rm tape30
 '@'	rm tape32
-'@'     cp output             ../regression_test_files/03/SNL-NJOY-2016_Test_03_Output
-'@'	cp tape37             ../regression_test_files/03/SNL-NJOY-2016_Test_03_Tape37
+'@'     cp output             ../regression_test_files/03/SNL-NJOY-2016_Test_Output
+'@'	cp tape37             ../regression_test_files/03/SNL-NJOY-2016_Test_Tape37
 '@'	echo "
 '@'	echo "This ends the post-process command stream"

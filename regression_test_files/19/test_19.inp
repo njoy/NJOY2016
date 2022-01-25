@@ -51,8 +51,8 @@ NJOY Regression Test #19
 '@'	echo "This starts the post-process command stream"
 '@'	echo " "
 '@'	rm tape20
-'@'     cp output             ../regression_test_files/19/SNL-NJOY-2016_Test_19_Output
-'@'	cp tape27             ../regression_test_files/19/SNL-NJOY-2016_Test_19_Tape27
-'@'	cp tape29             ../regression_test_files/19/SNL-NJOY-2016_Test_19_Tape29
+'@'     cp output             ../regression_test_files/19/SNL-NJOY-2016_Test_Output
+'@'	cp tape27             ../regression_test_files/19/SNL-NJOY-2016_Test_Tape27
+'@'	cp tape29             ../regression_test_files/19/SNL-NJOY-2016_Test_Tape29
 '@'	echo "
 '@'	echo "This ends the post-process command stream"

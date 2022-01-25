@@ -63,12 +63,12 @@ stop
 '@'	echo "This starts the post-process command stream"
 '@'	echo " "
 '@'	rm tape20
-'@'     cp output             ../regression_test_files/27/SNL-NJOY-2016_Test_27_Output
-'@'	cp tape36             ../regression_test_files/27/SNL-NJOY-2016_Test_27_Tape36
-'@'	cp tape37             ../regression_test_files/27/SNL-NJOY-2016_Test_27_Tape37
-'@'	cp tape46             ../regression_test_files/27/SNL-NJOY-2016_Test_27_Tape46
-'@'	cp tape47             ../regression_test_files/27/SNL-NJOY-2016_Test_27_Tape47
-'@'	cp tape56             ../regression_test_files/27/SNL-NJOY-2016_Test_27_Tape56
-'@'	cp tape57             ../regression_test_files/27/SNL-NJOY-2016_Test_27_Tape57
+'@'     cp output             ../regression_test_files/27/SNL-NJOY-2016_Test_Output
+'@'	cp tape36             ../regression_test_files/27/SNL-NJOY-2016_Test_Tape36
+'@'	cp tape37             ../regression_test_files/27/SNL-NJOY-2016_Test_Tape37
+'@'	cp tape46             ../regression_test_files/27/SNL-NJOY-2016_Test_Tape46
+'@'	cp tape47             ../regression_test_files/27/SNL-NJOY-2016_Test_Tape47
+'@'	cp tape56             ../regression_test_files/27/SNL-NJOY-2016_Test_Tape56
+'@'	cp tape57             ../regression_test_files/27/SNL-NJOY-2016_Test_Tape57
 '@'	echo "
 '@'	echo "This ends the post-process command stream"

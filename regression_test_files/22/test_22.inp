@@ -114,7 +114,7 @@ stop
 '@'     echo "    "
 '@'	echo "This starts the post-process command stream"
 '@'	echo " "
-'@'     cp output             ../regression_test_files/22/SNL-NJOY-2016_Test_22_Output
-'@'	cp tape20             ../regression_test_files/22/SNL-NJOY-2016_Test_22_Tape20
+'@'     cp output             ../regression_test_files/22/SNL-NJOY-2016_Test_Output
+'@'	cp tape20             ../regression_test_files/22/SNL-NJOY-2016_Test_Tape20
 '@'	echo "
 '@'	echo "This ends the post-process command stream"

@@ -97,11 +97,11 @@ stop
 '@'	rm tape21
 '@'	rm tape22
 '@'	rm tape23
-'@'     cp output             ../regression_test_files/17/SNL-NJOY-2016_Test_17_Output
-'@'	cp tape26             ../regression_test_files/17/SNL-NJOY-2016_Test_17_Tape26
-'@'	cp tape91             ../regression_test_files/17/SNL-NJOY-2016_Test_17_Tape91
-'@'	cp tape92             ../regression_test_files/17/SNL-NJOY-2016_Test_17_Tape92
-'@'	cp tape93             ../regression_test_files/17/SNL-NJOY-2016_Test_17_Tape93
-'@'	cp tape99             ../regression_test_files/17/SNL-NJOY-2016_Test_17_Tape99
+'@'     cp output             ../regression_test_files/17/SNL-NJOY-2016_Test_Output
+'@'	cp tape26             ../regression_test_files/17/SNL-NJOY-2016_Test_Tape26
+'@'	cp tape91             ../regression_test_files/17/SNL-NJOY-2016_Test_Tape91
+'@'	cp tape92             ../regression_test_files/17/SNL-NJOY-2016_Test_Tape92
+'@'	cp tape93             ../regression_test_files/17/SNL-NJOY-2016_Test_Tape93
+'@'	cp tape99             ../regression_test_files/17/SNL-NJOY-2016_Test_Tape99
 '@'	echo "
 '@'	echo "This ends the post-process command stream"
