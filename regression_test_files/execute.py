@@ -142,7 +142,7 @@ for reference_tape in reference_tapes:
       diff_file.write("*** {} ***\n".format(reference_tape))
       diff_file.write("--- {} ---\n".format(trial_tape))
 
-      identical = identicalLines(reference_lines, trial_lines, diff_file, 1E-9, 1E-7)
+      identical = identicalLines(reference_lines, trial_lines, diff_file, 1E-4, 1E-4)
 
     if not identical:
       print("Diff found, exiting")
@@ -156,6 +156,3 @@ print("No diff found")
 
 for diff in glob.glob('*_diff'):
   os.remove(diff)
-
-#os.remove('output')
-#os.remove('error')
