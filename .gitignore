@@ -1,1 +1,7 @@
+# Ignore main bin directory
 /bin
+
+# Ignore regression test files created from tests each run 
+/regression_test_files/*/SNL-NJOY-2016_Test*
+/regression_test_files/*/*.log
+/regression_test_files/*/*.out
