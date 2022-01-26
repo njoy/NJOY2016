@@ -24,8 +24,8 @@ else
   # For all regression input files found within numbered subdirectories, run a test
   for i in ../regression_test_files/*/*.inp; do
 
-    # Current skips are cases 7, 13, 25, and 33 due to infinite loop and large tape files
-    if [[ ${i:33:2} != "07" && ${i:33:2} != "13" && ${i:33:2} != "25" && ${i:33:2} != "33" ]]; then
+    # Current skips are cases 7, 13, 17, 25, and 33 due to infinite loop and large tape files
+    if [[ ${i:33:2} != "07" && ${i:33:2} != "13" && ${i:33:2} != "17" && ${i:33:2} != "25" && ${i:33:2} != "33" ]]; then
 
       # run the driver script, remove ".inp" from input 
       ./njoy-2016 ${i%.inp}
