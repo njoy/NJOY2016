@@ -15,7 +15,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04, macos-10.15]
         build_type: [ Debug, Release ]
-        vFortran: [ gfortran-10 ]
+        vFortran: [ gfortran-9 ]
 
     steps:
     - name: which gfortran
