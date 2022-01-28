@@ -1,2 +1,9 @@
 # Auto detect text files and perform LF normalization
-* text=Auto
+* text=Auto eol=lf
+
+# Set file types to LF endings
+#*.inp    text eol=lf
+#regression_test_files/*/reference*  text eol=lf
+#regression_test_files/*/SNL-NJOY-2016*  text eol=lf
+#regression_test_files/*/tape*  text eol=lf
+#regression_test_files/*/input  text eol=lf
