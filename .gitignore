@@ -5,3 +5,9 @@
 /regression_test_files/*/SNL-NJOY-2016_Test*
 /regression_test_files/*/*.log
 /regression_test_files/*/*.out
+
+# Ignore build bin directory so devs can't commit local build files
+/Git-Clone/NJOY2016/bin
+
+# Ignore user's working directory
+/*-work-*
