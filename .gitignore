@@ -11,3 +11,5 @@
 
 # Ignore user's working directory
 /*-work-*
+
+/build

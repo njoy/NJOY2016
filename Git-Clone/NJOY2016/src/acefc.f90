@@ -808,6 +808,7 @@ contains
          ncs(nxc)=ncs(nxc)+1+nint((scr(5)+5)/6)
       endif
       call tosend(nin,nout,0,scr)
+      deallocate(scr)
       return
    endif
 
@@ -868,6 +869,7 @@ contains
          deallocate(p1456nu)
       endif
       call contio(nin,nout,0,scr,nb,nw)
+      deallocate(scr)
       return
    endif
 
@@ -996,6 +998,11 @@ contains
    endif
    call contio(nin,nout,0,scr,nb,nw)
    call closz(-itape)
+   deallocate(y)
+   deallocate(x)
+   deallocate(buf)
+   deallocate(scr2)
+   deallocate(scr)
 
    !--finished
    return
@@ -1906,7 +1913,7 @@ contains
    real(kr)::y,enext
    real(kr),dimension(:),allocatable::tab1
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwmaxn=65000
+   integer,parameter::nwmaxn=1000000
    real(kr),parameter::big=1.e9_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
@@ -1920,7 +1927,7 @@ contains
    jpp=0
    jpnu=0
    nkk=0
-   nt1w=4200
+   nt1w=20000
    allocate(tab1(nt1w))
    nsix=19
    nin0=0
@@ -2482,6 +2489,7 @@ contains
 
    !--topfil is finished.
    deallocate(scr)
+   deallocate(tab1)
    return
    end subroutine topfil
 
@@ -3771,6 +3779,10 @@ contains
    call closz(-iold)
    call closz(-inew)
    call repoz(nf12c)
+   deallocate(scr2)
+   deallocate(scr)
+   deallocate(bufn)
+   deallocate(bufo)
    return
    end subroutine gamsum
 
@@ -4139,7 +4151,9 @@ contains
          i=ii
          ei=scr(6+(lg+1)*i-lg)
          if (ei.eq.zero.and.ee(k).eq.zero) idone=1
-         if (ei.ne.zero.and.abs(ei-ee(k))/ei.lt.0.0001) idone=1
+         if (ei.ne.zero) then
+            if (abs(ei-ee(k))/ei.lt.0.0001) idone=1
+         endif
       enddo
       if (idone.eq.0) then
          aa((k-1)*imax+j)=0
@@ -4404,6 +4418,15 @@ contains
      &'' energy discontinuities found in gamma files''/&
      &(10x,1p,e13.5))')&
      (disc(iedis),iedis=1,nedis)
+   deallocate(tot)
+   deallocate(yold)
+   deallocate(scr)
+   deallocate(rr)
+   deallocate(aa)
+   deallocate(yy)
+   deallocate(es)
+   deallocate(eg)
+   deallocate(ee)
    return
    end subroutine convr
 
@@ -4780,6 +4803,10 @@ contains
    !--the gamma angle and energy distributions are ready
    call amend(nout,0)
    call atend(nout,0)
+   if (allocated(ee)) deallocate(ee)
+   if (allocated(eb)) deallocate(eb)
+   deallocate(scr)
+   deallocate(sig)
    deallocate(egn)
    deallocate(egg)
    return
@@ -4820,7 +4847,9 @@ contains
    real(kr),parameter::zero=0
 
    !--initialize
-   nwscr=10000
+   inow=0
+   nnex=0
+   nwscr=1000000
    allocate(scr(nwscr))
    do i=1,8
       nxsd(i)=0
@@ -5294,7 +5323,7 @@ contains
          if (mt.eq.5.and.mt5p.eq.0) iskip=0
       else if (izai.eq.1002) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.32.or.mt.eq.35.or.&
+         if (mt.eq.2.or.mt.eq.11.or.mt.eq.32.or.mt.eq.35.or.&
            mt.eq.104.or.mt.eq.114.or.mt.eq.115.or.mt.eq.117.or.&
            mt.eq.157.or.mt.eq.158.or.mt.eq.169.or.&
            mt.eq.170.or.mt.eq.171.or.mt.eq.182.or.&
@@ -6174,6 +6203,11 @@ contains
 
    !--load particle production information
    call acelcp(next,matd,nin,za,awr)
+   if (allocated(urd)) deallocate(urd)
+   if (allocated(nudn)) deallocate(nudn)
+   if (allocated(nup)) deallocate(nup)
+   if (allocated(nut)) deallocate(nut)
+   deallocate(scr)
 
    return
    end subroutine acelod
@@ -6947,7 +6981,7 @@ contains
    integer::loc(5)
    character(60)::strng
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwscr=18000
+   integer,parameter::nwscr=1000000
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::small=1.e-30_kr
    real(kr),parameter::eps=.001e0_kr
@@ -8001,7 +8035,7 @@ contains
    real(kr),dimension(:),allocatable::dise
    real(kr),dimension(:),allocatable::tdise
    character(66)::strng
-   integer,parameter::nwscr=5000
+   integer,parameter::nwscr=1000000
    integer,parameter::ndise=5000
    real(kr),dimension(:),allocatable::phot
    real(kr),parameter::emev=1.e6_kr
@@ -8932,7 +8966,7 @@ contains
    real(kr)::eav,suml,chkl,ebar,ad,amuu,amulst,chklst,heat,g
    real(kr)::epl,gl,gammsq,amun,eavlst
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwscr=800000
+   integer,parameter::nwscr=10000000
    real(kr),parameter::awr1=.99862e0_kr
    real(kr),parameter::awr2=1.99626e0_kr
    real(kr),parameter::awr3=2.98960e0_kr
@@ -8986,6 +9020,7 @@ contains
       ptype=0
       ntro=0
       ploct=0
+      deallocate(scr)
       return
    endif
 
@@ -10611,7 +10646,10 @@ contains
    !--continue loop over production types
    enddo
    len2=next-1
-   if (izai.le.1) return
+   if (izai.le.1) then
+     deallocate(scr)
+     return
+   endif
 
    !--for incident charged particles,
    !--go back through file 6 and get heating from recoils
@@ -12244,6 +12282,7 @@ contains
         &'' ---------------------------------------------------''//&
         &(6x,12i6))') (nint(xss(i+yp)),i=1,nyp)
    endif
+   if (allocated(indx)) deallocate(indx)
    return
    end subroutine aceppp
 
@@ -14324,6 +14363,8 @@ contains
    integer::ipt,mtrh,nmtr
    integer::hpd,lsigh,sigh,ldlwh,dlwh,nj
    integer::locl(20)
+   integer::nure,nurb,lurt,luri,lura,lurf,ib
+   integer::nerrtb,nerrxt,nerrxe,nerrxf,nerrxg,nerrxh
    real(kr)::thresh,elast,e,aprime,q,epmax,clast,ep,c,p,r
    real(kr)::cclast,co,cc,gsum,ss,y,gg,sum,frac,x,xlast
    character(10)::name
@@ -14796,6 +14837,71 @@ contains
                enddo
             endif
          enddo
+      enddo
+   endif
+
+   !--check unresolved-range probability tables
+   if (iurpt.ne.0) then
+      write(nsyso,'(/'' check probability tables''/&
+      &'' ------------------------'')')
+      nure=nint(xss(iurpt))
+      nurb=nint(xss(iurpt+1))
+      lurt=nint(xss(iurpt+2))
+      luri=nint(xss(iurpt+3))
+      lura=nint(xss(iurpt+4))
+      lurf=nint(xss(iurpt+5))
+      write(nsyso,'(/''     number of energies: '',i6/&
+                    &''     number of bins:     '',i6/&
+                    &''     interpolation law:  '',i6/&
+                    &''     inelastic reaction: '',i6/&
+                    &''     absorption reaction:'',i6)')&
+                    & nure,nurb,lurt,luri,lura
+      if (lurf.eq.0) write(nsyso,'(&
+                    &''     tables are cross sections (lssf=0)'')')
+      if (lurf.eq.1) write(nsyso,'(&
+                    &''     tables are factors (lssf=1)'')')
+      do ie=1,nure
+         write(nsyso,'(/'' energy='',1p,e14.6)') xss(iurpt+5+ie)
+         nerrtb=0
+         nerrxt=0
+         nerrxe=0
+         nerrxf=0
+         nerrxg=0
+         nerrxh=0
+         ll=iurpt+5+nure+(ie-1)*6*nurb
+         do ib=1,nurb
+           if (xss(ll+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative probability value='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+ib),ib
+             nerrtb=nerrtb+1
+           endif
+           if (xss(ll+nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative total cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+nurb+ib),ib
+             nerrxt=nerrxt+1
+           endif
+           if (xss(ll+2*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative elastic cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+2*nurb+ib),ib
+             nerrxe=nerrxe+1
+           endif
+           if (xss(ll+3*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative fission cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+3*nurb+ib),ib
+             nerrxf=nerrxf+1
+           endif
+           if (xss(ll+4*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative capture cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+4*nurb+ib),ib
+             nerrxg=nerrxg+1
+           endif
+           if (xss(ll+5*nurb+ib).lt.0.0d0) then
+             write(nsyso,'('' consis: negative heating cross section/factor='',&
+             & 1pe14.6,'' for bin '',i4)')xss(ll+5*nurb+ib),ib
+             nerrxh=nerrxh+1
+           endif
+         enddo
+         nerr=nerr+nerrtb+nerrxt+nerrxe+nerrxf+nerrxg+nerrxh
       enddo
    endif
 

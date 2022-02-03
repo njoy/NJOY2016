@@ -531,6 +531,20 @@ contains
                        nr6(ii)=nr6(ii)+1
                   enddo
 
+                  ! read subsections until we're back at the right one
+                  ir=1
+                  do while (ir.lt.ik)
+                     ir=ir+1
+                     call tab1io(nin,0,0,scr,nb,nw)
+                     law=nint(scr(4))
+                     jscr=1+nw
+                     do while (nb.ne.0)
+                        call moreio(nin,0,0,scr(jscr),nb,nw)
+                        jscr=jscr+nw
+                     enddo
+                     call skip6(nin,0,0,scr,law)
+                  enddo
+
                !--this law is not currently handled
                else
                   call mess('acephn','file 6 law not coded',' ')
@@ -874,8 +888,8 @@ contains
 
                   !--special steps for two-body recoil
                   !--back up to the corresponding law=2 distr.
-                  izarec=0
-                  awprec=0
+                  izarec=-1
+                  awprec=-1
                   if (izap.eq.ip.and.law.eq.4) then
                      izarec=izap
                      awprec=awp
@@ -917,7 +931,7 @@ contains
                      scr(llht+5)=ne
                      scr(llht+6)=ne
                      scr(llht+7)=2
-                     if (izarec.eq.0) then
+                     if (izarec.eq.-1) then
                         awpp=awp
                      else
                         awpp=awprec
@@ -927,7 +941,7 @@ contains
                         call listio(nin,0,0,scr(ll),nb,nw)
                         lang=nint(scr(lld+2))
                         if (lang.eq.0) then
-                           if (izarec.ne.0) then
+                           if (izarec.ne.-1) then
                               nl=nint(scr(lld+5))
                               do iil=1,nl
                                  if (mod(iil,2).eq.1) then
@@ -3477,4 +3491,3 @@ contains
    end subroutine ascll
 
 end module acepn
-

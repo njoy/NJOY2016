@@ -1,7 +1,10 @@
 
-cmake_minimum_required( VERSION 3.2 ) 
+cmake_minimum_required( VERSION 3.2 )
+
+find_package( Python3 3.5 REQUIRED )
+
 set( CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configuration types" FORCE )
-        
+
 project( njoy LANGUAGES Fortran )
 get_directory_property( is_subproject PARENT_DIRECTORY )
 include( CMakeDependentOption REQUIRED )
@@ -35,7 +38,7 @@ if ( static AND ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" ) )
 endif()
 
 CMAKE_DEPENDENT_OPTION( static_libraries "Statically link component libraries" OFF "NOT static" ON )
-CMAKE_DEPENDENT_OPTION( static_njoy "Statically link the njoy component library" OFF "NOT static;NOT static_libraries" ON ) 
+CMAKE_DEPENDENT_OPTION( static_njoy "Statically link the njoy component library" OFF "NOT static;NOT static_libraries" ON )
 
 if ( profile_generate AND profile_use )
     message( FATAL_ERROR "Cannot both generate and use execution profile in the same configuration" )
@@ -46,7 +49,7 @@ if ( profile_generate )
 endif()
 
 set( CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}/fortran_modules" CACHE PATH "directory for fortran modules" )
-file( MAKE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}" ) 
+file( MAKE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}" )
 
 set( njoy_GNU_Linux_common_flags "-Wall" "-Wextra" )
 set( njoy_GNU_Linux_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
@@ -89,7 +92,7 @@ if ( static_njoy )
     set( njoy_library_linkage STATIC )
 else ()
     set( njoy_library_linkage SHARED )
-endif () 
+endif ()
 
 set( CMAKE_SKIP_BUILD_RPATH FALSE )
 set( CMAKE_BUILD_WITH_INSTALL_RPATH FALSE )
@@ -119,7 +122,7 @@ execute_process(
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     OUTPUT_VARIABLE GIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE
-) 
+)
 
 message( STATUS "" )
 message( STATUS "-----------------------------------------------------------" )
@@ -130,7 +133,7 @@ message( STATUS "Git commit hash: ${GIT_HASH}" )
 message( STATUS "" )
 message( STATUS "-----------------------------------------------------------" )
 
-add_library( njoy ${njoy_library_linkage} 
+add_library( njoy ${njoy_library_linkage}
              "${CMAKE_CURRENT_SOURCE_DIR}/src/acecm.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/acedo.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/acefc.f90"
@@ -175,20 +178,20 @@ target_include_directories( njoy PUBLIC "${CMAKE_Fortran_MODULE_DIRECTORY}" )
 
 set( PREFIX njoy_${CMAKE_Fortran_COMPILER_ID}_${CMAKE_SYSTEM_NAME} )
 
-target_compile_options( njoy PRIVATE 
+target_compile_options( njoy PRIVATE
 ${${PREFIX}_common_flags}
 $<$<BOOL:${njoy_strict}>:${${PREFIX}_njoy_strict_flags}>
 $<$<BOOL:${static}>:${${PREFIX}_static_flags}>
 $<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
 $<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>
 $<$<CONFIG:DEBUG>:
-${${PREFIX}_DEBUG_flags} 
+${${PREFIX}_DEBUG_flags}
 $<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags}>>
 $<$<CONFIG:RELEASE>:
-${${PREFIX}_RELEASE_flags} 
-$<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}> 
-$<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}> 
-$<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}> 
+${${PREFIX}_RELEASE_flags}
+$<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}>
+$<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}>
+$<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}>
 $<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>>
 ${Fortran_appended_flags} ${njoy_appended_flags} )
 
@@ -197,27 +200,27 @@ target_link_libraries( njoy PUBLIC "$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${link_time
 if ( NOT is_subproject )
     add_executable( njoy_executable src/main.f90 )
     set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
-    target_compile_options( njoy_executable PRIVATE 
+    target_compile_options( njoy_executable PRIVATE
     ${${PREFIX}_common_flags}
     $<$<BOOL:${njoy_strict}>:${${PREFIX}_njoy_strict_flags}>
     $<$<BOOL:${static}>:${${PREFIX}_static_flags}>
     $<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
     $<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>
     $<$<CONFIG:DEBUG>:
-    ${${PREFIX}_DEBUG_flags} 
+    ${${PREFIX}_DEBUG_flags}
     $<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags}>>
     $<$<CONFIG:RELEASE>:
-    ${${PREFIX}_RELEASE_flags} 
-    $<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}> 
-    $<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}> 
-    $<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}> 
+    ${${PREFIX}_RELEASE_flags}
+    $<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}>
+    $<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}>
+    $<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}>
     $<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>>
     ${Fortran_appended_flags} ${njoy_appended_flags} )
     target_link_libraries( njoy_executable PUBLIC njoy )
 endif()
 
 if( NOT is_subproject )
-    enable_testing() 
+    enable_testing()
     add_subdirectory( tests )
 endif()
 
@@ -226,21 +229,21 @@ if ( NOT is_subproject )
     list( APPEND installation_targets njoy_executable )
 endif()
 
-install( TARGETS ${installation_targets} 
+install( TARGETS ${installation_targets}
          RUNTIME DESTINATION bin
          LIBRARY DESTINATION lib
          ARCHIVE DESTINATION lib
-         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ 
-                     GROUP_EXECUTE GROUP_READ 
+         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+                     GROUP_EXECUTE GROUP_READ
                      WORLD_EXECUTE WORLD_READ )
 
-file( RELATIVE_PATH relative_fortran_module_files_path 
+file( RELATIVE_PATH relative_fortran_module_files_path
       "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_Fortran_MODULE_DIRECTORY}" )
-file( GLOB fortran_module_files 
+file( GLOB fortran_module_files
       RELATIVE "${relative_fortran_module_files_path}"
       *.mod )
-install( FILES ${fortran_module_files} 
+install( FILES ${fortran_module_files}
          DESTINATION include
-         PERMISSIONS OWNER_READ OWNER_WRITE 
-                     GROUP_READ 
+         PERMISSIONS OWNER_READ OWNER_WRITE
+                     GROUP_READ
                      WORLD_READ )
