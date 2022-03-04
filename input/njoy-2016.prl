@@ -18,7 +18,7 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
 
       $user       = `whoami`;
       $opsys      = "UNIX";
-      $type       = `uname -pris`;
+      $type       = `uname -prs`;
       $machine    = `uname -n`;
       $rm         = "rm -f";
       $sep        = "/";
@@ -26,7 +26,12 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
       $mv         = "mv";
 #	Linux make file creates an executable named njoy
       $executable = "njoy";
-      $exelib = "libnjoy.so";
+
+      if ($type =~ m/^Linux/){
+        $exelib = "libnjoy.so";
+      } elsif ($type =~ m/^Darwin/){
+        $exelib = "libnjoy.dylib"
+      }
 
       chomp($pwd);
       chomp($user);

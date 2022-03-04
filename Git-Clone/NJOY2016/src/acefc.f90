@@ -4139,7 +4139,9 @@ contains
          i=ii
          ei=scr(6+(lg+1)*i-lg)
          if (ei.eq.zero.and.ee(k).eq.zero) idone=1
-         if (ei.ne.zero.and.abs(ei-ee(k))/ei.lt.0.0001) idone=1
+         if (ei.ne.zero) then
+            if (abs(ei-ee(k))/ei.lt.0.0001) idone=1
+         endif
       enddo
       if (idone.eq.0) then
          aa((k-1)*imax+j)=0
