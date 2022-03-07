@@ -94,7 +94,11 @@ module errorm
    real(kr),dimension(:),allocatable::cflx
    real(kr),dimension(:,:),allocatable::csig
 
-   real(kr)::u1lele(10),plele(2501,10)
+   integer,parameter::ngmax=2501 ! max number groups in union grid
+   integer,parameter::lomax=10   ! max legendre order
+   real(kr),dimension(:,:),allocatable::plele
+
+   real(kr)::u1lele(10)
    integer::nr,nbt(20),jnt(20)
 
    ! globals for resonance processing
@@ -5364,6 +5368,14 @@ contains
    real(kr),parameter::zero=0
    real(kr),parameter::oneeps=0.99999999_kr
 
+   ! allocate storage
+   allocate(plele(ngmax,lomax))
+   do i=1,ngmax
+      do j=1,lomax
+         plele(i,j)=0.
+      end do
+   end do
+
    !--initialize
    if (iread.eq.2) call error('grpav4',&
      'not coded for multimaterial group averaging.',' ')
@@ -5501,7 +5513,6 @@ contains
       endif
 
       !--loop over union energy groups
-  200 continue
       n=1
       mfd=3
       mtd=iga(imt)
@@ -7671,6 +7682,7 @@ contains
    if (allocated(alsig)) deallocate(alsig)
    if (allocated(clflx)) deallocate(clflx)
    if (allocated(crr)) deallocate(crr)
+   if (allocated(plele)) deallocate(plele)
    if (nout.eq.0) return
    call afend(nout,0)
    call amend(nout,0)
