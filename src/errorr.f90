@@ -4083,8 +4083,10 @@ contains
    real(kr)::awri,aw,eres,ajres,backdt,backdt2,backdt3,ajres2
    real(kr)::eres2,gwidth,rho,rr,rr2,ser,per,tmp
    real(kr)::dap2
-   real(kr)::b(maxb)
-   real(kr)::sigr(maxe,5),sigp(maxe,5),gsig(4,ngmax)
+   real(kr),dimension(:),allocatable::b
+   real(kr),dimension(:,:),allocatable::sigr
+   real(kr),dimension(:,:),allocatable::sigp
+   real(kr),dimension(:,:),allocatable::gsig
    real(kr)::sens(4,mxnpar,ngmax)
    real(kr)::cov(mxnpar,mxnpar)
    real(kr)::pneorg(10000)
@@ -4095,6 +4097,25 @@ contains
    real(kr),parameter::rc2=.08e0_kr
    real(kr),parameter::third=0.333333333e0_kr
    real(kr),parameter::zero=0
+
+   allocate(b(maxb))
+   allocate(sigr(maxe,5))
+   allocate(sigp(maxe,5))
+   allocate(gsig(4,ngmax))
+   do i=1,maxb
+      b(i)=0.
+   end do
+   do i=1,maxe
+      do j=1,5
+         sigr(i,j)=0.
+         sigp(i,j)=0.
+      end do
+   end do
+   do i=1,4
+      do j=1,ngmax
+         gsig(i,j)=0.
+      end do
+   end do
 
    !--general resolved resonance subsection formats (lcomp=1)
    !--compact resolved resonance subsection formats (lcomp=2)
@@ -4558,6 +4579,12 @@ contains
       enddo
    endif
    ifresr=1
+
+   deallocate(b)
+   deallocate(sigr)
+   deallocate(sigp)
+   deallocate(gsig)
+   
    return
    end subroutine rpxlc12
 
@@ -4573,7 +4600,7 @@ contains
    real(kr)::cov(mxnpar,mxnpar),a(nwscr)
    ! internals
    integer::nb,nw,i1,i2,nind,lbg,l1,l2,l3,n1,n2,n3
-   integer::nn1,nn2,nnn,nx,nn2p,nm,i,m,ii,mm,mmm,ndigit,mbase
+   integer::nn1,nn2,nnn,nx,nn2p,nm,m,ii,mm,mmm,ndigit,mbase
    integer,dimension(6)::mpid
    integer,dimension(6),parameter::mpidbw=(/1,4,5,6,0,0/)
    integer,dimension(6),parameter::mpidrm=(/1,3,4,5,6,0/)
@@ -4583,7 +4610,6 @@ contains
    real(kr),parameter::rc2=.08e0_kr
    real(kr),parameter::third=0.333333333e0_kr
    real(kr),parameter::half=0.5e0_kr
-   real(kr),parameter::zero=0
 
    if (lrf.eq.1.or.lrf.eq.2) then
       mpid=mpidbw
@@ -4723,24 +4749,46 @@ contains
    integer::mxlru2,iest,ieed,nwscr
    real(kr)::a(nwscr),amur(3,mxlru2)
    ! internals
-   integer::nb,nw,l,l1,l2,l3,nl,ig,i,j,ig2,ii,igind,iscr,njs,inow
+   integer::nb,nw,l1,l2,l3,nl,ig,i,j,k,ig2,ii,igind,njs,inow
    integer::loop,loopn,l0
    integer,parameter::maxb=4000
    integer,parameter::mxnpar=100
    integer,parameter::maxe=600000
    real(kr)::e1,ebc,sfac,s,tmp,bb
-   real(kr)::sig(maxe,5),sig1(4)
-   real(kr)::gsigr(4,ngmax),gsigp(4,ngmax)
-   real(kr)::sens(4,mxnpar,ngmax)
+   real(kr)::sig1(4)
+   real(kr),dimension(:,:),allocatable::sig
+   real(kr),dimension(:,:),allocatable::gsigr
+   real(kr),dimension(:,:),allocatable::gsigp
    real(kr),dimension(:,:),allocatable::cov
+   real(kr),dimension(:,:,:),allocatable::sens
    real(kr)::b(maxb)
    character(60)::strng2
    real(kr),parameter::zero=0
 
+   allocate(sig(maxe,5))
+   allocate(gsigr(4,ngmax))
+   allocate(gsigp(4,ngmax))
    allocate(cov(mxnpar,mxnpar))
+   allocate(sens(4,mxnpar,ngmax))
+   do i=1,maxe
+      do j=1,5
+         sig(i,j)=0.
+      end do
+   end do
    do i=1,mxnpar
       do j=1,mxnpar
          cov(i,j)=0.
+      end do
+   end do
+   do i=1,4
+      do j=1,mxnpar
+         do k=1,ngmax
+            sens(i,j,k)=0.
+         end do
+      end do
+      do j=1,ngmax
+        gsigr(i,j)=0.
+        gsigp(i,j)=0.
       end do
    end do
 
@@ -4928,7 +4976,11 @@ contains
 
    ifunrs=1
    write(*,*)'... ended.'
+   deallocate(sig)
+   deallocate(gsigr)
+   deallocate(gsigp)
    deallocate(cov)
+   deallocate(sens)
 
    return
    end subroutine rpxunr
