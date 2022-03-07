@@ -30,7 +30,7 @@ module errorm
    integer::nscr1,nscr2,nscr3
 
    ! group structure
-   integer::ngn,nwgp
+   integer::ngn
    real(kr),dimension(:),allocatable::egn
 
    ! weight function
@@ -3720,8 +3720,8 @@ contains
    real(kr)::awri,aw,sum,den,fl,ajmax,aj
    real(kr)::er,rho,ser,per,corr,ebc,e1,ekp
    real(kr)::er1,er2,er3,er4,er5,er6,s
-   real(kr)::sig(maxe,5),gsig(4,2501,6),sig1(4)
-   real(kr)::sens(4,6,2501),cov(5,5)
+   real(kr)::sig(maxe,5),gsig(4,ngmax,6),sig1(4)
+   real(kr)::sens(4,6,ngmax),cov(5,5)
    real(kr)::ag(6),aa(3),aa2(3)
    character(60)::strng1,strng2
    logical::lneger
@@ -4084,8 +4084,8 @@ contains
    real(kr)::eres2,gwidth,rho,rr,rr2,ser,per,tmp
    real(kr)::dap2
    real(kr)::b(maxb)
-   real(kr)::sigr(maxe,5),sigp(maxe,5),gsig(4,2501)
-   real(kr)::sens(4,mxnpar,2501)
+   real(kr)::sigr(maxe,5),sigp(maxe,5),gsig(4,ngmax)
+   real(kr)::sens(4,mxnpar,ngmax)
    real(kr)::cov(mxnpar,mxnpar)
    real(kr)::pneorg(10000)
    real(kr)::time
@@ -4730,11 +4730,19 @@ contains
    integer,parameter::maxe=600000
    real(kr)::e1,ebc,sfac,s,tmp,bb
    real(kr)::sig(maxe,5),sig1(4)
-   real(kr)::gsigr(4,2501),gsigp(4,2501)
-   real(kr)::sens(4,mxnpar,2501),cov(mxnpar,mxnpar)
+   real(kr)::gsigr(4,ngmax),gsigp(4,ngmax)
+   real(kr)::sens(4,mxnpar,ngmax)
+   real(kr),dimension(:,:),allocatable::cov
    real(kr)::b(maxb)
    character(60)::strng2
    real(kr),parameter::zero=0
+
+   allocate(cov(mxnpar,mxnpar))
+   do i=1,mxnpar
+      do j=1,mxnpar
+         cov(i,j)=0.
+      end do
+   end do
 
    write(*,*)'Unresolved resonance energy range.'
    l1=lptr
@@ -4920,6 +4928,7 @@ contains
 
    ifunrs=1
    write(*,*)'... ended.'
+   deallocate(cov)
 
    return
    end subroutine rpxunr
@@ -5144,14 +5153,13 @@ contains
    ! externals
    integer::igx,ipoint,nwscr
    integer,parameter::maxe=600000
-   real(kr)::egn(*),sig(maxe,5),gsig(4,2501),a(nwscr)
+   real(kr)::egn(*),sig(maxe,5),gsig(4,ngmax),a(nwscr)
    !internals
    integer::k,i,i0,ig,lord,idis,j
    real(kr)::sumde,x1,enext,wt1,wt2,de,ebb,ebx,coef,egnt,egnt1
    real(kr)::wt12,wt3,wtr,x2,xr,y1,xx,xl,x12,y2,y3,yr,yl,z1,z2,z3,zr,zl,wtl
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::two=2
-   real(kr),parameter::three=3
    real(kr),parameter::six=6
    real(kr),parameter::zero=0
 
@@ -5351,8 +5359,8 @@ contains
    ! externals
    integer::mprint
    ! internals
-   integer::nwds,nb,ne,nw,i,il,ig2lo,ig,imt,iz,j,ng2,idis,m
-   integer::ngrp,n,n1,n2,n3,n4,nz,ntw,nng,nngr,ngg,nmu
+   integer::nwds,nb,nw,i,il,ig2lo,ig,imt,iz,j,ng2,idis,m
+   integer::n,n1,n2,n3,n4,nz,ntw,nng,ngg,nmu
    real(kr)::sec,etop,ehi,e,enext,elo,thresh,time
    real(kr)::dele,emu,els
    real(kr)::ans(10,2),z(26),flux(10,10),al(10)
@@ -5363,7 +5371,6 @@ contains
    character(66)::text
    character(60)::strng
    real(kr),parameter::eps=1.e-9_kr
-   real(kr),parameter::big=1.e10_kr
    real(kr),parameter::elow=1.e-5_kr
    real(kr),parameter::zero=0
    real(kr),parameter::oneeps=0.99999999_kr
@@ -5820,7 +5827,7 @@ contains
    real(kr)::csig(ncg,ncm),cflx(ncg),b(*),egt(nun+1)
    real(kr)::flux(nun),sig(nun+1),alp(nun)
    ! internal
-   integer::i,mat,mf,mt,nun1,ig,jg,ij,ibase,ip,ld,nb,nw,ngn1,ix,loc,np,nwds
+   integer::i,mt,nun1,ig,jg,ij,ibase,ip,ld,nb,nw,ngn1,ix,loc,np,nwds
    integer::ngnp1,izero
    real(kr)::abit,sss0
    real(kr)::c(6)
@@ -6459,7 +6466,6 @@ contains
    real(kr),parameter::rc2=.08e0_kr
    real(kr),parameter::third=0.333333333e0_kr
    real(kr),parameter::half=0.5e0_kr
-   real(kr),parameter::zero=0
 
    !--initialize
    do i=1,4
@@ -6732,7 +6738,6 @@ contains
    real(kr),parameter::rc1=.123e0_kr
    real(kr),parameter::rc2=.08e0_kr
    real(kr),parameter::third=0.333333333e0_kr
-   real(kr),parameter::zero=0
 
    !--initialize
    do i=2,4
@@ -10783,15 +10788,14 @@ contains
    use endf   ! provides endf routines and variables
 
    character(70)::strng
-   integer::i,i1,i2,ig,ii,iloop,j,jj,k,kk,lenscrl,lgscr,mloop
+   integer::i,i1,i2,ig,ii,iloop,j,k,kk,lenscrl,lgscr,mloop
    integer::mftest
-   integer::ngmode
    integer::ns0,ntw,nng,ngg,nwl,newnwl
    integer::nl,nlnew,nz,nznew,lrflag,ng,ng2,mfnow
    integer::nt,ntwds
    integer::matds,nb,nbsave,nw,nwsave
    real(kr),dimension(17)::t
-   real(kr),dimension(6)::c1,c2
+   real(kr),dimension(6)::c1
    real(kr),dimension(:),allocatable::gscr,scr1,scrl
    integer,dimension(:),allocatable::matsofar
 
