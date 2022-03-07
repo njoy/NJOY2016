@@ -365,7 +365,7 @@ contains
    use physics ! provides amassn, amu, ev, hbar
    ! internals
    integer::i,icov,nb,nw,mprint,nwi,nx,ndictm,nwl,ix,l
-   integer::mf,mfi,mt,neki,j,k,ii1,ii2,ii3,ii4
+   integer::mf,mt,neki,j,k,ii1,ii2,ii3,ii4
    integer::lim,ii,ntape,nek1,idone,iadd,nwscr
    integer::ng,ngp,iwtt,iw,np,nr
    integer::mat,nfissp,is
@@ -2413,7 +2413,6 @@ contains
    integer::isym,lb,ibase,ne,ne1,i,j,is
    real(kr)::sumt
    character(66)::c
-   real(kr)::b(17)
    real(kr),dimension(:),allocatable::rcs,spc
    real(kr),parameter::stst=1.0e-5_kr
    real(kr),parameter::sml=1.0e-30_kr
@@ -2516,14 +2515,18 @@ contains
    real(kr)::covm(*),spc(ne1)
    ! internals
    character(60)::strng
-   character(66)::c
    integer,parameter::nnw=10000
-   integer::mtt,mf56,mat,mf,mt,nk
+   integer::mtt,mf56,nk
    integer::i,nb,nw,k,lf,nr1,nr2,np1,np2,ib,ib2,iloop,ibx,nr12,np12
    integer::ir,ip,idis,izap,law,lang,lep,ib2x,na,nep,indx1,nnk,nd
-   real(kr)::c1,c2,esp,pe,enext,elow,ehigh,aaa
+   real(kr)::esp,pe,enext,elow,ehigh,aaa
    real(kr),dimension(:),allocatable::scr3
-   real(kr)::b(nnw)
+   real(kr),dimension(:),allocatable::b
+
+   allocate(b(nnw))
+   do i=1,nnw
+      b(i)=0.
+   enddo
 
    !--allocate scratch storage and initialize the spectrum
    !--integral array
@@ -3247,12 +3250,12 @@ contains
    integer::nsrs,nlrs,njsx,nparb,idis,lord
    integer::i,nb,nw
    integer::isrrr
-   real(kr)::el,eh,spin,ap,awri,aw,fact,en,rat,frac
-   real(kr)::e,enext,wt,wtl,elo,ehi,enxt,ee,eel,tmp
+   real(kr)::el,eh,spin,ap,awri,aw,fact,rat,frac
+   real(kr)::e,enext,wt,wtl,elo,ehi,ee,eel,tmp
    integer,parameter::nodmax=30000
-   real(kr)::enode(nodmax)
+   real(kr),dimension(:),allocatable::enode
    integer,parameter::maxb=90000
-   real(kr)::b(maxb)
+   real(kr),dimension(:),allocatable::b
 
    real(kr),dimension(:),allocatable::sdev
    real(kr),dimension(:,:),allocatable::cov
@@ -3270,6 +3273,15 @@ contains
    real(kr),parameter::third=0.333333333e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::ten=10
+
+   allocate(enode(nodmax))
+   allocate(b(maxb))
+   do i=1,nodmax
+      enode(i)=0.
+   end do
+   do i=1,maxb
+      b(i)=0.
+   end do
 
    !--read in the resonance parameters for computing cross sections
    isrrr=1
@@ -3697,6 +3709,8 @@ contains
    !--clean up allocated arrays
    deallocate(sens)
    deallocate(cov)
+   deallocate(enode)
+   deallocate(b)
 
    return
    end subroutine rpxsamm
@@ -3712,7 +3726,7 @@ contains
    integer::nwscr
    real(kr)::a(nwscr)
    ! internals
-   integer::nl,iloc,nrs,i,nr,ig,j,loop,igind,inow,id,ig1,ig2,ij,ii
+   integer::nl,iloc,nrs,i,nr,ig,j,loop,igind,inow,id,ig1,ig2,ij,ii,k
    integer::nb,nw,jd
    integer,parameter::maxnls=10
    integer,parameter::maxe=600000
@@ -3720,8 +3734,11 @@ contains
    real(kr)::awri,aw,sum,den,fl,ajmax,aj
    real(kr)::er,rho,ser,per,corr,ebc,e1,ekp
    real(kr)::er1,er2,er3,er4,er5,er6,s
-   real(kr)::sig(maxe,5),gsig(4,ngmax,6),sig1(4)
-   real(kr)::sens(4,6,ngmax),cov(5,5)
+   real(kr),dimension(:,:),allocatable::sig
+   real(kr),dimension(:,:,:),allocatable::gsig
+   real(kr)::sig1(4)
+   real(kr),dimension(:,:,:),allocatable::sens
+   real(kr)::cov(5,5)
    real(kr)::ag(6),aa(3),aa2(3)
    character(60)::strng1,strng2
    logical::lneger
@@ -3730,6 +3747,29 @@ contains
    real(kr),parameter::third=0.333333333e0_kr
    real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zero=0
+
+   allocate(sig(maxe,5))
+   allocate(gsig(4,ngmax,6))
+   allocate(sens(4,6,ngmax))
+   do i=1,maxe
+      do j=1,5
+         sig(i,j)=0.
+      end do
+   end do
+   do i=1,4
+      do j=1,ngmax
+         do k=1,6
+            gsig(i,j,k)=0.
+         end do
+      end do
+   end do
+   do i=1,4
+      do j=1,6
+         do k=1,ngmax
+            sens(i,j,k)=0.
+         end do
+      end do
+   end do
 
    lneger=.false.
 
@@ -4058,6 +4098,10 @@ contains
    !--end of do loops
    ifresr=1
 
+   deallocate(sig)
+   deallocate(gsig)
+   deallocate(sens)
+
    return
    end subroutine rpxlc0
 
@@ -4073,7 +4117,7 @@ contains
    integer::nwscr,iest,ieed
    real(kr)::a(nwscr)
    ! internals
-   integer::nb,nw,lru1,lrf1,lb,i,ig,ig2,il,ii2,ii1,ipp,j
+   integer::nb,nw,lru1,lrf1,lb,i,ig,ig2,il,ii2,ii1,ipp,j,k
    integer::loopm,loopn,loop,ns,nrs1,nsmax,ipos,l1,l2,l3
    integer::lb2,lldum,igind,ipara,itmp,ilnum,ind,ii
    integer::imess,inow,jj,lll,nrs
@@ -4087,9 +4131,9 @@ contains
    real(kr),dimension(:,:),allocatable::sigr
    real(kr),dimension(:,:),allocatable::sigp
    real(kr),dimension(:,:),allocatable::gsig
-   real(kr)::sens(4,mxnpar,ngmax)
-   real(kr)::cov(mxnpar,mxnpar)
-   real(kr)::pneorg(10000)
+   real(kr),dimension(:,:,:),allocatable::sens
+   real(kr),dimension(:,:),allocatable::cov
+   real(kr),dimension(:),allocatable::pneorg
    real(kr)::time
    integer::llmat(5)
    character(60)::strng1,strng2
@@ -4102,6 +4146,9 @@ contains
    allocate(sigr(maxe,5))
    allocate(sigp(maxe,5))
    allocate(gsig(4,ngmax))
+   allocate(sens(4,mxnpar,ngmax))
+   allocate(cov(mxnpar,mxnpar))
+   allocate(pneorg(10000))
    do i=1,maxb
       b(i)=0.
    end do
@@ -4115,6 +4162,21 @@ contains
       do j=1,ngmax
          gsig(i,j)=0.
       end do
+   end do
+   do i=1,4
+      do j=1,mxnpar
+         do k=1,ngmax
+            sens(i,j,k)=0.
+         end do
+      end do
+   end do
+   do i=1,mxnpar
+      do j=1,mxnpar
+         cov(i,j)=0.
+      end do
+   end do
+   do i=1,10000
+      pneorg(i)=0.
    end do
 
    !--general resolved resonance subsection formats (lcomp=1)
@@ -4584,7 +4646,10 @@ contains
    deallocate(sigr)
    deallocate(sigp)
    deallocate(gsig)
-   
+   deallocate(sens)
+   deallocate(cov)
+   deallocate(pneorg)
+
    return
    end subroutine rpxlc12
 
