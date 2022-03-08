@@ -2412,7 +2412,6 @@ contains
    ! internals
    integer::isym,lb,ibase,ne,ne1,i,j,is
    real(kr)::sumt
-   character(66)::c
    real(kr),dimension(:),allocatable::rcs,spc
    real(kr),parameter::stst=1.0e-5_kr
    real(kr),parameter::sml=1.0e-30_kr
@@ -2788,6 +2787,9 @@ contains
 
    mtd=iabs(mti)
    if (mfd.gt.1) go to 200
+   do i=1,100
+      mtsig0(i)=0
+   end do
 
    !--copy rest of this mat to a scratch file.
    call repoz(nscr2)
@@ -3282,6 +3284,7 @@ contains
    do i=1,maxb
       b(i)=0.
    end do
+   l3=1
 
    !--read in the resonance parameters for computing cross sections
    isrrr=1
@@ -4666,7 +4669,7 @@ contains
    ! internals
    integer::nb,nw,i1,i2,nind,lbg,l1,l2,l3,n1,n2,n3
    integer::nn1,nn2,nnn,nx,nn2p,nm,m,ii,mm,mmm,ndigit,mbase
-   integer,dimension(6)::mpid
+   integer,dimension(6)::mpid=(/0,0,0,0,0,0/)
    integer,dimension(6),parameter::mpidbw=(/1,4,5,6,0,0/)
    integer,dimension(6),parameter::mpidrm=(/1,3,4,5,6,0/)
    real(kr)::aw,awri,fd,std1,std2
@@ -6865,6 +6868,9 @@ contains
    nls=nint(a(5))
    nlru2=0
    inow=7
+   vl=0.
+   ps=0.
+   spot=0.
 
    !--do loop over all l states
    do l=1,nls
@@ -7102,6 +7108,17 @@ contains
 
    !--allocate storage.
    nmts=nmt1
+   nmt1d=nmt1
+   nm=0
+   mt1old=0
+   mt1lst=0
+   ldlst=-1
+   ldold=-1
+   iyp=0
+   iy=0
+   nmt1h=0
+   ld0=0
+   nmd=0
    nwds=10000000
    nngn=ngn*(ngn+1)/2
    ngn2=ngn*ngn
@@ -8068,6 +8085,7 @@ contains
    if (mf32.eq.0) return
    igmin=0
    igmax=0
+   gno=0
 
    !--initialize
    call repoz(nendf)
@@ -8454,6 +8472,7 @@ contains
             call efacphi(l,rhoc,phi2)
 
             !--correction of penetrability for reduced neutron width
+            !--gno only gets initialised for l=0,1,2
             if (l.eq.0) then
                gno=gnox*sqrt(em)
             else if (l.eq.1) then
@@ -9148,6 +9167,13 @@ contains
    nun1=nunion+1
    call repoz(ngout)
    call repoz(ntp)
+   er=0.
+   ea3=0
+   flxa=0.
+   xnua=0.
+   siga=0.
+   ea1=0.
+   ea2=0.
 
    !--test that ngout is really a groupr output tape
    !--then set scratch space based on problem dependent variables
