@@ -182,7 +182,7 @@ contains
    !    mti      mt for thermal incoherent data
    !    nbint    number of bins for incoherent scattering
    !    mte      mt for thermal elastic data
-   !    ielas    0/1=coherent/incoherent elastic
+   !    ielas    0/1/2=coherent elastic/incoherent elastic/mixed elastic
    !    nmix     number of atom types in mixed moderator
    !             (default=1, not mixed)
    !             (example, 2 for beo or c6h6)

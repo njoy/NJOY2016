@@ -1,6 +1,7 @@
 module aceth
    ! provides thermal ace stuff
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -16,14 +17,12 @@ module aceth
    real(kr)::aw0,tz
 
    ! ace nxs parameters for thermal data
-   integer::len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd(9)
+   integer::len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd(8)
 
    ! ace jxs parameters for thermal data
-   integer::itie,itix,itxe,itce,itcx,itca,jxsd(26)
+   integer::itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd(23)
 
    ! body of the ace data
-   integer,parameter::nxss=9000000
-   real(kr)::xss(nxss)
    integer::nei
    real(kr),dimension(5000)::wt
    integer,dimension(5000)::ndp
@@ -42,7 +41,7 @@ contains
    use endf ! provides endf routines and variables
    ! externals
    integer::nin,nace,ndir,matd
-   integer::mti,nbin,mte,ielas,nmix,iwt,iprint,mcnpx
+   integer::mti,nbin,mte,mtec,mtei,ielas,nmix,iwt,iprint,mcnpx
    real(kr)::tempd,suff,emax
    integer::izn(16)
    real(kr)::awn(16)
@@ -79,7 +78,8 @@ contains
    !--process the thermal data
    nxsd=0
    jxsd=0
-   ninmax=500000
+   xss=0
+   ninmax=5000000
    call openz(nin,0)
    nscr=iabs(nscr)
    if (nin.lt.0) nscr=-nscr
@@ -94,7 +94,7 @@ contains
    nw=npage+50
    allocate(xs(nw))
    allocate(six(ninmax))
-   nwscr=500000
+   nwscr=5000000
    allocate(scr(nwscr))
 
    !--determine what endf version is being used
@@ -127,12 +127,27 @@ contains
       if (delta.ge.ttol) call tomend(nin,0,0,xs)
    enddo
 
-   !--copy incoherent (and coherent elastic) cross section to nscr
+   !--copy incoherent inelastic cross section to nscr
    call findf(matd,3,mti,nin)
    call contio(nin,0,nscr,xs,nb,nw)
    call tosend(nin,0,nscr,xs)
-   if (mte.ne.0.and.ielas.ne.0) then
-      call findf(matd,3,mte,nin)
+
+   !--determine mt numbers for coherent and incoherent elastic
+   mtec=0
+   mtei=0
+   if (mte.ne.0) then
+      if (ielas.eq.0.or.ielas.eq.2) then
+         mtec=mte
+         if (ielas.eq.2) mtei=mte+1
+      else
+         mtei=mte
+      endif
+   endif
+
+   !--copy incoherent elastic if it is present
+   !--coherent elastic (Bragg edges) needs additional processing
+   if (mtei.ne.0) then
+      call findf(matd,3,mtei,nin)
       call contio(nin,0,nscr,xs,nb,nw)
       call tosend(nin,0,nscr,xs)
    endif
@@ -162,18 +177,20 @@ contains
 
    !--check for elastic data
    if (mte.eq.0) then
-      write(nout) mte,mte
+      ! size of the coherent and incoherent elastic blocks are all zero
+      write(nout) 0,0
+      write(nout) 0,0
    else
 
       !--process coherent reaction if requested
-      if (ielas.eq.0) then
-         call findf(matd,3,mte,nin)
+      if (mtec.ne.0) then
+         call findf(matd,3,mtec,nin)
          call contio(nin,0,0,scr,nb,nw)
-           e=0
-            call gety1(e,enext,idis,x,nin,scr)
-            nea=0
+         e=0
+         call gety1(e,enext,idis,x,nin,scr)
 
          !--locate bragg edges and compute cumulative probabilities
+         loc=1
          j=0
          clast=0
          idone=0
@@ -188,29 +205,32 @@ contains
                   j=j+1
                   if (2*j.gt.ninmax) call error('acesix',&
                     'storage six exceeded for coherent reactions.',' ')
-                  six(1+2*(j-1))=e
-                  six(1+2*(j-1)+1)=cnow
+                  six(loc)=e
+                  six(loc+1)=cnow
                   clast=cnow
+                  loc=loc+2
                endif
             endif
          enddo
 
          !--write out coherent reaction record
          nee=j
-         nw=2*nee
-         write(nout) nee,nea
-         write(nout) (six(1-1+i),i=1,nw)
+         write(nout) nee,0
+         write(nout) (six(i),i=1,2*nee)
+      else
+         write(nout) 0,0
+      endif
 
       !--incoherent elastic
-      else
-         call findf(matd,6,mte,nin)
+      if (mtei.ne.0) then
+         call findf(matd,6,mtei,nin)
          call contio(nin,0,0,scr,nb,nw)
          call tab1io(nin,0,0,scr,nb,nw)
          call tab2io(nin,0,0,scr,nb,nw)
          nee=nint(scr(6))
          neie=0
          call repoz(nscr)
-         call findf(matd,3,mte,nscr)
+         call findf(matd,3,mtei,nscr)
          call contio(nscr,0,0,xs,nb,nw)
          e=0
          call gety1(e,enext,idis,x,nscr,xs)
@@ -251,6 +271,8 @@ contains
          nea=nea-1
          write(nout) neie,nea
          write(nout) (six(i),i=1,loc)
+      else
+         write(nout) 0,0
       endif
    endif
 
@@ -563,8 +585,8 @@ contains
       endif
       read (nin,'(4(i7,f11.0))') (izo(i),awo(i),i=1,16)
       read (nin,'(8i9)')&
-        len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-        itie,itix,itxe,itce,itcx,itca,jxsd
+        len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+        itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       n=(len2+3)/4
       n=n-1
       l=0
@@ -574,12 +596,12 @@ contains
    else if (itype.eq.2) then
       if (mcnpx.eq.0) then
         read(nin) hz(1:10),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-          itie,itix,itxe,itce,itcx,itca,jxsd
+          len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+          itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       else
         read(nin) hz(1:13),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-          itie,itix,itxe,itce,itcx,itca,jxsd
+          len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+          itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       endif
       n=(len2+ner-1)/ner
       l=0
@@ -628,14 +650,14 @@ contains
    integer::izn(16)
    character(6)::tname
    ! internals
-   integer::nwscr,nw,i,loc,indx,j,k,jang
-   integer::nee,nea,nce,nie
+   integer::nwscr,nw,i,loc,indx,j,k,jang,start,middle
+   integer::nee,nea
    character(8)::hdt
    real(kr),dimension(:),allocatable::scr
    real(kr),parameter::emev=1.e6_kr
 
    !--initialize
-   nwscr=500000
+   nwscr=5000000
    allocate(scr(nwscr))
    write(hm,'(''   mat'',i4)') matd
    tz=tempd*bk/emev
@@ -648,76 +670,148 @@ contains
    hd='  '//hdt
    ncl=0
    idpni=3
+   idpnc=0
    ifeng=0
    if (iwt.eq.0) ifeng=1
    if (iwt.eq.2) ifeng=2
    call repoz(-nin)
 
-   !--read elastic pointers
-   read(nin) nee,nea
-   nce=nee
-   nie=nei
-
    !--assign pointers in xss array
    itie=1
-   itix=itie+1+nie
-   itxe=itix+nie
-   if (ifeng.gt.1) len2=len2+2*nie
-   len2=len2+itxe-1
-   if (nee.gt.0) then
-      itce=len2+1
-      itcx=itce+nee+1
-      len2=itcx+nee-1
-   endif
+   itix=itie+1+nei
+   itxe=itix+nei
+   itce=0
+   itcx=0
    itca=0
-   if (nee.gt.0.and.nea.gt.0) then
-      itca=itcx+nee
-      len2=itca+nee*nea-1
-   endif
+   itcei=0
+   itcxi=0
+   itcai=0
+
+   !--xss length
+   if (ifeng.gt.1) len2=len2+2*nei
+   len2=len2+itxe-1
    if (len2.gt.nxss) then
       write(nsyso,'(i10)') len2
       call error('thrlod','xss too small',' ')
    endif
 
-   !--check for elastic data
-   if (nee.ne.0) then
-      xss(itce)=nce
+   !--read first elastic block - coherent elastic
+   nee=0
+   nea=0
+   read(nin) nee,nea
 
-      !--process coherent elastic data
-      if (nea.le.0) then
-         ncl=-1
-         idpnc=4
-         nw=2*nee
-         if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
-         read(nin) (scr(i),i=1,nw)
-         do i=1,nee
-            xss(i+itce)=scr(1+2*(i-1))/emev
-            xss(i+nee+itce)=scr(2+2*(i-1))/emev/nmix
-         enddo
+   !--assign pointers in xss array
+   if (nee.gt.0) then
 
-      !--process incoherent elastic data
-      else
-         ncl=nea-1
-         idpnc=3
-         nw=nee*(2+nea)
-         if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
-         read(nin) (scr(i),i=1,nw)
-         loc=itca-1
-         indx=1
-         do i=1,nee
-            xss(itce+i)=scr(indx)/emev
-            xss(itce+nee+i)=scr(indx+1)/nmix
-            do j=1,nea
-               xss(j+loc)=scr(indx+1+j)
-            enddo
-            loc=loc+nea
-            indx=indx+nea+2
-         enddo
-      endif
+     !--set idpnc value
+     idpnc=4
+
+     !--assign pointers in xss array
+     itce=len2+1
+     itcx=itce+nee+1
+     itca=0
+     !--xss length
+     len2=len2+2*nee+1
+     if (len2.gt.nxss) then
+        write(nsyso,'(i10)') len2
+        call error('thrlod','xss too small',' ')
+     endif
+
+     !--nxs values
+     ncl=-1
+
+     !--fill xss array
+     xss(itce)=nee
+     nw=2*nee
+     if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
+     read(nin) (scr(i),i=1,nw)
+     do i=1,nee
+        xss(i+itce)=scr(1+2*(i-1))/emev
+        xss(i+nee+itce)=scr(2+2*(i-1))/emev/nmix
+     enddo
+
+   endif
+
+   !--read second elastic block - incoherent elastic
+   nee=0
+   nea=0
+   start=0
+   middle=0
+   read(nin) nee,nea
+
+   !--assign pointers in xss array
+   if (nee.gt.0) then
+
+     if (idpnc.eq.0) then
+
+        !--set idpnc value
+        idpnc=3
+
+        !--assign pointers in xss array
+        itce=len2+1
+        itcx=itce+nee+1
+        itca=itcx+nee
+
+        !--xss length
+        len2=itca+nee*nea-1
+        if (len2.gt.nxss) then
+           write(nsyso,'(i10)') len2
+           call error('thrlod','xss too small',' ')
+        endif
+
+        !--nxs values
+        ncl=nea-1
+
+        !--set indices
+        start=itce
+        middle=itca
+
+     else
+
+        !--set idpnc value
+        idpnc=5
+
+        !--assign pointers in xss array
+        itcei=len2+1
+        itcxi=itcei+nee+1
+        itcai=itcxi+nee
+
+        !--xss length
+        len2=itcai+nee*nea-1
+        if (len2.gt.nxss) then
+           write(nsyso,'(i10)') len2
+           call error('thrlod','xss too small',' ')
+        endif
+
+        !--nxs values
+        ncli=nea-1
+
+        !--set indices
+        start=itcei
+        middle=itcai
+
+     endif
+
+     !--fill xss array
+     xss(start)=nee
+     nw=nee*(2+nea)
+     if (nw.gt.nwscr) call error('thrlod','scr exceeded',' ')
+     read(nin) (scr(i),i=1,nw)
+     loc=middle-1
+     indx=1
+     do i=1,nee
+        xss(start+i)=scr(indx)/emev
+        xss(start+nee+i)=scr(indx+1)/nmix
+        do j=1,nea
+           xss(j+loc)=scr(indx+1+j)
+        enddo
+        loc=loc+nea
+        indx=indx+nea+2
+     enddo
+
    endif
 
    !--process inelastic data
-   nie=nei
    nieb=nbini
    if (ifeng.le.1) then
       nil=nang-1
@@ -733,7 +827,7 @@ contains
       read(nin) (scr(j),j=1,nw)
       nw=nw-2
       xss(itie+i)=scr(1)/emev
-      xss(itie+nie+i)=scr(2)/nmix
+      xss(itie+nei+i)=scr(2)/nmix
       if (ifeng.gt.1) then
          xss(itxe-1+i)=indx
          xss(itxe-1+nei+i)=nw/(nang+3)
@@ -766,8 +860,8 @@ contains
    ! externals
    character(70)::hk
    ! internals
-   integer::nie,nee,loc,nang,nbini,nln,lim,lim1,i,lines
-   integer::j,k,nea,ncol,npg,ipg,indx,mcol,ifini,ne
+   integer::nie,nee,neei,loc,nang,nbini,nln,lim,lim1,i,lines
+   integer::j,k,nea,ncol,npg,ipg,indx,mcol,ifini,ne,start,middle
    integer::ind(4)
    real(kr)::b(4),c(4)
    character(10),parameter::labl1='bragg edge'
@@ -781,7 +875,9 @@ contains
    !--print thermal header information
    nie=nint(xss(itie))
    nee=0
+   neei=0
    if (itce.gt.0) nee=nint(xss(itce))
+   if (itcei.gt.0) neei=nint(xss(itcei))
    write(nsyso,'(''1''///////&
      &38x,''zaid'',1x,a13/39x,''awr'',f10.3/&
      &38x,''temp'',1p,e10.2/38x,''date'',a10/39x,''mat'',a10/&
@@ -793,14 +889,16 @@ contains
      &6x,''*                     *'',8x,''idpnc'',i10/&
      &6x,''*     processed by    *'',10x,''ncl'',i10/&
      &6x,''*                     *'',8x,''ifeng'',i10/&
-     &6x,''*        njoy         *''/&
-     &6x,''*                     *'',9x,''itie'',i10/&
-     &6x,''***********************'',9x,''itix'',i10/&
-     &38x,''itxe'',i10/38x,''itce'',i10/38x,''itcx'',i10/&
-     &38x,''itca'',i10//39x,''nie'',i10/39x,''nee'',i10///&
+     &6x,''*        njoy         *'',9x,''ncli'',i10/&
+     &6x,''*                     *''/&
+     &6x,''***********************'',9x,''itie'',i10/&
+     &38x,''itix'',i10/38x,''itxe'',i10/38x,''itce'',i10/&
+     &38x,''itcx'',i10/38x,''itca'',i10/37x,''itcei'',i10/&
+     &37x,''itcxi'',i10/37x,''itcai'',i10//39x,''nie'',i10/&
+     &39x,''nee'',i10/38x,''neei'',i10///&
      &6x,''hk---'',a70)')&
      hz,aw0,tz,hd,hm,len2,idpni,nil,nieb,idpnc,ncl,&
-     ifeng,itie,itix,itxe,itce,itcx,itca,nie,nee,hk
+     ifeng,ncli,itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,nie,nee,neei,hk
 
    !--print inelastic data
    loc=itxe-1
@@ -870,41 +968,9 @@ contains
    enddo
 
    !--check for elastic data
-   if (nee.eq.0) return
+   if (idpnc.eq.0) return
 
-   !--print incoherent elastic data
-   if (idpnc.ne.4) then
-      nea=ncl+1
-      write(nsyso,'(''1''/&
-        &'' incoherent elastic data - equally probable angles''/&
-        &'' -------------------------------------------------''/)')
-      write(nsyso,'(/&
-        &9x,''incident'',9x,''cross''/&
-        &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
-      lines=7
-      nln=(nea+8)/9
-      lim=nea
-      if (nea.gt.8) lim=8
-      lim1=lim+1
-      loc=itca-1
-      do i=1,nee
-         if ((lines+nln).gt.58) then
-            write(nsyso,'(''1'')')
-            write(nsyso,'(/&
-              &9x,''incident'',9x,''cross''/&
-              &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
-            lines=4
-         endif
-         write(nsyso,'(/2x,i3,1x,1p,e12.4,3x,e12.4,3x,0p,8f10.4)')&
-           i,xss(itce+i),xss(itce+nee+i),(xss(loc+j),j=1,lim)
-         if (nea.gt.8) write(nsyso,'(36x,8f10.4)')&
-           (xss(loc+j),j=lim1,nea)
-         loc=loc+nea
-         lines=lines+nln
-      enddo
-
-   !--print coherent elastic data
-   else
+   if (idpnc.eq.4.or.idpnc.eq.5) then
       write(nsyso,'(''1''/&
         &'' coherent elastic data - bragg edges and cumulative '',&
         &''intensity''/&
@@ -962,6 +1028,45 @@ contains
          if (ifini.eq.0) indx=itce+1+200*ipg
       enddo
    endif
+
+   !--print incoherent elastic data
+   if (idpnc.eq.3.or.idpnc.eq.5) then
+      start=itce
+      middle=itca
+      nea=ncl+1
+      if (idpnc.eq.5) then
+         start=itcei
+         middle=itcai
+         nea=ncli+1
+      endif
+      write(nsyso,'(''1''/&
+        &'' incoherent elastic data - equally probable angles''/&
+        &'' -------------------------------------------------''/)')
+      write(nsyso,'(/&
+        &9x,''incident'',9x,''cross''/&
+        &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
+      lines=7
+      nln=(nea+8)/9
+      lim=nea
+      if (nea.gt.8) lim=8
+      lim1=lim+1
+      loc=middle-1
+      do i=1,neei
+         if ((lines+nln).gt.58) then
+            write(nsyso,'(''1'')')
+            write(nsyso,'(/&
+              &9x,''incident'',9x,''cross''/&
+              &4x,''i'',5x,''energy'',9x,''section'',25x,''angles'')')
+            lines=4
+         endif
+         write(nsyso,'(/2x,i3,1x,1p,e12.4,3x,e12.4,3x,0p,8f10.4)')&
+           i,xss(start+i),xss(start+neei+i),(xss(loc+j),j=1,lim)
+         if (nea.gt.8) write(nsyso,'(36x,8f10.4)')&
+           (xss(loc+j),j=lim1,nea)
+         loc=loc+nea
+         lines=lines+nln
+      enddo
+   endif
    return
    end subroutine thrprt
 
@@ -975,10 +1080,10 @@ contains
    integer::nout
    character(70)::hk
    ! internals
-   integer::ipcol,iwcol,nie,nee,i,it,idone,nang,nbini
+   integer::ipcol,iwcol,nie,nee,i,it,idone,nang,nbini,neei
    integer::loc,k,major,minor,j,ie,iskip
    real(kr)::xmin,xmax,ymin,ymax
-   real(kr)::e,xnelas,xelas,e1,x1,e2,x2,tot
+   real(kr)::e,xnelas,xelas,xielas,e1,x1,e2,x2,tot
    real(kr)::xtag,ytag,xs,xn,ubar,ystep
    real(kr)::ell,bl,ei,ui,bi,ebar,eprime,sum,wt
    real(kr)::zmin,zmax,ep,epl,x,xl,p,pl,cdl,u,ul,un,skip
@@ -1001,7 +1106,9 @@ contains
    write(nout,'(''1 2 .30'',i3,''/'')') ipcol
    nie=nint(xss(itie))
    nee=0
+   neei=0
    if (itce.gt.0) nee=nint(xss(itce))
+   if (itcei.gt.0) neei=nint(xss(itcei))
 
    !--plot log-log total, inelastic, and elastic (if present)
    xmin=big
@@ -1015,23 +1122,41 @@ contains
       if (e.gt.xmax) xmax=e
       if (xnelas.lt.ymin) ymin=xnelas
       if (xnelas.gt.ymax) ymax=xnelas
-      if (nee.ne.0) then
+      if (idpnc.ne.0) then
          j=0
          xelas=0
+         xielas=0
          do while (j.lt.nee)
             j=j+1
             e1=xss(itce+j)
             x1=xss(itce+nee+j)
-            if (idpnc.eq.4) x1=x1/e1
+            if (idpnc.eq.4.or.idpnc.eq.5) x1=x1/e1
             e2=xss(itce+j+1)
             x2=xss(itce+nee+j+1)
-            if (idpnc.eq.4) x2=x2/e2
-            if (e.ge.e1.and.e.le.e2) xelas=x1+(e-e1)*(x2-x1)/(e2-e1)
+            if (idpnc.eq.4.or.idpnc.eq.5) x2=x2/e2
+            if (e.ge.e1.and.e.le.e2) then
+               xelas=x1+(e-e1)*(x2-x1)/(e2-e1)
+               if (xelas.lt.ymin) ymin=xelas
+               if (xelas.gt.ymax) ymax=xelas
+            endif
          enddo
+         if (idpnc.eq.5) then
+            j=0
+            do while (j.lt.neei)
+               j=j+1
+               e1=xss(itcei+j)
+               x1=xss(itcei+neei+j)
+               e2=xss(itcei+j+1)
+               x2=xss(itcei+neei+j+1)
+               if (e.ge.e1.and.e.le.e2) then
+                  xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+                  if (xielas.lt.ymin) ymin=xielas
+                  if (xielas.gt.ymax) ymax=xielas
+               endif
+            enddo
+         endif
          if (xelas.gt.zero) then
-            tot=xnelas+xelas
-            if (xelas.lt.ymin) ymin=xelas
-            if (xelas.gt.ymax) ymax=xelas
+            tot=xnelas+xelas+xielas
             if (tot.lt.ymin) ymin=tot
             if (tot.gt.ymax) ymax=tot
          endif
@@ -1069,7 +1194,7 @@ contains
       write(nout,'(1p,2e14.6,''/'')') e,xs
    enddo
    write(nout,'(''/'')')
-   if (nee.ne.0) then
+   if (idpnc.ne.0) then
       write(nout,'(''2/'')')
       write(nout,'(''/'')')
       if (iwcol.eq.0) then
@@ -1077,9 +1202,13 @@ contains
       else
          write(nout,'(''0 0 0 2/'')')
       endif
-      write(nout,'(a,''elastic'',a,''/'')') qu,qu
+      if (idpnc.eq.3) then
+         write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
+      else
+         write(nout,'(a,''coherent elastic'',a,''/'')') qu,qu
+      endif
       write(nout,'(''0/'')')
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
          e=xss(itce+1)-xss(itce+1)/1000
          xs=xss(itce+nee+1)/e
          xs=xs/100
@@ -1088,15 +1217,15 @@ contains
       do i=1,nee
          e=xss(itce+i)
          xs=xss(itce+nee+i)
-         if (idpnc.eq.4) xs=xs/e
+         if (idpnc.eq.4.or.idpnc.eq.5) xs=xs/e
          write(nout,'(1p,2e14.6,''/'')') e,xs
-         if (idpnc.eq.4.and.i.lt.nee) then
+         if ((idpnc.eq.4.or.idpnc.eq.5).and.i.lt.nee) then
             e=xss(itce+i+1)-xss(itce+i+1)/1000
             xs=xss(itce+nee+i)/e
             write(nout,'(1p,2e14.6,''/'')') e,xs
          endif
       enddo
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
          do i=1,25
             e=e+e/10
             if (e.gt.xmax) exit
@@ -1105,7 +1234,22 @@ contains
          enddo
       endif
       write(nout,'(''/'')')
-      write(nout,'(''3/'')')
+      if (idpnc.eq.5) then
+        write(nout,'(''3/'')')
+        write(nout,'(''/'')')
+        write(nout,'(''0 0 0 3/'')')
+        write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
+        write(nout,'(''0/'')')
+        do i=1,neei
+           e=xss(itcei+i)
+           xs=xss(itcei+neei+i)
+           write(nout,'(1p,2e14.6,''/'')') e,xs
+        enddo
+        write(nout,'(''/'')')
+        write(nout,'(''4/'')')
+      else
+        write(nout,'(''3/'')')
+      endif
       write(nout,'(''/'')')
       write(nout,'(''/'')')
       write(nout,'(a,''total'',a,''/'')') qu,qu
@@ -1119,11 +1263,23 @@ contains
          if (e.ge.xss(itce+1)) then
             idone=1
          else
-            xs=xss(itie+nie+i)
-            write(nout,'(1p,2e14.6,''/'')') e,xs
+            xn=xss(itie+nie+i)
+            if (idpnc.eq.5) then
+               j=0
+               do while (j.lt.neei)
+                  j=j+1
+                  e1=xss(itcei+j)
+                  x1=xss(itcei+neei+j)
+                  e2=xss(itcei+j+1)
+                  x2=xss(itcei+neei+j+1)
+                  if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+               enddo
+            endif
+            tot=xn+xielas
+            write(nout,'(1p,2e14.6,''/'')') e,tot
          endif
       enddo
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
          e=xss(itce+1)-xss(itce+1)/1000
          j=0
          do while (j.lt.nie)
@@ -1134,13 +1290,26 @@ contains
             x2=xss(itie+nie+j+1)
             if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
          enddo
-         tot=xn
+         if (idpnc.eq.5) then
+            j=0
+            do while (j.lt.neei)
+               j=j+1
+               e1=xss(itcei+j)
+               x1=xss(itcei+neei+j)
+               e2=xss(itcei+j+1)
+               x2=xss(itcei+neei+j+1)
+               if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+            enddo
+         endif
+         tot=xn+xielas
          write(nout,'(1p,2e14.6,''/'')') e,tot
       endif
       do i=1,nee
          e=xss(itce+i)
          xs=xss(itce+nee+i)
-         if (idpnc.eq.4) xs=xs/e
+         xn=0
+         xielas=0
+         if (idpnc.eq.4.or.idpnc.eq.5) xs=xs/e
          j=0
          do while (j.lt.nie)
             j=j+1
@@ -1150,9 +1319,20 @@ contains
             x2=xss(itie+nie+j+1)
             if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
          enddo
-         tot=xs+xn
+         if (idpnc.eq.5) then
+            j=0
+            do while (j.lt.neei)
+               j=j+1
+               e1=xss(itcei+j)
+               x1=xss(itcei+neei+j)
+               e2=xss(itcei+j+1)
+               x2=xss(itcei+neei+j+1)
+               if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+            enddo
+         endif
+         tot=xs+xn+xielas
          write(nout,'(1p,2e14.6,''/'')') e,tot
-         if (i.lt.nee.and.idpnc.eq.4) then
+         if (i.lt.nee.and.(idpnc.eq.4.or.idpnc.eq.5)) then
             e=xss(itce+i+1)-xss(itce+i+1)/1000
             xs=xss(itce+nee+i)/e
             j=0
@@ -1164,11 +1344,22 @@ contains
                x2=xss(itie+nie+j+1)
                if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
             enddo
-            tot=xs+xn
+            if (idpnc.eq.5) then
+               j=0
+               do while (j.lt.neei)
+                  j=j+1
+                  e1=xss(itcei+j)
+                  x1=xss(itcei+neei+j)
+                  e2=xss(itcei+j+1)
+                  x2=xss(itcei+neei+j+1)
+                  if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+               enddo
+            endif
+            tot=xs+xn+xielas
             write(nout,'(1p,2e14.6,''/'')') e,tot
          endif
       enddo
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
          do i=1,25
             e=e+e/10
             if (e.gt.xmax) exit
@@ -1182,9 +1373,39 @@ contains
                x2=xss(itie+nie+j+1)
                if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
             enddo
-            tot=xs+xn
+            if (idpnc.eq.5) then
+               j=0
+               do while (j.lt.neei)
+                  j=j+1
+                  e1=xss(itcei+j)
+                  x1=xss(itcei+neei+j)
+                  e2=xss(itcei+j+1)
+                  x2=xss(itcei+neei+j+1)
+                  if (e.ge.e1.and.e.le.e2) xielas=x1+(e-e1)*(x2-x1)/(e2-e1)
+               enddo
+            endif
+            tot=xs+xn+xielas
             write(nout,'(1p,2e14.6,''/'')') e,tot
          enddo
+      endif
+      if (idpnc.eq.5) then
+        do i=1,neei
+           if (e.lt.xss(itcei+i)) then
+              e=xss(itcei+i)
+              xielas=xss(itcei+neei+i)
+              j=0
+              do while (j.lt.nie)
+                 j=j+1
+                 e1=xss(itie+j)
+                 x1=xss(itie+nie+j)
+                 e2=xss(itie+j+1)
+                 x2=xss(itie+nie+j+1)
+                 if (e.ge.e1.and.e.le.e2) xn=x1+(e-e1)*(x2-x1)/(e2-e1)
+              enddo
+              tot=xn+xielas
+              write(nout,'(1p,2e14.6,''/'')') e,tot
+         endif
+        enddo
       endif
       write(nout,'(''/'')')
    endif
@@ -1317,14 +1538,14 @@ contains
    enddo
    write(nout,'(''/'')')
    if (nee.ne.0) then
-      write(nout,'(''2/'')')
-      write(nout,'(''/'')')
-      if (iwcol.eq.0) then
-         write(nout,'(''0 0 1/'')')
-      else
-         write(nout,'(''0 0 0 2/'')')
-      endif
-      if (idpnc.eq.4) then
+      if (idpnc.eq.4.or.idpnc.eq.5) then
+         write(nout,'(''2/'')')
+         write(nout,'(''/'')')
+         if (iwcol.eq.0) then
+            write(nout,'(''0 0 1/'')')
+         else
+            write(nout,'(''0 0 0 2/'')')
+         endif
          write(nout,'(a,''coherent elastic'',a,''/'')') qu,qu
          write(nout,'(''0/'')')
          e=xss(itce+1)
@@ -1352,7 +1573,16 @@ contains
             write(nout,'(1p,2e14.6,''/'')') e,ubar
             e=e+e/50
          enddo
-      else
+         write(nout,'(''/'')')
+      endif
+      if (idpnc.eq.3) then
+         write(nout,'(''2/'')')
+         write(nout,'(''/'')')
+         if (iwcol.eq.0) then
+            write(nout,'(''0 0 1/'')')
+         else
+            write(nout,'(''0 0 0 2/'')')
+         endif
          write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
          write(nout,'(''0/'')')
          loc=itca-1
@@ -1365,8 +1595,30 @@ contains
             write(nout,'(1p,2e14.6,''/'')') e,ubar
             loc=loc+ncl+1
          enddo
+         write(nout,'(''/'')')
       endif
-      write(nout,'(''/'')')
+      if (idpnc.eq.5) then
+         write(nout,'(''3/'')')
+         write(nout,'(''/'')')
+         if (iwcol.eq.0) then
+            write(nout,'(''0 0 2/'')')
+         else
+            write(nout,'(''0 0 0 3/'')')
+         endif
+         write(nout,'(a,''incoherent elastic'',a,''/'')') qu,qu
+         write(nout,'(''0/'')')
+         loc=itcai-1
+         do i=1,neei
+            e=xss(itcei+i)
+            ubar=0
+            do j=1,ncli+1
+               ubar=ubar+xss(loc+j)/(ncli+1)
+            enddo
+            write(nout,'(1p,2e14.6,''/'')') e,ubar
+            loc=loc+ncli+1
+         enddo
+         write(nout,'(''/'')')
+      endif
    endif
 
    !--ebar plot
@@ -2037,14 +2289,16 @@ contains
    !-------------------------------------------------------------------
    ! Write thermal ACE data to output and directory files.
    !-------------------------------------------------------------------
-   use util ! provides openz,closz
+   use util  ! provides openz,closz,error
+   use acecm ! provides write routines
    ! externals
    integer::itype,nout,ndir,mcnpx
    integer::izn(16)
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::l,ne,n,nexe,nern,lrec,ll,nn,i
+   integer::l,ne,n,nexe,nern,lrec,ll,nn,i,nprime
+   integer::locator  ! locator index
    integer::ner=1
    integer::nbw=1
 
@@ -2067,56 +2321,63 @@ contains
       endif
       write(nout,'(4(i7,f11.0))') (izn(i),awn(i),i=1,16)
       write(nout,'(8i9)') &
-        len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-        itie,itix,itxe,itce,itcx,itca,jxsd
+        len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+        itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
 
       !--itie block
-      l=itie
+      l=1
+      call advance_to_locator(nout,l,itie)
       ne=nint(xss(l))
-      call typen(l,nout,1)
-      l=l+1
-      n=2*ne
-      do i=1,n
-         call typen(l,nout,2)
-         l=l+1
-      enddo
+      call write_integer(nout,l)            ! NE
+      call write_real_list(nout,l,2*ne)     ! E (NE values), xs (NE values)
 
       !--itxe block
-      l=itxe
-      if (ifeng.le.1) then
-         n=ne*nieb*(nil+2)
-         do i=1,n
-            call typen(l,nout,2)
-            l=l+1
-         enddo
+      call advance_to_locator(nout,l,itxe)
+      if (ifeng.le.1) then                  ! equal probable cosine or discrete cosine distributions
+         call write_real_list(nout,l,ne*nieb*(nil+2)) ! NE lists of NIEB*(NMU+1)=NIEB*(NIL+2) since NMU=NIL+1
       else
-         n=2*ne
+         locator=1
+         call write_integer_list(nout,l,2*ne) ! L (NE values), Nprime (NE values)
          do i=1,ne
-            n=n+nint(xss(l+ne+i-1))*(nil+2)
-         enddo
-         do i=1,n
-            call typen(l,nout,2)
-            l=l+1
+            call advance_to_locator(nout,l,nint(xss(itxe+locator-1))+1)
+            nprime=nint(xss(itxe+ne+i-1))
+            call write_real_list(nout,l,nprime*(nil+2)) ! NPRIME*(NMU+3)=NPRIME*(NIL+2) since NMU=NIL-1
+            locator=locator+1
          enddo
       endif
 
       !--itce block
       if (itce.ne.0) then
-         l=itce
+         call advance_to_locator(nout,l,itce)
          ne=nint(xss(l))
          nexe=ne
-         call typen(l,nout,1)
-         l=l+1
-         n=2*ne
+         call write_integer(nout,l)            ! NE
+         call write_real_list(nout,l,2*ne)     ! E (NE values), P (NE values)
+      endif
+
+      !--itca block
+      if (itca.ne.0) then
+         call advance_to_locator(nout,l,itca)
+         n=nexe*(ncl+1)
          do i=1,n
             call typen(l,nout,2)
             l=l+1
          enddo
       endif
 
-      !--itca block
-      if (itce.ne.0.and.ncl.ne.-1) then
-         n=nexe*(ncl+1)
+      !--itcei block
+      if (itcei.ne.0) then
+         call advance_to_locator(nout,l,itcei)
+         ne=nint(xss(l))
+         nexe=ne
+         call write_integer(nout,l)            ! NE
+         call write_real_list(nout,l,2*ne)     ! E (NE values), P (NE values)
+      endif
+
+      !--itcai block
+      if (itcai.ne.0) then
+         call advance_to_locator(nout,l,itcai)
+         n=nexe*(ncli+1)
          do i=1,n
             call typen(l,nout,2)
             l=l+1
@@ -2134,13 +2395,13 @@ contains
       if (mcnpx.eq.0) then
          write(nout) hz(1:10),aw0,tz,hd,hk,hm,&
             (izn(i),awn(i),i=1,16),&
-           len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-           itie,itix,itxe,itce,itcx,itca,jxsd
+           len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+           itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       else
          write(nout) hz(1:13),aw0,tz,hd,hk,hm,&
             (izn(i),awn(i),i=1,16),&
-           len2,idpni,nil,nieb,idpnc,ncl,ifeng,nxsd,&
-           itie,itix,itxe,itce,itcx,itca,jxsd
+           len2,idpni,nil,nieb,idpnc,ncl,ifeng,ncli,nxsd,&
+           itie,itix,itxe,itce,itcx,itca,itcei,itcxi,itcai,jxsd
       endif
       ll=0
       nn=len2
@@ -2169,32 +2430,4 @@ contains
    return
    end subroutine throut
 
-   subroutine typen(l,nout,iflag)
-   !-------------------------------------------------------------------
-   ! Write an integer or a real number to a Type-1 ACE file,
-   ! or (if nout=0) convert real to integer for type-3 output,
-   ! or (if nout=1) convert integer to real for type-3 input.
-   ! Use iflag.eq.1 to write an integer (i20).
-   ! Use iflag.eq.2 to write a real number (1pe20.11).
-   ! Use iflag.eq.3 to write partial line at end of file.
-   !-------------------------------------------------------------------
-   ! externals
-   integer::l,nout,iflag
-   ! internals
-   integer::i,j
-   character(20)::hl(4)
-   save hl,i
-
-   if (iflag.eq.3.and.nout.gt.1.and.i.lt.4) then
-      write(nout,'(4a20)') (hl(j),j=1,i)
-   else
-      i=mod(l-1,4)+1
-      if (iflag.eq.1) write(hl(i),'(i20)') nint(xss(l))
-      if (iflag.eq.2) write(hl(i),'(1p,e20.11)') xss(l)
-      if (i.eq.4) write(nout,'(4a20)') (hl(j),j=1,i)
-   endif
-   return
-   end subroutine typen
-
 end module aceth
-

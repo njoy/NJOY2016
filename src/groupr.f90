@@ -4847,8 +4847,9 @@ contains
      .251963e-06_kr,.141900e+08_kr,.239298e-06_kr,.143900e+08_kr,&
      .176226e-06_kr,.145900e+08_kr,.992422e-07_kr,.155500e+08_kr,&
      .150737e-08_kr,.200000e+08_kr,.725000e-10_kr/)
-   real(kr),dimension(102),parameter::w9=(/&
-     0.e0_kr,0.e0_kr,0.e0_kr,0.e0_kr,1e0_kr,47e0_kr,47e0_kr,5e0_kr,&
+   real(kr),dimension(106),parameter::w9=(/&
+     0.e0_kr,0.e0_kr,0.e0_kr,0.e0_kr,1e0_kr,49e0_kr,49e0_kr,5e0_kr,&
+      1.00e-5_kr,2.2391e5_kr,&
       1.39e-4_kr,3.019e6_kr,5.e-4_kr,1.07e7_kr,1.e-3_kr,2.098e7_kr,&
       5.e-3_kr,8.939e7_kr,1.e-2_kr,1.4638e8_kr,2.5e-2_kr,2.008e8_kr,&
       4.e-2_kr,1.7635e8_kr,5.e-2_kr,1.478e8_kr,1.e-1_kr,4.e7_kr,&
@@ -4864,7 +4865,8 @@ contains
       1.2e7_kr,7.6e-3_kr,1.3e7_kr,1.23e-2_kr,1.35e7_kr,2.64e-2_kr,&
       1.4e7_kr,1.14e-1_kr,1.41e7_kr,1.14e-1_kr,1.42e7_kr,1.01e-1_kr,&
       1.43e7_kr,6.5e-2_kr,1.46e7_kr,1.49e-2_kr,1.5e7_kr,4.e-3_kr,&
-      1.6e7_kr,1.54e-3_kr,1.7e7_kr,0.85e-3_kr/)
+      1.6e7_kr,1.54e-3_kr,1.7e7_kr,0.85e-3_kr,&
+      2.0e7_kr,1.7279e-4_kr/)
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::zero=0.e0_kr
    real(kr),parameter::onep5=1.5e0_kr
@@ -4991,9 +4993,9 @@ contains
       if (iwtt.gt.9) then
          write(nsyso,'(22x,''temperature dependent'')')
       endif
-      iw=102
+      iw=106
       allocate(wght(iw))
-      do i=1,102
+      do i=1,106
          wght(i)=w9(i)
       enddo
 

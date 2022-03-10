@@ -273,19 +273,39 @@ title: NJOY2016 Test Descriptions
 - test 53: LAW=5 LTP=1 for identical particles with a spin s = 1 (this changes due to the fix but the original file does no have NaN values, as expected)
 - test 54: LAW=5 LTP=1 for different particles (as expected, this remains the same before and after the fix)
 
-## Test Problem 55-59
+## Test Problem 55
 
-Currently assigned in unmerged fixes
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/56/input)]
+
+  This test relates to changes made to an ACE file by the consistency checks when a checker `ACER` run is requested. NJOY only rarely modifies data. It does so for secondary particle distributions that use LAW=4 (isotropic angular distribution and continuous tabulated energy distributions) or LAW=44 (Kalbach-Mann). Under some circumstances, these changes used to introduce peaks in the data that obscured the plots.
+
+## Test Problem 56-58
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/56/input)]
+
+  This test is added following issues in processing photonuclear data in `ACER`. These test uses the ENDF/B-VIII.0 photonuclear evaluation for U235 and Pb209, and the IAEA photonuclear evaluation for Co59.
+
+## Test Problem 59
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/59/input)]
+
+  This test is added following an issue in `MODER` converting MF28 data (atomic relaxation data) (see issue [\#162](https://github.com/njoy/NJOY2016/issues/162)). Conversion of MF28 data was not coded. This test verifies that the conversion to and from binary produces the same file, and that the conversion to binary still allows the data to be used (in `ACER` in this test). Test 48 served as a basis for this test.
 
 ## Test Problem 60
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/60/input)]
 
 This test was added to following issue [\#124](https://github.com/njoy/NJOY2016/issues/124) following processing issues using IRDFF-II ENDF files.
 
 ## Test Problem 61
 
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/61/input)]
+
 This test was added to following issue [\#163](https://github.com/njoy/NJOY2016/issues/163). Whenever an `ACER` check run changed the library suffix, it was ignored. This has been fixed now and this test was added to validate the fix.
 
 ## Test Problem 62
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/62/input)]
 
 This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/issues/173). For a new d+He3 evaluation, the ACE file produced by NJOY2016 still has a few NaN values appearing in it. This problem was due to an array index overflow in acecpe.
 
@@ -294,3 +314,33 @@ This test was added to following issue [\#173](https://github.com/njoy/NJOY2016/
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/63/input)]
 
 Tests 63 was added as a consequence of issue [\#178](https://github.com/njoy/NJOY2016/issues/178). It verifies that setting nunx in PURR to anything other than the default value does not break downstream processing (in this case up to ACER and VIEWR). The input file is equivalent to the input file for test 35 (with the exception of nunx which is set to 2).
+
+## Test Problem 64
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/64/input)]
+
+Tests 64 was added as a consequence of issue [\#201](https://github.com/njoy/NJOY2016/issues/201). Incorrect skipping of MF6 subsections with LAW=4 caused a reaction count issue for the secondary particles, resulting in a corrupt ACE file.
+
+## Test Problem 65
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/65/input)]
+
+Tests 65 was added as a consequence of issue [\#122](https://github.com/njoy/NJOY2016/issues/122) and [\#203](https://github.com/njoy/NJOY2016/issues/203). When using an MF34 with multiple subsubsections, the calculation now runs to completion.
+
+## Test Problem 66
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/66/input)]
+
+Tests 66 was added as a consequence of issue [\#214](https://github.com/njoy/NJOY2016/issues/214). It verifies that the yield (and production cross section) for secondary neutrons produced after photo-fission is equal to nubar when the evaluation uses an MF6/MT18 section for the PFNS in which the neutron yield is set to 1 instead of nubar.
+
+## Test Problem 67-70
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/67/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/68/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/69/input)]
+
+Tests 67-69 were added to test the new mixed mode elastic scattering processing for thermal scattering data in THERMR and ACER, which is going to be introduced in ENDF/B-VIII.1. The tests cover the following:
+- test 67: inelastic plus mixed mode elastic (D in 7LiD, new format in ENDF/B-VIII.1)
+- test 68: inelastic only (H in H2O)
+- test 69: inelastic plus incoherent elastic (Zr in ZrH)
+- test 70: inelastic plus coherent elastic (Al27)
