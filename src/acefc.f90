@@ -15043,7 +15043,10 @@ contains
    real(kr)::e,tot,abso,elas,gprod,xtag,ytag,thin,abss
    real(kr)::e1,e2,fiss,cap,heat,dam,x,y,xlast
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,test
-   real(kr)::ee(pltumx),s0(pltumx),s1(pltumx),s2(pltumx)
+   real(kr),dimension(:),allocatable::ee
+   real(kr),dimension(:),allocatable::s0
+   real(kr),dimension(:),allocatable::s1
+   real(kr),dimension(:),allocatable::s2
    real(kr)::f0,f1,f2,c1,c2,cl,dp,pp,pe,capt
    character(1)::qu=''''
    character(10)::name
@@ -15071,6 +15074,14 @@ contains
    iif=0
    iic=0
    mtl=0
+   allocate(ee(pltumx))
+   allocate(s0(pltumx))
+   allocate(s1(pltumx))
+   allocate(s2(pltumx))
+   ee=0
+   s0=0
+   s1=0
+   s2=0
 
    !--start the viewr input text
    call openz(nout,1)
@@ -16620,6 +16631,12 @@ contains
 
    !--plot particle production sections
    if (ntype.gt.0) call aploxp(nout,iwcol,hk)
+
+   !--deallocate
+   deallocate(ee)
+   deallocate(s0)
+   deallocate(s1)
+   deallocate(s2)
 
    !--end the plotr input text
    write(nout,'(''99/'')')

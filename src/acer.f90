@@ -231,6 +231,7 @@ contains
    use acepa ! provides acepho,phofix
    use acepn ! provides acephn,phnfix
    use acedo ! provides acedos,dosfix
+   use acecm ! provides the xss array
 
    ! internals
    integer::nendf,npend,ngend,nace,ndir
