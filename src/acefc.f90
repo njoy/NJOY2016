@@ -1099,6 +1099,7 @@ contains
    allocate(buf(nbuf))
    allocate(bufn(nbuf))
    ithopt=nint(thin(4))
+   npts=0
    if (ithopt.eq.2) iwtt=nint(thin(1))
    if (ithopt.eq.2) npts=nint(thin(2))
    if (ithopt.eq.2) rsigz=thin(3)
@@ -3345,13 +3346,15 @@ contains
    real(kr)::dmu,awr,ein,acos,ep,csn,elb,drv,clb,cmn,qq,aw1
    real(kr)::fmu
    integer,parameter::namax=9000
-   real(kr)::a(namax)
+   real(kr),dimension(:),allocatable::a
    real(kr)::amu(50)
    real(kr)::p(65)
    real(kr),parameter::zero=0
 
    ! initialise
    acos=0
+   allocate(a(namax))
+   a=0
 
    !--start the conversion process
    ndebug=nsyso
@@ -3538,6 +3541,10 @@ contains
 
    !--finished with this section
    call tosend(nin,nout,ndebug,a)
+
+   !--deallocate
+   deallocate(a)
+
    return
    end subroutine fix6
 
@@ -9056,6 +9063,7 @@ contains
 
    ! initialise
    aprime=0
+   awp=0
    chkl=0
    suml=0
    iaa=0
