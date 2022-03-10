@@ -434,6 +434,10 @@ contains
       call error('acer','illegal iopt.',' ')
    endif
 
+   !--allocate xss array
+   allocate(xss(nxss))
+   xss=0
+
    !--prepare fast ace data
    if (iopt.eq.1) then
       call acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,suff,&
@@ -510,6 +514,9 @@ contains
            suff,nxtra,hk,izn,awn)
       endif
    endif
+
+   !--deallocate xss array
+   deallocate(xss)
 
    !--acer is finished.
    call timer(time)

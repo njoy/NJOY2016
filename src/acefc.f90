@@ -25,7 +25,7 @@ module acefc
      iurpt,nud,dndat,ldnd,dnd,jxsd(2),ptype,ntro,ploct
 
    ! index of sections
-   integer,parameter::nxcmax=500
+   integer,parameter::nxcmax=1000
    integer::nxc,mfs(nxcmax),mts(nxcmax),ncs(nxcmax)
 
    ! scratch units
