@@ -1098,7 +1098,7 @@ contains
 
    !--allocate storage
    iscr=1
-   nthr=140
+   nthr=1000
    nw=2*nthr
    allocate(thr(nw))
    nw=nunr*4
