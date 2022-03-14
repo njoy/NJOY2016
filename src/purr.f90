@@ -215,14 +215,14 @@ contains
    endif
    allocate(tabl(nbin,5,ntemp))
    allocate(tval(nbin,ntemp))
-   if (.not.allocated(er)) allocate(er(nermax))
-   if (.not.allocated(gnr)) allocate(gnr(nermax))
-   if (.not.allocated(gfr)) allocate(gfr(nermax))
-   if (.not.allocated(ggr)) allocate(ggr(nermax))
-   if (.not.allocated(gxr)) allocate(gxr(nermax))
-   if (.not.allocated(gt)) allocate(gt(nermax))
-   if (.not.allocated(es)) allocate(es(nsamp))
-   if (.not.allocated(xs)) allocate(xs(nsamp))
+   allocate(er(nermax))
+   allocate(gnr(nermax))
+   allocate(gfr(nermax))
+   allocate(ggr(nermax))
+   allocate(gxr(nermax))
+   allocate(gt(nermax))
+   allocate(es(nsamp))
+   allocate(xs(nsamp))
    allocate(fis(ntemp,nsamp))
    allocate(cap(ntemp,nsamp))
    allocate(els(ntemp,nsamp))
@@ -269,6 +269,7 @@ contains
    h=0
    allocate(heat(4,nunr,ntemp))
    heat(:,:,:)=zero
+   ihave=0
    call rdheat(a,heat,eunr,temp,ntemp,nunr,ihave,matd)
    if (ihave.eq.0) call mess('purr',&
      'no heating found on pendf',&
@@ -1321,6 +1322,11 @@ contains
    sigi(3)=0
    sigi(4)=0
    lfw=0
+   vl=0.
+   ps=0.
+   ne=0
+   iest=0
+   aa=0.
 
    !--find sections of resonance parameters which contribute
    do i=1,nsect
