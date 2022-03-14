@@ -2523,9 +2523,7 @@ contains
    real(kr),dimension(:),allocatable::b
 
    allocate(b(nnw))
-   do i=1,nnw
-      b(i)=0.
-   enddo
+   b=0.
 
    !--allocate scratch storage and initialize the spectrum
    !--integral array
@@ -3278,12 +3276,8 @@ contains
 
    allocate(enode(nodmax))
    allocate(b(maxb))
-   do i=1,nodmax
-      enode(i)=0.
-   end do
-   do i=1,maxb
-      b(i)=0.
-   end do
+   enode=0.
+   b=0.
    l3=1
 
    !--read in the resonance parameters for computing cross sections
@@ -3754,25 +3748,9 @@ contains
    allocate(sig(maxe,5))
    allocate(gsig(4,ngmax,6))
    allocate(sens(4,6,ngmax))
-   do i=1,maxe
-      do j=1,5
-         sig(i,j)=0.
-      end do
-   end do
-   do i=1,4
-      do j=1,ngmax
-         do k=1,6
-            gsig(i,j,k)=0.
-         end do
-      end do
-   end do
-   do i=1,4
-      do j=1,6
-         do k=1,ngmax
-            sens(i,j,k)=0.
-         end do
-      end do
-   end do
+   sig=0.
+   gsig=0.
+   sens=0.
 
    lneger=.false.
 
@@ -4152,35 +4130,13 @@ contains
    allocate(sens(4,mxnpar,ngmax))
    allocate(cov(mxnpar,mxnpar))
    allocate(pneorg(10000))
-   do i=1,maxb
-      b(i)=0.
-   end do
-   do i=1,maxe
-      do j=1,5
-         sigr(i,j)=0.
-         sigp(i,j)=0.
-      end do
-   end do
-   do i=1,4
-      do j=1,ngmax
-         gsig(i,j)=0.
-      end do
-   end do
-   do i=1,4
-      do j=1,mxnpar
-         do k=1,ngmax
-            sens(i,j,k)=0.
-         end do
-      end do
-   end do
-   do i=1,mxnpar
-      do j=1,mxnpar
-         cov(i,j)=0.
-      end do
-   end do
-   do i=1,10000
-      pneorg(i)=0.
-   end do
+   b=0.
+   sigr=0.
+   sigp=0.
+   gsig=0.
+   sens=0.
+   cov=0.
+   pneorg=0.
 
    !--general resolved resonance subsection formats (lcomp=1)
    !--compact resolved resonance subsection formats (lcomp=2)
@@ -4838,27 +4794,11 @@ contains
    allocate(gsigp(4,ngmax))
    allocate(cov(mxnpar,mxnpar))
    allocate(sens(4,mxnpar,ngmax))
-   do i=1,maxe
-      do j=1,5
-         sig(i,j)=0.
-      end do
-   end do
-   do i=1,mxnpar
-      do j=1,mxnpar
-         cov(i,j)=0.
-      end do
-   end do
-   do i=1,4
-      do j=1,mxnpar
-         do k=1,ngmax
-            sens(i,j,k)=0.
-         end do
-      end do
-      do j=1,ngmax
-        gsigr(i,j)=0.
-        gsigp(i,j)=0.
-      end do
-   end do
+   sig=0.
+   gsigr=0.
+   gsigp=0.
+   cov=0.
+   sens=0.
 
    write(*,*)'Unresolved resonance energy range.'
    l1=lptr
@@ -5497,11 +5437,7 @@ contains
 
    ! allocate storage
    allocate(plele(ngmax,lomax))
-   do i=1,ngmax
-      do j=1,lomax
-         plele(i,j)=0.
-      end do
-   end do
+   plele=0.
 
    !--initialize
    if (iread.eq.2) call error('grpav4',&
