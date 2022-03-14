@@ -25,7 +25,7 @@ module acefc
      iurpt,nud,dndat,ldnd,dnd,jxsd(2),ptype,ntro,ploct
 
    ! index of sections
-   integer,parameter::nxcmax=500
+   integer,parameter::nxcmax=1000
    integer::nxc,mfs(nxcmax),mts(nxcmax),ncs(nxcmax)
 
    ! scratch units
@@ -1099,6 +1099,7 @@ contains
    allocate(buf(nbuf))
    allocate(bufn(nbuf))
    ithopt=nint(thin(4))
+   npts=0
    if (ithopt.eq.2) iwtt=nint(thin(1))
    if (ithopt.eq.2) npts=nint(thin(2))
    if (ithopt.eq.2) rsigz=thin(3)
@@ -3345,13 +3346,15 @@ contains
    real(kr)::dmu,awr,ein,acos,ep,csn,elb,drv,clb,cmn,qq,aw1
    real(kr)::fmu
    integer,parameter::namax=9000
-   real(kr)::a(namax)
+   real(kr),dimension(:),allocatable::a
    real(kr)::amu(50)
    real(kr)::p(65)
    real(kr),parameter::zero=0
 
    ! initialise
    acos=0
+   allocate(a(namax))
+   a=0
 
    !--start the conversion process
    ndebug=nsyso
@@ -3538,6 +3541,10 @@ contains
 
    !--finished with this section
    call tosend(nin,nout,ndebug,a)
+
+   !--deallocate
+   deallocate(a)
+
    return
    end subroutine fix6
 
@@ -9056,6 +9063,7 @@ contains
 
    ! initialise
    aprime=0
+   awp=0
    chkl=0
    suml=0
    iaa=0
@@ -15043,7 +15051,10 @@ contains
    real(kr)::e,tot,abso,elas,gprod,xtag,ytag,thin,abss
    real(kr)::e1,e2,fiss,cap,heat,dam,x,y,xlast
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,test
-   real(kr)::ee(pltumx),s0(pltumx),s1(pltumx),s2(pltumx)
+   real(kr),dimension(:),allocatable::ee
+   real(kr),dimension(:),allocatable::s0
+   real(kr),dimension(:),allocatable::s1
+   real(kr),dimension(:),allocatable::s2
    real(kr)::f0,f1,f2,c1,c2,cl,dp,pp,pe,capt
    character(1)::qu=''''
    character(10)::name
@@ -15071,6 +15082,14 @@ contains
    iif=0
    iic=0
    mtl=0
+   allocate(ee(pltumx))
+   allocate(s0(pltumx))
+   allocate(s1(pltumx))
+   allocate(s2(pltumx))
+   ee=0
+   s0=0
+   s1=0
+   s2=0
 
    !--start the viewr input text
    call openz(nout,1)
@@ -16620,6 +16639,12 @@ contains
 
    !--plot particle production sections
    if (ntype.gt.0) call aploxp(nout,iwcol,hk)
+
+   !--deallocate
+   deallocate(ee)
+   deallocate(s0)
+   deallocate(s1)
+   deallocate(s2)
 
    !--end the plotr input text
    write(nout,'(''99/'')')

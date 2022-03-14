@@ -5,6 +5,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 The following minor changes and fixes are included in this version:
   - several corrections to the ERRORR source code to remove compiler warning messages (these were made while looking into issue #211 for gcc-11 compilation)
+  - increased the nxcmax array size parameter to resolve issue #228
 
 ## [NJOY2016.66](https://github.com/njoy/NJOY2016/pull/226)
 This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
