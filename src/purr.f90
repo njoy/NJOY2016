@@ -42,7 +42,7 @@ module purm
 
    ! storage array for unresolved resonance parameters
    integer,parameter::jx=10000
-   real(kr)::arry(jx)
+   real(kr),dimension(:),allocatable::arry
 
    ! optional plots
    integer ipl
@@ -205,6 +205,7 @@ contains
    if (nbin.lt.15) call error('purr','nbin should be 15 or more',' ')
 
    !--allocate storage for ladders and tables
+   allocate(arry(jx))
    if (allocated(tabl)) then
       deallocate(tabl)
       deallocate(tval)
@@ -225,6 +226,7 @@ contains
    allocate(fis(ntemp,nsamp))
    allocate(cap(ntemp,nsamp))
    allocate(els(ntemp,nsamp))
+   arry=0.
    xs=0
 
    !--process this material
@@ -633,6 +635,7 @@ contains
     !   enddo
     !enddo
 
+   deallocate(arry)
    deallocate(temp)
    deallocate(sigz)
    deallocate(sigu)
@@ -1800,7 +1803,7 @@ contains
    integer::ixx,l,mfl,nebin,ibin,izeroprob,ibadxs
    real(kr)::rpi,binmin,elow,dmin,erange,ehigh,emin,emax,espan
    real(kr)::dbart,sigx,ctx,chek1,chek2,chekn,delr,elo,ehi
-   real(kr)::y,yy,szy,cc2,cs2,ccg,ccf,test,x,a1,rew,aimw,h,g
+   real(kr)::y,yy,szy,cc2,cs2,ccg,ccf,test,x,a1,rew,aimw
    real(kr)::a2,a3,temp1,temp2,a4,a5,f1,f2,a6,e1,e2,e3
    real(kr)::tempor,q,q2,hq,hq2,ax,aki,p,p2,hp,hp2,pq,tav
    real(kr)::tvar,eav,evar,fav,fvar,cav,cvar,totf,elsf,capf,fisf
@@ -2274,7 +2277,7 @@ contains
       call fsort(es,xs,ne,1)
       tmin(itemp)=es(1)
       tmax(itemp)=es(ne)
-      nebin=nsamp/(nbin-10+1.76)
+      nebin=int(nsamp/(nbin-10+1.76))
       ibin=nebin/200
       if (ibin.le.0) then
          if (mflg1.eq.0) then
