@@ -182,7 +182,7 @@ contains
    !    mti      mt for thermal incoherent data
    !    nbint    number of bins for incoherent scattering
    !    mte      mt for thermal elastic data
-   !    ielas    0/1=coherent/incoherent elastic
+   !    ielas    0/1/2=coherent elastic/incoherent elastic/mixed elastic
    !    nmix     number of atom types in mixed moderator
    !             (default=1, not mixed)
    !             (example, 2 for beo or c6h6)
@@ -231,6 +231,7 @@ contains
    use acepa ! provides acepho,phofix
    use acepn ! provides acephn,phnfix
    use acedo ! provides acedos,dosfix
+   use acecm ! provides the xss array
 
    ! internals
    integer::nendf,npend,ngend,nace,ndir
@@ -434,6 +435,10 @@ contains
       call error('acer','illegal iopt.',' ')
    endif
 
+   !--allocate xss array
+   allocate(xss(nxss))
+   xss=0
+
    !--prepare fast ace data
    if (iopt.eq.1) then
       call acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,suff,&
@@ -510,6 +515,9 @@ contains
            suff,nxtra,hk,izn,awn)
       endif
    endif
+
+   !--deallocate xss array
+   deallocate(xss)
 
    !--acer is finished.
    call timer(time)

@@ -1,6 +1,7 @@
 module acefc
    ! provides fast continuous options for acer
    use locale
+   use acecm, only: xss,nxss
    implicit none
    private
 
@@ -24,7 +25,7 @@ module acefc
      iurpt,nud,dndat,ldnd,dnd,jxsd(2),ptype,ntro,ploct
 
    ! index of sections
-   integer,parameter::nxcmax=500
+   integer,parameter::nxcmax=1000
    integer::nxc,mfs(nxcmax),mts(nxcmax),ncs(nxcmax)
 
    ! scratch units
@@ -80,10 +81,6 @@ module acefc
 
    ! storage for ptleg data
    real(kr),dimension(:),allocatable::xat
-
-   ! main container array for fast continuous data
-   integer,parameter::nxss=20000000
-   real(kr)::xss(nxss)
 
 contains
 
@@ -1102,6 +1099,7 @@ contains
    allocate(buf(nbuf))
    allocate(bufn(nbuf))
    ithopt=nint(thin(4))
+   npts=0
    if (ithopt.eq.2) iwtt=nint(thin(1))
    if (ithopt.eq.2) npts=nint(thin(2))
    if (ithopt.eq.2) rsigz=thin(3)
@@ -3348,13 +3346,15 @@ contains
    real(kr)::dmu,awr,ein,acos,ep,csn,elb,drv,clb,cmn,qq,aw1
    real(kr)::fmu
    integer,parameter::namax=9000
-   real(kr)::a(namax)
+   real(kr),dimension(:),allocatable::a
    real(kr)::amu(50)
    real(kr)::p(65)
    real(kr),parameter::zero=0
 
    ! initialise
    acos=0
+   allocate(a(namax))
+   a=0
 
    !--start the conversion process
    ndebug=nsyso
@@ -3541,6 +3541,10 @@ contains
 
    !--finished with this section
    call tosend(nin,nout,ndebug,a)
+
+   !--deallocate
+   deallocate(a)
+
    return
    end subroutine fix6
 
@@ -5380,7 +5384,7 @@ contains
          if (mt.eq.5.and.mt5p.eq.0) iskip=0
       else if (izai.eq.1002) then
          iskip=1
-         if (mt.eq.2.or.mt.eq.32.or.mt.eq.35.or.&
+         if (mt.eq.2.or.mt.eq.11.or.mt.eq.32.or.mt.eq.35.or.&
            mt.eq.104.or.mt.eq.114.or.mt.eq.115.or.mt.eq.117.or.&
            mt.eq.157.or.mt.eq.158.or.mt.eq.169.or.&
            mt.eq.170.or.mt.eq.171.or.mt.eq.182.or.&
@@ -9059,6 +9063,7 @@ contains
 
    ! initialise
    aprime=0
+   awp=0
    chkl=0
    suml=0
    iaa=0
@@ -9980,13 +9985,16 @@ contains
                xss(next)=0
                xss(next+1)=2
                xss(next+2)=sigfig(xss(esz+it-1),7,0)
-               xss(next+3)=1
-               xss(next+4)=sigfig(xss(esz+nes-1),7,0)
+               xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+               xss(next+4)=1
                xss(next+5)=1
                next=next+2+2*2
                xss(last+2)=next-dlwh+1
-               xss(next)=0     ! q is zero for mt102
-               xss(next+1)=awi/(awr+awi)
+               amass=awr/awi
+               aprime=awp/awi
+               xss(next)=sigfig((1+amass)*(-q)/amass,7,0)
+               xss(next+1)=&
+                 sigfig(amass*(amass+1-aprime)/(1+amass)**2,7,0)
                next=next+2
                ! add in contribution to heating
                naa=nint(xss(hpd+1))
@@ -10108,13 +10116,17 @@ contains
                      xss(next)=0
                      xss(next+1)=2
                      xss(next+2)=sigfig(xss(esz+it-1),7,0)
-                     xss(next+3)=1
-                     xss(next+4)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+4)=1
                      xss(next+5)=1
                      next=next+2+2*2
                      xss(last+2)=next-dlwh+1
-                     xss(next)=0
-                     xss(next+1)=awi/(awr+awi)
+                     amass=awr/awi
+                     aprime=awp/awi
+                     xss(next)=sigfig((1+amass)*(-q)/amass,7,0)
+                     xss(next+1)=&
+                       sigfig(amass*(amass+1-aprime)/(1+amass)**2,7,0)
+
                      next=next+2
                      ! add in contribution to heating
                      naa=nint(xss(hpd+1))
@@ -12797,7 +12809,8 @@ contains
    !-------------------------------------------------------------------
    ! Write ACE data out in desired format.
    !-------------------------------------------------------------------
-   use util ! provides openz,closz,error
+   use util  ! provides openz,closz,error
+   use acecm ! provides write routines
    ! externals
    integer::itype,nace,ndir,mcnpx
    character(70)::hk
@@ -12895,101 +12908,6 @@ contains
    return
    end subroutine aceout
 
-   subroutine advance_to_locator(nout,l,locator)
-   !-------------------------------------------------------------------
-   ! Advance to the next locator position from the current position l.
-   ! If the current position is not equal to the locator position, the
-   ! function will advance l until it is equal to the locator position.
-   ! It will write the values in the xss array while advancing to the
-   ! new position.
-   !-------------------------------------------------------------------
-   use util
-   ! externals
-   integer::nout,l,locator
-   ! internals
-   character(66)::text
-
-   if (l.lt.locator) then
-      write(text,'(''expected xss index ('',i6,'') greater than '',&
-                   &''current index ('',i6,'')'')') locator, l
-      call mess('change',text,'xss array was padded accordingly')
-      do while (l.lt.locator)
-         call typen(l,nout,1)
-         l=l+1
-      enddo
-   else if (l.gt.locator) then
-      write(text,'(''expected xss index ('',i6,'') less than '',&
-                   &''current index ('',i6,'')'')') locator, l
-      call error('change',text,'this may be a serious problem')
-   endif
-
-   return
-   end subroutine advance_to_locator
-
-   subroutine write_integer(nout,l)
-   !-------------------------------------------------------------------
-   ! Write an integer value at the position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l
-
-   call typen(l,nout,1)
-   l=l+1
-
-   return
-   end subroutine write_integer
-
-   subroutine write_real(nout,l)
-   !-------------------------------------------------------------------
-   ! Write a real value at the position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l
-
-   call typen(l,nout,2)
-   l=l+1
-
-   return
-   end subroutine write_real
-
-   subroutine write_integer_list(nout,l,n)
-   !-------------------------------------------------------------------
-   ! Write n integer values from position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l,n
-   ! internals
-   integer::i
-
-   do i=1,n
-      call typen(l,nout,1)
-      l=l+1
-   enddo
-
-   return
-   end subroutine write_integer_list
-
-   subroutine write_real_list(nout,l,n)
-   !-------------------------------------------------------------------
-   ! Write n real values from position l, and advance l to the
-   ! next position
-   !-------------------------------------------------------------------
-   ! externals
-   integer::nout,l,n
-   ! internals
-   integer::i
-
-   do i=1,n
-      call typen(l,nout,2)
-      l=l+1
-   enddo
-
-   return
-   end subroutine write_real_list
-
    subroutine change(nout)
    !-------------------------------------------------------------------
    ! Change ACE data fields from integer to real or vice versa.
@@ -13000,7 +12918,8 @@ contains
    ! If nout.eq.1, integer fields are changed to real in memory
    !    (fields are assumed to contain mixed reals and integers).
    !-------------------------------------------------------------------
-   use util ! provides error
+   use util  ! provides openz,closz,error
+   use acecm ! provides write routines
    ! externals
    integer::nout
    ! internals
@@ -13018,6 +12937,7 @@ contains
    l=1
 
    !--write esz block
+   call advance_to_locator(nout,l,esz)
    call write_real_list(nout,l,5*nes)
 
    !--write nu block
@@ -13839,6 +13759,8 @@ contains
                         enddo
                         ielocator=ielocator+1
                      enddo
+
+                   ! unknown law
                    else
                       write(text,'(''Undefined law for dlwh block: '',i3)') law
                       call error('change',text,' ')
@@ -13861,39 +13783,13 @@ contains
    return
    end subroutine change
 
-   subroutine typen(l,nout,iflag)
-   !-------------------------------------------------------------------
-   ! Write an integer or a real number to a Type-1 ACE file,
-   ! or (if nout=0) convert real to integer for type-3 output,
-   ! or (if nout=1) convert integer to real for type-3 input.
-   ! Use iflag.eq.1 to write an integer (i20).
-   ! Use iflag.eq.2 to write a real number (1pe20.11).
-   ! Use iflag.eq.3 to write partial line at end of file.
-   !-------------------------------------------------------------------
-   ! externals
-   integer::l,nout,iflag
-   ! internals
-   integer::i,j
-   character(20)::hl(4)
-   save hl,i
-
-   if (iflag.eq.3.and.nout.gt.1.and.i.lt.4) then
-      write(nout,'(4a20)') (hl(j),j=1,i)
-   else
-      i=mod(l-1,4)+1
-      if (iflag.eq.1) write(hl(i),'(i20)') nint(xss(l))
-      if (iflag.eq.2) write(hl(i),'(1p,e20.11)') xss(l)
-      if (i.eq.4) write(nout,'(4a20)') (hl(j),j=1,i)
-   endif
-   return
-   end subroutine typen
-
    subroutine acefix(nin,itype,nout,ndir,iprint,nplot,suff,&
      nxtra,hk,izn,awn,mcnpx)
    !-------------------------------------------------------------------
    ! Print or edit ACE files.
    !-------------------------------------------------------------------
-   use util ! provides openz,closz,error
+   use util  ! provides openz,closz
+   use acecm ! provides write routines
    ! externals
    integer::nin,itype,nout,ndir,iprint,nplot,nxtra,mcnpx
    real(kr)::suff
@@ -15155,7 +15051,10 @@ contains
    real(kr)::e,tot,abso,elas,gprod,xtag,ytag,thin,abss
    real(kr)::e1,e2,fiss,cap,heat,dam,x,y,xlast
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,test
-   real(kr)::ee(pltumx),s0(pltumx),s1(pltumx),s2(pltumx)
+   real(kr),dimension(:),allocatable::ee
+   real(kr),dimension(:),allocatable::s0
+   real(kr),dimension(:),allocatable::s1
+   real(kr),dimension(:),allocatable::s2
    real(kr)::f0,f1,f2,c1,c2,cl,dp,pp,pe,capt
    character(1)::qu=''''
    character(10)::name
@@ -15183,6 +15082,14 @@ contains
    iif=0
    iic=0
    mtl=0
+   allocate(ee(pltumx))
+   allocate(s0(pltumx))
+   allocate(s1(pltumx))
+   allocate(s2(pltumx))
+   ee=0
+   s0=0
+   s1=0
+   s2=0
 
    !--start the viewr input text
    call openz(nout,1)
@@ -16732,6 +16639,12 @@ contains
 
    !--plot particle production sections
    if (ntype.gt.0) call aploxp(nout,iwcol,hk)
+
+   !--deallocate
+   deallocate(ee)
+   deallocate(s0)
+   deallocate(s1)
+   deallocate(s2)
 
    !--end the plotr input text
    write(nout,'(''99/'')')

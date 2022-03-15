@@ -1,0 +1,40 @@
+-- case 1: thermal scattering inelastic and mixed mode elastic (ENDF/B-VIII.1 option)
+moder
+ 20 -30
+moder
+ 21 -40
+reconr
+ -30 -31 /
+ 'PENDF tape for ENDF/B-VIII.0 H-2'/
+ 128 2 0 /
+ 0.001 /
+ 'H-2 from ENDF/B-VIII.0' /
+ 'processed at 0.1% tolerance' /
+ 0 /
+broadr
+ -30 -31 -32
+ 128 1 /
+ 0.001 /
+ 400 /
+ 0 /
+thermr
+ -40 -32 -50 /
+ 15 128 20 1 2 1 0 2 221 1 /
+ 400 /
+ 0.001 10. /
+moder
+ -50 60
+acer
+ -30 -50 0 70 75                            / Card1
+ 2 1 1 .10 0                                / Card2
+ 'D in 7LiD @400K from ENDF/B-VIII.1-beta'  / Card3
+ 128 400 'd-lid'                            / Card8
+ 1002                                       / Card8a
+ 221 20 222 2 1 10. 0                       / Card9
+acer
+ 0 70 55 71 76 /
+ 7 1 1 -1/
+ 'D in 7LiD @400K from ENDF/B-VIII.1-beta - check tape 1'
+viewr
+ 55 56
+stop
