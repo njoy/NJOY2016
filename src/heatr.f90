@@ -658,14 +658,14 @@ contains
          ! correction.
          write(nsyso,'(/,&
            &'' fission energy components''/)')
-         c458(1:18)=scr(7:24)
+         c458(1:18)=scr(7:24)    ! scr is a list record
          if (lfc.eq.0) then      ! thermal point or polynomial
             qdel=c458(5)+c458(9)+c458(11) ! delayed fission Q at 0 eV
             if (nply.ge.1) then
                c458(19:36)=scr(25:42)
                if (nply.gt.1) then
                   do n=2,nply
-                     if (nmod.ne.7.or.lrel.ne.1) then
+                     if (nmod.ne.7.or.lrel.ne.1) then ! endf/b-vii.1 correction
                         efix=1
                      else
                         efix=mevev**(n-1)
@@ -718,17 +718,17 @@ contains
                   anp(1:nl)=scr(1:nl)
                else if (ifc.eq.3) then ! END is tabulated
                   ifc3=1
-                  qdel=qdel+scr(7)
+                  qdel=qdel+scr(6+2*n1h+2)
                else if (ifc.eq.4) then ! EGP is tabulated
                   ifc4=1
                   allocate(agp(1:nl))
                   agp(1:nl)=scr(1:nl)
                else if (ifc.eq.5) then ! EGD is tabulated
                   ifc5=1
-                  qdel=qdel+scr(7)
+                  qdel=qdel+scr(6+2*n1h+2)
                else if (ifc.eq.6) then ! EB is tabulated
                   ifc6=1
-                  qdel=qdel+scr(7)
+                  qdel=qdel+scr(6+2*n1h+2)
                endif
             enddo
             if (ifc3.eq.0) qdel=qdel+c458(5)
@@ -6278,4 +6278,3 @@ contains
    end subroutine hout
 
 end module heatm
-
