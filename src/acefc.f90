@@ -5795,6 +5795,9 @@ contains
          else
             lct=l2h
             call tab1io(nin,0,0,scr,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nin,0,0,scr,nb,nw)
+            enddo
             awp=c2h
             ltt=1
             law=l2h
