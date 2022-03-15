@@ -492,6 +492,7 @@ contains
    call contio(nendf,0,0,c(1),nb,nw)
    n6=n2h
    call contio(nendf,0,0,c(1),nb,nw)
+   nx=0
    if (n1h.ne.0) then
       iverf=4
       nx=n6
@@ -1018,7 +1019,6 @@ contains
    real(kr),parameter::step4=5.e6_kr
    real(kr),parameter::up=1.1e0_kr
    real(kr),parameter::zero=0
-   real(kr),parameter::qsmall=1e-6_kr
    real(kr),parameter::tol=1.e-5_kr
 
    !--allocate storage
@@ -1054,6 +1054,8 @@ contains
    jrec=0
    last6=0
    new6=0
+   qsave=0
+   pnue=0
 
    !--loop over non-redundant mt-s in file 3.
   105 continue
@@ -2605,6 +2607,7 @@ contains
    real(kr)::alxl,alxh,alyl,alyh
 
    !--initialize.
+   nbt=0
    if (law.gt.0.and.law.ne.1.and.law.ne.5)&
      call error('tabbar','coded for lf=1 and lf=5 only.',' ')
    if (law.ge.0) then
@@ -3677,7 +3680,6 @@ contains
    real(kr),parameter::up=1.00001e0_kr
    real(kr),parameter::dn=.99999e0_kr
    real(kr),parameter::off=.999995e0_kr
-   real(kr),parameter::step=0.05e0_kr
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::zero=0
@@ -3884,6 +3886,7 @@ contains
    !--select desired discrete line
    inow=7+(i-1)*ncnow
    epnext=cnow(inow)
+   t=0.
 
    !--legendre coefficients
    if (lang.eq.1) then
@@ -4193,7 +4196,6 @@ contains
    character(60)::strng
    real(kr)::flo(65),fhi(65)
    real(kr),parameter::small=1.e-10_kr
-   real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::zero=0
    save iso,iraw,ir,nne,ne,inn
    save elo,ehi,nlo,nhi,flo,fhi,ltt,ltt3,lttn
@@ -5073,6 +5075,7 @@ contains
    e=0
    dame=df(e,z,awr,z,awr)
    mgam=2
+   hk=0
   100 continue
    call contio(nscr,0,0,scr,nb,nw)
    if (mfh.eq.12) mgam=1
@@ -5685,6 +5688,7 @@ contains
    allocate(buf(nbuf))
 
    !--construct tab1 records for the kerma factors
+   n=0
    nscr=15
    if (nout.lt.0) nscr=-nscr
    call openz(nscr,1)
