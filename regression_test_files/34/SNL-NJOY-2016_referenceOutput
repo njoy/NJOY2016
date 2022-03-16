@@ -1,0 +1,2942 @@
+1*****************************************************************************
+ *                                         *              *                  *
+ *   $$   $$       $$   $$$$$   $$    $$   *              *  vers: 2021.04   *
+ *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
+ *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
+ *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:10:04  *
+ *                                         *              *                  *
+ *****************************************************************************
+
+Run Title:: NJOY Regression Test #34                                                        
+
+icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
+icntrl(10) control logic flag set for damage energy:   0
+
+ moder...change the mode of an endf tape or njoy output tape              0.0s
+
+ input unit (+ for coded, - for bb) ...         20
+ output unit (+ for coded, - for bb) ..        -30
+
+ tape label
+ --------------------------------------
+  Retrieved by E4-Web: 2018/03/20,10:00:45                            
+
+ using endf-6 format
+                                                                          1.0s
+ *****************************************************************************
+
+ reconr...reconstruct pointwise cross sections in pendf format            1.0s
+
+ unit for endf tape ...................        -30
+ unit for pendf tape ..................        -21
+
+ label for pendf tape
+ ------------------------------------------------------------------
+ PU240                                                               
+
+ tape label
+ ------------------------------------------------------------------
+ Retrieved by E4-Web: 2018/03/20,10:00:45                            
+
+ material to be processed .............       9440
+ reconstruction tolerance .............      0.001
+ reconstruction temperature ...........       0.00k
+ resonance-integral-check tolerance ...      0.010
+ max resonance-integral error .........  5.000E-08
+
+ descriptive cards for pendf tape
+ ------------------------------------------------------------------
+                                                                     
+ 
+
+ processing mat 9440 in endf-6 format
+ ------------------------------------------------------------------
+  94-Pu-240 LANL       EVAL-SEP09 YOUNG,TALOU,CHADWICK,KAHLER,KAWAN  
+
+ resonance range information
+ ----------------------------------
+ ier     energy-range     lru lrf  method
+  1  1.000E-05 5.700E+03   1   3   normal
+  2  5.700E+03 4.000E+04   2   1   normal
+
+ ---message from rdf2bw---calculation of angular distribution not installed.
+   samm max legendre order:  0
+
+ changed threshold from 1.223129E+07 to 1.223129E+07 for mt 17.
+
+ changed threshold from 4.297984E+04 to 4.297985E+04 for mt 51.
+
+ changed threshold from 1.422954E+05 to 1.422955E+05 for mt 52.
+
+ changed threshold from 2.955366E+05 to 2.955367E+05 for mt 53.
+
+ changed threshold from 4.995904E+05 to 4.995905E+05 for mt 54.
+
+ changed threshold from 5.998098E+05 to 5.998099E+05 for mt 55.
+
+ changed threshold from 6.516266E+05 to 6.516267E+05 for mt 56.
+
+ changed threshold from 7.454190E+05 to 7.454191E+05 for mt 57.
+
+ changed threshold from 7.509421E+05 to 7.509422E+05 for mt 58.
+
+ changed threshold from 8.643165E+05 to 8.643166E+05 for mt 59.
+
+ changed threshold from 9.040829E+05 to 9.040830E+05 for mt 60.
+
+ changed threshold from 9.420417E+05 to 9.420418E+05 for mt 61.
+
+ changed threshold from 9.628287E+05 to 9.628288E+05 for mt 62.
+
+ changed threshold from 9.963691E+05 to 9.963692E+05 for mt 63.
+
+ changed threshold from 1.006110E+06 to 1.006111E+06 for mt 64.
+
+ changed threshold from 1.034830E+06 to 1.034831E+06 for mt 65.
+
+ changed threshold from 1.041859E+06 to 1.041860E+06 for mt 66.
+
+ changed threshold from 1.046177E+06 to 1.046178E+06 for mt 67.
+
+ changed threshold from 1.080722E+06 to 1.080723E+06 for mt 68.
+
+ changed threshold from 1.094078E+06 to 1.094079E+06 for mt 69.
+
+ changed threshold from 1.120187E+06 to 1.120188E+06 for mt 70.
+
+ changed threshold from 1.136756E+06 to 1.136757E+06 for mt 71.
+
+ changed threshold from 1.174916E+06 to 1.174917E+06 for mt 72.
+
+ changed threshold from 1.255252E+06 to 1.255253E+06 for mt 73.
+
+ changed threshold from 1.446051E+06 to 1.446052E+06 for mt 74.
+
+ changed threshold from 1.596681E+06 to 1.596682E+06 for mt 75.
+
+ changed threshold from 1.757353E+06 to 1.757354E+06 for mt 76.
+
+ changed threshold from 1.857773E+06 to 1.857774E+06 for mt 77.
+
+ changed threshold from 1.958194E+06 to 1.958195E+06 for mt 78.
+
+ changed threshold from 2.159034E+06 to 2.159035E+06 for mt 79.
+
+ changed threshold from 2.309664E+06 to 2.309665E+06 for mt 80.
+
+ changed threshold from 2.400042E+06 to 2.400043E+06 for mt 81.
+
+ changed threshold from 2.503274E+06 to 2.503275E+06 for mt 82.
+
+ changed threshold from 2.952353E+06 to 2.952354E+06 for mt 83.
+
+ changed threshold from 3.202400E+06 to 3.202401E+06 for mt 84.
+
+ changed threshold from 3.402236E+06 to 3.402237E+06 for mt 85.
+
+ changed threshold from 3.552866E+06 to 3.552867E+06 for mt 86.
+
+ changed threshold from 3.652282E+06 to 3.652283E+06 for mt 87.
+
+ changed threshold from 3.752702E+06 to 3.752703E+06 for mt 88.
+
+ changed threshold from 3.853122E+06 to 3.853123E+06 for mt 89.
+
+ changed threshold from 3.925425E+06 to 3.925426E+06 for mt 90.
+
+ number of user and resonance nodes           =    1666
+ points in initial unionized grid             =    3044
+ points added by linearization                =     338                   1.1s
+
+               estimated maximum error due to
+               resonance integral check (errmax,errint)
+
+    upper      elastic   percent   capture   percent   fission   percent
+    energy     integral   error    integral   error    integral   error
+  1.00E-05
+  1.00E-04     4.27E+00   0.000    1.90E+04   0.000    3.67E+00   0.000
+  1.00E-03     4.27E+00   0.000    6.02E+03   0.000    1.16E+00   0.000
+  1.00E-02     4.23E+00   0.000    1.91E+03   0.000    3.69E-01   0.000
+  1.00E-01     3.83E+00   0.000    6.37E+02   0.000    1.24E-01   0.000
+  1.00E+00     3.92E+01   0.000    1.10E+03   0.000    2.79E-01   0.000
+  2.00E+00     6.63E+02   0.000    7.47E+03   0.000    2.10E+00   0.000
+  5.00E+00     1.56E+01   0.000    9.14E+00   0.000    4.07E-03   0.000
+  1.00E+01     7.71E+00   0.000    5.31E-01   0.000    6.06E-04   0.000
+  2.00E+01     6.11E+00   0.000    4.17E-01   0.000    2.61E-03   0.000
+  5.00E+01     4.94E+01   0.000    7.84E+01   0.000    1.98E-01   0.000
+  1.00E+02     4.61E+01   0.000    3.44E+01   0.000    5.06E-02   0.000
+  2.00E+02     2.23E+01   0.000    1.77E+01   0.001    3.33E-02   0.005
+  5.00E+02     1.97E+01   0.001    6.37E+00   0.007    3.43E-02   0.004
+  1.00E+03     1.39E+01   0.003    3.44E+00   0.035    2.19E-01   0.023
+  2.00E+03     1.35E+01   0.009    2.03E+00   0.086    1.46E-01   0.092
+  5.00E+03     1.50E+01   0.028    1.36E+00   0.226    1.11E-01   0.174
+
+ points added by resonance reconstruction     =  142380
+ points affected by resonance integral check  =   79037
+ final number of resonance points             =  144372
+ number of points in final unionized grid     =  145762
+                                                                         11.5s
+ *****************************************************************************
+
+ broadr...doppler broadening of endf data                                11.5s
+
+ unit for input endf tape .............        -30
+ unit for input pendf tape ............        -21
+ unit for output pendf tape ...........        -22
+ material to be processed .............       9440
+ number of final temperatures .........          1
+ restart (0 no, 1 yes) ................          0
+ bootstrap (0 no, 1 yes) ..............          0
+ starting material temperature ........        0.0k
+ thinning tolerance ...................      0.001
+ max. energy ..........................  1.000E+06
+ errmax for thinning ..................  1.000E-02
+ errint for thinning ..................  5.000E-08
+ final temperatures ...................  2.936E+02
+
+
+ files are in endf-6 format
+
+ resolved resonance range upper limit         =    5.70000E+03 eV.
+
+ final maximum energy for broadening/thinning =    5.70000E+03 eV
+                                                                         11.7s
+
+ broadened mat9440 from  0.0000E+00 to  2.9360E+02 k
+         points in= 145762  points out=  72125
+         mt   2  18 102
+
+    thermal quantities at 293.6 K = 0.0253 eV
+    -----------------------------------------
+           thermal fission xsec:  5.6299E-02
+          thermal fission nubar:  2.8971E+00
+           thermal capture xsec:  2.8944E+02
+       thermal capture integral:  2.6315E+02
+     capture resonance integral:  8.4840E+03
+       thermal fission integral:  5.1482E-02
+       thermal fission g-factor:  1.0318E+00
+         thermal alpha integral:  5.0908E+03
+           thermal eta integral:  5.6912E-04
+            thermal k1 integral: -2.6305E+02
+                  equivalent k1: -2.9682E+02
+     fission resonance integral:  1.0781E+01
+    -----------------------------------------
+                                                                         21.9s
+ *****************************************************************************
+
+ groupr...compute self-shielded group-averaged cross-sections            21.9s
+
+ unit for endf tape ...................        -30
+ unit for pendf tape ..................        -22
+ unit for input gout tape .............          0
+ unit for output gout tape ............        -31
+ mat to be processed ..................       9440
+ neutron group structure option .......          3
+ gamma group option ...................          0
+ weight function option ...............          2
+ legendre order .......................          1
+ print option (0 min, 1 max) ..........          0
+ smoothing option (0 off, 1 on) .......          1
+
+ run title
+ --------------------------------------
+      PU240                                                             
+ 
+ temperatures (kelvin) ................   2.94E+02
+ sigma zeroes .........................   infinity
+
+ neutron group structure......lanl 30 group
+     1   1.39000E-04  -  1.52000E-01
+     2   1.52000E-01  -  4.14000E-01
+     3   4.14000E-01  -  1.13000E+00
+     4   1.13000E+00  -  3.06000E+00
+     5   3.06000E+00  -  8.32000E+00
+     6   8.32000E+00  -  2.26000E+01
+     7   2.26000E+01  -  6.14000E+01
+     8   6.14000E+01  -  1.67000E+02
+     9   1.67000E+02  -  4.54000E+02
+    10   4.54000E+02  -  1.23500E+03
+    11   1.23500E+03  -  3.35000E+03
+    12   3.35000E+03  -  9.12000E+03
+    13   9.12000E+03  -  2.48000E+04
+    14   2.48000E+04  -  6.76000E+04
+    15   6.76000E+04  -  1.84000E+05
+    16   1.84000E+05  -  3.03000E+05
+    17   3.03000E+05  -  5.00000E+05
+    18   5.00000E+05  -  8.23000E+05
+    19   8.23000E+05  -  1.35300E+06
+    20   1.35300E+06  -  1.73800E+06
+    21   1.73800E+06  -  2.23200E+06
+    22   2.23200E+06  -  2.86500E+06
+    23   2.86500E+06  -  3.68000E+06
+    24   3.68000E+06  -  6.07000E+06
+    25   6.07000E+06  -  7.79000E+06
+    26   7.79000E+06  -  1.00000E+07
+    27   1.00000E+07  -  1.20000E+07
+    28   1.20000E+07  -  1.35000E+07
+    29   1.35000E+07  -  1.50000E+07
+    30   1.50000E+07  -  1.70000E+07
+
+ weight function......constant for all l
+
+ using endf-6 format
+
+ processing mat   9440
+ --------------------------------------
+                                                                      
+ 
+ group constants at t=2.936E+02 deg k                                    22.0s
+ for mf  3 and mt  1 (n,total) cross section                                     
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.1s
+ for mf  3 and mt  2 (n,elastic) cross section                                   
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.1s
+ for mf  3 and mt  4 (n,inel) cross section                                      
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.1s
+ for mf  3 and mt 16 (n,2n) cross section                                        
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.1s
+ for mf  3 and mt 17 (n,3n) cross section                                        
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.1s
+ for mf  3 and mt 18 (n,fission) cross section                                   
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.1s
+ for mf  3 and mt 19 (n,f) cross section                                         
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 20 (n,nf) cross section                                        
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 21 (n,2nf) cross section                                       
+ 
+ 
+ 
+
+ threshold is above highest energy bound for mt 37
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 38 (n,3nf) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 51 (n,n01) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 52 (n,n02) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 53 (n,n03) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 54 (n,n04) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 55 (n,n05) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 56 (n,n06) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 57 (n,n07) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 58 (n,n08) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 59 (n,n09) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 60 (n,n10) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 61 (n,n11) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 62 (n,n12) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 63 (n,n13) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 64 (n,n14) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 65 (n,n15) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 66 (n,n16) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 67 (n,n17) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 68 (n,n18) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 69 (n,n19) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 70 (n,n20) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 71 (n,n21) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 72 (n,n22) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 73 (n,n23) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 74 (n,n24) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 75 (n,n25) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 76 (n,n26) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 77 (n,n27) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 78 (n,n28) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 79 (n,n29) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 80 (n,n30) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 81 (n,n31) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 82 (n,n32) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 83 (n,n33) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 84 (n,n34) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 85 (n,n35) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 86 (n,n36) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 87 (n,n37) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 88 (n,n38) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 89 (n,n39) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 90 (n,n40) cross section                                       
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt 91 (n,nc) cross section                                        
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  3 and mt102 (n,g) cross section                                         
+ 
+ 
+ 
+ group constants at t=2.936E+02 deg k                                    22.2s
+ for mf  5 and mt 18 fission chi                                                 
+
+ spectrum constant below 3.3500E+03 ev  (  11 groups)
+ 
+ 
+ 
+                                                                         22.6s
+ *****************************************************************************
+
+ errorr...produce cross section covariances                              22.6s
+
+ unit for endf tape ...................        -30
+ unit for pendf tape ..................          0
+ unit for input gendf tape ............        -31
+ unit for output covariance tape ......        -21
+ unit for input covariance tape .......          0
+ unit for ratio-to-standard tape ......          0
+ material to be processed .............       9440
+ neutron group option .................          3
+ weight function option ...............          2
+ print option (0 min, 1 max) ..........          1
+ rel. cov. option (0 abs, 1 rel) ......          1
+ group av. print option (0 min, 1 max)           0
+ temperature ..........................      293.6
+
+ ---message from errorr---mf35 processing with the mf5 spectrum vector
+ read option (0 calc, 1 read, 2 combo)           0
+ endf covariance file to be processed .         35
+ igflag ...............................          0
+ ifissp ...............................          1
+ efmean ............................... 2.5000E+05
+ covariance matrix energy range ....... 1.0000E-05 to 5.0000E+05 eV
+
+ using endf-6 format
+ resonance range information
+ ----------------------------------
+ ier     energy-range     lru lrf  method
+  1  1.000E-05 5.700E+03   1   3   normal
+  2  5.700E+03 4.000E+04   2   1   normal
+
+ using errorj resonance method
+
+ neutron group structure......lanl 30 group
+ 
+     1   1.39000E-04  -   1.52000E-01
+     2   1.52000E-01  -   4.14000E-01
+     3   4.14000E-01  -   1.13000E+00
+     4   1.13000E+00  -   3.06000E+00
+     5   3.06000E+00  -   8.32000E+00
+     6   8.32000E+00  -   2.26000E+01
+     7   2.26000E+01  -   6.14000E+01
+     8   6.14000E+01  -   1.67000E+02
+     9   1.67000E+02  -   4.54000E+02
+    10   4.54000E+02  -   1.23500E+03
+    11   1.23500E+03  -   3.35000E+03
+    12   3.35000E+03  -   9.12000E+03
+    13   9.12000E+03  -   2.48000E+04
+    14   2.48000E+04  -   6.76000E+04
+    15   6.76000E+04  -   1.84000E+05
+    16   1.84000E+05  -   3.03000E+05
+    17   3.03000E+05  -   5.00000E+05
+    18   5.00000E+05  -   8.23000E+05
+    19   8.23000E+05  -   1.35300E+06
+    20   1.35300E+06  -   1.73800E+06
+    21   1.73800E+06  -   2.23200E+06
+    22   2.23200E+06  -   2.86500E+06
+    23   2.86500E+06  -   3.68000E+06
+    24   3.68000E+06  -   6.07000E+06
+    25   6.07000E+06  -   7.79000E+06
+    26   7.79000E+06  -   1.00000E+07
+    27   1.00000E+07  -   1.20000E+07
+    28   1.20000E+07  -   1.35000E+07
+    29   1.35000E+07  -   1.50000E+07
+    30   1.50000E+07  -   1.70000E+07
+
+ union structure has  301 groups
+
+     1      1.39000E-04  -  1.52000E-01
+     2      1.52000E-01  -  4.14000E-01
+     3      4.14000E-01  -  1.13000E+00
+     4      1.13000E+00  -  3.06000E+00
+     5      3.06000E+00  -  8.32000E+00
+     6      8.32000E+00  -  1.00000E+01
+     7      1.00000E+01  -  1.20000E+01
+     8      1.20000E+01  -  1.40000E+01
+     9      1.40000E+01  -  1.60000E+01
+    10      1.60000E+01  -  1.80000E+01
+    11      1.80000E+01  -  2.00000E+01
+    12      2.00000E+01  -  2.20000E+01
+    13      2.20000E+01  -  2.26000E+01
+    14      2.26000E+01  -  2.40000E+01
+    15      2.40000E+01  -  2.60000E+01
+    16      2.60000E+01  -  2.80000E+01
+    17      2.80000E+01  -  3.00000E+01
+    18      3.00000E+01  -  3.20000E+01
+    19      3.20000E+01  -  3.40000E+01
+    20      3.40000E+01  -  3.60000E+01
+    21      3.60000E+01  -  3.80000E+01
+    22      3.80000E+01  -  4.00000E+01
+    23      4.00000E+01  -  4.20000E+01
+    24      4.20000E+01  -  4.40000E+01
+    25      4.40000E+01  -  4.60000E+01
+    26      4.60000E+01  -  4.80000E+01
+    27      4.80000E+01  -  5.00000E+01
+    28      5.00000E+01  -  5.20000E+01
+    29      5.20000E+01  -  5.40000E+01
+    30      5.40000E+01  -  5.60000E+01
+    31      5.60000E+01  -  5.80000E+01
+    32      5.80000E+01  -  6.00000E+01
+    33      6.00000E+01  -  6.14000E+01
+    34      6.14000E+01  -  6.20000E+01
+    35      6.20000E+01  -  6.40000E+01
+    36      6.40000E+01  -  6.60000E+01
+    37      6.60000E+01  -  6.80000E+01
+    38      6.80000E+01  -  7.00000E+01
+    39      7.00000E+01  -  7.20000E+01
+    40      7.20000E+01  -  7.40000E+01
+    41      7.40000E+01  -  7.60000E+01
+    42      7.60000E+01  -  7.80000E+01
+    43      7.80000E+01  -  8.00000E+01
+    44      8.00000E+01  -  8.20000E+01
+    45      8.20000E+01  -  8.40000E+01
+    46      8.40000E+01  -  8.60000E+01
+    47      8.60000E+01  -  8.80000E+01
+    48      8.80000E+01  -  9.00000E+01
+    49      9.00000E+01  -  9.20000E+01
+    50      9.20000E+01  -  9.40000E+01
+    51      9.40000E+01  -  9.60000E+01
+    52      9.60000E+01  -  9.80000E+01
+    53      9.80000E+01  -  1.00000E+02
+    54      1.00000E+02  -  1.20000E+02
+    55      1.20000E+02  -  1.40000E+02
+    56      1.40000E+02  -  1.60000E+02
+    57      1.60000E+02  -  1.67000E+02
+    58      1.67000E+02  -  1.80000E+02
+    59      1.80000E+02  -  2.00000E+02
+    60      2.00000E+02  -  2.20000E+02
+    61      2.20000E+02  -  2.40000E+02
+    62      2.40000E+02  -  2.60000E+02
+    63      2.60000E+02  -  2.80000E+02
+    64      2.80000E+02  -  3.00000E+02
+    65      3.00000E+02  -  3.20000E+02
+    66      3.20000E+02  -  3.40000E+02
+    67      3.40000E+02  -  3.60000E+02
+    68      3.60000E+02  -  3.80000E+02
+    69      3.80000E+02  -  4.00000E+02
+    70      4.00000E+02  -  4.20000E+02
+    71      4.20000E+02  -  4.40000E+02
+    72      4.40000E+02  -  4.54000E+02
+    73      4.54000E+02  -  4.60000E+02
+    74      4.60000E+02  -  4.80000E+02
+    75      4.80000E+02  -  5.00000E+02
+    76      5.00000E+02  -  5.20000E+02
+    77      5.20000E+02  -  5.40000E+02
+    78      5.40000E+02  -  5.60000E+02
+    79      5.60000E+02  -  5.80000E+02
+    80      5.80000E+02  -  6.00000E+02
+    81      6.00000E+02  -  6.20000E+02
+    82      6.20000E+02  -  6.40000E+02
+    83      6.40000E+02  -  6.60000E+02
+    84      6.60000E+02  -  6.80000E+02
+    85      6.80000E+02  -  7.00000E+02
+    86      7.00000E+02  -  7.20000E+02
+    87      7.20000E+02  -  7.40000E+02
+    88      7.40000E+02  -  7.60000E+02
+    89      7.60000E+02  -  7.80000E+02
+    90      7.80000E+02  -  8.00000E+02
+    91      8.00000E+02  -  8.20000E+02
+    92      8.20000E+02  -  8.40000E+02
+    93      8.40000E+02  -  8.60000E+02
+    94      8.60000E+02  -  8.80000E+02
+    95      8.80000E+02  -  9.00000E+02
+    96      9.00000E+02  -  9.20000E+02
+    97      9.20000E+02  -  9.40000E+02
+    98      9.40000E+02  -  9.60000E+02
+    99      9.60000E+02  -  9.80000E+02
+   100      9.80000E+02  -  1.00000E+03
+   101      1.00000E+03  -  1.20000E+03
+   102      1.20000E+03  -  1.23500E+03
+   103      1.23500E+03  -  1.40000E+03
+   104      1.40000E+03  -  1.60000E+03
+   105      1.60000E+03  -  1.80000E+03
+   106      1.80000E+03  -  2.00000E+03
+   107      2.00000E+03  -  2.20000E+03
+   108      2.20000E+03  -  2.40000E+03
+   109      2.40000E+03  -  2.60000E+03
+   110      2.60000E+03  -  2.80000E+03
+   111      2.80000E+03  -  3.00000E+03
+   112      3.00000E+03  -  3.20000E+03
+   113      3.20000E+03  -  3.35000E+03
+   114      3.35000E+03  -  3.40000E+03
+   115      3.40000E+03  -  3.60000E+03
+   116      3.60000E+03  -  3.80000E+03
+   117      3.80000E+03  -  4.00000E+03
+   118      4.00000E+03  -  4.20000E+03
+   119      4.20000E+03  -  4.40000E+03
+   120      4.40000E+03  -  4.60000E+03
+   121      4.60000E+03  -  4.80000E+03
+   122      4.80000E+03  -  5.00000E+03
+   123      5.00000E+03  -  5.20000E+03
+   124      5.20000E+03  -  5.40000E+03
+   125      5.40000E+03  -  5.60000E+03
+   126      5.60000E+03  -  5.80000E+03
+   127      5.80000E+03  -  6.00000E+03
+   128      6.00000E+03  -  6.20000E+03
+   129      6.20000E+03  -  6.40000E+03
+   130      6.40000E+03  -  6.60000E+03
+   131      6.60000E+03  -  6.80000E+03
+   132      6.80000E+03  -  7.00000E+03
+   133      7.00000E+03  -  7.20000E+03
+   134      7.20000E+03  -  7.40000E+03
+   135      7.40000E+03  -  7.60000E+03
+   136      7.60000E+03  -  7.80000E+03
+   137      7.80000E+03  -  8.00000E+03
+   138      8.00000E+03  -  8.20000E+03
+   139      8.20000E+03  -  8.40000E+03
+   140      8.40000E+03  -  8.60000E+03
+   141      8.60000E+03  -  8.80000E+03
+   142      8.80000E+03  -  9.00000E+03
+   143      9.00000E+03  -  9.12000E+03
+   144      9.12000E+03  -  9.20000E+03
+   145      9.20000E+03  -  9.40000E+03
+   146      9.40000E+03  -  9.60000E+03
+   147      9.60000E+03  -  9.80000E+03
+   148      9.80000E+03  -  1.00000E+04
+   149      1.00000E+04  -  1.20000E+04
+   150      1.20000E+04  -  1.40000E+04
+   151      1.40000E+04  -  1.60000E+04
+   152      1.60000E+04  -  1.80000E+04
+   153      1.80000E+04  -  2.00000E+04
+   154      2.00000E+04  -  2.20000E+04
+   155      2.20000E+04  -  2.40000E+04
+   156      2.40000E+04  -  2.48000E+04
+   157      2.48000E+04  -  2.60000E+04
+   158      2.60000E+04  -  2.80000E+04
+   159      2.80000E+04  -  3.00000E+04
+   160      3.00000E+04  -  3.20000E+04
+   161      3.20000E+04  -  3.40000E+04
+   162      3.40000E+04  -  3.60000E+04
+   163      3.60000E+04  -  3.80000E+04
+   164      3.80000E+04  -  4.00000E+04
+   165      4.00000E+04  -  4.20000E+04
+   166      4.20000E+04  -  4.40000E+04
+   167      4.40000E+04  -  4.60000E+04
+   168      4.60000E+04  -  4.80000E+04
+   169      4.80000E+04  -  5.00000E+04
+   170      5.00000E+04  -  5.20000E+04
+   171      5.20000E+04  -  5.40000E+04
+   172      5.40000E+04  -  5.60000E+04
+   173      5.60000E+04  -  5.80000E+04
+   174      5.80000E+04  -  6.00000E+04
+   175      6.00000E+04  -  6.20000E+04
+   176      6.20000E+04  -  6.40000E+04
+   177      6.40000E+04  -  6.60000E+04
+   178      6.60000E+04  -  6.76000E+04
+   179      6.76000E+04  -  6.80000E+04
+   180      6.80000E+04  -  7.00000E+04
+   181      7.00000E+04  -  7.20000E+04
+   182      7.20000E+04  -  7.40000E+04
+   183      7.40000E+04  -  7.60000E+04
+   184      7.60000E+04  -  7.80000E+04
+   185      7.80000E+04  -  8.00000E+04
+   186      8.00000E+04  -  8.20000E+04
+   187      8.20000E+04  -  8.40000E+04
+   188      8.40000E+04  -  8.60000E+04
+   189      8.60000E+04  -  8.80000E+04
+   190      8.80000E+04  -  9.00000E+04
+   191      9.00000E+04  -  9.20000E+04
+   192      9.20000E+04  -  9.40000E+04
+   193      9.40000E+04  -  9.60000E+04
+   194      9.60000E+04  -  9.80000E+04
+   195      9.80000E+04  -  1.00000E+05
+   196      1.00000E+05  -  1.20000E+05
+   197      1.20000E+05  -  1.40000E+05
+   198      1.40000E+05  -  1.60000E+05
+   199      1.60000E+05  -  1.80000E+05
+   200      1.80000E+05  -  1.84000E+05
+   201      1.84000E+05  -  2.00000E+05
+   202      2.00000E+05  -  2.20000E+05
+   203      2.20000E+05  -  2.40000E+05
+   204      2.40000E+05  -  2.60000E+05
+   205      2.60000E+05  -  2.80000E+05
+   206      2.80000E+05  -  3.00000E+05
+   207      3.00000E+05  -  3.03000E+05
+   208      3.03000E+05  -  3.20000E+05
+   209      3.20000E+05  -  3.40000E+05
+   210      3.40000E+05  -  3.60000E+05
+   211      3.60000E+05  -  3.80000E+05
+   212      3.80000E+05  -  4.00000E+05
+   213      4.00000E+05  -  4.20000E+05
+   214      4.20000E+05  -  4.40000E+05
+   215      4.40000E+05  -  4.60000E+05
+   216      4.60000E+05  -  4.80000E+05
+   217      4.80000E+05  -  5.00000E+05
+   218      5.00000E+05  -  5.20000E+05
+   219      5.20000E+05  -  5.40000E+05
+   220      5.40000E+05  -  5.60000E+05
+   221      5.60000E+05  -  5.80000E+05
+   222      5.80000E+05  -  6.00000E+05
+   223      6.00000E+05  -  6.20000E+05
+   224      6.20000E+05  -  6.40000E+05
+   225      6.40000E+05  -  6.60000E+05
+   226      6.60000E+05  -  6.80000E+05
+   227      6.80000E+05  -  7.00000E+05
+   228      7.00000E+05  -  7.20000E+05
+   229      7.20000E+05  -  7.40000E+05
+   230      7.40000E+05  -  7.60000E+05
+   231      7.60000E+05  -  7.80000E+05
+   232      7.80000E+05  -  8.00000E+05
+   233      8.00000E+05  -  8.20000E+05
+   234      8.20000E+05  -  8.23000E+05
+   235      8.23000E+05  -  8.40000E+05
+   236      8.40000E+05  -  8.60000E+05
+   237      8.60000E+05  -  8.80000E+05
+   238      8.80000E+05  -  9.00000E+05
+   239      9.00000E+05  -  9.20000E+05
+   240      9.20000E+05  -  9.40000E+05
+   241      9.40000E+05  -  9.60000E+05
+   242      9.60000E+05  -  9.80000E+05
+   243      9.80000E+05  -  1.00000E+06
+   244      1.00000E+06  -  1.20000E+06
+   245      1.20000E+06  -  1.35300E+06
+   246      1.35300E+06  -  1.40000E+06
+   247      1.40000E+06  -  1.60000E+06
+   248      1.60000E+06  -  1.73800E+06
+   249      1.73800E+06  -  1.80000E+06
+   250      1.80000E+06  -  2.00000E+06
+   251      2.00000E+06  -  2.20000E+06
+   252      2.20000E+06  -  2.23200E+06
+   253      2.23200E+06  -  2.40000E+06
+   254      2.40000E+06  -  2.60000E+06
+   255      2.60000E+06  -  2.80000E+06
+   256      2.80000E+06  -  2.86500E+06
+   257      2.86500E+06  -  3.00000E+06
+   258      3.00000E+06  -  3.20000E+06
+   259      3.20000E+06  -  3.40000E+06
+   260      3.40000E+06  -  3.60000E+06
+   261      3.60000E+06  -  3.68000E+06
+   262      3.68000E+06  -  3.80000E+06
+   263      3.80000E+06  -  4.00000E+06
+   264      4.00000E+06  -  4.20000E+06
+   265      4.20000E+06  -  4.40000E+06
+   266      4.40000E+06  -  4.60000E+06
+   267      4.60000E+06  -  4.80000E+06
+   268      4.80000E+06  -  5.00000E+06
+   269      5.00000E+06  -  5.20000E+06
+   270      5.20000E+06  -  5.40000E+06
+   271      5.40000E+06  -  5.60000E+06
+   272      5.60000E+06  -  5.80000E+06
+   273      5.80000E+06  -  6.00000E+06
+   274      6.00000E+06  -  6.07000E+06
+   275      6.07000E+06  -  6.20000E+06
+   276      6.20000E+06  -  6.40000E+06
+   277      6.40000E+06  -  6.60000E+06
+   278      6.60000E+06  -  6.80000E+06
+   279      6.80000E+06  -  7.00000E+06
+   280      7.00000E+06  -  7.20000E+06
+   281      7.20000E+06  -  7.40000E+06
+   282      7.40000E+06  -  7.60000E+06
+   283      7.60000E+06  -  7.79000E+06
+   284      7.79000E+06  -  7.80000E+06
+   285      7.80000E+06  -  8.00000E+06
+   286      8.00000E+06  -  8.20000E+06
+   287      8.20000E+06  -  8.40000E+06
+   288      8.40000E+06  -  8.60000E+06
+   289      8.60000E+06  -  8.80000E+06
+   290      8.80000E+06  -  9.00000E+06
+   291      9.00000E+06  -  9.20000E+06
+   292      9.20000E+06  -  9.40000E+06
+   293      9.40000E+06  -  9.60000E+06
+   294      9.60000E+06  -  9.80000E+06
+   295      9.80000E+06  -  1.00000E+07
+   296      1.00000E+07  -  1.20000E+07
+   297      1.20000E+07  -  1.35000E+07
+   298      1.35000E+07  -  1.40000E+07
+   299      1.40000E+07  -  1.50000E+07
+   300      1.50000E+07  -  1.60000E+07
+   301      1.60000E+07  -  1.70000E+07
+
+ weight function......constant for all l
+
+ processing mat  9440
+ ---------------------
+  94-Pu-240 LANL       EVAL-SEP09 YOUNG,TALOU,CHADWICK,KAHLER,KAWAN  
+
+ ---message from sumchk---zero-sum test passed
+
+ ---message from covbin---converting mf35 convariance data to errorj format
+
+ covariances calculated for  1 reactions and  301 groups                 22.9s
+
+ table of multigroup data
+
+ group   lower       group     chi   
+  no.    energy      flux      mt 18
+ -----   ------      -----     ----------
+    1  1.3900E-04  1.5186E-01  2.0665E-12
+    2  1.5200E-01  2.6200E-01  1.3264E-11
+    3  4.1400E-01  7.1600E-01  9.8881E-11
+    4  1.1300E+00  1.9300E+00  7.2331E-10
+    5  3.0600E+00  5.2600E+00  5.3540E-09
+    6  8.3200E+00  1.4280E+01  3.1343E-08
+    7  2.2600E+01  3.8800E+01  1.4092E-07
+    8  6.1400E+01  1.0560E+02  6.3237E-07
+    9  1.6700E+02  2.8700E+02  2.8340E-06
+   10  4.5400E+02  7.8100E+02  1.2716E-05
+   11  1.2350E+03  2.1150E+03  5.6716E-05
+   12  3.3500E+03  5.7700E+03  2.5488E-04
+   13  9.1200E+03  1.5680E+04  1.1388E-03
+   14  2.4800E+04  4.2800E+04  5.0857E-03
+   15  6.7600E+04  1.1640E+05  2.2221E-02
+   16  1.8400E+05  1.1900E+05  3.0471E-02
+   17  3.0300E+05  1.9700E+05  6.0269E-02
+   18  5.0000E+05  3.2300E+05  1.0902E-01
+   19  8.2300E+05  5.3000E+05  1.7395E-01
+   20  1.3530E+06  3.8500E+05  1.1230E-01
+   21  1.7380E+06  4.9400E+05  1.2145E-01
+   22  2.2320E+06  6.3300E+05  1.1787E-01
+   23  2.8650E+06  8.1500E+05  1.0047E-01
+   24  3.6800E+06  2.3900E+06  1.1681E-01
+   25  6.0700E+06  1.7200E+06  2.0195E-02
+   26  7.7900E+06  2.2100E+06  6.6451E-03
+   27  1.0000E+07  2.0000E+06  1.2683E-03
+   28  1.2000E+07  1.5000E+06  2.4857E-04
+   29  1.3500E+07  1.5000E+06  8.0061E-05
+   30  1.5000E+07  2.0000E+06  3.6424E-05
+
+ relative covariance ( mt 18 , ig , mt 18 , igp )                        22.9s
+
+  ig   igp         +0         +1         +2
+ ---   ---       ----       ----       ----
+   6     6  7.920E-02  8.878E-02  8.758E-02  8.832E-02  8.833E-02  8.781E-02
+   6    12  8.903E-02  8.711E-02  8.751E-02  8.193E-02  7.311E-02  5.735E-02
+   6    18  2.985E-02  1.186E-02 -1.696E-03 -1.731E-02 -3.362E-02 -4.038E-02
+   6    24 -3.034E-02 -2.307E-03  3.685E-02  1.349E-01  1.970E-01  3.311E-01
+   6    30  3.558E-01
+   7     6  8.878E-02  9.952E-02  9.818E-02  9.901E-02  9.901E-02  9.843E-02
+   7    12  9.981E-02  9.765E-02  9.810E-02  9.184E-02  8.196E-02  6.430E-02
+   7    18  3.347E-02  1.330E-02 -1.894E-03 -1.940E-02 -3.768E-02 -4.527E-02
+   7    24 -3.404E-02 -2.631E-03  4.125E-02  1.511E-01  2.207E-01  3.709E-01
+   7    30  3.985E-01
+   8     6  8.758E-02  9.818E-02  9.686E-02  9.767E-02  9.768E-02  9.710E-02
+   8    12  9.846E-02  9.633E-02  9.678E-02  9.060E-02  8.086E-02  6.343E-02
+   8    18  3.302E-02  1.313E-02 -1.866E-03 -1.914E-02 -3.717E-02 -4.466E-02
+   8    24 -3.358E-02 -2.612E-03  4.067E-02  1.490E-01  2.176E-01  3.658E-01
+   8    30  3.930E-01
+   9     6  8.832E-02  9.901E-02  9.767E-02  9.850E-02  9.850E-02  9.792E-02
+   9    12  9.929E-02  9.715E-02  9.759E-02  9.137E-02  8.154E-02  6.396E-02
+   9    18  3.330E-02  1.323E-02 -1.884E-03 -1.930E-02 -3.749E-02 -4.504E-02
+   9    24 -3.386E-02 -2.624E-03  4.102E-02  1.503E-01  2.195E-01  3.689E-01
+   9    30  3.964E-01
+  10     6  8.833E-02  9.901E-02  9.768E-02  9.850E-02  9.851E-02  9.793E-02
+  10    12  9.930E-02  9.715E-02  9.760E-02  9.137E-02  8.154E-02  6.397E-02
+  10    18  3.330E-02  1.324E-02 -1.880E-03 -1.930E-02 -3.749E-02 -4.504E-02
+  10    24 -3.387E-02 -2.647E-03  4.099E-02  1.502E-01  2.194E-01  3.688E-01
+  10    30  3.963E-01
+  11     6  8.781E-02  9.843E-02  9.710E-02  9.792E-02  9.793E-02  9.735E-02
+  11    12  9.871E-02  9.658E-02  9.702E-02  9.083E-02  8.106E-02  6.359E-02
+  11    18  3.310E-02  1.316E-02 -1.872E-03 -1.919E-02 -3.727E-02 -4.477E-02
+  11    24 -3.367E-02 -2.610E-03  4.078E-02  1.494E-01  2.182E-01  3.668E-01
+  11    30  3.941E-01
+  12     6  8.903E-02  9.981E-02  9.846E-02  9.929E-02  9.930E-02  9.871E-02
+  12    12  1.001E-01  9.793E-02  9.838E-02  9.210E-02  8.220E-02  6.448E-02
+  12    18  3.357E-02  1.334E-02 -1.896E-03 -1.945E-02 -3.779E-02 -4.540E-02
+  12    24 -3.414E-02 -2.658E-03  4.134E-02  1.514E-01  2.212E-01  3.718E-01
+  12    30  3.995E-01
+  13     6  8.711E-02  9.765E-02  9.633E-02  9.715E-02  9.715E-02  9.658E-02
+  13    12  9.793E-02  9.581E-02  9.625E-02  9.011E-02  8.042E-02  6.309E-02
+  13    18  3.285E-02  1.307E-02 -1.847E-03 -1.903E-02 -3.697E-02 -4.443E-02
+  13    24 -3.343E-02 -2.646E-03  4.038E-02  1.480E-01  2.163E-01  3.635E-01
+  13    30  3.906E-01
+  14     6  8.751E-02  9.810E-02  9.678E-02  9.759E-02  9.760E-02  9.702E-02
+  14    12  9.838E-02  9.625E-02  9.670E-02  9.053E-02  8.080E-02  6.340E-02
+  14    18  3.303E-02  1.315E-02 -1.833E-03 -1.910E-02 -3.714E-02 -4.465E-02
+  14    24 -3.365E-02 -2.798E-03  4.036E-02  1.482E-01  2.167E-01  3.642E-01
+  14    30  3.914E-01
+  15     6  8.193E-02  9.184E-02  9.060E-02  9.137E-02  9.137E-02  9.083E-02
+  15    12  9.210E-02  9.011E-02  9.053E-02  8.477E-02  7.568E-02  5.942E-02
+  15    18  3.103E-02  1.242E-02 -1.627E-03 -1.781E-02 -3.474E-02 -4.186E-02
+  15    24 -3.175E-02 -3.191E-03  3.691E-02  1.368E-01  2.005E-01  3.371E-01
+  15    30  3.623E-01
+  16     6  7.311E-02  8.196E-02  8.086E-02  8.154E-02  8.154E-02  8.106E-02
+  16    12  8.220E-02  8.042E-02  8.080E-02  7.568E-02  6.761E-02  5.315E-02
+  16    18  2.788E-02  1.129E-02 -1.275E-03 -1.576E-02 -3.095E-02 -3.746E-02
+  16    24 -2.882E-02 -4.009E-03  3.114E-02  1.178E-01  1.740E-01  2.927E-01
+  16    30  3.151E-01
+  17     6  5.735E-02  6.430E-02  6.343E-02  6.396E-02  6.397E-02  6.359E-02
+  17    12  6.448E-02  6.309E-02  6.340E-02  5.942E-02  5.315E-02  4.191E-02
+  17    18  2.221E-02  9.220E-03 -6.828E-04 -1.211E-02 -2.416E-02 -2.956E-02
+  17    24 -2.348E-02 -5.276E-03  2.108E-02  8.464E-02  1.273E-01  2.147E-01
+  17    30  2.321E-01
+  18     6  2.985E-02  3.347E-02  3.302E-02  3.330E-02  3.330E-02  3.310E-02
+  18    12  3.357E-02  3.285E-02  3.303E-02  3.103E-02  2.788E-02  2.221E-02
+  18    18  1.220E-02  5.483E-03  2.468E-04 -5.809E-03 -1.234E-02 -1.569E-02
+  18    24 -1.387E-02 -6.851E-03  4.460E-03  2.881E-02  4.834E-02  8.276E-02
+  18    30  9.171E-02
+  19     6  1.186E-02  1.330E-02  1.313E-02  1.323E-02  1.324E-02  1.316E-02
+  19    12  1.334E-02  1.307E-02  1.315E-02  1.242E-02  1.129E-02  9.220E-03
+  19    18  5.483E-03  2.862E-03  7.055E-04 -1.806E-03 -4.655E-03 -6.520E-03
+  19    24 -7.163E-03 -6.913E-03 -4.920E-03 -4.262E-03  7.754E-04  3.121E-03
+  19    30  6.776E-03
+  20     6 -1.696E-03 -1.894E-03 -1.866E-03 -1.884E-03 -1.880E-03 -1.872E-03
+  20    12 -1.896E-03 -1.847E-03 -1.833E-03 -1.627E-03 -1.275E-03 -6.828E-04
+  20    18  2.468E-04  7.055E-04  8.951E-04  1.090E-03  1.092E-03  4.842E-04
+  20    24 -1.677E-03 -5.944E-03 -1.042E-02 -2.555E-02 -3.077E-02 -4.988E-02
+  20    30 -5.001E-02
+  21     6 -1.731E-02 -1.940E-02 -1.914E-02 -1.930E-02 -1.930E-02 -1.919E-02
+  21    12 -1.945E-02 -1.903E-02 -1.910E-02 -1.781E-02 -1.576E-02 -1.211E-02
+  21    18 -5.809E-03 -1.806E-03  1.090E-03  4.405E-03  7.701E-03  8.563E-03
+  21    24  4.707E-03 -4.660E-03 -1.649E-02 -4.943E-02 -6.636E-02 -1.097E-01
+  21    30 -1.142E-01
+  22     6 -3.362E-02 -3.768E-02 -3.717E-02 -3.749E-02 -3.749E-02 -3.727E-02
+  22    12 -3.779E-02 -3.697E-02 -3.714E-02 -3.474E-02 -3.095E-02 -2.416E-02
+  22    18 -1.234E-02 -4.655E-03  1.092E-03  7.701E-03  1.452E-02  1.709E-02
+  22    24  1.192E-02 -1.931E-03 -2.061E-02 -6.917E-02 -9.743E-02 -1.624E-01
+  22    30 -1.715E-01
+  23     6 -4.038E-02 -4.527E-02 -4.466E-02 -4.504E-02 -4.504E-02 -4.477E-02
+  23    12 -4.540E-02 -4.443E-02 -4.465E-02 -4.186E-02 -3.746E-02 -2.956E-02
+  23    18 -1.569E-02 -6.520E-03  4.842E-04  8.563E-03  1.709E-02  2.091E-02
+  23    24  1.657E-02  3.414E-03 -1.558E-02 -6.152E-02 -9.174E-02 -1.542E-01
+  23    30 -1.654E-01
+  24     6 -3.034E-02 -3.404E-02 -3.358E-02 -3.386E-02 -3.387E-02 -3.367E-02
+  24    12 -3.414E-02 -3.343E-02 -3.365E-02 -3.175E-02 -2.882E-02 -2.348E-02
+  24    18 -1.387E-02 -7.163E-03 -1.677E-03  4.707E-03  1.192E-02  1.657E-02
+  24    24  1.796E-02  1.696E-02  1.156E-02  8.604E-03 -4.762E-03 -1.268E-02
+  24    30 -2.259E-02
+  25     6 -2.307E-03 -2.631E-03 -2.612E-03 -2.624E-03 -2.647E-03 -2.610E-03
+  25    12 -2.658E-03 -2.646E-03 -2.798E-03 -3.191E-03 -4.009E-03 -5.276E-03
+  25    18 -6.851E-03 -6.913E-03 -5.944E-03 -4.660E-03 -1.931E-03  3.414E-03
+  25    24  1.696E-02  4.299E-02  6.893E-02  1.616E-01  1.876E-01  3.005E-01
+  25    30  2.928E-01
+  26     6  3.685E-02  4.125E-02  4.067E-02  4.102E-02  4.099E-02  4.078E-02
+  26    12  4.134E-02  4.038E-02  4.036E-02  3.691E-02  3.114E-02  2.108E-02
+  26    18  4.460E-03 -4.920E-03 -1.042E-02 -1.649E-02 -2.061E-02 -1.558E-02
+  26    24  1.156E-02  6.893E-02  1.322E-01  3.355E-01  4.098E-01  6.632E-01
+  26    30  6.595E-01
+  27     6  1.349E-01  1.511E-01  1.490E-01  1.503E-01  1.502E-01  1.494E-01
+  27    12  1.514E-01  1.480E-01  1.482E-01  1.368E-01  1.178E-01  8.464E-02
+  27    18  2.881E-02 -4.262E-03 -2.555E-02 -4.943E-02 -6.917E-02 -6.152E-02
+  27    24  8.604E-03  1.616E-01  3.355E-01  8.767E-01  1.090E+00  1.770E+00
+  27    30  1.773E+00
+  28     6  1.970E-01  2.207E-01  2.176E-01  2.195E-01  2.194E-01  2.182E-01
+  28    12  2.212E-01  2.163E-01  2.167E-01  2.005E-01  1.740E-01  1.273E-01
+  28    18  4.834E-02  7.754E-04 -3.077E-02 -6.636E-02 -9.743E-02 -9.174E-02
+  28    24 -4.762E-03  1.876E-01  4.098E-01  1.090E+00  1.370E+00  2.231E+00
+  28    30  2.249E+00
+  29     6  3.311E-01  3.709E-01  3.658E-01  3.689E-01  3.688E-01  3.668E-01
+  29    12  3.718E-01  3.635E-01  3.642E-01  3.371E-01  2.927E-01  2.147E-01
+  29    18  8.276E-02  3.121E-03 -4.988E-02 -1.097E-01 -1.624E-01 -1.542E-01
+  29    24 -1.268E-02  3.005E-01  6.632E-01  1.770E+00  2.231E+00  3.637E+00
+  29    30  3.676E+00
+  30     6  3.558E-01  3.985E-01  3.930E-01  3.964E-01  3.963E-01  3.941E-01
+  30    12  3.995E-01  3.906E-01  3.914E-01  3.623E-01  3.151E-01  2.321E-01
+  30    18  9.171E-02  6.776E-03 -5.001E-02 -1.142E-01 -1.715E-01 -1.654E-01
+  30    24 -2.259E-02  2.928E-01  6.595E-01  1.773E+00  2.249E+00  3.676E+00
+  30    30  3.739E+00
+                                                                         22.9s
+ *****************************************************************************
+
+ covr...process covariance data                                          22.9s
+
+ unit for input covariance tape .......        -21
+ unit for output covariance tape ......          0
+ unit for plot output .................         33
+ icolor ...............................          1
+ rel. cov. option (0=abs/1=rel) .......          1
+ ncase ................................          1
+ legend option (-1=first/0=all/1=none)           0
+ starting fig. no. (0=omit fig. nos.) .          1
+ no. subdivisions of each shade .......          1
+ minimum energy to be plotted .........  0.000E+00
+
+            mat      mt      mat1      mt1
+           ----     ---      ----      ---
+           9440       0         0        0
+
+ reaction-pairs processed 9440   18   9440   18
+
+ group structure
+ ---------------
+   1.3900E-04  1.5200E-01  4.1400E-01  1.1300E+00  3.0600E+00  8.3200E+00
+   2.2600E+01  6.1400E+01  1.6700E+02  4.5400E+02  1.2350E+03  3.3500E+03
+   9.1200E+03  2.4800E+04  6.7600E+04  1.8400E+05  3.0300E+05  5.0000E+05
+   8.2300E+05  1.3530E+06  1.7380E+06  2.2320E+06  2.8650E+06  3.6800E+06
+   6.0700E+06  7.7900E+06  1.0000E+07  1.2000E+07  1.3500E+07  1.5000E+07
+   1.7000E+07
+
+ ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
+                                                                         23.0s
+ **************************************************************************
+
+ viewr...display plots                                                   23.0s
+
+ lori .................................          1
+ xpage ................................     10.000
+ ypage ................................      7.500
+ istyle ...............................          2
+ size .................................      0.220
+ ipcol ................................          1
+
+ -------------------------------------------------
+
+ iplot ................................          1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      2.630
+ yll ..................................      4.000
+ ww ...................................      5.000
+ wh ...................................      3.380
+ wa ...................................      0.000
+
+            Grp-average ]f>(<e>#LH>in#HXLX>= 0.25 <m>e<v>), #EH<240#HXEX<p>u(n,f)           
+                                                                                            
+
+ itype ................................          4
+ jtype ................................          0
+ igrid ................................          2
+ ileg .................................          0
+
+ xlo ..................................   2.00E+02
+ xhi ..................................   2.00E+07
+ xstep ................................   1.00E+00
+ xlabel ... .                                                                               
+
+ ylo ..................................   0.00E+00
+ yhi ..................................   0.00E+00
+ ystep ................................   0.00E+00
+ ylabel ... .                                                                               
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          3
+ ithick ...............................          2
+ ishade ...............................          0
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      3.880
+ yll ..................................     -0.250
+ ww ...................................      5.000
+ wh ...................................      3.380
+ wa ...................................     90.000
+
+            [d]f/f> vs. <e> for #EH<240#HXEX<p>u(n,f)                                       
+                                                                                            
+
+ itype ................................          4
+ jtype ................................          0
+ igrid ................................          2
+ ileg .................................          0
+
+ xlo ..................................   2.00E+02
+ xhi ..................................   2.00E+07
+ xstep ................................   1.00E+00
+ xlabel ... .                                                                               
+
+ ylo ..................................   0.00E+00
+ yhi ..................................   0.00E+00
+ ystep ................................   0.00E+00
+ ylabel ... .                                                                               
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          3
+ ithick ...............................          2
+ ishade ...............................          0
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      1.900
+ yll ..................................      4.250
+ ww ...................................      3.380
+ wh ...................................      1.000
+ wa ...................................     90.000
+
+            #H.75<o>rdinate scales are % standard                                           
+            #H.75<>deviation and spectrum/eV.                                               
+
+ itype ................................          0
+ jtype ................................          0
+ igrid ................................          2
+ ileg .................................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      2.650
+ yll ..................................      4.250
+ ww ...................................      3.380
+ wh ...................................      1.000
+ wa ...................................     90.000
+
+            #H.75<a>bscissa scales are energy (e<v>).                                       
+                                                                                            
+
+ itype ................................          0
+ jtype ................................          0
+ igrid ................................          2
+ ileg .................................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      3.100
+ yll ..................................      4.250
+ ww ...................................      3.380
+ wh ...................................      1.000
+ wa ...................................     90.000
+
+            #H.75<w>arning:  some uncertainty                                               
+            #H.75<>data were suppressed.                                                    
+
+ itype ................................          0
+ jtype ................................          0
+ igrid ................................          2
+ ileg .................................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      2.630
+ yll ..................................     -0.250
+ ww ...................................      5.000
+ wh ...................................      5.000
+ wa ...................................      0.000
+
+                                                                                            
+                                                                                            
+
+ itype ................................          4
+ jtype ................................          0
+ igrid ................................          0
+ ileg .................................          0
+
+ xlo ..................................   2.00E+02
+ xhi ..................................   2.00E+07
+ xstep ................................   1.00E+00
+ xlabel ...                                                                                 
+
+ ylo ..................................   2.00E+02
+ yhi ..................................   2.00E+07
+ ystep ................................   1.00E+00
+ ylabel ...                                                                                 
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         50
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         60
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         50
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         54
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         54
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         46
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         42
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         44
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         46
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         42
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         54
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         42
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         50
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         44
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         60
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         50
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         44
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         44
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         46
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         42
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         54
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         44
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         46
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         44
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         46
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         46
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         42
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         42
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         50
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      8.230
+ yll ..................................      0.750
+ ww ...................................      8.230
+ wh ...................................      1.000
+ wa ...................................     90.000
+
+            <c>orrelation <m>atrix                                                          
+                                                                                            
+
+ itype ................................          0
+ jtype ................................          0
+ igrid ................................          2
+ ileg .................................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      9.980
+ yll ..................................      0.625
+ ww ...................................      1.750
+ wh ...................................      2.500
+ wa ...................................     90.000
+
+                                                                                            
+                                                                                            
+
+ itype ................................          1
+ jtype ................................          0
+ igrid ................................          0
+ ileg .................................          0
+
+ xlo ..................................   0.00E+00
+ xhi ..................................   1.00E+00
+ xstep ................................   1.00E+00
+ xlabel ...                                                                                 
+
+ ylo ..................................   0.00E+00
+ yhi ..................................   1.00E+00
+ ystep ................................   2.00E-01
+ ylabel ... .                                                                               
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................          0
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         42
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         44
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         46
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         48
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         50
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................         -1
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      9.980
+ yll ..................................      2.000
+ ww ...................................      1.750
+ wh ...................................      2.500
+ wa ...................................     90.000
+
+                                                                                            
+                                                                                            
+
+ itype ................................          1
+ jtype ................................          0
+ igrid ................................          0
+ ileg .................................          0
+
+ xlo ..................................   0.00E+00
+ xhi ..................................   1.00E+00
+ xstep ................................   1.00E+00
+ xlabel ...                                                                                 
+
+ ylo ..................................   0.00E+00
+ yhi ..................................  -1.00E+00
+ ystep ................................  -2.00E-01
+ ylabel ... .                                                                               
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................          0
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         52
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         54
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         56
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         58
+
+ data nform ...........................          0
+
+ -------------------------------------------------
+
+ iplot ................................          2
+ iwcol ................................          0
+ factx ................................   1.00E+00
+ facty ................................   1.00E+00
+ xll ..................................      0.000
+ yll ..................................      0.000
+ ww ...................................     10.000
+ wh ...................................      7.500
+ wa ...................................      0.000
+
+ icon .................................          0
+ isym .................................          0
+ idash ................................          0
+ iccol ................................          0
+ ithick ...............................          0
+ ishade ...............................         60
+
+ data nform ...........................          0
+
+                                                                         23.0s
+ *****************************************************************************

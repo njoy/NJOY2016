@@ -53,8 +53,8 @@ stop
 '@'	echo "This starts the post-process command stream"
 '@'	echo " "
 '@'	rm tape20
-'@'     cp output             ../regression_test_files/20/SNL-NJOY-2016_Test_20_Output
-'@'	cp tape23             ../regression_test_files/20/SNL-NJOY-2016_Test_20_Tape23
-'@'	cp tape27             ../regression_test_files/20/SNL-NJOY-2016_Test_20_Tape27
+'@'     cp output             ../regression_test_files/20/SNL-NJOY-2016_Test_Output
+'@'	cp tape23             ../regression_test_files/20/SNL-NJOY-2016_Test_Tape23
+'@'	cp tape27             ../regression_test_files/20/SNL-NJOY-2016_Test_Tape27
 '@'	echo "
 '@'	echo "This ends the post-process command stream"

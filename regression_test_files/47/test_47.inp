@@ -85,14 +85,14 @@ stop
 '@'	echo "This starts the post-process command stream"
 '@'	echo " "
 '@'	rm tape20
-'@'     cp output             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Output
-'@'	cp tape45             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape45
-'@'	cp tape46             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape46
-'@'	cp tape47             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape47
-'@'	cp tape48             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape48
-'@'	cp tape55             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape55
-'@'	cp tape56             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape56
-'@'	cp tape57             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape57
-'@'	cp tape58             ../regression_test_files/47/SNL-NJOY-2016_Test_47_Tape58
+'@'     cp output             ../regression_test_files/47/SNL-NJOY-2016_Test_Output
+'@'	cp tape45             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape45
+'@'	cp tape46             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape46
+'@'	cp tape47             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape47
+'@'	cp tape48             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape48
+'@'	cp tape55             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape55
+'@'	cp tape56             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape56
+'@'	cp tape57             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape57
+'@'	cp tape58             ../regression_test_files/47/SNL-NJOY-2016_Test_Tape58
 '@'	echo "
 '@'	echo "This ends the post-process command stream"
