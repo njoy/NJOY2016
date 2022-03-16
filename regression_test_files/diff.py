@@ -5,7 +5,7 @@ import glob
 import os
 import re
 import subprocess
-import sys
+from math import isclose
 
 
 floatPattern = re.compile("""(
@@ -46,8 +46,10 @@ def lineEquivalence(ref, trial, n, relativeError=1E-9, absoluteError=1E-10):
             else:
                 # Look at all the floats on the lines
                 for rF, tF in zip(refFloats, trialFloats):
-                    equal = fuzzyDiff(makeFloat(rF), makeFloat(tF),
-                                      relativeError, absoluteError)
+                    equal = isclose( makeFloat(rF), makeFloat(tF),
+                                     rel_tol = relativeError,
+                                     abs_tol = absoluteError )
+
                     if not equal:
                         print("{} and {} are not equal".format(
                             rF[0], tF[0]))
@@ -111,15 +113,6 @@ def writeDiff(diff_file, refLine, trialLine, lineNumber):
     diff_file.write("!{}".format(refLine))
     diff_file.write("--- {} ---\n".format(lineNumber+1))
     diff_file.write("!{}".format(trialLine))
-
-
-def fuzzyDiff(a, b, relativeError=1E-9, absoluteError=1E-10):
-    """
-    fuzzDiff will compare to numbers (a and b) to see if they are identical
-    within the given tolerance. Returns bool.
-    """
-    delta = max(abs(a), abs(b))*relativeError + absoluteError
-    return (abs(a - b) <= abs(delta))
 
 
 retained_tapes = set(glob.glob('SNL-NJOY-2016_Test_Tape*'))
