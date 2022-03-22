@@ -6308,7 +6308,7 @@ contains
    integer::ir,next,nin,ltt3,lttn,ltt,last,law,ne,ie,il,iso,newfor
    real(kr)::scr(*)
    ! internals
-   integer::idone,j,nb,nw,lang,iint,nn,kk,nmu,m,n,i,ne1,ii,ll
+   integer::idone,j,nb,nw,nw2,lang,iint,nn,kk,nmu,m,n,i,ne1,ii,ll
    real(kr)::sum,renorm
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::rmin=1.e-30_kr
@@ -6341,8 +6341,9 @@ contains
                call listio(nin,0,0,scr,nb,nw)
                ll=1+nw
                do while (nb.ne.0)
-                  call moreio(nin,0,0,scr(ll),nb,nw)
-                  ll=ll+nw
+                  call moreio(nin,0,0,scr(ll),nb,nw2)
+                  ll=ll+nw2
+                  nw=nw+nw2 ! nw is used in the if block that follows
                enddo
                if (mfh.eq.6) then
                   lang=nint(scr(3))
@@ -7827,10 +7828,8 @@ contains
             nexd=nexd+2
             mus=nexd
             nexd=nexd+2*nmu
-            loc=1+nw
             do while (nb.ne.0)
-               call moreio(nin,0,0,scr(loc),nb,nw)
-               loc=loc+nw
+               call moreio(nin,0,0,scr(jscr),nb,nw)
             enddo
             do imu=1,nmu
                jscr=1
