@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:46:21  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:31:03  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #03                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  reconr...reconstruct pointwise cross sections in pendf format            0.0s
 
@@ -70,7 +70,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =       0
  points in initial unionized grid             =      64
- points added by linearization                =     692                   0.1s
+ points added by linearization                =     692                   0.0s
  number of points in final unionized grid     =     756
                                                                           0.1s
  *****************************************************************************
@@ -168,7 +168,7 @@ icntrl(10) control logic flag set for damage energy:   0
   11     11    6.44202-8  6.44202-8  6.44202-8  6.44202-8  6.44201-8
   12     12    3.66840-8  3.66840-8  3.66839-8  3.66839-8  3.66839-8
 
- group constants                                                          0.2s
+ group constants                                                          0.1s
  for mf23 and mt504 inch                                                        
  
  gamma  sigma  
@@ -186,7 +186,7 @@ icntrl(10) control logic flag set for damage energy:   0
   11    5.75966-2
   12    4.61834-2
 
- group constants                                                          0.2s
+ group constants                                                          0.1s
  for mf26 and mt504 inch                                                        
  
  initl  final  cross sections vs
@@ -417,7 +417,7 @@ icntrl(10) control logic flag set for damage energy:   0
   11     11    1.79353-2  1.79214-2  1.78949-2  1.78569-2  1.78088-2
   12     12    1.02165-2  1.02114-2  1.02016-2  1.01874-2  1.01693-2
 
- group constants                                                          0.3s
+ group constants                                                          0.2s
  for mf23 and mt504 inch                                                        
  
  gamma  sigma  
@@ -435,7 +435,7 @@ icntrl(10) control logic flag set for damage energy:   0
   11    5.29609+0
   12    4.24727+0
 
- group constants                                                          0.3s
+ group constants                                                          0.2s
  for mf26 and mt504 inch                                                        
  
  initl  final  cross sections vs
@@ -1002,12 +1002,12 @@ icntrl(10) control logic flag set for damage energy:   0
  output particles .....................            1
 
 
-          doing h        for gscat    ...     0.5s
-          doing u        for gscat    ...     0.5s
-                                                                          0.5s
+          doing h        for gscat    ...     0.4s
+          doing u        for gscat    ...     0.4s
+                                                                          0.4s
  *****************************************************************************
 
- viewr...display plots                                                    0.5s
+ viewr...display plots                                                    0.4s
 
  lori .................................          1
  xpage ................................     10.000
@@ -1414,5 +1414,5 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          1
 
-                                                                          0.5s
+                                                                          0.4s
  *****************************************************************************

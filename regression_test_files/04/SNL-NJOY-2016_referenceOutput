@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:46:26  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:31:04  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #04                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -308,7 +308,7 @@ icntrl(10) control logic flag set for damage energy:   0
                                                                       
  
 
- group constants at t=zero deg k                                          0.2s
+ group constants at t=zero deg k                                          0.1s
  for mf  3 and mt452 total nubar                                                 
  
  enrgy  group constants at
@@ -345,10 +345,10 @@ icntrl(10) control logic flag set for damage energy:   0
     29    4.43317+0
     30    4.67845+0
  
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- errorr...produce cross section covariances                               0.2s
+ errorr...produce cross section covariances                               0.1s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................          0
@@ -409,7 +409,7 @@ icntrl(10) control logic flag set for damage energy:   0
  ---------------------
   92-u -2350bnl        eval-apr77 m.r.bhat                           
 
- covariances calculated for  1 reactions and   15 groups                  0.2s
+ covariances calculated for  1 reactions and   15 groups                  0.1s
  *** SNL covariance processing note 
  *** Processing of xsec/number-fraction based on    452
 
@@ -427,7 +427,7 @@ icntrl(10) control logic flag set for damage energy:   0
     6  1.0000E+05  2.3867E+00  2.4707E+00
     7  1.0000E+06  2.3314E+00  2.9171E+00
 
- relative covariance ( mt452 , ig , mt452 , igp )                         0.2s
+ relative covariance ( mt452 , ig , mt452 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -445,5 +445,5 @@ icntrl(10) control logic flag set for damage energy:   0
    6     7  2.806E-05
    7     1  2.775E-05  2.775E-05  2.784E-05  2.784E-05  2.784E-05  2.806E-05
    7     7  3.145E-05
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************

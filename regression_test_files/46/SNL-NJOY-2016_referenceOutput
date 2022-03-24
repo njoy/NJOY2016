@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:17:41  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:54:27  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #46                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -24,10 +24,10 @@ icntrl(10) control logic flag set for damage energy:   0
   JEFF-3.3 Incident Neutron File                                      
 
  using endf-6 format
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            0.2s
+ reconr...reconstruct pointwise cross sections in pendf format            0.1s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -151,7 +151,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =     933
  points in initial unionized grid             =   12816
- points added by linearization                =     455                   0.3s
+ points added by linearization                =     455                   0.2s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -186,10 +186,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =   24176
  final number of resonance points             =   37374
  number of points in final unionized grid     =   49258
-                                                                          2.0s
+                                                                          1.7s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 2.0s
+ broadr...doppler broadening of endf data                                 1.7s
 
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -22
@@ -211,7 +211,7 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    8.50000E+05 eV.
 
  final maximum energy for broadening/thinning =    8.50000E+05 eV
-                                                                          2.1s
+                                                                          1.8s
 
  broadened mat2631 from  0.0000E+00 to  2.9360E+02 k
          points in=  49258  points out=  41234
@@ -223,10 +223,10 @@ icntrl(10) control logic flag set for damage energy:   0
        thermal capture integral:  2.2916E+00
      capture resonance integral:  1.3428E+00
     -----------------------------------------
-                                                                          3.0s
+                                                                          2.6s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             3.0s
+ groupr...compute self-shielded group-averaged cross-sections             2.6s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -23
@@ -495,17 +495,17 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
   26-Fe-56 PENDF                                                      
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.6s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt  2 (n,elastic) cross section                                   
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt  4 (n,inel) cross section                                      
  
  
@@ -513,532 +513,532 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt  5
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 16 (n,2n) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 22 (n,na) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 28 (n,np) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 51 (n,n01) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 52 (n,n02) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 53 (n,n03) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 54 (n,n04) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 55 (n,n05) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 56 (n,n06) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 57 (n,n07) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 58 (n,n08) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 59 (n,n09) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 60 (n,n10) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 61 (n,n11) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 62 (n,n12) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 63 (n,n13) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 64 (n,n14) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 65 (n,n15) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 66 (n,n16) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.0s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 67 (n,n17) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 68 (n,n18) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 69 (n,n19) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 70 (n,n20) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 71 (n,n21) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 72 (n,n22) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 73 (n,n23) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 74 (n,n24) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 75 (n,n25) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 76 (n,n26) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 77 (n,n27) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 78 (n,n28) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 79 (n,n29) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 80 (n,n30) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 81 (n,n31) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 82 (n,n32) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt 91 (n,nc) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt102 (n,g) cross section                                         
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt103 (n,p) cross section                                         
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt104 (n,d) cross section                                         
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt105 (n,t) cross section                                         
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt106 (n,h) cross section                                         
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt107 (n,a) cross section                                         
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt600 (n,p00) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt601 (n,p01) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt602 (n,p02) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt603 (n,p03) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt604 (n,p04) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt605 (n,p05) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt606 (n,p06) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt607 (n,p07) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt608 (n,p08) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt609 (n,p09) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt610 (n,p10) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt611 (n,p11) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt612 (n,p12) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt613 (n,p13) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt649 (n,pc) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt800 (n,a00) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt801 (n,a01) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt802 (n,a02) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt803 (n,a03) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt804 (n,a04) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt805 (n,a05) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt806 (n,a06) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt807 (n,a07) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt808 (n,a08) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt809 (n,a09) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt810 (n,a10) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt849 (n,ac) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                     3.1s
+ group constants at t=2.936E+02 deg k                                     2.7s
  for mf  3 and mt251 mubar                                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.4s
+ group constants at t=2.936E+02 deg k                                     2.9s
  for mf  3 and mt252 xi                                                          
  
  
  
- group constants at t=2.936E+02 deg k                                     3.6s
+ group constants at t=2.936E+02 deg k                                     3.1s
  for mf  3 and mt253 gamma                                                       
  
  
  
- group constants at t=2.936E+02 deg k                                     3.8s
+ group constants at t=2.936E+02 deg k                                     3.2s
  for mf  3 and mt259 1_v                                                         
  
  
  
- group constants at t=2.936E+02 deg k                                     3.8s
+ group constants at t=2.936E+02 deg k                                     3.2s
  for mf  6 and mt  2 (n,elastic) neutron matrix                                  
  
  
  
- group constants at t=2.936E+02 deg k                                     4.0s
+ group constants at t=2.936E+02 deg k                                     3.5s
  for mf  6 and mt 51 (n,n01) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     4.2s
+ group constants at t=2.936E+02 deg k                                     3.7s
  for mf  6 and mt 52 (n,n02) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     4.4s
+ group constants at t=2.936E+02 deg k                                     3.9s
  for mf  6 and mt 53 (n,n03) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     4.5s
+ group constants at t=2.936E+02 deg k                                     4.0s
  for mf  6 and mt 54 (n,n04) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     4.6s
+ group constants at t=2.936E+02 deg k                                     4.1s
  for mf  6 and mt 55 (n,n05) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     4.7s
+ group constants at t=2.936E+02 deg k                                     4.2s
  for mf  6 and mt 56 (n,n06) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     4.8s
+ group constants at t=2.936E+02 deg k                                     4.3s
  for mf  6 and mt 57 (n,n07) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.0s
+ group constants at t=2.936E+02 deg k                                     4.4s
  for mf  6 and mt 58 (n,n08) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.1s
+ group constants at t=2.936E+02 deg k                                     4.5s
  for mf  6 and mt 59 (n,n09) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.2s
+ group constants at t=2.936E+02 deg k                                     4.6s
  for mf  6 and mt 60 (n,n10) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.2s
+ group constants at t=2.936E+02 deg k                                     4.6s
  for mf  6 and mt 61 (n,n11) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.3s
+ group constants at t=2.936E+02 deg k                                     4.7s
  for mf  6 and mt 62 (n,n12) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.4s
+ group constants at t=2.936E+02 deg k                                     4.8s
  for mf  6 and mt 63 (n,n13) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.5s
+ group constants at t=2.936E+02 deg k                                     4.9s
  for mf  6 and mt 64 (n,n14) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.6s
+ group constants at t=2.936E+02 deg k                                     5.0s
  for mf  6 and mt 65 (n,n15) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.7s
+ group constants at t=2.936E+02 deg k                                     5.1s
  for mf  6 and mt 66 (n,n16) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.8s
+ group constants at t=2.936E+02 deg k                                     5.2s
  for mf  6 and mt 67 (n,n17) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     5.9s
+ group constants at t=2.936E+02 deg k                                     5.2s
  for mf  6 and mt 68 (n,n18) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.0s
+ group constants at t=2.936E+02 deg k                                     5.3s
  for mf  6 and mt 69 (n,n19) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.1s
+ group constants at t=2.936E+02 deg k                                     5.4s
  for mf  6 and mt 70 (n,n20) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.2s
+ group constants at t=2.936E+02 deg k                                     5.5s
  for mf  6 and mt 71 (n,n21) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.3s
+ group constants at t=2.936E+02 deg k                                     5.6s
  for mf  6 and mt 72 (n,n22) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.3s
+ group constants at t=2.936E+02 deg k                                     5.6s
  for mf  6 and mt 73 (n,n23) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.4s
+ group constants at t=2.936E+02 deg k                                     5.7s
  for mf  6 and mt 74 (n,n24) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.5s
+ group constants at t=2.936E+02 deg k                                     5.8s
  for mf  6 and mt 75 (n,n25) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.6s
+ group constants at t=2.936E+02 deg k                                     5.9s
  for mf  6 and mt 76 (n,n26) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.7s
+ group constants at t=2.936E+02 deg k                                     5.9s
  for mf  6 and mt 77 (n,n27) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.8s
+ group constants at t=2.936E+02 deg k                                     6.0s
  for mf  6 and mt 78 (n,n28) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     6.9s
+ group constants at t=2.936E+02 deg k                                     6.1s
  for mf  6 and mt 79 (n,n29) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     7.0s
+ group constants at t=2.936E+02 deg k                                     6.2s
  for mf  6 and mt 80 (n,n30) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     7.0s
+ group constants at t=2.936E+02 deg k                                     6.2s
  for mf  6 and mt 81 (n,n31) neutron matrix                                      
  
  
  
- group constants at t=2.936E+02 deg k                                     7.1s
+ group constants at t=2.936E+02 deg k                                     6.3s
  for mf  6 and mt 82 (n,n32) neutron matrix                                      
  
  
@@ -1078,7 +1078,7 @@ icntrl(10) control logic flag set for damage energy:   0
  extending lin-lin as sqrt(E) below  3.38E+05 eV for E=  1.90E+07 eV
  extending lin-lin as sqrt(E) below  3.62E+05 eV for E=  2.00E+07 eV
  extending lin-lin as sqrt(E) below  3.62E+05 eV for E=  2.00E+08 eV
- group constants at t=2.936E+02 deg k                                     7.5s
+ group constants at t=2.936E+02 deg k                                     6.7s
  for mf  8 and mt 16 (n,2n) neutron matrix                                       
  
  
@@ -1096,7 +1096,7 @@ icntrl(10) control logic flag set for damage energy:   0
  extending lin-lin as sqrt(E) below  3.95E+05 eV for E=  1.90E+07 eV
  extending lin-lin as sqrt(E) below  4.15E+05 eV for E=  2.00E+07 eV
  extending lin-lin as sqrt(E) below  4.15E+05 eV for E=  2.00E+08 eV
- group constants at t=2.936E+02 deg k                                     7.5s
+ group constants at t=2.936E+02 deg k                                     6.8s
  for mf  8 and mt 22 (n,na) neutron matrix                                       
  
  
@@ -1113,7 +1113,7 @@ icntrl(10) control logic flag set for damage energy:   0
  extending lin-lin as sqrt(E) below  3.94E+05 eV for E=  1.90E+07 eV
  extending lin-lin as sqrt(E) below  4.08E+05 eV for E=  2.00E+07 eV
  extending lin-lin as sqrt(E) below  4.08E+05 eV for E=  2.00E+08 eV
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.9s
  for mf  8 and mt 28 (n,np) neutron matrix                                       
  
  
@@ -1137,15 +1137,15 @@ icntrl(10) control logic flag set for damage energy:   0
  extending lin-lin as sqrt(E) below  3.65E+05 eV for E=  1.90E+07 eV
  extending lin-lin as sqrt(E) below  3.87E+05 eV for E=  2.00E+07 eV
  extending lin-lin as sqrt(E) below  3.87E+05 eV for E=  2.00E+08 eV
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     7.0s
  for mf  8 and mt 91 (n,nc) neutron matrix                                       
  
  
  
-                                                                          7.9s
+                                                                          7.1s
  *****************************************************************************
 
- errorr...produce cross section covariances                               7.9s
+ errorr...produce cross section covariances                               7.1s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................          0
@@ -1689,20 +1689,20 @@ icntrl(10) control logic flag set for damage energy:   0
 
  weight function......constant for all l
 
- computing multigroup legendre coef.                                      7.9s
+ computing multigroup legendre coef.                                      7.2s
 
  weight function......constant for all l
 
  ---message from grpav4---collapsing NGOUT mf=3, mt=251 to the union grid
 
- legendre group averaging completed                                       7.9s
+ legendre group averaging completed                                       7.2s
 
 
  processing mat  2631
  ---------------------
   26-Fe- 56 NRG,CEA    EVAL-FEB04 EUROPEAN JOINT COLLABORATION       
 
- covariances calculated for  1 reactions and  271 groups                  8.0s
+ covariances calculated for  1 reactions and  271 groups                  7.2s
 
  table of multigroup data
 
@@ -1948,8 +1948,8 @@ icntrl(10) control logic flag set for damage energy:   0
   237  1.5680E+07  1.6500E+06  8.3113E-01
   238  1.7330E+07  2.6700E+06  8.2408E-01
 
- relative covariance ( mt  2 , ig , mt  2 , igp )                         8.0s
+ relative covariance ( mt  2 , ig , mt  2 , igp )                         7.2s
              same as ( mt251 , ig , mt251 , igp )
  for legendre component:  1 and  1
-                                                                          8.0s
+                                                                          7.3s
  *****************************************************************************

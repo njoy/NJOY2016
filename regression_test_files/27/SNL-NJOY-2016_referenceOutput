@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:06:08  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:46:16  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #27                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -24,10 +24,10 @@ icntrl(10) control logic flag set for damage energy:   0
    $Rev:: 1414     $  $Date:: 2017-12-15#$                            
 
  using endf-6 format
-                                                                          0.6s
+                                                                          0.5s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            0.6s
+ reconr...reconstruct pointwise cross sections in pendf format            0.5s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -150,7 +150,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =    3163
  points in initial unionized grid             =    3542
- points added by linearization                =     302                   0.7s
+ points added by linearization                =     302                   0.6s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -178,10 +178,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =   50910
  final number of resonance points             =  150342
  number of points in final unionized grid     =  150794
-                                                                         24.8s
+                                                                         21.2s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                24.8s
+ broadr...doppler broadening of endf data                                21.2s
 
  unit for input endf tape .............         20
  unit for input pendf tape ............        -22
@@ -203,7 +203,7 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    2.50000E+03 eV.
 
  final maximum energy for broadening/thinning =    2.50000E+03 eV
-                                                                         24.9s
+                                                                         21.3s
 
  broadened mat9437 from  0.0000E+00 to  2.9360E+02 k
          points in= 150794  points out=  72095
@@ -224,10 +224,10 @@ icntrl(10) control logic flag set for damage energy:   0
                   equivalent k1:  1.1614E+03
      fission resonance integral:  3.0834E+02
     -----------------------------------------
-                                                                         37.3s
+                                                                         33.4s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections            37.3s
+ groupr...compute self-shielded group-averaged cross-sections            33.4s
 
  unit for endf tape ...................         20
  unit for pendf tape ..................        -21
@@ -290,32 +290,32 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
                                                                       
  
- group constants at t=2.936E+02 deg k                                    39.0s
+ group constants at t=2.936E+02 deg k                                    34.8s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  
  
- group constants at t=2.936E+02 deg k                                    39.0s
+ group constants at t=2.936E+02 deg k                                    34.8s
  for mf  3 and mt  2 (n,elastic) cross section                                   
  
  
  
- group constants at t=2.936E+02 deg k                                    39.0s
+ group constants at t=2.936E+02 deg k                                    34.8s
  for mf  3 and mt  4 (n,inel) cross section                                      
  
  
  
- group constants at t=2.936E+02 deg k                                    39.0s
+ group constants at t=2.936E+02 deg k                                    34.8s
  for mf  3 and mt 16 (n,2n) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                    39.0s
+ group constants at t=2.936E+02 deg k                                    34.8s
  for mf  3 and mt 17 (n,3n) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                    39.0s
+ group constants at t=2.936E+02 deg k                                    34.8s
  for mf  3 and mt 18 (n,fission) cross section                                   
  
  
@@ -323,227 +323,227 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt 37
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 51 (n,n01) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 52 (n,n02) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 53 (n,n03) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 54 (n,n04) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 55 (n,n05) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 56 (n,n06) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 57 (n,n07) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 58 (n,n08) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 59 (n,n09) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 60 (n,n10) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 61 (n,n11) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 62 (n,n12) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 63 (n,n13) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 64 (n,n14) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 65 (n,n15) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 66 (n,n16) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 67 (n,n17) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 68 (n,n18) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 69 (n,n19) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 70 (n,n20) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 71 (n,n21) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 72 (n,n22) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 73 (n,n23) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 74 (n,n24) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 75 (n,n25) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 76 (n,n26) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 77 (n,n27) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 78 (n,n28) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 79 (n,n29) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 80 (n,n30) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 81 (n,n31) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 82 (n,n32) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 83 (n,n33) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 84 (n,n34) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 85 (n,n35) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 86 (n,n36) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 87 (n,n37) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 88 (n,n38) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 89 (n,n39) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 90 (n,n40) cross section                                       
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt 91 (n,nc) cross section                                        
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  3 and mt102 (n,g) cross section                                         
  
  
  
- group constants at t=2.936E+02 deg k                                    39.1s
+ group constants at t=2.936E+02 deg k                                    34.9s
  for mf  5 and mt 18 xi                                                          
 
  spectrum constant below 3.3500E+03 ev  (  11 groups)
  
  
  
-                                                                         42.5s
+                                                                         36.2s
  *****************************************************************************
 
- errorr...produce cross section covariances                              42.5s
+ errorr...produce cross section covariances                              36.2s
 
  unit for endf tape ...................         20
  unit for pendf tape ..................          0
@@ -1236,7 +1236,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  ---message from covbin---converting mf35 convariance data to errorj format
 
- covariances calculated for  1 reactions and  601 groups                 47.0s
+ covariances calculated for  1 reactions and  601 groups                 39.8s
 
  table of multigroup data
 
@@ -1274,7 +1274,7 @@ icntrl(10) control logic flag set for damage energy:   0
    29  1.3500E+07  1.5000E+06  9.6934E-05
    30  1.5000E+07  2.0000E+06  4.6658E-05
 
- relative covariance ( mt 18 , ig , mt 18 , igp )                        47.1s
+ relative covariance ( mt 18 , ig , mt 18 , igp )                        39.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1423,10 +1423,10 @@ icntrl(10) control logic flag set for damage energy:   0
   30    13 -9.072E-03 -1.017E-02 -1.239E-02 -1.404E-02 -1.161E-02 -4.738E-03
   30    19 -1.834E-03 -4.336E-04  6.314E-04  1.617E-03  2.938E-03  6.967E-03
   30    25  1.841E-02  4.300E-02  8.423E-02  1.253E-01  1.649E-01  1.701E-01
-                                                                         47.1s
+                                                                         39.9s
  *****************************************************************************
 
- covr...process covariance data                                          47.1s
+ covr...process covariance data                                          39.9s
 
  unit for input covariance tape .......        -22
  unit for output covariance tape ......          0
@@ -1455,10 +1455,10 @@ icntrl(10) control logic flag set for damage energy:   0
    1.7000E+07
 
  ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
-                                                                         47.1s
+                                                                         39.9s
  **************************************************************************
 
- viewr...display plots                                                   47.1s
+ viewr...display plots                                                   39.9s
 
  lori .................................          1
  xpage ................................     10.000
@@ -3969,10 +3969,10 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          0
 
-                                                                         47.1s
+                                                                         39.9s
  *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape             47.1s
+ moder...change the mode of an endf tape or njoy output tape             39.9s
 
  input unit (+ for coded, - for bb) ...        -22
  output unit (+ for coded, - for bb) ..         56
@@ -3982,10 +3982,10 @@ icntrl(10) control logic flag set for damage energy:   0
   PU239                                                               
 
  using endf-4 format
-                                                                         47.1s
+                                                                         39.9s
  *****************************************************************************
 
- errorr...produce cross section covariances                              47.1s
+ errorr...produce cross section covariances                              39.9s
 
  unit for endf tape ...................         20
  unit for pendf tape ..................          0
@@ -4678,7 +4678,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  ---message from covbin---converting mf35 convariance data to errorj format
 
- covariances calculated for  1 reactions and  601 groups                 51.4s
+ covariances calculated for  1 reactions and  601 groups                 43.6s
 
  table of multigroup data
 
@@ -4716,7 +4716,7 @@ icntrl(10) control logic flag set for damage energy:   0
    29  1.3500E+07  1.5000E+06  9.6934E-05
    30  1.5000E+07  2.0000E+06  4.6658E-05
 
- relative covariance ( mt 18 , ig , mt 18 , igp )                        51.5s
+ relative covariance ( mt 18 , ig , mt 18 , igp )                        43.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4865,10 +4865,10 @@ icntrl(10) control logic flag set for damage energy:   0
   30    13 -9.072E-03 -1.017E-02 -1.239E-02 -1.404E-02 -1.161E-02 -4.738E-03
   30    19 -1.834E-03 -4.336E-04  6.314E-04  1.617E-03  2.938E-03  6.967E-03
   30    25  1.841E-02  4.300E-02  8.423E-02  1.253E-01  1.649E-01  1.701E-01
-                                                                         51.5s
+                                                                         43.7s
  *****************************************************************************
 
- covr...process covariance data                                          51.5s
+ covr...process covariance data                                          43.7s
 
  unit for input covariance tape .......        -23
  unit for output covariance tape ......          0
@@ -4888,10 +4888,10 @@ icntrl(10) control logic flag set for damage energy:   0
  reaction-pairs processed 9437   18   9437   18
 
  ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
-                                                                         51.5s
+                                                                         43.7s
  **************************************************************************
 
- viewr...display plots                                                   51.5s
+ viewr...display plots                                                   43.7s
 
  lori .................................          1
  xpage ................................     10.000
@@ -7402,10 +7402,10 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          0
 
-                                                                         51.5s
+                                                                         43.7s
  *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape             51.5s
+ moder...change the mode of an endf tape or njoy output tape             43.7s
 
  input unit (+ for coded, - for bb) ...        -23
  output unit (+ for coded, - for bb) ..         57
@@ -7415,5 +7415,5 @@ icntrl(10) control logic flag set for damage energy:   0
   PU239                                                               
 
  using endf-4 format
-                                                                         51.5s
+                                                                         43.7s
  *****************************************************************************

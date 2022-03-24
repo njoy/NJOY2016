@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:06:03  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:46:15  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #26                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -91,7 +91,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =      10
  points in initial unionized grid             =     258
- points added by linearization                =     280                   0.1s
+ points added by linearization                =     280                   0.0s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -111,10 +111,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =       0
  final number of resonance points             =    1211
  number of points in final unionized grid     =    1282
-                                                                          0.1s
+                                                                          0.0s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 0.1s
+ broadr...doppler broadening of endf data                                 0.0s
 
  unit for input endf tape .............        -30
  unit for input pendf tape ............        -31
@@ -136,7 +136,7 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    1.00000E+01 eV.
 
  final maximum energy for broadening/thinning =    1.00000E+01 eV
-                                                                          0.1s
+                                                                          0.0s
 
  broadened mat9455 from  0.0000E+00 to  2.9360E+02 k
          points in=   1282  points out=   1147
@@ -157,10 +157,10 @@ icntrl(10) control logic flag set for damage energy:   0
                   equivalent k1: -1.1474E+01
      fission resonance integral:  3.4612E+00
     -----------------------------------------
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- heatr...prompt kerma                                                     0.2s
+ heatr...prompt kerma                                                     0.1s
 
  input endf unit ......................        -30
  input pendf unit .....................        -32
@@ -204,7 +204,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  ---message from hinit---mf6, mt849 does not give recoil za= 92242
                           one-particle recoil approx. used.
-                                                             temp 1       0.2s
+                                                             temp 1       0.1s
 
  neutron heating for mt  2   q0 =  0.0000E+00     q =  0.0000E+00
               e          ebar         yield          xsec       heating        damage
@@ -1360,7 +1360,7 @@ icntrl(10) control logic flag set for damage energy:   0
                                                      ebal   -1.2959E+03
      2.0000E+07    3.5113E+05    1.0000E+00    1.4521E-03    5.0987E+02    3.5303E+02
                                                      ebal   -1.3173E+03
-                                                             temp 1       0.4s
+                                                             temp 1       0.3s
 
  photon energy (from yields) mf12, mt 51
               e          ebar          xsec         yield        energy       heating
@@ -2155,10 +2155,10 @@ icntrl(10) control logic flag set for damage energy:   0
             max    3.5524E+08    3.4616E+04    3.5521E+08    4.9588E+03    3.5496E+08
                                                                high              
 
-                                                                          0.5s
+                                                                          0.4s
  *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape              0.5s
+ moder...change the mode of an endf tape or njoy output tape              0.4s
 
  input unit (+ for coded, - for bb) ...        -31
  output unit (+ for coded, - for bb) ..         40
@@ -2168,5 +2168,5 @@ icntrl(10) control logic flag set for damage energy:   0
   test heatr without mf1/mt458 section                                
 
  using endf-6 format
-                                                                          0.5s
+                                                                          0.4s
  *****************************************************************************
