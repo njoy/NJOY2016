@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:57:56  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:40:21  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #20                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  errorr...produce cross section covariances                               0.0s
 
@@ -274,7 +274,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =     741
  points in initial unionized grid             =    4393
- points added by linearization                =      14                   0.3s
+ points added by linearization                =      14                   0.2s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -310,10 +310,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =    2689
  final number of resonance points             =   10417
  number of points in final unionized grid     =   10730
-                                                                          6.4s
+                                                                          5.4s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 6.4s
+ broadr...doppler broadening of endf data                                 5.4s
 
  unit for input endf tape .............         20
  unit for input pendf tape ............         22
@@ -335,7 +335,7 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    1.20000E+06 eV.
 
  final maximum energy for broadening/thinning =    1.20000E+06 eV
-                                                                          6.7s
+                                                                          5.7s
 
  broadened mat1725 from  0.0000E+00 to  2.9360E+02 k
          points in=  10730  points out=   6710
@@ -347,10 +347,10 @@ icntrl(10) control logic flag set for damage energy:   0
        thermal capture integral:  3.8687E+01
      capture resonance integral:  1.7975E+01
     -----------------------------------------
-                                                                          7.1s
+                                                                          6.1s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             7.1s
+ groupr...compute self-shielded group-averaged cross-sections             6.1s
 
  unit for endf tape ...................         20
  unit for pendf tape ..................         23
@@ -408,7 +408,7 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
                                                                       
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  enrgy  group constants at
@@ -469,7 +469,7 @@ icntrl(10) control logic flag set for damage energy:   0
     27    2.50347+0
   flx   3.93469+6
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt  2 (n,elastic) cross section                                   
  
  enrgy  group constants at
@@ -503,7 +503,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.99394+0
     27    1.33284+0
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt  4 (n,inel) cross section                                      
  
  enrgy  group constants at
@@ -518,7 +518,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt 16
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 22 (n,na) cross section                                        
  
  enrgy  group constants at
@@ -526,7 +526,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    2.12685-5
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 28 (n,np) cross section                                        
  
  enrgy  group constants at
@@ -537,7 +537,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt 32
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 51 (n,n01) cross section                                       
  
  enrgy  group constants at
@@ -549,7 +549,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.96692-2
     27    1.28293-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 52 (n,n02) cross section                                       
  
  enrgy  group constants at
@@ -560,7 +560,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.24266-1
     27    3.30204-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 53 (n,n03) cross section                                       
  
  enrgy  group constants at
@@ -570,7 +570,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.00957-1
     27    3.70440-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 54 (n,n04) cross section                                       
  
  enrgy  group constants at
@@ -580,7 +580,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.23770-2
     27    2.08400-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 55 (n,n05) cross section                                       
  
  enrgy  group constants at
@@ -590,7 +590,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.90893-2
     27    2.80410-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 56 (n,n06) cross section                                       
  
  enrgy  group constants at
@@ -600,7 +600,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.70744-2
     27    3.34649-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 57 (n,n07) cross section                                       
  
  enrgy  group constants at
@@ -609,7 +609,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.29889-2
     27    1.67756-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 58 (n,n08) cross section                                       
  
  enrgy  group constants at
@@ -618,7 +618,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.65986-2
     27    3.38506-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 59 (n,n09) cross section                                       
  
  enrgy  group constants at
@@ -627,7 +627,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.13448-2
     27    8.50396-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 60 (n,n10) cross section                                       
  
  enrgy  group constants at
@@ -636,7 +636,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.84191-2
     27    1.63400-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 61 (n,n11) cross section                                       
  
  enrgy  group constants at
@@ -645,7 +645,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.03542-2
     27    2.91963-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 62 (n,n12) cross section                                       
  
  enrgy  group constants at
@@ -654,7 +654,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.21338-2
     27    2.30941-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 63 (n,n13) cross section                                       
  
  enrgy  group constants at
@@ -663,7 +663,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.29764-2
     27    9.96167-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 64 (n,n14) cross section                                       
  
  enrgy  group constants at
@@ -672,7 +672,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.56721-2
     27    1.72475-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 65 (n,n15) cross section                                       
  
  enrgy  group constants at
@@ -681,7 +681,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.23588-3
     27    1.02484-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 66 (n,n16) cross section                                       
  
  enrgy  group constants at
@@ -690,7 +690,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    7.12340-3
     27    1.28992-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 67 (n,n17) cross section                                       
  
  enrgy  group constants at
@@ -699,7 +699,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.17918-3
     27    4.22125-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 68 (n,n18) cross section                                       
  
  enrgy  group constants at
@@ -708,7 +708,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.18739-3
     27    3.87617-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 69 (n,n19) cross section                                       
  
  enrgy  group constants at
@@ -717,7 +717,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.76883-3
     27    1.20297-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 70 (n,n20) cross section                                       
  
  enrgy  group constants at
@@ -726,7 +726,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.62792-3
     27    4.94659-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 71 (n,n21) cross section                                       
  
  enrgy  group constants at
@@ -735,7 +735,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.90081-3
     27    1.09194-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 72 (n,n22) cross section                                       
  
  enrgy  group constants at
@@ -744,7 +744,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.65138-3
     27    7.24956-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 73 (n,n23) cross section                                       
  
  enrgy  group constants at
@@ -753,7 +753,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.30201-4
     27    3.78882-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 74 (n,n24) cross section                                       
  
  enrgy  group constants at
@@ -762,7 +762,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.21611-3
     27    9.49025-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 75 (n,n25) cross section                                       
  
  enrgy  group constants at
@@ -771,7 +771,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.20703-4
     27    7.56889-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 76 (n,n26) cross section                                       
  
  enrgy  group constants at
@@ -780,7 +780,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.44571-4
     27    4.94049-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 77 (n,n27) cross section                                       
  
  enrgy  group constants at
@@ -789,7 +789,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.18596-4
     27    6.55341-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 78 (n,n28) cross section                                       
  
  enrgy  group constants at
@@ -798,7 +798,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.20786-4
     27    4.68178-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 79 (n,n29) cross section                                       
  
  enrgy  group constants at
@@ -807,7 +807,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    8.77845-5
     27    2.64148-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 80 (n,n30) cross section                                       
  
  enrgy  group constants at
@@ -816,7 +816,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.04326-4
     27    4.64010-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt 91 (n,nc) cross section                                        
  
  enrgy  group constants at
@@ -825,7 +825,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.94567-4
     27    1.54307-1
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.5s
  for mf  3 and mt102 (n,g) cross section                                         
  
  enrgy  group constants at
@@ -833,7 +833,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
      1    1.73839+0
      2    9.49357-1
-     3    6.23002-1
+     3    6.23003-1
      4    3.76040-1
      5    2.05141-1
      6    1.00522-1
@@ -859,7 +859,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.01749-4
     27    3.33658-4
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt103 (n,p) cross section                                         
  
  enrgy  group constants at
@@ -893,7 +893,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.49321-1
     27    2.89847-1
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt104 (n,d) cross section                                         
  
  enrgy  group constants at
@@ -902,7 +902,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.86539-5
     27    3.43469-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt105 (n,t) cross section                                         
  
  enrgy  group constants at
@@ -910,7 +910,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    5.4126-22
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt107 (n,a) cross section                                         
  
  enrgy  group constants at
@@ -947,7 +947,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt111
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt112 (n,pa) cross section                                        
  
  enrgy  group constants at
@@ -955,7 +955,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    1.31463-8
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt600 (n,p00) cross section                                       
  
  enrgy  group constants at
@@ -989,7 +989,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    9.20837-2
     27    1.89056-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt601 (n,p01) cross section                                       
  
  enrgy  group constants at
@@ -1001,7 +1001,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.18647-2
     27    8.43072-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt602 (n,p02) cross section                                       
  
  enrgy  group constants at
@@ -1012,7 +1012,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.51566-2
     27    1.94153-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt603 (n,p03) cross section                                       
  
  enrgy  group constants at
@@ -1023,7 +1023,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.20991-2
     27    1.10788-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt604 (n,p04) cross section                                       
  
  enrgy  group constants at
@@ -1034,7 +1034,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.75574-2
     27    1.32156-2
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt605 (n,p05) cross section                                       
  
  enrgy  group constants at
@@ -1044,7 +1044,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    9.94063-3
     27    9.26527-3
  
- group constants at t=2.936E+02 deg k                                     7.6s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt606 (n,p06) cross section                                       
  
  enrgy  group constants at
@@ -1054,7 +1054,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.07961-3
     27    1.01161-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt607 (n,p07) cross section                                       
  
  enrgy  group constants at
@@ -1064,7 +1064,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.14336-3
     27    9.23596-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt608 (n,p08) cross section                                       
  
  enrgy  group constants at
@@ -1074,7 +1074,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.80032-3
     27    8.98812-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt609 (n,p09) cross section                                       
  
  enrgy  group constants at
@@ -1084,7 +1084,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.13632-3
     27    8.77534-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt610 (n,p10) cross section                                       
  
  enrgy  group constants at
@@ -1094,7 +1094,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.35977-3
     27    5.84883-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt611 (n,p11) cross section                                       
  
  enrgy  group constants at
@@ -1104,7 +1104,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.07896-3
     27    7.97507-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt612 (n,p12) cross section                                       
  
  enrgy  group constants at
@@ -1114,7 +1114,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.65351-3
     27    7.69156-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt613 (n,p13) cross section                                       
  
  enrgy  group constants at
@@ -1124,7 +1124,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.53304-3
     27    7.67254-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt614 (n,p14) cross section                                       
  
  enrgy  group constants at
@@ -1134,7 +1134,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.92800-3
     27    7.16628-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt615 (n,p15) cross section                                       
  
  enrgy  group constants at
@@ -1144,7 +1144,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.89767-3
     27    7.08780-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt616 (n,p16) cross section                                       
  
  enrgy  group constants at
@@ -1154,7 +1154,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.56246-3
     27    6.85845-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt617 (n,p17) cross section                                       
  
  enrgy  group constants at
@@ -1164,7 +1164,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.28958-3
     27    6.45421-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt618 (n,p18) cross section                                       
  
  enrgy  group constants at
@@ -1174,7 +1174,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.96842-4
     27    2.52089-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt619 (n,p19) cross section                                       
  
  enrgy  group constants at
@@ -1183,7 +1183,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    9.28622-4
     27    6.26775-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt620 (n,p20) cross section                                       
  
  enrgy  group constants at
@@ -1192,7 +1192,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.82850-4
     27    6.55121-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt621 (n,p21) cross section                                       
  
  enrgy  group constants at
@@ -1201,7 +1201,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.77304-4
     27    4.98369-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt622 (n,p22) cross section                                       
  
  enrgy  group constants at
@@ -1210,7 +1210,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.26051-4
     27    5.01286-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt623 (n,p23) cross section                                       
  
  enrgy  group constants at
@@ -1219,7 +1219,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.34703-4
     27    4.26808-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt624 (n,p24) cross section                                       
  
  enrgy  group constants at
@@ -1228,7 +1228,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.00569-5
     27    1.51688-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt625 (n,p25) cross section                                       
  
  enrgy  group constants at
@@ -1237,7 +1237,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.76132-5
     27    2.57125-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt626 (n,p26) cross section                                       
  
  enrgy  group constants at
@@ -1246,7 +1246,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.87793-5
     27    3.51385-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt627 (n,p27) cross section                                       
  
  enrgy  group constants at
@@ -1255,7 +1255,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.51474-5
     27    4.03526-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt628 (n,p28) cross section                                       
  
  enrgy  group constants at
@@ -1264,7 +1264,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.58347-5
     27    3.35933-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt629 (n,p29) cross section                                       
  
  enrgy  group constants at
@@ -1273,7 +1273,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.05552-5
     27    2.96757-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt649 (n,pc) cross section                                        
  
  enrgy  group constants at
@@ -1282,7 +1282,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.16208-5
     27    6.80965-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt650 (n,d00) cross section                                       
  
  enrgy  group constants at
@@ -1291,7 +1291,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.86539-5
     27    2.19258-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt651 (n,d01) cross section                                       
  
  enrgy  group constants at
@@ -1299,7 +1299,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    1.14400-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt652 (n,d02) cross section                                       
  
  enrgy  group constants at
@@ -1307,7 +1307,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    8.94748-5
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt653 (n,d03) cross section                                       
  
  enrgy  group constants at
@@ -1315,7 +1315,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    5.69184-6
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt654 (n,d04) cross section                                       
  
  enrgy  group constants at
@@ -1323,7 +1323,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    1.25643-6
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt655 (n,d05) cross section                                       
  
  enrgy  group constants at
@@ -1331,7 +1331,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    1.56872-6
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt656 (n,d06) cross section                                       
  
  enrgy  group constants at
@@ -1339,7 +1339,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    8.80438-8
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt657 (n,d07) cross section                                       
  
  enrgy  group constants at
@@ -1347,7 +1347,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    2.27547-8
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt658 (n,d08) cross section                                       
  
  enrgy  group constants at
@@ -1355,7 +1355,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    7.06134-9
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt659 (n,d09) cross section                                       
  
  enrgy  group constants at
@@ -1363,7 +1363,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    4.56134-9
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt660 (n,d10) cross section                                       
  
  enrgy  group constants at
@@ -1371,7 +1371,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    4.5344-22
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt661 (n,d11) cross section                                       
  
  enrgy  group constants at
@@ -1379,7 +1379,7 @@ icntrl(10) control logic flag set for damage energy:   0
  
     27    3.3446-22
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt662 (n,d12) cross section                                       
  
  enrgy  group constants at
@@ -1444,7 +1444,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt699
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt700 (n,t00) cross section                                       
  
  enrgy  group constants at
@@ -1545,7 +1545,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt749
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt800 (n,a00) cross section                                       
  
  enrgy  group constants at
@@ -1579,7 +1579,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.33170-2
     27    1.41162-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt801 (n,a01) cross section                                       
  
  enrgy  group constants at
@@ -1591,7 +1591,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.96782-2
     27    2.53821-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt802 (n,a02) cross section                                       
  
  enrgy  group constants at
@@ -1603,7 +1603,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    8.58777-3
     27    1.14385-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt803 (n,a03) cross section                                       
  
  enrgy  group constants at
@@ -1615,7 +1615,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    9.66832-3
     27    1.39724-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt804 (n,a04) cross section                                       
  
  enrgy  group constants at
@@ -1627,7 +1627,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.07909-2
     27    1.76010-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt805 (n,a05) cross section                                       
  
  enrgy  group constants at
@@ -1639,7 +1639,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.11789-3
     27    1.93181-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt806 (n,a06) cross section                                       
  
  enrgy  group constants at
@@ -1651,7 +1651,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.19811-3
     27    1.33269-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt807 (n,a07) cross section                                       
  
  enrgy  group constants at
@@ -1663,7 +1663,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.37901-3
     27    8.22469-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt808 (n,a08) cross section                                       
  
  enrgy  group constants at
@@ -1675,7 +1675,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.11499-3
     27    8.02374-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt809 (n,a09) cross section                                       
  
  enrgy  group constants at
@@ -1686,7 +1686,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.17318-4
     27    8.99522-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt810 (n,a10) cross section                                       
  
  enrgy  group constants at
@@ -1697,7 +1697,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.31390-4
     27    5.37750-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt811 (n,a11) cross section                                       
  
  enrgy  group constants at
@@ -1708,7 +1708,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.72733-4
     27    7.34200-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt812 (n,a12) cross section                                       
  
  enrgy  group constants at
@@ -1718,7 +1718,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    9.91545-5
     27    6.58244-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt813 (n,a13) cross section                                       
  
  enrgy  group constants at
@@ -1728,7 +1728,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    5.00900-5
     27    3.94149-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt814 (n,a14) cross section                                       
  
  enrgy  group constants at
@@ -1738,7 +1738,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    4.90087-5
     27    4.69356-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt815 (n,a15) cross section                                       
  
  enrgy  group constants at
@@ -1748,7 +1748,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.11266-5
     27    4.19021-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt816 (n,a16) cross section                                       
  
  enrgy  group constants at
@@ -1758,7 +1758,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.09646-5
     27    2.09815-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt817 (n,a17) cross section                                       
  
  enrgy  group constants at
@@ -1768,7 +1768,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    1.23113-5
     27    3.94711-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt818 (n,a18) cross section                                       
  
  enrgy  group constants at
@@ -1778,7 +1778,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.94001-6
     27    2.31059-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt819 (n,a19) cross section                                       
  
  enrgy  group constants at
@@ -1788,7 +1788,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.45889-6
     27    1.32233-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt820 (n,a20) cross section                                       
  
  enrgy  group constants at
@@ -1798,7 +1798,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    3.89778-6
     27    1.48425-3
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt849 (n,ac) cross section                                        
  
  enrgy  group constants at
@@ -1808,7 +1808,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.16325-5
     27    2.92603-2
  
- group constants at t=2.936E+02 deg k                                     7.7s
+ group constants at t=2.936E+02 deg k                                     6.6s
  for mf  3 and mt251 mubar                                                       
  
  enrgy  group constants at
@@ -1842,7 +1842,7 @@ icntrl(10) control logic flag set for damage energy:   0
     26    6.56778-1
     27    7.47196-1
  
- group constants at t=2.936E+02 deg k                                     7.9s
+ group constants at t=2.936E+02 deg k                                     6.7s
  for mf  3 and mt252 xi                                                          
  
  enrgy  group constants at
@@ -1875,10 +1875,10 @@ icntrl(10) control logic flag set for damage energy:   0
     26    2.23636-2
     27    1.54125-2
  
-                                                                          8.0s
+                                                                          6.7s
  *****************************************************************************
 
- errorr...produce cross section covariances                               8.0s
+ errorr...produce cross section covariances                               6.7s
 
  unit for endf tape ...................         21
  unit for pendf tape ..................          0
@@ -1971,7 +1971,7 @@ icntrl(10) control logic flag set for damage energy:   0
  ---------------------
   17-Cl- 35 ORNL,LANL  EVAL-OCT03 Sayer,Guber,Leal,Larson,Young+     
 
- covariances calculated for  4 reactions and   27 groups                  8.0s
+ covariances calculated for  4 reactions and   27 groups                  6.8s
  *** SNL covariance processing note 
  *** Processing of xsec/number-fraction based on      1
 
@@ -2011,23 +2011,23 @@ icntrl(10) control logic flag set for damage energy:   0
    26  3.6788E+06  2.3865E+06  3.0549E+00  1.9939E+00  4.0175E-04  9.2084E-02
    27  6.0653E+06  3.9347E+06  2.5035E+00  1.3328E+00  3.3366E-04  1.8906E-02
 
- relative covariance ( mt  1 , ig , mt  1 , igp )                        92.0s
+ relative covariance ( mt  1 , ig , mt  1 , igp )                        79.0s
 
  zero
 
- relative covariance ( mt  1 , ig , mt  2 , igp )                        92.0s
+ relative covariance ( mt  1 , ig , mt  2 , igp )                        79.0s
 
  zero
 
- relative covariance ( mt  1 , ig , mt102 , igp )                        92.0s
+ relative covariance ( mt  1 , ig , mt102 , igp )                        79.0s
 
  zero
 
- relative covariance ( mt  1 , ig , mt600 , igp )                        92.0s
+ relative covariance ( mt  1 , ig , mt600 , igp )                        79.0s
 
  zero
 
- relative covariance ( mt  2 , ig , mt  2 , igp )                        92.0s
+ relative covariance ( mt  2 , ig , mt  2 , igp )                        79.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2125,7 +2125,7 @@ icntrl(10) control logic flag set for damage energy:   0
   23    19  1.123E-04  8.369E-05  6.965E-05  7.650E-05  7.643E-05
   27    27  0.000E+00
 
- relative covariance ( mt  2 , ig , mt102 , igp )                        92.0s
+ relative covariance ( mt  2 , ig , mt102 , igp )                        79.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2223,7 +2223,7 @@ icntrl(10) control logic flag set for damage energy:   0
   23    19 -2.286E-08 -2.981E-08 -2.285E-08  2.876E-08 -1.286E-06
   27    27  0.000E+00
 
- relative covariance ( mt  2 , ig , mt600 , igp )                        92.0s
+ relative covariance ( mt  2 , ig , mt600 , igp )                        79.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2321,7 +2321,7 @@ icntrl(10) control logic flag set for damage energy:   0
   23    19  6.519E-03  6.989E-03  3.002E-02  1.583E-02  1.147E-05
   27    27  0.000E+00
 
- relative covariance ( mt102 , ig , mt102 , igp )                        92.0s
+ relative covariance ( mt102 , ig , mt102 , igp )                        79.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2419,7 +2419,7 @@ icntrl(10) control logic flag set for damage energy:   0
   23    19  1.649E-07  2.237E-07  1.871E-06  3.059E-06  3.697E-04
   27    27  0.000E+00
 
- relative covariance ( mt102 , ig , mt600 , igp )                        92.0s
+ relative covariance ( mt102 , ig , mt600 , igp )                        79.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2517,7 +2517,7 @@ icntrl(10) control logic flag set for damage energy:   0
   23    19  5.884E-03  8.419E-04  3.873E-03  1.982E-04 -2.804E-06
   27    27  0.000E+00
 
- relative covariance ( mt600 , ig , mt600 , igp )                        92.0s
+ relative covariance ( mt600 , ig , mt600 , igp )                        79.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2614,10 +2614,10 @@ icntrl(10) control logic flag set for damage energy:   0
   23    13  1.034E-03 -7.731E-03  7.116E-03  1.329E-02  6.244E-02  6.686E-02
   23    19  1.680E-02  8.145E-03  9.814E-03  1.287E-02  6.367E-02
   27    27  0.000E+00
-                                                                         92.0s
+                                                                         79.0s
  *****************************************************************************
 
- covr...process covariance data                                          92.0s
+ covr...process covariance data                                          79.0s
 
  unit for input covariance tape .......         25
  unit for output covariance tape ......          0
@@ -2698,10 +2698,10 @@ icntrl(10) control logic flag set for damage energy:   0
    1725      1   1725      2   null                                             
    1725      1   1725    102   null                                             
    1725      1   1725    600   null                                             
-                                                                         92.0s
+                                                                         79.0s
  **************************************************************************
 
- viewr...display plots                                                   92.0s
+ viewr...display plots                                                   79.0s
 
  lori .................................          1
  xpage ................................     10.000
@@ -17782,5 +17782,5 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          0
 
-                                                                         92.0s
+                                                                         79.0s
  *****************************************************************************

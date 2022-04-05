@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:59:33  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:41:40  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #21                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  reconr...reconstruct pointwise cross sections in pendf format            0.0s
 
@@ -238,10 +238,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =   28442
  final number of resonance points             =   49614
  number of points in final unionized grid     =   49785
-                                                                          3.0s
+                                                                          2.4s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 3.0s
+ broadr...doppler broadening of endf data                                 2.4s
 
  unit for input endf tape .............         20
  unit for input pendf tape ............         21
@@ -263,10 +263,10 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    3.50000E+05 eV.
 
  final maximum energy for broadening/thinning =    3.50000E+05 eV
-                                                                          3.3s
+                                                                          2.7s
 
  broadened mat2637 from  0.0000E+00 to  2.9360E+02 k
-         points in=  49785  points out=  31736
+         points in=  49785  points out=  31733
          mt   2 102
 
     thermal quantities at 293.6 K = 0.0253 eV
@@ -275,10 +275,10 @@ icntrl(10) control logic flag set for damage energy:   0
        thermal capture integral:  1.1649E+00
      capture resonance integral:  1.2796E+00
     -----------------------------------------
-                                                                          6.1s
+                                                                          5.5s
  *****************************************************************************
 
- heatr...prompt kerma                                                     6.1s
+ heatr...prompt kerma                                                     5.5s
 
  input endf unit ......................         20
  input pendf unit .....................         22
@@ -321,7 +321,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  ---message from hinit---mf6, mt649 does not give recoil za= 25058
                           one-particle recoil approx. used.
-                                                             temp 1       7.6s
+                                                             temp 1       6.9s
 
    generating recoil with one-particle approx.
 
@@ -337,12 +337,12 @@ icntrl(10) control logic flag set for damage energy:   0
    generating recoil with one-particle approx.
 
    generating recoil with one-particle approx.
-                                                             temp 1      11.6s
+                                                             temp 1      10.5s
 
-                                                                         15.2s
+                                                                         13.7s
  *****************************************************************************
 
- purr...probabalistic unresolved calculation                             15.2s
+ purr...probabalistic unresolved calculation                             13.7s
  unit for input endf tape .............         20
  unit for input pendf tape ............         23
  unit for output pendf tape ...........         24
@@ -353,7 +353,7 @@ icntrl(10) control logic flag set for damage energy:   0
  print option (0=min, 1=max) ..........          1
  no. of energy points (0=all) .........          0
 
- mat = 2637                                                              15.2s
+ mat = 2637                                                              13.7s
  evaluation lssf equal to 1
 
  competition starts at  8.5000E+05
@@ -1233,7 +1233,7 @@ e= 1.5000E+06  spot= 3.2132E+00  dbar= 1.5062E+03  sigx= 9.1551E-01
                   9.490E-02  9.705E-02  9.181E-02  9.247E-02  8.452E-02  4.455E-02  2.264E-02  7.680E-03  2.327E-03  1.489E-03
  tot   2.936E+02  9.158E-01  9.159E-01  9.167E-01  1.313E+00  1.867E+00  2.436E+00  2.962E+00  3.401E+00  3.770E+00  4.087E+00
                   4.429E+00  4.870E+00  5.467E+00  6.305E+00  7.479E+00  8.857E+00  1.026E+01  1.185E+01  1.324E+01  1.514E+01
- els   2.936E+02  1.000E-06  1.179E-06  2.648E-05  3.960E-01  9.504E-01  1.519E+00  2.045E+00  2.484E+00  2.853E+00  3.170E+00
+ els   2.936E+02  1.000E-06  1.179E-06  2.647E-05  3.960E-01  9.504E-01  1.519E+00  2.045E+00  2.484E+00  2.853E+00  3.170E+00
                   3.511E+00  3.952E+00  4.548E+00  5.384E+00  6.557E+00  7.933E+00  9.334E+00  1.092E+01  1.231E+01  1.421E+01
  fis   2.936E+02  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00
                   0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00  0.000E+00
@@ -1624,12 +1624,12 @@ e= 3.0000E+06  spot= 3.4862E+00  dbar= 1.5062E+03  sigx= 1.3963E+00
          temp      sig0    p0 total     elastic     fission     capture    p1 total
     2.936E+02 1.000E+10  6.1398E+00  4.7418E+00  0.0000E+00  1.6870E-03  6.1398E+00
 
- generated cross sections at  13 points                                 247.0s
+ generated cross sections at  13 points                                 239.2s
 
-                                                                        247.0s
+                                                                        239.2s
 *****************************************************************************
 
- acer...monte carlo neutron and photon data                             247.0s
+ acer...monte carlo neutron and photon data                             239.2s
 
  input endf unit ......................         20
  input pendf unit .....................         24
@@ -2060,5 +2060,5 @@ e= 3.0000E+06  spot= 3.4862E+00  dbar= 1.5062E+03  sigx= 1.3963E+00
  ---message from ptleg2---negative probs found
                              2 for mt=  5 e= 1.150E+02
 
-                                                                        275.5s
+                                                                        258.8s
  *****************************************************************************

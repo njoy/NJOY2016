@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:46:41  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:31:10  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #06                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  plotr...plot endf, pendf, gendf, or input data                           0.0s
 

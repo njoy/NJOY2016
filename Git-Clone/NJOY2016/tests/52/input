@@ -1,0 +1,20 @@
+-- MF6 MT2 LAW=5 LTP=1 LIDP=1 (identical particles) s=0.5
+moder
+ 20 -21
+moder
+ -21 -22
+acer
+ -21 -22 0 31 32
+ 1 1 1 .10 /
+ 'ENDF/B-VIII.0 proton + H1' /
+ 125 0.0 /
+ /
+ /
+acer
+ 0 31 33 34 35
+ 7 1 1 -1 /
+ 'ENDF/B-VIII.0 proton + H1' /
+viewr
+ 33 43
+stop
+

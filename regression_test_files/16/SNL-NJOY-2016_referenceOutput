@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:50:08  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:33:35  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #16                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -101,7 +101,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =    4865
  points in initial unionized grid             =    5189
- points added by linearization                =     353                   0.2s
+ points added by linearization                =     353                   0.1s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -131,10 +131,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =  176450
  final number of resonance points             =  246591
  number of points in final unionized grid     =  246931
-                                                                          8.5s
+                                                                          7.2s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 8.5s
+ broadr...doppler broadening of endf data                                 7.2s
 
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -22
@@ -156,15 +156,15 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    1.00000E+04 eV.
 
  final maximum energy for broadening/thinning =    1.00000E+04 eV
-                                                                          8.8s
+                                                                          7.5s
 
  broadened mat9237 from  0.0000E+00 to  3.0000E+02 k
          points in= 246931  points out= 102946
          mt   2  18 102
-                                                                         25.4s
+                                                                         23.8s
  *****************************************************************************
 
- errorr...produce cross section covariances                              25.4s
+ errorr...produce cross section covariances                              23.8s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -23
@@ -501,14 +501,14 @@ icntrl(10) control logic flag set for damage energy:   0
    109      1.62500E+07  -  1.65000E+07
    110      1.65000E+07  -  1.70000E+07
 
- computing multigroup cross sections                                     25.4s
+ computing multigroup cross sections                                     23.8s
 
  weight function......(thermal) -- (1/e) -- (fission + fusion)
 
  ---message from grpav---mf  3 mt  37
                           has threshold gt highest union energy.
 
- group averaging completed                                               25.5s
+ group averaging completed                                               23.9s
 
 
  processing mat  9237
@@ -518,7 +518,7 @@ icntrl(10) control logic flag set for damage energy:   0
  ---message from rdgout---mf 3 mt 37 not found.
                           calculation continued with sigma=0
 
- covariances calculated for 36 reactions and  110 groups                 25.6s
+ covariances calculated for 36 reactions and  110 groups                 24.0s
 
  ---message from rdgout---mf 3 mt 37 not found.
                           calculation continued with sigma=0
@@ -702,112 +702,112 @@ icntrl(10) control logic flag set for damage energy:   0
 
  ---message from rpxlc12---no scattering radius uncertainty
 
- ---message from rpxlc12---resonance parameter loop done                 34.0s
+ ---message from rpxlc12---resonance parameter loop done                 31.3s
 
- ---message from rpxlc12---sensitivity calculation continues             34.0s
+ ---message from rpxlc12---sensitivity calculation continues             31.3s
 
- ---message from rpxlc12---sensitivity calculation completed             34.0s
-
- ---message from resprx---mf2 nls=2, but mf32 nls=0
-                          continue with partial urr covariance data
-
- ---message from rpxlc12---no scattering radius uncertainty
-
- ---message from rpxlc12---resonance parameter loop done                 43.2s
-
- ---message from rpxlc12---sensitivity calculation continues             43.2s
-
- ---message from rpxlc12---sensitivity calculation completed             43.2s
+ ---message from rpxlc12---sensitivity calculation completed             31.3s
 
  ---message from resprx---mf2 nls=2, but mf32 nls=0
                           continue with partial urr covariance data
 
  ---message from rpxlc12---no scattering radius uncertainty
 
- ---message from rpxlc12---resonance parameter loop done                 52.6s
+ ---message from rpxlc12---resonance parameter loop done                 39.1s
 
- ---message from rpxlc12---sensitivity calculation continues             52.6s
+ ---message from rpxlc12---sensitivity calculation continues             39.1s
 
- ---message from rpxlc12---sensitivity calculation completed             52.6s
-
- ---message from resprx---mf2 nls=2, but mf32 nls=0
-                          continue with partial urr covariance data
-
- ---message from rpxlc12---no scattering radius uncertainty
-
- ---message from rpxlc12---resonance parameter loop done                 63.2s
-
- ---message from rpxlc12---sensitivity calculation continues             63.2s
-
- ---message from rpxlc12---sensitivity calculation completed             63.2s
+ ---message from rpxlc12---sensitivity calculation completed             39.1s
 
  ---message from resprx---mf2 nls=2, but mf32 nls=0
                           continue with partial urr covariance data
 
  ---message from rpxlc12---no scattering radius uncertainty
 
- ---message from rpxlc12---resonance parameter loop done                 71.0s
+ ---message from rpxlc12---resonance parameter loop done                 47.4s
 
- ---message from rpxlc12---sensitivity calculation continues             71.0s
+ ---message from rpxlc12---sensitivity calculation continues             47.4s
 
- ---message from rpxlc12---sensitivity calculation completed             71.0s
-
- ---message from resprx---mf2 nls=2, but mf32 nls=0
-                          continue with partial urr covariance data
-
- ---message from rpxlc12---no scattering radius uncertainty
-
- ---message from rpxlc12---resonance parameter loop done                 79.6s
-
- ---message from rpxlc12---sensitivity calculation continues             79.6s
-
- ---message from rpxlc12---sensitivity calculation completed             79.6s
+ ---message from rpxlc12---sensitivity calculation completed             47.4s
 
  ---message from resprx---mf2 nls=2, but mf32 nls=0
                           continue with partial urr covariance data
 
  ---message from rpxlc12---no scattering radius uncertainty
 
- ---message from rpxlc12---resonance parameter loop done                 88.0s
+ ---message from rpxlc12---resonance parameter loop done                 56.0s
 
- ---message from rpxlc12---sensitivity calculation continues             88.0s
+ ---message from rpxlc12---sensitivity calculation continues             56.0s
 
- ---message from rpxlc12---sensitivity calculation completed             88.0s
-
- ---message from resprx---mf2 nls=2, but mf32 nls=0
-                          continue with partial urr covariance data
-
- ---message from rpxlc12---no scattering radius uncertainty
-
- ---message from rpxlc12---resonance parameter loop done                 94.6s
-
- ---message from rpxlc12---sensitivity calculation continues             94.6s
-
- ---message from rpxlc12---sensitivity calculation completed             94.6s
+ ---message from rpxlc12---sensitivity calculation completed             56.0s
 
  ---message from resprx---mf2 nls=2, but mf32 nls=0
                           continue with partial urr covariance data
 
  ---message from rpxlc12---no scattering radius uncertainty
 
- ---message from rpxlc12---resonance parameter loop done                100.8s
+ ---message from rpxlc12---resonance parameter loop done                 62.9s
 
- ---message from rpxlc12---sensitivity calculation continues            100.8s
+ ---message from rpxlc12---sensitivity calculation continues             62.9s
 
- ---message from rpxlc12---sensitivity calculation completed            100.8s
+ ---message from rpxlc12---sensitivity calculation completed             62.9s
 
  ---message from resprx---mf2 nls=2, but mf32 nls=0
                           continue with partial urr covariance data
 
  ---message from rpxlc12---no scattering radius uncertainty
 
- ---message from rpxlc12---resonance parameter loop done                106.7s
+ ---message from rpxlc12---resonance parameter loop done                 70.2s
 
- ---message from rpxlc12---sensitivity calculation continues            106.7s
+ ---message from rpxlc12---sensitivity calculation continues             70.2s
 
- ---message from rpxlc12---sensitivity calculation completed            106.7s
+ ---message from rpxlc12---sensitivity calculation completed             70.2s
 
- relative covariance ( mt  1 , ig , mt  1 , igp )                       106.7s
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+
+ ---message from rpxlc12---resonance parameter loop done                 77.1s
+
+ ---message from rpxlc12---sensitivity calculation continues             77.1s
+
+ ---message from rpxlc12---sensitivity calculation completed             77.1s
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+
+ ---message from rpxlc12---resonance parameter loop done                 82.5s
+
+ ---message from rpxlc12---sensitivity calculation continues             82.5s
+
+ ---message from rpxlc12---sensitivity calculation completed             82.5s
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+
+ ---message from rpxlc12---resonance parameter loop done                 87.6s
+
+ ---message from rpxlc12---sensitivity calculation continues             87.6s
+
+ ---message from rpxlc12---sensitivity calculation completed             87.6s
+
+ ---message from resprx---mf2 nls=2, but mf32 nls=0
+                          continue with partial urr covariance data
+
+ ---message from rpxlc12---no scattering radius uncertainty
+
+ ---message from rpxlc12---resonance parameter loop done                 92.6s
+
+ ---message from rpxlc12---sensitivity calculation continues             92.6s
+
+ ---message from rpxlc12---sensitivity calculation completed             92.6s
+
+ relative covariance ( mt  1 , ig , mt  1 , igp )                        92.6s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -903,7 +903,7 @@ icntrl(10) control logic flag set for damage energy:   0
        14    14  0.000E+00  3.719E-04
        15    15  0.000E+00  9.920E-05
 
- relative covariance ( mt  1 , ig , mt  2 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt  2 , igp )                        92.6s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -956,143 +956,143 @@ icntrl(10) control logic flag set for damage energy:   0
   30    21  1.798E-05  8.804E-06  2.741E-05  2.877E-05  3.153E-05  3.358E-05
   30    27  3.600E-05  3.562E-05  6.382E-05  1.500E-04
 
- relative covariance ( mt  1 , ig , mt  4 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt  4 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 16 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 16 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 17 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 17 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 18 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 18 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 37 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 37 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 51 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 51 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 52 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 52 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 53 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 53 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 54 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 54 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 55 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 55 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 56 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 56 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 57 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 57 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 58 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 58 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 59 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 59 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 60 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 60 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 61 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 61 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 62 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 62 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 63 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 63 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 64 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 64 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 65 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 65 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 66 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 66 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 67 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 67 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 68 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 68 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 69 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 69 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 70 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 70 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 71 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 71 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 72 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 72 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 73 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 73 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 74 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 74 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 75 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 75 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 76 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 76 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 77 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 77 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 91 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt 91 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  1 , ig , mt102 , igp )                       106.7s
+ relative covariance ( mt  1 , ig , mt102 , igp )                        92.6s
 
  zero
 
- relative covariance ( mt  2 , ig , mt  2 , igp )                       106.7s
+ relative covariance ( mt  2 , ig , mt  2 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1190,7 +1190,7 @@ icntrl(10) control logic flag set for damage energy:   0
        14    14  0.000E+00  3.703E-04
        15    15  0.000E+00  1.068E-04
 
- relative covariance ( mt  2 , ig , mt  4 , igp )                       106.7s
+ relative covariance ( mt  2 , ig , mt  4 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1246,7 +1246,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20 -1.409E-06  1.068E-05  3.291E-06 -2.046E-05 -7.363E-05 -1.656E-04
   30    26 -5.018E-04 -1.390E-03 -1.963E-03 -2.232E-03 -2.398E-03
 
- relative covariance ( mt  2 , ig , mt 16 , igp )                       106.7s
+ relative covariance ( mt  2 , ig , mt 16 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1257,7 +1257,7 @@ icntrl(10) control logic flag set for damage energy:   0
   29    25 -5.583E-05 -5.078E-05 -5.489E-05 -1.646E-06 -2.444E-04 -1.002E-04
   30    25 -2.768E-05 -2.625E-05 -2.973E-05 -6.840E-05 -5.705E-05 -5.141E-04
 
- relative covariance ( mt  2 , ig , mt 17 , igp )                       106.7s
+ relative covariance ( mt  2 , ig , mt 17 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1266,7 +1266,7 @@ icntrl(10) control logic flag set for damage energy:   0
   29    27 -1.846E-04 -4.981E-05 -7.098E-04 -5.856E-04
   30    27  8.829E-05 -5.421E-04 -7.642E-04 -3.370E-03
 
- relative covariance ( mt  2 , ig , mt 18 , igp )                       106.7s
+ relative covariance ( mt  2 , ig , mt 18 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1347,11 +1347,11 @@ icntrl(10) control logic flag set for damage energy:   0
       ---   ---   --------
         8     8  4.901E-06
 
- relative covariance ( mt  2 , ig , mt 37 , igp )                       106.7s
+ relative covariance ( mt  2 , ig , mt 37 , igp )                        92.7s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 51 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 51 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1407,7 +1407,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20 -4.884E-06  6.388E-05  3.335E-05 -1.192E-04 -4.857E-04 -9.802E-04
   30    26 -1.435E-03 -2.229E-03 -2.760E-03 -3.100E-03 -3.388E-03
 
- relative covariance ( mt  2 , ig , mt 52 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 52 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1457,7 +1457,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    22 -1.659E-05 -4.924E-05 -1.454E-04 -2.881E-04 -4.452E-04 -6.840E-04
   30    28 -7.823E-04 -8.492E-04 -9.068E-04
 
- relative covariance ( mt  2 , ig , mt 53 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 53 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1504,7 +1504,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    23 -1.230E-04 -2.653E-04 -3.100E-04 -3.113E-04 -4.595E-04 -5.697E-04
   30    29 -6.016E-04 -6.025E-04
 
- relative covariance ( mt  2 , ig , mt 54 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 54 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1548,7 +1548,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    24 -1.358E-05 -4.077E-05 -6.940E-05 -8.509E-05 -9.673E-05 -1.076E-04
   30    30 -1.164E-04
 
- relative covariance ( mt  2 , ig , mt 55 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 55 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1592,7 +1592,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    24 -1.321E-04 -1.080E-04 -8.472E-05 -7.488E-05 -7.094E-05 -7.239E-05
   30    30 -7.547E-05
 
- relative covariance ( mt  2 , ig , mt 56 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 56 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1621,7 +1621,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  7.651E-07  1.055E-06 -3.684E-06 -1.756E-05 -2.280E-05 -2.845E-05
   30    25 -3.722E-05 -6.619E-05 -9.546E-05 -9.987E-05 -1.036E-04 -1.065E-04
 
- relative covariance ( mt  2 , ig , mt 57 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 57 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1650,7 +1650,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.329E-06  2.230E-06 -4.670E-06 -4.098E-06 -1.058E-06 -2.903E-06
   30    25 -1.826E-05 -3.528E-05 -5.257E-05 -6.696E-05 -7.725E-05 -8.490E-05
 
- relative covariance ( mt  2 , ig , mt 58 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 58 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1679,7 +1679,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -5.666E-08 -4.044E-07 -1.888E-06 -2.070E-05 -8.995E-05 -2.076E-04
   30    25 -1.856E-04 -2.401E-04 -3.097E-04 -3.434E-04 -3.602E-04 -3.733E-04
 
- relative covariance ( mt  2 , ig , mt 59 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 59 , igp )                        92.7s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1708,7 +1708,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  8.030E-07  1.084E-06  1.184E-06 -4.360E-06 -3.928E-05 -1.529E-04
   30    25 -1.856E-04 -2.239E-04 -2.423E-04 -2.463E-04 -2.472E-04 -2.475E-04
 
- relative covariance ( mt  2 , ig , mt 60 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 60 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1737,7 +1737,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -6.341E-10  2.583E-07  5.629E-07  5.758E-07 -9.754E-08 -3.498E-06
   30    25 -5.340E-06 -1.055E-05 -1.210E-05 -1.557E-05 -1.824E-05 -1.971E-05
 
- relative covariance ( mt  2 , ig , mt 61 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 61 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1766,7 +1766,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.268E-05 -3.252E-05  8.686E-06  1.179E-05  1.569E-05 -7.346E-06
   30    25 -6.781E-05 -1.217E-04 -1.671E-04 -2.055E-04 -2.341E-04 -2.567E-04
 
- relative covariance ( mt  2 , ig , mt 62 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 62 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1795,7 +1795,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  2.825E-06  4.495E-06  5.894E-06  1.922E-07 -2.529E-05 -1.912E-04
   30    25 -2.261E-04 -2.332E-04 -2.684E-04 -2.891E-04 -3.178E-04 -3.432E-04
 
- relative covariance ( mt  2 , ig , mt 63 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 63 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1824,7 +1824,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  5.319E-07  5.559E-07  2.698E-06  8.525E-07 -2.813E-06 -1.175E-05
   30    25 -1.797E-05 -3.657E-05 -3.768E-05 -4.317E-05 -4.880E-05 -5.222E-05
 
- relative covariance ( mt  2 , ig , mt 64 , igp )                       106.8s
+ relative covariance ( mt  2 , ig , mt 64 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1853,7 +1853,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -2.820E-07  1.141E-07 -4.402E-08 -1.291E-07  7.142E-07  1.109E-06
   30    25 -1.283E-05 -2.595E-05 -3.027E-05 -3.579E-05 -4.366E-05 -5.035E-05
 
- relative covariance ( mt  2 , ig , mt 65 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 65 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1865,7 +1865,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19 -9.474E-08 -6.748E-07 -1.517E-06 -1.868E-06 -1.988E-06 -2.081E-06
   30    30  0.000E+00
 
- relative covariance ( mt  2 , ig , mt 66 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 66 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1894,7 +1894,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  5.505E-06 -1.193E-07 -9.780E-06 -7.545E-07 -1.311E-05 -6.551E-05
   30    25 -1.465E-04 -2.020E-04 -2.793E-04 -3.294E-04 -3.590E-04 -3.851E-04
 
- relative covariance ( mt  2 , ig , mt 67 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 67 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1923,7 +1923,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.455E-07 -2.458E-07 -5.216E-07 -3.101E-07 -4.750E-07 -4.794E-06
   30    25 -2.018E-06  3.660E-06 -1.652E-05 -2.939E-05 -3.039E-05 -3.386E-05
 
- relative covariance ( mt  2 , ig , mt 68 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 68 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1935,7 +1935,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19 -5.448E-08 -3.415E-07 -7.767E-07 -9.585E-07 -1.021E-06 -1.068E-06
   30    30  0.000E+00
 
- relative covariance ( mt  2 , ig , mt 69 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 69 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1964,7 +1964,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  7.860E-08 -9.526E-08  9.074E-07  4.078E-06  8.215E-06  2.693E-06
   30    25 -4.367E-05 -6.172E-05 -5.613E-05 -7.283E-05 -9.891E-05 -1.196E-04
 
- relative covariance ( mt  2 , ig , mt 70 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 70 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1993,7 +1993,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  1.657E-06  2.649E-06  3.949E-06  4.139E-06 -5.243E-06 -1.065E-04
   30    25 -2.191E-04 -2.802E-04 -3.171E-04 -3.238E-04 -3.245E-04 -3.247E-04
 
- relative covariance ( mt  2 , ig , mt 71 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 71 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2022,7 +2022,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  2.281E-06 -2.071E-06 -6.923E-06 -2.027E-05 -4.947E-05 -1.444E-04
   30    25 -2.271E-04 -2.472E-04 -2.634E-04 -2.924E-04 -3.086E-04 -2.900E-04
 
- relative covariance ( mt  2 , ig , mt 72 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 72 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2051,7 +2051,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  8.974E-06  8.751E-06  4.689E-06 -1.565E-05 -7.824E-05 -3.297E-04
   30    25 -2.821E-04 -2.292E-04 -2.501E-04 -2.903E-04 -3.252E-04 -3.468E-04
 
- relative covariance ( mt  2 , ig , mt 73 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 73 , igp )                        92.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2062,7 +2062,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    20 -6.367E-07 -1.377E-06 -1.694E-06 -1.803E-06 -1.887E-06
   30    30  0.000E+00
 
- relative covariance ( mt  2 , ig , mt 74 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 74 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2089,7 +2089,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20 -8.187E-08 -1.520E-07 -8.424E-07 -2.991E-06 -2.605E-05 -6.067E-05
   30    26 -8.426E-05 -1.345E-04 -1.476E-04 -1.502E-04 -1.537E-04
 
- relative covariance ( mt  2 , ig , mt 75 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 75 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2116,7 +2116,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20  4.094E-06  3.052E-06  1.626E-06  1.403E-06  1.537E-06 -1.745E-05
   30    26 -6.243E-05 -1.329E-04 -1.561E-04 -1.628E-04 -1.641E-04
 
- relative covariance ( mt  2 , ig , mt 76 , igp )                       106.9s
+ relative covariance ( mt  2 , ig , mt 76 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2128,7 +2128,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19 -9.633E-08 -3.644E-07 -7.540E-07 -9.278E-07 -9.878E-07 -1.034E-06
   30    30  0.000E+00
 
- relative covariance ( mt  2 , ig , mt 77 , igp )                       107.0s
+ relative covariance ( mt  2 , ig , mt 77 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2139,7 +2139,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    20 -3.778E-07 -6.870E-07 -8.366E-07 -8.901E-07 -9.304E-07
   30    30  0.000E+00
 
- relative covariance ( mt  2 , ig , mt 91 , igp )                       107.0s
+ relative covariance ( mt  2 , ig , mt 91 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2165,7 +2165,7 @@ icntrl(10) control logic flag set for damage energy:   0
   29    25 -6.463E-05 -6.638E-04 -2.077E-03 -2.596E-03 -2.761E-03 -2.624E-03
   30    25 -3.721E-06 -1.621E-04 -1.291E-03 -2.093E-03 -2.420E-03 -2.516E-03
 
- relative covariance ( mt  2 , ig , mt102 , igp )                       107.0s
+ relative covariance ( mt  2 , ig , mt102 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2222,7 +2222,7 @@ icntrl(10) control logic flag set for damage energy:   0
       ---   ---   --------
         9     9  6.864E-08
 
- relative covariance ( mt  4 , ig , mt  4 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt  4 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2278,23 +2278,23 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20  9.501E-06 -7.205E-05 -2.219E-05  1.380E-04  4.965E-04  1.116E-03
   30    26  3.384E-03  9.374E-03  1.323E-02  1.505E-02  1.617E-02
 
- relative covariance ( mt  4 , ig , mt 16 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 16 , igp )                        92.9s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 17 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 17 , igp )                        92.9s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 18 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 18 , igp )                        92.9s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 37 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 37 , igp )                        92.9s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 51 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 51 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2350,7 +2350,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20  3.293E-05 -4.308E-04 -2.249E-04  8.036E-04  3.275E-03  6.609E-03
   30    26  9.678E-03  1.503E-02  1.861E-02  2.090E-02  2.285E-02
 
- relative covariance ( mt  4 , ig , mt 52 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 52 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2400,7 +2400,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    22  1.119E-04  3.321E-04  9.804E-04  1.942E-03  3.002E-03  4.612E-03
   30    28  5.275E-03  5.726E-03  6.115E-03
 
- relative covariance ( mt  4 , ig , mt 53 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 53 , igp )                        92.9s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2447,7 +2447,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    23  8.292E-04  1.789E-03  2.090E-03  2.099E-03  3.098E-03  3.841E-03
   30    29  4.056E-03  4.063E-03
 
- relative covariance ( mt  4 , ig , mt 54 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 54 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2491,7 +2491,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    24  9.155E-05  2.749E-04  4.679E-04  5.738E-04  6.523E-04  7.258E-04
   30    30  7.846E-04
 
- relative covariance ( mt  4 , ig , mt 55 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 55 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2535,7 +2535,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    24  8.906E-04  7.282E-04  5.713E-04  5.049E-04  4.784E-04  4.881E-04
   30    30  5.089E-04
 
- relative covariance ( mt  4 , ig , mt 56 , igp )                       107.0s
+ relative covariance ( mt  4 , ig , mt 56 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2564,7 +2564,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -5.159E-06 -7.111E-06  2.484E-05  1.184E-04  1.538E-04  1.918E-04
   30    25  2.509E-04  4.463E-04  6.437E-04  6.734E-04  6.982E-04  7.183E-04
 
- relative covariance ( mt  4 , ig , mt 57 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 57 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2593,7 +2593,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  8.962E-06 -1.504E-05  3.149E-05  2.764E-05  7.136E-06  1.958E-05
   30    25  1.231E-04  2.379E-04  3.544E-04  4.515E-04  5.209E-04  5.725E-04
 
- relative covariance ( mt  4 , ig , mt 58 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 58 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2622,7 +2622,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  3.821E-07  2.727E-06  1.273E-05  1.396E-04  6.065E-04  1.400E-03
   30    25  1.252E-03  1.619E-03  2.088E-03  2.316E-03  2.429E-03  2.517E-03
 
- relative covariance ( mt  4 , ig , mt 59 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 59 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2651,7 +2651,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -5.414E-06 -7.310E-06 -7.984E-06  2.940E-05  2.648E-04  1.031E-03
   30    25  1.251E-03  1.510E-03  1.634E-03  1.661E-03  1.667E-03  1.669E-03
 
- relative covariance ( mt  4 , ig , mt 60 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 60 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2680,7 +2680,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  4.276E-09 -1.742E-06 -3.796E-06 -3.883E-06  6.577E-07  2.359E-05
   30    25  3.601E-05  7.116E-05  8.156E-05  1.050E-04  1.230E-04  1.329E-04
 
- relative covariance ( mt  4 , ig , mt 61 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 61 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2709,7 +2709,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  8.548E-05  2.193E-04 -5.857E-05 -7.947E-05 -1.058E-04  4.954E-05
   30    25  4.572E-04  8.207E-04  1.127E-03  1.385E-03  1.578E-03  1.731E-03
 
- relative covariance ( mt  4 , ig , mt 62 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 62 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2738,7 +2738,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.905E-05 -3.031E-05 -3.974E-05 -1.296E-06  1.705E-04  1.289E-03
   30    25  1.525E-03  1.572E-03  1.810E-03  1.949E-03  2.143E-03  2.314E-03
 
- relative covariance ( mt  4 , ig , mt 63 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 63 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2767,7 +2767,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -3.587E-06 -3.749E-06 -1.820E-05 -5.748E-06  1.897E-05  7.925E-05
   30    25  1.212E-04  2.466E-04  2.541E-04  2.911E-04  3.291E-04  3.521E-04
 
- relative covariance ( mt  4 , ig , mt 64 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 64 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2796,7 +2796,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  1.901E-06 -7.691E-07  2.968E-07  8.708E-07 -4.816E-06 -7.475E-06
   30    25  8.653E-05  1.750E-04  2.041E-04  2.413E-04  2.944E-04  3.395E-04
 
- relative covariance ( mt  4 , ig , mt 65 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 65 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2808,7 +2808,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19  1.471E-07  1.048E-06  2.356E-06  2.901E-06  3.087E-06  3.231E-06
   30    30  0.000E+00
 
- relative covariance ( mt  4 , ig , mt 66 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 66 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2837,7 +2837,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -3.712E-05  8.048E-07  6.594E-05  5.087E-06  8.842E-05  4.417E-04
   30    25  9.878E-04  1.362E-03  1.883E-03  2.221E-03  2.421E-03  2.597E-03
 
- relative covariance ( mt  4 , ig , mt 67 , igp )                       107.1s
+ relative covariance ( mt  4 , ig , mt 67 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2866,7 +2866,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  9.814E-07  1.657E-06  3.517E-06  2.091E-06  3.203E-06  3.232E-05
   30    25  1.361E-05 -2.468E-05  1.114E-04  1.982E-04  2.049E-04  2.283E-04
 
- relative covariance ( mt  4 , ig , mt 68 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 68 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2878,7 +2878,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19  8.460E-08  5.303E-07  1.206E-06  1.488E-06  1.585E-06  1.659E-06
   30    30  0.000E+00
 
- relative covariance ( mt  4 , ig , mt 69 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 69 , igp )                        93.0s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2907,7 +2907,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -5.300E-07  6.424E-07 -6.119E-06 -2.750E-05 -5.539E-05 -1.816E-05
   30    25  2.945E-04  4.162E-04  3.785E-04  4.911E-04  6.670E-04  8.062E-04
 
- relative covariance ( mt  4 , ig , mt 70 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 70 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2936,7 +2936,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.118E-05 -1.786E-05 -2.663E-05 -2.791E-05  3.535E-05  7.181E-04
   30    25  1.477E-03  1.889E-03  2.138E-03  2.184E-03  2.188E-03  2.189E-03
 
- relative covariance ( mt  4 , ig , mt 71 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 71 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2965,7 +2965,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.538E-05  1.396E-05  4.668E-05  1.367E-04  3.336E-04  9.738E-04
   30    25  1.531E-03  1.667E-03  1.776E-03  1.972E-03  2.081E-03  1.955E-03
 
- relative covariance ( mt  4 , ig , mt 72 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 72 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2994,7 +2994,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -6.051E-05 -5.901E-05 -3.162E-05  1.056E-04  5.276E-04  2.223E-03
   30    25  1.902E-03  1.545E-03  1.686E-03  1.958E-03  2.193E-03  2.338E-03
 
- relative covariance ( mt  4 , ig , mt 73 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 73 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3005,7 +3005,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    20  9.887E-07  2.138E-06  2.630E-06  2.799E-06  2.930E-06
   30    30  0.000E+00
 
- relative covariance ( mt  4 , ig , mt 74 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 74 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3032,7 +3032,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20  5.520E-07  1.025E-06  5.681E-06  2.017E-05  1.757E-04  4.091E-04
   30    26  5.681E-04  9.070E-04  9.953E-04  1.013E-03  1.037E-03
 
- relative covariance ( mt  4 , ig , mt 75 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 75 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3059,7 +3059,7 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20 -2.761E-05 -2.058E-05 -1.096E-05 -9.461E-06 -1.037E-05  1.176E-04
   30    26  4.209E-04  8.963E-04  1.052E-03  1.098E-03  1.106E-03
 
- relative covariance ( mt  4 , ig , mt 76 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 76 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3071,7 +3071,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19  1.496E-07  5.659E-07  1.171E-06  1.441E-06  1.534E-06  1.605E-06
   30    30  0.000E+00
 
- relative covariance ( mt  4 , ig , mt 77 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 77 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3082,7 +3082,7 @@ icntrl(10) control logic flag set for damage energy:   0
   24    20  5.867E-07  1.067E-06  1.299E-06  1.382E-06  1.445E-06
   30    30  0.000E+00
 
- relative covariance ( mt  4 , ig , mt 91 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt 91 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3108,11 +3108,11 @@ icntrl(10) control logic flag set for damage energy:   0
   29    25  3.778E-04  3.880E-03  1.214E-02  1.517E-02  1.614E-02  1.534E-02
   30    25  2.509E-05  1.093E-03  8.702E-03  1.411E-02  1.632E-02  1.697E-02
 
- relative covariance ( mt  4 , ig , mt102 , igp )                       107.2s
+ relative covariance ( mt  4 , ig , mt102 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 16 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 16 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3123,135 +3123,135 @@ icntrl(10) control logic flag set for damage energy:   0
   29    25  2.045E-04  1.860E-04  2.010E-04  6.028E-06  8.953E-04  3.671E-04
   30    25  1.781E-04  1.689E-04  1.912E-04  4.401E-04  3.671E-04  3.308E-03
 
- relative covariance ( mt 16 , ig , mt 17 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 17 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 18 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 18 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 37 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 37 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 51 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 51 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 52 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 52 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 53 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 53 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 54 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 54 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 55 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 55 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 56 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 56 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 57 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 57 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 58 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 58 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 59 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 59 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 60 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 60 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 61 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 61 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 62 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 62 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 63 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 63 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 64 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 64 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 65 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 65 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 66 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 66 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 67 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 67 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 68 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 68 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 69 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 69 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 70 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 70 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 71 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 71 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 72 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 72 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 73 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 73 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 74 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 74 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 75 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 75 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 76 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 76 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 77 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 77 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt 91 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt 91 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 16 , ig , mt102 , igp )                       107.2s
+ relative covariance ( mt 16 , ig , mt102 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 17 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 17 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3260,131 +3260,131 @@ icntrl(10) control logic flag set for damage energy:   0
   29    27  1.165E-03  3.144E-04  4.480E-03  3.696E-03
   30    27 -4.270E-04  2.622E-03  3.696E-03  1.630E-02
 
- relative covariance ( mt 17 , ig , mt 18 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 18 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 37 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 37 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 51 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 51 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 52 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 52 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 53 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 53 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 54 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 54 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 55 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 55 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 56 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 56 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 57 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 57 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 58 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 58 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 59 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 59 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 60 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 60 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 61 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 61 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 62 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 62 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 63 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 63 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 64 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 64 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 65 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 65 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 66 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 66 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 67 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 67 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 68 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 68 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 69 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 69 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 70 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 70 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 71 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 71 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 72 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 72 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 73 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 73 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 74 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 74 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 75 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 75 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 76 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 76 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 77 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 77 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt 91 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt 91 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 17 , ig , mt102 , igp )                       107.2s
+ relative covariance ( mt 17 , ig , mt102 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 18 , igp )                       107.2s
+ relative covariance ( mt 18 , ig , mt 18 , igp )                        93.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3477,123 +3477,123 @@ icntrl(10) control logic flag set for damage energy:   0
        12    12  5.221E-04  0.000E+00
        13    13  1.736E-09  0.000E+00
 
- relative covariance ( mt 18 , ig , mt 37 , igp )                       107.2s
+ relative covariance ( mt 18 , ig , mt 37 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 51 , igp )                       107.2s
+ relative covariance ( mt 18 , ig , mt 51 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 52 , igp )                       107.2s
+ relative covariance ( mt 18 , ig , mt 52 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 53 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 53 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 54 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 54 , igp )                        93.1s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 55 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 55 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 56 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 56 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 57 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 57 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 58 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 58 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 59 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 59 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 60 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 60 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 61 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 61 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 62 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 62 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 63 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 63 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 64 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 64 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 65 , igp )                       107.3s
+ relative covariance ( mt 18 , ig , mt 65 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 66 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 66 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 67 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 67 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 68 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 68 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 69 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 69 , igp )                        93.2s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 70 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 71 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 72 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 73 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 74 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 75 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 76 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 77 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt 91 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 18 , ig , mt102 , igp )                       107.4s
+ relative covariance ( mt 18 , ig , mt102 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3615,7 +3615,7 @@ icntrl(10) control logic flag set for damage energy:   0
    8     7 -2.879E-06  3.988E-06 -3.930E-06 -2.444E-08
    9     1  1.632E-06  1.692E-06  1.835E-06  2.274E-06  1.635E-06 -1.661E-05
    9     7 -1.110E-06 -1.106E-07 -5.811E-05  1.811E-07
-  10     1 -3.219E-09 -3.684E-09 -4.845E-09 -8.956E-09 -1.225E-08 -7.625E-08
+  10     1 -3.218E-09 -3.684E-09 -4.845E-09 -8.956E-09 -1.225E-08 -7.625E-08
   10     7 -8.416E-09 -2.353E-09  7.892E-08  2.606E-07 -1.850E-08
   11    10  3.802E-08 -9.597E-08  7.473E-11
   12    11  2.192E-15 -5.812E-06  8.011E-14
@@ -3629,127 +3629,127 @@ icntrl(10) control logic flag set for damage energy:   0
         2     2  2.719E-04  0.000E+00
         9     9  8.265E-08  0.000E+00
 
- relative covariance ( mt 37 , ig , mt 37 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 37 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 51 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 51 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 52 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 52 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 53 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 53 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 54 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 54 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 55 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 55 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 56 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 56 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 57 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 37 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 37 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 51 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 51 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3805,119 +3805,119 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20  9.280E-05 -1.214E-03 -6.337E-04  2.265E-03  9.230E-03  1.863E-02
   30    26  2.727E-02  4.235E-02  5.244E-02  5.891E-02  6.438E-02
 
- relative covariance ( mt 51 , ig , mt 52 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 52 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 53 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 53 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 54 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 54 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 55 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 55 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 56 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 56 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 57 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 51 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 52 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 52 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3967,115 +3967,115 @@ icntrl(10) control logic flag set for damage energy:   0
   30    22  1.973E-03  5.858E-03  1.730E-02  3.427E-02  5.296E-02  8.136E-02
   30    28  9.306E-02  1.010E-01  1.079E-01
 
- relative covariance ( mt 52 , ig , mt 53 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 53 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 54 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 54 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 55 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 55 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 56 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 56 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 57 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 52 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 52 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 53 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 53 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4122,111 +4122,111 @@ icntrl(10) control logic flag set for damage energy:   0
   30    23  7.146E-02  1.541E-01  1.801E-01  1.809E-01  2.670E-01  3.310E-01
   30    29  3.495E-01  3.501E-01
 
- relative covariance ( mt 53 , ig , mt 54 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 54 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 55 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 55 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 56 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 56 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 57 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 53 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 53 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 54 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 54 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4270,107 +4270,107 @@ icntrl(10) control logic flag set for damage energy:   0
   30    24  1.138E-02  3.418E-02  5.818E-02  7.134E-02  8.110E-02  9.024E-02
   30    30  9.755E-02
 
- relative covariance ( mt 54 , ig , mt 55 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 55 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 56 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 56 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 57 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 54 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 54 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 55 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 55 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4414,103 +4414,103 @@ icntrl(10) control logic flag set for damage energy:   0
   30    24  4.509E-02  3.686E-02  2.892E-02  2.556E-02  2.422E-02  2.471E-02
   30    30  2.576E-02
 
- relative covariance ( mt 55 , ig , mt 56 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 56 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 57 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 55 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 55 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 56 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 56 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4539,99 +4539,99 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -7.722E-04 -1.064E-03  3.718E-03  1.773E-02  2.302E-02  2.872E-02
   30    25  3.756E-02  6.681E-02  9.635E-02  1.008E-01  1.045E-01  1.075E-01
 
- relative covariance ( mt 56 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 57 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 56 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 56 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 57 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 57 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4660,95 +4660,95 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  3.562E-03 -5.977E-03  1.252E-02  1.098E-02  2.836E-03  7.781E-03
   30    25  4.895E-02  9.456E-02  1.409E-01  1.795E-01  2.070E-01  2.276E-01
 
- relative covariance ( mt 57 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 58 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 57 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 57 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 58 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 58 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4777,91 +4777,91 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  1.150E-04  8.209E-04  3.833E-03  4.202E-02  1.826E-01  4.213E-01
   30    25  3.768E-01  4.874E-01  6.287E-01  6.971E-01  7.311E-01  7.577E-01
 
- relative covariance ( mt 58 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 59 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 58 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 58 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 59 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 59 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4890,87 +4890,87 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -3.233E-03 -4.365E-03 -4.768E-03  1.756E-02  1.581E-01  6.157E-01
   30    25  7.473E-01  9.017E-01  9.757E-01  9.916E-01  9.956E-01  9.966E-01
 
- relative covariance ( mt 59 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 60 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 59 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 59 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 60 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 60 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4999,83 +4999,83 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  1.743E-06 -7.101E-04 -1.547E-03 -1.583E-03  2.681E-04  9.616E-03
   30    25  1.468E-02  2.901E-02  3.325E-02  4.280E-02  5.013E-02  5.417E-02
 
- relative covariance ( mt 60 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 61 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 60 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 60 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 61 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 61 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5104,79 +5104,79 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  1.284E-02  3.294E-02 -8.798E-03 -1.194E-02 -1.590E-02  7.441E-03
   30    25  6.868E-02  1.233E-01  1.693E-01  2.081E-01  2.371E-01  2.600E-01
 
- relative covariance ( mt 61 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 62 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 61 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 61 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 62 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 62 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5205,75 +5205,75 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -9.569E-04 -1.523E-03 -1.997E-03 -6.510E-05  8.568E-03  6.478E-02
   30    25  7.659E-02  7.900E-02  9.093E-02  9.793E-02  1.077E-01  1.163E-01
 
- relative covariance ( mt 62 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 63 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 62 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 62 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 63 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 63 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5302,71 +5302,71 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -5.428E-04 -5.673E-04 -2.754E-03 -8.699E-04  2.871E-03  1.199E-02
   30    25  1.834E-02  3.732E-02  3.845E-02  4.406E-02  4.980E-02  5.329E-02
 
- relative covariance ( mt 63 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 64 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 63 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 63 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 64 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 64 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5395,67 +5395,67 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  1.219E-03 -4.932E-04  1.903E-04  5.583E-04 -3.088E-03 -4.793E-03
   30    25  5.548E-02  1.122E-01  1.309E-01  1.547E-01  1.888E-01  2.177E-01
 
- relative covariance ( mt 64 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 65 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 64 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 64 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 65 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 65 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5467,63 +5467,63 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19  1.812E-03  1.290E-02  2.901E-02  3.572E-02  3.801E-02  3.979E-02
   30    30  0.000E+00
 
- relative covariance ( mt 65 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 66 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 65 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 65 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 66 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 66 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5552,59 +5552,59 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.283E-03  2.781E-05  2.279E-03  1.758E-04  3.056E-03  1.526E-02
   30    25  3.414E-02  4.708E-02  6.509E-02  7.676E-02  8.367E-02  8.975E-02
 
- relative covariance ( mt 66 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 67 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 66 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 66 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 67 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 67 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5633,55 +5633,55 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19  2.210E-03  3.733E-03  7.922E-03  4.709E-03  7.213E-03  7.280E-02
   30    25  3.064E-02 -5.558E-02  2.509E-01  4.463E-01  4.615E-01  5.143E-01
 
- relative covariance ( mt 67 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 68 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 67 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 67 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 68 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 68 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5693,51 +5693,51 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19  2.029E-03  1.272E-02  2.892E-02  3.570E-02  3.801E-02  3.979E-02
   30    30  0.000E+00
 
- relative covariance ( mt 68 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 69 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 68 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 68 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 69 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 69 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5766,47 +5766,47 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -1.496E-04  1.814E-04 -1.727E-03 -7.764E-03 -1.564E-02 -5.127E-03
   30    25  8.314E-02  1.175E-01  1.069E-01  1.387E-01  1.883E-01  2.276E-01
 
- relative covariance ( mt 69 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 70 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 69 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 69 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 70 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 70 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5835,43 +5835,43 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -5.090E-03 -8.137E-03 -1.213E-02 -1.271E-02  1.610E-02  3.271E-01
   30    25  6.728E-01  8.605E-01  9.739E-01  9.947E-01  9.966E-01  9.973E-01
 
- relative covariance ( mt 70 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 71 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 70 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 70 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt 71 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 71 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5900,39 +5900,39 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -6.423E-03  5.832E-03  1.950E-02  5.707E-02  1.393E-01  4.067E-01
   30    25  6.396E-01  6.962E-01  7.419E-01  8.235E-01  8.692E-01  8.165E-01
 
- relative covariance ( mt 71 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 72 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 71 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 71 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 72 , ig , mt 72 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt 72 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5961,35 +5961,35 @@ icntrl(10) control logic flag set for damage energy:   0
   30    19 -3.199E-03 -3.120E-03 -1.672E-03  5.581E-03  2.789E-02  1.176E-01
   30    25  1.006E-01  8.171E-02  8.914E-02  1.035E-01  1.159E-01  1.236E-01
 
- relative covariance ( mt 72 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt 73 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 72 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 72 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 72 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 72 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 72 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 72 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 72 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 73 , ig , mt 73 , igp )                       107.5s
+ relative covariance ( mt 73 , ig , mt 73 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6000,31 +6000,31 @@ icntrl(10) control logic flag set for damage energy:   0
   24    20  1.343E-02  2.903E-02  3.573E-02  3.802E-02  3.979E-02
   30    30  0.000E+00
 
- relative covariance ( mt 73 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 73 , ig , mt 74 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 73 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 73 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 73 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 73 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 73 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 73 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 73 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 73 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 73 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 73 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 74 , ig , mt 74 , igp )                       107.5s
+ relative covariance ( mt 74 , ig , mt 74 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6051,27 +6051,27 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20  2.922E-04  5.423E-04  3.006E-03  1.067E-02  9.297E-02  2.165E-01
   30    26  3.007E-01  4.800E-01  5.268E-01  5.360E-01  5.486E-01
 
- relative covariance ( mt 74 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 74 , ig , mt 75 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 74 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 74 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 74 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 74 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 74 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 74 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 74 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 74 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 75 , ig , mt 75 , igp )                       107.5s
+ relative covariance ( mt 75 , ig , mt 75 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6098,23 +6098,23 @@ icntrl(10) control logic flag set for damage energy:   0
   30    20 -2.486E-02 -1.853E-02 -9.871E-03 -8.519E-03 -9.334E-03  1.059E-01
   30    26  3.790E-01  8.070E-01  9.477E-01  9.887E-01  9.960E-01
 
- relative covariance ( mt 75 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 75 , ig , mt 76 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 75 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 75 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 75 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 75 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 75 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 75 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 76 , ig , mt 76 , igp )                       107.5s
+ relative covariance ( mt 76 , ig , mt 76 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6126,19 +6126,19 @@ icntrl(10) control logic flag set for damage energy:   0
   24    19  3.707E-03  1.402E-02  2.901E-02  3.570E-02  3.801E-02  3.978E-02
   30    30  0.000E+00
 
- relative covariance ( mt 76 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 76 , ig , mt 77 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 76 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 76 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 76 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 76 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 77 , ig , mt 77 , igp )                       107.5s
+ relative covariance ( mt 77 , ig , mt 77 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6149,15 +6149,15 @@ icntrl(10) control logic flag set for damage energy:   0
   24    20  1.613E-02  2.933E-02  3.572E-02  3.801E-02  3.973E-02
   30    30  0.000E+00
 
- relative covariance ( mt 77 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 77 , ig , mt 91 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 77 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 77 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt 91 , ig , mt 91 , igp )                       107.5s
+ relative covariance ( mt 91 , ig , mt 91 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6183,11 +6183,11 @@ icntrl(10) control logic flag set for damage energy:   0
   29    25  9.169E-04  9.417E-03  2.946E-02  3.683E-02  3.917E-02  3.723E-02
   30    25  5.726E-05  2.494E-03  1.986E-02  3.220E-02  3.723E-02  3.872E-02
 
- relative covariance ( mt 91 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt 91 , ig , mt102 , igp )                        93.3s
 
  zero
 
- relative covariance ( mt102 , ig , mt102 , igp )                       107.5s
+ relative covariance ( mt102 , ig , mt102 , igp )                        93.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6257,10 +6257,10 @@ icntrl(10) control logic flag set for damage energy:   0
        13    13  6.404E-07  2.870E-03
        14    14  0.000E+00  1.182E-03
        15    15  0.000E+00  1.750E-03
-                                                                        107.5s
+                                                                         93.3s
  *****************************************************************************
 
- errorr...produce cross section covariances                             107.5s
+ errorr...produce cross section covariances                              93.3s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -23
@@ -6389,25 +6389,25 @@ icntrl(10) control logic flag set for damage energy:   0
     55      1.35000E+07  -  1.50000E+07
     56      1.50000E+07  -  1.70000E+07
 
- computing multigroup cross sections                                    107.5s
+ computing multigroup cross sections                                     93.3s
 
  weight function......(thermal) -- (1/e) -- (fission + fusion)
 
- group averaging completed                                              107.5s
+ group averaging completed                                               93.4s
 
 
- computing multigroup legendre coef.                                    107.5s
+ computing multigroup legendre coef.                                     93.4s
 
  weight function......(thermal) -- (1/e) -- (fission + fusion)
 
- legendre group averaging completed                                     107.5s
+ legendre group averaging completed                                      93.4s
 
 
  processing mat  9237
  ---------------------
   92-U -238 KYU+       EVAL-Mar00 T.Kawano et al.                    
 
- covariances calculated for  1 reactions and   56 groups                107.5s
+ covariances calculated for  1 reactions and   56 groups                 93.4s
 
  table of multigroup data
 
@@ -6445,7 +6445,7 @@ icntrl(10) control logic flag set for damage energy:   0
    29  1.3500E+07  3.5585E-05  9.0396E-01
    30  1.5000E+07  1.6872E-05  9.1995E-01
 
- relative covariance ( mt  2 , ig , mt  2 , igp )                       107.5s
+ relative covariance ( mt  2 , ig , mt  2 , igp )                        93.4s
              same as ( mt251 , ig , mt251 , igp )
  for legendre component:  1 and  1
   ig   igp         +0         +1         +2
@@ -6502,10 +6502,10 @@ icntrl(10) control logic flag set for damage energy:   0
   30    14 -5.591E-05 -1.183E-04 -3.004E-05  1.893E-05  3.755E-05  5.081E-05
   30    20  1.096E-04  1.383E-04  1.232E-04  1.004E-04  9.077E-05  9.526E-05
   30    26  8.846E-05  1.023E-04  1.486E-04  1.781E-04  2.274E-04
-                                                                        107.5s
+                                                                         93.4s
  *****************************************************************************
 
- covr...process covariance data                                         107.5s
+ covr...process covariance data                                          93.4s
 
  unit for input covariance tape .......         26
  unit for output covariance tape ......          0
@@ -6573,10 +6573,10 @@ icntrl(10) control logic flag set for damage energy:   0
  reaction-pairs processed 9237   18   9237  102
 
  reaction-pairs processed 9237  102   9237  102
-                                                                        107.8s
+                                                                         93.6s
  **************************************************************************
 
- covr...process covariance data                                         107.8s
+ covr...process covariance data                                          93.6s
 
  unit for input covariance tape .......         27
  unit for output covariance tape ......          0
@@ -6596,10 +6596,10 @@ icntrl(10) control logic flag set for damage energy:   0
  reaction-pairs processed 9237  251   9237  251
 
  ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.1153E-01
-                                                                        107.8s
+                                                                         93.6s
  **************************************************************************
 
- viewr...display plots                                                  107.8s
+ viewr...display plots                                                   93.6s
 
  lori .................................          1
  xpage ................................     10.000
@@ -27710,10 +27710,10 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          0
 
-                                                                        107.9s
+                                                                         93.7s
  *****************************************************************************
 
- viewr...display plots                                                  107.9s
+ viewr...display plots                                                   93.7s
 
  lori .................................          1
  xpage ................................     10.000
@@ -29573,5 +29573,5 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          0
 
-                                                                        108.0s
+                                                                         93.7s
  *****************************************************************************
