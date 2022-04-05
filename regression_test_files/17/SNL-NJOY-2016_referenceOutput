@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:52:02  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:35:10  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #17                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  reconr...reconstruct pointwise cross sections in pendf format            0.0s
 
@@ -118,10 +118,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =  176450
  final number of resonance points             =  246591
  number of points in final unionized grid     =  246931
-                                                                         16.2s
+                                                                         14.4s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                16.2s
+ broadr...doppler broadening of endf data                                14.4s
 
  unit for input endf tape .............         21
  unit for input pendf tape ............         41
@@ -143,15 +143,15 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    1.00000E+04 eV.
 
  final maximum energy for broadening/thinning =    1.00000E+04 eV
-                                                                         18.8s
+                                                                         16.5s
 
  broadened mat9237 from  0.0000E+00 to  3.0000E+02 k
          points in= 246931  points out= 102946
          mt   2  18 102
-                                                                         38.0s
+                                                                         35.6s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format           38.0s
+ reconr...reconstruct pointwise cross sections in pendf format           35.6s
 
  unit for endf tape ...................         22
  unit for pendf tape ..................         42
@@ -208,7 +208,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =    9525
  points in initial unionized grid             =   10070
- points added by linearization                =     420                  38.3s
+ points added by linearization                =     420                  35.8s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -237,10 +237,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =   80324
  final number of resonance points             =  242289
  number of points in final unionized grid     =  242949
-                                                                        166.3s
+                                                                        147.9s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                               166.3s
+ broadr...doppler broadening of endf data                               147.9s
 
  unit for input endf tape .............         22
  unit for input pendf tape ............         42
@@ -262,15 +262,15 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    2.25000E+03 eV.
 
  final maximum energy for broadening/thinning =    2.25000E+03 eV
-                                                                        169.8s
+                                                                        151.1s
 
  broadened mat9228 from  0.0000E+00 to  3.0000E+02 k
          points in= 242949  points out=  76300
          mt   2  18  51 102
-                                                                        192.2s
+                                                                        173.7s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format          192.2s
+ reconr...reconstruct pointwise cross sections in pendf format          173.7s
 
  unit for endf tape ...................         23
  unit for pendf tape ..................         43
@@ -321,7 +321,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =    3074
  points in initial unionized grid             =    3334
- points added by linearization                =     473                 192.3s
+ points added by linearization                =     473                 173.8s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -350,10 +350,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =   50510
  final number of resonance points             =  150177
  number of points in final unionized grid     =  150598
-                                                                        206.4s
+                                                                        186.4s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                               206.4s
+ broadr...doppler broadening of endf data                               186.4s
 
  unit for input endf tape .............         23
  unit for input pendf tape ............         43
@@ -375,15 +375,15 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    2.50000E+03 eV.
 
  final maximum energy for broadening/thinning =    2.50000E+03 eV
-                                                                        207.9s
+                                                                        187.7s
 
  broadened mat9437 from  0.0000E+00 to  3.0000E+02 k
          points in= 150598  points out=  71916
          mt   2  18 102
-                                                                        221.9s
+                                                                        201.6s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections           221.9s
+ groupr...compute self-shielded group-averaged cross-sections           201.6s
 
  unit for endf tape ...................         21
  unit for pendf tape ..................         31
@@ -456,32 +456,32 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
                                                                       
  
- group constants at t=3.000E+02 deg k                                   222.1s
+ group constants at t=3.000E+02 deg k                                   201.7s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  
  
- group constants at t=3.000E+02 deg k                                   222.2s
+ group constants at t=3.000E+02 deg k                                   201.8s
  for mf  3 and mt  2 (n,elastic) cross section                                   
  
  
  
- group constants at t=3.000E+02 deg k                                   222.3s
+ group constants at t=3.000E+02 deg k                                   201.9s
  for mf  3 and mt  4 (n,inel) cross section                                      
  
  
  
- group constants at t=3.000E+02 deg k                                   222.3s
+ group constants at t=3.000E+02 deg k                                   201.9s
  for mf  3 and mt 16 (n,2n) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   222.3s
+ group constants at t=3.000E+02 deg k                                   201.9s
  for mf  3 and mt 17 (n,3n) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   222.3s
+ group constants at t=3.000E+02 deg k                                   201.9s
  for mf  3 and mt 18 (n,fission) cross section                                   
  
  
@@ -489,187 +489,187 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt 37
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 51 (n,n01) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 52 (n,n02) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 53 (n,n03) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 54 (n,n04) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 55 (n,n05) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 56 (n,n06) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 57 (n,n07) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 58 (n,n08) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 59 (n,n09) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 60 (n,n10) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 61 (n,n11) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 62 (n,n12) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 63 (n,n13) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 64 (n,n14) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 65 (n,n15) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 66 (n,n16) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 67 (n,n17) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 68 (n,n18) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 69 (n,n19) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 70 (n,n20) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 71 (n,n21) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 72 (n,n22) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 73 (n,n23) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 74 (n,n24) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 75 (n,n25) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 76 (n,n26) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 77 (n,n27) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt 91 (n,nc) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   222.4s
+ group constants at t=3.000E+02 deg k                                   202.0s
  for mf  3 and mt102 (n,g) cross section                                         
  
  
  
- group constants at t=3.000E+02 deg k                                   222.5s
+ group constants at t=3.000E+02 deg k                                   202.1s
  for mf  3 and mt251 mubar                                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   223.7s
+ group constants at t=3.000E+02 deg k                                   202.6s
  for mf  3 and mt252 xi                                                          
  
  
  
- group constants at t=3.000E+02 deg k                                   224.2s
+ group constants at t=3.000E+02 deg k                                   202.8s
  for mf  3 and mt452 nu                                                          
  
  
  
- group constants at t=3.000E+02 deg k                                   224.3s
+ group constants at t=3.000E+02 deg k                                   202.9s
  for mf  3 and mt455 nu                                                          
  
  
  
- group constants at t=3.000E+02 deg k                                   224.7s
+ group constants at t=3.000E+02 deg k                                   203.1s
  for mf  3 and mt456 nu                                                          
  
  
  
- group constants at t=3.000E+02 deg k                                   225.2s
+ group constants at t=3.000E+02 deg k                                   203.3s
  for mf  5 and mt 18 xi                                                          
 
  spectrum constant below 3.3500E+03 ev  (  11 groups)
  
  
  
-                                                                        225.5s
+                                                                        203.5s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections           225.5s
+ groupr...compute self-shielded group-averaged cross-sections           203.5s
 
  unit for endf tape ...................         22
  unit for pendf tape ..................         32
@@ -742,32 +742,32 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
                                                                       
  
- group constants at t=3.000E+02 deg k                                   225.6s
+ group constants at t=3.000E+02 deg k                                   203.6s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  
  
- group constants at t=3.000E+02 deg k                                   225.7s
+ group constants at t=3.000E+02 deg k                                   203.6s
  for mf  3 and mt  2 (n,elastic) cross section                                   
  
  
  
- group constants at t=3.000E+02 deg k                                   225.8s
+ group constants at t=3.000E+02 deg k                                   203.7s
  for mf  3 and mt  4 (n,inel) cross section                                      
  
  
  
- group constants at t=3.000E+02 deg k                                   225.8s
+ group constants at t=3.000E+02 deg k                                   203.8s
  for mf  3 and mt 16 (n,2n) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   225.8s
+ group constants at t=3.000E+02 deg k                                   203.8s
  for mf  3 and mt 17 (n,3n) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   225.8s
+ group constants at t=3.000E+02 deg k                                   203.8s
  for mf  3 and mt 18 (n,fission) cross section                                   
  
  
@@ -775,165 +775,165 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt 37
  
- group constants at t=3.000E+02 deg k                                   225.9s
+ group constants at t=3.000E+02 deg k                                   203.8s
  for mf  3 and mt 51 (n,n01) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 52 (n,n02) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 53 (n,n03) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 54 (n,n04) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 55 (n,n05) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 56 (n,n06) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 57 (n,n07) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 58 (n,n08) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 59 (n,n09) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 60 (n,n10) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 61 (n,n11) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 62 (n,n12) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 63 (n,n13) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 64 (n,n14) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 65 (n,n15) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 66 (n,n16) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 67 (n,n17) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 68 (n,n18) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 69 (n,n19) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 70 (n,n20) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 71 (n,n21) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 72 (n,n22) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 73 (n,n23) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 74 (n,n24) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 75 (n,n25) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 76 (n,n26) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 77 (n,n27) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 78 (n,n28) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 79 (n,n29) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt 91 (n,nc) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   226.0s
+ group constants at t=3.000E+02 deg k                                   203.9s
  for mf  3 and mt102 (n,g) cross section                                         
  
  
  
-                                                                        226.1s
+                                                                        204.0s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections           226.1s
+ groupr...compute self-shielded group-averaged cross-sections           204.0s
 
  unit for endf tape ...................         23
  unit for pendf tape ..................         33
@@ -1006,32 +1006,32 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
                                                                       
  
- group constants at t=3.000E+02 deg k                                   226.5s
+ group constants at t=3.000E+02 deg k                                   204.3s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  
  
- group constants at t=3.000E+02 deg k                                   226.5s
+ group constants at t=3.000E+02 deg k                                   204.4s
  for mf  3 and mt  2 (n,elastic) cross section                                   
  
  
  
- group constants at t=3.000E+02 deg k                                   226.6s
+ group constants at t=3.000E+02 deg k                                   204.4s
  for mf  3 and mt  4 (n,inel) cross section                                      
  
  
  
- group constants at t=3.000E+02 deg k                                   226.6s
+ group constants at t=3.000E+02 deg k                                   204.4s
  for mf  3 and mt 16 (n,2n) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   226.6s
+ group constants at t=3.000E+02 deg k                                   204.4s
  for mf  3 and mt 17 (n,3n) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   226.6s
+ group constants at t=3.000E+02 deg k                                   204.4s
  for mf  3 and mt 18 (n,fission) cross section                                   
  
  
@@ -1039,110 +1039,110 @@ icntrl(10) control logic flag set for damage energy:   0
 
  threshold is above highest energy bound for mt 37
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 51 (n,n01) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 52 (n,n02) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 53 (n,n03) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 54 (n,n04) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 55 (n,n05) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 56 (n,n06) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 57 (n,n07) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 58 (n,n08) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 59 (n,n09) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 60 (n,n10) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 61 (n,n11) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 62 (n,n12) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 63 (n,n13) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 64 (n,n14) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 65 (n,n15) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 66 (n,n16) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 67 (n,n17) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 68 (n,n18) cross section                                       
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt 91 (n,nc) cross section                                        
  
  
  
- group constants at t=3.000E+02 deg k                                   226.7s
+ group constants at t=3.000E+02 deg k                                   204.5s
  for mf  3 and mt102 (n,g) cross section                                         
  
  
  
-                                                                        226.8s
+                                                                        204.6s
  *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape            226.8s
+ moder...change the mode of an endf tape or njoy output tape            204.6s
 
  put materials from various tapes on output tape  99
 
@@ -1157,10 +1157,10 @@ icntrl(10) control logic flag set for damage energy:   0
            92          9228
            91          9237
            93          9437
-                                                                        226.8s
+                                                                        204.6s
  *****************************************************************************
 
- errorr...produce cross section covariances                             226.8s
+ errorr...produce cross section covariances                             204.6s
 
  unit for endf tape ...................         21
  unit for pendf tape ..................          0
@@ -1497,7 +1497,6 @@ icntrl(10) control logic flag set for damage energy:   0
    107      1.21631E+07  -  1.25000E+07
    108      1.25000E+07  -  1.30000E+07
    109      1.30000E+07  -  1.35000E+07
-Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_DIVIDE_BY_ZERO
 STOP 77
    110      1.35000E+07  -  1.45000E+07
    111      1.45000E+07  -  1.50000E+07

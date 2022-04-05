@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:07:38  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:47:14  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #31                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -24,10 +24,10 @@ icntrl(10) control logic flag set for damage energy:   0
   Retrieved by E4-Web: 2018/03/20,10:00:45                            
 
  using endf-6 format
-                                                                          1.2s
+                                                                          1.0s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            1.2s
+ reconr...reconstruct pointwise cross sections in pendf format            1.0s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -148,7 +148,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =    1666
  points in initial unionized grid             =    3044
- points added by linearization                =     338                   1.3s
+ points added by linearization                =     338                   1.0s
 
                estimated maximum error due to
                resonance integral check (errmax,errint)
@@ -177,10 +177,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =   79037
  final number of resonance points             =  144372
  number of points in final unionized grid     =  145762
-                                                                         11.7s
+                                                                          9.6s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                11.7s
+ broadr...doppler broadening of endf data                                 9.6s
 
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -22
@@ -202,7 +202,7 @@ icntrl(10) control logic flag set for damage energy:   0
  resolved resonance range upper limit         =    5.70000E+03 eV.
 
  final maximum energy for broadening/thinning =    5.70000E+03 eV
-                                                                         11.9s
+                                                                          9.8s
 
  broadened mat9440 from  0.0000E+00 to  2.9360E+02 k
          points in= 145762  points out=  72125
@@ -223,10 +223,10 @@ icntrl(10) control logic flag set for damage energy:   0
                   equivalent k1: -2.9682E+02
      fission resonance integral:  1.0781E+01
     -----------------------------------------
-                                                                         22.0s
+                                                                         19.9s
  *****************************************************************************
 
- purr...probabalistic unresolved calculation                             22.0s
+ purr...probabalistic unresolved calculation                             19.9s
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -23
  unit for output pendf tape ...........        -24
@@ -237,7 +237,7 @@ icntrl(10) control logic flag set for damage energy:   0
  print option (0=min, 1=max) ..........          1
  no. of energy points (0=all) .........          0
 
- mat = 9440                                                              22.0s
+ mat = 9440                                                              19.9s
  evaluation lssf equal to 1
 
  competition starts at  3.0000E+04
@@ -779,12 +779,12 @@ e= 4.0000E+04  spot= 9.4839E+00  dbar= 1.4989E+00  sigx= 0.0000E+00
          temp      sig0    p0 total     elastic     fission     capture    p1 total
     2.936E+02 1.000E+10  1.2862E+01  1.2134E+01  9.7454E-02  6.2988E-01  1.2862E+01
 
- generated cross sections at  14 points                                  40.8s
+ generated cross sections at  14 points                                  37.8s
 
-                                                                         40.8s
+                                                                         37.8s
 *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape             40.8s
+ moder...change the mode of an endf tape or njoy output tape             37.8s
 
  input unit (+ for coded, - for bb) ...        -24
  output unit (+ for coded, - for bb) ..         30
@@ -794,5 +794,5 @@ e= 4.0000E+04  spot= 9.4839E+00  dbar= 1.4989E+00  sigx= 0.0000E+00
   reconr/pendf tape for 9440                                          
 
  using endf-6 format
-                                                                         43.8s
+                                                                         41.0s
  *****************************************************************************

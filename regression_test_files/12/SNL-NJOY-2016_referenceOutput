@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:47:53  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:31:57  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #12                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  reconr...reconstruct pointwise cross sections in pendf format            0.0s
 
@@ -125,10 +125,10 @@ icntrl(10) control logic flag set for damage energy:   0
  *** means that the yield is energy dependent
 
  found 1 temperatures
-                                                                          0.5s
+                                                                          0.4s
  *****************************************************************************
 
- plotr...plot endf, pendf, gendf, or input data                           0.5s
+ plotr...plot endf, pendf, gendf, or input data                           0.4s
 
  lori .................................          1
  istyle ...............................          1

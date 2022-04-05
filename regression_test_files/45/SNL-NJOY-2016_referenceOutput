@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:17:36  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:54:26  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #45                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -158,10 +158,10 @@ icntrl(10) control logic flag set for damage energy:   0
        thermal capture integral:  3.5106E-01
      capture resonance integral:  1.7807E-01
     -----------------------------------------
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- gaspr...add gas production cross sections                                0.2s
+ gaspr...add gas production cross sections                                0.1s
 
  units:   -21   -23   -22
 
@@ -220,5 +220,5 @@ icntrl(10) control logic flag set for damage energy:   0
  tape id is blank
 
  using endf-6 format
-                                                                          0.3s
+                                                                          0.2s
  *****************************************************************************

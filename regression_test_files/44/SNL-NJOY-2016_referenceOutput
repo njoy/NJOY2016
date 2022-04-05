@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:17:33  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:54:26  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #44                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -88,15 +88,15 @@ icntrl(10) control logic flag set for damage energy:   0
  - reset to    6.50000E+06 eV.
 
  final maximum energy for broadening/thinning =    1.95000E+07 eV
-                                                                          0.1s
+                                                                          0.0s
 
  broadened mat 125 from  0.0000E+00 to  1.0000E-01 k
          points in=    302  points out=    288
          mt   2 102
-                                                                          0.1s
+                                                                          0.0s
  *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape              0.1s
+ moder...change the mode of an endf tape or njoy output tape              0.0s
 
  input unit (+ for coded, - for bb) ...        -23
  output unit (+ for coded, - for bb) ..         35
@@ -106,5 +106,5 @@ icntrl(10) control logic flag set for damage energy:   0
   reconr/pendf tape for 125                                           
 
  using endf-6 format
-                                                                          0.1s
+                                                                          0.0s
  *****************************************************************************

@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:07:27  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:47:09  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #30                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -73,12 +73,12 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =       0
  points in initial unionized grid             =     153
- points added by linearization                =     542                   0.1s
+ points added by linearization                =     542                   0.0s
  number of points in final unionized grid     =     695
-                                                                          0.1s
+                                                                          0.0s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 0.1s
+ broadr...doppler broadening of endf data                                 0.0s
 
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -22
@@ -101,7 +101,7 @@ icntrl(10) control logic flag set for damage energy:   0
  - reset to    6.50000E+06 eV.
 
  final maximum energy for broadening/thinning =    6.50000E+06 eV
-                                                                          0.1s
+                                                                          0.0s
 
  broadened mat 125 from  0.0000E+00 to  3.0000E+02 k
          points in=    695  points out=    631
@@ -1262,7 +1262,7 @@ icntrl(10) control logic flag set for damage energy:   0
    174    6.60419-1
    175    6.60196-1
  
- group constants at t=3.000E+02 deg k                                     0.7s
+ group constants at t=3.000E+02 deg k                                     0.6s
  for mf  3 and mt252 xi                                                          
  
  enrgy  group constants at
@@ -1443,7 +1443,7 @@ icntrl(10) control logic flag set for damage energy:   0
    174    2.47011-2
    175    1.17629-1
  
- group constants at t=3.000E+02 deg k                                     1.2s
+ group constants at t=3.000E+02 deg k                                     1.0s
  for mf  3 and mt253 gamma                                                       
  
  enrgy  group constants at
@@ -1624,7 +1624,7 @@ icntrl(10) control logic flag set for damage energy:   0
    174    1.24509-2
    175    6.11814-2
  
- group constants at t=3.000E+02 deg k                                     1.6s
+ group constants at t=3.000E+02 deg k                                     1.4s
  for mf  3 and mt259 1/v                                                         
  
  enrgy  group constants at
@@ -1806,7 +1806,7 @@ icntrl(10) control logic flag set for damage energy:   0
    174    1.74475-8
    175    1.67977-8
  
- group constants at t=3.000E+02 deg k                                     1.6s
+ group constants at t=3.000E+02 deg k                                     1.4s
  for mf  6 and mt  2 (n,elastic) neutron matrix                                  
  
  initl  final  group constants vs legendre order
@@ -16877,7 +16877,7 @@ icntrl(10) control logic flag set for damage energy:   0
    175    174   1.18356-2  1.14101-2  1.05877-2  9.42299-3  7.99216-3  6.38677-3  4.70633-3
    175    175   3.06699-2  3.00550-2  2.88529-2  2.71177-2  2.49260-2  2.23732-2  1.95670-2
  
- group constants at t=3.000E+02 deg k                                     3.0s
+ group constants at t=3.000E+02 deg k                                     2.6s
  for mf 18 and mt102 (n,g) gamma matrix                                          
  
  initl  final  group constants vs legendre order
@@ -17073,10 +17073,10 @@ icntrl(10) control logic flag set for damage energy:   0
    175     38   2.68999-5  0.00000+0  0.00000+0  0.00000+0  0.00000+0  0.00000+0  0.00000+0
    175     39   8.27002-7  0.00000+0  0.00000+0  0.00000+0  0.00000+0  0.00000+0  0.00000+0
  
-                                                                          3.0s
+                                                                          2.6s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            3.0s
+ reconr...reconstruct pointwise cross sections in pendf format            2.6s
 
  unit for endf tape ...................        -41
  unit for pendf tape ..................        -42
@@ -17109,12 +17109,12 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =       0
  points in initial unionized grid             =    2021
- points added by linearization                =     113                   3.0s
+ points added by linearization                =     113                   2.6s
  number of points in final unionized grid     =    2134
-                                                                          3.0s
+                                                                          2.7s
  *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape              3.0s
+ moder...change the mode of an endf tape or njoy output tape              2.7s
 
  input unit (+ for coded, - for bb) ...        -42
  output unit (+ for coded, - for bb) ..         45
@@ -17124,10 +17124,10 @@ icntrl(10) control logic flag set for damage energy:   0
   PENDF photo-atomic data for 1-H-1                                   
 
  using endf-6 format
-                                                                          3.1s
+                                                                          2.7s
  *****************************************************************************
 
- gaminr...produce photon interaction cross sections                       3.1s
+ gaminr...produce photon interaction cross sections                       2.7s
 
  unit for endf tape ...................        -41
  unit for pendf tape ..................        -42
@@ -17196,7 +17196,7 @@ icntrl(10) control logic flag set for damage energy:   0
  ------------------------------------------------------------------
                                                                      
 
- group constants                                                          3.1s
+ group constants                                                          2.7s
  for mf23 and mt501 totl                                                        
  
  gamma  sigma  
@@ -17244,7 +17244,7 @@ icntrl(10) control logic flag set for damage energy:   0
   41    3.30267-2
   42    2.91330-2
 
- group constants                                                          3.1s
+ group constants                                                          2.7s
  for mf23 and mt502 coht                                                        
  
  gamma  sigma  
@@ -17291,7 +17291,7 @@ icntrl(10) control logic flag set for damage energy:   0
   40    1.81746-8
   41    8.69239-9
 
- group constants                                                          3.1s
+ group constants                                                          2.7s
  for mf26 and mt502 coht                                                        
  
  initl  final  cross sections vs
@@ -17381,7 +17381,7 @@ icntrl(10) control logic flag set for damage energy:   0
   42     42    5.14238-9  5.14238-9  5.14238-9  5.14238-9  5.14238-9  5.14238-9
                5.14238-9
 
- group constants                                                          3.5s
+ group constants                                                          3.1s
  for mf23 and mt504 inch                                                        
  
  gamma  sigma  
@@ -17429,7 +17429,7 @@ icntrl(10) control logic flag set for damage energy:   0
   41    2.67954-2
   42    2.19920-2
 
- group constants                                                          3.5s
+ group constants                                                          3.1s
  for mf26 and mt504 inch                                                        
  
  initl  final  cross sections vs
@@ -18645,7 +18645,7 @@ icntrl(10) control logic flag set for damage energy:   0
   42   xsec    2.19920-2
   42   heat    4.92928+5
 
- group constants                                                          4.5s
+ group constants                                                          4.0s
  for mf23 and mt516 pair                                                        
  
  gamma  sigma  
@@ -18674,7 +18674,7 @@ icntrl(10) control logic flag set for damage energy:   0
   41    6.23132-3
   42    7.14101-3
 
- group constants                                                          4.5s
+ group constants                                                          4.0s
  for mf26 and mt516 pair                                                        
  
  initl  final  cross sections vs
@@ -18726,7 +18726,7 @@ icntrl(10) control logic flag set for damage energy:   0
   42     15    1.42820-2
   42   heat    2.069E+05
 
- group constants                                                          4.5s
+ group constants                                                          4.0s
  for mf23 and mt522 abst                                                        
  
  gamma  sigma      heating
@@ -18773,7 +18773,7 @@ icntrl(10) control logic flag set for damage energy:   0
   40    5.1069-11  8.21399-4
   41    3.4615-11  8.06656-4
 
- group constants                                                          4.5s
+ group constants                                                          4.0s
  for mf23 and mt525 heat                                                        
  
  gamma  heating
@@ -18820,10 +18820,10 @@ icntrl(10) control logic flag set for damage energy:   0
   40    4.87320+5
   41    6.02935+5
   42    6.99860+5
-                                                                          4.5s
+                                                                          4.0s
  *****************************************************************************
 
- matxsr...produce a matxs format output file                              4.5s
+ matxsr...produce a matxs format output file                              4.0s
 
  input gendf unit .....................         31
  input gamout unit ....................         43
@@ -18848,8 +18848,8 @@ icntrl(10) control logic flag set for damage energy:   0
  output particles .....................            1         2         2
 
 
-          doing h1       for nscat    ...     4.6s
-          doing h1       for ng       ...     4.9s
-          doing h1       for gscat    ...     4.9s
-                                                                          5.0s
+          doing h1       for nscat    ...     4.1s
+          doing h1       for ng       ...     4.3s
+          doing h1       for gscat    ...     4.3s
+                                                                          4.4s
  *****************************************************************************

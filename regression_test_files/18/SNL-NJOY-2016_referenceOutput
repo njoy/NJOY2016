@@ -4,15 +4,15 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 03:55:56  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/24/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 10:38:35  *
  *                                         *              *                  *
  *****************************************************************************
 
 Run Title:: NJOY Regression Test #18                                                        
 
-icntrl(1) control logic flag set for NJOY default (spKP-DE):   0
-icntrl(10) control logic flag set for damage energy:   0
+icntrl(1) control logic flag not implemented:    1     0
+icntrl(10) control logic flag not implemented:    10     0
 
  moder...change the mode of an endf tape or njoy output tape              0.0s
 
@@ -90,14 +90,14 @@ icntrl(10) control logic flag set for damage energy:   0
   2.00E+02     9.27E+00   0.000    4.33E+00   0.000    1.09E+01   0.000
   3.67E+02     8.16E+00   0.000    2.31E+00   0.000    5.84E+00   0.000
 
- points added by resonance reconstruction     =    9524
+ points added by resonance reconstruction     =    9535
  points affected by resonance integral check  =     171
- final number of resonance points             =    9947
+ final number of resonance points             =    9958
 
  ---message from emerge---nonpositive elastic cross sections found.
 
  number of nonpositive cross sections removed =     235
- number of points in final unionized grid     =   10022
+ number of points in final unionized grid     =   10033
                                                                           0.1s
  *****************************************************************************
 
@@ -126,12 +126,12 @@ icntrl(10) control logic flag set for damage energy:   0
                                                                           0.1s
 
  broadened mat9999 from  0.0000E+00 to  3.0000E+02 k
-         points in=  10022  points out=   7617
+         points in=  10033  points out=   7628
          mt   2  18 102
-                                                                          0.8s
+                                                                          0.7s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             0.8s
+ groupr...compute self-shielded group-averaged cross-sections             0.7s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -23
@@ -245,7 +245,7 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
                                                                       
  
- group constants at t=3.000E+02 deg k                                     0.8s
+ group constants at t=3.000E+02 deg k                                     0.7s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  enrgy  group constants at
@@ -765,7 +765,7 @@ icntrl(10) control logic flag set for damage energy:   0
  enrgy  group constants at
  group  infinite dilution
  
-     1    9.99086-1
+     1    9.99085-1
      2    5.01563-1
      3    2.98438-1
      4    2.58333-1
@@ -1045,7 +1045,7 @@ icntrl(10) control logic flag set for damage energy:   0
 
  ---message from covbin---converting mf35 convariance data to errorj format
 
- covariances calculated for  1 reactions and   71 groups                  0.9s
+ covariances calculated for  1 reactions and   71 groups                  0.8s
 
  table of multigroup data
 
@@ -1124,7 +1124,7 @@ icntrl(10) control logic flag set for damage energy:   0
    70  1.7900E+07  1.2000E+06  6.1159E-06
    71  1.9100E+07  9.0000E+05  2.1799E-06
 
- relative covariance ( mt 18 , ig , mt 18 , igp )                         0.9s
+ relative covariance ( mt 18 , ig , mt 18 , igp )                         0.8s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1980,10 +1980,10 @@ icntrl(10) control logic flag set for damage energy:   0
   71    55  4.256E-04  4.414E-04  4.807E-04  5.200E-04  5.545E-04  5.603E-04
   71    61  8.864E-04  9.214E-04  5.121E-04  7.974E-04  1.072E-03  1.582E-03
   71    67  1.052E-03  2.318E-03  3.013E-03  2.538E-03  5.736E-01
-                                                                          0.9s
+                                                                          0.8s
  *****************************************************************************
 
- covr...process covariance data                                           0.9s
+ covr...process covariance data                                           0.8s
 
  unit for input covariance tape .......         28
  unit for output covariance tape ......          0
@@ -2016,10 +2016,10 @@ icntrl(10) control logic flag set for damage energy:   0
    8.5500E+06  9.0500E+06  9.5500E+06  1.0050E+07  1.0550E+07  1.1050E+07
    1.1550E+07  1.2050E+07  1.2550E+07  1.3050E+07  1.3550E+07  1.4050E+07
    1.4600E+07  1.5900E+07  1.6900E+07  1.7900E+07  1.9100E+07  2.0000E+07
-                                                                          0.9s
+                                                                          0.8s
  **************************************************************************
 
- viewr...display plots                                                    0.9s
+ viewr...display plots                                                    0.8s
 
  lori .................................          1
  xpage ................................     10.000
