@@ -8,7 +8,7 @@ module acecm
 
    ! main ace container array
    integer,parameter,public::nxss=50000000
-   real(kr),public::xss(nxss)
+   real(kr),dimension(:),allocatable,public::xss
 
    !--Public routines
    public mtname,ptleg2,pttab2,bachaa,eavl,newsuff
