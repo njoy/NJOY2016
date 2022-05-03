@@ -2,12 +2,13 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.67](https://github.com/njoy/NJOY2016/pull/xxx)
-This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library.
+This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library and TENDL-2021 library for evaluations with sub-actinide fission.
 
 The following minor changes and fixes are included in this version:
   - several corrections to the ERRORR source code to remove compiler warning messages (these were made while looking into issue #211 for gcc-11 compilation)
   - increased the nxcmax array size parameter in ACER to resolve issue #228
   - increased the nthr array size parameter in PURR to resolve an issue in JENDL5 Mn55 (issue #233)
+  - properly set the za in the case of sub-actinide fission (MF10 MT18 data) when using MF10 automated processing in GROUPR (issue #241)
 
 A large number of compiler warnings have now been resolved (unused variables, large static arrays converted into allocatable arrays, etc.). There are still a lot of warnings but their number is heavily reduced. For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 
