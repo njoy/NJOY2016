@@ -6733,6 +6733,13 @@ contains
          call tab2io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
          n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=1',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+2*m+1.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          jnt=nint(scr(8))
@@ -6849,7 +6856,14 @@ contains
            'you will have to patch the evaluation to use lf=1.')
          call tab1io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
-         n=nint(scr(5))
+         n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=5',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+2*m+2*n+2.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          jnt=nint(scr(8))
@@ -6873,6 +6887,13 @@ contains
          call tab1io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
          n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=5',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+n+1.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          xss(next)=n
@@ -6887,6 +6908,13 @@ contains
          call tab1io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
          n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=7 or 9',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+2*m+2*n+2.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          jnt=nint(scr(8))
