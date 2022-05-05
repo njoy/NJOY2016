@@ -8,6 +8,8 @@ The following minor changes and fixes are included in this version:
   - several corrections to the ERRORR source code to remove compiler warning messages (these were made while looking into issue #211 for gcc-11 compilation)
   - increased the nxcmax array size parameter in ACER to resolve issue #228
   - increased the nthr array size parameter in PURR to resolve an issue in JENDL5 Mn55 (issue #233)
+  - fixed an issue for processing JENDL5 U235 in ACER (issue #237)
+  - correction in HEATR to properly retrieve the fission energy release component's Q value at 0 eV (issue #209 - there currently is no evaluation impacted by this change)
   - corrected ACER following issue #188. Evaluations using LAW=7 in MF6 data that are added to the DLWH block are impacted by this change (i.e. for secondary particle types that are not the incident particle type). For ENDF/B-VIII.0, only the secondary alphas from MT16 in Be9 is impacted by the change.
 
 A large number of compiler warnings have now been resolved (unused variables, large static arrays converted into allocatable arrays, etc.). There are still a lot of warnings but their number is heavily reduced. For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
