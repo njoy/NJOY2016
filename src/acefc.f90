@@ -5795,6 +5795,9 @@ contains
          else
             lct=l2h
             call tab1io(nin,0,0,scr,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nin,0,0,scr,nb,nw)
+            enddo
             awp=c2h
             ltt=1
             law=l2h
@@ -5989,6 +5992,11 @@ contains
          law=l2h
          nn=n1h
          n=n2h
+         loc=1+nw
+         do while (nb.ne.0)
+            call moreio(nin,0,0,scr(loc),nb,nw)
+            loc=loc+nw
+         enddo
          !--dndat entry
          xss(lff)=dntc(i)/shake
          lff=lff+1
@@ -6022,6 +6030,9 @@ contains
          else if (law.eq.5) then
             !--law=5
             call tab1io(nin,0,0,scr,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nin,0,0,scr,nb,nw)
+            enddo
             call tab1io(nin,0,0,scr,nb,nw)
             do while (nb.ne.0)
                call moreio(nin,0,0,scr,nb,nw)
@@ -6048,6 +6059,11 @@ contains
          law=l2h
          nn=n1h
          n=n2h
+         loc=1+nw
+         do while (nb.ne.0)
+            call moreio(nin,0,0,scr(loc),nb,nw)
+            loc=loc+nw
+         enddo
          xxmin=scr(7+2*nn)
          xxmax=scr(5+2*nn+2*n)
          !--ldnd entry
@@ -6114,6 +6130,9 @@ contains
          else if (law.eq.5) then
             !--law=5
             call tab1io(nin,0,0,scr,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nin,0,0,scr,nb,nw)
+            enddo
             call tab1io(nin,0,0,scr,nb,nw)
             loc=1+nw
             do while (nb.ne.0)
@@ -6226,6 +6245,9 @@ contains
          call contio(nin,0,0,scr,nb,nw)
          if (mth.eq.1) then
             call tab1io(nin,0,0,scr,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nin,0,0,scr,nb,nw)
+            enddo
             call tab2io(nin,0,0,scr,nb,nw)
             negn=nint(scr(6))
             if (negn.ne.30) call error('acelod',&
@@ -6286,7 +6308,7 @@ contains
    integer::ir,next,nin,ltt3,lttn,ltt,last,law,ne,ie,il,iso,newfor
    real(kr)::scr(*)
    ! internals
-   integer::idone,j,nb,nw,lang,iint,nn,kk,nmu,m,n,i,ne1,ii,ll
+   integer::idone,j,nb,nw,nw2,lang,iint,nn,kk,nmu,m,n,i,ne1,ii,ll
    real(kr)::sum,renorm
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::rmin=1.e-30_kr
@@ -6298,9 +6320,15 @@ contains
       do j=1,ne
          if (newfor.eq.0) then
             call tab1io(nin,0,0,scr,nb,nw)
+            do while (nb.ne.0)
+               call moreio(nin,0,0,scr,nb,nw)
+            enddo
          else
             if (law.eq.7) then
                call tab1io(nin,0,0,scr,nb,nw)
+               do while (nb.ne.0)
+                  call moreio(nin,0,0,scr,nb,nw)
+               enddo
             else if (ltt.eq.2) then
                call tab1io(nin,0,0,scr,nb,nw)
                ll=1+nw
@@ -6311,6 +6339,12 @@ contains
                call pttab2(scr)
             else
                call listio(nin,0,0,scr,nb,nw)
+               ll=1+nw
+               do while (nb.ne.0)
+                  call moreio(nin,0,0,scr(ll),nb,nw2)
+                  ll=ll+nw2
+                  nw=nw+nw2 ! nw is used in the if block that follows
+               enddo
                if (mfh.eq.6) then
                   lang=nint(scr(3))
                   if (lang.eq.0) then
@@ -6623,7 +6657,7 @@ contains
    integer::next,i,matd,mt,nin,ismooth
    real(kr)::q
    ! internals
-   integer::nb,nw,nk,k,lf,m,n,jnt,ja,jb,j,l,nextn,nexd,ne,jscr,ki
+   integer::nb,nw,nk,k,lf,m,n,jnt,ja,jb,j,l,nextn,nexd,ne,jscr,ki,loc
    integer::ie,js,is,last,ix,ixx
    real(kr)::u,e,ep,renorm,efl,efh,emin,emax,tme,tmt
    real(kr)::dy,test,xm,ym,yt,dele,ta11
@@ -6655,6 +6689,11 @@ contains
       lf=nint(scr(4))
       m=nint(scr(5))
       n=nint(scr(6))
+      loc=1+nw
+      do while (nb.ne.0)
+         call moreio(nin,0,0,scr(loc),nb,nw)
+         loc=loc+nw
+      enddo
       if (next+2*m+2*n+3.gt.nxss) call error('acelf5',&
         'insufficient space for energy distributions',' ')
       jnt=nint(scr(8))
@@ -6694,6 +6733,13 @@ contains
          call tab2io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
          n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=1',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+2*m+1.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          jnt=nint(scr(8))
@@ -6810,7 +6856,14 @@ contains
            'you will have to patch the evaluation to use lf=1.')
          call tab1io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
-         n=nint(scr(5))
+         n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=5',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+2*m+2*n+2.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          jnt=nint(scr(8))
@@ -6834,6 +6887,13 @@ contains
          call tab1io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
          n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=5',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+n+1.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          xss(next)=n
@@ -6848,6 +6908,13 @@ contains
          call tab1io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
          n=nint(scr(6))
+         jscr=1
+         do while (nb.ne.0)
+            jscr=jscr+nw
+            if (jscr.gt.nwscr) call error('acelf5',&
+              'scratch storage exceeded reading lf=7 or 9',' ')
+            call moreio(nin,0,0,scr(jscr),nb,nw)
+         enddo
          if (next+2*m+2*n+2.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          jnt=nint(scr(8))
@@ -6877,6 +6944,11 @@ contains
          m=nint(scr(5))
          n=nint(scr(6))
          jnt=nint(scr(8))
+         loc=1+nw
+         do while (nb.ne.0)
+            call moreio(nin,0,0,scr(loc),nb,nw)
+            loc=loc+nw
+         enddo
          if (next+2*m+2*n+2.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          if (m.ne.1.or.jnt.ne.2) then
@@ -6899,6 +6971,11 @@ contains
          call tab1io(nin,0,0,scr,nb,nw)
          m=nint(scr(5))
          n=nint(scr(6))
+         loc=1+nw
+         do while (nb.ne.0)
+            call moreio(nin,0,0,scr(loc),nb,nw)
+            loc=loc+nw
+         enddo
          if (next+2*m+2*n+2.gt.nxss) call error('acelf5',&
            'insufficient space for energy distributions',' ')
          jnt=nint(scr(8))
@@ -6925,6 +7002,11 @@ contains
       !--law 12...madland-nix fission spectrum
       else if (lf.eq.12) then
          call tab1io(nin,0,0,scr,nb,nw)
+         loc=1+nw
+         do while (nb.ne.0)
+            call moreio(nin,0,0,scr(loc),nb,nw)
+            loc=loc+nw
+         enddo
          efl=scr(1)
          efh=scr(2)
          m=nint(scr(5))
@@ -7774,6 +7856,9 @@ contains
             nexd=nexd+2
             mus=nexd
             nexd=nexd+2*nmu
+            do while (nb.ne.0)
+               call moreio(nin,0,0,scr(jscr),nb,nw)
+            enddo
             do imu=1,nmu
                jscr=1
                call tab1io(nin,0,0,scr(jscr),nb,nw)
@@ -9626,6 +9711,11 @@ contains
                   do iie=1,ne
                      ll=lld
                      call tab1io(nin,0,0,scr(ll),nb,nw)
+                     ll=ll+nw
+                     do while (nb.ne.0)
+                        call moreio(nin,0,0,scr(ll),nb,nw)
+                        ll=ll+nw
+                     enddo
                      call pttab2(scr(lld))
                      xss(ie+iie)=sigfig(scr(lld+1)/emev,7,0)
                      m=nint(scr(lld+4))
@@ -10277,7 +10367,7 @@ contains
                                  else
                                     intmu=lang-10
                                     nmu=na/2
-                                    llx=lld+6
+                                    llx=lld+6+ncyc*(ig-1)
                                  endif
                                  xss(next+1+3*ng+ig)=nexcd-dlwh+1
                                  xss(nexcd)=intmu
@@ -10590,7 +10680,12 @@ contains
                      npp=2
                      do ie=1,ne
                         ll=llad
-                           call tab1io(nin,0,0,scr(ll),nb,nw)
+                        call tab1io(nin,0,0,scr(ll),nb,nw)
+                        ll=ll+nw
+                        do while (nb.ne.0)
+                           call moreio(nin,0,0,scr(ll),nb,nw)
+                           ll=ll+nw
+                        enddo
                         intmu=l1h
                         nmu=l2h
                         e=c2h
