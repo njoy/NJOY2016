@@ -1,0 +1,45 @@
+moder
+ 20 -21
+reconr
+ -21 -22/
+ 'reconr/pendf tape for 425'/
+ 425 0/
+ .001/
+ 0 /
+broadr
+ -21 -22 -23/
+ 425 1 0 0/
+ .001/
+ 293.6/
+ 0/
+heatr
+ -21 -23 -24/
+ 425 6/
+ 302 303 304 402 443 444/
+heatr
+ -21 -23 -25 26/
+ 425 6 0 1 0 2/
+ 302 303 304 402 443 444/
+thermr
+ 0 -25 -27/
+ 0 425 20 1 1 0 0 1 221 0/ njoy2012 input
+ 293.6/
+ 0.001 10./
+gaspr
+ -21 -27 -28
+moder
+ -28 38
+acer
+ -21 -28 0 41 42
+ 1 0 1 .10 /
+ 'fast acer tape for material 425' /
+ 425 293.6 /
+ /
+ /
+acer
+ 0 41 43 44 45
+ 7 1 1 -1 /
+ 'acer check/plot tape for material 425' /
+viewr
+ 43 54
+stop
