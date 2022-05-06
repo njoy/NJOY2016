@@ -357,3 +357,9 @@ Tests 71 was added as a consequence of issue [\#184](https://github.com/njoy/NJO
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/72/input)]
 
 Tests 72 was added as a consequence of issue [\#188](https://github.com/njoy/NJOY2016/issues/184). It verifies that MF6 LAW=7 data for outgoing particles added to the DLWH block is added to an ACE file correctly.
+
+## Test Problem 73
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/73/input)]
+
+Tests 73 was added as a consequence of issue [\#241](https://github.com/njoy/NJOY2016/issues/241). It verifies that GROUPR automated processing of MF10 for an evaluation with subactinide fission functions properly.
