@@ -2,7 +2,7 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.67](https://github.com/njoy/NJOY2016/pull/xxx)
-This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library and TENDL-2021 library for evaluations with sub-actinide fission, and provides fixes a few minor issues.
+This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library and TENDL-2021 library for evaluations with sub-actinide fission, and provides fixes for a few minor issues.
 
 Due to an internal compiler error, gcc-11 will not be supported. Users should consider moving to gcc-12 or any version from gcc-7 to gcc-10.
 
