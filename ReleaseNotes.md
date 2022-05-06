@@ -2,7 +2,9 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.67](https://github.com/njoy/NJOY2016/pull/xxx)
-This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library.
+This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library and TENDL-2021 library for evaluations with sub-actinide fission, and provides fixes a few minor issues.
+
+Due to an internal compiler error, gcc-11 will not be supported. Users should consider moving to gcc-12 or any version from gcc-7 to gcc-10.
 
 The following minor changes and fixes are included in this version:
   - several corrections to the ERRORR source code to remove compiler warning messages (these were made while looking into issue #211 for gcc-11 compilation)
@@ -11,6 +13,8 @@ The following minor changes and fixes are included in this version:
   - fixed an issue for processing JENDL5 U235 in ACER (issue #237)
   - correction in HEATR to properly retrieve the fission energy release component's Q value at 0 eV (issue #209 - there currently is no evaluation impacted by this change)
   - corrected ACER following issue #188. Evaluations using LAW=7 in MF6 data that are added to the DLWH block are impacted by this change (i.e. for secondary particle types that are not the incident particle type). For ENDF/B-VIII.0, only the secondary alphas from MT16 in Be9 is impacted by the change.
+  - properly set the za in the case of sub-actinide fission (MF10 MT18 data) when using MF10 automated processing in GROUPR (issue #241)
+  - when using the ign option in GROUPR for predefined group structures, some of the newer options did not return the correct structure, this has been fixed
 
 A large number of compiler warnings have now been resolved (unused variables, large static arrays converted into allocatable arrays, etc.). There are still a lot of warnings but their number is heavily reduced. For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 
