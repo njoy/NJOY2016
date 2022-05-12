@@ -11004,13 +11004,15 @@ contains
       if (irr26.ne.1) then
          if (mth.le.iabs(mf4r(6,irr26-1))+1) itest=1
       endif
-      if (itest.eq.1) then
-         if (mf4r(6,irr26-1).lt.0) irr26=irr26-1
-         mf4r(6,irr26)=-mth
-         irr26=irr26+1
-      else
-         mf4r(6,irr26)=mth
-         irr26=irr26+1
+      if (mth.ne.18) then ! exclude fission for residual production
+         if (itest.eq.1) then
+            if (mf4r(6,irr26-1).lt.0) irr26=irr26-1
+            mf4r(6,irr26)=-mth
+            irr26=irr26+1
+         else
+            mf4r(6,irr26)=mth
+            irr26=irr26+1
+         endif
       endif
    endif
    go to 119
@@ -11565,6 +11567,7 @@ contains
    go to 790
   755 continue
    if (imf26.eq.1) go to 756
+   if (mth.eq.18) go to 790 ! skip fission in a>4 production
    if (mth.eq.iabs(mf6p(6,imf26-1))) go to 790
    if (mth.gt.iabs(mf6p(6,imf26-1))+1) go to 756
    if (mf6p(6,imf26-1).lt.0) imf26=imf26-1
