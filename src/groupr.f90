@@ -7451,7 +7451,7 @@ contains
    real(kr),parameter::eps=0.02e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::alight=5
-   integer,parameter::ntmp=990000
+   integer,parameter::ntmp=2000000
    save nne,ne,int
    save jlo,elo,jhi,ehi,terml
    save pspmax,langn,lepn,disc102
