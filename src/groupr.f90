@@ -352,7 +352,6 @@ contains
    real(kr),dimension(:,:),allocatable::flux,sig
    character(4)::mtname(15)
    character(60)::strng
-   character(66)::text
    character(4)::tz(17)
    real(kr)::z(17)
    equivalence(tz(1),z(1))
@@ -645,6 +644,7 @@ contains
          lfs=0
          isom=0
          izam=-1
+         izar=-1
       else
          itmp=mfd/10000000
          itmp=(mfd-10000000*itmp)/10
@@ -660,6 +660,7 @@ contains
    elseif (iauto.eq.1.and.mfd.ge.10000000) then
       if (mfd.eq.40000000) then ! fission special case for mf10
          izam=-1
+         izar=-1
       else
          izar=(mfd-((mfd/1000000)*1000000))/10
          if (lfs.lt.10) then
@@ -4410,7 +4411,7 @@ contains
       ngp=ngn+1
       allocate(egn(ngp))
       do ig=1,ngp
-         egn(ig)=eg24(ig)
+         egn(ig)=eg29(ig)
       enddo
 
    !--ukaea  1025-group structure
@@ -4419,7 +4420,7 @@ contains
       ngp=ngn+1
       allocate(egn(ngp))
       do ig=1,ngp
-         egn(ig)=eg25(ig)
+         egn(ig)=eg30(ig)
       enddo
 
    !--ukaea  1067-group structure
@@ -4428,7 +4429,7 @@ contains
       ngp=ngn+1
       allocate(egn(ngp))
       do ig=1,ngp
-         egn(ig)=eg26(ig)
+         egn(ig)=eg31(ig)
       enddo
 
    !--ukaea  1102-group structure
@@ -4437,7 +4438,7 @@ contains
       ngp=ngn+1
       allocate(egn(ngp))
       do ig=1,ngp
-         egn(ig)=eg27(ig)
+         egn(ig)=eg32(ig)
       enddo
 
    !--ukaea  142-group structure
@@ -4446,7 +4447,7 @@ contains
       ngp=ngn+1
       allocate(egn(ngp))
       do ig=1,ngp
-         egn(ig)=eg28(ig)
+         egn(ig)=eg33(ig)
       enddo
 
    !--lanl 618 group structure
@@ -4790,7 +4791,7 @@ contains
    use util   ! provides error
    ! internals
    integer::iwtt,i,nr,np,ntmp,iw
-   real(kr)::ehi,eb,tb,ec,tc,ab,ac
+   real(kr)::eb,tb,ec,tc,ab,ac
    real(kr),dimension(:),allocatable::tmp
    real(kr),dimension(92),parameter::w1=(/&
      0.e0_kr,0.e0_kr,0.e0_kr,0.e0_kr,1.e0_kr,88.e0_kr,88.e0_kr,&
@@ -6480,6 +6481,7 @@ contains
    enddo
    if (nk.eq.0) go to 180
    izn=0
+   lfn=0
    if (mft.eq.9.or.mft.eq.10) izn=nint(tmp(3))
    if (mft.eq.6) izn=nint(tmp(1))
    if (mft.eq.9.or.mft.eq.10) lfn=nint(tmp(4))
@@ -7430,11 +7432,10 @@ contains
    integer::llo,lhi,iz,l,iy,max,nc,lf
    real(kr)::zad,elo,ehi,apsx,enow,eihi,ep,epnext,en
    real(kr)::pspmax,yldd,el,eh,e0,g0,e1,e2,test,pe,disc102
-   real(kr)::val,fx,ex,cx,cxx,sum,rn,dx
+   real(kr)::val,fx,ex,cx,cxx,rn,dx
    integer(kr)::nx,ncyc,n,ix
    integer,parameter::mxlg=65
    real(kr)::term(mxlg),terml(mxlg)
-   character(60)::strng
    integer,parameter::maxss=500
    integer,parameter::nssm=9
    integer,dimension(nssm)::iyss,izss,jjss
@@ -7450,7 +7451,7 @@ contains
    real(kr),parameter::eps=0.02e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::alight=5
-   integer,parameter::ntmp=990000
+   integer,parameter::ntmp=2000000
    save nne,ne,int
    save jlo,elo,jhi,ehi,terml
    save pspmax,langn,lepn,disc102
@@ -8423,7 +8424,7 @@ contains
    ! internals
    integer::nl,inow,lnow,mnow,ncnow,na,ndnow,npnow,idone,illdef
    integer::l,iza2,int,ii,jj,lll,ia
-   real(kr)::efirst,enow,t,eplast,s,r,aa,ss,bb,sa,tii,tjj,tt
+   real(kr)::efirst,enow,t,eplast,s,r,aa,tii,tjj,tt
    real(kr)::x1,x2,y1,y2
    integer,parameter::mxlg=65
    real(kr)::p(mxlg)
@@ -8433,8 +8434,6 @@ contains
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::step=0.05e0_kr
    real(kr),parameter::small=1.e-10_kr
-   real(kr),parameter::tomev=1.e-6_kr
-   real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zero=0
    save enow,efirst,nl,inow,lnow,mnow,ncnow,na,illdef
 
@@ -8622,11 +8621,9 @@ contains
    ! internals
    integer::nl,inow,lnow,mnow,ncnow,na,ndnow,npnow,l
    integer::iza2,int,ia
-   real(kr)::enow,t,s,r,ep,aa,ss,bb,sa,tt
+   real(kr)::enow,t,s,r,aa
    integer,parameter::mxlg=65
    real(kr)::p(mxlg)
-   real(kr),parameter::tomev=1.e-6_kr
-   real(kr),parameter::half=0.5e0_kr
    real(kr),parameter::zero=0.e0_kr
    save nl,inow,lnow,mnow,ncnow,na,enow
 
@@ -9044,6 +9041,8 @@ contains
 
    !--normal entry
    !--law 1.  find energy range.
+   f1=0
+   f2=0
    if (int.lt.11.or.int.gt.15) then
       idone=0
       do while (idone.eq.0)
@@ -9380,6 +9379,7 @@ contains
    aa=(whi+wlo)/2
    b=(whi-wlo)/2
    nqp=int(npo*2*b)
+   wqp=0
    if (nqp.gt.npo) nqp=npo
    if (nqp.le.8) nqp=4
    if (nqp.gt.8.and.nqp.le.12) nqp=8
@@ -11004,13 +11004,15 @@ contains
       if (irr26.ne.1) then
          if (mth.le.iabs(mf4r(6,irr26-1))+1) itest=1
       endif
-      if (itest.eq.1) then
-         if (mf4r(6,irr26-1).lt.0) irr26=irr26-1
-         mf4r(6,irr26)=-mth
-         irr26=irr26+1
-      else
-         mf4r(6,irr26)=mth
-         irr26=irr26+1
+      if (mth.ne.18) then ! exclude fission for residual production
+         if (itest.eq.1) then
+            if (mf4r(6,irr26-1).lt.0) irr26=irr26-1
+            mf4r(6,irr26)=-mth
+            irr26=irr26+1
+         else
+            mf4r(6,irr26)=mth
+            irr26=irr26+1
+         endif
       endif
    endif
    go to 119
@@ -11565,6 +11567,7 @@ contains
    go to 790
   755 continue
    if (imf26.eq.1) go to 756
+   if (mth.eq.18) go to 790 ! skip fission in a>4 production
    if (mth.eq.iabs(mf6p(6,imf26-1))) go to 790
    if (mth.gt.iabs(mf6p(6,imf26-1))+1) go to 756
    if (mf6p(6,imf26-1).lt.0) imf26=imf26-1
@@ -11704,6 +11707,7 @@ contains
    save nktot,nupm,loc
 
    !--initialize
+   ethi=0
    if (ed.eq.zero) then
       ier=1
       ntmp=250000
@@ -12139,7 +12143,7 @@ contains
    ! internals
    integer::new,nr,np,ip2,ir2,i,idisc,lf,loct,locg,locb
    real(kr)::rp4,epl,eph,u,de,xone,xtwo,theta,xc,r1,r2,temp1
-   real(kr)::xlo,xhi,rc,r4,expa,bot,rl,rh,r3,expb,expc,b,en
+   real(kr)::xlo,xhi,rc,r4,bot,rl,rh,r3,b,en
    real(kr)::top,ca,ef,alpha,sa,sb,aa,bb,ab,fact,ap,bp,ans
    real(kr)::h(2)
    real(kr),parameter::xmin=1.e-3_kr
@@ -12156,6 +12160,7 @@ contains
    epl=ep1
    eph=ep2
    new=0
+   ans=0
    if (ep1.lt.etest) new=1
 
    ! check limit on integration.

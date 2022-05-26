@@ -338,9 +338,28 @@ Tests 66 was added as a consequence of issue [\#214](https://github.com/njoy/NJO
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/67/input)]
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/68/input)]
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/69/input)]
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/70/input)]
 
 Tests 67-69 were added to test the new mixed mode elastic scattering processing for thermal scattering data in THERMR and ACER, which is going to be introduced in ENDF/B-VIII.1. The tests cover the following:
 - test 67: inelastic plus mixed mode elastic (D in 7LiD, new format in ENDF/B-VIII.1)
 - test 68: inelastic only (H in H2O)
 - test 69: inelastic plus incoherent elastic (Zr in ZrH)
 - test 70: inelastic plus coherent elastic (Al27)
+
+## Test Problem 71
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/71/input)]
+
+Tests 71 was added as a consequence of issue [\#184](https://github.com/njoy/NJOY2016/issues/184) and [\#223](https://github.com/njoy/NJOY2016/issues/223). It verifies that MT11 is now properly included in charged particle processing.
+
+## Test Problem 72
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/72/input)]
+
+Tests 72 was added as a consequence of issue [\#188](https://github.com/njoy/NJOY2016/issues/184). It verifies that MF6 LAW=7 data for outgoing particles added to the DLWH block is added to an ACE file correctly.
+
+## Test Problem 73
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/73/input)]
+
+Tests 73 was added as a consequence of issue [\#241](https://github.com/njoy/NJOY2016/issues/241). It verifies that GROUPR automated processing of MF10 for an evaluation with subactinide fission functions properly.
