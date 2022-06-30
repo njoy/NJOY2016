@@ -31,7 +31,7 @@ else
       ./njoy-2016 ${i%.inp}
 
       # Navigate to regression directory, perform diff on resulting Tape files, return to input directory
-      cd ${i:0:27}; python3 ../diff.py; cd ../../input
+      cd ${i%/*}; python3 ../diff.py; cd ../../input
     fi
   done   
 fi
