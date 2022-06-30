@@ -4,7 +4,7 @@ Enh: SNL_test_01 regression test: Ag109(n,g)Ag110m IRDFF-II covariance processin
 '#'	echo "Start the pre-process command stream"
 '#'	echo "IRDFF-II Covariance Analysis"
 '#'	echo " File 10/40 extraction"
-'#'	cp ../../xsec/IRDFF-II_release/IRDFF-II.endf tape20
+'#'	wget -O tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/IRDFF-II_release/IRDFF-II.endf 
 '#'	echo " "
 '#'	echo "End pre-process command stream"
 moder 

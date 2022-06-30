@@ -588,6 +588,10 @@ exit 0;
                         $command = "$rmx $x3 $x4";
 #                       print "REMOVE command: $command \n";
                         system("${command}");
+                    }  elsif ($x2 eq "wget") {
+                        $command = "wget $x3 $x4";
+#                       print "wget Download command: $command \n";
+                        system("${command}");
                      }  else {
                         print "Unknown prepro command: $x3 $x4";
                      }
