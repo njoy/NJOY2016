@@ -7,7 +7,7 @@ Enh: SNL_test_01 regression test: Ag109(n,g)Ag110m IRDFF-II covariance processin
 '#'	cp ../../xsec/IRDFF-II_release/IRDFF-II.endf tape20
 '#'	echo " "
 '#'	echo "End pre-process command stream"
-moder
+moder 
  20  -21 
 reconr
   -21  -22 
