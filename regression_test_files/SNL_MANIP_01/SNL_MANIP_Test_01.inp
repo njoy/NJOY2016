@@ -67,11 +67,12 @@ stop
 '@'	echo " "
 '@'	rm tape20
 '@'	echo "Save files to support MANIPULATE-2020 regression testing in normal location"
-'@'     cp output             ../output/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey.out
-'@'	cp tape28             ../groupr/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey
+'@'	echo "NOTE: files saved in NJOY regression directories for now"
+'@' cp output             ../regression_test_files/SNL_MANIP_01/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey.out
+'@'	cp tape28             ../regression_test_files/SNL_MANIP_01/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey
 '@'	echo " "
 '@'	echo "Save files for this NJOY regression test in regression test location"
-'@'     cp output             ../regression_test_files/SNL_MANIP_01/SNL_MANIP_Test_01_Output
+'@' cp output             ../regression_test_files/SNL_MANIP_01/SNL_MANIP_Test_01_Output
 '@'	cp tape28             ../regression_test_files/SNL_MANIP_01/SNL_MANIP_Test_01_Tape28
 '@'	echo "
 '@'	echo "This ends the post-process command stream"
