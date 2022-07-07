@@ -3,7 +3,7 @@ Enh: MANIPULATE-2020 prep: As-75 (self-atom in GaAs) ENDF/B-VIII_0; displ. kerma
  7 0 0 0 1 0 0 0 0 0
 '#'	echo "This starts the pre-process command stream"
 '#'	echo "As-75 in GaAs displacement kerma cross section survey: using ENDF/B-VIII.0 in SAND-VI 770-grp"
-'#'	wget -O tape20 https://github.com/sandialabs/xsec/blob/main/ENDFB-VIII-0/ENDF-B-VIII.0_neutrons/n-033_As_075.endf 
+'#'	wget -O tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/ENDFB-VIII-0/ENDF-B-VIII.0_neutrons/n-033_As_075.endf 
 '#'	echo " icntrl(1)=7: Displacement kerma treatment, i.e. no threshold"
 '#'	echo " icntrl(5)=1: Modification of Ed, lattice atom mass and Z"
 '#'     echo "            use elemental weight, in amu, for lattice atomic weight"
