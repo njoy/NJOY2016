@@ -2068,7 +2068,7 @@ contains
       do j=2,nbini-1
          ep=(xss(loc+1)+epl)/2
          if (xss(loc+1).gt.epl) then
-            if (j.eq.2.or.ep/epl.gt.skip) then
+            if (j.eq.2.or.ep.gt.skip*epl) then
                write(nout,'(1p,e14.6,''/'')') ep
                ul=-1
                write(nout,'(1p,2e14.6,''/'')') -1.,zmin
