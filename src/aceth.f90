@@ -1454,7 +1454,7 @@ contains
 !                       xss(loc+3+k)
 !              endif
               ubar=ubar+xss(loc+3+k)*p/2
-              ubar=ubar+xss(loc+3+k-nang-2)*p/2
+              ubar=ubar+xss(loc+3+k-nang-3)*p/2
               sum=sum+p
             enddo
             cdl=xss(loc+3)
@@ -1526,7 +1526,7 @@ contains
             p=xss(loc+3)-cdl
             do k=1,nang
               ubar=ubar+xss(loc+3+k)*p/2
-              ubar=ubar+xss(loc+3+k-nang-2)*p/2
+              ubar=ubar+xss(loc+3+k-nang-3)*p/2
               sum=sum+p
             enddo
             cdl=xss(loc+3)
