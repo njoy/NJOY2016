@@ -1,6 +1,11 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.68](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes a number of minor issues:
+  - there was an indexing error in the calculation of inelastic thermal scattering mubar in ACER for IFENG=2 ACE files. Test 74 was added to track this issue.
+  - there was a division by zero that caused a segmentation fault in Debug mode, also for IFENG=2 ACE files.
+
 ## [NJOY2016.67](https://github.com/njoy/NJOY2016/pull/243)
 This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library and TENDL-2021 library for evaluations with sub-actinide fission, and provides fixes for a few minor issues.
 
