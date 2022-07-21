@@ -662,7 +662,7 @@ contains
          izam=-1
          izar=-1
       else
-         izar=(mfd-((mfd/1000000)*1000000))/10
+         izar=(mfd-((mfd/10000000)*10000000))/10
          if (lfs.lt.10) then
             izam=mod(mfd,10000000)+lfs
          else
