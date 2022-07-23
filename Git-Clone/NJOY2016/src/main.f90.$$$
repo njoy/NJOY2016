@@ -360,7 +360,7 @@ program njoy
    module_loop_number = 0
    do
       module_loop_number = module_loop_number + 1
-      if ( module_loop_number .eq. 1 .and. SNL_enhanced_input_format .eq. -1) then 
+      if ( module_loop_number .eq. 1) then 
          module = run_title(1:6)
       else
          read(nsysi,*) module

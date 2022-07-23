@@ -1,9 +1,10 @@
 Enh: MANIPULATE-2020 prep: As-75 (self-atom in GaAs) ENDF/B-VIII_0; displ. kerma; Ed = 0.00 eV; Robinson; Z/A modification; 770-grp; 293.6K, 20.45C; 2200 m/s; 0.0253 eV
  0 0 0
  7 0 0 0 1 0 0 0 0 0
+'#'	echo " MANIPULATE-2020 regression tests, Section 6.1, As-75_..._DK, response extraction"
 '#'	echo "This starts the pre-process command stream"
 '#'	echo "As-75 in GaAs displacement kerma cross section survey: using ENDF/B-VIII.0 in SAND-VI 770-grp"
-'#'	wget -O tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/ENDFB-VIII-0/ENDF-B-VIII.0_neutrons/n-033_As_075.endf 
+'#'	wget -O 2>SNL_MANIP_Test_01.log tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/ENDFB-VIII-0/ENDF-B-VIII.0_neutrons/n-033_As_075.endf 
 '#'	echo " icntrl(1)=7: Displacement kerma treatment, i.e. no threshold"
 '#'	echo " icntrl(5)=1: Modification of Ed, lattice atom mass and Z"
 '#'     echo "            use elemental weight, in amu, for lattice atomic weight"
@@ -67,12 +68,12 @@ stop
 '@'	echo " "
 '@'	rm tape20
 '@'	echo "Save files to support MANIPULATE-2020 regression testing in normal location"
-'@'	echo "NOTE: files saved in NJOY regression directories for now"
-'@' cp output             ../regression_test_files/SNL_MANIP_01/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey.out
+'@'	echo "NOTE: files for MANIPULATE-2020 regression testing saved in NJOY regression directories for now"
+'@'     cp output             ../regression_test_files/SNL_MANIP_01/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey.out
 '@'	cp tape28             ../regression_test_files/SNL_MANIP_01/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey
 '@'	echo " "
 '@'	echo "Save files for this NJOY regression test in regression test location"
-'@' cp output             ../regression_test_files/SNL_MANIP_01/SNL-NJOY-2016_Test_Output
-'@'	cp tape28             ../regression_test_files/SNL_MANIP_01/SNL-NJOY-2016_Test_Tape28
-'@'	echo "
+'@'     cp output             ../regression_test_files/SNL_MANIP_01/SNL-MANIP_Test_01_Output
+'@'	cp tape28             ../regression_test_files/SNL_MANIP_01/SNL-MANIP_Test_01_Tape28
+'@'	echo "  "
 '@'	echo "This ends the post-process command stream"
