@@ -1444,14 +1444,14 @@ contains
       izaa=izam/10
       imm=isom
       if (imm.eq.0) then
-         write(azam,'(i5)') izaa
-         dummy='('//proj//','//reac//')-'//azam(1:5)//'-production.'
+         write(azam,'(i6)') izaa
+         dummy='('//proj//','//reac//')-'//azam(1:6)//'-production.'
       else if (imm.lt.10) then
-         write(azam,'(i5,''m'',i1)') izaa,imm
+         write(azam,'(i6,''m'',i1)') izaa,imm
          dummy='('//proj//','//reac//')-'//azam//'-production.'
       else
          izaa=izaa/10
-         write(azam,'(i5,''m'',i2)') izaa,imm
+         write(azam,'(i6,''m'',i2)') izaa,imm
          dummy='('//proj//','//reac//')-'//azam//'-production.'
       endif
    else
