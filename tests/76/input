@@ -1,0 +1,45 @@
+ 'moder'
+ 20  -21
+ 'reconr'
+ -21 -22
+ 'pendf tape for  U235'/
+ 9228 3 0
+ .0005 /
+ 'U 235'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original file for details of evaluation'/
+ 0/
+ 'broadr'
+ -21 -22 -23
+ 9228  1 0 0 0
+ .0005 1.e6 /
+ 300.
+ 0/
+ 'unresr'
+ -21 -23 -24
+ 9228    1 1 1
+ 300.
+ 1.e10
+ 0/
+ 'groupr'
+ -21 -24 0 25
+ 9228  9 0 5 5 1 1 1 1
+ 'U 235'/
+ 300.
+ 1.e10
+ 3 /
+ 3 452 'nu-t' /
+ 3 455 'nu-d' /
+ 3 456 'nu-p' /
+ 5 18 'chi ' /
+ 5 455 'chid' /
+ 6 /
+ 0/
+ 0/
+ 'ccccr'
+ 25 00  00  30
+ 1  0 'holerith' /
+ 'U 235' /
+ 69  0  1  1  1
+ 'U 235' 'U 235' 'endf80' 'U 235' 9228 11.586
+ 'stop'
