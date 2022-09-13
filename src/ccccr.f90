@@ -3049,7 +3049,7 @@ contains
       nwi=2*nisod
       nwds=mult*nwh+nwr+nwi
       write(idlay)(ha(l1h+i),i=1,nwh),(a(l1r+i),i=1,nwr),&
-        (ia(lli+i),i=1,nwi)
+        (ia(l1i+i),i=1,nwi)
 
       !--delayed neutron precursor yield data by isotope
       l3=l1+nwds
