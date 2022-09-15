@@ -27,7 +27,7 @@ The following minor changes and fixes are included in this version:
 A large number of compiler warnings have now been resolved (unused variables, large static arrays converted into allocatable arrays, etc.). There are still a lot of warnings but their number is heavily reduced. For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 
 ## [NJOY2016.66](https://github.com/njoy/NJOY2016/pull/226)
-This constitutes a major update of NJOY to aommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
+This constitutes a major update of NJOY to acommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
 
 The following is an overview of the major changes made to NJOY for this update:
   - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=1 LANG=1)
