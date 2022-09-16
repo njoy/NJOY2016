@@ -3127,10 +3127,6 @@ contains
       if (mfh.eq.5) then
          ! number of delayed neutron groups
          ndg=nint(e(3))
-         call contio(nin,0,0,e(1),nb,nw)
-         ! offset of energy groups where no delayed data is given
-         ! position 9 of gendf tape mf5 mt455
-         ig1=nint(e(3))-1
       else
          nisod=0
          return
@@ -3252,6 +3248,10 @@ contains
 
    !--process delayed neutron spectra record
   410 nd=nl
+   ! lowest energy group that holds delayed data
+   ! subtraction of -1 because first position in gendf mf5mt455
+   ! is decay constant of that precursor family
+   ig1=l1h-1
    ! hisnm--isotope name
    jj=(l1-1)/mult+nisod
    ta(jj)=hisnm
@@ -3283,7 +3283,7 @@ contains
    !--numfam--family number for each yield vector
       locb=l8-1+ndg*ngn*nisod+ndg*(nisod-1)+i
       ia(locb)=ifam
-      do j=1,ig1
+      do j=1,ngn
          a(loca-j)=fract(i)*a(loca-j)
       enddo
    enddo
