@@ -6,6 +6,7 @@ This update fixes a number of minor issues:
   - there was an indexing error in the calculation of inelastic thermal scattering mubar in ACER for IFENG=2 ACE files. Test 74 was added to track this issue.
   - there was a division by zero that caused a segmentation fault in Debug mode, also for IFENG=2 ACE files.
   - fixed an indexing problem in CCCCR for delayed neutron data and added test 76.
+  - there was a use of wrong memory addresses in CCCR not accounting for GROUPR's energy structure offset.
 
 ## [NJOY2016.67](https://github.com/njoy/NJOY2016/pull/243)
 This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library and TENDL-2021 library for evaluations with sub-actinide fission, and provides fixes for a few minor issues.
