@@ -5,6 +5,8 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 This update fixes a number of minor issues:
   - there was an indexing error in the calculation of inelastic thermal scattering mubar in ACER for IFENG=2 ACE files. Test 74 was added to track this issue.
   - there was a division by zero that caused a segmentation fault in Debug mode, also for IFENG=2 ACE files.
+  - removed an erroneously added FEND record in the PENDF file when no MF12 data gets added to the PENDF file (related to issue #250).
+  - correction in ACER to fix issue #250. Previously it could happen that ACER picked the wrong temperature from a multi-temperature PENDF file when the materials in the PENDF only contained linearised MF3 data (no MF10, MF12 or MF23 data was added by RECONR).
   - fixed an indexing problem in CCCCR for delayed neutron data and added test 76.
   - there was a use of wrong memory addresses in CCCR not accounting for GROUPR's energy structure offset.
 

@@ -594,6 +594,8 @@ contains
    enddo
    if (jethr.gt.1) call aordr(jethr,nethr,ethr)
    nethr=jethr
+   ! we're on a fend record, go back one line (this avoids the next findf
+   ! call to see a mend record if the pendf tape only contains mf3)
    call skiprz(npend,-2)
 
    !--for new format...
@@ -3943,7 +3945,12 @@ contains
    call findf(matd,3,0,npend)
    nnth=0
   101 call contio(npend,0,0,scr,nb,nw)
-   if (mfh.eq.0) go to 102
+   if (mfh.eq.0) then
+      ! we're on a fend record, go back one line (this avoids the next findf
+      ! call to see a mend record if the pendf tape only contains mf3)
+      call skiprz(npend,-2)
+      go to 102
+   endif
    e=0
    call gety1(e,enxt,jdis,x,npend,scr)
    nnth=nnth+1
