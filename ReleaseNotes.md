@@ -7,7 +7,8 @@ This update fixes a number of minor issues:
   - there was a division by zero that caused a segmentation fault in Debug mode, also for IFENG=2 ACE files.
   - removed an erroneously added FEND record in the PENDF file when no MF12 data gets added to the PENDF file (related to issue #250).
   - correction in ACER to fix issue #250. Previously it could happen that ACER picked the wrong temperature from a multi-temperature PENDF file when the materials in the PENDF only contained linearised MF3 data (no MF10, MF12 or MF23 data was added by RECONR).
-  - there was a use of wrong memory addresses in CCCR not accounting for GROUPR's energy structure offset 
+  - fixed an indexing problem in CCCCR for delayed neutron data and added test 76.
+  - there was a use of wrong memory addresses in CCCR not accounting for GROUPR's energy structure offset.
 
 ## [NJOY2016.67](https://github.com/njoy/NJOY2016/pull/243)
 This update resolves a number of issues encountered when processing the newly released JENDL5 nuclear data library and TENDL-2021 library for evaluations with sub-actinide fission, and provides fixes for a few minor issues.
@@ -29,7 +30,7 @@ The following minor changes and fixes are included in this version:
 A large number of compiler warnings have now been resolved (unused variables, large static arrays converted into allocatable arrays, etc.). There are still a lot of warnings but their number is heavily reduced. For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 
 ## [NJOY2016.66](https://github.com/njoy/NJOY2016/pull/226)
-This constitutes a major update of NJOY to acommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
+This constitutes a major update of NJOY to accommodate the latest IAEA photonuclear data library (which uses non-isotropic photon distributions) and the mixed mode elastic scattering ENDF format (adopted in the ENDF format in November 2020).
 
 The following is an overview of the major changes made to NJOY for this update:
   - LAW=61 is now allowed for photonuclear ACE libraries (the secondary angular distributions are now tabulated in all cases instead of being assumed isotropic when using LAW=1 LANG=1)
