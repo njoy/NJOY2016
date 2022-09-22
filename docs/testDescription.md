@@ -369,3 +369,9 @@ Tests 73 was added as a consequence of issue [\#241](https://github.com/njoy/NJO
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/74/input)]
 
 Tests 74 was added to track an issue found in ACER while calculating inelastic thermal scattering mubar for IFENG=2 ACE files. This is a test for H in ZrH and is similar to test 69 (test 69 is for Zr in ZrH and is an IFENG=1 file).
+
+## Test Problem 75
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/75/input)]
+
+Tests 75 was added to track a few CCCCR issues. Unfortunately, these issues were related to a binary file so we cannot verify the content of the file just yet. At the very least, we now have a test to verify if CCCCR actually runs (there was previously a crash on this input).
