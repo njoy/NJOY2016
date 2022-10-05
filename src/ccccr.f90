@@ -6,11 +6,11 @@ module ccccm
    public ccccr
 
    ! equivalenced arrays for CCCC input and output
-   integer::isiza=50000    ! container array size
-   real(k4)::a(50000)      ! reals are 4-byte
-   integer(k4)::ia(50000)  ! integers are 4-byte
-   real(k8)::ha(25000)     ! Hollerith data are 8-byte
-   character(8)::ta(25000) ! text equivalent to Hollerith
+   integer,parameter:: isiza4=100000, isiza8=isiza4/2
+   real(k4)::a(isiza4)      ! reals are 4-byte
+   integer(k4)::ia(isiza4)  ! integers are 4-byte
+   real(k8)::ha(isiza8)     ! Hollerith data are 8-byte
+   character(8)::ta(isiza8) ! text equivalent to Hollerith
    integer::mult=2         ! used for counting 8-byte entries
    equivalence(a(1),ia(1),ha(1),ta(1))
 
@@ -1061,7 +1061,7 @@ contains
    ! for ifopt=2 and nsblk=ngps, nrec and npass are not used
 
    !--set up sizes
-   nsiza=isiza-l22+1
+   nsiza=isiza4-l22+1
    irsize=6+(ngps+1)*(maxord+1)*nsz
    if (irsize.lt.6*ngps) irsize=6*ngps
    if (irsize.gt.nsiza)&
@@ -1543,7 +1543,7 @@ contains
    nwi=niso
    nwds=mult*nwh+nwr+nwi
    irec1=irec1+1
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pisotx','input record too large.',' ')
    read(n4)(ha(i),i=1,nwh),(a(llr+i),i=1,nwr),(ia(lli+i),i=1,nwi)
    if (ird(2).eq.1) then
@@ -1582,7 +1582,7 @@ contains
       llr=npt-1
       lli=llr+nwr
       irec1=irec1+1
-      if (nwds.ge.isiza)&
+      if (nwds.ge.isiza4)&
         call error('pisotx','input record too large.',' ')
       read(n4)(a(llr+i),i=1,nwr),(ia(lli+i),i=1,nwi)
       if (ird(3).eq.1) then
@@ -1600,7 +1600,7 @@ contains
    nwi=11+2*nscmax+2*ngroup*nscmax
    nwds=mult*nwh+nwr+nwi
    irec1=irec1+1
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pisotx','input record too large.',' ')
    read(n4)(ha(j),j=1,nwh),(a(llr+j),j=1,nwr),(ia(lli+j),j=1,nwi)
    jread=1+nwds
@@ -1701,7 +1701,7 @@ contains
    if (ind.eq.1) read(hsnd,'(a6)') htype(j)
    if (ind.eq.1) j=j+1
    if (int.eq.1) read(hsnt,'(a6)') htype(j)
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pisotx','input record too large.',' ')
    read(n4)(a(jread+k-1),k=1,nwds)
    if (ird(5).eq.1) then
@@ -1732,7 +1732,7 @@ contains
       llr=npt-1
       lli=llr+nwr
       irec1=irec1+1
-      if (nwds.ge.isiza)&
+      if (nwds.ge.isiza4)&
          call error('pisotx','input record too large.',' ')
       read(n4)(a(llr+i),nn=1,nwr),(ia(lli+nn),nn=1,nwi)
       if (ird(6).eq.1) then
@@ -1798,7 +1798,7 @@ contains
    nwds=nwds*lordn
    if (nwds.eq.0) go to 180
    irec1=irec1+1
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pisotx','input record too large.',' ')
    read(n4)(a(npt+ii-1),ii=1,nwds)
    if (ird(7).ne.1) go to 180
@@ -2104,7 +2104,7 @@ contains
    !--iffile--length of entire self shielding file
    !--nsblk--number of s-s records to be written on scratch tape
    !--lrsize--length of one s-s record
-   nosize=isiza-l20+1
+   nosize=isiza4-l20+1
    iffile=nreact*ngpn*ntl*nzl
    nsblk=1
    if (iffile.gt.nosize) nsblk=nreact
@@ -2128,7 +2128,7 @@ contains
    call repoz(-nscrt2)
    jbl=ngpn
    jbh=0
-   do j=l18,isiza
+   do j=l18,isiza4
       a(j)=0
    enddo
    do j=1,10
@@ -2838,7 +2838,7 @@ contains
    nwi=4*nisosh
    nwds=mult*nwh+nwr+nwi
    irec1=irec1+1
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pbrkxs','input record too large.',' ')
    read(n4)(ha(i),i=1,nwh),(a(llr+i),i=1,nwr),(ia(lli+i),i=1,nwi)
    if (ird(2).eq.1) then
@@ -2904,7 +2904,7 @@ contains
    nwds=nreact*npro
    if (nwds.le.0) go to 100
    irec1=irec1+1
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pbrkxs','input record too large.',' ')
    read(n4)(a(jssf+j-1),j=1,nwds)
    if (ird(3).ne.1) go to 100
@@ -2979,7 +2979,7 @@ contains
    !--cross sections
    nwds=6*ngroup
    irec1=irec1+1
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pbrkxs','input record too large.',' ')
    read(n4)(a(jssf+n-1),n=1,nwds)
    if (ird(4).eq.1) then
@@ -3049,7 +3049,7 @@ contains
       nwi=2*nisod
       nwds=mult*nwh+nwr+nwi
       write(idlay)(ha(l1h+i),i=1,nwh),(a(l1r+i),i=1,nwr),&
-        (ia(lli+i),i=1,nwi)
+        (ia(l1i+i),i=1,nwi)
 
       !--delayed neutron precursor yield data by isotope
       l3=l1+nwds
@@ -3103,7 +3103,7 @@ contains
    integer::nin
    ! internals
    integer::nisoo,nwds,lzero,l3,l4,l5,l6,l7,l8,l9,la,last
-   integer::i,ipr,nb,nw,ig,nl,nz,ng,ng2,loc,ngn,ngp1,loca
+   integer::i,ipr,nb,nw,ig,ig1,nl,nz,ng,ng2,loc,ngn,ngp1,loca
    integer::ifam,nd,jj,locb,j,ndg
    integer::imusd(200)
    integer,parameter::ndmax=8
@@ -3125,6 +3125,7 @@ contains
          call contio(nin,0,0,e(1),nb,nw)
       enddo
       if (mfh.eq.5) then
+         ! number of delayed neutron groups
          ndg=nint(e(3))
       else
          nisod=0
@@ -3171,6 +3172,9 @@ contains
    l9=next
    la=l9+5
    last=la+10*ngps
+
+   if (last.gt.isiza4) call error('dldata',&
+        'max4a for container a exceeded',' ')
 
    !--read through input tape for desired data
    do i=1,200
@@ -3244,6 +3248,10 @@ contains
 
    !--process delayed neutron spectra record
   410 nd=nl
+   ! lowest energy group that holds delayed data
+   ! subtraction of -1 because first position in gendf mf5mt455
+   ! is decay constant of that precursor family
+   ig1=l1h-1
    ! hisnm--isotope name
    jj=(l1-1)/mult+nisod
    ta(jj)=hisnm
@@ -3263,7 +3271,7 @@ contains
       loca=l3+ngn+ngn*(ifam-1)
       locb=6+i
       fract(i)=0
-      do j=1,ngn
+      do j=1,ig1
          a(loca-j)=e(nl*j+locb)
          fract(i)=e(nl*j+locb)+fract(i)
       enddo
@@ -3339,7 +3347,7 @@ contains
    lli=llr+nsp
    nwds=nwh*mult+nsp+nint
    irec1=irec1+1
-   if (nwds.ge.isiza)&
+   if (nwds.ge.isiza4)&
      call error('pdlyxs','input record too large.',' ')
    read(n4)(ha(i),i=1,nwh),(a(llr+i),i=1,nsp),(ia(lli+i),i=1,nint)
    write(nsyso,'(/3x,''isotope'',5x,''name'')')
@@ -3393,7 +3401,7 @@ contains
       llr=jwd1-1
       lli=llr+nsp
       irec1=irec1+1
-      if (nwds.ge.isiza)&
+      if (nwds.ge.isiza4)&
         call error('pdlyxs','input record too large.',' ')
       read(n4)(a(llr+j),j=1,nsp),(ia(lli+j),j=1,nint)
       jwd2=jwd1+ngroup*kk
@@ -3516,4 +3524,3 @@ contains
    end subroutine stow
 
 end module ccccm
-

@@ -1,0 +1,40 @@
+-- case 3: thermal scattering inelastic and incoherent inelastic
+moder
+ 20 -30
+moder
+ 21 -40
+reconr
+ -30 -31 /
+ 'PENDF tape for ENDF/B-VIII.0 H-1'/
+ 125 2 0 /
+ 0.001 /
+ 'H-1 from ENDF/B-VIII.0' /
+ 'processed at 0.1% tolerance' /
+ 0 /
+broadr
+ -30 -31 -32
+ 125 1 /
+ 0.001 /
+ 296 /
+ 0 /
+thermr
+ -40 -32 -50 /
+ 7 125 20 1 2 1 0 1 221 1 /
+ 296 /
+ 0.001 1. /
+moder
+ -50 60
+acer
+ -30 -50 0 70 75                            / Card1
+ 2 1 1 .10 0                                / Card2
+ 'H in ZrH @296K from ENDF/B-VIII.0'        / Card3
+ 125 296 'hzrh' 1                          / Card8
+ 1001                                     / Card8a
+ 221 20 222 1 1 1. 2                       / Card9
+acer
+ 0 70 55 71 76 /
+ 7 1 1 -1/
+ 'H in ZrH @296K from ENDF/B-VIII.0 - check tape 1'
+viewr
+ 55 56
+stop

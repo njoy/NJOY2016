@@ -1454,7 +1454,7 @@ contains
 !                       xss(loc+3+k)
 !              endif
               ubar=ubar+xss(loc+3+k)*p/2
-              ubar=ubar+xss(loc+3+k-nang-2)*p/2
+              ubar=ubar+xss(loc+3+k-nang-3)*p/2
               sum=sum+p
             enddo
             cdl=xss(loc+3)
@@ -1526,7 +1526,7 @@ contains
             p=xss(loc+3)-cdl
             do k=1,nang
               ubar=ubar+xss(loc+3+k)*p/2
-              ubar=ubar+xss(loc+3+k-nang-2)*p/2
+              ubar=ubar+xss(loc+3+k-nang-3)*p/2
               sum=sum+p
             enddo
             cdl=xss(loc+3)
@@ -2068,7 +2068,7 @@ contains
       do j=2,nbini-1
          ep=(xss(loc+1)+epl)/2
          if (xss(loc+1).gt.epl) then
-            if (j.eq.2.or.ep/epl.gt.skip) then
+            if (j.eq.2.or.ep.gt.skip*epl) then
                write(nout,'(1p,e14.6,''/'')') ep
                ul=-1
                write(nout,'(1p,2e14.6,''/'')') -1.,zmin
