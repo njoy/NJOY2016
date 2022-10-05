@@ -1,6 +1,10 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes a number of minor issues:
+  - PURR now writes Bondarenko data obtained from the probability tables to MF2 MT152 instead of the Bondarenko data obtained from the direct sampled cross sections (for very low dilutions, the Bondarenko data obtained using these two methods does not align, with the direct sampled data leading to extremely low P1 values).
+
 ## [NJOY2016.68](https://github.com/njoy/NJOY2016/pull/264)
 This update fixes a number of minor issues:
   - there was an indexing error in the calculation of inelastic thermal scattering mubar in ACER for IFENG=2 ACE files. Test 74 was added to track this issue.
