@@ -2214,12 +2214,12 @@ contains
    go to 145
   135 do ik=1,ng2
       jg2=noutg-ig2lo-ik+2
-      a(icdat-1+jg2)=b(irinp+lz+ik-1)
+      a(icdat-1+jg2)=b(irinp+lz+(ik-1)*nz+iz-1)
    enddo
    go to 240
   140 jconst=ig
    jg1=ning+1-ig
-   a(icdat-1+noutg+jg1)=b(irinp+lz+1)
+   a(icdat-1+noutg+jg1)=b(irinp+lz+nz+iz-1)
    go to 240
 
    !--store matrix sub-blocks
