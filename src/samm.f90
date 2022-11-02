@@ -574,6 +574,7 @@ contains
    ! internals
    integer::nb,nw,nls,is,ng,ll,iis,i,ires,jj,nrs,llll,ig,igxm,lrx
    integer::j,ndig,kres,igroup,ichp1,ichan,ix,ich,ippx,igamma,l,nx,ires1
+   integer::ifg,krm,krl
    real(kr)::pari,parl,capj,capjmx,c,awri,apl,aptru,apeff,spinjj
    real(kr)::gamf,gamf2,s1,s2,hw,ehalf,ell,x,gamx,qx
    real(kr),dimension(:),allocatable::a
@@ -985,6 +986,20 @@ contains
 
       !--nls is really the number of spin groups for mode=7
       ngroup=nls
+
+      !--get width flag, formalism and kinematics flag
+      ifg=l1h
+      krm=l2h
+      krl=n2h
+      if (ifg.ne.0) then
+        call error('rdsammy','only ifg=0 is currently supported',' ')
+      endif
+      if (krm.ne.3) then
+        call error('rdsammy','only krm=3 is currently supported',' ')
+      endif
+      if (krl.ne.0) then
+        call error('rdsammy','only krl=0 is currently supported',' ')
+      endif
 
       !--read the list of particle-pair descriptions
       !--and store the values in the proper allocated arrays
@@ -6993,4 +7008,3 @@ contains
    end subroutine desammy
 
 end module samm
-
