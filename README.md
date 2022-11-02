@@ -35,7 +35,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ../
 make -j8
 ```
 
-The above instructions will produce a release build consisting of a dynamic library and dynamically linked library. To compile a static version (i.e. the executable is not a dynamically linked executable), the cmake command shown above should be replaced with the following cmake command:
+The above instructions will produce a release build consisting of a dynamic library and dynamically linked executable. To compile a static version (i.e. the executable is not a dynamically linked executable), the cmake command shown above should be replaced with the following cmake command:
 ```
 cmake -DCMAKE_BUILD_TYPE=Release -Dstatic_libraries=ON
       -Dstatic_njoy=ON -DCMAKE_EXE_LINKER_FLAGS=-static ../
