@@ -2,11 +2,13 @@
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
 ## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes a number of minor issues:
+  - PURR now writes Bondarenko data obtained from the probability tables to MF2 MT152 instead of the Bondarenko data obtained from the direct sampled cross sections (for very low dilutions, the Bondarenko data obtained using these two methods does not align, with the direct sampled data leading to extremely low P1 values).
 
-When reading LRF=7 resonance parameters, RECONR will now issue an error message under the following circumstances:
-  - IFG is not equal to zero (reduced widths are given)
-  - KRM is not equal to 3 (the formalism is not Reich-Moore)
-  - KRL is not equal to 0 (relativistic kinematics need to be used)
+This update also contains a temporary fix to deal with a resonance reconstruction issue. When reading LRF=7 resonance parameters, RECONR will now issue an error message under the following circumstances:
+    - IFG is not equal to zero (reduced widths are given)
+    - KRM is not equal to 3 (the formalism is not Reich-Moore)
+    - KRL is not equal to 0 (relativistic kinematics need to be used)
 
 This is a temporary fix until we fix the issue (which we will most likely in NJOY2016.69) but this will prevent issues for the time being.
 
