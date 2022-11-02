@@ -37,7 +37,8 @@ make -j8
 
 The above instructions will produce a release build consisting of a dynamic library and dynamically linked library. To compile a static version (i.e. the executable is not a dynamically linked executable), the cmake command shown above should be replaced with the following cmake command:
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -Dstatic_libraries=ON -Dstatic_njoy=ON -DCMAKE_EXE_LINKER_FLAGS=-static ../
+cmake -DCMAKE_BUILD_TYPE=Release -Dstatic_libraries=ON
+      -Dstatic_njoy=ON -DCMAKE_EXE_LINKER_FLAGS=-static ../
 ```
 
 When you have already cloned the NJOY2016 repository and wish to update to the latest version, you can use the following instructions (inside the build folder):
