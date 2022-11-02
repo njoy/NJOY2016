@@ -3,7 +3,12 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/xxx)
 
-TODO
+When reading LRF=7 resonance parameters, RECONR will now issue an error message under the following circumstances:
+  - IFG is not equal to zero (reduced widths are given)
+  - KRM is not equal to 3 (the formalism is not Reich-Moore)
+  - KRL is not equal to 0 (relativistic kinematics need to be used)
+
+This is a temporary fix until we fix the issue (which we will most likely in NJOY2016.69) but this will prevent issues for the time being.
 
 ## [NJOY2016.68](https://github.com/njoy/NJOY2016/pull/264)
 This update fixes a number of minor issues:
