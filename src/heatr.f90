@@ -3228,7 +3228,7 @@ contains
    fl=0
    do i=1,nep
       l=7+ncyc*(i-1)
-      xx=c(l)
+      xx=abs(c(l))
       yy=c(l+1)
       x2=xx
       if (irec.eq.0) then
