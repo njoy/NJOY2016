@@ -4,6 +4,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 ## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/XXX)
 This update fixes a number of issues:
   - MATXSR was modified to handle the changes of GROUPR introduced by [NJOY2016.49](https://github.com/njoy/NJOY2016/pull/119). The 10d record now reproduces the spec and prod arrays for the dilutions given in UNRESR,PURR,GROUPR.
+  - MATXSR does now dynamical allocation of sigz array like GROUPR does.
 
 ## [NJOY2016.68](https://github.com/njoy/NJOY2016/pull/264)
 This update fixes a number of minor issues:
