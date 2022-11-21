@@ -1079,6 +1079,9 @@ contains
    temp=c1h
    nnmat=nnmat+1
    nsigz=nz
+   if (allocated(sigz)) deallocate(sigz)
+   if (allocated(noned)) deallocate(noned)
+   if (allocated(ntwod)) deallocate(ntwod)
    allocate(sigz(nsigz),noned(nsigz),ntwod(nsigz))
    do k=1,nsigz
       sigz(k)=b(k+lz+ntw-1+ll)
