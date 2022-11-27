@@ -42,7 +42,7 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::nin,nb,nw,nwscr,nx,mtx,ielas,mf4,mf6,mt452,mt456,mtxnu
+   integer::nin,nb,nw,nwscr,nx,mtx,ielas,mf4,mf6,mt452,mt456,mtxnu,naux,mta
    integer::mt103,mt104,mt105,mt106,mt107
    integer::i,mfd,mtd,l,mttot,idis,nex,nexc,ir,j,idone,nnex,n
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
@@ -63,7 +63,7 @@ contains
    real(kr)::av,del
    real(kr)::awprec,awpp
    integer,parameter::mmax=1000
-   integer::mfm(mmax),mtm(mmax),nr6(mmax)
+   integer::mfm(mmax),mtm(mmax),nr6(mmax),mtaux(mmax)
    real(kr)::fnubar(300)
    character(8)::hdt
    real(kr),dimension(:),allocatable::scr
@@ -132,6 +132,7 @@ contains
    nw=nx
    ntr=0
    mtx=0
+   naux=0
    ielas=0
    mf4=0
    mf6=0
@@ -156,17 +157,24 @@ contains
          if (mfd.eq.3.and.(mtd.ge.700.and.mtd.le.749)) mt105=1
          if (mfd.eq.3.and.(mtd.ge.750.and.mtd.le.799)) mt106=1
          if (mfd.eq.3.and.(mtd.ge.800.and.mtd.le.849)) mt107=1
-         mtx=mtx+1
-         if (mtx.gt.mmax) call error('acephn',&
-           'too many reactions in mtr list',' ')
-         if (mfd.eq.6.and.mtd.ge.201.and.mtd.le.207)&
-           call error('acephn','mf=6/mt=201-207 not supported.',&
-           'does not conform to endf format.')
-         mfm(mtx)=mfd
-         mtm(mtx)=mtd
-         nr6(mtx)=0
-         if (mfd.eq.4) mf4=1
-         if (mfd.eq.6) mf6=1
+         if (mfd.eq.3.and.(mtd.ge.201.and.mtd.le.207)) then
+            !--this is potentially auxiliary reaction, add to the end of the MTR array
+            naux=naux+1
+            mtaux(naux)=mtd
+         else
+            !--this is a transport reaction, add to the front of the MTR array
+            mtx=mtx+1
+            if (mtx.gt.mmax) call error('acephn',&
+              'too many reactions in mtr list',' ')
+            if (mfd.eq.6.and.mtd.ge.201.and.mtd.le.207)&
+              call error('acephn','mf=6/mt=201-207 not supported.',&
+              'does not conform to endf format.')
+            mfm(mtx)=mfd
+            mtm(mtx)=mtd
+            nr6(mtx)=0
+            if (mfd.eq.4) mf4=1
+            if (mfd.eq.6) mf6=1
+         endif
       endif
    enddo
 
