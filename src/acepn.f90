@@ -1116,12 +1116,12 @@ contains
                            ilaw2mt5=1
                            write(text,'(''with a yield not equal to 1 for outgoing particle type'',i3,''.'')')ip
                            if (izarec.eq.ip) then
-                              call mess('acephn',
-                                        'law=2 (discrete two-body scattering) used in mt=5 recoil',
+                              call mess('acephn',&
+                                        'law=2 (discrete two-body scattering) used in mt=5 recoil',&
                                         text)
                            else
-                              call mess('acephn',
-                                        'law=2 (discrete two-body scattering) used in mt=5',
+                              call mess('acephn',&
+                                        'law=2 (discrete two-body scattering) used in mt=5',&
                                         text)
                            endif
                         endif
