@@ -1112,9 +1112,9 @@ contains
                         !--modified to be in MeV already (see above)
                         call terpa(yld,e*emev,en,idis,scr,npp,nrr)
                         h=yld*h ! just in case, multiply by yield
-                        if (ilaw2mt5.ne.0.and.mt.eq.5.and.yld.ne.one) then
+                        if (ilaw2mt5.eq.0.and.mt.eq.5.and.yld.ne.one) then
                            ilaw2mt5=1
-                           write(text,'(''with a yield not equal to 1 for outgoing particle type'',i3,''.'')')ip
+                           write(text,'(''yield different from 1 for outgoing particle '',i5,''.'')')ip
                            if (izarec.eq.ip) then
                               call mess('acephn',&
                                         'law=2 (discrete two-body scattering) used in mt=5 recoil',&
