@@ -3,7 +3,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes a number of minor issues:
-  - PURR now writes Bondarenko data obtained from the probability tables to MF2 MT152 instead of the Bondarenko data obtained from the direct sampled cross sections (for very low dilutions, the Bondarenko data obtained using these two methods does not align, with the direct sampled data leading to extremely low P1 values).
+  - PURR now writes Bondarenko data obtained from the probability tables to MF2 MT152 instead of the Bondarenko data obtained from the direct sampled cross sections (for very low dilutions, the Bondarenko data obtained using these two methods does not align, with the direct sampled data leading to extremely low P1 values). When comparing with the Bondarenko data at low dilutions obtained with UNRESR, the Bondarenko data obtained from the probability table directly seems to be the best.
 
 ## [NJOY2016.68](https://github.com/njoy/NJOY2016/pull/264)
 This update fixes a number of minor issues:
