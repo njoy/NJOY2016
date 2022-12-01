@@ -374,4 +374,10 @@ Tests 74 was added to track an issue found in ACER while calculating inelastic t
 
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/75/input)]
 
-Tests 75 was added to track a few CCCCR issues. Unfortunately, these issues were related to a binary file so we cannot verify the content of the file just yet. At the very least, we now have a test to verify if CCCCR actually runs (there was previously a crash on this input).
+Tests 75 was added to track an issue found in ACER when multiple temperatures were present in the PENDF file. See issue [\#250](https://github.com/njoy/NJOY2016/issues/241) for more information.
+
+## Test Problem 76
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/76/input)]
+
+Tests 76 was added to track a few CCCCR issues. Unfortunately, these issues were related to a binary file so we cannot verify the content of the file just yet. At the very least, we now have a test to verify if CCCCR actually runs (there was previously a crash on this input).
