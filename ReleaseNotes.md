@@ -5,6 +5,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 This update fixes a number of minor issues:
   - PURR now writes Bondarenko data obtained from the probability tables to MF2 MT152 instead of the Bondarenko data obtained from the direct sampled cross sections (for very low dilutions, the Bondarenko data obtained using these two methods does not align, with the direct sampled data leading to extremely low P1 values). When comparing with the Bondarenko data at low dilutions obtained with UNRESR, the Bondarenko data obtained from the probability table directly seems to be the best.
   - MF6 LAW=2 represents discrete two body scattering in which only angular distribution data is given (knowing that the outgoing energy of the secondary particle can be determined through kinematics when the angle is known). When calculating heating numbers based on LAW=2, ACER assumes that the yield of the secondary particle is 1, which is correct in all cases except when MT5 is used as a lumped reaction. Heating numbers in ACER for photonuclear files using LAW=2 in an MT5 entry are now correctly multiplied by the yield. A warning message is printed out whenever this situation is detected. Test 78 was added as part of this correction.
+  - Previously, ERRORR would segfault for LRF=7 resonance evaluations when MF33 was present without MF32.  A check for this situation now avoids this.
 
 ## [NJOY2016.68](https://github.com/njoy/NJOY2016/pull/264)
 This update fixes a number of minor issues:
