@@ -7439,7 +7439,7 @@ contains
   390 continue
 
    ! add contribution from resonance-parameter uncertainty
-   if (mfcov.ne.34.and.mfcov.ne.35.and.mf32.ne.0) then
+   if (mfcov.eq.33.and.mf32.ne.0) then
       call rescon(ix,ixp,csig,cova,izero,ngn,nmt1)
    endif
 
