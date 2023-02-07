@@ -52,14 +52,14 @@ contains
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
    integer::lee,lle,nd,na,ncyc,ng,ig,nnr,nnp,mf,mt
    integer::ipt,ntrp,pxs,phn,mtrp,tyrp,lsigp,sigp,landp,andp,ldlwp,dlwp
-   integer::izarec,nl,iil,nexn,nexd,ki
+   integer::izarec,nl,iil,nexn,nexd,ki,ilaw2mt5
    integer::nle
    integer::imu,intmu,nmu
    real(kr)::emc2,e,enext,s,y,ynext,heat,en,ep,g,h,epl
    real(kr)::tneut,tphot,tprot,tdeut,ttrit,the3,the4,thresh
    real(kr)::ss,tt,ubar,sum,renorm,ebar,hh,u,theta,x,anorm
    real(kr)::ee,amass,avadd,avlab,avll,test,rkal,akal
-   real(kr)::eavi,avl,avcm,sign,dele,avav,zaid,gl,awp,awr,q
+   real(kr)::eavi,avl,avcm,sign,dele,avav,zaid,gl,awp,awr,q,yld
    real(kr)::av,del
    real(kr)::awprec,awpp
    integer,parameter::mmax=1000
@@ -78,6 +78,8 @@ contains
    character(66)::text
    emc2=amassn*amu*clight*clight/ev/emev
    tvn=1
+   ilaw2mt5=0
+   yld=1.
 
    nxsd=0
    jxsd=0
@@ -1095,8 +1097,8 @@ contains
                              sigfig(renorm*xss(nex+1+2*n+ii),9,0)  ! CDF(ii)
                         enddo
                         nex=nex+2+3*n       ! index for the next distribution
-                        e=xss(ie+iie)
-                        scr(llht+6+2*iie)=e
+                        e=xss(ie+iie)       ! e from xss, thus MeV
+                        scr(llht+6+2*iie)=e ! store it in scr, so energy in MeV
                         scr(llht+7+2*iie)=(awr-awpp)*(e+q)/awr
                      enddo
                      ! add in contribution to heating
@@ -1105,6 +1107,24 @@ contains
                      do ie=it,nes
                         e=xss(esz+ie-1)/emev
                         call terpa(h,e,en,idis,scr(llht),npp,nrr)
+                        !--get the yield and modify heating
+                        !--beware: e is already in MeV, scr(llht) has been
+                        !--modified to be in MeV already (see above)
+                        call terpa(yld,e*emev,en,idis,scr,npp,nrr)
+                        h=yld*h ! just in case, multiply by yield
+                        if (ilaw2mt5.eq.0.and.mt.eq.5.and.yld.ne.one) then
+                           ilaw2mt5=1
+                           write(text,'(''yield different from 1 for outgoing particle '',i5,''.'')')ip
+                           if (izarec.eq.ip) then
+                              call mess('acephn',&
+                                        'law=2 (discrete two-body scattering) used in mt=5 recoil',&
+                                        text)
+                           else
+                              call mess('acephn',&
+                                        'law=2 (discrete two-body scattering) used in mt=5',&
+                                        text)
+                           endif
+                        endif
                         ss=0
                         if (ie.ge.iaa) ss=xss(2+k+ie-iaa)
                         xss(phn+2+ie-it)=xss(phn+2+ie-it)+h*ss
@@ -1112,6 +1132,7 @@ contains
                           xss(thn+ie-1)=xss(thn+ie-1)&
                           +h*ss/xss(tot+ie-1)
                      enddo
+                     ilaw2mt5=0
                   else
                      call skip6(nin,0,0,scr,law)
                   endif
