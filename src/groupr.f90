@@ -7452,7 +7452,7 @@ contains
    integer,dimension(nssm)::iyss,izss,jjss
    integer,dimension(maxss)::jloss
    real(kr),dimension(:),allocatable::tmp
-   integer,parameter::ncmax=350
+   integer,parameter::ncmax=1000
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::shade=1.1999e0_kr
@@ -9592,7 +9592,7 @@ contains
    character(60)::strng
    integer,parameter::mxlg=65
    real(kr)::flo(mxlg),fhi(mxlg)
-   integer,parameter::ncmax=350
+   integer,parameter::ncmax=1000
    real(kr)::fls(ncmax)
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::small=1.e-10_kr
