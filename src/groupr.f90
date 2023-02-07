@@ -6709,7 +6709,7 @@ contains
    integer::mat,ntape
    real(kr)::temp
    ! internals
-   integer::mfd,mtd,nb,nw,i,j,nsig0,l,ll,ntmp
+   integer::mfd,mtd,nb,nw,i,j,nsig0,l,ntmp
    real(kr)::temz
    character(60)::strng
    real(kr),dimension(:),allocatable::tmp
@@ -7440,7 +7440,7 @@ contains
    integer::ie,ilo,jlo,jhi,ii,nn,nnn,langn,lepn,idis,jzap
    integer::nk,jzad,lang,lep,i,npsx,irr,npp,nmu,l1
    integer::j,iss,ip,ir,jgmax,jj,jg,ndlo,nplo,nclo,nphi,nchi
-   integer::llo,lhi,iz,l,iy,max,nc,lf,ll
+   integer::llo,lhi,iz,l,iy,max,nc,lf
    real(kr)::zad,elo,ehi,apsx,enow,eihi,ep,epnext,en
    real(kr)::pspmax,yldd,el,eh,e0,g0,e1,e2,test,pe,disc102
    real(kr)::val,fx,ex,cx,cxx,rn,dx
@@ -9785,7 +9785,7 @@ contains
    integer::idis,nl,nq,mat,mf,mt,nin,nlg
    real(kr)::aed(nlg,*),e,enext
    ! internals
-   integer::itt,law,ir,ne,nwt,ncyc,nu,nlo,ie,nw1,nw2,l1,idone,ll
+   integer::itt,law,ir,ne,nwt,ncyc,nu,nlo,ie,nw1,nw2,l1,idone
    integer::l2,l3,llo,lhi,nhi,jbrag,nbrag,nb,nw
    integer::i,il,ig,k1,k2,iu,ib,loc
    real(kr)::elo,ehi,clast,ebrag,xs,cnow,eg,eb,egp,egp1,egp2
@@ -10195,7 +10195,7 @@ contains
    integer::idis,nl,nlg,ng,mat,mf,mt,nin
    real(kr)::ed,enext,gfl(nlg,ng)
    ! internals
-   integer::li,ltt,lcd,ig,il,j,i,im,m,ll
+   integer::li,ltt,lcd,ig,il,j,i,im,m
    integer::ip1,k,l,lint,lnow,in,int,nb,nw,ni,np,nnp
    integer::nh,nipj,lnext,nbt,nld,loc,ntmp,na
    real(kr)::elo,ehi
