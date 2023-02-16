@@ -3723,7 +3723,7 @@ contains
    integer::nwscr
    real(kr)::a(nwscr)
    ! internals
-   integer::nl,iloc,nrs,i,nr,ig,j,loop,igind,inow,id,ig1,ig2,ij,ii,k
+   integer::nl,iloc,nrs,i,nr,ig,j,loop,igind,inow,id,ig1,ig2,ij,ii
    integer::nb,nw,jd
    integer,parameter::maxnls=10
    integer,parameter::maxe=600000
@@ -4098,7 +4098,7 @@ contains
    integer::nwscr,iest,ieed
    real(kr)::a(nwscr)
    ! internals
-   integer::nb,nw,lru1,lrf1,lb,i,ig,ig2,il,ii2,ii1,ipp,j,k
+   integer::nb,nw,lru1,lrf1,lb,i,ig,ig2,il,ii2,ii1,ipp,j
    integer::loopm,loopn,loop,ns,nrs1,nsmax,ipos,l1,l2,l3
    integer::lb2,lldum,igind,ipara,itmp,ilnum,ind,ii
    integer::imess,inow,jj,lll,nrs
@@ -4773,7 +4773,7 @@ contains
    integer::mxlru2,iest,ieed,nwscr
    real(kr)::a(nwscr),amur(3,mxlru2)
    ! internals
-   integer::nb,nw,l1,l2,l3,nl,ig,i,j,k,ig2,ii,igind,njs,inow
+   integer::nb,nw,l1,l2,l3,nl,ig,i,j,ig2,ii,igind,njs,inow
    integer::loop,loopn,l0
    integer,parameter::maxb=4000
    integer,parameter::mxnpar=100
@@ -7439,7 +7439,7 @@ contains
   390 continue
 
    ! add contribution from resonance-parameter uncertainty
-   if (mfcov.ne.34.and.mfcov.ne.35) then
+   if (mfcov.eq.33.and.mf32.ne.0) then
       call rescon(ix,ixp,csig,cova,izero,ngn,nmt1)
    endif
 
