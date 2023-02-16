@@ -1,0 +1,27 @@
+-- moder
+moder
+20 -30
+-- reconr
+reconr
+-30 -21/
+'He3 IAEA photonuclear data' /
+225 /
+0.001 /
+0/
+moder
+-21 90
+-- acer
+acer
+-30 -21 0 31 32                                                 / Card 1
+5 0 1 .31                                                       / Card 2
+'He3 IAEA photonuclear data'                                    / Card 3
+225                                                             / Card 12
+-- acer check/plot/correct
+acer
+0 31 33 34 35
+7 1 1 -1/
+'He3 IAEA photonuclear data - check tape'
+-- viewr plots from check tape
+viewr
+33 43
+stop

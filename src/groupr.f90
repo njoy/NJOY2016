@@ -6430,7 +6430,7 @@ contains
    integer::idis,mat,mf,mt,lfs,itape,i,nr,nc
    real(kr)::e,enext,yld,term
    ! internals
-   integer::mft,nb,nw,nk,ik,lnu,iza,lnd,izn,lfn,ip,ir,na,loc
+   integer::mft,nb,nw,nk,ik,lnu,iza,lnd,izn,lfn,ip,ir,na,loc,ll
    integer::ntmp
    real(kr),dimension(:),allocatable::tmp
    real(kr),parameter::emax=1.e10_kr
@@ -6459,12 +6459,23 @@ contains
    if (mt.eq.455) go to 110
    lnd=0
    if (lnu.ne.1) go to 130
-   call listio(itape,0,0,tmp(loc),nb,nw)
+   ll=loc
+   call listio(itape,0,0,tmp(ll),nb,nw)
    na=nw
+   do while (nb.ne.0)
+      ll=ll+nw
+      call moreio(itape,0,0,tmp(ll),nb,nw)
+      na=na+nw
+   enddo
    enext=emax
    go to 190
   110 continue
-   call listio(itape,0,0,tmp(loc),nb,nw)
+   ll=loc
+   call listio(itape,0,0,tmp(ll),nb,nw)
+   do while (nb.ne.0)
+      ll=ll+nw
+      call moreio(itape,0,0,tmp(ll),nb,nw)
+   enddo
    lnd=nint(tmp(loc+4))
    if (lnd.gt.8) call error('getyld','illegal lnd.',' ')
    do i=1,lnd
@@ -7441,7 +7452,7 @@ contains
    integer,dimension(nssm)::iyss,izss,jjss
    integer,dimension(maxss)::jloss
    real(kr),dimension(:),allocatable::tmp
-   integer,parameter::ncmax=350
+   integer,parameter::ncmax=1000
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::shade=1.1999e0_kr
@@ -9576,12 +9587,12 @@ contains
    real(kr)::e,enext,fle(*)
    ! internals
    integer::iso,lidp,ltt,iraw,ir,nne,ne,int,nlo,nhi,ltt3,lttn
-   integer::nb,nwc,lvt,i,nlmax,il
+   integer::nb,nwc,lvt,i,nlmax,il,ll
    real(kr)::elo,ehi
    character(60)::strng
    integer,parameter::mxlg=65
    real(kr)::flo(mxlg),fhi(mxlg)
-   integer,parameter::ncmax=350
+   integer,parameter::ncmax=1000
    real(kr)::fls(ncmax)
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::small=1.e-10_kr
@@ -9639,14 +9650,24 @@ contains
       ! read in raw data at first two incident energies.
       ! retrieve or compute legendre coefficients.
       iraw=1+nwc
-      if (ltt.eq.1) call listio(nin,0,0,fls(iraw),nb,nwc)
-      if (ltt.eq.2) call tab1io(nin,0,0,fls(iraw),nb,nwc)
+      ll=iraw
+      if (ltt.eq.1) call listio(nin,0,0,fls(ll),nb,nwc)
+      if (ltt.eq.2) call tab1io(nin,0,0,fls(ll),nb,nwc)
+      do while (nb.ne.0)
+         ll=ll+nwc
+         call moreio(nin,0,0,fls(ll),nb,nwc)
+      enddo
       elo=fls(iraw+1)
       nlo=nle
       if (lidp.ge.0) fls(iraw+3)=lidp
       call getco(flo,nlo,lcd,fls(iraw),lct,ltt,idis)
-      if (ltt.eq.1) call listio(nin,0,0,fls(iraw),nb,nwc)
-      if (ltt.eq.2) call tab1io(nin,0,0,fls(iraw),nb,nwc)
+      ll=iraw
+      if (ltt.eq.1) call listio(nin,0,0,fls(ll),nb,nwc)
+      if (ltt.eq.2) call tab1io(nin,0,0,fls(ll),nb,nwc)
+      do while (nb.ne.0)
+         ll=ll+nwc
+         call moreio(nin,0,0,fls(ll),nb,nwc)
+      enddo
       ehi=fls(iraw+1)
       nhi=nle
       if (lidp.ge.0) fls(iraw+3)=lidp
@@ -9691,8 +9712,13 @@ contains
    else if (nne.eq.ne) then
       call error('getfle','desired energy above highest given.',' ')
    endif
-   if (ltt.eq.1) call listio(nin,0,0,fls(iraw),nb,nwc)
-   if (ltt.eq.2) call tab1io(nin,0,0,fls(iraw),nb,nwc)
+   ll=iraw
+   if (ltt.eq.1) call listio(nin,0,0,fls(ll),nb,nwc)
+   if (ltt.eq.2) call tab1io(nin,0,0,fls(ll),nb,nwc)
+   do while (nb.ne.0)
+      ll=ll+nwc
+      call moreio(nin,0,0,fls(ll),nb,nwc)
+   enddo
    ehi=fls(iraw+1)
    nhi=nle
    if (lidp.ge.0) fls(iraw+3)=lidp
@@ -9788,6 +9814,9 @@ contains
       call tab1io(nin,0,0,p,nb,nw)
       itt=-l1h
       law=l2h
+      do while (nb.ne.0)
+         call moreio(nin,0,0,p,nb,nw)
+      enddo
 
       !--incoherent elastic or inelastic with E-E'-mu ordering
       if (law.eq.1) then
@@ -10806,7 +10835,7 @@ contains
    integer::mt0,mt0old,nb,nw,jzar,lg,n,kk,k,kp1,l,lm1,mtl,no455
    integer::nnu,lnu,mf,mt,l1,l2,n1,n2,nk,jzap,ne,ltp,nm
    integer::m1,m2,mtnow,mttst,nn
-   integer::ltt,lcd,nl
+   integer::ltt,lcd,nl,ll
    real(kr)::g,ei,eja,ejb,e1,enext,p,za2,za,ysum,yy,tsave,w,elow,etop,enxt,x
    character(60)::strng
    integer::ngam(440)
@@ -11125,7 +11154,12 @@ contains
    lg=l2h
    g=1
    l2flg=1
-   call listio(nin,0,0,scr,nb,nw)
+   ll=1
+   call listio(nin,0,0,scr(ll),nb,nw)
+   do while (nb.ne.0)
+      ll=ll+nw
+      call moreio(nin,0,0,fls(ll),nb,nw)
+   enddo
 
    !--make sure mt0 is correct for this range of mt's.
    if (mth.ge.51.and.mth.le.90.and.mt0.ne.49) mt0=49
@@ -11441,10 +11475,20 @@ contains
       spi=c1h
       ne=n2h
       do ie=1,ne
-         call listio(nin,0,0,scr,nb,nw)
+         ll=1
+         call listio(nin,0,0,scr(ll),nb,nw)
          ltp=l1h
+         do while (nb.ne.0)
+            ll=ll+nw
+            call moreio(nin,0,0,scr(ll),nb,nw)
+         enddo
          if (ltp.le.2) then
-            call listio(0,nout,nscr,scr,nb,nw)
+            ll=1
+            call listio(0,nout,nscr,scr(ll),nb,nw)
+            do while (nb.ne.0)
+               ll=ll+nw
+               call moreio(0,nout,nscr,scr(ll),nb,nw)
+            enddo
          else
             e1=c2h
             call getsig(e1,enext,idis,sig,1,1)
@@ -11464,7 +11508,12 @@ contains
             do il=1,nl
                scr(6+il)=fl(il)
             enddo
-            call listio(0,nout,nscr,scr,nb,nw)
+            ll=1
+            call listio(0,nout,nscr,scr(ll),nb,nw)
+            do while (nb.ne.0)
+               ll=ll+nw
+               call moreio(0,nout,nscr,scr(ll),nb,nw)
+            enddo
          endif
       enddo
       izap=-izap
@@ -11586,7 +11635,12 @@ contains
       ik=0
       do while (ik.lt.nk)
          ik=ik+1
-         call listio(nin,0,0,scr,nb,nw)
+         ll=1
+         call listio(nin,0,0,scr(ll),nb,nw)
+         do while (nb.ne.0)
+            ll=ll+nw
+            call moreio(nin,0,0,scr(ll),nb,nw)
+         enddo
          izan=nint(c1h)
          imf=l1h
          iis=l2h
