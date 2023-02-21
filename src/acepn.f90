@@ -48,7 +48,7 @@ contains
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
    integer::k,ia,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
    integer::ll,lll,lep,ne,llh,lld,ie,np,ip,mtt,lct,ii
-   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang,lleg,ileg
+   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
    integer::lee,lle,nd,na,ncyc,ng,ig,nnr,nnp,mf,mt
    integer::ipt,ntrp,pxs,phn,mtrp,tyrp,lsigp,sigp,landp,andp,ldlwp,dlwp
@@ -74,7 +74,6 @@ contains
    real(kr),parameter::eps=1.e-10_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
-   integer,parameter::ni=64
    character(66)::text
    emc2=amassn*amu*clight*clight/ev/emev
    tvn=1
@@ -1861,7 +1860,6 @@ contains
    real(kr),parameter::zero=0
 
    integer,parameter::ner=1
-   integer,parameter::nbw=1
 
    !--read type 1 ace format file
    call openz(nin,0)
@@ -2455,8 +2453,8 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::l,n,ne,ip,mftype,nr,li,ir,nn,ll,k,np,nw,nmu,nrr
-   integer::ii,lnw,law,kk,nern,lrec,j,i
+   integer::l,n,ne,ip,mftype,nr,nn,ll,k,np,nmu,nrr
+   integer::lnw,law,nern,lrec,j,i
    integer::ipt, ntrp, pxs, phn, mtrp, tyrp, lsigp, sigp, landp, andp, ldlwp, dlwp ! IXS
    integer::rlocator  ! locator index for reaction data
    integer::plocator  ! locator index for the particle IXS array
