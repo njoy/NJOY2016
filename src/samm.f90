@@ -553,7 +553,6 @@ contains
       lllmax=lllmaxx
       call allo
    endif
-   if (nmtres.eq.0) deallocate(nchan)
 
    return
    end subroutine s2sammy
@@ -6993,4 +6992,3 @@ contains
    end subroutine desammy
 
 end module samm
-
