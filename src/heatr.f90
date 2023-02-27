@@ -272,7 +272,7 @@ contains
         &'' auxiliary q values ................... '',1p,e12.4)') qa(1)
       if (nqa.gt.1) write(nsyso,'(40x,1p,e12.4)') (qa(i),i=2,nqa)
       if (nzq.ne.0) then
-         do i=1,nqa
+         do i=1,nqa 
             if (qa(i).ge.qtest) then
                nsh=0
                math=1
@@ -644,7 +644,13 @@ contains
          ifc4=0
          ifc5=0
          ifc6=0
-         call listio(nendf,0,0,scr,nb,nw)
+         l=1
+         call listio(nendf,0,0,scr(l),nb,nw)
+         l=l+nw
+         do while (nb.ne.0)
+            call moreio(nendf,0,0,scr(l),nb,nw)
+            l=l+nw
+         enddo
          nply=nint(scr(4))
          if (lfc.eq.0) then
             allocate(cpoly(0:nply))
@@ -693,7 +699,7 @@ contains
             qdel=0
             do i=1,nfc
                l=1
-               call tab1io(nendf,0,0,scr,nb,nw)
+               call tab1io(nendf,0,0,scr(l),nb,nw)
                do while (nb.ne.0)
                   l=l+nw
                   call moreio(nendf,0,0,scr(l),nb,nw)
@@ -810,9 +816,16 @@ contains
             awrr=c2h+1
             ielem=mod(nint(c1h),1000)
             do ik=1,nk
-               call tab1io(nendf,nend6,0,scr,nb,nw)
+               l=1
+               call tab1io(nendf,nend6,0,scr(l),nb,nw)
+               l=l+nw
+               do while (nb.ne.0)
+                  call moreio(nendf,nend6,0,scr(l),nb,nw)
+                  l=l+nw
+               enddo
                nr=n1h
                zap=c1h
+               law=l2h
                if (nint(zap).eq.0) then
                   i6p=i6p+1
                   mt6yp(i6p)=mth
@@ -853,10 +866,6 @@ contains
                   mt6no(ii6)=nk
                endif
                if (zap.eq.zero) mgam=10+mod(mgam,10)
-               law=l2h
-               do while (nb.ne.0)
-                  call moreio(nendf,nend6,0,scr,nb,nw)
-               enddo
                if (law.eq.6) then
                   call contio(nendf,nend6,0,scr,nb,nw)
                else if (law.eq.1.or.law.eq.2.or.law.eq.5) then
@@ -2311,7 +2320,13 @@ contains
       call contio(itape,0,0,a,nb,nw)
       lnu=nint(a(4))
       if (mth.eq.455) then
-         call listio(itape,0,0,a,nb,nw)
+         loc=1
+         call listio(itape,0,0,a(loc),nb,nw)
+         loc=loc+nw
+         do while (nb.ne.0)
+            call moreio(itape,0,0,a(loc),nb,nw)
+            loc=loc+nw
+         enddo
          lnd=nint(a(5))
          if (lnd.ne.6.and.lnd.ne.8)&
            call error('hgtyld','illegal lnd, must be 6 or 8',' ')
@@ -2347,8 +2362,15 @@ contains
             nr=nint(a(5))
             enext=a(7+2*nr)
          else
-            call listio(itape,0,0,a,nb,nw)
+            loc=1
+            call listio(itape,0,0,a(loc),nb,nw)
+            loc=loc+nw
             na=nw
+            do while (nb.ne.0)
+               call moreio(itape,0,0,a(loc),nb,nw)
+               loc=loc+nw
+               na=na+nw
+            enddo
             enext=emax
          endif
       endif
@@ -2778,6 +2800,11 @@ contains
    do while (ik.lt.irec-1)
       ik=ik+1
       call tab1io(nin,0,0,c(l),nb,nw)
+      l=l+nw
+      do while (nb.ne.0)
+         call moreio(nin,0,0,c(l),nb,nw)
+         l=l+nw
+      enddo
       law=l2h
       call skip6(nin,0,0,c(l),law)
    enddo
@@ -2790,10 +2817,14 @@ contains
   110 continue
    l=1
    call tab1io(nin,0,0,c(l),nb,nw)
+   l=l+nw
+   do while (nb.ne.0)
+      call moreio(nin,0,0,c(l),nb,nw)
+      l=l+nw
+   enddo
    zap=c1h
    awp=c2h
    law=l2h
-   l=l+nw
 
    !--error for awp=0. for non photons
    if (zap.ne.0.and.awp.eq.0) then
@@ -2802,10 +2833,6 @@ contains
      call error('sixbar',strng,' ')
    endif
 
-   do while (nb.ne.0)
-      call moreio(nin,0,0,c(l),nb,nw)
-      l=l+nw
-   enddo
    iflag=0
    disc102=0
    if (zap.eq.zero) then
@@ -4721,7 +4748,13 @@ contains
    lg=l2h
    g=1
    l2flg=1
-   call listio(nin,0,0,scr,nb,nw)
+   l=1
+   call listio(nin,0,0,scr(l),nb,nw)
+   l=l+nw
+   do while (nb.ne.0)
+      call moreio(nin,0,0,scr(l),nb,nw)
+      l=l+nw
+   enddo
 
    !--set base value for mt0
    if (mth.ge.51.and.mth.le.91.and.mt0.ne.49) mt0=49
