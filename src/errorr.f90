@@ -3228,7 +3228,6 @@ contains
       enddo
    enddo
    call closz(nscr6)
-   if (nmtres.gt.0) call desammy
 
    return
    end subroutine resprx
