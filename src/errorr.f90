@@ -1046,11 +1046,11 @@ contains
 
    !--add MF32 covariance matrices and write output tape.
    call covout
-   if (nmtres.ne.0) call desammy
 
    !--errorr is finished.
    call atend(nout,0)
   330 continue
+   if (nmtres.ne.0) call desammy
    if (allocated(flx))  deallocate(flx)
    if (allocated(sig))  deallocate(sig)
    if (allocated(cov))  deallocate(cov)
