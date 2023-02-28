@@ -229,9 +229,9 @@ contains
    !            (mf=32) (default=1)
    !            0 = area sensitivity method
    !            1 = 1% sensitivity method
-   !    l       Legendre order for reaction MT (default=0)
+   !    l       Legendre order for reaction MT (default=1)
    !            (if mfcov is not 34, legord is ignored)
-   ! l1/ifissp  if mfcov is 34: Legendre order for reaction MT1 (default=0)
+   ! l1/ifissp  if mfcov is 34: Legendre order for reaction MT1 (default=1)
    !            if mfcov is 35: matrix to process (default=-1 which means process
    !            the subsection that includes efmean).  The value
    !            for ifissp that appears in njoy's standard output
@@ -514,11 +514,13 @@ contains
       iread=0
       mfcov=33
       irespr=1
-      legord=0
-      ifissp=-1
+      legord=1
+      ifissp=-1000
       isru=0
       dap=0
       read(nsysi,*) iread,mfcov,irespr,legord,ifissp,efmean,dap
+      if (mfcov.eq.35.and.ifissp.eq.-1000) ifissp=-1
+      if (mfcov.eq.34.and.ifissp.eq.-1000) ifissp=1
 
       !--only allow legord=1 at this time
       if (mfcov.eq.34.and.legord.lt.0) then
