@@ -272,7 +272,7 @@ contains
         &'' auxiliary q values ................... '',1p,e12.4)') qa(1)
       if (nqa.gt.1) write(nsyso,'(40x,1p,e12.4)') (qa(i),i=2,nqa)
       if (nzq.ne.0) then
-         do i=1,nqa 
+         do i=1,nqa
             if (qa(i).ge.qtest) then
                nsh=0
                math=1
@@ -2663,8 +2663,8 @@ contains
       yh=a(ibase+ncyc*(i-1)+2)
       if (law.gt.0.and.i.gt.nbt) then
          ir=ir+1
-         nbt=nint(a(ibase+2*ir-1))
-         inn=nint(a(ibase+2*ir))
+         nbt=nint(a(6+2*ir-1))
+         inn=nint(a(6+2*ir))
       endif
       if (xl.ne.xh) then
 
@@ -5643,8 +5643,8 @@ contains
       yh=a(ibase+2*i)
       if (i.gt.nbt) then
          ir=ir+1
-         nbt=nint(a(ibase+2*ir-1))
-         inn=nint(a(ibase+2*ir))
+         nbt=nint(a(6+2*ir-1))
+         inn=nint(a(6+2*ir))
       endif
       if (xl.ne.xh) then
          dx=xh-xl
