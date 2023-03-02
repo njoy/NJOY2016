@@ -4,6 +4,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 ## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes a number of minor issues:
   - Fixed an issue in HEATR when reading evaluations with large multiplicity tables in MF6.
+  - Fixed an issue in HEATR where the photon recoil needed to be multiplied by the photon multiplicity to obtain the photon recoil per interaction.
   - Fixed a crash in THERMR when asking for S(a,b) processing (iinc=2) while no ENDF tape is given (nendf=0).
 
 A few compiler warnings have been resolved as well (unused variables). For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
