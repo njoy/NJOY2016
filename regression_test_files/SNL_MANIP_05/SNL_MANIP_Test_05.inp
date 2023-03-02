@@ -1,0 +1,64 @@
+Enh: MANIPULATE-2020 prep: Cf-252 fission neutron covariance analysis
+ 0 0 0
+ 0 0 0 0 0 0 0 0 0 0
+'#'	echo " MANIPULATE-2020 regression tests, Section 6.4, Cf2552_IRDFF-II_640grp_spectrum_validation, spectrum extraction"
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "Cf-252 fission neutron covariance analysis"
+'#'	wget -O 2>SNL_MANIP_Test_05.log tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/IRDFF-II_release/IRDFF-II_sp.endf_mod3
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"                                             
+moder
+ 20  21 /
+reconr
+  21  22 /
+ 'processing IRDFF-II 252Cf with decay mf3/mt261 & mf33/mt33'
+ 9861 0 0 /
+ 0.001 /
+ 0 /
+groupr
+  21  22 0 91 /
+ 9861 15 0 2 1 1 1 1 /
+ 'Fission Neutron Spectrum' 
+ 0.0 /
+ 1.0e10 /
+  3 261 'spect' /
+ 0 /
+ 0 2
+errorr
+ 20 0 91 28 0 0 /
+ 9861 19 2 1 1 /
+ 1 0.0 /
+ 0 33 1 1 -1 1.23e6 /
+ 1 / # of added groups, energy boundaries follow:
+ 0.0001  20000000. /
+covr
+ 28 0 38 /
+ 1 /
+ 1.e3 /
+ /
+ 9861 /
+viewr
+ 38 39 /
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'	echo "Save files to support MANIPULATE-2020 regression testing in normal location"
+'@'	echo "NOTE: files for MANIPULATE-2020 regression testing saved in NJOY regression directories for now"
+'@'     cp output             ../regression_test_files/SNL_MANIP_05/Cf252_IRDFF-II_640grp_spectrum_validation.out
+'@'	cp tape39             ../regression_test_files/SNL_MANIP_05/Cf252_IRDFF-II_640grp_spectrum_validation.eps
+'@'	cp tape91             ../regression_test_files/SNL_MANIP_05/Cf252_IRDFF-II_640grp_spectrum_validation.groupr
+'@'	cp tape38             ../regression_test_files/SNL_MANIP_05/Cf252_IRDFF-II_640grp_spectrum_validation.viewr
+'@'	cp std.plot           ../regression_test_files/SNL_MANIP_05/Cf252_IRDFF-II_640grp_spectrum_validation.std
+'@'	cp lsl_interface.cov  ../regression_test_files/SNL_MANIP_05/Cf252_IRDFF-II_640grp_spectrum_validation.lsl
+'@'	echo " "
+'@'	echo "Save files for this NJOY regression test in regression test location"
+'@'     cp output             ../regression_test_files/SNL_MANIP_05/SNL-MANIP_Test_05_Output
+'@'	cp tape39             ../regression_test_files/SNL_MANIP_05/SNL-MANIP_Test_Tape39
+'@'	cp tape91             ../regression_test_files/SNL_MANIP_05/SNL-MANIP_Test_Tape91
+'@'	cp tape38             ../regression_test_files/SNL_MANIP_05/SNL-MANIP_Test_Tape38
+'@'	cp std.plot           ../regression_test_files/SNL_MANIP_05/SNL-MANIP_Test_Tape92
+'@'	cp lsl_interface.cov  ../regression_test_files/SNL_MANIP_05/SNL-MANIP_Test_Tape93
+'@'	echo "  "
+'@'	echo "This ends the post-process command stream"

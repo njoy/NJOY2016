@@ -1,0 +1,70 @@
+Enh: MANIPULATE-2020 prep: S32(n,p)P32 IRDFF-II covariance processing
+ 0 0 0
+ 0 0 0 0 0 0 0 0 0 0
+'#'	echo " MANIPULATE-2020 regression tests, Section 6.6, S32_np_IRDFF-II_cor, spectrum extraction"
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "Co59g covariance processing"
+'#'	wget -O 2>SNL_MANIP_Test_09.log tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/IRDFF-II_release/IRDFF-II.endf 
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"                                             
+moder
+ 20  -21 
+reconr
+  -21  -22 
+'PENDF TAPE FOR S32p of IRDFF-II'/
+  1625  3 0/
+ .001 293.6 /
+'S32p IRDFF-II'/
+'PROCESSED BY THE NJOY-2016 NUCLEAR DATA PROCESSING SYSTEM'/
+'SEE ORIGINAL TAPE FOR DETAILS OF EVALUATION'/
+ 0/
+groupr
+ -21 -22 0 25 
+  1625 15 0 4 0 1  1 1 1
+'S32p Cross Sections (eV-b)'/
+ 293.6
+ 1.E10
+ 0.1   0.025   100000.  1400000.0 /
+ 3  /
+ 0/
+ 0/
+errorr
+  -21  -22 25 26 0 0/
+ 1625  19 6 1 1 /  
+ 1  293.6 /
+ 1 33 /
+ 1 /
+  103  /
+ 1 /
+ 0.0001  20000000. /
+covr 
+26 0 34/
+1/
+ /
+ /
+ 1625 103 1625 103/
+viewr
+34 35/
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'	echo "Save files to support MANIPULATE-2020 regression testing in normal location"
+'@'	echo "NOTE: files for MANIPULATE-2020 regression testing saved in NJOY regression directories for now"
+'@'     cp output             ../regression_test_files/SNL_MANIP_09/S32_np_IRDFF-II_cor.out
+'@'	cp tape25             ../regression_test_files/SNL_MANIP_09/S32_np_IRDFF-II_cor.groupr
+'@'	cp tape35             ../regression_test_files/SNL_MANIP_09/S32_np_IRDFF-II_cor.eps
+'@'	cp tape34             ../regression_test_files/SNL_MANIP_09/S32_np_IRDFF-II_corn.viewr
+'@'	cp std.plot           ../regression_test_files/SNL_MANIP_09/S32_np_IRDFF-II_corn.std
+'@'	cp lsl_interface.cov  ../regression_test_files/SNL_MANIP_09/S32_np_IRDFF-II_cor.lsl
+'@'	echo " "
+'@'	echo "Save files for this NJOY regression test in regression test location"
+'@'     cp output             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_09_Output
+'@'	cp tape25             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape25
+'@'	cp tape35             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape35
+'@'	cp tape34             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape34
+'@'	cp std.plot           ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape90
+'@'	cp lsl_interface.cov  ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape91
+'@'	echo "  "
+'@'	echo "This ends the post-process command stream"

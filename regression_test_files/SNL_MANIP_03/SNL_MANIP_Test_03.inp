@@ -1,0 +1,52 @@
+Enh: MANIPULATE-2020 prep: Ag109(n,g)Ag110m IRDFF-II cross section processing
+ 0 0 0
+ 0 0 0 0 0 0 0 0 0 0
+'#'	echo " MANIPULATE-2020 regression tests, Section 6.3, Ag109g_...xsec..., response extraction"
+'#'	echo "This starts the pre-process command stream"
+'#'	echo " IRDFF-II Cross Section Analysis in SAND-II 640-grp"
+'#'	echo " File 3/33 extraction"
+'#'	wget -O 2>SNL_MANIP_Test_03.log tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/IRDFF-II_release/IRDFF-II.endf 
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"                                             
+moder
+ 20 -21 /
+reconr
+ -21 -22 /
+ 'processing of Ag109g of IRDFF-II'/
+ 4731 3 0 /
+ 0.001 293.6 /
+'Ag109 IRDFF-II'/
+'PROCESSED BY THE NJOY-2016 NUCLEAR DATA PROCESSING SYSTEM'/
+'SEE ORIGINAL TAPE FOR DETAILS OF EVALUATION'/
+ 0 /
+broadr
+ -21 -22 -23
+ 4731 1 0 0  0.0 /
+ .001 6.5e+6/
+ 293.6
+ 0/
+groupr
+ -21 -22 0 25 /
+ 4731 15 0 4 0 1 1 1 /
+ 'groupr: 640-group SAND-II' /
+ 293.6 /
+ 1.0e10 /
+ 0.1   0.025   100000.  1400000.0 /
+ 10 /
+ 0 /
+ 0 /
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'	echo "Save files to support MANIPULATE-2020 regression testing in normal location"
+'@'	echo "NOTE: files for MANIPULATE-2020 regression testing saved in NJOY regression directories for now"
+'@'     cp output             ../regression_test_files/SNL_MANIP_03/Ag109g_IRDFF-II_640grp_xsec.out
+'@'	cp tape25             ../regression_test_files/SNL_MANIP_03/Ag109g_IRDFF-II_640grp_xsec
+'@'	echo " "
+'@'	echo "Save files for this NJOY regression test in regression test location"
+'@'     cp output             ../regression_test_files/SNL_MANIP_03/SNL-MANIP_Test_Output
+'@'	cp tape25             ../regression_test_files/SNL_MANIP_03/SNL-MANIP_Test_Tape25
+'@'	echo "  "
+'@'	echo "This ends the post-process command stream"

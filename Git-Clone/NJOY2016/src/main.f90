@@ -212,7 +212,7 @@ program njoy
    character(8)::time
    character(28)::strng
    real(kr)::secs
-   integer:: jk
+   integer:: jk, module_loop_number
 
    !--set page size for blocked binary mode in module endf
    npage=(npage/102)*102
@@ -273,6 +273,11 @@ program njoy
      write (nsyso,'(''Enhanced control logic inputs:'')')
      write (nsyso,'(/,''    imode:  '', 3i2)') (imode(jk), jk=1,3)
      write (nsyso,'(  ''    icntrl: '', 10i2,/)') (icntrl(jk), jk=1,10)
+   endif
+
+   if ( run_title(1:5) .eq. 'moder') then
+     SNL_enhanced_input_format = -1
+     write (nsyso,'(''Ols style control logic inputs:'')')
    endif
 
    do jk = 1, 2 
@@ -352,8 +357,14 @@ program njoy
         write (nsyso,'(''icntrl(10) control logic flag not implemented:    10 '', i5)') icntrl(10)
    endif
    
+   module_loop_number = 0
    do
-      read(nsysi,*) module
+      module_loop_number = module_loop_number + 1
+      if ( module_loop_number .eq. 1 .and. SNL_enhanced_input_format .eq. -1) then 
+         module = run_title(1:6)
+      else
+         read(nsysi,*) module
+      endif
       if (module.eq.'stop') exit
       select case(module)
 

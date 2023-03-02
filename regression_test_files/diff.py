@@ -114,8 +114,8 @@ def writeDiff(diff_file, refLine, trialLine, lineNumber):
     diff_file.write("--- {} ---\n".format(lineNumber+1))
     diff_file.write("!{}".format(trialLine))
 
-
-retained_tapes = set(glob.glob('SNL-NJOY-2016_Test_Tape*'))
+# Diff checking for original format files
+#retained_tapes = set(glob.glob('SNL-NJOY-2016_Test_Tape*'))
 reference_tapes = glob.glob('SNL-NJOY-2016_referenceTape*')
 
 for reference_tape in reference_tapes:
@@ -138,9 +138,38 @@ for reference_tape in reference_tapes:
       identical = identicalLines(reference_lines, trial_lines, diff_file, 1E-5, 1E-5)
 
     if not identical:
-      print("Diff found, exiting")
+      print("Diff found in NJOY test, exiting")
       exit(99)
       
+
+# Diff checking for SNL-MANIPULATE series
+#retained_tapes = set(glob.glob('SNL-MANIP_Test_Tape*'))
+reference_tapes = glob.glob('SNL-MANIP_referenceTape*')
+
+for reference_tape in reference_tapes:
+  trial_tape = 'SNL-MANIP_Test_Tape' + reference_tape[-2:]
+  if not filecmp.cmp(reference_tape, trial_tape):
+    with open(reference_tape, 'r') as reference_file, \
+         open(trial_tape, 'r') as trial_file, \
+         open(trial_tape + '_diff', 'w') as diff_file:
+      should_exit = False
+      reference_lines = reference_file.readlines()
+      trial_lines = trial_file.readlines()
+      reference_lines = [datePattern.sub(r'XX/XX/XX', line)
+                         for line in reference_lines]
+      trial_lines = [datePattern.sub(r'XX/XX/XX', line)
+                     for line in trial_lines]
+
+      diff_file.write("*** {} ***\n".format(reference_tape))
+      diff_file.write("--- {} ---\n".format(trial_tape))
+
+      identical = identicalLines(reference_lines, trial_lines, diff_file, 1E-5, 1E-5)
+
+
+    if not identical:
+      print("Diff found in MANIPULATE-NJOY tests, exiting")
+      exit(99)
+
 print("No diff found")
 
 #removed_tapes = list(set(glob.glob('tape*')) - retained_tapes)

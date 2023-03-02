@@ -81,5 +81,5 @@ stop
 '@'	rm tape26
 '@'     cp output             ../regression_test_files/01/SNL-NJOY-2016_Test_Output
 '@'	cp tape25             ../regression_test_files/01/SNL-NJOY-2016_Test_Tape25
-'@'	echo "
+'@'	echo " "
 '@'	echo "This ends the post-process command stream"

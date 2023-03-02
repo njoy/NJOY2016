@@ -24,6 +24,8 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
       $sep        = "/";
       $cpx        = "cp -f -p";        
       $mv         = "mv";
+      $cleanup    = "on";
+      $preclean   = "void";
 #	Linux make file creates an executable named njoy
       $executable = "njoy";
 
@@ -288,137 +290,153 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
 
       chmod (0777, "machine", "username", "opsys", "date.tmp", "getcwd" );
 
-      $filout = "0*";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/0*");
+#     Evaluate pre-clean operation
+      $filtxt1 = "$input_dir${sep}${job}.inp";
+      $filtxt2 = "$input_dir${sep}${job}";
+      if  (-r $filtxt1 ) {
+#       input found in normal format, i.e., *.inp - pre-clean and continue run
+        print "Normal input format: pre-clean of working space will be performed \n";
+        $preclean   = "on";
+      } elsif (-r $filtxt2 ) {
+#       input found in regression format, i.e., without inp suffix - bypass pre-clean and continue run
+        print "Regression input format: bypass pre-clean operation \n";
+        $preclean   = "off";
+      } else {
+          print " \n \n Probable ERROR on pre-clean input_file $filtxt1 nor $filtxt2 file exist \n \n";
+          die "   try again $!\n";
       }
+      if ( $preclean eq "on") {
+          $filout = "0*";
+          if  (-e $filout ) {
+             system("rm -f $work_dir/0*");
+          }
 
-      $filout = "temp*";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/temp*");
+          $filout = "temp*";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/temp*");
+          }
+
+          $filout = "1*";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/1*");
+          }
+
+          $filout = "std*";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/std*");
+          }
+
+          $filout = "std.plot";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/std.plot");
+          }
+
+          $filout = "eff.dat";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/eff.dat");
+          }
+
+          $filout = "lsl_interface.cov";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/lsl_interface.cov");
+          }
+
+          $filout = "partition_func.dat";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/partition_func.dat");
+          }
+
+          while ( <tape*>  ) {
+            system("$rm $_");
+          }
+
+#          $filout = "tape28";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape28");
+#          }
+#          $filout = "tape26";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape26");
+#          }
+#          $filout = "tape34";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape34");
+#          }
+#          $filout = "tape35";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape35");
+#          }
+#          $filout = "tape38";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape38");
+#          }
+#              $filout = "tape91";
+#      if  (-e $filout ) {
+#              system("rm -f $work_dir/tape91");
+#          }
+#          $filout = "tape44";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape44");
+#          }
+#          $filout = "tape32";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape32");
+#          }
+#          $filout = "tape31";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape31");
+#          }  
+#          $filout = "tape27";
+#         if  (-e $filout ) {
+#              system("rm -f $work_dir/tape27");
+#          }
+#          $filout = "tape33";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape33");
+#          }
+#          $filout = "tape51";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape51");
+#          }
+#          $filout = "tape21";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape21");
+#          }
+#          $filout = "tape22";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape22");
+#          }
+#          $filout = "tape23";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape23");
+#          }
+#          $filout = "tape24";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape24");
+#          }
+#          $filout = "tape25";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape25");
+#          }      
+#          $filout = "tape30";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape30");
+#          }
+#         $filout = "tape39";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/tape39");
+#          }
+
+          $filout = "misc";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/misc");
+          }
+
+          $filout = "index";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/index");
+          }
       }
-
-      $filout = "1*";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/1*");
-      }
-
-      $filout = "std*";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/std*");
-      }
-
-      $filout = "std.plot";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/std.plot");
-      }
-
-      $filout = "eff.dat";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/eff.dat");
-      }
-
-      $filout = "lsl_interface.cov";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/lsl_interface.cov");
-      }
-
-      $filout = "partition_func.dat";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/partition_func.dat");
-      }
-
-      while ( <tape*>  ) {
-        system("$rm $_");
-      }
-
-#      $filout = "tape28";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape28");
-#      }
-#      $filout = "tape26";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape26");
-#      }
-#      $filout = "tape34";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape34");
-#      }
-#      $filout = "tape35";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape35");
-#      }
-#      $filout = "tape38";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape38");
-#      }
-#      $filout = "tape91";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape91");
-#      }
-#      $filout = "tape44";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape44");
-#      }
-#      $filout = "tape32";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape32");
-#      }
-#      $filout = "tape31";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape31");
-#      }
-#      $filout = "tape27";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape27");
-#      }
-#      $filout = "tape33";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape33");
-#      }
-#      $filout = "tape51";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape51");
-#      }
-#      $filout = "tape21";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape21");
-#      }
-#      $filout = "tape22";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape22");
-#      }
-#      $filout = "tape23";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape23");
-#      }
-#      $filout = "tape24";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape24");
-#      }
-#      $filout = "tape25";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape25");
-#      }      
-#      $filout = "tape30";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape30");
-#      }
-#      $filout = "tape39";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/tape39");
-#      }
-
-      $filout = "misc";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/misc");
-      }
-
-      $filout = "index";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/index");
-      }
-
 #
 #    copy input file to njoy-2016 input
 #
@@ -433,10 +451,28 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
 #      print "command instruction = $command\n";
 #      system ("$command");
 
-      system("$cpx $input_dir${sep}${job}.inp njoy-2016.inp") == 0 || die
+      $filtxt1 = "$input_dir${sep}${job}.inp";
+      $filtxt2 = "$input_dir${sep}${job}";
+      if  (-r $filtxt1 ) {
+#       input found in normal format, i.e., *.inp - continue run
+        print "Normal input format with .inp suffix \n";
+        system("$cpx $input_dir${sep}${job}.inp njoy-2016.inp") == 0 || die
         "Cannot open ${job}.inp\n" ;
-      system("$cpx njoy-2016.inp njoy-2016.copy");
-      system("$cpx njoy-2016.inp input");
+        system("$cpx njoy-2016.inp njoy-2016.copy");
+        system("$cpx njoy-2016.inp input");
+      } elsif (-r $filtxt2 ) {
+#       input found in regression format, i.e., without inp suffix - continue run
+        print "Regression input format without .inp suffix \n";
+        print "Suppress working area clean-up \n";
+        $cleanup    = "off";
+        system("$cpx $input_dir${sep}${job} njoy-2016.inp") == 0 || die
+        "Cannot open ${job}\n" ;
+        system("$cpx njoy-2016.inp njoy-2016.copy");
+        system("$cpx njoy-2016.inp input");
+      } else {
+          print " \n \n Probable ERROR input_file $filtxt1 nor $filtxt2 file exist \n \n";
+          die "   try again $!\n";
+      }
 
 #
 #    preprocess input module
@@ -483,76 +519,85 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
 #
 #     Clean-up after run
 #
+      print " Clean-up status: $cleanup \n\n";
+      if ($cleanup eq "on") {
 
-      $filout = "input";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/input");
-      }
+          $filout = "input";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/input");
+          }
 
-      $filout = "output";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/output");
-      }
+          $filout = "output";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/output");
+          }
 
-      $filout = "log";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/log");
-      }
+          $filout = "log";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/log");
+          }
 
-      while ( <temp*>  ) {
+          while ( <temp*>  ) {
         system("$rm $_");
-      }
+          }
 
-      while ( <tape*>  ) {
-        system("$rm $_");
-      }
+          while ( <tape*>  ) {
+            system("$rm $_");
+          }
 
-      $filout = "eff.dat";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/eff.dat");
-      }
+          $filout = "eff.dat";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/eff.dat");
+          }
 
-      $filout = "*.log";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/*.log");
-      }
-#      $filout = "*.inp";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/*.inp");
-#      }
-      $filout = "date.tmp";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/date.tmp");
-      }
-      $filout = "username";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/username");
-      }
-      $filout = "opsys";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/opsys");
-      }
-      $filout = "machine";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/machine");
-      }
-      $filout = "getcwd";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/getcwd");
-      }
-      $filout = "partition_func.dat";
-      if  (-e $filout ) {
-          system("rm -f $work_dir/partition_func.dat");
-      }
-# temporarily stop clean-up of input file while testing
-#      $filout = "njoy-2016.inp";
-#      if  (-e $filout ) {
-#          system("rm -f $work_dir/njoy-2016.inp");
-#      }
-#      $file = "${job}.inp";
-#      system("rm -f $work_dir/${file}");
+          $filout = "*.log";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/*.log");
+          }
+#          $filout = "*.inp";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/*.inp");
+#          }
+          $filout = "date.tmp";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/date.tmp");
+          }
+          $filout = "username";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/username");
+          }
+          $filout = "opsys";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/opsys");
+          }
+          $filout = "machine";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/machine");
+          }
+          $filout = "getcwd";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/getcwd");
+          }
+          $filout = "partition_func.dat";
+          if  (-e $filout ) {
+              system("rm -f $work_dir/partition_func.dat");
+          }
+#         temporarily stop clean-up of input file while testing
+#          $filout = "njoy-2016.inp";
+#          if  (-e $filout ) {
+#              system("rm -f $work_dir/njoy-2016.inp");
+#          }
+#          $file = "${job}.inp";
+#          system("rm -f $work_dir/${file}");
 
-exit 0;
+           exit 0;
+      } elsif ($cleanup eq "off") {
+          print " \n \n Clean-up status was $cleanup, look in the working directory $work_dir for results \n \n";
+      } else {
+          print " \n \n Probable ERROR in clean-up $cleanup \n \n";
+          die "   try again $!\n";
+      }
+      exit 0;
 #
 ##   subroutine prepro, this routine preprocessed the input file
 #
@@ -587,6 +632,10 @@ exit 0;
                      }  elsif ($x2 eq $rmxfix) {
                         $command = "$rmx $x3 $x4";
 #                       print "REMOVE command: $command \n";
+                        system("${command}");
+                    }  elsif ($x2 eq "wget") {
+                        $command = "wget $x3 $x4";
+#                       print "wget Download command: $command \n";
                         system("${command}");
                      }  else {
                         print "Unknown prepro command: $x3 $x4";

@@ -1,0 +1,79 @@
+Enh: MANIPULATE-2020 prep: As-75 (self-atom in GaAs) ENDF/B-VIII_0; displ. kerma; Ed = 0.00 eV; Robinson; Z/A modification; 770-grp; 293.6K, 20.45C; 2200 m/s; 0.0253 eV
+ 0 0 0
+ 7 0 0 0 1 0 0 0 0 0
+'#'	echo " MANIPULATE-2020 regression tests, Section 6.1, As-75_..._DK, response extraction"
+'#'	echo "This starts the pre-process command stream"
+'#'	echo "As-75 in GaAs displacement kerma cross section survey: using ENDF/B-VIII.0 in SAND-VI 770-grp"
+'#'	wget -O 2>SNL_MANIP_Test_01.log tape20 https://raw.githubusercontent.com/sandialabs/xsec/main/ENDFB-VIII-0/ENDF-B-VIII.0_neutrons/n-033_As_075.endf 
+'#'	echo " icntrl(1)=7: Displacement kerma treatment, i.e. no threshold"
+'#'	echo " icntrl(5)=1: Modification of Ed, lattice atom mass and Z"
+'#'     echo "            use elemental weight, in amu, for lattice atomic weight"
+'#'	echo " icntrl(8)=0: Use built-in Robinson partition function"
+'#'	echo " icntrl(9)=0: Full Robinson treatment of recoil particles"
+'#'	echo " Temperature broadened to 293.6K - room temperature, 2200 m/s Maxwellian distribution neutrons"
+'#'     echo " SAND-IV 770-group output"
+'#'	echo " "
+'#'	echo "This ends the pre-process command stream"                                             
+moder
+ 20 -21
+reconr
+ -21 -22
+ 'pendf tape for n + 33-As-75 from ...'/
+ 3325 2 0
+ 0.001 0.0 /
+ 'n + 33-As-75 from ENDF/B-VIII.0'/
+ 'processed by SNL-NJOY-2016'/
+ 0/
+broadr
+ -21 -22 -23
+ 3325 1 0 0  0.0 /
+ .001 6.5e+6/
+ 293.6
+ 0/
+heatr
+ -21 -23 -24 25 
+ 3325 7 0 0 0 2 00.0  0 74.921595   33.0 /
+ 302 401 443 444 445 446 447/
+groupr
+ -21 -24 0 28
+ 3325 24 0 4 0 1 1 1/
+ 'groupr: 770-group SAND-IV'
+ 293.6                                                      
+ 1.0e10
+ 0.1   0.0253   100000.  1400000.0 /
+ 3 301 'Total Kerma, Heat Production'/
+ 3 302 '302 Elastic Kerma'/
+ 3 401 '401 Disappearance Kerma'/
+ 3 446 '446 Inelastic Damage Kerma'/
+ 3 443 'Kinematic Kerma'/   
+ 3 444 '444 Total Damage Kerma'/
+ 3 445 '445 Elastic Damage Kerma'/
+ 3 447 '447 Disappearence Damage Kerma'/
+ 3 1 'total'/  
+ 3 2 'elast'/ 
+ 3 4 'inel'/
+ 3 102 'n,g'/
+ 3 103 'n,p' /
+ 3 107 'n,a' /  
+ 3  16 'n,2n' /
+ 3  22 'n,2a' /
+ 3  28 'n,np' /
+ 3  51 'inel_51' /
+ 3  91 'inel-cont' /
+  0 /
+  0 /
+stop
+'@'     echo "    "
+'@'	echo "This starts the post-process command stream"
+'@'	echo " "
+'@'	rm tape20
+'@'	echo "Save files to support MANIPULATE-2020 regression testing in normal location"
+'@'	echo "NOTE: files for MANIPULATE-2020 regression testing saved in NJOY regression directories for now"
+'@'     cp output             ../regression_test_files/SNL_MANIP_01/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey.out
+'@'	cp tape28             ../regression_test_files/SNL_MANIP_01/As-75_SA_in_GaAs_ENDFB_VIII_0_770grp_DK_NJOY2016_xsec_survey
+'@'	echo " "
+'@'	echo "Save files for this NJOY regression test in regression test location"
+'@'     cp output             ../regression_test_files/SNL_MANIP_01/SNL-MANIP_Test_Output
+'@'	cp tape28             ../regression_test_files/SNL_MANIP_01/SNL-MANIP_Test_Tape28
+'@'	echo "  "
+'@'	echo "This ends the post-process command stream"

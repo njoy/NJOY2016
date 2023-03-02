@@ -4,12 +4,12 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 12/27/21  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 04:29:32  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 07/22/22  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 11:35:01  *
  *                                         *              *                  *
  *****************************************************************************
 
-Run Title:: Enh: Co59(n,g)Co60 IRDFF-II cross section processing                            
+Run Title:: Enh: S32(n,p) IRDFF-II cross section processing (no broadr)                     
 
 Enhanced control logic inputs:
 
@@ -29,10 +29,10 @@ icntrl(10) control logic flag set for damage energy:   0
   IRDFF-II master library in ENDF-6 format at 293.6 K                 
 
  using endf-6 format
-                                                                          2.3s
+                                                                          2.2s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            2.3s
+ reconr...reconstruct pointwise cross sections in pendf format            2.2s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -69,35 +69,12 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =       0
  points in initial unionized grid             =     262
- points added by linearization                =       2                   2.3s
+ points added by linearization                =       2                   2.2s
  number of points in final unionized grid     =     264
-                                                                          2.3s
+                                                                          2.2s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 2.3s
-
- unit for input endf tape .............        -21
- unit for input pendf tape ............        -22
- unit for output pendf tape ...........        -23
- material to be processed .............       1625
- number of final temperatures .........          1
- restart (0 no, 1 yes) ................          0
- bootstrap (0 no, 1 yes) ..............          0
- starting material temperature ........        0.0k
- thinning tolerance ...................      0.001
- max. energy ..........................  6.500E+06
- errmax for thinning ..................  1.000E-02
- errint for thinning ..................  5.000E-08
- final temperatures ...................  2.936E+02
-
-
- files are in endf-6 format
-
- ---message from broadr---desired mat and temp not on tape
-                                                                          2.3s
- *****************************************************************************
-
- groupr...compute self-shielded group-averaged cross-sections             2.3s
+ groupr...compute self-shielded group-averaged cross-sections             2.2s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -770,7 +747,7 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
   S32 IRDFF-II                                                        
  
- group constants at t=2.936E+02 deg k                                     2.4s
+ group constants at t=2.936E+02 deg k                                     2.2s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  enrgy  group constants at
@@ -1161,7 +1138,7 @@ icntrl(10) control logic flag set for damage energy:   0
    640    7.71466-2
   flx   9.83018-6
  
- group constants at t=2.936E+02 deg k                                     2.4s
+ group constants at t=2.936E+02 deg k                                     2.2s
  for mf  3 and mt103 (n,p) cross section                                         
  
  enrgy  group constants at
@@ -1360,5 +1337,5 @@ icntrl(10) control logic flag set for damage energy:   0
    639    7.81733-2
    640    7.71466-2
  
-                                                                          2.4s
+                                                                          2.2s
  *****************************************************************************
