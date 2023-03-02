@@ -2,7 +2,19 @@
 /bin
 
 # Ignore regression test files created from tests each run 
+# Original Series
 /regression_test_files/*/SNL-NJOY-2016_Test*
+# SNL developed series
+/regression_test_files/*/SNL-NJOY-2016_SNL_Test*
+# SNL MANIPULATE-NJOY series
+/regression_test_files/*/SNL-MANIP_Test_Tape*
+/regression_test_files/*/SNL-MANIP_Test_*Output
+/regression_test_files/*/SNL-MANIP_Test*.groupr
+/regression_test_files/*/SNL-MANIP_Test*.lsl
+/regression_test_files/*/SNL-MANIP_Test*.std
+/regression_test_files/*/SNL-MANIP_Test*.viewr
+/regression_test_files/*/SNL-MANIP_Test*.eps
+# Logs and outputs
 /regression_test_files/*/*.log
 /regression_test_files/*/*.out
 

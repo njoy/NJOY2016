@@ -4,8 +4,8 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 07/23/22  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 01:39:19  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/01/23  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 21:07:33  *
  *                                         *              *                  *
  *****************************************************************************
 
@@ -29,10 +29,10 @@ icntrl(10) control logic flag set for damage energy:   0
   IRDFF-II master library in ENDF-6 format at 293.6 K                 
 
  using endf-6 format
-                                                                          2.8s
+                                                                          1.5s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            2.8s
+ reconr...reconstruct pointwise cross sections in pendf format            1.5s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -69,12 +69,12 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =       0
  points in initial unionized grid             =     262
- points added by linearization                =       2                   2.8s
+ points added by linearization                =       2                   1.5s
  number of points in final unionized grid     =     264
-                                                                          2.8s
+                                                                          1.5s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             2.8s
+ groupr...compute self-shielded group-averaged cross-sections             1.5s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -747,7 +747,7 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
   S32p IRDFF-II                                                       
  
- group constants at t=2.936E+02 deg k                                     2.9s
+ group constants at t=2.936E+02 deg k                                     1.5s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  enrgy  group constants at
@@ -1138,7 +1138,7 @@ icntrl(10) control logic flag set for damage energy:   0
    640    7.71466-2
   flx   9.83018-6
  
- group constants at t=2.936E+02 deg k                                     2.9s
+ group constants at t=2.936E+02 deg k                                     1.5s
  for mf  3 and mt103 (n,p) cross section                                         
  
  enrgy  group constants at
@@ -1337,10 +1337,10 @@ icntrl(10) control logic flag set for damage energy:   0
    639    7.81733-2
    640    7.71466-2
  
-                                                                          2.9s
+                                                                          1.5s
  *****************************************************************************
 
- errorr...produce cross section covariances                               2.9s
+ errorr...produce cross section covariances                               1.5s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -1429,7 +1429,7 @@ icntrl(10) control logic flag set for damage energy:   0
  ---------------------
   16-S - 32 FEI        EVAL-Nov07 K.I.Zolotarev                      
 
- covariances calculated for  1 reactions and   49 groups                  2.9s
+ covariances calculated for  1 reactions and   49 groups                  1.5s
  *** SNL covariance processing note 
  *** Processing of xsec/number-fraction based on    103
 
@@ -1489,7 +1489,7 @@ icntrl(10) control logic flag set for damage energy:   0
    48  1.8500E+07  1.1281E-04  9.2518E-02
    49  1.9000E+07  1.3666E-04  8.2878E-02
 
- relative covariance ( mt103 , ig , mt103 , igp )                         2.9s
+ relative covariance ( mt103 , ig , mt103 , igp )                         1.5s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1877,10 +1877,10 @@ icntrl(10) control logic flag set for damage energy:   0
   49    32  2.591E-04  2.673E-04  2.585E-04  2.356E-04  2.047E-04  1.738E-04
   49    38  1.500E-04  1.389E-04  1.439E-04  1.661E-04  2.054E-04  2.607E-04
   49    44  3.302E-04  4.118E-04  5.037E-04  6.038E-04  7.102E-04  8.789E-04
-                                                                          2.9s
+                                                                          1.5s
  *****************************************************************************
 
- covr...process covariance data                                           2.9s
+ covr...process covariance data                                           1.5s
 
  unit for input covariance tape .......         26
  unit for output covariance tape ......          0
@@ -1912,10 +1912,10 @@ icntrl(10) control logic flag set for damage energy:   0
    1.9000E+07  2.0000E+07
 
  ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.0873E-01
-                                                                          2.9s
+                                                                          1.5s
  **************************************************************************
 
- viewr...display plots                                                    2.9s
+ viewr...display plots                                                    1.5s
 
  lori .................................          1
  xpage ................................     10.000
@@ -7009,5 +7009,5 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          0
 
-                                                                          3.0s
+                                                                          1.5s
  *****************************************************************************

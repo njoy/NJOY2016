@@ -46,7 +46,7 @@ stop
 '@'	cp tape25             ../regression_test_files/SNL_MANIP_04/S32p_IRDFF-II_640grp_xsec
 '@'	echo " "
 '@'	echo "Save files for this NJOY regression test in regression test location"
-'@'     cp output             ../regression_test_files/SNL_MANIP_04/SNL-MANIP_Test_03_Output
-'@'	cp tape25             ../regression_test_files/SNL_MANIP_04/SNL-MANIP_Test_03_Tape25
+'@'     cp output             ../regression_test_files/SNL_MANIP_04/SNL-MANIP_Test_Output
+'@'	cp tape25             ../regression_test_files/SNL_MANIP_04/SNL-MANIP_Test_Tape25
 '@'	echo "  "
 '@'	echo "This ends the post-process command stream"

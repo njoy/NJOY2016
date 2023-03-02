@@ -61,10 +61,10 @@ stop
 '@'	echo " "
 '@'	echo "Save files for this NJOY regression test in regression test location"
 '@'     cp output             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_09_Output
-'@'	cp tape25             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_09.groupr
-'@'	cp tape35             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_09_eps
-'@'	cp tape34             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_09.viewr
-'@'	cp std.plot           ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_09.std
-'@'	cp lsl_interface.cov  ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_09.lsl
+'@'	cp tape25             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape25
+'@'	cp tape35             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape35
+'@'	cp tape34             ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape34
+'@'	cp std.plot           ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape90
+'@'	cp lsl_interface.cov  ../regression_test_files/SNL_MANIP_09/SNL-MANIP_Test_Tape91
 '@'	echo "  "
 '@'	echo "This ends the post-process command stream"

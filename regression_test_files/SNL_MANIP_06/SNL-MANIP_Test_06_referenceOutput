@@ -4,8 +4,8 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 07/23/22  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 01:57:53  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/01/23  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 21:07:24  *
  *                                         *              *                  *
  *****************************************************************************
 
@@ -94,10 +94,10 @@ icntrl(10) control logic flag set for damage energy:   0
  points affected by resonance integral check  =       0
  final number of resonance points             =     343
  number of points in final unionized grid     =     741
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             0.2s
+ groupr...compute self-shielded group-averaged cross-sections             0.1s
 
  unit for endf tape ...................         21
  unit for pendf tape ..................         22
@@ -769,7 +769,7 @@ icntrl(10) control logic flag set for damage energy:   0
                                                                       
  
 
- group constants at t=zero deg k                                          0.2s
+ group constants at t=zero deg k                                          0.1s
  for mf  3 and mt261 spect                                                       
  
  enrgy  group constants at
@@ -1416,10 +1416,10 @@ icntrl(10) control logic flag set for damage energy:   0
    639    7.4712-13
    640    6.9352-13
  
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- errorr...produce cross section covariances                               0.2s
+ errorr...produce cross section covariances                               0.1s
 
  unit for endf tape ...................         20
  unit for pendf tape ..................          0
@@ -1533,7 +1533,7 @@ icntrl(10) control logic flag set for damage energy:   0
  ---------------------
   92-U -235 IAEA       EVAL-NOV17 IAEA CIELO Collaboration           
 
- covariances calculated for  1 reactions and   78 groups                  0.2s
+ covariances calculated for  1 reactions and   78 groups                  0.1s
  *** SNL covariance processing note 
  *** Processing of xsec/number-fraction based on    261
 
@@ -1622,7 +1622,7 @@ icntrl(10) control logic flag set for damage energy:   0
    77  1.6000E+07  2.0000E+06  6.5877E-12
    78  1.8000E+07  2.0000E+06  1.5218E-12
 
- relative covariance ( mt261 , ig , mt261 , igp )                         0.2s
+ relative covariance ( mt261 , ig , mt261 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2640,10 +2640,10 @@ icntrl(10) control logic flag set for damage energy:   0
   78    61  6.289E-06  9.025E-06  9.522E-06  9.543E-06  9.597E-06  7.130E-06
   78    67  5.028E-06  3.468E-06 -1.762E-06 -1.229E-06 -8.576E-07 -5.953E-07
   78    73 -4.127E-07 -2.862E-07 -1.262E-07  5.197E-05  1.203E-05  5.560E-06
-                                                                          0.3s
+                                                                          0.1s
  *****************************************************************************
 
- covr...process covariance data                                           0.3s
+ covr...process covariance data                                           0.1s
 
  unit for input covariance tape .......         28
  unit for output covariance tape ......          0
@@ -2678,10 +2678,10 @@ icntrl(10) control logic flag set for damage energy:   0
    8.0500E+06  8.5500E+06  9.0500E+06  9.5500E+06  1.0050E+07  1.0550E+07
    1.1050E+07  1.1550E+07  1.2050E+07  1.4000E+07  1.6000E+07  1.8000E+07
    2.0000E+07
-                                                                          0.3s
+                                                                          0.1s
  **************************************************************************
 
- viewr...display plots                                                    0.3s
+ viewr...display plots                                                    0.1s
 
  lori .................................          1
  xpage ................................     10.000
@@ -7922,5 +7922,5 @@ icntrl(10) control logic flag set for damage energy:   0
 
  data nform ...........................          0
 
-                                                                          0.3s
+                                                                          0.1s
  *****************************************************************************

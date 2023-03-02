@@ -4,8 +4,8 @@
  *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 22Sept21  *
  *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: snl RES   *
  *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
- *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 07/22/22  *
- *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 21:04:28  *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 03/01/23  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 21:07:22  *
  *                                         *              *                  *
  *****************************************************************************
 
@@ -29,10 +29,10 @@ icntrl(10) control logic flag set for damage energy:   0
   IRDFF-II master library in ENDF-6 format at 293.6 K                 
 
  using endf-6 format
-                                                                          2.4s
+                                                                          1.5s
  *****************************************************************************
 
- reconr...reconstruct pointwise cross sections in pendf format            2.4s
+ reconr...reconstruct pointwise cross sections in pendf format            1.5s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -69,12 +69,12 @@ icntrl(10) control logic flag set for damage energy:   0
 
  number of user and resonance nodes           =       0
  points in initial unionized grid             =     262
- points added by linearization                =       2                   2.4s
+ points added by linearization                =       2                   1.5s
  number of points in final unionized grid     =     264
-                                                                          2.4s
+                                                                          1.5s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 2.4s
+ broadr...doppler broadening of endf data                                 1.5s
 
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -22
@@ -94,10 +94,10 @@ icntrl(10) control logic flag set for damage energy:   0
  files are in endf-6 format
 
  ---message from broadr---desired mat and temp not on tape
-                                                                          2.4s
+                                                                          1.5s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             2.4s
+ groupr...compute self-shielded group-averaged cross-sections             1.5s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -770,7 +770,7 @@ icntrl(10) control logic flag set for damage energy:   0
  --------------------------------------
   S32 IRDFF-II                                                        
  
- group constants at t=2.936E+02 deg k                                     2.4s
+ group constants at t=2.936E+02 deg k                                     1.5s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  enrgy  group constants at
@@ -1161,7 +1161,7 @@ icntrl(10) control logic flag set for damage energy:   0
    640    7.71466-2
   flx   9.83018-6
  
- group constants at t=2.936E+02 deg k                                     2.4s
+ group constants at t=2.936E+02 deg k                                     1.5s
  for mf  3 and mt103 (n,p) cross section                                         
  
  enrgy  group constants at
@@ -1360,5 +1360,5 @@ icntrl(10) control logic flag set for damage energy:   0
    639    7.81733-2
    640    7.71466-2
  
-                                                                          2.4s
+                                                                          1.5s
  *****************************************************************************
