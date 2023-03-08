@@ -4,6 +4,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 ## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes a number of minor issues:
   - Fixed an issue in HEATR when reading evaluations with large multiplicity tables in MF6.
+  - Fixed an issue in HEATR when calculating the average outgoing energy from a distribution that uses multiple interpolation ranges in TAB1 records (test 79 was added to detect this issue in the future). Mainly nuclides using MF5 instead of MF6 are impacted by this change (e.g. Sn119 and Sn122 from ENDF/B-VIII.0).
   - Fixed an issue in HEATR where the photon recoil needed to be multiplied by the photon multiplicity to obtain the photon recoil per interaction.
   - Fixed a crash in THERMR when asking for S(a,b) processing (iinc=2) while no ENDF tape is given (nendf=0).
 
