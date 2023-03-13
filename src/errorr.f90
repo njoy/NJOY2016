@@ -1051,8 +1051,9 @@ contains
    !--compute MF33 covariance matrices
    ek(1)=sigfig(ek(1),ndig,0)
    if (abs(egn(1)-elo).le.eps) egn(1)=elo
+print*, 'before covcal'
    call covcal
-
+print*, 'after covcal'
    !--add MF32 covariance matrices and write output tape.
    call covout
 
@@ -1791,7 +1792,7 @@ contains
    real(kr),dimension(:),allocatable::b
    real(kr),parameter::small=1.e-10_kr
    real(kr),parameter::zero=0
-
+print*, 'here'
    !--initialize
    ifoundmf34=0
    izero=0
@@ -1841,6 +1842,7 @@ contains
    call rdgout(ngout,matd,mfd,mtd,izero,b,flx)
    nsc=0
    call rdsig(matd,izero,izero,b,scr)
+   print*, 'here2'
 
    !--temporary patch for missing mf33
    if (mf33.eq.0.and.mfcov.eq.33) then
@@ -1906,6 +1908,7 @@ contains
       endif
       izap=10*l1h+l2h
    endif
+   print*, 'here3'
 
    ! ignore components of a lumped reaction
    if (nl.eq.0) go to 140
@@ -1957,9 +1960,11 @@ contains
    else
       call lumpxs(mtl,mtl,sig,sig1,b,scr2)
    endif
+   print*, 'here4'
 
    !--loop over different covariance matrices for this reaction
    do 650 il=1,nl
+print*, 'in loop ', il
    if (mfcov.eq.35) then
       mat1=0
       mt1=mth
@@ -2006,6 +2011,7 @@ contains
    mat1=matc(1)
    mt1=mtc(1)
    kmtb=kmt1
+   print*, '-- 1'
 
    !--read in all sub-subsections for this matrix.
   230 continue
@@ -2064,6 +2070,7 @@ contains
       if (.not.(ld.eq.legord.and.ld1.eq.ifissp)) go to 650
       ifoundmf34=1
    endif
+   print*, '-- 2'
 
    !--retrieve sigma for mt1, either from ngout or sig.
    if (kmt1.ne.nmts) then
@@ -2079,9 +2086,13 @@ contains
    endif
 
    if (mfcov.eq.34) then
+     print*, '-- 2a'
       call rdlgnd(nscr4,matd,mth,ld,b,alp1)
+      print*, '-- 2b'
       call rdlgnd(nscr4,matd,mt1,ld1,b,alp2)
+      print*, '-- 2c'
    endif
+   print*, '-- 3'
 
    !--generate covariance matrix using specified laws.
    do 570 jg=1,nunion
@@ -2136,6 +2147,7 @@ contains
    locip6=loci+6
    nk1=np-1
    if (lb.ne.8) go to 880
+   print*, '-- 4'
 
    !--separate treatment for lb=8
    if (jh.ne.jg) go to 510
@@ -2177,6 +2189,7 @@ contains
    go to 510
   800 continue
    if (lb.ne.6) go to 850
+   print*, '-- 5'
 
    !--separate treatment for lb=6
    k=0
@@ -2233,6 +2246,7 @@ contains
       cov(jh)=cov(jh)+scr(ifloc+np)*sig(jg)*sig1(jh)
    endif
    go to 510
+   print*, '-- 6'
 
    !--integrated treatment for lb=0 thru lb=4.
   410 continue
@@ -2307,6 +2321,7 @@ contains
    cov(jh)=cov(jh)+scr(loci+5+k2)
   510 continue
   520 continue
+  print*, '-- 6'
 
    !--write one row of the covariance matrix on scratch tape.
    jgend=0
@@ -2353,6 +2368,7 @@ contains
    enddo
   570 continue
    go to 650
+   print*, '-- 7'
 
    !--write a null covariance matrix on scratch tape.
   600 continue
@@ -2370,9 +2386,12 @@ contains
    call listio(0,0,nscr1,b,nb,nw)
 
    !--close loop over subsections of mfcov
+   print*, 'done loop'
+
   650 continue
   660 continue
    call asend(0,nscr1)
+   print*, 'done!'
 
    !--check if we found the MF34 l,l1 sub-subsection
    if (mfcov.eq.34.and.ifoundmf34.eq.0) then
@@ -5599,6 +5618,7 @@ contains
       mfd=3
       mtd=iga(imt)
       do 260 ig=1,nunion
+print*, 'union loop ', ig
          elo=un(ig)
          ehi=un(1+ig)
          ig2lo=0
@@ -5632,6 +5652,7 @@ contains
                go to 260
             endif
          else
+           print*, 'from nscr5'
          !--collapse NGOUT (now nscr5) Legendre data to the union grid
          !  - we already know ge(1).le.un(1) & ge(nng+1).ge.un(nunion)
          !  - n is a group number, bounded by ge(n) to ge(n+1)
@@ -5669,8 +5690,14 @@ contains
          z(5)=nw
          z(6)=ig
          z(7)=ans(1,1)
+print*, z(1), z(2), z(3), z(4), z(5), z(6)
          do i=1,legord
+            if (ans(i,2).lt.1e-30) then
+            z(i+7)=0.
+          else
             z(i+7)=ans(i,2)
+          endif
+print*, z(i+7)
          enddo
          nwds=legord+7
          call listio(0,nscr4,0,z,nb,nwds)
@@ -6043,26 +6070,36 @@ contains
    real(kr)::b(*),alp(*)
    ! internals
    integer::nl,ngt,i,il,jg,nb,nwds
-
+print*, 'rdlgnd'
    !--set up header record
    call repoz(nscr4)
+   print*, 'before findf'
    call findf(matd,4,mtd,nscr4)
+   print*, 'before contio'
    call contio(nscr4,0,0,b,nb,nwds)
+   print*, 'after contio'
    nl=l2h
    ngt=n2h
    do i=1,ngt
       alp(i)=0
    enddo
-   if (npl.gt.nl) return
+   if (npl.gt.nl) then
+     print*, 'done with rdlgnd'
+
+     return
+   endif
+   print*, 'here?'
    il=npl+7
 
    !--retrieve desired legendre coefficient
    jg=0
    do while (jg.lt.ngt)
+     print*, 'whar about here?'
       call listio(nscr4,0,0,b,nb,nwds)
       jg=n2h
       alp(jg)=b(il)
    enddo
+   print*, 'done with rdlgnd'
    return
    end subroutine rdlgnd
 
