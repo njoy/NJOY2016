@@ -3894,7 +3894,7 @@ contains
 !  imax=49
    imax=50
    imaxsq=imax*imax
-   lmax=100
+   lmax=imax*(imax-1)/2
    nned=50
    allocate(disc(nned))
    allocate(ee(imax))
