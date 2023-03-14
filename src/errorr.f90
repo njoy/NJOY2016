@@ -2082,7 +2082,7 @@ contains
    ltyi=nint(scr(loci+4))
    np=nint(scr(loci+5))
    if (mfcov.eq.34.and.&
-     (lb.lt.0.or.lb.eq.3.or.lb.eq.4.or.lb.eq.7.or.lb.gt.8)) then
+     (lb.lt.0.or.lb.eq.3.or.lb.eq.4.or.lb.gt.8)) then
       write(strng,'(''unpermitted for lb='',i2)') lb
       call error('covcal',strng,'in mf=34.')
    else if (mfcov.eq.35.and.lb.ne.7) then
@@ -2109,7 +2109,7 @@ contains
    if (ehr.lt.ety1.or.ehr.ge.ety2) go to 510
   346 continue
    if (lb.eq.7.or.lb.gt.8) then
-      if (mfcov.eq.35.and.lb.eq.7) go to 347
+      if ((mfcov.eq.34.or.mfcov.eq.35).and.lb.eq.7) go to 347
       write(strng,'(''not coded for lb='',i2)') lb
       call error('covcal',strng,' ')
    endif
