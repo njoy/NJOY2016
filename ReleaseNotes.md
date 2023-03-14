@@ -8,6 +8,8 @@ This update fixes a number of minor issues:
   - Fixed an issue in HEATR where the photon recoil needed to be multiplied by the photon multiplicity to obtain the photon recoil per interaction.
   - Fixed a crash in THERMR when asking for S(a,b) processing (iinc=2) while no ENDF tape is given (nendf=0).
 
+This update also adds an experimental feature to allow evaluations with absolute covariances (LB=7) in MF34. Previously only relative covariances were allowed. This feature only impacts processing in ERRORR (no changes need to made in MODER to accommodate the format update). The ENDF format proposal that would allow the use of absolute covariances in MF34 is currently pending so this update is subject to change.
+
 A few compiler warnings have been resolved as well (unused variables). For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 
 ## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/281)
