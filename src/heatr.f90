@@ -272,7 +272,7 @@ contains
         &'' auxiliary q values ................... '',1p,e12.4)') qa(1)
       if (nqa.gt.1) write(nsyso,'(40x,1p,e12.4)') (qa(i),i=2,nqa)
       if (nzq.ne.0) then
-         do i=1,nqa 
+         do i=1,nqa
             if (qa(i).ge.qtest) then
                nsh=0
                math=1
@@ -1371,7 +1371,7 @@ contains
    elst=elst-elst/10000000
   193 continue
    if (e.lt.thresh) go to 290
-   call gety1(e,enext,idis,y,nin,b)
+   call gety1(e,enext,idis,y,nin,b) ! y is the reaction cross section
    ! check for energy-dependent q
    if (iimt.gt.0) then
       if (qa(iimt).ge.qtest) then
@@ -2663,8 +2663,8 @@ contains
       yh=a(ibase+ncyc*(i-1)+2)
       if (law.gt.0.and.i.gt.nbt) then
          ir=ir+1
-         nbt=nint(a(ibase+2*ir-1))
-         inn=nint(a(ibase+2*ir))
+         nbt=nint(a(6+2*ir-1))
+         inn=nint(a(6+2*ir))
       endif
       if (xl.ne.xh) then
 
@@ -2944,7 +2944,7 @@ contains
       call getsix(elo,flo,dlo,c(iraw),law,lang,lep,irec)
    else
       ztt=int(zat/1000)
-      call tabsq6(flo,dlo,c(iraw),law,ztt,awrt)
+      call tabsq6(flo,dlo,c(iraw),law,ztt,awrt,elo,c(1))
    endif
    if ((mth.ge.18.and.mth.le.21).or.mth.eq.38) then
       matd=math
@@ -3028,7 +3028,7 @@ contains
       call getsix(ehi,fhi,dhi,c(iraw),law,lang,lep,irec)
    else
       ztt=int(zat/1000)
-      call tabsq6(fhi,dhi,c(iraw),law,ztt,awrt)
+      call tabsq6(fhi,dhi,c(iraw),law,ztt,awrt,ehi,c(1))
    endif
    go to 305
 
@@ -3255,7 +3255,7 @@ contains
    fl=0
    do i=1,nep
       l=7+ncyc*(i-1)
-      xx=c(l)
+      xx=abs(c(l))
       yy=c(l+1)
       x2=xx
       if (irec.eq.0) then
@@ -4132,7 +4132,7 @@ contains
    return
    end function h6psp
 
-   subroutine tabsq6(g,h,a,law,z,awr)
+   subroutine tabsq6(g,h,a,law,z,awr,e,yld)
    !-------------------------------------------------------------------
    ! Compute average of photon recoil energy from capture and
    ! corresponding damage energy for File 6 capture photons
@@ -4140,10 +4140,10 @@ contains
    use endf ! provides terp1
    ! externals
    integer::law
-   real(kr)::g,h,a(*),z,awr
+   real(kr)::g,h,a(*),z,awr,e,yld(*)
    ! internals
-   integer::nd,np,ncyc,ibase,inn,nc,i,j
-   real(kr)::ein,rein,x,y,xr,awc,xh,yh,xl,yl,dx,s
+   integer::nd,np,ncyc,ibase,inn,nc,i,j,ip,ir,idis
+   real(kr)::ein,rein,x,y,xr,awc,xh,yh,xl,yl,dx,s,yield,enext
    integer,parameter::nq=4
    real(kr),dimension(nq),parameter::qp=(/&
      -.86114e0_kr,-.33998e0_kr,.33998e0_kr,.86114e0_kr/)
@@ -4161,6 +4161,11 @@ contains
    ncyc=nint(a(5))/np
    ibase=6
    inn=2
+
+   !--interpolate the photon yield
+   ip=2
+   ir=1
+   call terpa(yield,e,enext,idis,yld(1),ip,ir)
 
    !--accumulate contributions from discrete levels
    if (nd.ne.0) then
@@ -4201,8 +4206,8 @@ contains
    endif
 
    !--finished
-   g=g/s
-   h=h/s
+   g=yield*g/s
+   h=yield*h/s
    return
    end subroutine tabsq6
 
@@ -5643,8 +5648,8 @@ contains
       yh=a(ibase+2*i)
       if (i.gt.nbt) then
          ir=ir+1
-         nbt=nint(a(ibase+2*ir-1))
-         inn=nint(a(ibase+2*ir))
+         nbt=nint(a(6+2*ir-1))
+         inn=nint(a(6+2*ir))
       endif
       if (xl.ne.xh) then
          dx=xh-xl
