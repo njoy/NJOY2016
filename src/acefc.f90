@@ -18724,7 +18724,8 @@ contains
    integer::ipt,mtrh,nmtr
    integer hpd,lsigh,sigh,landh,andh,ldlwh,dlwh,yh
    real(kr)::test,e,xs,xstep,ystep,xtag,ytag,thin,xlast
-   real(kr)::ep,pd,ylast,break,cc,pp,rat,stepm,elast
+!  real(kr)::ep,pd,ylast,break,cc,pp,rat,stepm,elast
+   real(kr)::ep,pd,epl,pdl,ylast,break,cc,pp,rat,stepm,elast
    real(kr)::xmin,xmax,ymin,ymax,zmin,zmax,zmax1,zmax2,heat
    character(10)::name
    character(1)::qu=''''
@@ -19141,13 +19142,15 @@ contains
                   intt=nint(xss(loci))
                   nn=nint(xss(loci+1))
                   loci=loci+1
+                  epl = xss(loci+1)
+                  pdl = xss(loci+nn+1)
                   do j=1,nn
                      ep=xss(loci+j)
                      pd=xss(loci+nn+j)
-                     if (pd.ge.zmin.and.pd.le.zmax) then
-                        if (ep.lt.xmin) xmin=ep
-                        if (ep.gt.xmax) xmax=ep
-                     endif
+                     if(pd  .ge. zmin .and. epl .lt. xmin) xmin = epl
+                     if(pdl .ge. zmin .and. ep  .gt. xmax) xmax = ep
+                     epl = ep
+                     pdl = pd
                   enddo
                endif
             enddo
