@@ -796,6 +796,8 @@ contains
             if (mmtres(i).eq.106) mmtres(i)=750
             if (mmtres(i).eq.107) mmtres(i)=800
          enddo
+      else
+         call desammy
       endif
       call findf(matd,2,0,nendf)
       deallocate(a)
@@ -1048,6 +1050,7 @@ contains
    !--errorr is finished.
    call atend(nout,0)
   330 continue
+   if (nmtres.ne.0) call desammy
    if (allocated(flx))  deallocate(flx)
    if (allocated(sig))  deallocate(sig)
    if (allocated(cov))  deallocate(cov)
@@ -3225,7 +3228,6 @@ contains
       enddo
    enddo
    call closz(nscr6)
-   if (nmtres.gt.0) call desammy
 
    return
    end subroutine resprx

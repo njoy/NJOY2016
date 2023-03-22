@@ -7,6 +7,7 @@ This update fixes a number of minor issues:
   - Fixed an issue in HEATR when calculating the average outgoing energy from a distribution that uses multiple interpolation ranges in TAB1 records (test 79 was added to detect this issue in the future). Mainly nuclides using MF5 instead of MF6 are impacted by this change (e.g. Sn119 and Sn122 from ENDF/B-VIII.0).
   - Fixed an issue in HEATR where the photon recoil needed to be multiplied by the photon multiplicity to obtain the photon recoil per interaction.
   - Fixed a crash in THERMR when asking for S(a,b) processing (iinc=2) while no ENDF tape is given (nendf=0).
+  - Multiple ERRORR calls can now be made in the same input file without crashing. This is of interest to users that wish to process MF34 and MF35 (where ERRORR needs to be called for each sub-subsection and incident energy group). The issue was related to arrays being allocated but not unallocated in the previous ERRORR run in NJOY's Sammy routines (evaluations using MF2 LRF=7 had this issue).
 
 A few compiler warnings have been resolved as well (unused variables). For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 

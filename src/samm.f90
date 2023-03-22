@@ -553,7 +553,6 @@ contains
       lllmax=lllmaxx
       call allo
    endif
-   if (nmtres.eq.0) deallocate(nchan)
 
    return
    end subroutine s2sammy
@@ -6867,130 +6866,129 @@ contains
    !-------------------------------------------------------------------
 
    ! channel array
-   deallocate(nchan)
+   if (allocated(nchan)) deallocate(nchan)
 
    ! angle array
    if (Want_Angular_Dist) then
-      deallocate(xlmn)
-      deallocate(kxlmn)
+      if (allocated(xlmn)) deallocate(xlmn)
+      if (allocated(kxlmn)) deallocate(kxlmn)
    endif
 
    ! allo2 arrays
    if (Want_Partial_Derivs) then
-      deallocate(br)
-      deallocate(bi)
-      deallocate(pr)
-      deallocate(pii)
+      if (allocated(br)) deallocate(br)
+      if (allocated(bi)) deallocate(bi)
+      if (allocated(pr)) deallocate(pr)
+      if (allocated(pii)) deallocate(pii)
    endif
 
-   deallocate(crss)
-   deallocate(sigmas)
+   if (allocated(crss)) deallocate(crss)
+   if (allocated(sigmas)) deallocate(sigmas)
 
    if (Want_Partial_Derivs) then
-      deallocate(deriv)
-      deallocate(dsigma)
+      if (allocated(deriv)) deallocate(deriv)
+      if (allocated(dsigma)) deallocate(dsigma)
    endif
 
    if (Want_Angular_Dist) then
-      deallocate(crssx)
-      deallocate(Coef_Leg)
+      if (allocated(crssx)) deallocate(crssx)
+      if (allocated(Coef_Leg)) deallocate(Coef_Leg)
       if (Want_Partial_Derivs) then
-         deallocate(derivx)
-         deallocate(D_Coef_Leg)
+         if (allocated(derivx)) deallocate(derivx)
+         if (allocated(D_Coef_Leg)) deallocate(D_Coef_Leg)
       endif
    endif
 
-   deallocate(alphar)
-   deallocate(alphai)
-   deallocate(difen)
-   deallocate(xden)
+   if (allocated(alphar)) deallocate(alphar)
+   if (allocated(alphai)) deallocate(alphai)
+   if (allocated(difen)) deallocate(difen)
+   if (allocated(xden)) deallocate(xden)
 
    if (Want_Partial_Derivs) then
-      deallocate(upr)
-      deallocate(upi)
+      if (allocated(upr)) deallocate(upr)
+      if (allocated(upi)) deallocate(upi)
    endif
 
-   deallocate(sinsqr)
-   deallocate(sin2ph)
-   deallocate(dphi)
-   deallocate(dpdr)
-   deallocate(dsdr)
-   deallocate(cscs)
-   deallocate(cosphi)
-   deallocate(sinphi)
+   if (allocated(sinsqr)) deallocate(sinsqr)
+   if (allocated(sin2ph)) deallocate(sin2ph)
+   if (allocated(dphi)) deallocate(dphi)
+   if (allocated(dpdr)) deallocate(dpdr)
+   if (allocated(dsdr)) deallocate(dsdr)
+   if (allocated(cscs)) deallocate(cscs)
+   if (allocated(cosphi)) deallocate(cosphi)
+   if (allocated(sinphi)) deallocate(sinphi)
 
-   deallocate(rootp)
-   deallocate(elinvr)
-   deallocate(elinvi)
-   deallocate(psmall)
-   deallocate(xxxxr)
-   deallocate(xxxxi)
+   if (allocated(rootp)) deallocate(rootp)
+   if (allocated(elinvr)) deallocate(elinvr)
+   if (allocated(elinvi)) deallocate(elinvi)
+   if (allocated(psmall)) deallocate(psmall)
+   if (allocated(xxxxr)) deallocate(xxxxr)
+   if (allocated(xxxxi)) deallocate(xxxxi)
 
-   deallocate(xqr)
-   deallocate(xqi)
+   if (allocated(xqr)) deallocate(xqr)
+   if (allocated(xqi)) deallocate(xqi)
 
-   deallocate(qr)
-   deallocate(qi)
+   if (allocated(qr)) deallocate(qr)
+   if (allocated(qi)) deallocate(qi)
 
    if (Want_Partial_Derivs) then
-      deallocate(tr)
-      deallocate(ti)
-      deallocate(tx)
+      if (allocated(tr)) deallocate(tr)
+      if (allocated(ti)) deallocate(ti)
+      if (allocated(tx)) deallocate(tx)
    endif
 
-   deallocate(ddddd)
+   if (allocated(ddddd)) deallocate(ddddd)
 
-   deallocate(yinv)
+   if (allocated(yinv)) deallocate(yinv)
 
-   deallocate(rmat)
-   deallocate(ymat)
+   if (allocated(rmat)) deallocate(rmat)
+   if (allocated(ymat)) deallocate(ymat)
 
-   deallocate(par)
+   if (allocated(par)) deallocate(par)
 
  ! allo1 arrays
 
-   deallocate(ema)
-   deallocate(emb)
-   deallocate(kza)
-   deallocate(kzb)
-   deallocate(spina)
-   deallocate(spinb)
-   deallocate(qqq)
-   deallocate(ishift)
-   deallocate(lpent)
-   deallocate(mt)
-   deallocate(pa)
-   deallocate(pb)
-   deallocate(sspin)
-   deallocate(parity)
-   deallocate(nresg)
-   deallocate(ipp)
-   deallocate(lspin)
-   deallocate(chspin)
-   deallocate(bound)
-   deallocate(rdeff)
-   deallocate(rdtru)
-   deallocate(eres)
-   deallocate(gamgam)
-   deallocate(gamma)
-   deallocate(parext)
-   deallocate(nent)
-   deallocate(next)
-   deallocate(goj)
-   deallocate(zke)
-   deallocate(zkfe)
-   deallocate(zkte)
-   deallocate(zeta)
-   deallocate(echan)
-   deallocate(betapr)
-   deallocate(gbetpr)
-   deallocate(beta)
-   deallocate(uuuu)
-   deallocate(duuu)
-   deallocate(iduu)
+   if (allocated(ema)) deallocate(ema)
+   if (allocated(emb)) deallocate(emb)
+   if (allocated(kza)) deallocate(kza)
+   if (allocated(kzb)) deallocate(kzb)
+   if (allocated(spina)) deallocate(spina)
+   if (allocated(spinb)) deallocate(spinb)
+   if (allocated(qqq)) deallocate(qqq)
+   if (allocated(ishift)) deallocate(ishift)
+   if (allocated(lpent)) deallocate(lpent)
+   if (allocated(mt)) deallocate(mt)
+   if (allocated(pa)) deallocate(pa)
+   if (allocated(pb)) deallocate(pb)
+   if (allocated(sspin)) deallocate(sspin)
+   if (allocated(parity)) deallocate(parity)
+   if (allocated(nresg)) deallocate(nresg)
+   if (allocated(ipp)) deallocate(ipp)
+   if (allocated(lspin)) deallocate(lspin)
+   if (allocated(chspin)) deallocate(chspin)
+   if (allocated(bound)) deallocate(bound)
+   if (allocated(rdeff)) deallocate(rdeff)
+   if (allocated(rdtru)) deallocate(rdtru)
+   if (allocated(eres)) deallocate(eres)
+   if (allocated(gamgam)) deallocate(gamgam)
+   if (allocated(gamma)) deallocate(gamma)
+   if (allocated(parext)) deallocate(parext)
+   if (allocated(nent)) deallocate(nent)
+   if (allocated(next)) deallocate(next)
+   if (allocated(goj)) deallocate(goj)
+   if (allocated(zke)) deallocate(zke)
+   if (allocated(zkfe)) deallocate(zkfe)
+   if (allocated(zkte)) deallocate(zkte)
+   if (allocated(zeta)) deallocate(zeta)
+   if (allocated(echan)) deallocate(echan)
+   if (allocated(betapr)) deallocate(betapr)
+   if (allocated(gbetpr)) deallocate(gbetpr)
+   if (allocated(beta)) deallocate(beta)
+   if (allocated(uuuu)) deallocate(uuuu)
+   if (allocated(duuu)) deallocate(duuu)
+   if (allocated(iduu)) deallocate(iduu)
 
    return
    end subroutine desammy
 
 end module samm
-
