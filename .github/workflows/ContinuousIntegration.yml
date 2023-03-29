@@ -30,13 +30,13 @@ jobs:
         ${{matrix.vFortran}} --version
     - uses: actions/checkout@v2
     - name: wipe and mkdir bin
-      run: rm -rf Git-Clone/NJOY2016/bin && mkdir Git-Clone/NJOY2016/bin 
+      run: rm -rf bin && mkdir bin 
     - name: cmake
       run: cmake -D CMAKE_Fortran_COMPILER=`which ${{matrix.vFortran}}` -D CMAKE_BUILD_TYPE=${{matrix.build_type}} ..  
-      working-directory: ./Git-Clone/NJOY2016/bin
+      working-directory: ./bin
     - name: make
       run: make -j
-      working-directory: ./Git-Clone/NJOY2016/bin
+      working-directory: ./bin
     - name: Regression Tests
       run: ./standard_NJOY_regression_tests
       working-directory: ./input

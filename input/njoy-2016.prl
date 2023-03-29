@@ -95,7 +95,6 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
       $library_dir = $base."library";
       $correlation_dir = $base."correlation";
       $src_dir = $base."source";
-      $Git_dir = $base."Git-Clone".$sep."NJOY2016";
 
       $njoy_xsc_ENDFB6 = $root."xsec".$sep."ENDFB6";
       $ENV{njoy_xsc_ENDFB6} = $njoy_xsc_ENDFB6;
@@ -200,14 +199,6 @@ if( $#ARGV > 2 || $#ARGV < 0 ) {
       else {
           print " njoy-2016 executable library not found, not deleted \n";
       }
-
-      $command = "$cpx $Git_dir${sep}bin${sep}$executable $bin_dir${sep}$executable";
-      print "Git clone binary copy command: $command \n";
-      system ("$command");
-
-      $command = "$cpx $Git_dir${sep}bin${sep}$exelib $bin_dir${sep}$exelib";
-      print "Git clone binary copy command: $command \n";
-      system ("$command");
 
       system("$cpx $bin_dir${sep}$executable .") == 0 || die
          " Cannot open file $bin_dir${sep}$executable\n" ;
