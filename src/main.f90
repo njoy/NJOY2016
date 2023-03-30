@@ -275,9 +275,13 @@ program njoy
      write (nsyso,'(  ''    icntrl: '', 10i2,/)') (icntrl(jk), jk=1,10)
    endif
 
-   if ( run_title(1:5) .eq. 'moder') then
+   if (( run_title(1:5) .eq. 'moder') .OR. ( run_title(1:6) .eq. 'reconr') .OR. ( run_title(1:5) .eq. 'plotr')) then
      SNL_enhanced_input_format = -1
-     write (nsyso,'(''Ols style control logic inputs:'')')
+     write (nsyso,'(''Old style control logic inputs:'')')
+   endif
+   if (( run_title(1:5) .eq. 'leapr') .OR. ( run_title(1:6) .eq. 'errorr') .OR. ( run_title(1:4) .eq. 'acer')) then
+      SNL_enhanced_input_format = -1
+      write (nsyso,'(''Old style control logic inputs:'')')
    endif
 
    do jk = 1, 2 
