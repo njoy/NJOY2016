@@ -286,6 +286,11 @@ contains
    endif
    write(nsyso,'(/'' endf uses endf-'',i1,'' format'')') iverf
 
+   !--verify if nendf != 0 for iinc == 2
+   if (nendf.eq.0.and.iinc.eq.2) then
+      call error('thermr','No ENDF tape given for iinc=2 (nendf is 0)',' ')
+   endif
+
    !--initialize i/o units
    iold=10
    inew=11

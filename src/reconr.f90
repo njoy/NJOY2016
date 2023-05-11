@@ -289,6 +289,8 @@ contains
                     if (mmtres(i).eq.106) mmtres(i)=750
                     if (mmtres(i).eq.107) mmtres(i)=800
                  enddo
+              else
+                 call desammy
               endif
               call repoz(nin)
               call findf(mata,2,0,nin)

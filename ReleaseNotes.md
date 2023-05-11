@@ -1,6 +1,18 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/295)
+This update fixes a number of minor issues:
+  - Fixed an issue in HEATR when reading evaluations with large multiplicity tables in MF6.
+  - Fixed an issue in HEATR when calculating the average outgoing energy from a distribution that uses multiple interpolation ranges in TAB1 records (test 79 was added to detect this issue in the future). Mainly nuclides using MF5 instead of MF6 are impacted by this change (e.g. Sn119 and Sn122 from ENDF/B-VIII.0).
+  - Fixed an issue in HEATR where the photon recoil needed to be multiplied by the photon multiplicity to obtain the photon recoil per interaction.
+  - Fixed a crash in THERMR when asking for S(a,b) processing (iinc=2) while no ENDF tape is given (nendf=0).
+  - Multiple ERRORR calls can now be made in the same input file without crashing. This is of interest to users that wish to process MF34 and MF35 (where ERRORR needs to be called for each sub-subsection and incident energy group). The issue was related to arrays being allocated but not unallocated in the previous ERRORR run in NJOY's Sammy routines (evaluations using MF2 LRF=7 had this issue).
+  - Fixed an issue in ACER where the number of photons given in the ENDF file was larger than the hardcoded limit. The new limit is now adaptive.
+  - Fixed an issue in ACER where NaN values were produced in the postscript file for the checking plots.
+
+A few compiler warnings have been resolved as well (unused variables). For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
+
 ## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/281)
 This update fixes a number of minor issues:
   - PURR now writes Bondarenko data obtained from the probability tables to MF2 MT152 instead of the Bondarenko data obtained from the direct sampled cross sections (for very low dilutions, the Bondarenko data obtained using these two methods does not align, with the direct sampled data leading to extremely low P1 values). When comparing with the Bondarenko data at low dilutions obtained with UNRESR, the Bondarenko data obtained from the probability table directly seems to be the best.
