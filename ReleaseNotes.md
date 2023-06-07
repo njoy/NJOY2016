@@ -1,6 +1,9 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.71](https://github.com/njoy/NJOY2016/pull/xxx)
+This update adds the new MF7 MT451 (thermal scattering general information) ENDF format to MODER so that this module will be able to interpret the new MF7 section. No other capability in NJOY2016 currently uses the information in this section.
+
 ## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/295)
 This update fixes a number of minor issues:
   - Fixed an issue in HEATR when reading evaluations with large multiplicity tables in MF6.
