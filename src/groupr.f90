@@ -9604,6 +9604,7 @@ contains
 
    !--initialize
    idis=0
+   lct=0
    if (e.gt.zero) go to 200
    iso=0
    if (mfd.ne.8) then
