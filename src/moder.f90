@@ -1066,7 +1066,7 @@ contains
    !--general information (mt=451)
    else if (mth.eq.451) then
 
-      n=n1h
+      n=l1h
       do i=1,n
          call listio(nin,nout,nscr,a,nb,nw)
          do while (nb.ne.0)
