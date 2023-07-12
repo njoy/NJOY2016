@@ -2311,7 +2311,7 @@ contains
             else if (lf.eq.7.and.newfor.eq.1.and.no7.eq.1) then
                ! law=7 for newfor=1 -- convert the law7
                ! data into law1 format.
-               call tab2io(nin,0,0,b,nb,nw)
+               call tab2io(nin,0,0,b,nb,nwb)
                ne=nint(b(6))
                do ie=1,ne
                   ! read in the data
@@ -2334,7 +2334,7 @@ contains
                   if (ie.eq.1) then
                      b(3)=10+intmu
                      b(4)=intep
-                     call tab2io(0,nout,0,b,nb,nw)
+                     call tab2io(0,nout,0,b,nb,nwb)
                      ncs(nxc)=ncs(nxc)+2
                   endif
                   ! construct a union grid for eprime
