@@ -7436,7 +7436,7 @@ contains
    real(kr)::ed,enext,yld
    real(kr)::ans(nlg,*),eg(*)
    ! internals
-   integer::mfn,nb,nw,lct,lct3,ik,nne,ne,int,nss
+   integer::mfn,nb,nw,lct3,ik,nne,ne,int,nss
    integer::ie,ilo,jlo,jhi,ii,nn,nnn,langn,lepn,idis,jzap
    integer::nk,jzad,lang,lep,i,npsx,irr,npp,nmu,l1
    integer::j,iss,ip,ir,jgmax,jj,jg,ndlo,nplo,nclo,nphi,nchi
@@ -7466,7 +7466,7 @@ contains
    save nne,ne,int
    save jlo,elo,jhi,ehi,terml
    save pspmax,langn,lepn,disc102
-   save idis,iyss,izss,jjss,jloss,nss,jzap,lct3,lct
+   save idis,iyss,izss,jjss,jloss,nss,jzap,lct3
 
    !--initialize
    if (ed.gt.zero) go to 200
@@ -9604,7 +9604,6 @@ contains
 
    !--initialize
    idis=0
-   lct=0
    if (e.gt.zero) go to 200
    iso=0
    if (mfd.ne.8) then
