@@ -5,7 +5,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 This update adds the new MF7 MT451 (thermal scattering general information) ENDF format to MODER so that this module will be able to interpret the new MF7 section. No other capability in NJOY2016 currently uses the information in this section.
 
 In addition to this MODER update, this update also fixes the following issues:
-  - Fixed an issue in GROUPR related to an error coming up in production matrix calculations. Depending on when a user asks for a production matrix associated to a reaction, it is possible that the reference frame of the previous reaction is used instead (because fortran does not reinitialise variables in subroutines between calls). A number of tests have been updated following this fix (essentially roundoff changes in the 6th digit after the decimal point).
+  - Fixed an issue in GROUPR related to an error coming up in production matrix calculations. Depending on when a user asks for a production matrix associated to a reaction, it is possible that the reference frame of the previous reaction is used instead (caused by erronously defining an already declared global variable as local with a "save" attribute). A number of tests have been updated following this fix (essentially roundoff changes in the 6th digit after the decimal point).
 
 ## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/295)
 This update fixes a number of minor issues:
