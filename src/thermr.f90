@@ -2672,15 +2672,15 @@ contains
    real(kr)::s(nlmax),tolin
    ! internals
    integer::nl,i,j,il
-   real(kr)::b,seep,sum,xl,yl,ymax,xm,ym,test,test2
+   real(kr)::b,seep,sum,xl,yl,ymax,xm,ym,test
    real(kr)::rnbin,fract,gral,add,xil,xn,f,rf,disc,yn,xbar,rfract
    real(kr)::yt,tol,s1bb
-   integer,parameter::imax=20
+   integer,parameter::imax=200
    real(kr)::x(imax),y(imax)
    real(kr)::p(nlin)
    character(60)::strng
    real(kr),parameter::zero=0
-   real(kr),parameter::xtol=.00001e0_kr
+   real(kr),parameter::xtol=.001e0_kr
    real(kr),parameter::ytol=.001e0_kr
    real(kr)::one=1
    real(kr),parameter::half=.5e0_kr
@@ -2723,10 +2723,8 @@ contains
    xm=sigfig(xm,8,0)
    ym=half*(y(i-1)+y(i))
    yt=sig(e,ep,xm,tev,nalpha,alpha,nbeta,beta,sab)
-   test=tol*abs(yt)+tol*ymax/50
-   test2=ym+ymax/100
-   if (abs(yt-ym).le.test.and.abs(y(i-1)-y(i)).le.test2.and.&
-     (x(i-1)-x(i)).lt.half) go to 120
+   test=tol*abs(yt)
+   if (abs(yt-ym).le.test) go to 120
    if (x(i-1)-x(i).lt.xtol) go to 120
    i=i+1
    x(i)=x(i-1)
@@ -2783,10 +2781,8 @@ contains
    xm=sigfig(xm,8,0)
    ym=half*(y(i-1)+y(i))
    yt=sig(e,ep,xm,tev,nalpha,alpha,nbeta,beta,sab)
-   test=tol*abs(yt)+tol*ymax/50
-   test2=ym+ymax/100
-   if (abs(yt-ym).le.test.and.abs(y(i-1)-y(i)).le.test2.and.&
-     (x(i-1)-x(i)).lt.half) go to 160
+   test=tol*abs(yt)
+   if (abs(yt-ym).le.test) go to 160
    if (x(i-1)-x(i).lt.xtol) go to 160
    i=i+1
    x(i)=x(i-1)
