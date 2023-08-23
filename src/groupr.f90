@@ -11385,7 +11385,7 @@ contains
    call contio(nin,nout,nscr,scr,nb,nw)
    if (mfh.eq.0) go to 110
    if (mth.ne.452) go to 595
-   nnu=8000
+   nnu=10000
    allocate(nu(nnu))
    l=1
    lnu=l2h
@@ -11393,7 +11393,7 @@ contains
    if (lnu.eq.2) call tab1io(nin,nout,nscr,nu(l),nb,nw)
    do while (nb.ne.0)
       if (l+nw.gt.nnu) call error('conver',&
-        'storage for fission nu exceeded',' ')
+        'storage for fission nu exceeded (increase the size of the nu array)',' ')
       l=l+nw
       call moreio(nin,nout,nscr,nu(l),nb,nw)
    enddo
