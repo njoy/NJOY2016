@@ -6440,7 +6440,7 @@ contains
 
    !--initialize
    if (e.gt.zero) go to 200
-   ntmp=10000
+   ntmp=20000
    allocate(tmp(ntmp))
    mft=mf
    if (mft.ge.40000000) mft=10
@@ -11385,7 +11385,7 @@ contains
    call contio(nin,nout,nscr,scr,nb,nw)
    if (mfh.eq.0) go to 110
    if (mth.ne.452) go to 595
-   nnu=10000
+   nnu=20000
    allocate(nu(nnu))
    l=1
    lnu=l2h
