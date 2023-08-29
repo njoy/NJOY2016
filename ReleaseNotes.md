@@ -1,11 +1,26 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
-## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/xxx)
+## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes the following issues:
+  - Fixed an issue in GROUPR related to an error coming up in production matrix calculations. Depending on when a user asks for a production matrix associated to a reaction, it is possible that the reference frame of the previous reaction is used instead (caused by erronously defining an already declared global variable as local with a "save" attribute). In some circumstances, this causes NJOY2016 to error out (with a message related to unsupported reference frames). No test results had to be updated due to this change.
+  - Fixed issues in acer to properly print already existing dosimetry and photoatomic ace files when running a stand-alone acer iopt=7 job.
+  - The meaning of legord and ifissp in the ERRORR input file has been repurposed when mfcov=34. The values now represent the L,L1 values of the MF34 sub-subsection to be calculated (instead of the first one). By default, the L=1,L1=1 sub-subsection will be calculated which in almost all cases will correspond to the first sub-subsection in the MF34 data (as a result, the default behaviour of NJOY2016 will not change).
+
+## [NJOY2016.71](https://github.com/njoy/NJOY2016/pull/301)
+This update adds the new MF7 MT451 (thermal scattering general information) ENDF format to MODER so that this module will be able to interpret the new MF7 section. No other capability in NJOY2016 currently uses the information in this section.
+
+This update also resolves an issue encountered when processing some JENDL5 evaluation that use LAW=7 (which ACER converts into LAW=1) due to errors in the temporary files. See issue #293 for more information.
+
+## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/295)
 This update fixes a number of minor issues:
   - Fixed an issue in HEATR when reading evaluations with large multiplicity tables in MF6.
-  - Multiple ERRORR calls can now be made in the same input file without crashing. This is of interest to users that wish to process MF34 and MF35 (where ERRORR needs to be called for each sub-subsection and incident energy group).
-  - The meaning of legord and ifissp in the ERRORR input file has been repurposed when mfcov=34. The values now represent the L,L1 values of the MF34 sub-subsection to be calculated (instead of the first one). By default, the L=1,L1=1 sub-subsection will be calculated which in almost all cases will correspond to the first sub-subsection in the MF34 data (as a result, the default behaviour of NJOY2016 will not change).
+  - Fixed an issue in HEATR when calculating the average outgoing energy from a distribution that uses multiple interpolation ranges in TAB1 records (test 79 was added to detect this issue in the future). Mainly nuclides using MF5 instead of MF6 are impacted by this change (e.g. Sn119 and Sn122 from ENDF/B-VIII.0).
+  - Fixed an issue in HEATR where the photon recoil needed to be multiplied by the photon multiplicity to obtain the photon recoil per interaction.
+  - Fixed a crash in THERMR when asking for S(a,b) processing (iinc=2) while no ENDF tape is given (nendf=0).
+  - Multiple ERRORR calls can now be made in the same input file without crashing. This is of interest to users that wish to process MF34 and MF35 (where ERRORR needs to be called for each sub-subsection and incident energy group). The issue was related to arrays being allocated but not unallocated in the previous ERRORR run in NJOY's Sammy routines (evaluations using MF2 LRF=7 had this issue).
+  - Fixed an issue in ACER where the number of photons given in the ENDF file was larger than the hardcoded limit. The new limit is now adaptive.
+  - Fixed an issue in ACER where NaN values were produced in the postscript file for the checking plots.
 
 A few compiler warnings have been resolved as well (unused variables). For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 

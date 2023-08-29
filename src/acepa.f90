@@ -804,6 +804,7 @@ contains
    !-------------------------------------------------------------------
    ! Print ACE photon interaction data from memory.
    !-------------------------------------------------------------------
+   use endf   ! provides iverf
    use mainio ! provides nsyso
    ! externals
    character(70)::hk
@@ -840,6 +841,11 @@ contains
    iabs=icoh+nes
    ipair=iabs+nes
    ihtng=lhnm-1
+
+   !--if this is a stand-alone acer iopt=7 job then iverf retains
+   !  its default -1 value and the values written as natural logs
+   !  need to be converted back to real numbers prior to printing.
+
    do i=1,nes
       if (mod(i,57).eq.1) write(nsyso,'(''1''/&
         &''     i'',8x,''energy'',4x,''incoherent'',&
@@ -849,18 +855,23 @@ contains
         &4x,''----------'',4x,''----------'')')
       col(1)=blank
       x=xss(ieg+i)
+      if (iverf.eq.-1.and.x.ne.zero) x=exp(x)
       if (x.ne.zero) write(col(1),'(1p,e14.4)') x
       col(2)=blank
       x=xss(iinc+i)
+      if (iverf.eq.-1.and.x.ne.zero) x=exp(x)
       if (x.ne.zero) write(col(2),'(1p,e14.4)') x
       col(3)=blank
       x=xss(icoh+i)
+      if (iverf.eq.-1.and.x.ne.zero) x=exp(x)
       if (x.ne.zero) write(col(3),'(1p,e14.4)') x
       col(4)=blank
       x=xss(iabs+i)
+      if (iverf.eq.-1.and.x.ne.zero) x=exp(x)
       if (x.ne.zero) write(col(4),'(1p,e14.4)') x
       col(5)=blank
       x=xss(ipair+i)
+      if (iverf.eq.-1.and.x.ne.zero) x=exp(x)
       if (x.ne.zero) write(col(5),'(1p,e14.4)') x
       col(6)=blank
       x=xss(ihtng+i)
@@ -906,6 +917,7 @@ contains
    !-------------------------------------------------------------------
    ! Write photo-atomic ACE data to output and directory files.
    !-------------------------------------------------------------------
+   use endf  ! provides iverf
    use util  ! provides openz,closz,error
    use acecm ! provides write routines
    ! externals
@@ -941,11 +953,12 @@ contains
         len2,z,nes,nflo,nxsd(1:12),&
         eszg,jinc,jcoh,jflo,lhnm,jxsd(1:27)
 
-      !--eszg block
+      !--eszg block.
+      !  convert to natural log, if not already done, prior to writing
       l=eszg
       n=5*nes
       do i=1,n
-         if (xss(l).ne.0.) xss(l)=log(xss(l))
+         if (xss(l).ne.0..and.iverf.ne.-1) xss(l)=log(xss(l))
          call typen(l,nout,2)
          l=l+1
       enddo

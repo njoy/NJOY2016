@@ -1063,6 +1063,17 @@ contains
          call error('file7',strng,' ')
       endif
 
+   !--general information (mt=451)
+   else if (mth.eq.451) then
+
+      n=l1h
+      do i=1,n
+         call listio(nin,nout,nscr,a,nb,nw)
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+      enddo
+
    !--illegal mt
    else
       write(strng,'(''illegal mt='',i3)') mth

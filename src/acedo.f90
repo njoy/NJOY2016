@@ -334,7 +334,7 @@ contains
       read(nin,'(8i9)')&
         len2,za,nxs3,ntr,nxsd(1:12),&
         lone,jxs2,mtr,jxs4,jxs5,lsig,sigd,jxsd(1:14),end,jxsd2(1:10)
-      n=(lone+3)/4
+      n=(len2+3)/4
       l=0
       do i=1,n
          read (nin,'(4e20.0)') (xss(l+j),j=1,4)

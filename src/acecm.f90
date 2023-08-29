@@ -146,7 +146,15 @@ contains
      '(n,xhe3)  ','(n,xa)    '/)
    character(10)::hndf10(1)='damage    '
 
-   if (iverf.ge.6) then
+   !-- default name value is blank unless reset below.
+   name=''
+   
+   !--when iverf=-1 the endf version used to create this file is
+   !  unknown.  we assume it comes from version 6 but if the file
+   !  originated from version 5 or earlier the name assigned here
+   !  might be incorrect.
+
+   if (iverf.ge.6.or.iverf.eq.-1) then
       if (mt.ge.201.and.mt.le.207) then
          name=hndf9(mt-200)
       else if (mt.eq.444) then

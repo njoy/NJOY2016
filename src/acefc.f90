@@ -2311,7 +2311,7 @@ contains
             else if (lf.eq.7.and.newfor.eq.1.and.no7.eq.1) then
                ! law=7 for newfor=1 -- convert the law7
                ! data into law1 format.
-               call tab2io(nin,0,0,b,nb,nw)
+               call tab2io(nin,0,0,b,nb,nwb)
                ne=nint(b(6))
                do ie=1,ne
                   ! read in the data
@@ -2334,7 +2334,7 @@ contains
                   if (ie.eq.1) then
                      b(3)=10+intmu
                      b(4)=intep
-                     call tab2io(0,nout,0,b,nb,nw)
+                     call tab2io(0,nout,0,b,nb,nwb)
                      ncs(nxc)=ncs(nxc)+2
                   endif
                   ! construct a union grid for eprime
@@ -3894,7 +3894,7 @@ contains
 !  imax=49
    imax=50
    imaxsq=imax*imax
-   lmax=100
+   lmax=imax*(imax-1)/2
    nned=50
    allocate(disc(nned))
    allocate(ee(imax))
@@ -18724,7 +18724,7 @@ contains
    integer::ipt,mtrh,nmtr
    integer hpd,lsigh,sigh,landh,andh,ldlwh,dlwh,yh
    real(kr)::test,e,xs,xstep,ystep,xtag,ytag,thin,xlast
-   real(kr)::ep,pd,ylast,break,cc,pp,rat,stepm,elast
+   real(kr)::ep,pd,epl,pdl,ylast,break,cc,pp,rat,stepm,elast
    real(kr)::xmin,xmax,ymin,ymax,zmin,zmax,zmax1,zmax2,heat
    character(10)::name
    character(1)::qu=''''
@@ -19141,13 +19141,15 @@ contains
                   intt=nint(xss(loci))
                   nn=nint(xss(loci+1))
                   loci=loci+1
+                  epl = xss(loci+1)
+                  pdl = xss(loci+nn+1)
                   do j=1,nn
                      ep=xss(loci+j)
                      pd=xss(loci+nn+j)
-                     if (pd.ge.zmin.and.pd.le.zmax) then
-                        if (ep.lt.xmin) xmin=ep
-                        if (ep.gt.xmax) xmax=ep
-                     endif
+                     if(pd  .ge. zmin .and. epl .lt. xmin) xmin = epl
+                     if(pdl .ge. zmin .and. ep  .gt. xmax) xmax = ep
+                     epl = ep
+                     pdl = pd
                   enddo
                endif
             enddo
