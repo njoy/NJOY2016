@@ -5670,11 +5670,11 @@ contains
          z(6)=ig
          z(7)=ans(1,1)
          do i=1,legord
-            if (ans(i,2).lt.1e-30) then
-            z(i+7)=0.
-          else
-            z(i+7)=ans(i,2)
-          endif
+           if (ans(i,2).lt.1e-30) then
+             z(i+7)=0.
+           else
+             z(i+7)=ans(i,2)
+           endif
          enddo
          nwds=legord+7
          call listio(0,nscr4,0,z,nb,nwds)
