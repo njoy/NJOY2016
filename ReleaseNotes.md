@@ -1,7 +1,7 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
-## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/xxx)
+## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/308)
 This update fixes the following issues:
   - Fixed an issue in GROUPR related to an error coming up in production matrix calculations. Depending on when a user asks for a production matrix associated to a reaction, it is possible that the reference frame of the previous reaction is used instead (caused by erronously defining an already declared global variable as local with a "save" attribute). In some circumstances, this causes NJOY2016 to error out (with a message related to unsupported reference frames). No test results had to be updated due to this change.
   - Fixed issues in acer to properly print already existing dosimetry and photoatomic ace files when running a stand-alone acer iopt=7 job.
