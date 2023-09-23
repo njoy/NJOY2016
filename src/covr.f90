@@ -43,6 +43,7 @@ module covm
    real(kr),dimension(:),allocatable::xx,xy
    real(kr),dimension(:),allocatable::rsdx,rsdy
    integer,dimension(:),allocatable::imtx,imtx1,imatx1
+   logical::verboseFile=.false.
 
 contains
 
@@ -114,7 +115,10 @@ contains
    !
    !  card 2b
    !     matype         output library matrix option
-   !                    3/4=covariances/correlations
+   !                    1=covariances  (verbose text format)
+   !                    2=correlations (verbose text format)
+   !                    3=covariances  (boxer format)
+   !                    4=correlations (boxer format)
    !                    (default=3)
    !     ncase          no. cases to be run (maximum=ncasemx=100)
    !                    (default=1)
@@ -244,6 +248,11 @@ contains
       matype=3
       ncase=1
       read(nsysi,*) matype,ncase
+      ! determine format of nout file
+      if (matype.eq.1 .or. matype.eq.2) then
+        verboseFile=.true.
+        matype=matype+2
+      endif
       if (matype.ne.4) matype=3
       if (ncase.le.0) ncase=1
       if (ncase.gt.ncamx)&
@@ -434,29 +443,13 @@ contains
       if (matype.eq.3) write(hlibid,'(a6,''-a-'',i3)') hinpid,ixmax
       if (matype.eq.4) write(hlibid,'(a6,''-b-'',i3)') hinpid,ixmax
    endif
-   nrow=ixmax+1
-   ncol=1
-   nvf=10
-   ncf=3
-   itype=0
-   ! for first sub-case of first case, write the group structure
-   if (n.eq.1.and.ne.eq.1) call press(0,nout,x,nrow,ncol)
-   nrow=ixmax
-   if (mat1.eq.mat.and.mt1.eq.mt) then
-      itype=1
-      call press(0,nout,xx,ixmax,1)
-      itype=2
-      call press(0,nout,rsdx,ixmax,1)
+
+   if (verboseFile) then
+     call write_verbose_lib(n, ne)
+   else
+     call write_boxer_lib(n, ne)
    endif
-   ncol=nrow
-   if (mat1.eq.mat.and.mt1.eq.mt) ncol=0
-   nvf=7
-   if (matype.eq.3) nvf=10
-   ncf=6
-   if (ixmax.le.100) ncf=5
-   if (ixmax.le.30) ncf=4
-   itype=matype
-   call press(0,nout,cf,2,ixmax)
+
   190 continue
    if (allocated(x))deallocate(x)
    if (allocated(y))deallocate(y)
@@ -2245,6 +2238,95 @@ contains
    icft=ift(ncf)
    return
    end subroutine setfor
+
+   subroutine write_boxer_lib(n, ne)
+
+     integer, intent(in) :: n, ne
+
+     nrow=ixmax+1
+     ncol=1
+     nvf=10
+     ncf=3
+     itype=0
+     ! for first sub-case of first case, write the group structure
+     if (n.eq.1 .and. ne.eq.1) call press(0,nout,x,nrow,ncol)
+     nrow=ixmax
+     if (mat1.eq.mat .and. mt1.eq.mt) then
+        itype=1
+        call press(0,nout,xx,ixmax,1)
+        itype=2
+        call press(0,nout,rsdx,ixmax,1)
+     endif
+     ncol=nrow
+     if (mat1.eq.mat .and. mt1.eq.mt) ncol=0
+     nvf=7
+     if (matype.eq.3) nvf=10
+     ncf=6
+     if (ixmax.le.100) ncf=5
+     if (ixmax.le.30) ncf=4
+     itype=matype
+     call press(0,nout,cf,2,ixmax)
+
+   end subroutine write_boxer_lib
+
+   subroutine write_verbose_lib(n, ne)
+
+     use util, only: repoz
+
+     integer, intent(in) :: n, ne
+
+     integer               :: idx, jdx, grp
+     character(len=9)      :: writeFmt='(es24.16)'
+     character(len=12)     :: mtxType
+     real(kr), allocatable :: tmpMat(:,:)
+
+     ! write group structure
+     if (n.eq.1 .and. ne.eq.1) then
+       write(nout,'(a,i0,a)') "# energy group structure for ",ixmax," groups"
+       do idx=1,ixmax+1
+         write(nout, writeFmt, advance='no') x(idx)
+       enddo
+       write(nout,'()')
+     endif
+
+     if (mat1.eq.mat .and. mt1.eq.mt) then
+
+       ! write cross section data
+       write(nout,'(2a)') "# cross section for ",trim(adjustl(hdescr))
+       do idx=1,ixmax
+         write(nout, writeFmt, advance='no') xx(idx)
+       enddo
+       write(nout,'()')
+
+       ! write standard deviation data
+       write(nout,'(2a)') "# relative standard deviations for ",trim(adjustl(hdescr))
+       do idx=1,ixmax
+         write(nout, writeFmt, advance='no') rsdx(idx)
+       enddo
+       write(nout,'()')
+
+       ! read matrix data from scratch tape
+       allocate(tmpMat(ixmax,ixmax)); tmpMat=0.0
+       call repoz(-nscr1)
+       do idx=1,ixmax
+         read(nscr1) grp,(tmpMat(idx,jdx),jdx=1,ixmax)
+       enddo
+
+       ! print to output
+       if (matype.eq.3) mtxType="covariance"
+       if (matype.eq.4) mtxType="correlation"
+       write(nout,'(4a)') "# ", trim(mtxType)," matrix for ",trim(adjustl(hdescr))
+       do idx=1,ixmax
+         do jdx=1,ixmax
+           write(nout, writeFmt, advance='no') tmpMat(idx,jdx)
+           if( mod(jdx,ixmax).eq.0 ) write(nout,'()')
+         enddo
+       enddo
+       deallocate(tmpMat)
+
+     endif
+
+   end subroutine write_verbose_lib
 
 end module covm
 
