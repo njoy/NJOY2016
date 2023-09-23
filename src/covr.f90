@@ -2292,39 +2292,42 @@ contains
      if (mat1.eq.mat .and. mt1.eq.mt) then
 
        ! write cross section data
-       write(nout,'(2a)') "# cross section for ",trim(adjustl(hdescr))
+       write(nout,'(a,i0,",",i0,x,a)') "# cross section for mat,mt=",&
+                                    mat,mt,trim(adjustl(hdescr))
        do idx=1,ixmax
          write(nout, writeFmt, advance='no') xx(idx)
        enddo
        write(nout,'()')
 
        ! write standard deviation data
-       write(nout,'(2a)') "# relative standard deviations for ",trim(adjustl(hdescr))
+       write(nout,'(a,i0,",",i0,x,a)') "# relative standard deviations for mat,mt=",&
+                                     mat,mt,trim(adjustl(hdescr))
        do idx=1,ixmax
          write(nout, writeFmt, advance='no') rsdx(idx)
        enddo
        write(nout,'()')
 
-       ! read matrix data from scratch tape
-       allocate(tmpMat(ixmax,ixmax)); tmpMat=0.0
-       call repoz(-nscr1)
-       do idx=1,ixmax
-         read(nscr1) grp,(tmpMat(idx,jdx),jdx=1,ixmax)
-       enddo
-
-       ! print to output
-       if (matype.eq.3) mtxType="covariance"
-       if (matype.eq.4) mtxType="correlation"
-       write(nout,'(4a)') "# ", trim(mtxType)," matrix for ",trim(adjustl(hdescr))
-       do idx=1,ixmax
-         do jdx=1,ixmax
-           write(nout, writeFmt, advance='no') tmpMat(idx,jdx)
-           if( mod(jdx,ixmax).eq.0 ) write(nout,'()')
-         enddo
-       enddo
-       deallocate(tmpMat)
-
      endif
+
+     ! read matrix data from scratch tape
+     allocate(tmpMat(ixmax,ixmax)); tmpMat=0.0
+     call repoz(-nscr1)
+     do idx=1,ixmax
+       read(nscr1) grp,(tmpMat(idx,jdx),jdx=1,ixmax)
+     enddo
+
+     ! print to output
+     if (matype.eq.3) mtxType="covariance"
+     if (matype.eq.4) mtxType="correlation"
+     write(nout,'(3a,3(i0,","),i0,x,a)') "# ", trim(mtxType), " matrix for mat,mt,mat1,mt1=",&
+                                        mat,mt,mat1,mt1,trim(adjustl(hdescr))
+     do idx=1,ixmax
+       do jdx=1,ixmax
+         write(nout, writeFmt, advance='no') tmpMat(idx,jdx)
+         if( mod(jdx,ixmax).eq.0 ) write(nout,'()')
+       enddo
+     enddo
+     deallocate(tmpMat)
 
    end subroutine write_verbose_lib
 
