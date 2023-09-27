@@ -7,6 +7,7 @@ This update fixes the following issues:
   - Fixed issues in acer to properly print already existing dosimetry and photoatomic ace files when running a stand-alone acer iopt=7 job.
   - The meaning of legord and ifissp in the ERRORR input file has been repurposed when mfcov=34. The values now represent the L,L1 values of the MF34 sub-subsection to be calculated (instead of the first one). By default, the L=1,L1=1 sub-subsection will be calculated which in almost all cases will correspond to the first sub-subsection in the MF34 data (as a result, the default behaviour of NJOY2016 will not change).
   - Increased allocation of arrays to accommodate ENDF/B-VIII.1 evaluations.
+  - Fixed a typo in the name for MT195 in ACER.
 
 ## [NJOY2016.71](https://github.com/njoy/NJOY2016/pull/301)
 This update adds the new MF7 MT451 (thermal scattering general information) ENDF format to MODER so that this module will be able to interpret the new MF7 section. No other capability in NJOY2016 currently uses the information in this section.
