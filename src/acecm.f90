@@ -67,7 +67,7 @@ contains
      '(n,2nhe3) ','(n,3nhe3) ','(n,4nhe3) ','(n,3n2p)  ','(n,3n2a)  ',&
      '(n,3npa)  ','(n,dt)    ','(n,npd)   ','(n,npt)   ','(n,ndt)   ',&
      '(n,nphe3) ','(n,ndhe3) ','(n,nthe3) ','(n,nta)   ','(n,2n2p)  ',&
-     '(n,phe3)  ','(n,dhe3)  ','(n,he3a)  ','(n,4n2p)  ','(n,2n2a)  ',&
+     '(n,phe3)  ','(n,dhe3)  ','(n,he3a)  ','(n,4n2p)  ','(n,4n2a)  ',&
      '(n,4npa)  ','(n,3p)    ','(n,n3p)   ','(n,3n2pa) ','(n,5n2p)  ',& !200
      '(n,p*0)   ',&
      '(n,p*1)   ','(n,p*2)   ','(n,p*3)   ','(n,p*4)   ','(n,p*5)   ',&
@@ -146,7 +146,15 @@ contains
      '(n,xhe3)  ','(n,xa)    '/)
    character(10)::hndf10(1)='damage    '
 
-   if (iverf.ge.6) then
+   !-- default name value is blank unless reset below.
+   name=''
+
+   !--when iverf=-1 the endf version used to create this file is
+   !  unknown.  we assume it comes from version 6 but if the file
+   !  originated from version 5 or earlier the name assigned here
+   !  might be incorrect.
+
+   if (iverf.ge.6.or.iverf.eq.-1) then
       if (mt.ge.201.and.mt.le.207) then
          name=hndf9(mt-200)
       else if (mt.eq.444) then

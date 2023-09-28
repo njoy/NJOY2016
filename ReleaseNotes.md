@@ -1,6 +1,14 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/308)
+This update fixes the following issues:
+  - Fixed an issue in GROUPR related to an error coming up in production matrix calculations. Depending on when a user asks for a production matrix associated to a reaction, it is possible that the reference frame of the previous reaction is used instead (caused by erronously defining an already declared global variable as local with a "save" attribute). In some circumstances, this causes NJOY2016 to error out (with a message related to unsupported reference frames). No test results had to be updated due to this change.
+  - Fixed issues in acer to properly print already existing dosimetry and photoatomic ace files when running a stand-alone acer iopt=7 job.
+  - The meaning of legord and ifissp in the ERRORR input file has been repurposed when mfcov=34. The values now represent the L,L1 values of the MF34 sub-subsection to be calculated (instead of the first one). By default, the L=1,L1=1 sub-subsection will be calculated which in almost all cases will correspond to the first sub-subsection in the MF34 data (as a result, the default behaviour of NJOY2016 will not change).
+  - Increased allocation of arrays to accommodate ENDF/B-VIII.1 evaluations.
+  - Fixed a typo in the name for MT195 in ACER.
+
 ## [NJOY2016.71](https://github.com/njoy/NJOY2016/pull/301)
 This update adds the new MF7 MT451 (thermal scattering general information) ENDF format to MODER so that this module will be able to interpret the new MF7 section. No other capability in NJOY2016 currently uses the information in this section.
 

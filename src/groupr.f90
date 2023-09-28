@@ -6440,7 +6440,7 @@ contains
 
    !--initialize
    if (e.gt.zero) go to 200
-   ntmp=10000
+   ntmp=20000
    allocate(tmp(ntmp))
    mft=mf
    if (mft.ge.40000000) mft=10
@@ -7436,7 +7436,7 @@ contains
    real(kr)::ed,enext,yld
    real(kr)::ans(nlg,*),eg(*)
    ! internals
-   integer::mfn,nb,nw,lct,lct3,ik,nne,ne,int,nss
+   integer::mfn,nb,nw,lct3,ik,nne,ne,int,nss
    integer::ie,ilo,jlo,jhi,ii,nn,nnn,langn,lepn,idis,jzap
    integer::nk,jzad,lang,lep,i,npsx,irr,npp,nmu,l1
    integer::j,iss,ip,ir,jgmax,jj,jg,ndlo,nplo,nclo,nphi,nchi
@@ -7466,7 +7466,7 @@ contains
    save nne,ne,int
    save jlo,elo,jhi,ehi,terml
    save pspmax,langn,lepn,disc102
-   save idis,iyss,izss,jjss,jloss,nss,jzap,lct3,lct
+   save idis,iyss,izss,jjss,jloss,nss,jzap,lct3
 
    !--initialize
    if (ed.gt.zero) go to 200
@@ -11385,7 +11385,7 @@ contains
    call contio(nin,nout,nscr,scr,nb,nw)
    if (mfh.eq.0) go to 110
    if (mth.ne.452) go to 595
-   nnu=8000
+   nnu=20000
    allocate(nu(nnu))
    l=1
    lnu=l2h
@@ -11393,7 +11393,7 @@ contains
    if (lnu.eq.2) call tab1io(nin,nout,nscr,nu(l),nb,nw)
    do while (nb.ne.0)
       if (l+nw.gt.nnu) call error('conver',&
-        'storage for fission nu exceeded',' ')
+        'storage for fission nu exceeded (increase the size of the nu array)',' ')
       l=l+nw
       call moreio(nin,nout,nscr,nu(l),nb,nw)
    enddo
