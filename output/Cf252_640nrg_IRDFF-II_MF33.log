@@ -1,5 +1,5 @@
 
- njoy 2021.04  22Sept21                                      12/27/21 04:30:41
+ njoy 2021.04  22Sept21                                      09/29/23 19:21:29
  *****************************************************************************
 
 Run Title:: Enh: NJOY processing of Cf252(s.f.) fission neutron spectrum from IRDFF-II      
@@ -9,17 +9,17 @@ Run Title:: Enh: NJOY processing of Cf252(s.f.) fission neutron spectrum from IR
 
  reconr...                                                                0.1s
 
- groupr...                                                                0.2s
+ groupr...                                                                0.1s
 
- errorr...                                                                0.2s
+ errorr...                                                                0.1s
 
  processing mat  9861
  ---------------------
   98-Cf-252 INEL,PTB,+ EVAL-JUN90 C.W.REICH, W MANNHART, T ENGLAD    
 
- covariances calculated for  1 reactions and   71 groups                  0.3s
+ covariances calculated for  1 reactions and   71 groups                  0.2s
 
- covr...                                                                  0.3s
+ covr...                                                                  0.2s
 
  ---message from matshd---processing of mat/mt 9861/261 vs. mat1/mt1 9861/261
                           largest coefficient= -1.12739E+00 at index  37  71
@@ -27,6 +27,6 @@ Run Title:: Enh: NJOY processing of Cf252(s.f.) fission neutron spectrum from IR
  ---message from matshd---   2 coefficients > 1
                           reset and continue.
 
- viewr...                                                                 0.3s
-                                                                          0.3s
+ viewr...                                                                 0.2s
+                                                                          0.2s
  *****************************************************************************

@@ -1,5 +1,5 @@
 
- njoy 2021.04  22Sept21                                      12/27/21 04:30:34
+ njoy 2021.04  22Sept21                                      09/29/23 19:21:25
  *****************************************************************************
 
 Run Title:: Enh: Co59(n,g)Co60 IRDFF-II cross section processing                            
@@ -7,12 +7,12 @@ Run Title:: Enh: Co59(n,g)Co60 IRDFF-II cross section processing
 
  moder...                                                                 0.0s
 
- reconr...                                                                2.3s
+ reconr...                                                                1.2s
 
- broadr...                                                                2.4s
+ broadr...                                                                1.2s
 
  ---message from broadr---desired mat and temp not on tape
 
- groupr...                                                                2.4s
-                                                                          2.6s
+ groupr...                                                                1.2s
+                                                                          1.3s
  *****************************************************************************
