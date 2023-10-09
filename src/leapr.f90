@@ -450,7 +450,7 @@ contains
    integer::itemp,np,maxn
    ! internals
    integer::i,j,k,n,npn,npl,iprt,jprt
-   integer,dimension(1000)::maxt
+   integer,dimension(10000)::maxt
    character(3)::tag
    real(kr)::al,be,bel,ex,exx,st,add,sc,alp,alw,ssct,ckk
    real(kr)::ff0,ff1,ff2,ff1l,ff2l,sum0,sum1
