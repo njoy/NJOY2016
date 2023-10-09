@@ -2039,7 +2039,7 @@ contains
                if (k.eq.nang.and.un-u.gt.5*(u-ul)) un=u+3*(u-ul)
                p=1
                p=p/nang
-               p=p/(un-ul)
+               if (un.ne.ul) p=p/(un-ul)
                ul=un
             enddo
          endif
@@ -2083,7 +2083,7 @@ contains
                   if (k.eq.nang.and.un-u.gt.5*(u-ul)) un=u+3*(u-ul)
                   p=1
                   p=p/nang
-                  p=p/(un-ul)
+                  if (un.ne.ul) p=p/(un-ul)
                   if (k.eq.1) write(nout,'(1p,2e14.6,''/'')') ul,zmin
                   write(nout,'(1p,2e14.6,''/'')') u,p
                   if (k.eq.nang) write(nout,'(1p,2e14.6,''/'')') un,zmin
