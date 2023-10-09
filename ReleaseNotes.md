@@ -4,6 +4,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 ## [NJOY2016.73](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
   - Increased allocation of an array in LEAPR to accommodate ENDF/B-VIII.1 thermal scattering evaluations.
+  - Fixing a few thing related to intel compiler warnings and errors.
 
 ## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/308)
 This update fixes the following issues:
