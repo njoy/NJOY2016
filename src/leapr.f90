@@ -383,7 +383,7 @@ contains
          if (nd.gt.0) call discre(itemp)
 
          !--check for special hydrogen and deuterium options
-        if (ncold.gt.0) call coldh(itemp,temp)
+         if (ncold.gt.0) call coldh(itemp,temp)
 
          !--check for skold option for correlations
          if ((nsk.eq.2) .and. (ncold.eq.0))&
