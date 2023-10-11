@@ -374,29 +374,20 @@ contains
          endif
 
          !--continuous part of distribution
-print*, 'calling contin'
          call contin(temp,itemp,np1,nphon)
-print*, 'done with contin'
-print*, 'calling trans - if there is a translational part'
+
          !--translational part, if any
          if (twt.gt.zero) call trans(itemp)
-print*, 'done with trans'
 
-print*, 'calling discre - if there are discrete oscillators'
          !--discrete oscillators, if any
          if (nd.gt.0) call discre(itemp)
-print*, 'done with discre'
 
          !--check for special hydrogen and deuterium options
-print*, 'calling coldh - special hydrogen and deuterium options'
-          if (ncold.gt.0) call coldh(itemp,temp)
-print*, 'done with coldh'
+        if (ncold.gt.0) call coldh(itemp,temp)
 
-print*, 'calling skold - special hydrogen and deuterium options'
          !--check for skold option for correlations
-          if ((nsk.eq.2) .and. (ncold.eq.0))&
-             call skold(itemp,temp,ssm,nalpha,nbeta,ntempr)
-print*, 'done with skold'
+         if ((nsk.eq.2) .and. (ncold.eq.0))&
+            call skold(itemp,temp,ssm,nalpha,nbeta,ntempr)
 
       !--continue temperature loop
       enddo
@@ -900,8 +891,8 @@ print*, 'done with skold'
       if (ded.lt.delta) delta=ded
       nu=1
       if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
-        '(/'' delta d='',f12.6,5x,''delta b='',f12.6,&
-        &10x,''delta='',f12.6)') ded,deb,delta
+        '(/'' delta d='',e18.5,5x,''delta b='',e18.5,&
+        &10x,''delta='',e18.5)') ded,deb,delta
 
       !--make table of s-diffusion or s-free on this interval
       call stable(ap,sd,nsd,al,delta,iprt,nu,ndmax)
@@ -1241,6 +1232,7 @@ print*, 'done with skold'
       else
          sb(i)=0
       endif
+      if (bet.eq.(bet+delta)) delta=delta*10
       bet=bet+delta
    enddo
    return
