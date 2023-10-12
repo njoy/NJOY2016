@@ -1234,7 +1234,10 @@ contains
       else
          sb(i)=0
       endif
-      if (bet.eq.(bet+delta)) delta=delta*10
+      ! if delta is to small for the current value of beta, increase it
+      do while (bet.eq.(bet+delta))
+         delta=delta*10
+      end do
       bet=bet+delta
    enddo
    return
