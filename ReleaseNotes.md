@@ -3,6 +3,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.73](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
+  - Fix an issue in ACER for thermal scattering leading to energy values being out of order when plotting the coherent elastic scattering cross section (this issue only affects plots, the thermal scattering ACE files do not change).
   - Increased allocation of an array in LEAPR to accommodate ENDF/B-VIII.1 thermal scattering evaluations. In addition, LEAPR will now warn the user about potential excessive calculation times and print out progression in the phonon expansion sum when the phonon expansion order is large
 
 ## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/308)
