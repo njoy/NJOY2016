@@ -549,9 +549,11 @@ contains
                &n,maxn,time
       endif
    enddo
-   call timer(time)
-   write(nsyse,'(/'' done with phonon expansion sum'',&
-         &38x,f8.1,''s'')'),time
+   if (maxn.gt.maxnphon) then
+      call timer(time)
+      write(nsyse,'(/'' done with phonon expansion sum'',&
+            &38x,f8.1,''s'')'),time
+   endif
 
    !--print out start of sct range for each beta
    if (iprint.ne.0) then
