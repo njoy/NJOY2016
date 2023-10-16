@@ -7444,7 +7444,7 @@ contains
    real(kr)::zad,elo,ehi,apsx,enow,eihi,ep,epnext,en
    real(kr)::pspmax,yldd,el,eh,e0,g0,e1,e2,test,pe,disc102
    real(kr)::val,fx,ex,cx,cxx,rn,dx
-   integer(kr)::nx,ncyc,n,ix
+   integer::nx,ncyc,n,ix
    integer,parameter::mxlg=65
    real(kr)::term(mxlg),terml(mxlg)
    integer,parameter::maxss=500
