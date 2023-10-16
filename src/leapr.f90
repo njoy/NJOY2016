@@ -413,7 +413,7 @@ contains
    isym=0
    if (ncold.ne.0) isym=1
    if (isabt.eq.1) isym=isym+2
-   mscr=4000
+   mscr=10000
    allocate(scr(mscr))
    call endout(ntempr,bragg,nedge,maxb,scr,mscr,isym,ilog)
 
