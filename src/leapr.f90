@@ -450,7 +450,7 @@ contains
    integer::itemp,np,maxn
    ! internals
    integer::i,j,k,n,npn,npl,iprt,jprt
-   integer,dimension(1000)::maxt
+   integer,allocatable,dimension(:)::maxt
    character(3)::tag
    real(kr)::al,be,bel,ex,exx,st,add,sc,alp,alw,ssct,ckk
    real(kr)::ff0,ff1,ff2,ff1l,ff2l,sum0,sum1
@@ -468,6 +468,7 @@ contains
    allocate(tlast(nphon*np1))
    allocate(tnow(nphon*np1))
    allocate(xa(nalpha))
+   allocate(maxt(nbeta))
 
    !--calculate various parameters for this temperature
    call start(itemp,p,np,deltab,tev)
