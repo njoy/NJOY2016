@@ -47,6 +47,9 @@ module leapm
    real(kr),dimension(:),allocatable::dwpix,dwp1
    real(kr),dimension(:),allocatable::tempf,tempf1
 
+   ! min phonon expansion for time warning message
+   integer,parameter,public::maxnphon=250
+
 contains
 
    subroutine leapr
@@ -220,6 +223,7 @@ contains
    integer::isym,mscr,maxb,isecs
    real(kr)::time
    character(4)::title(20)
+   character(60)::strng
    real(kr)::temp,emax
    character::text*80
    real(kr),dimension(:),allocatable::bragg
@@ -293,6 +297,12 @@ contains
    allocate(beta(nbeta))
    read(nsysi,*) (alpha(i),i=1,nalpha)
    read(nsysi,*) (beta(i),i=1,nbeta)
+
+   ! warn for excessive computation time
+   if (nphon.gt.maxnphon) then
+      write(strng,'('' phonon expansion order is larger than '',i3)') maxnphon
+      call mess('leapr',strng,'calculation time may be excessive')
+   endif
 
    !--open the output unit
    call openz(nout,1)
@@ -373,11 +383,11 @@ contains
          if (nd.gt.0) call discre(itemp)
 
          !--check for special hydrogen and deuterium options
-          if (ncold.gt.0) call coldh(itemp,temp)
+         if (ncold.gt.0) call coldh(itemp,temp)
 
          !--check for skold option for correlations
-          if ((nsk.eq.2) .and. (ncold.eq.0))&
-             call skold(itemp,temp,ssm,nalpha,nbeta,ntempr)
+         if ((nsk.eq.2) .and. (ncold.eq.0))&
+            call skold(itemp,temp,ssm,nalpha,nbeta,ntempr)
 
       !--continue temperature loop
       enddo
@@ -445,14 +455,15 @@ contains
    !--------------------------------------------------------------------
    use physics ! provides pi
    use mainio  ! provides nsyso
+   use util    ! provides timer
    ! externals
    real(kr)::temp
    integer::itemp,np,maxn
    ! internals
    integer::i,j,k,n,npn,npl,iprt,jprt
-   integer,dimension(1000)::maxt
+   integer,dimension(10000)::maxt
    character(3)::tag
-   real(kr)::al,be,bel,ex,exx,st,add,sc,alp,alw,ssct,ckk
+   real(kr)::al,be,bel,ex,exx,st,add,sc,alp,alw,ssct,ckk,time
    real(kr)::ff0,ff1,ff2,ff1l,ff2l,sum0,sum1
    real(kr),dimension(:),allocatable::p,tlast,tnow,xa
    real(kr),parameter::therm=0.0253e0_kr
@@ -498,8 +509,14 @@ contains
    do j=1,nbeta
       maxt(j)=nalpha+1
    enddo
-   if (iprint.eq.2)&
-     write(nsyso,'(/'' normalization check for phonon expansion'')')
+   if (iprint.eq.2) then
+      write(nsyso,'(/'' normalization check for phonon expansion'')')
+   endif
+   if (maxn.gt.maxnphon) then
+      call timer(time)
+      write(nsyse,'(/'' performing phonon expansion sum'',&
+            &37x,f8.1,''s'')'),time
+   endif
    do n=2,maxn
       npn=np+npl-1
       call convol(p,tlast,tnow,np,npl,npn,deltab,ckk)
@@ -525,7 +542,18 @@ contains
          tlast(i)=tnow(i)
       enddo
       npl=npn
+      if (mod(n,maxnphon).eq.0) then
+         call timer(time)
+         write(nsyse,'(2x,i5,'' of '',i5,&
+               &'' loops done for phonon expansion sum'',17x,f8.1,''s'')')&
+               &n,maxn,time
+      endif
    enddo
+   if (maxn.gt.maxnphon) then
+      call timer(time)
+      write(nsyse,'(/'' done with phonon expansion sum'',&
+            &38x,f8.1,''s'')'),time
+   endif
 
    !--print out start of sct range for each beta
    if (iprint.ne.0) then
@@ -865,8 +893,8 @@ contains
       if (ded.lt.delta) delta=ded
       nu=1
       if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
-        '(/'' delta d='',f12.6,5x,''delta b='',f12.6,&
-        &10x,''delta='',f12.6)') ded,deb,delta
+        '(/'' delta d='',e18.5,5x,''delta b='',e18.5,&
+        &10x,''delta='',e18.5)') ded,deb,delta
 
       !--make table of s-diffusion or s-free on this interval
       call stable(ap,sd,nsd,al,delta,iprt,nu,ndmax)
@@ -1206,6 +1234,10 @@ contains
       else
          sb(i)=0
       endif
+      ! if delta is to small for the current value of beta, increase it
+      do while (bet.eq.(bet+delta))
+         delta=delta*10
+      end do
       bet=bet+delta
    enddo
    return
