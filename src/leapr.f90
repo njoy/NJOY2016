@@ -413,7 +413,7 @@ contains
    isym=0
    if (ncold.ne.0) isym=1
    if (isabt.eq.1) isym=isym+2
-   mscr = 8 + 2*nalpha ! This should be max lengths of scr based on endout
+   mscr = 8 + 2*nalpha ! Max needed length of scr based on endout
    allocate(scr(mscr))
    call endout(ntempr,bragg,nedge,maxb,scr,mscr,isym,ilog)
 
