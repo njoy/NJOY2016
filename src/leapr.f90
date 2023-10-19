@@ -423,7 +423,13 @@ contains
    isym=0
    if (ncold.ne.0) isym=1
    if (isabt.eq.1) isym=isym+2
-   mscr = max(8 + 2*nalpha, 8 + 2*nedge) ! Max needed length of scr based on endout
+   
+   ! Based on endout, to write the actual TSL data, the max number of entries
+   ! needed in scr is either 8+2*nalpha, or 8+2*nedge. However, we have no way
+   ! of knowing how many comment lines were added to the leaper input. The
+   ! previous hard coded limit of 4000 is also used as a possible max as this
+   ! has apparently been sufficient to hold all comments in the past.
+   mscr = max(8 + 2*nalpha, 8 + 2*nedge, 4000)
    allocate(scr(mscr))
    call endout(ntempr,bragg,nedge,maxb,scr,mscr,isym,ilog)
 
