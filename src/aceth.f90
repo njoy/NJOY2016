@@ -1209,7 +1209,7 @@ contains
       endif
       write(nout,'(''0/'')')
       if (idpnc.eq.4.or.idpnc.eq.5) then
-         e=xss(itce+1)-xss(itce+1)/1000
+         e=xss(itce+1)
          xs=xss(itce+nee+1)/e
          xs=xs/100
          write(nout,'(1p,2e14.6,''/'')') e,xs
@@ -1220,7 +1220,7 @@ contains
          if (idpnc.eq.4.or.idpnc.eq.5) xs=xs/e
          write(nout,'(1p,2e14.6,''/'')') e,xs
          if ((idpnc.eq.4.or.idpnc.eq.5).and.i.lt.nee) then
-            e=xss(itce+i+1)-xss(itce+i+1)/1000
+            e=xss(itce+i+1)
             xs=xss(itce+nee+i)/e
             write(nout,'(1p,2e14.6,''/'')') e,xs
          endif
@@ -1280,7 +1280,7 @@ contains
          endif
       enddo
       if (idpnc.eq.4.or.idpnc.eq.5) then
-         e=xss(itce+1)-xss(itce+1)/1000
+         e=xss(itce+1)
          j=0
          do while (j.lt.nie)
             j=j+1
@@ -1333,7 +1333,7 @@ contains
          tot=xs+xn+xielas
          write(nout,'(1p,2e14.6,''/'')') e,tot
          if (i.lt.nee.and.(idpnc.eq.4.or.idpnc.eq.5)) then
-            e=xss(itce+i+1)-xss(itce+i+1)/1000
+            e=xss(itce+i+1)
             xs=xss(itce+nee+i)/e
             j=0
             do while (j.lt.nie)
@@ -2039,7 +2039,7 @@ contains
                if (k.eq.nang.and.un-u.gt.5*(u-ul)) un=u+3*(u-ul)
                p=1
                p=p/nang
-               p=p/(un-ul)
+               if (un.ne.ul) p=p/(un-ul)
                ul=un
             enddo
          endif
@@ -2083,7 +2083,7 @@ contains
                   if (k.eq.nang.and.un-u.gt.5*(u-ul)) un=u+3*(u-ul)
                   p=1
                   p=p/nang
-                  p=p/(un-ul)
+                  if (un.ne.ul) p=p/(un-ul)
                   if (k.eq.1) write(nout,'(1p,2e14.6,''/'')') ul,zmin
                   write(nout,'(1p,2e14.6,''/'')') u,p
                   if (k.eq.nang) write(nout,'(1p,2e14.6,''/'')') un,zmin
