@@ -181,6 +181,7 @@ contains
    integer::jnow,nb,nw,lfw,nis,i,lru,lrf,nro,naps,mode,lrx,kf,ki
    integer::nls,ner,j,ng,is,ll,iis,kchan,kpp,kres,kpar,jj,nrs,igroup
    integer::nch,ich,iso,ier,ipp,kk,kki,kkf
+   integer::kbk,lbk
    real(kr)::spin,parity,parl,capj,capjmx,gamf,gamf2,el,e1,e2,gamx
    real(kr),dimension(2)::s
    real(kr),parameter::zero=0
@@ -514,12 +515,23 @@ contains
             kres=0
             kpar=0
             do igroup=1,ngroup
+
+               !--read particle pair information
                call listio(nin,0,0,res(jnow),nb,nw)
                jnow=jnow+nw
+               do while (nb.ne.0)
+                  call moreio(nin,0,0,res(jj),nb,nw)
+                  jj=jj+nw
+                  if (jj.gt.maxres) call error('s2sammy',&
+                    'res storage exceeded',' ')
+               enddo
+               kbk=l1h
                nch=n2h
                ich=nch-1
                nchan(igroup,ier)=ich
                if (ich.gt.kchan) kchan=ich
+
+               !--read resonance parameters
                call listio(nin,0,0,res(jnow),nb,nw)
                jj=jnow+nw
                do while (nb.ne.0)
@@ -531,6 +543,41 @@ contains
                nrs=nint(res(jnow+3))
                kpar=kpar+nrs*(ich+2)
                kres=kres+nrs
+
+               !--read background rmatrix elements
+               if (kbk.gt.0) then
+                  do i=1,kbk
+                     call contio(nin,0,0,res(jnow),nb,nw)
+                     lbk=l2h
+                     if (lbk.eq.1) then
+                        call tab1io(nin,0,0,res(jj),nb,nw)
+                        jj=jnow+nw
+                        do while (nb.ne.0)
+                           call moreio(nin,0,0,res(jj),nb,nw)
+                           jj=jj+nw
+                           if (jj.gt.maxres) call error('s2sammy',&
+                             'res storage exceeded',' ')
+                        enddo
+                        call tab1io(nin,0,0,res(jj),nb,nw)
+                        jj=jnow+nw
+                        do while (nb.ne.0)
+                           call moreio(nin,0,0,res(jj),nb,nw)
+                           jj=jj+nw
+                           if (jj.gt.maxres) call error('s2sammy',&
+                             'res storage exceeded',' ')
+                        enddo
+                     else if (lbk.eq.2.or.lbk.eq.3) then
+                        call listio(nin,0,0,res(jj),nb,nw)
+                        jj=jnow+nw
+                        do while (nb.ne.0)
+                           call moreio(nin,0,0,res(jj),nb,nw)
+                           jj=jj+nw
+                           if (jj.gt.maxres) call error('s2sammy',&
+                             'res storage exceeded',' ')
+                        enddo
+                     endif
+                  enddo
+               endif
             enddo
             if (kpar.gt.npar) npar=kpar
             if (kchan.gt.mchan) mchan=kchan
@@ -573,6 +620,7 @@ contains
    ! internals
    integer::nb,nw,nls,is,ng,ll,iis,i,ires,jj,nrs,llll,ig,igxm,lrx
    integer::j,ndig,kres,igroup,ichp1,ichan,ix,ich,ippx,igamma,l,nx,ires1
+   integer::kbk,lbk
    real(kr)::pari,parl,capj,capjmx,c,awri,apl,aptru,apeff,spinjj
    real(kr)::gamf,gamf2,s1,s2,hw,ehalf,ell,x,gamx,qx
    real(kr),dimension(:),allocatable::a
@@ -761,7 +809,7 @@ contains
             gamma(1,ires,ier)=res(jj+3)
             gamgam(ires,ier)=res(jj+4)
             gamf=res(jj+5)
-         gamf=gamf*(-1)**ires
+            gamf=gamf*(-1)**ires
             gamx=0
             if (lrx.gt.0) gamx=res(jj+2)-res(jj+3)-res(jj+4)-res(jj+5)
             if (gamx.lt.1.e-7_kr) gamx=0
@@ -1023,8 +1071,16 @@ contains
 
          !--read the spin group information
          call listio(nin,0,0,res(jnow),nb,nw)
+         jj=jnow+nw
+         do while (nb.ne.0)
+            call moreio(nin,0,0,res(jj),nb,nw)
+            jj=jj+nw
+            if (jj.gt.maxres) call error('rdsammy',&
+              'res storage exceeded',' ')
+         enddo
          sspin(igroup,ier)=c1h
          parity(igroup,ier)=c2h
+         kbk=l1h
          ichp1=n2h
          ichan=ichp1-1
          ix=0
@@ -1057,7 +1113,7 @@ contains
             if (jj.gt.maxres) call error('rdsammy',&
               'res storage exceeded',' ')
          enddo
-         nresg(igroup,ier)=nint(res(jnow+3))
+         nresg(igroup,ier)=l2h
          if (nresg(igroup,ier).gt.0) then
             jj=jnow+6
             nx=6
@@ -1110,6 +1166,41 @@ contains
                   gamgam(kres,ier)=x
                endif
                jj=jj+nx
+            enddo
+         endif
+
+         !--read background rmatrix elements
+         if (kbk.gt.0) then
+            do l=1,kbk
+               call contio(nin,0,0,res(jnow),nb,nw)
+               lbk=l2h
+               if (lbk.eq.1) then
+                  call tab1io(nin,0,0,res(jnow),nb,nw)
+                  jj=jnow+nw
+                  do while (nb.ne.0)
+                     call moreio(nin,0,0,res(jj),nb,nw)
+                     jj=jj+nw
+                     if (jj.gt.maxres) call error('rdsammy',&
+                       'res storage exceeded',' ')
+                  enddo
+                  call tab1io(nin,0,0,res(jnow),nb,nw)
+                  jj=jnow+nw
+                  do while (nb.ne.0)
+                     call moreio(nin,0,0,res(jj),nb,nw)
+                     jj=jj+nw
+                     if (jj.gt.maxres) call error('rdsammy',&
+                       'res storage exceeded',' ')
+                  enddo
+               else if (lbk.eq.2.or.lbk.eq.3) then
+                  call listio(nin,0,0,res(jnow),nb,nw)
+                  jj=jnow+nw
+                  do while (nb.ne.0)
+                     call moreio(nin,0,0,res(jj),nb,nw)
+                     jj=jj+nw
+                     if (jj.gt.maxres) call error('rdsammy',&
+                       'res storage exceeded',' ')
+                  enddo
+               endif
             enddo
          endif
       enddo
