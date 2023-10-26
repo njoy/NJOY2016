@@ -25,7 +25,7 @@ module samm
    logical::Want_Partial_U=.false.
 
    !--variables
-   integer::ngroup,mchan,nres,npp,ntriag,npar,lllmax,kkxlmn
+   integer::ngroup,mchan,nres,npp,ntriag,npar,lllmax,kkxlmn,nback
    integer::nrext,krext,nparr,nerm
    integer,dimension(12)::ngroupm,nppm,nresm
    integer,parameter::lllmaxx=10
@@ -36,7 +36,8 @@ module samm
    integer,dimension(:,:),allocatable::kza,kzb,ishift,lpent,mt
    real(kr),dimension(:,:),allocatable::pa,pb,sspin,parity
    integer,dimension(:,:),allocatable::nresg
-   integer,dimension(:,:,:),allocatable::ipp,lspin
+   integer,dimension(:,:,:),allocatable::ipp,lspin,backgr
+   real(kr),dimension(:,:,:,:),allocatable::backgrdata
    real(kr),dimension(:,:,:),allocatable::chspin,bound,rdeff,rdtru
    real(kr),dimension(:,:),allocatable::eres,gamgam
    real(kr),dimension(:,:,:),allocatable::gamma
@@ -179,7 +180,7 @@ contains
    real(kr)::res(maxres)
    ! internals
    integer::jnow,nb,nw,lfw,nis,i,lru,lrf,nro,naps,mode,lrx,kf,ki
-   integer::nls,ner,j,ng,is,ll,iis,kchan,kpp,kres,kpar,jj,nrs,igroup
+   integer::nls,ner,j,ng,is,ll,iis,kchan,kpp,kres,kpar,jj,nrs,igroup,kback
    integer::nch,ich,iso,ier,ipp,kk,kki,kkf
    integer::kbk,lbk
    real(kr)::spin,parity,parl,capj,capjmx,gamf,gamf2,el,e1,e2,gamx
@@ -206,9 +207,11 @@ contains
    npp=0
    mchan=0
    npar=0
+   nback=0
    kres=0
    kpp=0
    kchan=0
+   kback=0
 
    !--check for multiple isotopes
    if (nis.gt.1) then
@@ -512,6 +515,7 @@ contains
 
             !--loop over the spin groups
             kchan=0
+            kback=0
             kres=0
             kpar=0
             do igroup=1,ngroup
@@ -566,6 +570,7 @@ contains
                            if (jj.gt.maxres) call error('s2sammy',&
                              'res storage exceeded',' ')
                         enddo
+                        if ((jj-jnow+1).gt.kback) kback=jj-jnow+1
                      else if (lbk.eq.2.or.lbk.eq.3) then
                         call listio(nin,0,0,res(jj),nb,nw)
                         jj=jnow+nw
@@ -575,12 +580,18 @@ contains
                            if (jj.gt.maxres) call error('s2sammy',&
                              'res storage exceeded',' ')
                         enddo
+                        if (lbk.eq.2) then
+                           if (7.gt.kback) kback=7
+                        else
+                           if (5.gt.kback) kback=5
+                        endif
                      endif
                   enddo
                endif
             enddo
             if (kpar.gt.npar) npar=kpar
             if (kchan.gt.mchan) mchan=kchan
+            if (kback.gt.nback) nback=kback
             nresm(ier)=kres
             if (kres.gt.nres) nres=kres
          endif
@@ -620,7 +631,7 @@ contains
    ! internals
    integer::nb,nw,nls,is,ng,ll,iis,i,ires,jj,nrs,llll,ig,igxm,lrx
    integer::j,ndig,kres,igroup,ichp1,ichan,ix,ich,ippx,igamma,l,nx,ires1
-   integer::kbk,lbk
+   integer::kbk,lbk,lch
    real(kr)::pari,parl,capj,capjmx,c,awri,apl,aptru,apeff,spinjj
    real(kr)::gamf,gamf2,s1,s2,hw,ehalf,ell,x,gamx,qx
    real(kr),dimension(:),allocatable::a
@@ -682,6 +693,8 @@ contains
          do j=1,ngroupm(ier)
             lspin(i,j,ier)=0
             chspin(i,j,ier)=0
+            backgr(i,j,ier)=0
+            backgrdata(i,igroup,ier,:)=0
          enddo
       enddo
       pari=1
@@ -872,6 +885,8 @@ contains
          do j=1,ngroupm(ier)
             lspin(i,j,ier)=0
             chspin(i,j,ier)=0
+            backgr(i,j,ier)=0
+            backgrdata(i,igroup,ier,:)=0
          enddo
       enddo
       pari=1
@@ -1100,6 +1115,8 @@ contains
                rdeff(i,igroup,ier)=res(jj+4)
                if (mt(ipp(i,igroup,ier),ier).eq.2) ascat=res(jj+4)
                rdtru(i,igroup,ier)=res(jj+5)
+               backgr(i,igroup,ier)=0
+               backgrdata(i,igroup,ier,:)=0
             endif
             jj=jj+6
          enddo
@@ -1173,7 +1190,11 @@ contains
          if (kbk.gt.0) then
             do l=1,kbk
                call contio(nin,0,0,res(jnow),nb,nw)
+               lch=l1h
                lbk=l2h
+               if (lbk.ne.0.and.lch.ne.1) then
+                  backgr(lch-1,igroup,ier)=lbk ! lch=1 is the eliminated capture width
+               endif
                if (lbk.eq.1) then
                   call tab1io(nin,0,0,res(jnow),nb,nw)
                   jj=jnow+nw
@@ -1200,6 +1221,17 @@ contains
                      if (jj.gt.maxres) call error('rdsammy',&
                        'res storage exceeded',' ')
                   enddo
+                  if (lch.ne.1) then
+                     backgrdata(lch-1,igroup,ier,1)=c1h
+                     backgrdata(lch-1,igroup,ier,2)=c2h
+                     backgrdata(lch-1,igroup,ier,3)=res(jnow+6)-res(jnow+10)*(c2h-c1h)
+                     backgrdata(lch-1,igroup,ier,4)=res(jnow+7)
+                     backgrdata(lch-1,igroup,ier,5)=res(jnow+8)
+                     if (lbk.eq.2) then
+                        backgrdata(lch-1,igroup,ier,6)=res(jnow+9)
+                        backgrdata(lch-1,igroup,ier,7)=res(jnow+10)
+                     endif
+                  endif
                endif
             enddo
          endif
@@ -1535,6 +1567,8 @@ contains
    allocate(nresg(ngroup,nerm))
    allocate(ipp(mchan,ngroup,nerm))
    allocate(lspin(mchan,ngroup,nerm))
+   allocate(backgr(mchan,ngroup,nerm))
+   allocate(backgrdata(mchan,ngroup,nerm,nback))
    allocate(chspin(mchan,ngroup,nerm))
    allocate(bound(mchan,ngroup,nerm))
    allocate(rdeff(mchan,ngroup,nerm))
@@ -3184,7 +3218,7 @@ contains
    ! internals
    integer::nnntot,i,kl,k,l,ires,ii,ipx,iffy,kk,kx,kkx,j,ji
    integer::lsp,jdopha
-   real(kr)::aloge,ex,rho,rhof,eta,hr,hi,p,dp,ds
+   real(kr)::aloge,ex,rho,rhof,eta,hr,hi,p,dp,ds,temp
    real(kr)::sinphx,cosphx,dphix
    real(kr)::hrx,hix,px,dpx,dsx
    real(kr),parameter::zero=0
@@ -3209,11 +3243,27 @@ contains
          kl=kl+1
          rmat(1,kl,ier)=0
          rmat(2,kl,ier)=0
-         if (l.eq.k.and.nrext.ne.0) then
-            rmat(1,kl,ier)=parext(3,k,n,ier)+parext(4,k,n,ier)*su&
-             -parext(5,k,n,ier)*aloge+parext(7,k,n,ier)*su**2&
-             -parext(6,k,n,ier)*(parext(2,k,n,ier)-parext(1,k,n,ier))&
-             -parext(6,k,n,ier)*aloge*su
+         if (l.eq.k) then
+            ! add background rmatrix elements if defined for the channel
+            if (backgr(k,n,ier).gt.0) then
+               if (backgr(k,n,ier).eq.1) then
+                  ! currently unsupported
+               else if (backgr(k,n,ier).eq.2) then
+                  rmat(1,kl,ier)=backgrdata(k,n,ier,3)&
+                                +backgrdata(k,n,ier,4)*su&
+                                +backgrdata(k,n,ier,5)*su**2&
+                                -(backgrdata(k,n,ier,6)+backgrdata(k,n,ier,7)*su)*&
+                                log((backgrdata(k,n,ier,2)-su)/(su-backgrdata(k,n,ier,1)))
+               else if (backgr(k,n,ier).eq.3) then
+                  ! currently unsupported
+               endif
+            endif
+            if (nrext.ne.0) then
+               rmat(1,kl,ier)=parext(3,k,n,ier)+parext(4,k,n,ier)*su&
+                -parext(5,k,n,ier)*aloge+parext(7,k,n,ier)*su**2&
+                -parext(6,k,n,ier)*(parext(2,k,n,ier)-parext(1,k,n,ier))&
+                -parext(6,k,n,ier)*aloge*su
+            endif
          endif
       enddo
    enddo
@@ -3280,7 +3330,7 @@ contains
 
          else
 
-            !)--and here it is
+            !--and here it is
             lsp=lspin(i,n,ier)
             ex=sqrt(su-echan(i,n,ier))
             rho=zkte(i,n,ier)*ex
@@ -7056,6 +7106,8 @@ contains
    if (allocated(nresg)) deallocate(nresg)
    if (allocated(ipp)) deallocate(ipp)
    if (allocated(lspin)) deallocate(lspin)
+   if (allocated(backgr)) deallocate(backgr)
+   if (allocated(backgrdata)) deallocate(backgrdata)
    if (allocated(chspin)) deallocate(chspin)
    if (allocated(bound)) deallocate(bound)
    if (allocated(rdeff)) deallocate(rdeff)
