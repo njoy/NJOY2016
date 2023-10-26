@@ -629,9 +629,10 @@ contains
    real(kr)::el,eh,spin,ascat
    real(kr)::enode(nodmax),res(maxres)
    ! internals
+   character(80)::strng
    integer::nb,nw,nls,is,ng,ll,iis,i,ires,jj,nrs,llll,ig,igxm,lrx
    integer::j,ndig,kres,igroup,ichp1,ichan,ix,ich,ippx,igamma,l,nx,ires1
-   integer::kbk,lbk,lch
+   integer::kbk,lbk,lch,krm,ifg
    real(kr)::pari,parl,capj,capjmx,c,awri,apl,aptru,apeff,spinjj
    real(kr)::gamf,gamf2,s1,s2,hw,ehalf,ell,x,gamx,qx
    real(kr),dimension(:),allocatable::a
@@ -1048,6 +1049,16 @@ contains
       !--nls is really the number of spin groups for mode=7
       ngroup=nls
 
+      !--check krm and ifg
+      ifg=l1h
+      krm=l2h
+      if (ifg.ne.0) then
+        call error('rdsammy','reduced resonance widths are not supported (IFG=1)',' ')
+      endif
+      if (krm.ne.3) then
+        call error('rdsammy','LRF=7 currently only supports Reich-Moore (KRM=3)',' ')
+      endif
+
       !--read the list of particle-pair descriptions
       !--and store the values in the proper allocated arrays
       call listio(nin,0,0,res(jnow),nb,nw)
@@ -1188,29 +1199,39 @@ contains
 
          !--read background rmatrix elements
          if (kbk.gt.0) then
+            if (krm.ne.3) then
+               call error('rdsammy',&
+               'Background rmatrix elements in LRF=7 are only allowed for Reich-Moore (KRM=3)',' ')
+            endif
             do l=1,kbk
                call contio(nin,0,0,res(jnow),nb,nw)
                lch=l1h
                lbk=l2h
+               if (lbk.ne.0.and.lch.eq.1) then
+                  write(strng,'(''channel '',i3,'' in spin group '',i3,&
+                               &'' is the eliminated capture channel'')') lch,igroup
+                  call error('rdsammy',strng,&
+                             'Background rmatrix data is not allowed for this channel')
+               endif
                if (lbk.ne.0.and.lch.ne.1) then
-                  backgr(lch-1,igroup,ier)=lbk ! lch=1 is the eliminated capture width
+                  backgr(lch-1,igroup,ier)=lbk
                endif
                if (lbk.eq.1) then
-                  call tab1io(nin,0,0,res(jnow),nb,nw)
-                  jj=jnow+nw
+                  !--store the tables
+                  jj=3
+                  backgrdata(lch-1,igroup,ier,1)=jj
+                  call tab1io(nin,0,0,backgrdata(lch-1,igroup,ier,jj),nb,nw)
+                  jj=jj+nw
                   do while (nb.ne.0)
-                     call moreio(nin,0,0,res(jj),nb,nw)
+                     call moreio(nin,0,0,backgrdata(lch-1,igroup,ier,jj),nb,nw)
                      jj=jj+nw
-                     if (jj.gt.maxres) call error('rdsammy',&
-                       'res storage exceeded',' ')
                   enddo
-                  call tab1io(nin,0,0,res(jnow),nb,nw)
+                  backgrdata(lch-1,igroup,ier,2)=jj
+                  call tab1io(nin,0,0,backgrdata(lch-1,igroup,ier,jj),nb,nw)
                   jj=jnow+nw
                   do while (nb.ne.0)
-                     call moreio(nin,0,0,res(jj),nb,nw)
+                     call moreio(nin,0,0,backgrdata(lch-1,igroup,ier,jj),nb,nw)
                      jj=jj+nw
-                     if (jj.gt.maxres) call error('rdsammy',&
-                       'res storage exceeded',' ')
                   enddo
                else if (lbk.eq.2.or.lbk.eq.3) then
                   call listio(nin,0,0,res(jnow),nb,nw)
@@ -1221,16 +1242,14 @@ contains
                      if (jj.gt.maxres) call error('rdsammy',&
                        'res storage exceeded',' ')
                   enddo
-                  if (lch.ne.1) then
-                     backgrdata(lch-1,igroup,ier,1)=c1h
-                     backgrdata(lch-1,igroup,ier,2)=c2h
-                     backgrdata(lch-1,igroup,ier,3)=res(jnow+6)-res(jnow+10)*(c2h-c1h)
-                     backgrdata(lch-1,igroup,ier,4)=res(jnow+7)
-                     backgrdata(lch-1,igroup,ier,5)=res(jnow+8)
-                     if (lbk.eq.2) then
-                        backgrdata(lch-1,igroup,ier,6)=res(jnow+9)
-                        backgrdata(lch-1,igroup,ier,7)=res(jnow+10)
-                     endif
+                  backgrdata(lch-1,igroup,ier,1)=c1h
+                  backgrdata(lch-1,igroup,ier,2)=c2h
+                  backgrdata(lch-1,igroup,ier,3)=res(jnow+6)
+                  backgrdata(lch-1,igroup,ier,4)=res(jnow+7)
+                  backgrdata(lch-1,igroup,ier,5)=res(jnow+8)
+                  if (lbk.eq.2) then
+                     backgrdata(lch-1,igroup,ier,6)=res(jnow+9)
+                     backgrdata(lch-1,igroup,ier,7)=res(jnow+10)
                   endif
                endif
             enddo
@@ -3213,12 +3232,13 @@ contains
    !-------------------------------------------------------------------
    ! Generate the R-matrix and other arrays.
    !-------------------------------------------------------------------
+   use endf    ! provides terpa
    ! externals
    integer::n,lrmat,min,max,nent,nchan,ier
    ! internals
-   integer::nnntot,i,kl,k,l,ires,ii,ipx,iffy,kk,kx,kkx,j,ji
+   integer::nnntot,i,kl,k,l,ires,ii,ipx,iffy,kk,kx,kkx,j,ji,ip,ir,idis
    integer::lsp,jdopha
-   real(kr)::aloge,ex,rho,rhof,eta,hr,hi,p,dp,ds,temp
+   real(kr)::aloge,ex,rho,rhof,eta,hr,hi,p,dp,ds,esum,ediff,temp,enext
    real(kr)::sinphx,cosphx,dphix
    real(kr)::hrx,hix,px,dpx,dsx
    real(kr),parameter::zero=0
@@ -3246,16 +3266,29 @@ contains
          if (l.eq.k) then
             ! add background rmatrix elements if defined for the channel
             if (backgr(k,n,ier).gt.0) then
-               if (backgr(k,n,ier).eq.1) then
-                  ! currently unsupported
-               else if (backgr(k,n,ier).eq.2) then
+               if (backgr(k,n,ier).eq.1) then      ! arbitrary tabulated complex function
+                  ip=2
+                  ir=1
+                  call terpa(rmat(1,kl,ier),su,enext,idis,&
+                             backgrdata(k,n,ier,3),ip,ir)
+                  ip=2
+                  ir=1
+                  call terpa(rmat(2,kl,ier),su,enext,idis,&
+                             backgrdata(k,n,ier,int(backgrdata(k,n,ier,2))),ip,ir)
+               else if (backgr(k,n,ier).eq.2) then ! Sammy parametrisation
                   rmat(1,kl,ier)=backgrdata(k,n,ier,3)&
-                                +backgrdata(k,n,ier,4)*su&
-                                +backgrdata(k,n,ier,5)*su**2&
+                                -backgrdata(k,n,ier,7)*(backgrdata(k,n,ier,2)-backgrdata(k,n,ier,1))&
+                                +(backgrdata(k,n,ier,4)+backgrdata(k,n,ier,5)*su)*su&
                                 -(backgrdata(k,n,ier,6)+backgrdata(k,n,ier,7)*su)*&
                                 log((backgrdata(k,n,ier,2)-su)/(su-backgrdata(k,n,ier,1)))
-               else if (backgr(k,n,ier).eq.3) then
-                  ! currently unsupported
+               else if (backgr(k,n,ier).eq.3) then ! Frohner parametrisation
+                   esum=backgrdata(k,n,ier,1)+backgrdata(k,n,ier,2)
+                   ediff=backgrdata(k,n,ier,2)-backgrdata(k,n,ier,1)
+                   rmat(1,kl,ier)=backgrdata(k,n,ier,3)&
+                                 +2.*backgrdata(k,n,ier,4)&
+                                 *atanh((2.*su-esum)/ediff)
+                   rmat(2,kl,ier)=backgrdata(k,n,ier,5)/ediff&
+                                 /(1.-((2.*su-esum)/ediff)**2)
                endif
             endif
             if (nrext.ne.0) then
