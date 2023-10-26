@@ -26,7 +26,7 @@ module samm
 
    !--variables
    integer::ngroup,mchan,nres,npp,ntriag,npar,lllmax,kkxlmn,nback
-   integer::nrext,krext,nparr,nerm
+   integer::nrext,nparr,nerm
    integer,dimension(12)::ngroupm,nppm,nresm
    integer,parameter::lllmaxx=10
    real(kr)::awr,su
@@ -41,7 +41,6 @@ module samm
    real(kr),dimension(:,:,:),allocatable::chspin,bound,rdeff,rdtru
    real(kr),dimension(:,:),allocatable::eres,gamgam
    real(kr),dimension(:,:,:),allocatable::gamma
-   real(kr),dimension(:,:,:,:),allocatable::parext
    integer,dimension(:,:),allocatable::nent,next
    real(kr),dimension(:,:),allocatable::goj
    real(kr),dimension(:,:,:),allocatable::zke,zkfe,zkte,zeta,echan
@@ -1199,6 +1198,7 @@ contains
 
          !--read background rmatrix elements
          if (kbk.gt.0) then
+            nrext=1
             if (krm.ne.3) then
                call error('rdsammy',&
                'Background rmatrix elements in LRF=7 are only allowed for Reich-Moore (KRM=3)',' ')
@@ -1595,7 +1595,6 @@ contains
    allocate(eres(nres,nerm))
    allocate(gamgam(nres,nerm))
    allocate(gamma(mchan,nres,nerm))
-   allocate(parext(7,mchan,ngroup,nerm))
    allocate(nent(nres,nerm))
    allocate(next(nres,nerm))
    allocate(goj(nres,nerm))
@@ -2055,11 +2054,15 @@ contains
                iduu(knpar,ier)=0
                if (Want_Partial_U) then
                   uuuu(knpar,ier)=1
-               else
-                  if (kqq.ne.5) uuuu(knpar,ier)=parext(kqq,j,kgroup,ier)
-                  if (kqq.eq.5) uuuu(knpar,ier)=sqrt(parext(kqq,j,kgroup,ier))
                endif
             enddo
+            uuuu(1,ier)=backgrdata(j,kgroup,ier,1)
+            uuuu(2,ier)=backgrdata(j,kgroup,ier,2)
+            uuuu(3,ier)=backgrdata(j,kgroup,ier,3)
+            uuuu(4,ier)=backgrdata(j,kgroup,ier,4)
+            uuuu(5,ier)=sqrt(backgrdata(j,kgroup,ier,6))
+            uuuu(6,ier)=backgrdata(j,kgroup,ier,7)
+            uuuu(7,ier)=backgrdata(j,kgroup,ier,5)
          enddo
       enddo
    endif
@@ -3072,9 +3075,6 @@ contains
       enddo
    endif
 
-   krext=nrext
-   if (krext.eq.0) krext=1
-
    !--do loop over spin-parity groups
 
    kstart=0
@@ -3258,7 +3258,6 @@ contains
    !--initialize R-matrix
    kl=0
    do k=1,nchan
-      if (nrext.ne.0) aloge=log((parext(2,k,n,ier)-su)/(su-parext(1,k,n,ier)))
       do l=1,k
          kl=kl+1
          rmat(1,kl,ier)=0
@@ -3279,8 +3278,8 @@ contains
                   rmat(1,kl,ier)=backgrdata(k,n,ier,3)&
                                 -backgrdata(k,n,ier,7)*(backgrdata(k,n,ier,2)-backgrdata(k,n,ier,1))&
                                 +(backgrdata(k,n,ier,4)+backgrdata(k,n,ier,5)*su)*su&
-                                -(backgrdata(k,n,ier,6)+backgrdata(k,n,ier,7)*su)*&
-                                log((backgrdata(k,n,ier,2)-su)/(su-backgrdata(k,n,ier,1)))
+                                -(backgrdata(k,n,ier,6)+backgrdata(k,n,ier,7)*su)&
+                                *log((backgrdata(k,n,ier,2)-su)/(su-backgrdata(k,n,ier,1)))
                else if (backgr(k,n,ier).eq.3) then ! Frohner parametrisation
                    esum=backgrdata(k,n,ier,1)+backgrdata(k,n,ier,2)
                    ediff=backgrdata(k,n,ier,2)-backgrdata(k,n,ier,1)
@@ -3290,12 +3289,6 @@ contains
                    rmat(2,kl,ier)=backgrdata(k,n,ier,5)/ediff&
                                  /(1.-((2.*su-esum)/ediff)**2)
                endif
-            endif
-            if (nrext.ne.0) then
-               rmat(1,kl,ier)=parext(3,k,n,ier)+parext(4,k,n,ier)*su&
-                -parext(5,k,n,ier)*aloge+parext(7,k,n,ier)*su**2&
-                -parext(6,k,n,ier)*(parext(2,k,n,ier)-parext(1,k,n,ier))&
-                -parext(6,k,n,ier)*aloge*su
             endif
          endif
       enddo
@@ -6858,6 +6851,7 @@ contains
 
    subroutine derext(n,nchan,jstart,nnnn,ier)
    !-------------------------------------------------------------------
+   use util ! provides error
    ! externals
    integer::n,nchan,jstart,nnnn,ier
    ! internals
@@ -6867,6 +6861,12 @@ contains
    !--angle-integrated
    ij=0
    do i=1,nchan
+
+      !--only for the Sammy background option
+      if (backgr(i,nnnn,ier).ne.2) then
+         call error('derext','Partial derivatives are only coded for the Sammy formalism','')
+      endif
+
       ij=ij+I
       !  note that tr = 1/2 times partial (sigma) wrt (re R),
       !  ergo need to multiply by 2 here
@@ -6874,17 +6874,17 @@ contains
       jstart=jstart+1
       do m=1,npp
          if (m.le.2) then
-            deriv(m,jstart,ier)=-tr(m,ij,ier)*a*(parext(5,i,nnnn,ier)+&
-              parext(6,i,nnnn,ier)*parext(1,i,nnnn,ier))/&
-              (su-parext(1,i,nnnn,ier))
+            deriv(m,jstart,ier)=-tr(m,ij,ier)*a*(backgrdata(i,nnnn,ier,6)+&
+              backgrdata(i,nnnn,ier,7)*backgrdata(i,nnnn,ier,1))/&
+              (su-backgrdata(i,nnnn,ier,1))
          endif
       enddo
       jstart=jstart+1
       do m=1,npp
          if (m.le.2) then
-            deriv(m,jstart,ier)=-tr(m,ij,ier)*a*(parext(5,i,nnnn,ier)+&
-              parext(6,I,nnnn,ier)*parext(2,i,nnnn,ier))/&
-             (parext(2,i,nnnn,ier)-su)
+            deriv(m,jstart,ier)=-tr(m,ij,ier)*a*(backgrdata(i,nnnn,ier,6)+&
+              backgrdata(I,nnnn,ier,7)*backgrdata(i,nnnn,ier,2))/&
+             (backgrdata(i,nnnn,ier,2)-su)
          endif
       enddo
       jstart=jstart+1
@@ -6902,18 +6902,18 @@ contains
       jstart=jstart+1
       do m=1,npp
          if (m.le.2) then
-            deriv(m,jstart,ier)=-2*tr(m,ij,ier)*a*sqrt(parext(5,i,nnnn,ier))*&
-              log((parext(2,i,nnnn,ier)-su)/(su-parext(1,i,nnnn,ier)))
+            deriv(m,jstart,ier)=-2*tr(m,ij,ier)*a*sqrt(backgrdata(i,nnnn,ier,6))*&
+              log((backgrdata(i,nnnn,ier,2)-su)/(su-backgrdata(i,nnnn,ier,1)))
               !   Remember that the u-parameter is the
-              !   square root of parext(5)
+              !   square root of backgrdata(6)
          endif
       enddo
       jstart=jstart+1
       do m=1,npp
          if (m.le.2) then
             deriv(m,jstart,ier)=-tr(m,ij,ier)*a*&
-              ((parext(2,i,nnnn,ier)-parext(1,i,nnnn,ier))+&
-              su*log((parext(2,i,nnnn,ier)-su)/(su-parext(1,i,nnnn,ier))))
+              ((backgrdata(i,nnnn,ier,2)-backgrdata(i,nnnn,ier,1))+&
+              su*log((backgrdata(i,nnnn,ier,2)-su)/(su-backgrdata(i,nnnn,ier,1))))
          endif
       enddo
       jstart=jstart+1
@@ -7148,7 +7148,6 @@ contains
    if (allocated(eres)) deallocate(eres)
    if (allocated(gamgam)) deallocate(gamgam)
    if (allocated(gamma)) deallocate(gamma)
-   if (allocated(parext)) deallocate(parext)
    if (allocated(nent)) deallocate(nent)
    if (allocated(next)) deallocate(next)
    if (allocated(goj)) deallocate(goj)
