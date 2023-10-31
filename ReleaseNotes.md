@@ -5,6 +5,8 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 This update fixes the following issues:
   - Fix an issue in ACER for thermal scattering leading to energy values being out of order when plotting the coherent elastic scattering cross section (this issue only affects plots, the thermal scattering ACE files do not change).
   - Increased allocation of an array in LEAPR to accommodate ENDF/B-VIII.1 thermal scattering evaluations and added a check to avoid an infinite loop when using a very fine beta grid. In addition, LEAPR will now warn the user about potential excessive calculation times and print out progression in the phonon expansion sum when the phonon expansion order is large.
+  - Added logic to MODER to read background R-matrix element information from LRF=7 resonance parameter data.
+  - Updated RECONR to use background R-matrix element information from LRF=7 and added test 81 using ENDF/B-VIII.1 Sr88.
   - Fixing a few thing related to intel compiler warnings and errors.
 
 ## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/308)
