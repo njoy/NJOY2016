@@ -2494,7 +2494,7 @@ contains
    ! internals
    integer::nb1,na1,i,ib,ia
    real(kr)::rtev,bb,a,sigc,b,c,bbb,s,s1,s2,s3,arg
-   real(kr)::tfff,tfff2,rat
+   real(kr)::tfff,tfff2
    real(kr),parameter::sigmin=1.e-10_kr
    real(kr),parameter::sabflg=-225.e0_kr
    real(kr),parameter::amin=1.e-6_kr

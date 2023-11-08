@@ -693,18 +693,25 @@ contains
                      call moreio(nin,nout,nscr,a,nb,nw)
                   enddo
                   if (kbk.gt.0) then
-                     call listio(nin,nout,nscr,a,nb,nw)
-                     lbk=n1h
-                     if (lbk.eq.1) then
-                        call tab1io(nin,nout,nscr,a,nb,nw)
-                        do while (nb.ne.0)
-                           call moreio(nin,nout,nscr,a,nb,nw)
-                        enddo
-                        call tab1io(nin,nout,nscr,a,nb,nw)
-                        do while (nb.ne.0)
-                           call moreio(nin,nout,nscr,a,nb,nw)
-                        enddo
-                     endif
+                     do l=1,kbk
+                        call contio(nin,nout,nscr,a,nb,nw)
+                        lbk=l2h
+                        if (lbk.eq.1) then
+                           call tab1io(nin,nout,nscr,a,nb,nw)
+                           do while (nb.ne.0)
+                              call moreio(nin,nout,nscr,a,nb,nw)
+                           enddo
+                           call tab1io(nin,nout,nscr,a,nb,nw)
+                           do while (nb.ne.0)
+                              call moreio(nin,nout,nscr,a,nb,nw)
+                           enddo
+                        else if (lbk.eq.2.or.lbk.eq.3) then
+                           call listio(nin,nout,nscr,a,nb,nw)
+                           do while (nb.ne.0)
+                              call moreio(nin,nout,nscr,a,nb,nw)
+                           enddo
+                        endif
+                     enddo
                   endif
                   if (kps.eq.1)then
                      call listio(nin,nout,nscr,a,nb,nw)
