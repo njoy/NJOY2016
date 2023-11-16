@@ -1,5 +1,5 @@
 
- njoy 2021.04  22Sept21                                      12/27/21 04:29:52
+ njoy 2021.04  22Sept21                                      09/29/23 19:21:21
  *****************************************************************************
 
 Run Title:: Enh: Co59(n,g)Co60 IRDFF-II covariance processing                               
@@ -7,22 +7,22 @@ Run Title:: Enh: Co59(n,g)Co60 IRDFF-II covariance processing
 
  moder...                                                                 0.0s
 
- reconr...                                                                2.3s
+ reconr...                                                                1.2s
 
- groupr...                                                                2.5s
+ groupr...                                                                1.2s
 
- errorr...                                                                2.6s
+ errorr...                                                                1.3s
 
  processing mat  2725
  ---------------------
   27-Co- 59 FEI        EVAL-Jan10 K.I.Zolotarev                      
 
- covariances calculated for  1 reactions and   14 groups                  2.6s
+ covariances calculated for  1 reactions and   14 groups                  1.3s
 
- covr...                                                                  2.6s
+ covr...                                                                  1.3s
 
  ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.0873E-01
 
- viewr...                                                                 2.6s
-                                                                          2.6s
+ viewr...                                                                 1.3s
+                                                                          1.3s
  *****************************************************************************

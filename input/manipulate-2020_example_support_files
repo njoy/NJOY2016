@@ -1,4 +1,4 @@
-#! /bin/csh 
+#! /bin/bash 
 #
 # SNL-NJOY-2016 generation of manipulate-2020 regression test examples Unix shell
 #
@@ -9,32 +9,35 @@
 # Note: Generate support files for the regression tests for manipulate-2020 
 #       Later, add a comparison of output files
 #
-setenv SYSTEMTYPE unix
+#setenv SYSTEMTYPE unix
+export SYSTEMTYPE=unix
 # 
 # AGENCY must be only 3 characters
 #
-setenv AGENCY snl
+#setenv AGENCY snl
+export AGENCY=snl
 #
-# check number of input arguments
+echo 
+echo " Calling location is: $(pwd)"
+echo " AGENCY = $AGENCY"
+echo " SYSTEMTYPE = $SYSTEMTYPE"
+echo 
 #
-if ( $#argv > 0) then
-       echo "Usage: SNL-NJOY-2016 generation of manipulate-2020 regression examples called with Invalid number of arguments $#argv"
-else
-       ./njoy-2016  Ag109_ng_IRDFF-II_cor                    
-       ./njoy-2016  Ag109g_IRDFF-II_640grp_xsec   
-       ./njoy-2016  S32_np_IRDFF-II_cor           
-       ./njoy-2016  S32p_IRDFF-II_640grp_xsec
-       ./njoy-2016  Co59_ng_IRDFF-II_cor   
-       ./njoy-2016  Co59g_IRDFF-II_640grp_xsec  
-       ./njoy-2016  Cf252_640nrg_IRDFF-II_MF33             
-       ./njoy-2016  U235_640nrg_IRDFF-II_MF33
-#       Note: The fixed.viewer file for the next two calculation needed to be supplied via a hand edit of the baseline viewer file
-#             This change reflects the error message in the input files regarding the bad standard deviation in the high eneryg portion of the source file
-       ./njoy-2016  Cf252_640nrg_IRDFF-II_MF33_fixed_viewer   
-       ./njoy-2016  U235_640nrg_IRDFF-II_MF33_fixed_viewer    
+       perl njoy-2016.prl  Ag109_ng_IRDFF-II_cor                    
+       perl njoy-2016.prl  Ag109g_IRDFF-II_640grp_xsec   
+       perl njoy-2016.prl  S32_np_IRDFF-II_cor           
+       perl njoy-2016.prl  S32p_IRDFF-II_640grp_xsec
+       perl njoy-2016.prl  Co59_ng_IRDFF-II_cor   
+       perl njoy-2016.prl  Co59g_IRDFF-II_640grp_xsec  
+       perl njoy-2016.prl  Cf252_640nrg_IRDFF-II_MF33             
+       perl njoy-2016.prl  U235_640nrg_IRDFF-II_MF33
+#       Note: The fixed.viewer file for the next two calculation needed to be supplied via a hand edit of the baseline viewer file in subdirectory ../output/viewr
+#             This change reflects the error message in the input nuclear data files regarding the bad standard deviation in the high energy ()>14-MeV) portion of the source file
+       perl njoy-2016.prl  Cf252_640nrg_IRDFF-II_MF33_fixed_viewer   
+       perl njoy-2016.prl  U235_640nrg_IRDFF-II_MF33_fixed_viewer    
 #  
-       ./njoy-2016  Ni58_103_IRDFF-II_640grp_xsec                 
-       ./njoy-2016  Ni58_103_IRDFF-II_cor               
-       ./njoy-2016  Ni58_103_IRDFF-II_640grp_cov              
-endif
-#
+       perl njoy-2016.prl  Ni58_103_IRDFF-II_640grp_xsec                 
+       perl njoy-2016.prl  Ni58_103_IRDFF-II_cor               
+       perl njoy-2016.prl  Ni58_103_IRDFF-II_640grp_cov              
+echo 
+exit #

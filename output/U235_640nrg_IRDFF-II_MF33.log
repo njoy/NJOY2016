@@ -1,5 +1,5 @@
 
- njoy 2021.04  22Sept21                                      12/27/21 04:30:46
+ njoy 2021.04  22Sept21                                      09/29/23 19:21:30
  *****************************************************************************
 
 Run Title:: Enh: NJOY processing of U235(nth) thermal fission neutron spectrum from IRDFF-II
@@ -9,18 +9,18 @@ Run Title:: Enh: NJOY processing of U235(nth) thermal fission neutron spectrum f
 
  reconr...                                                                0.1s
 
- groupr...                                                                0.2s
+ groupr...                                                                0.1s
 
- errorr...                                                                0.2s
+ errorr...                                                                0.1s
 
  processing mat  9228
  ---------------------
   92-U -235 IAEA       EVAL-NOV17 IAEA CIELO Collaboration           
 
- covariances calculated for  1 reactions and   78 groups                  0.2s
+ covariances calculated for  1 reactions and   78 groups                  0.1s
 
- covr...                                                                  0.2s
+ covr...                                                                  0.1s
 
- viewr...                                                                 0.3s
-                                                                          0.3s
+ viewr...                                                                 0.1s
+                                                                          0.1s
  *****************************************************************************

@@ -54,7 +54,8 @@ stop
 '@'	rm tape20
 '@'     cp output             ../output/Cf252_640nrg_IRDFF-II_MF33.out
 '@'	cp tape39             ../correlation/Cf252_640nrg_IRDFF-II_MF33.eps
-'@'	cp tape38             ../correlation/Cf252_640nrg_IRDFF-II_MF33.std
+'@'	cp tape38             ../correlation/Cf252_640nrg_IRDFF-II_MF33.viewr
+'@'	cp std.plot           ../correlation/Cf252_640nrg_IRDFF-II_MF33.std
 '@'	cp lsl_interface.cov  ../correlation/Cf252_640nrg_IRDFF-II_MF33.lsl
 '@'	cp tape91             ../groupr/Cf252_640nrg_IRDFF-II_MF33.groupr
 '@'	echo " "

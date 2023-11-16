@@ -1,5 +1,5 @@
 
- njoy 2021.04  22Sept21                                      12/27/21 04:31:15
+ njoy 2021.04  22Sept21                                      09/29/23 19:21:42
  *****************************************************************************
 
 Run Title::  0                                                                              
@@ -7,22 +7,22 @@ Run Title::  0
 
  moder...                                                                 0.0s
 
- reconr...                                                                2.1s
+ reconr...                                                                1.2s
 
- groupr...                                                                2.1s
+ groupr...                                                                1.2s
 
- errorr...                                                                2.1s
+ errorr...                                                                1.2s
 
  processing mat  2825
  ---------------------
   28-Ni- 58 FEI        EVAL-Jul13 K.I.Zolotarev                      
 
- covariances calculated for  1 reactions and   38 groups                  2.1s
+ covariances calculated for  1 reactions and   38 groups                  1.2s
 
- covr...                                                                  2.1s
+ covr...                                                                  1.2s
 
  ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.0873E-01
 
- viewr...                                                                 2.2s
-                                                                          2.2s
+ viewr...                                                                 1.2s
+                                                                          1.3s
  *****************************************************************************
