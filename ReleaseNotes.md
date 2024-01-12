@@ -3,7 +3,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.74](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
-  - Correct the Euler-Mascheroni constant
+  - Correct the Euler-Mascheroni constant (this has an influence on the Coulomb wave functions and therefore influences LRF=7 evaluations that have charged particle channels)
 
 ## [NJOY2016.73](https://github.com/njoy/NJOY2016/pull/321)
 This update fixes the following issues:
