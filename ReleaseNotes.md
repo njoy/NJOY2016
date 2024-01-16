@@ -1,6 +1,10 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.74](https://github.com/njoy/NJOY2016/pull/327)
+This update fixes the following issues:
+  - Correct the Euler-Mascheroni constant (this has an influence on the Coulomb wave functions and therefore influences LRF=7 evaluations that have charged particle channels)
+
 ## [NJOY2016.73](https://github.com/njoy/NJOY2016/pull/321)
 This update fixes the following issues:
   - Fix an issue in ACER for thermal scattering leading to energy values being out of order when plotting the coherent elastic scattering cross section (this issue only affects plots, the thermal scattering ACE files do not change).
