@@ -17,7 +17,7 @@ module acefc
    real(kr)::aw0,tz
 
    ! parameters for continuous nxs block
-   integer::len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,nxsd(8)
+   integer::len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,nxsd(5)
 
    ! parameters for continuous jxs block
    integer::esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
@@ -286,17 +286,25 @@ contains
       call contio(npend,0,0,scr,nb,nw)
       if (math.ne.matd)&
         call error('first','desired temperature not found.',' ')
-      za=scr(1)
-      za=nint(za)
+      za=nint(scr(1))
       awr=scr(2)
       nxp=n2h
       jscr=7
-      if (iverf.ge.5) call contio(npend,0,0,scr(jscr),nb,nw)
-      if (iverf.ge.5) jscr=jscr+6
-      if (iverf.eq.6) call contio(npend,0,0,scr(jscr),nb,nw)
-      if (iverf.eq.6) jscr=jscr+6
+      is=0
+      if (iverf.ge.5) then
+         call contio(npend,0,0,scr(jscr),nb,nw)
+         jscr=jscr+6
+         is=nint(scr(10)) ! endf-5 and endf-6 both store liso
+      endif
+      if (iverf.eq.6) then
+         call contio(npend,0,0,scr(jscr),nb,nw)
+         jscr=jscr+6
+      endif
       awi=1
       izai=1
+      izaid=nint(scr(1))
+      ia=mod(izaid,1000)
+      iz=(izaid-ia)/1000
       if (iverf.eq.6) then
          awi=scr(13)
          nlib=nint(scr(17))
@@ -4918,7 +4926,7 @@ contains
    nnex=0
    nwscr=1000000
    allocate(scr(nwscr))
-   do i=1,8
+   do i=1,5
       nxsd(i)=0
    enddo
    do i=1,2
@@ -4968,7 +4976,6 @@ contains
       endif
    endif
    ntrp=ntrpp
-   izaid=nint(za)
    call dater(hdt)
    hd='  '//hdt
 
@@ -11076,9 +11083,10 @@ contains
      &6x,''*                     *'',9x,''ntrp'',i10/&
      &6x,''*     processed by    *'',8x,''ntype'',i10/&
      &6x,''*                     *'',9x,''ndnf'',i10/&
-     &6x,''*        njoy         *'',10x,''esz'',i10/&
-     &6x,''*                     *'',11x,''nu'',i10/&
-     &6x,''***********************'',10x,''mtr'',i10/&
+     &6x,''*        njoy         *'',12x,''z'',i10/&
+     &6x,''*                     *'',12x,''a'',i10/&
+     &6x,''***********************'',12x,''s'',i10/&
+     &39x,''esz'',i10/40x,''nu'',i10/39x,''mtr'',i10/&
      &39x,''lqr'',i10/39x,''tyr'',i10/38x,''lsig'',i10/&
      &39x,''sig'',i10/38x,''land'',i10/39x,''and'',i10/&
      &38x,''ldlw'',i10//39x,''dlw'',i10/39x,''gpd'',i10/&
@@ -11089,7 +11097,7 @@ contains
      &37x,''dndat'',i10/38x,''ldnd'',i10/39x,''dnd'',i10/&
      &37x,''ptype'',i10/38x,''ntro'',i10/37x,''ploct'',i10///&
      &6x,''hk---'',a70)')&
-     hz,aw0,tz,hd,hm,len2,nes,ntr,nr,ntrp,ntype,ndnf,esz,&
+     hz,aw0,tz,hd,hm,len2,nes,ntr,nr,ntrp,ntype,ndnf,iz,ia,is,esz,&
      nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,gpd,mtrp,lsigp,&
      sigp,landp,andp,ldlwp,dlwp,yp,fis,end,iurpt,nud,dndat,ldnd,&
      dnd,ptype,ntro,ploct,hk
@@ -12938,7 +12946,7 @@ contains
       endif
       write(nout,'(4(i7,f11.0))') (izn(i),awn(i),i=1,16)
       write(nout,'(8i9)')&
-        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
         esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
         gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
         iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
@@ -12956,14 +12964,14 @@ contains
       if (mcnpx.eq.0) then
          write(nout) hz(1:10),aw0,tz,hd,hk,hm,&
            (izn(i),awn(i),i=1,16),&
-           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
            esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
            gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
            iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
       else
          write(nout) hz(1:13),aw0,tz,hd,hk,hm,&
            (izn(i),awn(i),i=1,16),&
-           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
            esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
            gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
            iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
@@ -13926,7 +13934,7 @@ contains
       endif
       read (nin,'(4(i7,f11.0))') (izo(i),awo(i),i=1,16)
       read (nin,'(8i9)')&
-        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
         esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
         gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
         iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
@@ -14004,13 +14012,13 @@ contains
    else if (itype.eq.2) then
       if (mcnpx.eq.0) then
         read(nin) hz(1:10),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
           esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
           gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
           iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
       else
         read(nin) hz(1:13),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
           esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
           gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
           iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
