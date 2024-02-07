@@ -85,7 +85,7 @@ module acefc
 contains
 
    subroutine acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,&
-     suff,hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin)
+     suff,hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin,izaoption)
    !--------------------------------------------------------------------
    ! Prepare an ACE fast continuous file.
    !--------------------------------------------------------------------
@@ -94,7 +94,7 @@ contains
    use endf   ! provides endf routines and variables
    ! externals
    integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp,ismooth,i
-   integer::mcnpx
+   integer::mcnpx,izaoption
    real(kr)::suff
    character(70)::hk
    integer::izn(16)
@@ -205,7 +205,7 @@ contains
    call atend(mscr,0)
 
    !--load ace data into memory.
-   call acelod(mscr,suff,matd,tempd,newfor,mcnpx,ismooth)
+   call acelod(mscr,suff,matd,tempd,newfor,mcnpx,ismooth,izaoption)
 
    !--print ace file.
    if (iprint.gt.0) call aceprt(hk)
@@ -4887,7 +4887,7 @@ contains
    return
    end subroutine gamout
 
-   subroutine acelod(nin,suff,matd,tempd,newfor,mcnpx,ismooth)
+   subroutine acelod(nin,suff,matd,tempd,newfor,mcnpx,ismooth,izaoption)
    !-------------------------------------------------------------------
    ! Load data in ace format from the input file.
    !-------------------------------------------------------------------
@@ -4896,7 +4896,7 @@ contains
    use util ! repoz,dater,error,skiprz,sigfig
    use endf ! provides endf routines and variables
    ! externals
-   integer::nin,matd,newfor,mcnpx,ismooth
+   integer::nin,matd,newfor,mcnpx,ismooth,izaoption
    real(kr)::suff,tempd
    ! internals
    integer::nwscr,nnu,nnup,kfis,mtnr,mtntr,i,nnud,nnf
@@ -4933,11 +4933,21 @@ contains
       jxsd(i)=0
    enddo
    call repoz(nin)
-   iza=nint(za)
+   iza=izaid
    aw0=awr
    write(hm,'(''   mat'',i4)') matd
    tz=tempd*bk/emev
-   zaid=iza+suff
+   zaid=izaid+suff
+   if (izaoption.eq.1.and.is.gt.0) then
+      zaid=izaid+300+100*is+suff
+   endif
+   if (izaoption.eq.1.and.izaid.eq.95242) then
+      if (is.eq.0) then
+         zaid=izaid+400+suff
+      elseif (is.eq.1) then
+         zaid=izaid+suff
+      endif
+   endif
    if (mcnpx.eq.0) then
       if (izai.eq.1) then
          write(hz,'(f9.2,''c'')') zaid
