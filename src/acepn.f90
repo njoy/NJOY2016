@@ -25,7 +25,7 @@ module acepn
 contains
 
    subroutine acephn(nendf,npend,nace,ndir,matd,tempd,iprint,mcnpx,&
-     ityp,suff,hk,izn,awn)
+     ityp,suff,hk,izn,awn,izaoption)
    !-------------------------------------------------------------------
    ! Prepare ACE photo-nuclear files.
    !-------------------------------------------------------------------
@@ -36,7 +36,7 @@ contains
    use endf  ! provides endf routines and variables
    use acecm ! provides bachaa,eavl,ptleg2,pttab2
    ! externals
-   integer::nendf,npend,nace,ndir,matd,iprint,mcnpx,ityp
+   integer::nendf,npend,nace,ndir,matd,iprint,mcnpx,ityp,izaoption
    real(kr)::tempd,suff
    integer::izn(16)
    real(kr)::awn(16)
@@ -1825,6 +1825,16 @@ contains
 
    !--print and write the photonuclear file
    zaid=za+suff
+   if (izaoption.eq.1.and.is.gt.0) then
+      zaid=za+300+100*is+suff
+   endif
+   if (izaoption.eq.1.and.za.eq.95242) then
+      if (is.eq.0) then
+         zaid=za+400+suff
+      elseif (is.eq.1) then
+         zaid=za+suff
+      endif
+   endif
    if (mcnpx.eq.0) then
       write(hz,'(f9.2,''u'')') zaid
    else

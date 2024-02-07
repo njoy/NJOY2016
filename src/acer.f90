@@ -479,7 +479,7 @@ contains
    !--prepare photo-nuclear data
    else if (iopt.eq.5) then
       call acephn(nendf,npend,nace,ndir,matd,tempd,iprint,&
-        mcnpx,itype,suff,hk,izn,awn)
+        mcnpx,itype,suff,hk,izn,awn,izaoption)
 
    !--print or edit ace files
    else if (iopt.ge.7.and.iopt.le.8) then
