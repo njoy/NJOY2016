@@ -17,7 +17,7 @@ module acepn
    real(kr)::aw0,tz
 
    ! parameters for photonuclear nxs block
-   integer::lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(8),tvn
+   integer::lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(4),tvn
 
    ! parameters for photonuclear jxs block
    integer::esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(21)
@@ -46,7 +46,7 @@ contains
    integer::mt103,mt104,mt105,mt106,mt107
    integer::i,mfd,mtd,l,mttot,idis,nex,nexc,ir,j,idone,nnex,n
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
-   integer::k,ia,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
+   integer::k,ib,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
    integer::ll,lll,lep,ne,llh,lld,ie,np,ip,mtt,lct,ii
    integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
@@ -114,9 +114,11 @@ contains
    call contio(nin,0,0,scr,nb,nw)
    nx=n2h
    izai=0
+   is=0
    if (iverf.ge.5) then
       i=i+6
       call contio(nin,0,0,scr(i),nb,nw)
+      is=nint(scr(10)) ! endf-5 and endf-6 both store liso
    endif
    if (iverf.eq.6) then
       i=i+6
@@ -125,6 +127,10 @@ contains
       if (izai.ne.0) call error('acephn',&
          'endf input tape is not a photonuclear tape',' ')
    endif
+   za=nint(scr(1))
+   ia=mod(za,1000)
+   iz=(za-ia)/1000
+   print*,iz,ia,is,za
    call hdatio(nin,0,0,scr,nb,nw)
    if (iverf.ge.5) nx=n2h
    do while (nb.ne.0)
@@ -205,7 +211,6 @@ contains
    call findf(matd,3,0,nin)
    call contio(nin,0,0,scr,nb,nw)
    mttot=mth
-   za=nint(scr(1))
    e=0
    call gety1(e,enext,idis,s,nin,scr)
    do while (enext.lt.etop)
@@ -1633,11 +1638,11 @@ contains
                                     scr(ll+3)=0
                                     scr(ll+4)=na                            !P(l) order (zero is allowed)
                                     scr(ll+5)=0
-                                    do ia=1,na
+                                    do ib=1,na
                                        lll=lld+7+ncyc*(ig-1)
-                                       scr(ll+5+ia)=0
+                                       scr(ll+5+ib)=0
                                        if (scr(lll).ne.zero) then
-                                          scr(ll+5+ia)=scr(lll+ia)/scr(lll) !P(n)/P(0)
+                                          scr(ll+5+ib)=scr(lll+ib)/scr(lll) !P(n)/P(0)
                                        endif
                                     enddo
 
@@ -1874,8 +1879,8 @@ contains
            hz(1:13),aw0,tz,hd,hko,hm
       endif
       read (nin,'(4(i7,f11.0))') (izo(i),awo(i),i=1,16)
-      read (nin,'(8i9)') lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
-        esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
+      read (nin,'(8i9)') lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,&
+        nxsd(1:4),tvn,esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       n=(lxs+3)/4
       l=0
       do i=1,n
@@ -1887,11 +1892,11 @@ contains
    else if (itype.eq.2) then
       if (mcnpx.eq.0) then
         read(nin) hz(1:10),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+          lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
           esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       else
         read(nin) hz(1:13),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+          lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
           esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       endif
       n=(lxs+ner-1)/ner
@@ -1980,10 +1985,11 @@ contains
      &6x,''*        njoy         *'',8x,''ntype'',i10/&
      &6x,''*                     *'',8x,''npixs'',i10/&
      &6x,''***********************'',8x,''neixs'',i10/&
+     &41x,''z'',i10/41x,''a'',i10/41x,''s'',i10/&
      &39x,''tvn'',i10/39x,''esz'',i10/39x,''mtr'',i10/&
      &39x,''lqr'',i10/38x,''lsig'',i10/39x,''sig'',i10/&
      &//6x,''hk--- '',a70///)')&
-     hz,aw0,tz,hd,hm,lxs,za,nes,ntr,ntype,npixs,neixs,tvn,&
+     hz,aw0,tz,hd,hm,lxs,za,nes,ntr,ntype,npixs,neixs,iz,ia,is,tvn,&
      esz,mtr,lqr,lsig,sig,hk
 
    !--photonuclear reaction descriptions
@@ -2481,8 +2487,8 @@ contains
            hz,aw0,tz,hd,hk,hm
       endif
       write(nout,'(4(i7,f11.0))') (izn(i),awn(i),i=1,16)
-      write(nout,'(8i9)')lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
-        esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
+      write(nout,'(8i9)')lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,&
+        nxsd(1:4),tvn,esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
 
       !--esz block
       l=1
@@ -2775,11 +2781,11 @@ contains
    else
       if (mcnpx.eq.0) then
          write(nout) hz(1:10),aw0,tz,hd,hk,hm,(izn(i),awn(i),i=1,16),&
-           lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+           lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
            esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       else
          write(nout) hz(1:13),aw0,tz,hd,hk,hm,(izn(i),awn(i),i=1,16),&
-           lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+           lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
            esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       endif
       ll=0

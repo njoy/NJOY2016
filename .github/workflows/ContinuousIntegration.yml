@@ -27,7 +27,7 @@ jobs:
       run: |
         which ${{matrix.vFortran}}
         ${{matrix.vFortran}} --version
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: mkdir bin
       run: mkdir bin
     - name: cmake
