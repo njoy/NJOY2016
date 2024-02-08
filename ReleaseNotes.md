@@ -4,7 +4,11 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 ## [NJOY2016.75](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
 
-In addition, this update made a small change to the NXS array for continuous energy and photonuclear ACE files (iopt = 1 and 5). In both cases, the isomeric state S, atom number Z and mass number A are now stored in NXS(9), NXS(10) and NXS(11) respectively.
+In addition, this update made added the following features and changes:
+  - A small change to the NXS array for continuous energy and photonuclear ACE files (iopt = 1 and 5): in both cases, the isomeric state S, atom number Z and mass number A are now stored in NXS(9), NXS(10) and NXS(11) respectively.
+  - A new input option for acer was introduced for setting the zaid identifier of the continuous energy and photonuclear ACE files (iopt = 1 and 5):
+      - use za in the zaid regardless of the metastable state of the nuclide (default, this is how NJOY has always worked)
+      - use the metastable zaid rules (MCNP 6.3 or lower) in which we use za for ground state nuclides and use za + 300 + s * 100 for metastable nuclides (Am242 and Am242m are exceptions to this rule, for these we use 95642 and 95242 respectively)
 
 ## [NJOY2016.74](https://github.com/njoy/NJOY2016/pull/327)
 This update fixes the following issues:
