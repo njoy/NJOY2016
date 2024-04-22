@@ -3,6 +3,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.75](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
+  - Corrected a typo in the gateff subroutine in thermr (changed 1220 into 1200, see issue #76)
 
 In addition, this update made added the following features and changes:
   - A small change to the NXS array for continuous energy and photonuclear ACE files (iopt = 1 and 5): in both cases, the isomeric state S, atom number Z and mass number A are now stored in NXS(9), NXS(10) and NXS(11) respectively.
