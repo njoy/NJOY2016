@@ -132,6 +132,17 @@ contains
    !    itype    ace output type (1, 2, or 3, default=1)
    !    suff     id suffix for zaid (default=.00)
    !    nxtra    number of iz,aw pairs to read in (default=0)
+   !    izaopt   the zaid option
+   !               0   use za in the zaid regardless of the metastable state
+   !                   of the nuclide (default)
+   !               1   use the metastable zaid rules (MCNP 6.3 or lower):
+   !                     - use za for ground state nuclides
+   !                     - use za + 300 + s * 100 for metastable
+   !                       nuclides
+   !                   Am242 and Am242m are exceptions to this rule, for
+   !                   these we use 95642 and 95242 respectively
+   !             this option only affects fast and photonuclear files when
+   !             they are created by acer (iopt = 1 and iopt = 5)
    ! card 3
    !    hk       descriptive character string (70 char max)
    !             delimited by quotes
@@ -235,7 +246,7 @@ contains
 
    ! internals
    integer::nendf,npend,ngend,nace,ndir
-   integer::iopt,iprint,itype,nxtra,nza
+   integer::iopt,iprint,itype,nxtra,nza,izaoption
    integer::matd
    real(kr)::tempd
    integer::newfor,iopp,ismooth
@@ -280,7 +291,8 @@ contains
    itype=1
    suff=0
    nxtra=0
-   read(nsysi,*) iopt,iprint,itype,suff,nxtra
+   izaoption=0
+   read(nsysi,*) iopt,iprint,itype,suff,nxtra,izaoption
    mcnpx=0
    if (iopt.lt.0) then
       mcnpx=1
@@ -327,10 +339,15 @@ contains
       if (ismooth.ne.0.and.ismooth.ne.1) then
          call error('acer','illegal ismooth.',' ')
       endif
+      if (izaoption.ne.0.and.izaoption.ne.1) then
+         call error('acer','illegal izaopt.',' ')
+      endif
       if (iopp.eq.0) write(nsyso,&
         '(/'' photons will not be processed'')')
       if (ismooth.eq.0) write(nsyso,&
         '(/'' smoothing operation will not be performed'')')
+      if (izaoption.eq.1) write(nsyso,&
+        '(/'' zaids will be formatted using the metastable za rules'')')
       mte=0
       z(1)=0
       z(2)=0
@@ -442,7 +459,7 @@ contains
    !--prepare fast ace data
    if (iopt.eq.1) then
       call acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,suff,&
-        hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin)
+        hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin,izaoption)
 
    !--prepare thermal ace data
    else if (iopt.eq.2) then
@@ -462,7 +479,7 @@ contains
    !--prepare photo-nuclear data
    else if (iopt.eq.5) then
       call acephn(nendf,npend,nace,ndir,matd,tempd,iprint,&
-        mcnpx,itype,suff,hk,izn,awn)
+        mcnpx,itype,suff,hk,izn,awn,izaoption)
 
    !--print or edit ace files
    else if (iopt.ge.7.and.iopt.le.8) then
