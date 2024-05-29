@@ -1,6 +1,10 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.76](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes the following issues:
+  - Increase an array size to properly process Pt covariances in ENDF/B-VIII.1.
+
 ## [NJOY2016.75](https://github.com/njoy/NJOY2016/pull/335)
 This update fixes the following issues:
   - Corrected a typo in the gateff subroutine in thermr (changed 1220 into 1200, see issue #76)
