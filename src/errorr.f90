@@ -713,7 +713,7 @@ contains
    !--read covariance reaction types from end/b dictionary
    !--and set file 32 flag
    nscr2=0
-   nwi=4000
+   nwi=40000
    allocate(dict(nwi))
    call repoz(nendf)
    call tpidio(nendf,0,0,dict,nb,nw)
