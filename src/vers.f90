@@ -4,5 +4,5 @@ module version
    implicit none
    private
    character(8),public::vers='2016.76'
-   character(8),public::vday='xxXxx24'
+   character(8),public::vday='03Jul24'
 end module version
