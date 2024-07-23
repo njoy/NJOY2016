@@ -1,6 +1,10 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.76](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes the following issues:
+  - Background cross section values for reactions other than total, elastic, fission and capture were not handled properly in the unresolved resonance region. The background for total, elastic, fission and capture is integrated into the unresolved resonance cross section values in the genunr subroutine. In the emerge subroutine, the background in the unresolved resonance region was therefore zeroed out for any resonance reaction. This has never been an issue but now we have LRF=7 evaluations that can define reactions other than total, elastic, fission and capture.
+
 ## [NJOY2016.76](https://github.com/njoy/NJOY2016/pull/340)
 This update fixes the following issues:
   - Increase an array size to properly process Pt covariances in ENDF/B-VIII.1.
