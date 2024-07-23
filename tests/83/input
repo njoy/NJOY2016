@@ -1,0 +1,13 @@
+-- read tape20 and transform to binary
+moder
+20 -30
+-- reconstruct, linearise and unionise
+reconr
+-30 -21
+'reconstructed data' /
+4234 /
+0.001 /
+0 /
+moder
+-21 50
+stop
