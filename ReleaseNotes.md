@@ -3,7 +3,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.77](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
-  - Background cross section values for reactions other than total, elastic, fission and capture were not handled properly in the unresolved resonance region. The background for total, elastic, fission and capture is integrated into the unresolved resonance cross section values in the genunr subroutine. In the emerge subroutine, the background in the unresolved resonance region was therefore zeroed out for any resonance reaction. This has never been an issue but now we have LRF=7 evaluations that can define reactions other than total, elastic, fission and capture.
+  - Background cross section values for reactions other than total, elastic, fission and capture were not handled properly in the unresolved resonance region. The background for total, elastic, fission and capture is integrated into the unresolved resonance cross section values in the genunr subroutine. In the emerge subroutine, the background in the unresolved resonance region was therefore zeroed out for any resonance reaction. This has never been an issue but now we have LRF=7 evaluations that can define reactions other than total, elastic, fission and capture. Test 82 was added to detect this issue in the future.
 
 ## [NJOY2016.76](https://github.com/njoy/NJOY2016/pull/340)
 This update fixes the following issues:
