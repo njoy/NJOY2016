@@ -18,9 +18,9 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ ubuntu-20.04, macos-11 ]
+        os: [ ubuntu-22.04, macos-12 ]
         build_type: [ Debug, Release ]
-        vFortran: [ gfortran-10 ]
+        vFortran: [ gfortran-11 ]
 
     steps:
     - name: which gfortran
