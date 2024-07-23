@@ -4776,7 +4776,10 @@ contains
    if (thresh.gt.one.and.abs(thresh-eg).lt.test*thresh) sn=0
    ! backgrounds in a range of unresolved-smooth overlap
    ! are arbitrarily assigned to the unresolved component
-   if (eg.ge.eresr.and.eg.lt.eresh.and.itype.gt.0) sn=0
+   ! this only applies to total, elastic, fission and capture.
+   ! for lrf=7 evaluations that can have additional resonance reactions,
+   ! we still need to add the background.
+   if (eg.ge.eresr.and.eg.lt.eresh.and.itype.gt.0.and.itype.lt.5) sn=0
   345 continue
    if (er-eg.gt.test*eg) go to 360
    if (abs(eg-er).lt.test*eg) go to 355
