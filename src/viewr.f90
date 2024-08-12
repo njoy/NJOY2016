@@ -1323,7 +1323,7 @@ contains
          enddo
          i=i+2+2*nn
          j=j+1
-         if (j.lt.length) then
+         if (j.gt.length) then
             call error('set3d','array overflow, increase the length parameter',' ')
          endif
       endif
