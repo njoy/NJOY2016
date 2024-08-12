@@ -1269,10 +1269,11 @@ contains
    integer::iplot,nxyz
    real(kr)::xyz(nxyz)
    ! internals
+   integer,parameter::length=2000
    integer::i,j,nn,k,ncurv,major,minor,itop,ibot,l,n
    real(kr)::wt,xlo,xhi,ylo,yhi,zlo,zhi,xn,yn,zn,yy
    real(kr)::top,bot,xop,yop,zop
-   integer::lll(2000)
+   integer::lll(length)
    real(kr)::x(2000),y(2000),z(2000)
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::d0=.001e0_kr
@@ -1322,6 +1323,9 @@ contains
          enddo
          i=i+2+2*nn
          j=j+1
+         if (j.lt.length) then
+            call error('set3d','array overflow, increase the length parameter',' ')
+         endif
       endif
    enddo
    ncurv=j-1
