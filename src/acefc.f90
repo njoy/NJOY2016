@@ -9585,15 +9585,15 @@ contains
                next=next+5
                do ie=1,2
                   xss(next)=2
-                  xss(next+1)=3
-                  xss(next+2)=-1
-                     xss(next+5)=0
-                  xss(next+8)=0
+                  xss(next+1)=3            ! three points in the cosine grid
+                  xss(next+2)=-1           ! three cosine values
                   xss(next+3)=one-one/100
-                  xss(next+6)=0
-                  xss(next+9)=0
                   xss(next+4)=1
+                  xss(next+5)=0            ! three pdf values
+                  xss(next+6)=0
                   xss(next+7)=200
+                  xss(next+8)=0            ! three cdf values
+                  xss(next+9)=0
                   xss(next+10)=1
                   next=next+11
                enddo
