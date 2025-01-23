@@ -179,14 +179,14 @@ contains
    integer::lun,new
    ! internals
    integer::nun
-   character::for*15,age*7,fn*6
+   character::for*15,age*7,fn*7
    logical::there
 
    nun=iabs(lun)
    if ((nun.ge.5.and.nun.le.7).or.nun.eq.0) return
-   if (nun.gt.99) call error('openz','illegal unit number.',' ')
+   if (nun.gt.999) call error('openz','illegal unit number.',' ')
    ! construct file name
-   write(fn,'(''tape'',i2)') nun
+   write(fn,'(''tape'',i0)') nun
    ! set format based on sign of unit number
    for='formatted'
    if (lun.lt.0) for='unformatted'
@@ -227,7 +227,7 @@ contains
 
    nun=iabs(lun)
    if (nun.lt.10) return
-   if (nun.gt.99) call error('closz','illegal unit number.',' ')
+   if (nun.gt.999) call error('closz','illegal unit number.',' ')
    close(nun)
    return
    end subroutine closz
