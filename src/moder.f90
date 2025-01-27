@@ -59,7 +59,7 @@ contains
    character(4)::hb(17)
    real(kr)::rb(17)
    equivalence(hb(1),rb(1))
-   real(kr)::a(5200)
+   real(kr),allocatable::a(:)
    real(kr)::z(20)
    character(4)::zc(20)
    equivalence(zc(1),z(1))
@@ -67,6 +67,8 @@ contains
    nscr=0
    ninl=0
    matl=-2
+
+   allocate(a(1000000)) ! deallocated automatically at end of subroutine
 
    !--read user input, initialize,
    !--and write output header.
