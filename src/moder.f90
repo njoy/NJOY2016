@@ -54,6 +54,7 @@ contains
    integer::nin,nout,no,loop,i,nz,inout
    integer::matd,mend,ig,nk,ik,nb,nw
    integer::nscr,ninl,matl
+   integer,parameter::nbuf=1000000
    real(kr)::time
    character(105)::strng
    character(4)::hb(17)
@@ -68,7 +69,7 @@ contains
    ninl=0
    matl=-2
 
-   allocate(a(1000000)) ! deallocated automatically at end of subroutine
+   allocate(a(nbuf)) ! deallocated automatically at end of subroutine
 
    !--read user input, initialize,
    !--and write output header.
