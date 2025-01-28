@@ -5,6 +5,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 This update fixes the following issues:
   - Tape numbers are now allowed to go up to 999 instead of 99 previously. This change was made to accommodate processing of the light water evaluation in ENDF/B-VIII.1 that has 94 temperatures. Test 84 was added to detect this issue in the future.
   - A few updates were made related to array sizes and array allocation.
+  - Adding a message to signal malformed ENDF files when l-value lists for SLBW/MLBW and Reich-Moore have nrs=0 (no resonances given for this l value).
 
 ## [NJOY2016.77](https://github.com/njoy/NJOY2016/pull/347)
 This update fixes the following issues:
