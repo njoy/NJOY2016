@@ -1,9 +1,10 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
-## NJOY2016.78
+## [NJOY2016.78](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
   - Tape numbers are now allowed to go up to 999 instead of 99 previously. This change was made to accommodate processing of the light water evaluation in ENDF/B-VIII.1 that has 94 temperatures. Test 84 was added to detect this issue in the future.
+  - A few updates were made related to array sizes and array allocation.
 
 ## [NJOY2016.77](https://github.com/njoy/NJOY2016/pull/347)
 This update fixes the following issues:

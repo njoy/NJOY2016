@@ -6514,6 +6514,7 @@ contains
    enext=tmp(7+2*nr)
   190 continue
    idis=0
+   if (allocated(yield)) deallocate(yield)
    allocate(yield(na))
    do i=1,na
       yield(i)=tmp(i)
