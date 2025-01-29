@@ -42,8 +42,8 @@ module groupm
    ! - lfs8(i) points to the "level number" from mf8.
    ! - mlfs8(i) is calculated and corresponds to NJOY's assumption
    !   of the ground state or isomer number.
-   integer,parameter::maxr1=500
-   integer,parameter::maxr2=500
+   integer,parameter::maxr1=1000
+   integer,parameter::maxr2=10000
    integer::mf4(maxr1),mf6(maxr1),mf12(maxr1),mf13(maxr1),mf18(maxr1),&
      mf4r(6,maxr1),mf6p(6,maxr1),mf10f(maxr2),mf10s(maxr2),mf10i(maxr2),&
      lfs8(maxr2),mlfs8(maxr2)
