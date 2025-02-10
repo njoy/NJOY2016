@@ -1698,31 +1698,8 @@ contains
    ! internals
    integer::nr0,ir,idone,ndf,i,n
    real(kr)::dcon
-   real(kr),dimension(20,4),parameter::chisq=reshape((/&
-     1.31003e-3_kr,9.19501e-3_kr,.0250905e0_kr,.049254e0_kr,&
-     .0820892e0_kr,.124169e0_kr,.176268e0_kr,.239417e0_kr,&
-     .314977e0_kr,.404749e0_kr,.511145e0_kr,.637461e0_kr,&
-     .788315e0_kr,.970419e0_kr,1.194e0_kr,1.47573e0_kr,&
-     1.84547e0_kr,2.36522e0_kr,3.20371e0_kr,5.58201e0_kr,&
-     .0508548e0_kr,.156167e0_kr,.267335e0_kr,.38505e0_kr,&
-     .510131e0_kr,.643564e0_kr,.786543e0_kr,.940541e0_kr,&
-     1.1074e0_kr,1.28947e0_kr,1.48981e0_kr,1.71249e0_kr,&
-     1.96314e0_kr,2.24984e0_kr,2.58473e0_kr,2.98744e0_kr,&
-     3.49278e0_kr,4.17238e0_kr,5.21888e0_kr,7.99146e0_kr,&
-     .206832e0_kr,.470719e0_kr,.691933e0_kr,.901674e0_kr,&
-     1.10868e0_kr,1.31765e0_kr,1.53193e0_kr,1.75444e0_kr,&
-     1.98812e0_kr,2.23621e0_kr,2.50257e0_kr,2.79213e0_kr,&
-     3.11143e0_kr,3.46967e0_kr,3.88053e0_kr,4.36586e0_kr,&
-     4.96417e0_kr,5.75423e0_kr,6.94646e0_kr,10.0048e0_kr,&
-     .459462e0_kr,.893735e0_kr,1.21753e0_kr,1.50872e0_kr,&
-     1.78605e0_kr,2.05854e0_kr,2.33194e0_kr,2.61069e0_kr,&
-     2.89878e0_kr,3.20032e0_kr,3.51995e0_kr,3.86331e0_kr,&
-     4.23776e0_kr,4.65345e0_kr,5.12533e0_kr,5.67712e0_kr,&
-     6.35044e0_kr,7.22996e0_kr,8.541e0_kr,11.8359e0_kr/),(/20,4/))
    real(kr),parameter::start=19.9999e0_kr
    real(kr),parameter::zero=0.e0_kr
-     real(kr)::rnsum
-     rnsum=0
 
    !--select resonance parameters
    !--until resonance energy is above ehi
@@ -1753,16 +1730,13 @@ contains
       ! choose neutron width for ndn degrees of freedom
       ndf=ndfn(i)
       if (ndf.gt.0) gn=gn/ndf
-      n=int(1+start*rann(kk))
-         rnsum=rnsum+n
-      xr=chisq(n,ndf)
+      xr=chisq(kk,ndf)
       gn=gn*xr
       ! choose fission width for ndf degrees of freedom
       if (cgf(i).ne.zero.and.ndff(i).ne.0) then
          ndf=ndff(i)
          if (ndf.gt.0) gf=gf/ndf
-         n=int(1+start*rann(kk))
-         xr=chisq(n,ndf)
+         xr=chisq(kk,ndf)
          gf=gf*xr
       endif
       ! choose competitive width for ndx degrees of freedom
@@ -1771,8 +1745,7 @@ contains
          if (ndf.gt.0) gx=gx/ndf
          dn=20
          dn=dn-dn/10000
-         n=int(1+dn*rann(kk))
-         xr=chisq(n,ndf)
+         xr=chisq(kk,ndf)
          gx=gx*xr
       endif
       gt(ir)=gn+gf+gg+gx
@@ -2890,5 +2863,30 @@ contains
    if (rann.eq.zero) go to 100
    return
    end function rann
+
+   ! generates one sample from a standard normal distribution
+   ! note that we only use the first from the Box-Muller because it
+   ! seems there is potentially a little correlation between two
+   ! consecutive samples from the PURR RNG?
+   real(kr) function gauss(idum)
+     integer,intent(inout)::idum
+     real(kr)::u1,u2,z1,z2
+     real(kr), parameter :: pi = 3.141592653589793
+     u1=rann(idum)
+     u2=rann(idum)
+     gauss = sqrt(-2.0_kr * log(u1)) * cos(2.0_kr * pi * u2)
+   end function
+
+   real(kr) function chisq(idum, dof)
+     integer,intent(inout)::idum
+     integer,intent(in)::dof
+     integer::j
+     real(kr)::z
+     chisq=0.0_kr
+     do j=1,dof
+       z=gauss(idum)
+       chisq=chisq + z*z
+     enddo
+   end function chisq
 
 end module purm
