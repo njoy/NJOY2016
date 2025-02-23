@@ -63,7 +63,10 @@ Original NJOY README Information Below:
 The documentation for NJOY2016 is found in the [NJOY2016-manual](https://github.com/njoy/NJOY2016-manual) repository. There, you can find a [pre-compiled PDF](https://github.com/njoy/NJOY2016-manual/raw/master/njoy16.pdf) of the manual.
 
 ## Installation
-Instructions for the installation of NJOY2016 are found on our page, [Obtaining and Installing NJOY](https://njoy.github.io/Build/index.html).
+mkdir build
+cd build
+cmake ..
+make
 
 ## Modules
 +  `NJOY` directs the flow of data through the other modules and contains a library of common functions and subroutines used by the other modules.
