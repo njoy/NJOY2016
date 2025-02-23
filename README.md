@@ -64,8 +64,11 @@ The documentation for NJOY2016 is found in the [NJOY2016-manual](https://github.
 
 ## Installation
 mkdir build
+
 cd build
+
 cmake ..
+
 make
 
 ## Modules
