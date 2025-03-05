@@ -286,6 +286,11 @@ contains
    endif
    write(nsyso,'(/'' endf uses endf-'',i1,'' format'')') iverf
 
+   !--verify if nendf != 0 for iinc == 2
+   if (nendf.eq.0.and.iinc.eq.2) then
+      call error('thermr','No ENDF tape given for iinc=2 (nendf is 0)',' ')
+   endif
+
    !--initialize i/o units
    iold=10
    inew=11
@@ -631,7 +636,7 @@ contains
      1064.e0_kr,700.e0_kr,749.69e0_kr,&
      1064.e0_kr,800.e0_kr,843.63e0_kr,&
      1064.e0_kr,1000.e0_kr,1035.e0_kr,&
-     1064.e0_kr,1220.e0_kr,1229.3e0_kr,&
+     1064.e0_kr,1200.e0_kr,1229.3e0_kr,&
      1065.e0_kr,296.0e0_kr,713.39e0_kr,&
      1065.e0_kr,400.0e0_kr,754.68e0_kr,&
      1065.e0_kr,500.0e0_kr,806.67e0_kr,&
@@ -2489,7 +2494,7 @@ contains
    ! internals
    integer::nb1,na1,i,ib,ia
    real(kr)::rtev,bb,a,sigc,b,c,bbb,s,s1,s2,s3,arg
-   real(kr)::tfff,tfff2,rat
+   real(kr)::tfff,tfff2
    real(kr),parameter::sigmin=1.e-10_kr
    real(kr),parameter::sabflg=-225.e0_kr
    real(kr),parameter::amin=1.e-6_kr

@@ -37,7 +37,7 @@ module purm
    real(kr),dimension(:),allocatable::sb
 
    ! probability table globals
-   real(kr),dimension(:,:,:),allocatable::bval,sigb
+   real(kr),dimension(:,:,:),allocatable::bval
    real(kr),dimension(:),allocatable::tmin,tmax,tsum
 
    ! storage array for unresolved resonance parameters
@@ -643,7 +643,6 @@ contains
    deallocate(sigpl)
    if (allocated(bval)) then
       deallocate(bval)
-      deallocate(sigb)
       deallocate(tmin)
       deallocate(tmax)
       deallocate(tsum)
@@ -1856,13 +1855,11 @@ contains
       elow=10
       if (allocated(bval)) then
          deallocate(bval)
-         deallocate(sigb)
          deallocate(tmin)
          deallocate(tmax)
          deallocate(tsum)
       endif
       allocate(bval(8,nsig0,ntemp))
-      allocate(sigb(5,nsig0,ntemp))
       allocate(tmin(ntemp))
       allocate(tmax(ntemp))
       allocate(tsum(ntemp))
@@ -2493,37 +2490,21 @@ contains
                bval(7,i,itemp)=bval(7,i,itemp)+ttt*den*den
             endif
          enddo
-         sigb(1,i,itemp)=bval(1,i,itemp)/bval(6,i,itemp)
-         sigb(2,i,itemp)=bval(2,i,itemp)/bval(6,i,itemp)
-         sigb(3,i,itemp)=bval(3,i,itemp)/bval(6,i,itemp)
-         sigb(4,i,itemp)=bval(4,i,itemp)/bval(6,i,itemp)
-         sigb(5,i,itemp)=bval(5,i,itemp)/bval(7,i,itemp)
+         sigf(1,i,itemp)=bval(1,i,itemp)/bval(6,i,itemp)
+         sigf(2,i,itemp)=bval(2,i,itemp)/bval(6,i,itemp)
+         sigf(3,i,itemp)=bval(3,i,itemp)/bval(6,i,itemp)
+         sigf(4,i,itemp)=bval(4,i,itemp)/bval(6,i,itemp)
+         sigf(5,i,itemp)=bval(5,i,itemp)/bval(7,i,itemp)
       enddo
    enddo
    if (iprint.gt.0) then
       do itemp=1,ntemp
          do i=1,nsig0
             write(nsyso,'(3x,1p,2e10.3,5e12.4)')&
-              temp(itemp),sig0(i),(sigb(j,i,itemp),j=1,5)
+              temp(itemp),sig0(i),(sigf(j,i,itemp),j=1,5)
          enddo
       enddo
    endif
-
-   !--NOTE
-   !--sigf contains direct calculations of self shielded cross sections.
-   !--sigb contains self shielded cross sections computed from the
-   !--probability table.  copy sigb to sigf in order to make the MF152
-   !--values more consistent with the MF153 probability tables (even
-   !--if slightly less accurate).
-   !
-   ! do itemp=1,ntemp
-   !    do i=1,nsig0
-   !       do j=1,5
-   !!         sigf(i,j,itemp)=sigb(i,j,itemp)  !(i,j) wrong?!?!?
-   !          sigf(j,i,itemp)=sigb(j,i,itemp)  !(j,i) right? ... check w/Bob
-   !       enddo
-   !    enddo
-   ! enddo
 
    !--renormalize probability table and bondarenko
    !--cross sections to the computed infinitely-dilute values

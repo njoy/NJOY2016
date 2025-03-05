@@ -289,6 +289,8 @@ contains
                     if (mmtres(i).eq.106) mmtres(i)=750
                     if (mmtres(i).eq.107) mmtres(i)=800
                  enddo
+              else
+                 call desammy
               endif
               call repoz(nin)
               call findf(mata,2,0,nin)
@@ -897,6 +899,7 @@ contains
    real(kr),parameter::third=.333333333e0_kr
    real(kr),parameter::gxmin=1.0e-5_kr
    real(kr),parameter::zero=0
+   character::strng*60
    cwaven=sqrt(2*amassn*amu*ev)*1.e-12_kr/hbar
 
    !--check for energy-dependent scattering radius
@@ -946,9 +949,17 @@ contains
          if (jj.gt.maxres) call error('rdf2bw',&
            'res storage exceeded',' ')
       enddo
-      nrs=nint(res(jnow+5))
-      ncyc=nint(res(jnow+4))/nrs
       ll=nint(res(jnow+2))
+      nrs=nint(res(jnow+5))
+      ! some files are malformed and have a list record for l values without
+      ! resonances, issue a warning and move to the next l value
+      if (nrs.eq.0) then
+         write(strng,'(''nrs=0 for SLBW/MLBW and l='',i2)') ll
+         call mess('rdf2bw',strng,'malformed ENDF file, check evaluation')
+         jnow = jnow+6
+         cycle
+      end if
+      ncyc=nint(res(jnow+4))/nrs
       qx=res(jnow+1)
       lrx=nint(res(jnow+3))
       if (lrx.ne.0) then
@@ -3214,6 +3225,7 @@ contains
    real(kr),parameter::four=4.0e0_kr
    real(kr),parameter::small=3.e-4_kr
    real(kr),parameter::zero=0
+   character::strng*60
    cwaven=sqrt(2*amassn*amu*ev)*1.e-12_kr/hbar
 
    !--doppler broadening not provided.
@@ -3250,9 +3262,17 @@ contains
    !--loop over l states
    do l=1,nls
       inowb=inow
-      nrs=nint(res(inow+5))
-      ncyc=nint(res(inow+4))/nrs
       ll=nint(res(inow+2))
+      nrs=nint(res(inow+5))
+      ! some files are malformed and have a list record for l values without
+      ! resonances, issue a warning and move to the next l value
+      if (nrs.eq.0) then
+         write(strng,'(''nrs=0 for Reich-Moore and l='',i2)') ll
+         call mess('csrmat',strng,'malformed ENDF file, check evaluation')
+         inow = inow+6
+         cycle
+      end if
+      ncyc=nint(res(inow+4))/nrs
       apl=res(inow+1)
       rhoc=k*ap
       rho=k*ra
@@ -4774,7 +4794,10 @@ contains
    if (thresh.gt.one.and.abs(thresh-eg).lt.test*thresh) sn=0
    ! backgrounds in a range of unresolved-smooth overlap
    ! are arbitrarily assigned to the unresolved component
-   if (eg.ge.eresr.and.eg.lt.eresh.and.itype.gt.0) sn=0
+   ! this only applies to total, elastic, fission and capture.
+   ! for lrf=7 evaluations that can have additional resonance reactions,
+   ! we still need to add the background.
+   if (eg.ge.eresr.and.eg.lt.eresh.and.itype.gt.0.and.itype.lt.5) sn=0
   345 continue
    if (er-eg.gt.test*eg) go to 360
    if (abs(eg-er).lt.test*eg) go to 355

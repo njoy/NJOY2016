@@ -18,16 +18,16 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ ubuntu-20.04, macos-11 ]
+        os: [ ubuntu-22.04, macos-13 ]
         build_type: [ Debug, Release ]
-        vFortran: [ gfortran-9 ]
+        vFortran: [ gfortran-12 ]
 
     steps:
     - name: which gfortran
       run: |
         which ${{matrix.vFortran}}
         ${{matrix.vFortran}} --version
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: mkdir bin
       run: mkdir bin
     - name: cmake

@@ -1,10 +1,76 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
-## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/XXX)
-This update fixes a number of issues:
-  - MATXSR was modified to handle the changes of GROUPR introduced by [NJOY2016.49](https://github.com/njoy/NJOY2016/pull/119). The 10d record now reproduces the spec and prod arrays for the dilutions given in UNRESR,PURR,GROUPR.
-  - MATXSR does now dynamical allocation of sigz array like GROUPR does.
+## [NJOY2016.78](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes the following issues:
+  - Tape numbers are now allowed to go up to 999 instead of 99 previously. This change was made to accommodate processing of the light water evaluation in ENDF/B-VIII.1 that has 94 temperatures. Test 84 was added to detect this issue in the future.
+  - A few updates were made related to array sizes and array allocation.
+  - Adding a message to signal malformed ENDF files when l-value lists for SLBW/MLBW and Reich-Moore have nrs=0 (no resonances given for this l value).
+
+## [NJOY2016.77](https://github.com/njoy/NJOY2016/pull/347)
+This update fixes the following issues:
+  - Background cross section values for reactions other than total, elastic, fission and capture were not handled properly in the unresolved resonance region. The background for total, elastic, fission and capture is integrated into the unresolved resonance cross section values in the genunr subroutine. In the emerge subroutine, the background in the unresolved resonance region was therefore zeroed out for any resonance reaction. This has never been an issue but now we have LRF=7 evaluations that can define reactions other than total, elastic, fission and capture. Test 82 was added to detect this issue in the future.
+  - Increased the size of internal arrays in VIEWR.
+
+## [NJOY2016.76](https://github.com/njoy/NJOY2016/pull/340)
+This update fixes the following issues:
+  - Increase an array size to properly process Pt covariances in ENDF/B-VIII.1.
+
+## [NJOY2016.75](https://github.com/njoy/NJOY2016/pull/335)
+This update fixes the following issues:
+  - Corrected a typo in the gateff subroutine in thermr (changed 1220 into 1200, see issue #76)
+
+In addition, this update made added the following features and changes:
+  - A small change to the NXS array for continuous energy and photonuclear ACE files (iopt = 1 and 5): in both cases, the isomeric state S, atom number Z and mass number A are now stored in NXS(9), NXS(10) and NXS(11) respectively.
+  - A new input option for acer was introduced for setting the zaid identifier of the continuous energy and photonuclear ACE files (iopt = 1 and 5):
+      - use za in the zaid regardless of the metastable state of the nuclide (default, this is how NJOY has always worked)
+      - use the metastable zaid rules (MCNP 6.3 or lower) in which we use za for ground state nuclides and use za + 300 + s * 100 for metastable nuclides (Am242 and Am242m are exceptions to this rule, for these we use 95642 and 95242 respectively)
+
+## [NJOY2016.74](https://github.com/njoy/NJOY2016/pull/327)
+This update fixes the following issues:
+  - Correct the Euler-Mascheroni constant (this has an influence on the Coulomb wave functions and therefore influences LRF=7 evaluations that have charged particle channels)
+
+## [NJOY2016.73](https://github.com/njoy/NJOY2016/pull/321)
+This update fixes the following issues:
+  - Fix an issue in ACER for thermal scattering leading to energy values being out of order when plotting the coherent elastic scattering cross section (this issue only affects plots, the thermal scattering ACE files do not change).
+  - Increased allocation of an array in LEAPR to accommodate ENDF/B-VIII.1 thermal scattering evaluations and added a check to avoid an infinite loop when using a very fine beta grid. In addition, LEAPR will now warn the user about potential excessive calculation times and print out progression in the phonon expansion sum when the phonon expansion order is large.
+  - Added logic to MODER to read background R-matrix element information from LRF=7 resonance parameter data.
+  - Updated RECONR to use background R-matrix element information from LRF=7 and added test 81 using ENDF/B-VIII.1 Sr88.
+  - Fixing a few thing related to intel compiler warnings and errors.
+
+## [NJOY2016.72](https://github.com/njoy/NJOY2016/pull/308)
+This update fixes the following issues:
+  - Fixed an issue in GROUPR related to an error coming up in production matrix calculations. Depending on when a user asks for a production matrix associated to a reaction, it is possible that the reference frame of the previous reaction is used instead (caused by erronously defining an already declared global variable as local with a "save" attribute). In some circumstances, this causes NJOY2016 to error out (with a message related to unsupported reference frames). No test results had to be updated due to this change.
+  - Fixed issues in acer to properly print already existing dosimetry and photoatomic ace files when running a stand-alone acer iopt=7 job.
+  - The meaning of legord and ifissp in the ERRORR input file has been repurposed when mfcov=34. The values now represent the L,L1 values of the MF34 sub-subsection to be calculated (instead of the first one). By default, the L=1,L1=1 sub-subsection will be calculated which in almost all cases will correspond to the first sub-subsection in the MF34 data (as a result, the default behaviour of NJOY2016 will not change).
+  - Increased allocation of arrays to accommodate ENDF/B-VIII.1 evaluations.
+  - Fixed a typo in the name for MT195 in ACER.
+
+## [NJOY2016.71](https://github.com/njoy/NJOY2016/pull/301)
+This update adds the new MF7 MT451 (thermal scattering general information) ENDF format to MODER so that this module will be able to interpret the new MF7 section. No other capability in NJOY2016 currently uses the information in this section.
+
+This update also resolves an issue encountered when processing some JENDL5 evaluation that use LAW=7 (which ACER converts into LAW=1) due to errors in the temporary files. See issue #293 for more information.
+
+## [NJOY2016.70](https://github.com/njoy/NJOY2016/pull/295)
+This update fixes a number of minor issues:
+  - Fixed an issue in HEATR when reading evaluations with large multiplicity tables in MF6.
+  - Fixed an issue in HEATR when calculating the average outgoing energy from a distribution that uses multiple interpolation ranges in TAB1 records (test 79 was added to detect this issue in the future). Mainly nuclides using MF5 instead of MF6 are impacted by this change (e.g. Sn119 and Sn122 from ENDF/B-VIII.0).
+  - Fixed an issue in HEATR where the photon recoil needed to be multiplied by the photon multiplicity to obtain the photon recoil per interaction.
+  - Fixed a crash in THERMR when asking for S(a,b) processing (iinc=2) while no ENDF tape is given (nendf=0).
+  - Multiple ERRORR calls can now be made in the same input file without crashing. This is of interest to users that wish to process MF34 and MF35 (where ERRORR needs to be called for each sub-subsection and incident energy group). The issue was related to arrays being allocated but not unallocated in the previous ERRORR run in NJOY's Sammy routines (evaluations using MF2 LRF=7 had this issue).
+  - Fixed an issue in ACER where the number of photons given in the ENDF file was larger than the hardcoded limit. The new limit is now adaptive.
+  - Fixed an issue in ACER where NaN values were produced in the postscript file for the checking plots.
+
+A few compiler warnings have been resolved as well (unused variables). For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
+
+## [NJOY2016.69](https://github.com/njoy/NJOY2016/pull/281)
+This update fixes a number of minor issues:
+  - PURR now writes Bondarenko data obtained from the probability tables to MF2 MT152 instead of the Bondarenko data obtained from the direct sampled cross sections (for very low dilutions, the Bondarenko data obtained using these two methods does not align, with the direct sampled data leading to extremely low P1 values). When comparing with the Bondarenko data at low dilutions obtained with UNRESR, the Bondarenko data obtained from the probability table directly seems to be the best.
+  - MF6 LAW=2 represents discrete two body scattering in which only angular distribution data is given (knowing that the outgoing energy of the secondary particle can be determined through kinematics when the angle is known). When calculating heating numbers based on LAW=2, ACER assumes that the yield of the secondary particle is 1, which is correct in all cases except when MT5 is used as a lumped reaction. Heating numbers in ACER for photonuclear files using LAW=2 in an MT5 entry are now correctly multiplied by the yield. A warning message is printed out whenever this situation is detected. Test 78 was added as part of this correction.
+  - Previously, ERRORR would segfault for LRF=7 resonance evaluations when MF33 was present without MF32.  A check for this situation now avoids this.
+  - Fixed an issue in GROUPR when reading some of the FENDL3.2 evaluations.
+
+A few compiler warnings have been resolved as well (unused variables). For source files that were corrected in this way, the remaining warnings relate to equality comparisons for real values, unused dummy arguments in subroutines and potential 0 indices into arrays (in all cases, if statements prevented this from happening).
 
 ## [NJOY2016.68](https://github.com/njoy/NJOY2016/pull/264)
 This update fixes a number of minor issues:
@@ -68,8 +134,7 @@ This release addresses issue [\#201](https://github.com/njoy/NJOY2016/issues/201
 ## [NJOY2016.63](https://github.com/njoy/NJOY2016/pull/193)
 This fixes a bug in ERRORR when using the `999` option. When using this option, the input and output tapes are not closed in Fortran. This causes problems in NJOY21 as the output from ERRORR isn't completely written to disk before the next module starts. This update simply closes files `nitape` and `notape` which resolves the issue.
 
-In addition, some logic statements in the GROUPR conver and ACER convr subroutines have been corrected to fix failures in the test
-suite when building in Debug mode.
+In addition, some logic statements in the GROUPR conver and ACER convr subroutines have been corrected to fix failures in the test suite when building in Debug mode.
 
 ## [NJOY2016.62](https://github.com/njoy/NJOY2016/pull/191)
 This adds a number of changes to NJOY2016 contributed by Toshihiko Kawano, Bob McFarlane, IAEA and CIEMAT. In particular, the following changes were made:

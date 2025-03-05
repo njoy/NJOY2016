@@ -54,12 +54,13 @@ contains
    integer::nin,nout,no,loop,i,nz,inout
    integer::matd,mend,ig,nk,ik,nb,nw
    integer::nscr,ninl,matl
+   integer,parameter::nbuf=1000000
    real(kr)::time
    character(105)::strng
    character(4)::hb(17)
    real(kr)::rb(17)
    equivalence(hb(1),rb(1))
-   real(kr)::a(5200)
+   real(kr),allocatable::a(:)
    real(kr)::z(20)
    character(4)::zc(20)
    equivalence(zc(1),z(1))
@@ -67,6 +68,8 @@ contains
    nscr=0
    ninl=0
    matl=-2
+
+   allocate(a(nbuf)) ! deallocated automatically at end of subroutine
 
    !--read user input, initialize,
    !--and write output header.
@@ -693,18 +696,25 @@ contains
                      call moreio(nin,nout,nscr,a,nb,nw)
                   enddo
                   if (kbk.gt.0) then
-                     call listio(nin,nout,nscr,a,nb,nw)
-                     lbk=n1h
-                     if (lbk.eq.1) then
-                        call tab1io(nin,nout,nscr,a,nb,nw)
-                        do while (nb.ne.0)
-                           call moreio(nin,nout,nscr,a,nb,nw)
-                        enddo
-                        call tab1io(nin,nout,nscr,a,nb,nw)
-                        do while (nb.ne.0)
-                           call moreio(nin,nout,nscr,a,nb,nw)
-                        enddo
-                     endif
+                     do l=1,kbk
+                        call contio(nin,nout,nscr,a,nb,nw)
+                        lbk=l2h
+                        if (lbk.eq.1) then
+                           call tab1io(nin,nout,nscr,a,nb,nw)
+                           do while (nb.ne.0)
+                              call moreio(nin,nout,nscr,a,nb,nw)
+                           enddo
+                           call tab1io(nin,nout,nscr,a,nb,nw)
+                           do while (nb.ne.0)
+                              call moreio(nin,nout,nscr,a,nb,nw)
+                           enddo
+                        else if (lbk.eq.2.or.lbk.eq.3) then
+                           call listio(nin,nout,nscr,a,nb,nw)
+                           do while (nb.ne.0)
+                              call moreio(nin,nout,nscr,a,nb,nw)
+                           enddo
+                        endif
+                     enddo
                   endif
                   if (kps.eq.1)then
                      call listio(nin,nout,nscr,a,nb,nw)
@@ -1062,6 +1072,17 @@ contains
          write(strng,'(''illegal value of lthr='',i4)') lthr
          call error('file7',strng,' ')
       endif
+
+   !--general information (mt=451)
+   else if (mth.eq.451) then
+
+      n=l1h
+      do i=1,n
+         call listio(nin,nout,nscr,a,nb,nw)
+         do while (nb.ne.0)
+            call moreio(nin,nout,nscr,a,nb,nw)
+         enddo
+      enddo
 
    !--illegal mt
    else

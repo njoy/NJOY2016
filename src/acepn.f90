@@ -17,7 +17,7 @@ module acepn
    real(kr)::aw0,tz
 
    ! parameters for photonuclear nxs block
-   integer::lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(8),tvn
+   integer::lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(4),tvn
 
    ! parameters for photonuclear jxs block
    integer::esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(21)
@@ -25,7 +25,7 @@ module acepn
 contains
 
    subroutine acephn(nendf,npend,nace,ndir,matd,tempd,iprint,mcnpx,&
-     ityp,suff,hk,izn,awn)
+     ityp,suff,hk,izn,awn,izaoption)
    !-------------------------------------------------------------------
    ! Prepare ACE photo-nuclear files.
    !-------------------------------------------------------------------
@@ -36,7 +36,7 @@ contains
    use endf  ! provides endf routines and variables
    use acecm ! provides bachaa,eavl,ptleg2,pttab2
    ! externals
-   integer::nendf,npend,nace,ndir,matd,iprint,mcnpx,ityp
+   integer::nendf,npend,nace,ndir,matd,iprint,mcnpx,ityp,izaoption
    real(kr)::tempd,suff
    integer::izn(16)
    real(kr)::awn(16)
@@ -46,20 +46,20 @@ contains
    integer::mt103,mt104,mt105,mt106,mt107
    integer::i,mfd,mtd,l,mttot,idis,nex,nexc,ir,j,idone,nnex,n
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
-   integer::k,ia,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
+   integer::k,ib,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
    integer::ll,lll,lep,ne,llh,lld,ie,np,ip,mtt,lct,ii
-   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang,lleg,ileg
+   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
    integer::lee,lle,nd,na,ncyc,ng,ig,nnr,nnp,mf,mt
    integer::ipt,ntrp,pxs,phn,mtrp,tyrp,lsigp,sigp,landp,andp,ldlwp,dlwp
-   integer::izarec,nl,iil,nexn,nexd,ki
+   integer::izarec,nl,iil,nexn,nexd,ki,ilaw2mt5
    integer::nle
    integer::imu,intmu,nmu
    real(kr)::emc2,e,enext,s,y,ynext,heat,en,ep,g,h,epl
    real(kr)::tneut,tphot,tprot,tdeut,ttrit,the3,the4,thresh
    real(kr)::ss,tt,ubar,sum,renorm,ebar,hh,u,theta,x,anorm
    real(kr)::ee,amass,avadd,avlab,avll,test,rkal,akal
-   real(kr)::eavi,avl,avcm,sign,dele,avav,zaid,gl,awp,awr,q
+   real(kr)::eavi,avl,avcm,sign,dele,avav,zaid,gl,awp,awr,q,yld
    real(kr)::av,del
    real(kr)::awprec,awpp
    integer,parameter::mmax=1000
@@ -74,10 +74,11 @@ contains
    real(kr),parameter::eps=1.e-10_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
-   integer,parameter::ni=64
    character(66)::text
    emc2=amassn*amu*clight*clight/ev/emev
    tvn=1
+   ilaw2mt5=0
+   yld=1.
 
    nxsd=0
    jxsd=0
@@ -113,9 +114,11 @@ contains
    call contio(nin,0,0,scr,nb,nw)
    nx=n2h
    izai=0
+   is=0
    if (iverf.ge.5) then
       i=i+6
       call contio(nin,0,0,scr(i),nb,nw)
+      is=nint(scr(10)) ! endf-5 and endf-6 both store liso
    endif
    if (iverf.eq.6) then
       i=i+6
@@ -124,6 +127,10 @@ contains
       if (izai.ne.0) call error('acephn',&
          'endf input tape is not a photonuclear tape',' ')
    endif
+   za=nint(scr(1))
+   ia=mod(za,1000)
+   iz=(za-ia)/1000
+   print*,iz,ia,is,za
    call hdatio(nin,0,0,scr,nb,nw)
    if (iverf.ge.5) nx=n2h
    do while (nb.ne.0)
@@ -204,7 +211,6 @@ contains
    call findf(matd,3,0,nin)
    call contio(nin,0,0,scr,nb,nw)
    mttot=mth
-   za=nint(scr(1))
    e=0
    call gety1(e,enext,idis,s,nin,scr)
    do while (enext.lt.etop)
@@ -1095,8 +1101,8 @@ contains
                              sigfig(renorm*xss(nex+1+2*n+ii),9,0)  ! CDF(ii)
                         enddo
                         nex=nex+2+3*n       ! index for the next distribution
-                        e=xss(ie+iie)
-                        scr(llht+6+2*iie)=e
+                        e=xss(ie+iie)       ! e from xss, thus MeV
+                        scr(llht+6+2*iie)=e ! store it in scr, so energy in MeV
                         scr(llht+7+2*iie)=(awr-awpp)*(e+q)/awr
                      enddo
                      ! add in contribution to heating
@@ -1105,6 +1111,24 @@ contains
                      do ie=it,nes
                         e=xss(esz+ie-1)/emev
                         call terpa(h,e,en,idis,scr(llht),npp,nrr)
+                        !--get the yield and modify heating
+                        !--beware: e is already in MeV, scr(llht) has been
+                        !--modified to be in MeV already (see above)
+                        call terpa(yld,e*emev,en,idis,scr,npp,nrr)
+                        h=yld*h ! just in case, multiply by yield
+                        if (ilaw2mt5.eq.0.and.mt.eq.5.and.yld.ne.one) then
+                           ilaw2mt5=1
+                           write(text,'(''yield different from 1 for outgoing particle '',i5,''.'')')ip
+                           if (izarec.eq.ip) then
+                              call mess('acephn',&
+                                        'law=2 (discrete two-body scattering) used in mt=5 recoil',&
+                                        text)
+                           else
+                              call mess('acephn',&
+                                        'law=2 (discrete two-body scattering) used in mt=5',&
+                                        text)
+                           endif
+                        endif
                         ss=0
                         if (ie.ge.iaa) ss=xss(2+k+ie-iaa)
                         xss(phn+2+ie-it)=xss(phn+2+ie-it)+h*ss
@@ -1112,6 +1136,7 @@ contains
                           xss(thn+ie-1)=xss(thn+ie-1)&
                           +h*ss/xss(tot+ie-1)
                      enddo
+                     ilaw2mt5=0
                   else
                      call skip6(nin,0,0,scr,law)
                   endif
@@ -1613,11 +1638,11 @@ contains
                                     scr(ll+3)=0
                                     scr(ll+4)=na                            !P(l) order (zero is allowed)
                                     scr(ll+5)=0
-                                    do ia=1,na
+                                    do ib=1,na
                                        lll=lld+7+ncyc*(ig-1)
-                                       scr(ll+5+ia)=0
+                                       scr(ll+5+ib)=0
                                        if (scr(lll).ne.zero) then
-                                          scr(ll+5+ia)=scr(lll+ia)/scr(lll) !P(n)/P(0)
+                                          scr(ll+5+ib)=scr(lll+ib)/scr(lll) !P(n)/P(0)
                                        endif
                                     enddo
 
@@ -1800,6 +1825,16 @@ contains
 
    !--print and write the photonuclear file
    zaid=za+suff
+   if (izaoption.eq.1.and.is.gt.0) then
+      zaid=za+300+100*is+suff
+   endif
+   if (izaoption.eq.1.and.za.eq.95242) then
+      if (is.eq.0) then
+         zaid=za+400+suff
+      elseif (is.eq.1) then
+         zaid=za+suff
+      endif
+   endif
    if (mcnpx.eq.0) then
       write(hz,'(f9.2,''u'')') zaid
    else
@@ -1840,7 +1875,6 @@ contains
    real(kr),parameter::zero=0
 
    integer,parameter::ner=1
-   integer,parameter::nbw=1
 
    !--read type 1 ace format file
    call openz(nin,0)
@@ -1855,8 +1889,8 @@ contains
            hz(1:13),aw0,tz,hd,hko,hm
       endif
       read (nin,'(4(i7,f11.0))') (izo(i),awo(i),i=1,16)
-      read (nin,'(8i9)') lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
-        esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
+      read (nin,'(8i9)') lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,&
+        nxsd(1:4),tvn,esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       n=(lxs+3)/4
       l=0
       do i=1,n
@@ -1868,11 +1902,11 @@ contains
    else if (itype.eq.2) then
       if (mcnpx.eq.0) then
         read(nin) hz(1:10),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+          lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
           esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       else
         read(nin) hz(1:13),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+          lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
           esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       endif
       n=(lxs+ner-1)/ner
@@ -1961,10 +1995,11 @@ contains
      &6x,''*        njoy         *'',8x,''ntype'',i10/&
      &6x,''*                     *'',8x,''npixs'',i10/&
      &6x,''***********************'',8x,''neixs'',i10/&
+     &41x,''z'',i10/41x,''a'',i10/41x,''s'',i10/&
      &39x,''tvn'',i10/39x,''esz'',i10/39x,''mtr'',i10/&
      &39x,''lqr'',i10/38x,''lsig'',i10/39x,''sig'',i10/&
      &//6x,''hk--- '',a70///)')&
-     hz,aw0,tz,hd,hm,lxs,za,nes,ntr,ntype,npixs,neixs,tvn,&
+     hz,aw0,tz,hd,hm,lxs,za,nes,ntr,ntype,npixs,neixs,iz,ia,is,tvn,&
      esz,mtr,lqr,lsig,sig,hk
 
    !--photonuclear reaction descriptions
@@ -2434,8 +2469,8 @@ contains
    real(kr)::awn(16)
    character(70)::hk
    ! internals
-   integer::l,n,ne,ip,mftype,nr,li,ir,nn,ll,k,np,nw,nmu,nrr
-   integer::ii,lnw,law,kk,nern,lrec,j,i
+   integer::l,n,ne,ip,mftype,nr,nn,ll,k,np,nmu,nrr
+   integer::lnw,law,nern,lrec,j,i
    integer::ipt, ntrp, pxs, phn, mtrp, tyrp, lsigp, sigp, landp, andp, ldlwp, dlwp ! IXS
    integer::rlocator  ! locator index for reaction data
    integer::plocator  ! locator index for the particle IXS array
@@ -2462,8 +2497,8 @@ contains
            hz,aw0,tz,hd,hk,hm
       endif
       write(nout,'(4(i7,f11.0))') (izn(i),awn(i),i=1,16)
-      write(nout,'(8i9)')lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
-        esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
+      write(nout,'(8i9)')lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,&
+        nxsd(1:4),tvn,esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
 
       !--esz block
       l=1
@@ -2756,11 +2791,11 @@ contains
    else
       if (mcnpx.eq.0) then
          write(nout) hz(1:10),aw0,tz,hd,hk,hm,(izn(i),awn(i),i=1,16),&
-           lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+           lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
            esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       else
          write(nout) hz(1:13),aw0,tz,hd,hk,hm,(izn(i),awn(i),i=1,16),&
-           lxs,za,nes,ntr,ntype,npixs,neixs,nxsd(1:8),tvn,&
+           lxs,za,nes,ntr,ntype,npixs,neixs,ignored,is,iz,ia,nxsd(1:4),tvn,&
            esz,tot,non,els,thn,mtr,lqr,lsig,sig,ixsa,ixs,jxsd(1:21)
       endif
       ll=0

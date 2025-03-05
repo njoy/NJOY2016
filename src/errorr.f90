@@ -229,14 +229,14 @@ contains
    !            (mf=32) (default=1)
    !            0 = area sensitivity method
    !            1 = 1% sensitivity method
-   !    legord  legendre order for calculating covariances (default=1)
+   !    l       Legendre order for reaction MT (default=1)
    !            (if mfcov is not 34, legord is ignored)
-   !    ifissp  subsection of the fission spectrum covariance
-   !            matrix to process (default=-1 which means process
+   ! l1/ifissp  if mfcov is 34: Legendre order for reaction MT1 (default=1)
+   !            if mfcov is 35: matrix to process (default=-1 which means process
    !            the subsection that includes efmean).  The value
    !            for ifissp that appears in njoy's standard output
    !            will equal the subsection containing efmean.
-   !            (if mfcov is not 35, ifissp is ignored)
+   !            (if mfcov is not 34 or 35, l1/ifissp is ignored)
    !    efmean  incident neutron energy (eV).  Process the covar-
    !            iance matrix subsection whose energy interval in-
    !            cludes efmean.  if ifissp=-1 and efmean is not
@@ -515,16 +515,21 @@ contains
       mfcov=33
       irespr=1
       legord=1
-      ifissp=-1
+      ifissp=-1000
       isru=0
       dap=0
       read(nsysi,*) iread,mfcov,irespr,legord,ifissp,efmean,dap
+      if (mfcov.eq.35.and.ifissp.eq.-1000) ifissp=-1
+      if (mfcov.eq.34.and.ifissp.eq.-1000) ifissp=1
 
       !--only allow legord=1 at this time
-      if (legord.ne.1) then
-         write(strng,'(''reset legord from '',i2,'' to 1'')')legord
-         call mess('errorr',strng,'')
-         legord=1
+      if (mfcov.eq.34.and.legord.lt.0) then
+         write(strng,'(''Legendre order l for mf34 cannot be less than zero'')')
+         call error('errorr',strng,' ')
+      endif
+      if (mfcov.eq.34.and.ifissp.lt.0) then
+         write(strng,'(''Legendre order l1 for mf34 cannot be less than zero'')')
+         call error('errorr',strng,' ')
       endif
 
       !--input check for legal and/or consistent options
@@ -681,8 +686,12 @@ contains
         '('' irespr processing option for mf=33 ... '',i10)') irespr
       if (isru.ne.0) write(nsyso,&
         '('' user dap for scat radius unc override '',f11.4)') dap
-      if (mfcov.eq.34) write(nsyso,&
-        '('' legendre order for mf=34 ............. '',i10)') legord
+      if (mfcov.eq.34) then
+        write(nsyso,&
+        '('' legendre order l for mf=34 ........... '',i10)') legord
+        write(nsyso,&
+        '('' legendre order l1 for mf=34 .......... '',i10)') ifissp
+      endif
       if (mfcov.eq.35) then
          write(nsyso,&
            '('' igflag ............................... '',i10/&
@@ -704,7 +713,7 @@ contains
    !--read covariance reaction types from end/b dictionary
    !--and set file 32 flag
    nscr2=0
-   nwi=4000
+   nwi=40000
    allocate(dict(nwi))
    call repoz(nendf)
    call tpidio(nendf,0,0,dict,nb,nw)
@@ -796,6 +805,8 @@ contains
             if (mmtres(i).eq.106) mmtres(i)=750
             if (mmtres(i).eq.107) mmtres(i)=800
          enddo
+      else
+         call desammy
       endif
       call findf(matd,2,0,nendf)
       deallocate(a)
@@ -1048,6 +1059,7 @@ contains
    !--errorr is finished.
    call atend(nout,0)
   330 continue
+   if (nmtres.ne.0) call desammy
    if (allocated(flx))  deallocate(flx)
    if (allocated(sig))  deallocate(sig)
    if (allocated(cov))  deallocate(cov)
@@ -1768,7 +1780,7 @@ contains
    integer::jh,loci,lt,lb,locip4,locip6,nk1,k,k2,locnec,nl1
    integer::ifloc,nlt,nk,nlt1,locl,lend,loclp4,loclp6
    integer::l2,m,m2,jgend,ih,ibase,ij,kmtb,isrrr,namx
-   integer::mat2,mt2,nlg1,nlg2,ld,ld1,izap,izero
+   integer::mat2,mt2,nlg1,nlg2,ld,ld1,izap,izero,ifoundmf34
    real(kr)::eg,xcv,time,de,flux,dne
    character(70)::strng,strng2
    integer,parameter::locm=100
@@ -1781,6 +1793,7 @@ contains
    real(kr),parameter::zero=0
 
    !--initialize
+   ifoundmf34=0
    izero=0
    nscr2=13
    if (ngout.lt.0) nscr2=-nscr2
@@ -2048,7 +2061,8 @@ contains
   320 continue
    if (iok.eq.0) go to 600
    if (mfcov.eq.34) then
-      if (ld.gt.legord.or.ld1.gt.legord) go to 650
+      if (.not.(ld.eq.legord.and.ld1.eq.ifissp)) go to 650
+      ifoundmf34=1
    endif
 
    !--retrieve sigma for mt1, either from ngout or sig.
@@ -2359,6 +2373,12 @@ contains
   650 continue
   660 continue
    call asend(0,nscr1)
+
+   !--check if we found the MF34 l,l1 sub-subsection
+   if (mfcov.eq.34.and.ifoundmf34.eq.0) then
+      write(strng,'(''no sub-subsection for l='',i2,'' and l1='',i2)') legord,ifissp
+      call error('covcal',strng,'in mf=34.')
+   endif
 
    !--close loop over sections of mfcov
    go to 140
@@ -3225,7 +3245,6 @@ contains
       enddo
    enddo
    call closz(nscr6)
-   if (nmtres.gt.0) call desammy
 
    return
    end subroutine resprx
@@ -3723,7 +3742,7 @@ contains
    integer::nwscr
    real(kr)::a(nwscr)
    ! internals
-   integer::nl,iloc,nrs,i,nr,ig,j,loop,igind,inow,id,ig1,ig2,ij,ii,k
+   integer::nl,iloc,nrs,i,nr,ig,j,loop,igind,inow,id,ig1,ig2,ij,ii
    integer::nb,nw,jd
    integer,parameter::maxnls=10
    integer,parameter::maxe=600000
@@ -4098,7 +4117,7 @@ contains
    integer::nwscr,iest,ieed
    real(kr)::a(nwscr)
    ! internals
-   integer::nb,nw,lru1,lrf1,lb,i,ig,ig2,il,ii2,ii1,ipp,j,k
+   integer::nb,nw,lru1,lrf1,lb,i,ig,ig2,il,ii2,ii1,ipp,j
    integer::loopm,loopn,loop,ns,nrs1,nsmax,ipos,l1,l2,l3
    integer::lb2,lldum,igind,ipara,itmp,ilnum,ind,ii
    integer::imess,inow,jj,lll,nrs
@@ -4773,7 +4792,7 @@ contains
    integer::mxlru2,iest,ieed,nwscr
    real(kr)::a(nwscr),amur(3,mxlru2)
    ! internals
-   integer::nb,nw,l1,l2,l3,nl,ig,i,j,k,ig2,ii,igind,njs,inow
+   integer::nb,nw,l1,l2,l3,nl,ig,i,j,ig2,ii,igind,njs,inow
    integer::loop,loopn,l0
    integer,parameter::maxb=4000
    integer,parameter::mxnpar=100
@@ -5651,7 +5670,11 @@ contains
          z(6)=ig
          z(7)=ans(1,1)
          do i=1,legord
-            z(i+7)=ans(i,2)
+           if (ans(i,2).lt.1e-30) then
+             z(i+7)=0.
+           else
+             z(i+7)=ans(i,2)
+           endif
          enddo
          nwds=legord+7
          call listio(0,nscr4,0,z,nb,nwds)
@@ -6046,7 +6069,6 @@ contains
    enddo
    return
    end subroutine rdlgnd
-
 
    subroutine fssigc(ncg,ncm,nun,csig,cflx,b,egt,flux,sig)
    !--------------------------------------------------------------------
@@ -7439,7 +7461,7 @@ contains
   390 continue
 
    ! add contribution from resonance-parameter uncertainty
-   if (mfcov.ne.34.and.mfcov.ne.35) then
+   if (mfcov.eq.33.and.mf32.ne.0) then
       call rescon(ix,ixp,csig,cova,izero,ngn,nmt1)
    endif
 
