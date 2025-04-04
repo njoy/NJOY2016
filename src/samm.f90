@@ -886,7 +886,7 @@ contains
             lspin(i,j,ier)=0
             chspin(i,j,ier)=0
             backgr(i,j,ier)=0
-            backgrdata(i,igroup,ier,:)=0
+            backgrdata(i,j,ier,:)=0
          enddo
       enddo
       pari=1
@@ -1023,8 +1023,12 @@ contains
             gamf2=res(jj+5)
             if (gamf.ne.zero) then
                gamma(2,ires,ier)=gamf
-               if (nchan(ig,ier).lt.2) then
-                  nchan(ig,ier)=2
+               if (nchan(ig,ier).ne.2) then
+                  !-- if num channels is already set to 3,
+                  !-- don't overwrite it with 2
+                  if (nchan(ig,ier).ne.3) then
+                      nchan(ig,ier)=2
+                  endif
                   ipp(2,ig,ier)=3
                endif
             endif
