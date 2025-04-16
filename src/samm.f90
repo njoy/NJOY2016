@@ -947,7 +947,11 @@ contains
          emb(2,ier)=awri
          apl=res(jnow+1)
          if (apl.eq.zero) then
-            aptru=z123*(awri*amassn)**(one/three)+zz8
+            if (naps.eq.1) then
+               aptru=ascat
+            else
+               aptru=z123*(awri*amassn)**(one/three)+zz8
+            endif
             apeff=ascat
          else
             apeff=apl
