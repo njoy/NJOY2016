@@ -1282,6 +1282,12 @@ contains
 
    !--optional output of converted MF2/MT151
    if (imf2.eq.1) then
+
+      write(nsyse,*)
+      write(nsyse,*) "Coverted RRR parameters:"
+      write(nsyse,*)
+
+
       allocate(a(12*nres+100))
       mfh=2
       mth=151
@@ -1291,7 +1297,7 @@ contains
       a(4)=3
       a(5)=ngroupm(ier)
       a(6)=0
-      call contio(0,nsyso,0,a,nb,nw)
+      call contio(0,nsyse,0,a,nb,nw)
       a(1)=0
       a(2)=0
       a(3)=nppm(ier)
@@ -1314,7 +1320,7 @@ contains
          a(j+12)=pb(i,ier)
          j=j+12
       enddo
-      call listio(0,nsyso,0,a,nb,nw)
+      call listio(0,nsyse,0,a,nb,nw)
       ires1=0
       do i=1,ngroupm(ier)
          a(1)=sspin(i,ier)
@@ -1337,7 +1343,7 @@ contains
             a(17+6*(j-1))=rdeff(j,i,ier)
             a(18+6*(j-1))=rdtru(j,i,ier)
          enddo
-         call listio(0,nsyso,0,a,nb,nw)
+         call listio(0,nsyse,0,a,nb,nw)
          a(1)=0
          a(2)=0
          a(3)=0
@@ -1359,10 +1365,10 @@ contains
             enddo
             ll=ll+nx
          enddo
-         call listio(0,nsyso,0,a,nb,nw)
+         call listio(0,nsyse,0,a,nb,nw)
          ll=1+nw
          do while (nb.ne.0)
-            call moreio(0,nsyso,0,a(ll),nb,nw)
+            call moreio(0,nsyse,0,a(ll),nb,nw)
             ll=ll+nw
          enddo
          ires1=nresg(i,ier)

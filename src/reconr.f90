@@ -341,9 +341,13 @@ contains
                endif
             endif
             write(nsyso,'(''   samm max legendre order:'',i3)') ncoef-1
-            if (ncoef.gt.1)&
+            if (ncoef.gt.1) then
               write(nsyso,&
                '(''   generating File 4 for resonance angular distributions'')')
+            else
+              write(nsyso,&
+               '(''  Not generating File 4 because NLS < 2 '')')
+            endif
             if (lrp.eq.1) write(nsyso,'(/&
               &'' mat has no unresolved resonance parameters'')')
             ! temporary meaning of lrp------
