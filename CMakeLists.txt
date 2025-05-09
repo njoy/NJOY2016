@@ -6,6 +6,7 @@ string(TOLOWER ${CMAKE_PROJECT_NAME} CMAKE_PROJECT_NAME_LOWER) # For install pat
 # Include standard modules
 include(GNUInstallDirs)
 include(FeatureSummary)
+include(cmake/GenerateScript.cmake)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configuration types" FORCE)
 
@@ -164,17 +165,49 @@ function(njoy_apply_build_options TARGET_NAME)
     endif()
 endfunction()
 
-# RPATH settings
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) # Important: RPATH is added at install time, not build time
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(NJOY_RPATH_PREFIX "@loader_path")
+
+if(SKBUILD)
+  # By default, scikit-build will install everything to ${SKBUILD_PLATLIB_DIR}/njoy
+  # Install include and bin directories to ${SKBUILD_PLATLIB_DIR}/njoy/SKBUILD_SUBDIR
+  set(SKBUILD_SUBDIR core/)
+  set(CMAKE_INSTALL_BINDIR ${SKBUILD_SUBDIR}${CMAKE_INSTALL_BINDIR})
+  set(CMAKE_INSTALL_INCLUDEDIR ${SKBUILD_SUBDIR}${CMAKE_INSTALL_INCLUDEDIR})
+  set(CMAKE_INSTALL_LIBDIR ${SKBUILD_SUBDIR}${CMAKE_INSTALL_LIBDIR})
+  set(CMAKE_INSTALL_DATADIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_DATADIR})
+  set(CMAKE_INSTALL_DOCDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_DOCDIR})
+  set(CMAKE_INSTALL_INFODIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_INFODIR})
+  set(CMAKE_INSTALL_MANDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_MANDIR})
+  set(CMAKE_INSTALL_LOCALEDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_LOCALEDIR})
+  set(CMAKE_INSTALL_LOCALSTATEDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_LOCALSTATEDIR})
+  set(CMAKE_INSTALL_RUNSTATEDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_RUNSTATEDIR})
+
+  # Set RPATH
+  if(APPLE)
+    set(CMAKE_MACOSX_RPATH ON)
+    set(NJOY_LIBRARY_RPATH "@loader_path")
+    set(NJOY_BINARY_RPATH "@loader_path/../../${CMAKE_INSTALL_LIBDIR}")
+  elseif(UNIX)
+    set(NJOY_LIBRARY_RPATH "$ORIGIN")
+    set(NJOY_BINARY_RPATH "$ORIGIN/../../${CMAKE_INSTALL_LIBDIR}")
+  endif()
 else()
-    set(NJOY_RPATH_PREFIX "$ORIGIN")
+  # use, i.e. don't skip the full RPATH for the build tree
+  set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+  # when building, don't use the install RPATH already
+  # (but later on when installing)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+  # the RPATH to be used when installing, but only if it's not a system directory
+  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" isSystemDir)
+  if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
+  endif()
 endif()
-file(RELATIVE_PATH RPATH_TO_LIB_DIR "${CMAKE_INSTALL_FULL_BINDIR}" "${CMAKE_INSTALL_FULL_LIBDIR}")
-set(CMAKE_INSTALL_RPATH "${NJOY_RPATH_PREFIX}/${RPATH_TO_LIB_DIR}")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE) # Ensures a target's link interface RPATHs are used
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Feature Summary Setup for NJOY Options
 add_feature_info("Strict Warnings As Errors" NJOY_STRICT "Compile time warnings are converted to errors.")
@@ -225,7 +258,19 @@ set(NJOY_LIBRARY_SOURCES
 
 # Add NJOY library. Type (SHARED/STATIC) is controlled by BUILD_SHARED_LIBS.
 add_library(${CMAKE_PROJECT_NAME} ${NJOY_LIBRARY_SOURCES})
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES Fortran_MODULE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}")
+set_target_properties(${CMAKE_PROJECT_NAME} 
+    PROPERTIES 
+    Fortran_MODULE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}"
+    )
+
+# Set RPATH for the library
+if(NJOY_LIBRARY_RPATH)
+    set_target_properties(${CMAKE_PROJECT_NAME}
+        PROPERTIES
+        INSTALL_RPATH "${NJOY_LIBRARY_RPATH}"
+        )
+endif()
+
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_Fortran_MODULE_DIRECTORY}> # For build tree consumption
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME_LOWER}> # For installed consumption
@@ -234,9 +279,23 @@ njoy_apply_build_options(${CMAKE_PROJECT_NAME})
 
 if(NOT NJOY_IS_SUBPROJECT)
     add_executable(${CMAKE_PROJECT_NAME}_executable src/main.f90)
-    set_target_properties(${CMAKE_PROJECT_NAME}_executable PROPERTIES OUTPUT_NAME ${CMAKE_PROJECT_NAME_LOWER})
+    set_target_properties(${CMAKE_PROJECT_NAME}_executable
+        PROPERTIES 
+        OUTPUT_NAME ${CMAKE_PROJECT_NAME_LOWER}
+        )
+
+    # Set RPATH for the executable
+    if(NJOY_BINARY_RPATH)
+        set_target_properties(${CMAKE_PROJECT_NAME}_executable
+            PROPERTIES
+            INSTALL_RPATH "${NJOY_BINARY_RPATH}"
+            )
+    endif()
     target_link_libraries(${CMAKE_PROJECT_NAME}_executable PRIVATE ${CMAKE_PROJECT_NAME})
     njoy_apply_build_options(${CMAKE_PROJECT_NAME}_executable)
+
+    # Generate and install the Python script for the executable
+    generate_and_install_python_script(${CMAKE_PROJECT_NAME_LOWER})
 
     if(NJOY_LINK_EXECUTABLE_STATICALLY)
         if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
