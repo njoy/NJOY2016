@@ -1,0 +1,36 @@
+[build-system]
+requires = ["scikit-build-core", "setuptools_scm"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "njoy"
+authors = [
+    {name = "The NJOY Development Team", email = "njoy@lanl.gov"},
+]
+description = "NJOY is a modular code that processes ENDF nuclear data into libraries for applications, with independent modules communicating via files."
+dynamic = ["version"]
+requires-python = ">=3.8"
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD 3-Clause License",
+    "Natural Language :: English",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Fortran",
+    "Programming Language :: Python :: 3",
+]
+[project.urls]
+Homepage = "https://www.njoy21.io/NJOY2016/"
+Documentation = "https://www.njoy21.io/NJOY2016/"
+Repository = "https://github.com/njoy/NJOY2016"
+Issues = "https://github.com/njoy/NJOY2016/issues"
+
+# Scikit-Build Configuration
+[tool.scikit-build]
+build.verbose = true
+logging.level = "INFO"
+wheel.install-dir = "njoy"
