@@ -176,54 +176,6 @@ file(RELATIVE_PATH RPATH_TO_LIB_DIR "${CMAKE_INSTALL_FULL_BINDIR}" "${CMAKE_INST
 set(CMAKE_INSTALL_RPATH "${NJOY_RPATH_PREFIX}/${RPATH_TO_LIB_DIR}")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE) # Ensures a target's link interface RPATHs are used
 
-
-# Git Information
-find_package(Git QUIET)
-set_package_properties(Git PROPERTIES
-    TYPE OPTIONAL
-    PURPOSE "Provides version information for the build"
-    DESCRIPTION "Git command-line tools"
-)
-
-if(NOT GIT_FOUND OR NOT GIT_EXECUTABLE)
-    set(NJOY_GIT_BRANCH "UNKNOWN_BRANCH_GIT_NOT_FOUND")
-    set(NJOY_GIT_HASH "UNKNOWN_HASH_GIT_NOT_FOUND")
-else()
-    set(NJOY_GIT_WORKING_DIR "${CMAKE_SOURCE_DIR}") # Top-level source dir
-    if(NOT IS_DIRECTORY "${NJOY_GIT_WORKING_DIR}/.git" AND NOT EXISTS "${NJOY_GIT_WORKING_DIR}/.git")
-        message(WARNING "The Git working directory ('${NJOY_GIT_WORKING_DIR}') does not appear to be a Git repository. Git information will be unavailable.")
-        set(NJOY_GIT_BRANCH "UNKNOWN_BRANCH_NO_REPO")
-        set(NJOY_GIT_HASH "UNKNOWN_HASH_NO_REPO")
-    else()
-        execute_process(
-            COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-            WORKING_DIRECTORY "${NJOY_GIT_WORKING_DIR}"
-            OUTPUT_VARIABLE _git_branch_output ERROR_VARIABLE _git_error RESULT_VARIABLE _git_result
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-        if(NOT _git_result EQUAL 0)
-            message(WARNING "Git command to determine branch failed in '${NJOY_GIT_WORKING_DIR}'. Error: ${_git_error}")
-            set(NJOY_GIT_BRANCH "UNKNOWN_BRANCH")
-        else()
-            set(NJOY_GIT_BRANCH "${_git_branch_output}")
-        endif()
-
-        execute_process(
-            COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
-            WORKING_DIRECTORY "${NJOY_GIT_WORKING_DIR}"
-            OUTPUT_VARIABLE _git_hash_output ERROR_VARIABLE _git_error RESULT_VARIABLE _git_result
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-        if(NOT _git_result EQUAL 0)
-            message(WARNING "Git command to determine hash failed in '${NJOY_GIT_WORKING_DIR}'. Error: ${_git_error}")
-            set(NJOY_GIT_HASH "UNKNOWN_HASH")
-        else()
-            set(NJOY_GIT_HASH "${_git_hash_output}")
-        endif()
-    endif()
-endif()
-add_feature_info("Git Versioning" GIT_FOUND "Git executable for version information. Branch: ${NJOY_GIT_BRANCH}, Hash: ${NJOY_GIT_HASH}")
-
 # Feature Summary Setup for NJOY Options
 add_feature_info("Strict Warnings As Errors" NJOY_STRICT "Compile time warnings are converted to errors.")
 add_feature_info("Test Coverage (Debug)" NJOY_COVERAGE "Enable binary instrumentation for test coverage.")
@@ -252,8 +204,6 @@ message(STATUS "  Installation Prefix: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "    Install Binaries to: ${CMAKE_INSTALL_FULL_BINDIR}")
 message(STATUS "    Install Libraries to: ${CMAKE_INSTALL_FULL_LIBDIR}")
 message(STATUS "    Install Modules/Includes to: ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${CMAKE_PROJECT_NAME_LOWER}")
-message(STATUS "  Git Branch: ${NJOY_GIT_BRANCH}")
-message(STATUS "  Git Commit Hash: ${NJOY_GIT_HASH}")
 message(STATUS "  Fortran Compiler: ${CMAKE_Fortran_COMPILER_ID} ${CMAKE_Fortran_COMPILER_VERSION}")
 message(STATUS "  Build types: ${CMAKE_CONFIGURATION_TYPES}")
 message(STATUS "  NJOY Library Type: ${NJOY_LIBRARY_TYPE_MESSAGE}")
