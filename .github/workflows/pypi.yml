@@ -1,0 +1,69 @@
+name: Publish wheels to PyPI
+
+on:
+  # allows running workflows manually
+  workflow_dispatch:
+
+  release:
+    types: [published]
+
+jobs:
+  main:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: manylinux_x86_64
+          - os: macos-13
+            arch: macosx_x86_64
+          - os: macos-14
+            arch: macosx_arm64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.23.0
+        env:
+          CIBW_BUILD: "cp*-${{ matrix.arch }}"
+          CIBW_ARCHS_LINUX: "x86_64"
+          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_2_34_x86_64
+          CIBW_ARCHS_MACOS: "native"
+          CIBW_ENVIRONMENT_MACOS: >
+            MACOSX_DEPLOYMENT_TARGET=${{ matrix.os == 'macos-14' && '14.0' || '13.0' }}
+            DYLD_LIBRARY_PATH=/usr/local/opt/gcc/lib/gcc/current/:$DYLD_LIBRARY_PATH
+            FC=gfortran-14
+          CIBW_BUILD_FRONTEND: "build"
+        with:
+          package-dir: .
+          output-dir: wheelhouse
+          config-file: "{package}/pyproject.toml"
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: vmecpp-wheels-${{ matrix.os }}
+          path: ./wheelhouse/*.whl
+
+  publish:
+    name: Publish wheels to PyPI
+    if: github.event_name == 'release'
+    needs: main
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: wheelhouse
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
