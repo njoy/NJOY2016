@@ -694,7 +694,7 @@ contains
             lspin(i,j,ier)=0
             chspin(i,j,ier)=0
             backgr(i,j,ier)=0
-            backgrdata(i,igroup,ier,:)=0
+            backgrdata(i,j,ier,:)=0
          enddo
       enddo
       pari=1
