@@ -202,6 +202,13 @@ contains
    !    mtname  description of section to be processed
    !          repeat for all reactions desired
    !          mfd=0/ terminates this temperature/material.
+   ! card9a     Extended residual format (mfd = -1 only)
+   !    file    The file (MF) to extract data from
+   !    section The section (MT) to extract data from
+   !    zaid    The ZZZAAA value of the residual
+   !    m       The metastable (file = 3, 6) or excited level (file = 9, 10)
+   !             number
+   !
    ! card10
    !    matd    next mat number to be processed
    !            matd=0/ terminates groupr run.
@@ -313,6 +320,9 @@ contains
    !                     subsection from file 10
    !    40000000       fission product production (mtd=18 only)
    !                     subsection from file 10
+   !     -1            Use extended format (card9a) from the following
+   !                     line, ignoring the rest of card9. Useful when
+   !                     m > 9.
    !
    !     mtd          meaning
    !     ---          -------
@@ -343,11 +353,12 @@ contains
    use util   ! provides openz,timer,repoz,skiprz,error,mess,closz
    ! internals
    integer::nwscr,nb,nw,itend,nwds,i,itemp,nz
-   integer::ngnp1,nggp1,np,loc,ngi,mtdp,iauto,izam,j,ibase
+   integer::ngnp1,nggp1,np,loc,ngi,mtdp,iauto,iza,izam,j,ibase
    integer::iaddmt,iglo,nq,ig1,ig,nll,ig2lo,it,iz,il,igzero
    integer::naed,ng2,nl,idis,lim,nlg,ng2g,mfdn,jzam
    integer::itmp
    real(kr)::time,za,tempin,eps,diff,ee,first,en
+   real(kr)::fzam
    real(kr)::enext,elo,ehi,yld,test
    real(kr),dimension(:,:),allocatable::flux,sig
    character(4)::mtname(15)
@@ -602,6 +613,7 @@ contains
    lfs=0
    isom=0
    izam=0
+   fzam=0.0_kr
    if (mtd+mtdp.lt.0) go to 400
    if (iauto.eq.0) go to 365
    call nextr(iauto,matd,mfd,mtdp,scr)
@@ -610,7 +622,7 @@ contains
    mtdp=-1000
    strng=' '
    read(nsysi,*) mfd,mtdp,strng
-   if (mfd.lt.0.or.mfd.eq.1.or.mfd.eq.2.or.mfd.eq.4) go to 381
+   if (mfd.lt.-1.or.mfd.eq.1.or.mfd.eq.2.or.mfd.eq.4) go to 381
    if (mfd.eq.7.or.mfd.eq.9.or.mfd.eq.11) go to 381
    if (mfd.eq.14.or.mfd.eq.15) go to 381
    if (mfd.gt.18.and.mfd.lt.21) go to 381
@@ -619,6 +631,7 @@ contains
    if (mfd.ge.12.and.mfd.le.18.and.igg.eq.0)&
      call error('groupr','photons not allowed with igg=0.',' ')
    if (mfd.eq.0) go to 590
+   if (mfd.eq.-1) go to 383
    if (mtdp.eq.-1000) go to 382
    read(strng,'(15a4)') (mtname(i),i=1,15)
    go to 390
@@ -633,6 +646,29 @@ contains
    write(strng,'(''auto finds no reactions for mf='',i3)') mfd
    call mess('groupr',strng,' ')
    go to 365
+  383 continue
+   ! Read card9a format and down-convert
+   read(nsysi,*) mfd, mtdp, iza, lfs
+   if (mtdp.ge.0) mtd=mtdp
+   isom=lfs
+   select case(mfd)
+   case(3)
+      mfd=10000000
+   case(6)
+      mfd=20000000
+   case(9)
+      mfd=30000000
+   case(10)
+      mfd=40000000
+   case default
+      write(strng,'(''illegal file ='',i3)') mfd
+      call error('groupr',strng,' ')
+   end select
+   mfd = mfd + iza*10
+   izam = iza*1000 + lfs
+   izar = iza
+   fzam = real(iza, kind=kr) + real(lfs, kind=kr) / 1000.0_kr
+   go to 400
   390 continue
    if (mtdp.ge.0) mtd=mtdp
    ! -- if auto processing, already have level number (lfs) and isomer
@@ -832,6 +868,10 @@ contains
          mth=mtd
          scr(1)=za
          scr(2)=izam
+         if (fzam /= 0) then
+            ! Write extended format ZZZAAA.SSS format.
+            scr(2) = fzam
+         end if
          scr(3)=nl
          scr(4)=nz
          scr(5)=lrflag
