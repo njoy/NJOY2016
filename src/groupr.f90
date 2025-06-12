@@ -353,7 +353,7 @@ contains
    use util   ! provides openz,timer,repoz,skiprz,error,mess,closz
    ! internals
    integer::nwscr,nb,nw,itend,nwds,i,itemp,nz
-   integer::ngnp1,nggp1,np,loc,ngi,mtdp,iauto,iza,izam,j,ibase
+   integer::ngnp1,nggp1,np,loc,ngi,mtdp,iauto,izam,j,ibase
    integer::iaddmt,iglo,nq,ig1,ig,nll,ig2lo,it,iz,il,igzero
    integer::naed,ng2,nl,idis,lim,nlg,ng2g,mfdn,jzam
    integer::itmp
@@ -373,6 +373,7 @@ contains
    real(kr),dimension(:,:,:),allocatable::prod
    real(kr),parameter::small=1.e-6_kr
    real(kr),parameter::zero=0
+   logical::need_name
 
    !--initialize
    nwscr=10000
@@ -609,6 +610,7 @@ contains
    mtd=1
    mtdp=1
    iauto=0
+   need_name=.false.
   360 continue
    lfs=0
    isom=0
@@ -640,6 +642,7 @@ contains
    call error('groupr',strng,' ')
   382 continue
    iauto=1
+   need_name=.true.
    mtdp=0
    call nextr(iauto,matd,mfd,mtdp,scr)
    if (mtdp.ne.0) go to 390
@@ -648,7 +651,7 @@ contains
    go to 365
   383 continue
    ! Read card9a format and down-convert
-   read(nsysi,*) mfd, mtdp, iza, lfs
+   read(nsysi,*) mfd, mtdp, izar, lfs
    if (mtdp.ge.0) mtd=mtdp
    isom=lfs
    select case(mfd)
@@ -664,10 +667,10 @@ contains
       write(strng,'(''illegal file ='',i3)') mfd
       call error('groupr',strng,' ')
    end select
-   mfd = mfd + iza*10
-   izam = iza*1000 + lfs
-   izar = iza
-   fzam = real(iza, kind=kr) + real(lfs, kind=kr) / 1000.0_kr
+   mfd = mfd + izar*10
+   izam = izar*1000 + lfs
+   fzam = real(izar, kind=kr) + real(lfs, kind=kr) / 1000.0_kr
+   need_name=.true.
    go to 400
   390 continue
    if (mtdp.ge.0) mtd=mtdp
@@ -710,7 +713,7 @@ contains
    if (mtdp.lt.0) mtd=mtd+1
    if (iauto.eq.0.and.(mfd.eq.13.or.mfd.eq.16)) call mfchk(mfd,mtd)
    if (iauto.eq.0.and.mfd.ge.21.and.mfd.le.26) call mfchk2(mfd,mtd)
-   if (iauto.eq.1) call namer(izap,izam,mfd,mtd,mtname)
+   if (need_name) call namer(izap,izar,lfs,mfd,mtd,mtname)
    if (iaddmt.le.0) go to 490
   410 continue
    call contio(ngout1,0,0,scr,nb,nw)
@@ -837,19 +840,19 @@ contains
             jzam=izam
             if (mfdn.eq.1) then
                write(nsyso,'(&
-                 &'' for mf3 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf3 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             else if (mfdn.eq.2) then
                write(nsyso,'(&
-                 &'' for mf3*mf6 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf3*mf6 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             else if (mfdn.eq.3) then
                write(nsyso,'(&
-                 &'' for mf3*mf9 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf3*mf9 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             else if (mfdn.eq.4) then
                write(nsyso,'(&
-                 &'' for mf10 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf10 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             endif
          endif
@@ -1311,14 +1314,14 @@ contains
    return
    end subroutine nextr
 
-   subroutine namer(izad,izam,mfd,mtd,mtname)
+   subroutine namer(izad,izar,lfs,mfd,mtd,mtname)
    !-------------------------------------------------------------------
    ! Generates standard names for ENDF reactions in 4 char. words.
    ! The letter 'h' is used for He-3.
    !-------------------------------------------------------------------
    use endf ! provides iverf
    ! externals
-   integer::izad,izam,mfd,mtd
+   integer::izad,izar,lfs,mfd,mtd
    character(4)::mtname(15)
    ! internals
    integer::i,j,izaa,imm
@@ -1326,7 +1329,7 @@ contains
    character(1)::proj
    character(7)::reac
    character(8)::part
-   character(8)::azam
+   character(10)::azam
    integer,dimension(7),parameter::ip=(/&
      0,1,1001,1002,1003,2003,2004/)
    character(1),dimension(7),parameter::np=(/&
@@ -1481,19 +1484,16 @@ contains
    if (mfd.eq.3) then
       dummy='('//proj//','//reac//')-cross-section.'
    else if (mfd.ge.10000000) then
-      izaa=izam/10
-      imm=isom
-      if (imm.eq.0) then
-         write(azam,'(i6)') izaa
-         dummy='('//proj//','//reac//')-'//azam(1:6)//'-production.'
-      else if (imm.lt.10) then
-         write(azam,'(i6,''m'',i1)') izaa,imm
-         dummy='('//proj//','//reac//')-'//azam//'-production.'
+      if (lfs.eq.0) then
+         write(azam,'(i0)') izar
       else
-         izaa=izaa/10
-         write(azam,'(i6,''m'',i2)') izaa,imm
-         dummy='('//proj//','//reac//')-'//azam//'-production.'
-      endif
+         if (mfd.lt.30000000) then
+            write(azam,'(i0,"m",i0)') izar, lfs
+         else
+            write(azam,'(i0,"e",i0)') izar, lfs
+         end if
+      end if
+      dummy='('//proj//','//reac//')-'//trim(azam)//'-production.'
    else
       part='?'
       do i=1,npart
