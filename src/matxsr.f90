@@ -2214,12 +2214,12 @@ contains
    go to 145
   135 do ik=1,ng2
       jg2=noutg-ig2lo-ik+2
-      a(icdat-1+jg2)=b(irinp+lz+ik-1)
+      a(icdat-1+jg2)=b(irinp+lz+nz*(ik-1)+iz-1)
    enddo
    go to 240
   140 jconst=ig
    jg1=ning+1-ig
-   a(icdat-1+noutg+jg1)=b(irinp+lz+1)
+   a(icdat-1+noutg+jg1)=b(irinp+lz+nz+iz-1)
    go to 240
 
    !--store matrix sub-blocks
@@ -2359,10 +2359,10 @@ contains
    nwd=6-nwh
    if (nwd.le.0) go to 120
    if (nx.ne.0) write(hfmt,&
-     &'(''('',i2,''a4,'',i2,''x,1p'',i1,''e11.0)'')')&
+     &'(''('',i2,''a4,'',i2,''x,'',i1,''e11.0)'')')&
      ntw,nx,nwd
    if (nx.eq.0) write(hfmt,&
-     '(''('',i2,''a4,'',''1p'',i1,''e11.0)'')')&
+     &'(''('',i2,''a4,'',i1,''e11.0)'')')&
      ntw,nwd
    read(nin,hfmt) (tz(i),i=1,ntw),(a(i+nw1+ntw),i=1,nwd)
    do i=1,ntw
