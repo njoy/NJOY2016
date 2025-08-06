@@ -423,7 +423,7 @@ contains
    isym=0
    if (ncold.ne.0) isym=1
    if (isabt.eq.1) isym=isym+2
-   
+
    ! Based on endout, to write the actual TSL data, the max number of entries
    ! needed in scr is either 8+2*nalpha, or 8+2*nedge. However, we have no way
    ! of knowing how many comment lines were added to the leaper input. The
@@ -3080,7 +3080,7 @@ contains
    scr(6)=6
    call contio(0,nout,nprnt,scr(1),nb,nw)
    scr(1)=1
-   scr(2)=0
+   scr(2)=sigfig(therm*beta(nbeta),7,0)
    scr(3)=0
    scr(4)=0
    scr(5)=12
