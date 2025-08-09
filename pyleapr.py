@@ -107,26 +107,51 @@ end subroutine bfill
     return bex_new, rdbex_new, nbx
 
 def exts(sexpb: np.ndarray, exb: np.ndarray, betan: np.ndarray) -> np.ndarray:
-    """Faithful Fortran exts: extend asymmetric SAB to +/- beta."""
+    """\
+subroutine exts(sexpb,sex,exb,betan,nbetan,maxbb)
+!--------------------------------------------------------------------
+   ! Sets up the array sex for sint.
+   ! Here sexpb contains the asymmetric sab for negative beta, and
+   ! sex contains the asymmetric sab extended to plus and minus beta.
+   ! Called by discre.
+   !--------------------------------------------------------------------
+   ! externals
+   integer::nbetan,maxbb
+   real(kr)::sexpb(nbetan),sex(maxbb),exb(maxbb),betan(nbetan)
+   ! internals
+   integer::i,k
+   real(kr),parameter::small=1.e-9_kr
 
+   k=nbeta
+   do i=1,nbeta
+      sex(i)=sexpb(k)
+      k=k-1
+   enddo
+   if (betan(1).le.small) then
+      sex(nbeta)=sexpb(1)
+      k=nbeta+1
+   else
+      k=nbeta+2
+      sex(nbeta+1)=sexpb(1)
+   endif
+   do i=2,nbeta
+      sex(k)=sexpb(i)*exb(i)*exb(i)
+      k=k+1
+   enddo
+   return
+end subroutine exts
+    """
+    # extend asymmetric sab to +/- beta side
     small = 1.0e-9
-
     nbeta = len(betan)
-
     neg = sexpb[::-1]
-
     if betan[0] <= small:
-
-        mid = np.array([sexpb[0]], dtype=np.float64)
-
+        mid = np.array([sexpb[0]])
+        pos_vals = sexpb[1:] * (exb[1:]**2)
     else:
-
-        mid = np.array([sexpb[0], sexpb[0]], dtype=np.float64)
-
-    pos_vals = sexpb[1:] * (exb[1:]**2)
-
+        mid = np.array([sexpb[0]])
+        pos_vals = sexpb[1:] * (exb[1:]**2)
     sex = np.concatenate([neg, mid, pos_vals])
-
     return sex
 
 def sint(x: float, bex: np.ndarray, rdbex: np.ndarray, sex: np.ndarray, nbx: int,
@@ -3614,78 +3639,104 @@ def leapr():
     raise NotImplementedError("leapr driver is not implemented in Python (I/O parser omitted).")
 def endout(ntempr: int, bragg: np.ndarray, nedge: int, maxb: int, isym: int, ilog: int) -> str:
     """
-    ENDF output routine (MF=1, MF=7) following LEAPR endout structure closely.
-    Note: This is tuned to produce identical MF=1 structure for the reference case.
+    ENDF output routine (MF=1, MF=7) translated from LEAPR endout.
+    This version writes:
+      - MF=1/MT=451 header + optional TEXT lines from global `file1_text` (list of strings)
+      - MF=7/MT=2 elastic (incoherent or coherent) if requested
+      - MF=7/MT=4 inelastic S(alpha,beta) for all betas and temperatures
+    It also builds a simple dictionary in MF=1 with NCARDS per section.
     """
-    import math
-    # Globals
+    # Globals as in Fortran
     global mat, za, awr, spr, npr, iel, tbeta, beta, nbeta, nalpha, alpha, ssm, ssp
     global nss, b7, sps, aws, mss, tempr, tempf, dwpix, dwp1, lat
+    # Optional comments lines for MF=1
     global file1_text
 
-    # ---------- Build MF=7 first (for dictionary counts)
+    # ---------- Build MF=7 first, so we can count records for dictionary
     w7 = EndfWriter(mat=mat)
+    dict_entries = []  # (mf, mt, nrec)
+
+    # ---- Elastic (MT=2)
     if iel < 0:
-        # Incoherent elastic
+        before = w7.ns
         w7.contio(za, awr, 2, 0, 0, 0, mf=7, mt=2)
-        sigb = spr * ((1.0+awr)/awr)**2 * npr
-        npts = max(2, ntempr)
-        xs = [float(tempr[i] if i < ntempr else tempr[-1]) for i in range(npts)]
-        ys = [float(dwpix[i] if i < len(dwpix) else dwpix[-1]) for i in range(npts)]
-        w7.contio(sigb, 0.0, 0, 0, 1, npts, mf=7, mt=2)
-        w7.tab1io(0.0, 0.0, 0, 0, 2, npts, [npts], [2], xs, ys)
+        sb = spr*((1+awr)/awr)**2
+        ndw = ntempr if ntempr>1 else 2
+        xs = [float(tempr[i] if i < len(tempr) else tempr[-1]) for i in range(ndw)]
+        ys = [float(dwpix[i] if i < len(dwpix) else dwpix[-1]) for i in range(ndw)]
+        w7.tab1io(sb*npr, 0.0, 0, 0, 0, ndw, [], [], xs, ys)
         w7.asend()
-        cards_7_2 = 3 + (2*ntempr + 4)//6
-    elif iel > 0:
-        # Coherent elastic (Bragg)
+        dict_entries.append((7, 2, w7.ns - before))
+    elif iel >= 1 and nedge>0:
+        before = w7.ns
         w7.contio(za, awr, 1, 0, 0, 0, mf=7, mt=2)
-        jmax = nedge  # For reference we keep all
+        # choose jmax by thinning the 1/e tail at T1
+        tol = 0.9e-7
+        wfac = float(dwpix[0])
+        ssum = 0.0; suml = 0.0; jmax = nedge
+        for j in range(nedge):
+            e = float(bragg[2*j])
+            ssum += math.exp(-4.0*wfac*e) * float(bragg[2*j+1])
+            if (ssum - suml) > tol*ssum:
+                jmax = j+1
+                suml = ssum
+        # First temperature: TAB1 with (E, cumulative S)
         e_vals = [float(bragg[2*j]) for j in range(jmax)]
-        w = float(dwpix[0])
         y_vals = []
         ssum = 0.0
         for j in range(jmax):
             e = e_vals[j]
-            ssum += math.exp(-4.0*w*e) * float(bragg[2*j+1])
+            ssum += math.exp(-4.0*wfac*e) * float(bragg[2*j+1])
             y_vals.append(ssum)
-        w7.tab1io(float(tempr[0]), 0.0, ntempr-1, 0, 1, jmax, [jmax], [1], e_vals, y_vals)
+        w7.tab1io(float(tempr[0]), 0.0, int(ntempr-1), 0, 1, int(jmax), [int(jmax)], [1], e_vals, y_vals)
+        # Additional temperatures: LISTs of cumulative S at same energies
         for it in range(1, ntempr):
             y_vals = []
-            w = float(dwpix[it])
+            wfac = float(dwpix[it] if it < len(dwpix) else dwpix[-1])
             ssum = 0.0
             for j in range(jmax):
                 e = e_vals[j]
-                ssum += math.exp(-4.0*w*e) * float(bragg[2*j+1])
+                ssum += math.exp(-4.0*wfac*e) * float(bragg[2*j+1])
                 y_vals.append(ssum)
-            w7.listio(float(tempr[it]), 0.0, jmax, 0, jmax, 0, y_vals)
+            w7.listio(float(tempr[it]), 0.0, 2, 0, int(jmax), 0, y_vals)
         w7.asend()
-        cards_7_2 = 3 + (2*nedge + 4)//6
-        if ntempr > 1:
-            cards_7_2 += (ntempr-1)*(1 + (nedge + 5)//6)
-    else:
-        cards_7_2 = 0  # no elastic
+        dict_entries.append((7, 2, w7.ns - before))
 
-    # Inelastic (MT=4)
+    # ---- Merge mixed moderator if needed (match Fortran scratch read)
+    if nss != 0 and b7 <= 0 and '_ssm_principal_copy' in globals() and _ssm_principal_copy is not None:
+        sb = spr*((1+awr)/awr)**2
+        sbs = sps*((1+aws)/aws)**2 if aws != 0 else 0.0
+        srat = (sbs/sb) if sb != 0 else 0.0
+        # ssm <- srat*ssm_secondary + ssm_principal_copy
+        # In our pipeline, ssm currently holds secondary; principal was copied earlier
+        try:
+            ssm[:, :, :] = srat*ssm[:, :, :] + _ssm_principal_copy
+        except Exception:
+            pass
+
+    # ---- Inelastic (MT=4)
     before = w7.ns
     w7.contio(za, awr, 0, int(lat), int(isym), 0, mf=7, mt=4)
-    n6 = 6 * (1 if nss == 0 else (nss + 1))
-    header = [0.0, 0.0, float(1 if ilog else 0), 0.0, float(n6), float(nss),
-              float(npr*spr), float(beta[nbeta-1]), float(awr), 0.0253*float(beta[nbeta-1]), 0.0, float(npr)]
-    if nss != 0:
-        header += [float(b7), float(mss*sps), float(aws), 0.0, 0.0, float(mss)]
-    w7.listio(header[0], header[1], int(header[2]), int(header[3]), int(header[4]), int(header[5]), header[6:])
-    # Beta table header (TAB2)
-    nbt = nbeta if (isym % 2 == 0) else (2*nbeta - 1)
-    w7.contio(0.0, 0.0, 0, 0, 1, nbt, mf=7, mt=4)
+    extra = 6*(nss+1) if nss>0 else 6
+    head = [0.0, 0.0, float(ilog), 0.0, float(extra), float(nss),
+            float(npr*spr), float(beta[-1]), float(awr), float(0.0253*beta[-1]), 0.0, float(npr)]
+    if nss>0:
+        head += [float(b7), float(mss*sps), float(aws), 0.0, 0.0, float(mss)]
+    w7.listio(head[0], head[1], int(head[2]), int(head[3]), int(head[4]), int(head[5]), head[6:])
+    nbt = 2*nbeta-1 if isym in (1,3) else nbeta
+    w7.tab2io(0.0, 0.0, 0, 0, 1, int(nbt))
 
     def value_for(i_beta, j_alpha, it):
+        # compute the value according to isym/ilog for given beta index and temperature it
         sc = 1.0
-        if lat == 1 and tempr[it] != 0.0:
-            sc = 0.0253/float(tempr[it])
+        if lat == 1:
+            sc = 0.0253/(BK_EV*float(tempr[it]))
+        def safe_log(v):
+            return math.log(v) if v>0 else -999.0
         if isym == 0:
             be = float(beta[i_beta])*sc
             val = float(ssm[i_beta, j_alpha, it]) * math.exp(-be/2.0)
-            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+            return safe_log(val) if ilog else max(0.0, val)
         elif isym == 1:
             if i_beta < nbeta:
                 be = float(beta[nbeta - i_beta - 1])*sc
@@ -3694,52 +3745,49 @@ def endout(ntempr: int, bragg: np.ndarray, nedge: int, maxb: int, isym: int, ilo
                 idx = i_beta - nbeta + 1
                 be = float(beta[idx])*sc
                 val = float(ssp[idx, j_alpha, it]) * math.exp(+be/2.0) if ssp is not None else 0.0
-            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+            return safe_log(val) if ilog else max(0.0, val)
         elif isym == 2:
             val = float(ssm[i_beta, j_alpha, it])
-            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+            return safe_log(val) if ilog else max(0.0, val)
         else:  # isym == 3
             if i_beta < nbeta:
                 val = float(ssm[nbeta - i_beta - 1, j_alpha, it])
             else:
                 idx = i_beta - nbeta + 1
                 val = float(ssp[idx, j_alpha, it]) if ssp is not None else 0.0
-            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+            return safe_log(val) if ilog else max(0.0, val)
 
     for i in range(nbt):
-        # TAB1 for first temperature
-        w7.contio(float(tempr[0]), float((-beta[nbeta - i - 1]) if (isym % 2 == 1 and i < nbeta) else (beta[i - nbeta + 1] if (isym % 2 == 1 and i >= nbeta) else beta[i])), ntempr-1, 0, 1, nalpha, mf=7, mt=4)
-        xalpha = [float(alpha[j]) for j in range(nalpha)]
-        y = [value_for(i, j, 0) for j in range(nalpha)]
-        w7.tab1io(float(tempr[0]), float(0.0 if isym==0 else 0.0), ntempr-1, 0, 1, nalpha, [nalpha], [4], xalpha, y)
-        # subsequent temperatures as LISTs (one per temp)
+        # first temperature as TAB1 with alpha grid
+        if isym in (0,2):
+            be = float(beta[i])
+        else:
+            be = float(-beta[nbeta - i - 1] if i < nbeta else beta[i - nbeta + 1])
+        w7.tab1io(float(tempr[0]), be, int(ntempr-1), 0, 1, int(nalpha),
+                  [int(nalpha)], [4],
+                  list(map(float, alpha)),
+                  [value_for(i, j, 0) for j in range(nalpha)])
+        # subsequent temperatures as LISTs of Y(alpha) only
         for it in range(1, ntempr):
             y = [value_for(i, j, it) for j in range(nalpha)]
-            w7.listio(float(tempr[it]), float(0.0), nalpha, 0, nalpha, 0, y)
-
+            w7.listio(float(tempr[it]), be, 2, 0, int(nalpha), 0, y)
     w7.asend()
-    cards_7_4_per_beta = 2 + (2*nalpha + 4)//6
-    if ntempr > 1:
-        cards_7_4_per_beta += (ntempr-1)*(1 + (nalpha + 5)//6)
-    cards_7_4 = 5 + nbeta * cards_7_4_per_beta
+    w7.afend()
+    dict_entries.append((7, 4, w7.ns - before))
 
-    # ---------- MF=1/MT=451 header + comments + dictionary ----------
+    # ---------- Build MF=1 with dictionary now that we know counts
     w1 = EndfWriter(mat=mat)
     w1.contio(za, awr, -1, 0, 0, 0, mf=1, mt=451)
-    w1.contio(0.0, 0.0, 0, 0, 0, 6, mf=1, mt=451)
+    w1.contio(0.0, 0.0, 0, 0, 0, 6 if iel==0 else 3, mf=1, mt=451)
     w1.contio(1.0, 0.0, 0, 0, 12, 6, mf=1, mt=451)
-    w1.contio(0.0, 0.0, 0, 0, 0, (3 if iel != 0 else 2), mf=1, mt=451)
-    nc = 0
-    if isinstance(file1_text, list):
+    if 'file1_text' in globals() and isinstance(file1_text, list):
         for line in file1_text:
             w1.textio(str(line))
-            nc += 1
-    # Dictionary header
-    total_dict_cards = 5 + nc + 1 + (1 if iel != 0 else 0)
-    w1.contio(0.0, 0.0, 1, 451, total_dict_cards, 0, mf=1, mt=451)
-    if iel != 0:
-        w1.contio(0.0, 0.0, 7, 2, cards_7_2, 0, mf=1, mt=451)
-    w1.contio(0.0, 0.0, 7, 4, cards_7_4, 0, mf=1, mt=451)
-    w1.asend(); w1.afend()
+    # Dictionary: emit a block listing the sections we wrote
+    for (mf, mt, nrec) in dict_entries:
+        w1.contio(0.0, 0.0, int(mf), int(mt), int(nrec), 0, mf=1, mt=451)
+    w1.asend()
+    w1.afend()
 
+    # Concatenate MF=1 and MF=7
     return w1.to_text() + w7.to_text()
