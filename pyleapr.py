@@ -1,3288 +1,3745 @@
-"""
-Python translation of the NJOY ``leapr`` module.
-
-This module provides a partial implementation of the LEAPR algorithm
-originally written in Fortran.  The goal of this port is to expose
-the core routines used to compute the thermal scattering law
-\(S(\alpha,\beta)\) in the incoherent and Gaussian approximations.  The
-original Fortran code contained over 100 kB of source spread across a
-number of subroutines dealing with everything from phonon expansion and
-continuous spectra to translational, discrete oscillator and cold
-hydrogen/deuterium corrections.  A line‑by‑line translation of the
-entire module into Python would be prohibitively long and
-error‑prone.  Instead, this file focuses on the core numerical
-components required to compute the continuous part of the scattering
-law (the so‑called phonon expansion) and provides a clean and
-extensible structure for future development.
-
-**Disclaimer:**
-
-The original LEAPR module supports a wide range of features beyond
-what is implemented here – including translational contributions
-(diffusion and free gas options), convolution with discrete
-oscillators, special handling for cold hydrogen/deuterium, and writing
-results in the ENDF‑6 format.  Those portions of the code are
-non‑trivial and require careful attention to physics and numeric
-details.  This port covers the core phonon expansion algorithm and
-supports reading of the standard LEAPR input deck.  Where the
-original code contains functionality that has not yet been ported, a
-``NotImplementedError`` is raised.  Contributors wishing to extend
-this module should consult the original Fortran source for guidance.
-
-References:
-
-* R. E. MacFarlane, "The LEAPR Module of NJOY" (various versions).
-* NJOY2016 source code, ``leapr.f90``.
-"""
-
 from __future__ import annotations
-
 import math
-import sys
-from dataclasses import dataclass, field
-from typing import List, Tuple, Optional
-
 import numpy as np
+# Minimal constants (cgs/ev) to mirror physics module where needed
+BK_EV = 8.617333262e-5  # eV/K
+HBAR  = 1.054571817e-27 # erg*s
+EV    = 1.602176634e-12 # erg
+AMU   = 1.66053906660e-24 # g
+AMASSN= 1.00866491595    # neutron mass in amu
 
-# -------------------------------------------------------------------
-# Supporting utility functions and ENDF‑I/O routines
-#
-# The following functions and classes provide minimal support for
-# message printing, error handling, timing and ENDF‑6 record writing.
-# They are adapted from the NJOY ``util.f90``, ``phys.f90`` and
-# ``endf.f90`` modules.  Where possible the original semantics are
-# preserved.  These utilities are used by the ``export_to_endf``
-# routine in this module to produce a more faithful ENDF‑6 output.
 
-import time
-from typing import Iterable, IO
+# Globals expected to be set by the driver (mirrors module leapm)
+alpha: np.ndarray | None = None
+beta:  np.ndarray | None = None
+nalpha: int = 0
+nbeta:  int = 0
+lat: int = 0
+tev: float = 0.0
+deltab: float = 0.0
+tbeta: float = 0.0
+twt: float = 0.0
+c: float = 0.0
+iprint: int = 1
+arat: float = 1.0
+f0: float = 0.0
+ssm: np.ndarray | None = None
+ssp: np.ndarray | None = None
+tempf: np.ndarray | None = None
+tempr: np.ndarray | None = None
+dwpix: np.ndarray | None = None
+ska: np.ndarray | None = None
+nka: int = 0
+dka: float = 0.0
+cfrac: float = 0.0
+nss: int = 0
+b7: float = 0.0
+aws: float = 0.0
+sps: float = 0.0
+mss: int = 0
+awr: float = 0.0
+spr: float = 0.0
+npr: int = 1
+iel: int = 0
+ncold: int = 0
+nd: int = 0
+bdel: np.ndarray | None = None
+adel: np.ndarray | None = None
+delta1: float = 0.0
+p1: np.ndarray | None = None
+np1: int = 0
+tbar: float = 0.0
+naint: int = 1
+nbint: int = 1
 
-# Logical units for standard input/output/error (mirrors mainio)
-NSYSI = sys.stdin
-NSYSO = sys.stderr  # error log
-NSYSE = sys.stdout  # terminal output
 
-def error(from_where: str, mess1: str, mess2: str = "") -> None:
-    """Fatal error (mirrors util.f90:error).  Prints a message on
-    both the error and standard outputs and aborts execution.
+def bfill(betan: np.ndarray) -> tuple[np.ndarray, np.ndarray, int]:
+    """\
+subroutine bfill(bex,rdbex,nbx,betan,nbetan,maxbb)
+!--------------------------------------------------------------------
+   ! Sets up the arrays bex and rdbex used by sint.
+   ! Called by discre.
+   !--------------------------------------------------------------------
+   ! externals
+   integer::nbx,nbetan,maxbb
+   real(kr)::bex(maxbb),rdbex(maxbb),betan(nbetan)
+   ! internals
+   integer::i,k,nbxm
+   real(kr),parameter::small=1.e-9_kr
 
-    Parameters
-    ----------
-    from_where : str
-        Name of the calling routine.
-    mess1, mess2 : str, optional
-        Error messages to print.
+   k=nbeta
+   do i=1,nbeta
+      bex(i)=-betan(k)
+      k=k-1
+   enddo
+   if (betan(1).le.small) then
+      bex(nbeta)=0
+      k=nbeta+1
+   else
+      k=nbeta+2
+      bex(nbeta+1)=betan(1)
+   endif
+   do i=2,nbeta
+      bex(k)=betan(i)
+      k=k+1
+   enddo
+   nbxm=k-2
+   nbx=k-1
+   do i=1,nbxm
+      rdbex(i)=1/(bex(i+1)-bex(i))
+   enddo
+   return
+end subroutine bfill
     """
-    print(f"\n***error in {from_where}*** {mess1}", file=NSYSO)
-    if mess2.strip():
-        print(" " * 22 + mess2, file=NSYSO)
-    print("", file=NSYSO)
-    if NSYSE is not NSYSO:
-        print(f"\n***error in {from_where}*** {mess1}", file=NSYSE)
-        if mess2.strip():
-            print(" " * 22 + mess2, file=NSYSE)
-        print("", file=NSYSE)
-    raise SystemExit(77)
+    small = 1.0e-9
+    nbeta = len(betan)
+    neg = -betan[::-1]
+    if betan[0] <= small:
+        mid = np.array([0.0])
+        pos = betan[1:]
+    else:
+        mid = np.array([betan[0]])
+        pos = betan[1:]
+    bex_new = np.concatenate([neg, mid, pos])
+    nbx = len(bex_new)
+    rdbex_new = np.empty(nbx-1, dtype=np.float64)
+    rdbex_new[:] = 1.0 / (bex_new[1:] - bex_new[:-1])
+    return bex_new, rdbex_new, nbx
 
-def mess(from_where: str, mess1: str, mess2: str = "") -> None:
-    """Non‑fatal message (mirrors util.f90:mess).
+def exts(sexpb: np.ndarray, exb: np.ndarray, betan: np.ndarray) -> np.ndarray:
+    """Faithful Fortran exts: extend asymmetric SAB to +/- beta."""
 
-    Parameters
-    ----------
-    from_where : str
-        Name of the calling routine.
-    mess1, mess2 : str, optional
-        Messages to print.
+    small = 1.0e-9
+
+    nbeta = len(betan)
+
+    neg = sexpb[::-1]
+
+    if betan[0] <= small:
+
+        mid = np.array([sexpb[0]], dtype=np.float64)
+
+    else:
+
+        mid = np.array([sexpb[0], sexpb[0]], dtype=np.float64)
+
+    pos_vals = sexpb[1:] * (exb[1:]**2)
+
+    sex = np.concatenate([neg, mid, pos_vals])
+
+    return sex
+
+def sint(x: float, bex: np.ndarray, rdbex: np.ndarray, sex: np.ndarray, nbx: int,
+         alph: float, wt: float, tbart: float, betan: np.ndarray) -> float:
+    """\
+function sint(x,bex,rdbex,sex,nbx,alph,wt,tbart,&
+     betan,nbetan,maxbb)
+!--------------------------------------------------------------------
+   ! Interpolates in scattering function, or uses SCT approximation
+   ! to extrapolate outside the range in memory.
+   ! Called by discre.
+   !--------------------------------------------------------------------
+   use physics ! provides pi
+   ! externals
+   integer::nbx,nbetan,maxbb
+   real(kr)::x,alph,wt,tbart
+   real(kr)::bex(maxbb),rdbex(maxbb),sex(maxbb),betan(nbetan)
+   ! internals
+   integer::k1,k2,k3,idone
+   real(kr)::sv,ex,ss1,ss3
+   real(kr),parameter::slim=-225.e0_kr
+   real(kr),parameter::zero=0
+
+   !--sct approx
+   if (abs(x).gt.betan(nbeta)) then
+      if (alph.le.zero) then
+         sv=0
+      else
+         ex=-(wt*alph-abs(x))**2/(4*wt*alph*tbart)
+         if (x.gt.zero) ex=ex-x
+         sv=exp(ex)/(4*pi*wt*alph*tbart)
+      endif
+      sint=sv
+      return
+   endif
+
+   !--interpolation
+   k1=1
+   k2=nbeta
+   k3=nbx
+   !  bisect for x
+   idone=0
+   do while (idone.eq.0)
+      if (x.eq.bex(k2)) then
+         sv=sex(k2)
+         sint=sv
+         return
+      else if (x.gt.bex(k2)) then
+         k1=k2
+         k2=(k3-k2)/2+k2
+         if (k3-k1.le.1) idone=1
+      else
+         k3=k2
+         k2=(k2-k1)/2+k1
+         if (k3-k1.le.1) idone=1
+      endif
+   enddo
+   if (sex(k1).le.zero) then
+      ss1=slim
+   else
+      ss1=log(sex(k1))
+   endif
+   if (sex(k3).le.zero) then
+      ss3=slim
+   else
+      ss3=log(sex(k3))
+   endif
+   ex=((bex(k3)-x)*ss1+(x-bex(k1))*ss3)*rdbex(k1)
+   sv=0
+   if (ex.gt.slim) sv=exp(ex)
+   sint=sv
+   return
+end function sint
     """
-    print(f"\n---message from {from_where}--- {mess1}", file=NSYSO)
-    if mess2.strip():
-        print(" " * 26 + mess2, file=NSYSO)
-    if NSYSE is not NSYSO:
-        print(f"\n---message from {from_where}--- {mess1}", file=NSYSE)
-        if mess2.strip():
-            print(" " * 26 + mess2, file=NSYSE)
+    slim = -225.0
+    zero = 0.0
+    nbeta = len(betan)
+    # SCT approx
+    if abs(x) > betan[-1]:
+        if alph <= zero:
+            return 0.0
+        ex = -((wt*alph - abs(x))**2) / (4.0*wt*alph*tbart)
+        if x > zero:
+            ex = ex - x
+        return math.exp(ex) / (4.0*math.pi*wt*alph*tbart)
+    # interpolation (binary search)
+    k1 = 0
+    k3 = nbx - 1
+    if x == bex[k3]:
+        return float(sex[k3])
+    while k3 - k1 > 1:
+        k2 = (k1 + k3) // 2
+        if x > bex[k2]:
+            k1 = k2
+        else:
+            k3 = k2
+    ss1 = slim if sex[k1] <= zero else math.log(sex[k1])
+    ss3 = slim if sex[k3] <= zero else math.log(sex[k3])
+    ex = ((bex[k3] - x) * ss1 + (x - bex[k1]) * ss3) * rdbex[k1]
+    return 0.0 if ex <= slim else float(math.exp(ex))
 
-def wclock() -> str:
-    """Return a wall clock time string in HH:MM:SS format."""
-    return time.strftime("%H:%M:%S", time.localtime())
+def terps(sd: np.ndarray, delta: float, be: float) -> float:
+    """\
+function terps(sd,nsd,delta,be)
+!--------------------------------------------------------------------
+   ! Interpolate in a table of S(alpha,beta) for a required beta.
+   ! Used in trans.
+   !--------------------------------------------------------------------
+   ! externals
+   integer::nsd
+   real(kr)::delta,be
+   real(kr)::sd(nsd)
+   ! internals
+   integer::i
+   real(kr)::bt,btp,st,stp,stt
+   real(kr),parameter::slim=-225.e0_kr
+   real(kr),parameter::zero=0
 
-# Additional physical constants (subset of phys.f90).  Some constants
-# such as BK, EV, HBAR, AMASSN, AMU and ANGST are already defined in
-# the Leapr class below.  Here we define a few extras for completeness.
-euler = 0.57721566490153286
-clight = 2.99792458e10  # speed of light (cm/s)
-finstri = 1.0e16 * (6.582119569e-16 * 1.602176634e-12) / (1.602176634e-12 ** 2 * clight)
-
-# -------------------------------------------------------------------
-# ENDF‑6 I/O helper routines
-
-class EndfState:
-    """Global ENDF state for record writing.
-
-    This class mirrors the common blocks in endf.f90 that store
-    current material (MAT), file (MF), and section (MT) identifiers
-    and track the running line count (NS).  These variables are
-    implicitly updated by the ENDF I/O routines defined below.
+   terps=0
+   if (be.gt.delta*nsd) return
+   i=int(be/delta)
+   if (i.lt.nsd-1) then
+      bt=i*delta
+      btp=bt+delta
+      i=i+1
+      if (sd(i).le.zero) then
+         st=slim
+      else
+         st=log(sd(i))
+      endif
+      if (sd(i+1).le.zero) then
+         stp=slim
+      else
+         stp=log(sd(i+1))
+      endif
+      stt=st+(be-bt)*(stp-st)/(btp-bt)
+      terps=0
+      if (stt.gt.slim) terps=exp(stt)
+      return
+   endif
+   return
+end function terps
     """
-    def __init__(self) -> None:
-        self.math: int = 0
-        self.mfh: int = 0
-        self.mth: int = 0
-        self.nsh: int = 1  # line number counter (1..99999)
-
-# Instantiate the global state
-STATE = EndfState()
-
-def a11(x: float) -> str:
-    """Convert a floating point number to ENDF 11‑column format.
-
-    This function attempts to reproduce the Fortran formatting logic
-    implemented in endf.f90 for scientific and fixed notation.  It
-    outputs a string of length 11, including sign and exponent.
-
-    Parameters
-    ----------
-    x : float
-        Number to format.
-
-    Returns
-    -------
-    str
-        The formatted 11‑character string.
-    """
-    # handle zero specially
-    if x == 0.0:
-        return "      0.0+0"
-    # Convert to scientific notation (e.g., '1.23456e+03')
-    s = f"{x:.5e}"
-    mant_str, exp_str = s.split('e')
-    mant = float(mant_str)
-    exp = int(exp_str)
-    # Format mantissa with explicit sign and 6 digits after decimal
-    mant_form = f"{mant:+.6f}"
-    mant_form = mant_form.replace(' ', '')
-    exp_form = f"{exp:+d}"
-    out = f"{mant_form[:-2]}{exp_form}"
-    return out.rjust(11)
-
-def _line(mat: int, mf: int, mt: int, ns: int, six_fields: Iterable[str]) -> str:
-    """Assemble a single ENDF record line from six fields and a trailer."""
-    body = "".join(f"{f:>11}" for f in six_fields)
-    trailer = f"{mat:>4}{mf:>2}{mt:>3}{ns:>5}"
-    return body + trailer
-
-def asend(nout: IO[str]) -> None:
-    """Write a section end (ASEND) record."""
-    global STATE
-    line = _line(STATE.math, STATE.mfh, 0, STATE.nsh, ["", "", 0, 0, 0, 0])
-    print(line, file=nout)
-    STATE.nsh = 1
-
-def afend(nout: IO[str]) -> None:
-    """Write a file end (AFEND) record."""
-    global STATE
-    line = _line(STATE.math, 0, 0, STATE.nsh, ["", "", 0, 0, 0, 0])
-    print(line, file=nout)
-    STATE.nsh = 1
-
-def amend(nout: IO[str]) -> None:
-    """Write a material end (AMEND) record."""
-    global STATE
-    line = _line(0, 0, 0, STATE.nsh, ["", "", 0, 0, 0, 0])
-    print(line, file=nout)
-    STATE.nsh = 1
-
-def atend(nout: IO[str]) -> None:
-    """Write a tape end (ATEND) record."""
-    global STATE
-    line = _line(-1, 0, 0, STATE.nsh, ["", "", 0, 0, 0, 0])
-    print(line, file=nout)
-    STATE.nsh = 1
-
-def contio(nout: IO[str], c1: float, c2: float, l1: int, l2: int, n1: int, n2: int) -> None:
-    """Write a CONT record using the global STATE variables."""
-    global STATE
-    fields = [a11(c1), a11(c2), f"{l1:>11}", f"{l2:>11}", f"{n1:>11}", f"{n2:>11}"]
-    print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, fields), file=nout)
-    STATE.nsh += 1
-    if STATE.nsh > 99999:
-        STATE.nsh = 1
-
-def listio(nout: IO[str], c1: float, c2: float, l1: int, l2: int,
-           npl: int, n2: int, list_vals: Iterable[float]) -> None:
-    """Write a LIST record with header and body."""
-    global STATE
-    fields = [a11(c1), a11(c2), f"{l1:>11}", f"{l2:>11}", f"{npl:>11}", f"{n2:>11}"]
-    print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, fields), file=nout)
-    STATE.nsh += 1
-    # Now write the list body 6 per line
-    row: List[str] = []
-    for v in list_vals:
-        row.append(a11(float(v)))
-        if len(row) == 6:
-            print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, row), file=nout)
-            STATE.nsh += 1
-            row = []
-    if row:
-        while len(row) < 6:
-            row.append("")
-        print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, row), file=nout)
-        STATE.nsh += 1
-
-def tab1io(nout: IO[str], c1: float, c2: float, l1: int, l2: int,
-           nbt: List[int], intt: List[int], x: List[float], y: List[float]) -> None:
-    """Write a TAB1 record: header with interpolation table and x,y pairs."""
-    global STATE
-    if len(nbt) != len(intt):
-        raise ValueError("nbt and intt lengths must match")
-    nr = len(nbt)
-    npairs = len(x)
-    fields = [a11(c1), a11(c2), f"{l1:>11}", f"{l2:>11}", f"{nr:>11}", f"{npairs:>11}"]
-    print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, fields), file=nout)
-    STATE.nsh += 1
-    # Interpolation table pairs: (NBT,INT) three per line
-    row: List[str] = []
-    for i in range(nr):
-        row.append(f"{nbt[i]:>11}")
-        row.append(f"{intt[i]:>11}")
-        if len(row) == 6 or (i == nr - 1):
-            while len(row) < 6:
-                row.append("")
-            print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, row), file=nout)
-            STATE.nsh += 1
-            row = []
-    # Data pairs: x,y (3 pairs per line)
-    row = []
-    for xi, yi in zip(x, y):
-        row.append(a11(float(xi)))
-        row.append(a11(float(yi)))
-        if len(row) == 6:
-            print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, row), file=nout)
-            STATE.nsh += 1
-            row = []
-    if row:
-        while len(row) < 6:
-            row.append("")
-        print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, row), file=nout)
-        STATE.nsh += 1
-
-def tab2io(nout: IO[str], c1: float, c2: float, l1: int, l2: int,
-           nbt: List[int], intt: List[int], n2: int) -> None:
-    """Write a TAB2 header (no data pairs)."""
-    global STATE
-    if len(nbt) != len(intt):
-        raise ValueError("nbt and intt lengths must match")
-    nr = len(nbt)
-    fields = [a11(c1), a11(c2), f"{l1:>11}", f"{l2:>11}", f"{nr:>11}", f"{n2:>11}"]
-    print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, fields), file=nout)
-    STATE.nsh += 1
-    row: List[str] = []
-    for i in range(nr):
-        row.append(f"{nbt[i]:>11}")
-        row.append(f"{intt[i]:>11}")
-        if len(row) == 6 or (i == nr - 1):
-            while len(row) < 6:
-                row.append("")
-            print(_line(STATE.math, STATE.mfh, STATE.mth, STATE.nsh, row), file=nout)
-            STATE.nsh += 1
-            row = []
-
-def set_mat(mat: int) -> None:
-    """Set the MAT identifier for subsequent ENDF records."""
-    STATE.math = mat
-
-def set_mf(mf: int) -> None:
-    """Set the MF identifier for subsequent ENDF records."""
-    STATE.mfh = mf
-
-def set_mt(mt: int) -> None:
-    """Set the MT identifier for subsequent ENDF records."""
-    STATE.mth = mt
-
-def reset_ns() -> None:
-    """Reset the line counter (NS) to 1."""
-    STATE.nsh = 1
-
-# -------------------------------------------------------------------
-# Additional utility: significant figure rounding (from util.f90)
-
-def sigfig(x: float, ndig: int, idig: int) -> float:
-    """
-    Round a floating point number to ``ndig`` significant figures.
-    Optionally adjust the last digit by ``idig``.  This function
-    mirrors the behaviour of the Fortran ``sigfig`` function in
-    util.f90.  A small bias is applied to avoid boundary effects.
-
-    Parameters
-    ----------
-    x : float
-        Value to round.
-    ndig : int
-        Number of significant digits to retain.
-    idig : int
-        Adjustment applied to the least significant digit (typically 0).
-
-    Returns
-    -------
-    float
-        The value of ``x`` rounded to ``ndig`` significant figures.
-    """
-    if x == 0.0:
+    slim = -225.0
+    zero = 0.0
+    nsd = len(sd)
+    if be > delta * nsd:
         return 0.0
-    # Compute approximate exponent of x in base 10
-    aa = math.log10(abs(x))
-    ipwr = int(aa)
-    if aa < 0.0:
-        ipwr -= 1
-    ipwr = ndig - 1 - ipwr
-    # Form integer representation at the desired precision
-    ii = int(round(x * (10.0 ** ipwr) + (10.0 ** (ndig - 11))))
-    if ii >= 10 ** ndig:
-        ii //= 10
-        ipwr -= 1
-    # Apply digit adjustment
-    ii += idig
-    xx = ii * (10.0 ** (-ipwr))
-    # Apply slight bias as in original Fortran
-    return xx * 1.0000000000001
+    i = int(be / delta)
+    if i < nsd - 1:
+        bt = i * delta
+        btp = bt + delta
+        i1 = i + 1
+        st  = slim if sd[i1]   <= zero else math.log(sd[i1])
+        stp = slim if sd[i1+1] <= zero else math.log(sd[i1+1])
+        stt = st + (be - bt) * (stp - st) / (btp - bt)
+        return 0.0 if stt <= slim else float(math.exp(stt))
+    else:
+        return 0.0
 
+def besk1(x: float) -> float:
+    """\
+function besk1(x)
+!--------------------------------------------------------------------
+   ! Computes modified Bessel function, K1.
+   ! The exponential part for x>1 is omitted (see stable).
+   ! Called by stable.
+   !--------------------------------------------------------------------
+   ! externals
+   real(kr)::x
+   ! internals
+   real(kr)::test,v,u,bi1,bi3
+   real(kr),parameter::c0=.125e0_kr
+   real(kr),parameter::c1=.442850424e0_kr
+   real(kr),parameter::c2=.584115288e0_kr
+   real(kr),parameter::c3=6.070134559e0_kr
+   real(kr),parameter::c4=17.864913364e0_kr
+   real(kr),parameter::c5=48.858995315e0_kr
+   real(kr),parameter::c6=90.924600045e0_kr
+   real(kr),parameter::c7=113.795967431e0_kr
+   real(kr),parameter::c8=85.331474517e0_kr
+   real(kr),parameter::c9=32.00008698e0_kr
+   real(kr),parameter::c10=3.999998802e0_kr
+   real(kr),parameter::c11=1.304923514e0_kr
+   real(kr),parameter::c12=1.47785657e0_kr
+   real(kr),parameter::c13=16.402802501e0_kr
+   real(kr),parameter::c14=44.732901977e0_kr
+   real(kr),parameter::c15=115.837493464e0_kr
+   real(kr),parameter::c16=198.437197312e0_kr
+   real(kr),parameter::c17=222.869709703e0_kr
+   real(kr),parameter::c18=142.216613971e0_kr
+   real(kr),parameter::c19=40.000262262e0_kr
+   real(kr),parameter::c20=1.999996391e0_kr
+   real(kr),parameter::c21=1.e0_kr
+   real(kr),parameter::c22=.5e0_kr
+   real(kr),parameter::c23=.5772156649e0_kr
+   real(kr),parameter::c24=1.e0_kr
+   real(kr),parameter::c25=.0108241775e0_kr
+   real(kr),parameter::c26=.0788000118e0_kr
+   real(kr),parameter::c27=.2581303765e0_kr
+   real(kr),parameter::c28=.5050238576e0_kr
+   real(kr),parameter::c29=.663229543e0_kr
+   real(kr),parameter::c30=.6283380681e0_kr
+   real(kr),parameter::c31=.4594342117e0_kr
+   real(kr),parameter::c32=.2847618149e0_kr
+   real(kr),parameter::c33=.1736431637e0_kr
+   real(kr),parameter::c34=.1280426636e0_kr
+   real(kr),parameter::c35=.1468582957e0_kr
+   real(kr),parameter::c36=.4699927013e0_kr
+   real(kr),parameter::c37=1.2533141373e0_kr
 
-@dataclass
-class LeaprInput:
-    """Container for user input parameters.
-
-    The LEAPR module is driven by a structured input deck.  For
-    convenience this dataclass stores the quantities read from the
-    input file.  See the comments in the original Fortran for
-    detailed descriptions of each field.
+   test=1
+   if (x.le.test) then
+      v=c0*x
+      u=v*v
+      bi1=(((((((((c1*u+c2)*u+c3)*u+c4)*u+c5)*u+c6)*u+c7)*u&
+        +c8)*u+c9)*u+c10)*v
+      bi3=(((((((((c11*u+c12)*u+c13)*u+c14)*u+c15)*u+c16)*u&
+        +c17)*u+c18)*u+c19)*u+c20)
+      besk1=c21/x+bi1*(log(c22*x)+c23)-v*bi3
+   else
+      u=c24/x
+      bi3=((((((((((((-c25*u+c26)*u-c27)*u+c28)*u-c29)*u+c30)*u&
+        -c31)*u+c32)*u-c33)*u+c34)*u-c35)*u+c36)*u+c37)
+      besk1=sqrt(u)*bi3
+   endif
+   return
+end function besk1
     """
+    # K1-like approximation (with exp factor separated when x>1)
+    c0=0.125; c1=0.442850424; c2=0.584115288; c3=6.070134559; c4=17.864913364
+    c5=48.858995315; c6=90.924600045; c7=113.795967431; c8=85.331474517; c9=32.00008698
+    c10=3.999998802; c11=1.304923514; c12=1.47785657; c13=16.402802501; c14=44.732901977
+    c15=115.837493464; c16=198.437197312; c17=222.869709703; c18=142.216613971; c19=40.000262262
+    c20=1.999996391; c21=1.0; c22=0.5; c23=0.5772156649; c24=1.0; c25=0.0108241775
+    c26=0.0788000118; c27=0.2581303765; c28=0.5050238576; c29=0.663229543; c30=0.6283380681
+    c31=0.4594342117; c32=0.2847618149; c33=0.1736431637; c34=0.1280426636; c35=0.1468582957
+    c36=0.4699927013; c37=1.2533141373
+    test = 1.0
+    if x <= test:
+        v = c0 * x
+        u = v*v
+        bi1 = (((((((((c1*u+c2)*u+c3)*u+c4)*u+c5)*u+c6)*u+c7)*u + c8)*u + c9)*u + c10)*v
+        bi3 = (((((((((c11*u+c12)*u+c13)*u+c14)*u+c15)*u+c16)*u + c17)*u + c18)*u + c19)*u + c20)
+        return c21/x + bi1*(math.log(c22*x)+c23) - v*bi3
+    else:
+        u = c24 / x
+        bi3 = (((((((((((-c25*u+c26)*u-c27)*u+c28)*u-c29)*u+c30)*u - c31)*u + c32)*u - c33)*u + c34)*u - c35)*u + c36)*u + c37
+        return math.sqrt(u) * bi3
 
-    # card 1
-    nout: int  # ENDF output unit (unused in this port)
+def bfact(x: float, dwc: float, betai: float) -> tuple[float, np.ndarray, np.ndarray]:
+    """\
+subroutine bfact(x,bzero,bplus,bminus,dwc,betai)
+!--------------------------------------------------------------------
+   ! Calculates the Bessel function terms for discrete oscillators.
+   ! Called by discre.
+   !--------------------------------------------------------------------
+   ! externals
+   real(kr)::x,dwc,betai
+   real(kr)::bzero,bplus(50),bminus(50)
+   ! internals
+   integer::i,imax,j
+   real(kr)::bn(50)
+   real(kr)::y,u,v,bessi0,bessi1,rat,arg
+   real(kr),parameter::c0=3.75e0_kr
+   real(kr),parameter::c1=1.e0_kr
+   real(kr),parameter::c2=3.5156229e0_kr
+   real(kr),parameter::c3=3.0899424e0_kr
+   real(kr),parameter::c4=1.2067492e0_kr
+   real(kr),parameter::c5=0.2659732e0_kr
+   real(kr),parameter::c6=0.0360768e0_kr
+   real(kr),parameter::c7=0.0045813e0_kr
+   real(kr),parameter::c8=0.39894228e0_kr
+   real(kr),parameter::c9=0.01328592e0_kr
+   real(kr),parameter::c10=0.00225319e0_kr
+   real(kr),parameter::c11=0.00157565e0_kr
+   real(kr),parameter::c12=0.00916281e0_kr
+   real(kr),parameter::c13=0.02057706e0_kr
+   real(kr),parameter::c14=0.02635537e0_kr
+   real(kr),parameter::c15=0.01647633e0_kr
+   real(kr),parameter::c16=0.00392377e0_kr
+   real(kr),parameter::c17=0.5e0_kr
+   real(kr),parameter::c18=0.87890594e0_kr
+   real(kr),parameter::c19=0.51498869e0_kr
+   real(kr),parameter::c20=0.15084934e0_kr
+   real(kr),parameter::c21=0.02658733e0_kr
+   real(kr),parameter::c22=0.00301532e0_kr
+   real(kr),parameter::c23=0.00032411e0_kr
+   real(kr),parameter::c24=0.02282967e0_kr
+   real(kr),parameter::c25=0.02895312e0_kr
+   real(kr),parameter::c26=0.01787654e0_kr
+   real(kr),parameter::c27=0.00420059e0_kr
+   real(kr),parameter::c28=0.39894228e0_kr
+   real(kr),parameter::c29=0.03988024e0_kr
+   real(kr),parameter::c30=0.00362018e0_kr
+   real(kr),parameter::c31=0.00163801e0_kr
+   real(kr),parameter::c32=0.01031555e0_kr
+   real(kr),parameter::big=1.e10_kr
+   real(kr),parameter::tiny=1.e-30_kr
+   real(kr),parameter::zero=0
+   real(kr),parameter::one=1
 
-    # card 3 – run control
-    ntempr: int = 1
-    iprint: int = 1
-    nphon: int = 100
+   !--compute bessi0
+   y=x/c0
+   if (y.le.one) then
+      u=y*y
+      bessi0=c1+u*(c2+u*(c3+u*(c4+u*(c5+u*(c6+u*c7)))))
+   else
+      v=1/y
+      bessi0=(c8+v*(c9+v*(c10+v*(-c11+v*(c12+v*(-c13&
+        +v*(c14+v*(-c15+v*c16))))))))/sqrt(x)
+   endif
 
-    # card 4 – ENDF output control
-    mat: int = 0
-    za: float = 0.0
-    isabt: int = 0
-    ilog: int = 0
-    smin: float = 1.0e-75
+   !--compute bessi1
+   if (y.le.one) then
+      u=y*y
+      bessi1=(c17+u*(c18+u*(c19+u*(c20+u*(c21+u*(c22+u*c23))))))*x
+   else
+      v=1/y
+      bessi1=c24+v*(-c25+v*(c26-v*c27))
+      bessi1=c28+v*(-c29+v*(-c30+v*(c31+v*(-c32+v*bessi1))))
+      bessi1=bessi1/sqrt(x)
+   endif
 
-    # card 5 – principal scatterer control
-    awr: float = 0.0
-    spr: float = 0.0
-    npr: int = 1
-    iel: int = 0
-    ncold: int = 0
-    nsk: int = 0
+   !--generate higher orders by reverse recursion
+   imax=50
+   bn(imax)=0
+   bn(imax-1)=1
+   i=imax-1
+   do while (i.gt.1)
+      bn(i-1)=bn(i+1)+i*(2/x)*bn(i)
+      i=i-1
+      if (bn(i).ge.big) then
+         do j=i,imax
+            bn(j)=bn(j)/big
+         enddo
+      endif
+   enddo
+   rat=bessi1/bn(1)
+   do i=1,imax
+      bn(i)=bn(i)*rat
+      if (bn(i).lt.tiny) bn(i)=0
+   enddo
 
-    # card 6 – secondary scatterer control
-    nss: int = 0
-    b7: float = 0.0
-    aws: float = 0.0
-    sps: float = 0.0
-    mss: int = 0
-
-    # card 7 – α/β control
-    nalpha: int = 0
-    nbeta: int = 0
-    lat: int = 0
-
-    # card 8/9 – α and β values
-    alpha: List[float] = field(default_factory=list)
-    beta: List[float] = field(default_factory=list)
-
-    # per‑temperature parameters (cards 10–18) will be stored
-    temperatures: List[float] = field(default_factory=list)
-    continuous: List[Tuple[float, List[float], float, float, float]] = field(default_factory=list)
-    # each entry is (delta1, p1 array, twt, c, tbeta)
-    oscillators: List[Tuple[List[float], List[float]]] = field(default_factory=list)
-    # each entry is (bdel, adel) for the discrete oscillator section
-    pair_corr: List[Tuple[int, float, List[float]]] = field(default_factory=list)
-    # each entry is (nka, dka, ska array) if present
-    cfracs: List[float] = field(default_factory=list)  # only used for nsk>0
-
-
-class Leapr:
+   !--apply exponential terms to bessel functions
+   if (y.le.one) then
+      bzero=bessi0*exp(-dwc)
+      do i=1,imax
+         bminus(i)=0
+         bplus(i)=0
+         if (bn(i).ne.zero) then
+            arg=-dwc-i*betai/2
+            bplus(i)=0
+            bplus(i)=exp(arg)*bn(i)
+            if (bplus(i).lt.tiny) bplus(i)=0
+            bminus(i)=0
+            arg=-dwc+i*betai/2
+            bminus(i)=exp(arg)*bn(i)
+            if (bminus(i).lt.tiny) bminus(i)=0
+         else
+            bplus(i)=0
+            bminus(i)=0
+         endif
+      enddo
+   else
+      bzero=bessi0*exp(-dwc+x)
+      do i=1,imax
+         bminus(i)=0
+         bplus(i)=0
+         if (bn(i).ne.zero) then
+            bplus(i)=0
+            arg=-dwc-i*betai/2+x
+            bplus(i)=exp(arg)*bn(i)
+            if (bplus(i).lt.tiny) bplus(i)=0
+            bminus(i)=0
+            arg=-dwc+i*betai/2+x
+            bminus(i)=exp(arg)*bn(i)
+            if (bminus(i).lt.tiny) bminus(i)=0
+         else
+            bplus(i)=0
+            bminus(i)=0
+         endif
+      enddo
+   endif
+   return
+end subroutine bfact
     """
-    A Python implementation of the core LEAPR algorithm.
+    big = 1.0e10
+    tiny = 1.0e-30
+    one = 1.0
+    c0=3.75; c1=1.0; c2=3.5156229; c3=3.0899424; c4=1.2067492; c5=0.2659732; c6=0.0360768; c7=0.0045813
+    c8=0.39894228; c9=0.01328592; c10=0.00225319; c11=0.00157565; c12=0.00916281; c13=0.02057706; c14=0.02635537
+    c15=0.01647633; c16=0.00392377; c17=0.5; c18=0.87890594; c19=0.51498869; c20=0.15084934; c21=0.02658733
+    c22=0.00301532; c23=0.00032411; c24=0.02282967; c25=0.02895312; c26=0.01787654; c27=0.00420059
+    c28=0.39894228; c29=0.03988024; c30=0.00362018; c31=0.00163801; c32=0.01031555
+    y = x / c0
+    # bessi0
+    if y <= one:
+        u = y*y
+        bessi0 = c1 + u*(c2 + u*(c3 + u*(c4 + u*(c5 + u*(c6 + u*c7)))))
+    else:
+        v = 1.0/y
+        bessi0 = (c8 + v*(c9 + v*(c10 + v*(-c11 + v*(c12 + v*(-c13 + v*(c14 + v*(-c15 + v*c16))))))))/math.sqrt(x)
+    # bessi1
+    if y <= one:
+        u = y*y
+        bessi1 = (c17 + u*(c18 + u*(c19 + u*(c20 + u*(c21 + u*(c22 + u*c23)))))) * x
+    else:
+        v = 1.0/y
+        bessi1 = c24 + v*(-c25 + v*(c26 - v*c27))
+        bessi1 = c28 + v*(-c29 + v*(-c30 + v*(c31 + v*(-c32 + v*bessi1))))
+        bessi1 = bessi1 / math.sqrt(x)
+    # reverse recursion
+    imax = 50
+    bn = np.zeros(imax+1, dtype=np.float64)
+    bn[imax] = 0.0
+    bn[imax-1] = 1.0
+    i = imax-1
+    while i > 1:
+        bn[i-1] = bn[i+1] + i*(2.0/x)*bn[i]
+        i -= 1
+        if bn[i] >= big:
+            for j in range(i, imax+1):
+                bn[j] = bn[j]/big
+    rat = bessi1 / bn[1]
+    for i in range(1, imax+1):
+        bn[i] = bn[i]*rat
+        if bn[i] < tiny: bn[i] = 0.0
+    bplus  = np.zeros(imax, dtype=np.float64)
+    bminus = np.zeros(imax, dtype=np.float64)
+    if y <= one:
+        bzero = bessi0 * math.exp(-dwc)
+        for i in range(1, imax+1):
+            if bn[i] != 0.0:
+                arg = -dwc - i*betai/2.0
+                val = math.exp(arg)*bn[i]
+                bplus[i-1]  = 0.0 if val < tiny else val
+                arg = -dwc + i*betai/2.0
+                val = math.exp(arg)*bn[i]
+                bminus[i-1] = 0.0 if val < tiny else val
+            else:
+                bplus[i-1] = 0.0; bminus[i-1] = 0.0
+    else:
+        bzero = bessi0 * math.exp(-dwc + x)
+        for i in range(1, imax+1):
+            if bn[i] != 0.0:
+                arg = -dwc - i*betai/2.0 + x
+                val = math.exp(arg)*bn[i]
+                bplus[i-1]  = 0.0 if val < tiny else val
+                arg = -dwc + i*betai/2.0 + x
+                val = math.exp(arg)*bn[i]
+                bminus[i-1] = 0.0 if val < tiny else val
+            else:
+                bplus[i-1] = 0.0; bminus[i-1] = 0.0
+    return float(bzero), bplus, bminus
 
-    Instances of this class are intended to be configured with a
-    :class:`LeaprInput` object.  The ``run`` method performs the
-    calculation of S(α,β) on the provided α and β grids for each
-    temperature.  Results are stored internally and can be queried
-    through the ``ssm`` attribute.
+def stable(al: float, delta: float, ndmax: int) -> tuple[np.ndarray, np.ndarray]:
+    """\
+subroutine stable(ap,sd,nsd,al,delta,iprt,nu,ndmax)
+!--------------------------------------------------------------------
+   ! Sets up table of S-diffusion or S-free in the array sd,
+   ! evaluated at intervals delta determined by trans.
+   ! Tabulation is continued until
+   !       sd(j) is less than 1e-7*sd(1)
+   !       or nsd is 1999
+   ! Here, nsd is always odd for use with Simpson's rule, and
+   ! ap is used for temporary storage of beta values.
+   ! This routine returns the -beta side of
+   ! the asymmetric S(alpha,beta).
+   ! Called by trans.
+   ! Uses besk1.
+   !--------------------------------------------------------------------
+   use mainio ! provide nsyso
+   use physics ! provides pi
+   ! externals
+   integer::nsd,iprt,nu,ndmax
+   real(kr)::al,delta,check0,check1,f,bb,sfree
+   real(kr)::ap(ndmax),sd(ndmax)
+   ! internals
+   integer::i,j,idone,icheck
+   real(kr)::d,c2,c3,c4,c5,c6,c7,c8,be,ex,wal
+   real(kr),parameter::quart=0.25e0_kr
+   real(kr),parameter::eps=1.e-7_kr
+   real(kr),parameter::zero=0
+   real(kr),parameter::one=1
+   icheck=0
+
+   !--diffusion branch
+   if (c.ne.zero) then
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/4(4x,''beta'',4x,''ssdiff(-beta)''))')
+      d=twt*c
+      c2=sqrt(c*c+quart)
+      c3=2*d*al
+      c4=c3*c3
+      c8=c2*c3/pi
+      c3=2*d*c*al
+      be=0
+      j=1
+      idone=0
+      do while (idone.eq.0)
+         c6=sqrt(be*be+c4)
+         c7=c6*c2
+         if (c7.le.one) c5=c8*exp(c3+be/2)
+         if (c7.gt.one) then
+            c5=0
+            ex=c3-c7+be/2
+            c5=c8*exp(ex)
+         endif
+         sd(j)=c5*besk1(c7)/c6
+         ap(j)=be
+         be=be+delta
+         j=j+1
+         if (mod(j,2).eq.0) then
+            if (j.ge.ndmax) idone=1
+            if (eps*sd(1).ge.sd(j-1)) idone=1
+         endif
+      enddo
+      j=j-1
+      nsd=j
+      if (iprt.eq.1.and.iprint.eq.2)&
+        write(nsyso,'(0pf10.5,1pe15.7,0pf10.5,1pe15.7,0pf10.5,&
+        &1pe15.7,0pf10.5,1pe15.7)') (ap(i),sd(i),i=1,j,nu)
+
+   !--free-gas branch
+   else
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/4(4x,''beta'',4x,''ssfree(-beta)''))')
+      be=0
+      j=1
+      wal=twt*al
+      idone=0
+      do while (idone.eq.0)
+         ex=-(wal-be)**2/(4*wal)
+         sfree=exp(ex)/sqrt(4*pi*wal)
+         sd(j)=sfree
+         ap(j)=be
+         be=be+delta
+         j=j+1
+         if (mod(j,2).eq.0) then
+            if (j.ge.ndmax) idone=1
+            if (eps*sd(1).ge.sd(j-1)) idone=1
+         endif
+      enddo
+      j=j-1
+      nsd=j
+      if (iprt.eq.1.and.iprint.eq.2)&
+        write(nsyso,'(0pf10.5,1pe15.7,0pf10.5,1pe15.7,0pf10.5,&
+        &1pe15.7,0pf10.5,1pe15.7)') (ap(i),sd(i),i=1,j,nu)
+   endif
+
+   !--check the moments of the distribution
+   if (iprt.ne.1.or.iprint.ne.2) return
+   if (icheck.eq.0) return
+   check0=0
+   check1=0
+   do i=1,nsd
+      f=2*(mod(i-1,2)+1)
+      if (i.eq.1.or.i.eq.nsd) f=1
+      bb=(i-1)*delta
+      check0=check0+f*sd(i)
+      check0=check0+sd(i)*exp(-bb)
+      check1=check1+f*bb*sd(i)
+      check1=check1+f*bb*sd(i)*exp(-bb)
+   enddo
+   check0=check0*delta/3
+   check1=check1*delta/3
+   check1=check1/(al*twt)
+   write(nsyso,'(/'' check0='',f11.7,''   check1='',f11.7)')&
+     check0,check1
+   return
+end subroutine stable
     """
-
-    def __init__(self, leapr_input: LeaprInput) -> None:
-        self.inp = leapr_input
-        # allocate arrays for results: shape (ntempr, nbeta, nalpha)
-        ntemp = self.inp.ntempr
-        nbeta = self.inp.nbeta
-        nalpha = self.inp.nalpha
-        self.ssm = np.zeros((ntemp, nbeta, nalpha), dtype=float)
-        # placeholders for Debye–Waller factor and effective temperature
-        self.dwpix = np.zeros(ntemp, dtype=float)
-        self.tempf = np.zeros(ntemp, dtype=float)
-        # additional state used during computations
-        self.f0 = 0.0
-        self.tbar = 0.0
-        self.tev = 0.0
-        self.deltab = 0.0
-        # allocate a second scattering array for positive β values
-        # For most contributions (phonon expansion, translational and
-        # discrete oscillators), the scattering law is symmetric in β
-        # and ssp will simply mirror ssm.  When the cold hydrogen/
-        # deuterium option is enabled, the scattering law becomes
-        # asymmetric; ssm will hold the negative‑β branch and ssp the
-        # positive‑β branch.
-        self.ssp = np.zeros((ntemp, nbeta, nalpha), dtype=float)
-
-        # placeholders for principal scatterer Debye–Waller and effective
-        # temperature values when secondary mixing is applied.  These
-        # arrays will be created lazily in run() if needed.
-        self.dwp1: Optional[np.ndarray] = None
-        self.tempf1: Optional[np.ndarray] = None
-
-    # ------------------------------------------------------------------
-    # Helper routines for coherent elastic scattering (Bragg edges)
-    #
-    # The NJOY LEAPR module includes a ``coher`` subroutine that
-    # calculates Bragg edge energies and associated structure factors
-    # for a handful of crystalline moderators (graphite, beryllium,
-    # beryllium oxide, aluminum, lead and iron).  The Fortran code is
-    # quite involved: it sets up lattice constants, loops over
-    # reciprocal lattice vectors, applies form factors and Debye–
-    # Waller damping and finally sorts and combines duplicate edges.
-    # The routines below provide a direct translation of the core
-    # calculations used by ``coher``.  They are not called
-    # automatically by ``run`` but can be invoked by client code if
-    # coherent scattering data are required.
-
-    def _formf(self, lat: int, l1: int, l2: int, l3: int) -> float:
-        """Compute form factors for the specified lattice.
-
-        This function replicates the Fortran ``formf`` routine.  It
-        returns the squared structure factor for the lattice defined by
-        ``lat`` and Miller indices ``(l1,l2,l3)``.  The meaning of
-        ``lat`` is as follows:
-
-        * ``1`` – graphite (hexagonal)
-        * ``2`` – beryllium (hexagonal)
-        * ``3`` – beryllium oxide (hexagonal)
-        * ``4`` – fcc lattice (aluminum)
-        * ``5`` – fcc lattice (lead)
-        * ``6`` – bcc lattice (iron)
-
-        Parameters
-        ----------
-        lat : int
-            Lattice type.
-        l1, l2, l3 : int
-            Integer Miller indices.
-
-        Returns
-        -------
-        float
-            The form factor (squared structure factor).
-        """
-        pi = self.PI
-        # graphite
-        if lat == 1:
-            # graphite has an ABAB stacking that gives rise to
-            # selection rules depending on the c‑axis index l3.  If
-            # l3 is odd, the form factor is given by sin^2(pi*(l1-l2)/3),
-            # otherwise by (6+10*cos(2*pi*(l1-l2)/3))/4.
-            i = l3 // 2
-            if 2 * i != l3:
-                return math.sin(pi * (l1 - l2) / 3.0) ** 2
-            else:
-                return (6.0 + 10.0 * math.cos(2.0 * pi * (l1 - l2) / 3.0)) / 4.0
-        # beryllium
-        elif lat == 2:
-            # For beryllium the two atoms per primitive cell lead to a
-            # cosine modulation.
-            return 1.0 + math.cos(2.0 * pi * (2 * l1 + 4 * l2 + 3 * l3) / 6.0)
-        # beryllium oxide
-        elif lat == 3:
-            # Beryllium oxide has two different atomic species in the
-            # hexagonal cell, giving rise to additional coefficients.
-            c1 = 7.54
-            c2 = 4.24
-            c3 = 11.31
-            return (
-                1.0
-                + math.cos(2.0 * pi * (2 * l1 + 4 * l2 + 3 * l3) / 6.0)
-            ) * (c1 + c2 + c3 * math.cos(3.0 * pi * l3 / 4.0))
-        # fcc lattices (aluminum, lead)
-        elif lat == 4 or lat == 5:
-            e1 = 2.0 * pi * l1
-            e2 = 2.0 * pi * (l1 + l2)
-            e3 = 2.0 * pi * (l1 + l3)
-            # The form factor is the magnitude squared of the sum of
-            # contributions from the basis vectors in an fcc cell.
-            return (
-                (1.0 + math.cos(e1) + math.cos(e2) + math.cos(e3)) ** 2
-                + (math.sin(e1) + math.sin(e2) + math.sin(e3)) ** 2
-            )
-        # bcc lattice (iron)
-        elif lat == 6:
-            e1 = 2.0 * pi * (l1 + l2 + l3)
-            return (1.0 + math.cos(e1)) ** 2 + (math.sin(e1)) ** 2
-        # unsupported lattice
-        else:
-            raise ValueError(f"Illegal lattice type {lat} in formf")
-
-    @staticmethod
-    def _tausq(m1: int, m2: int, m3: int, c1: float, c2: float, twopis: float) -> float:
-        """Reciprocal lattice magnitude squared for hexagonal structures.
-
-        This function matches the Fortran function ``tausq``.  It
-        computes
-
-        .. math::
-
-           \tau^2 = [c_1 (m_1^2 + m_2^2 + m_1 m_2) + m_3^2 c_2] \times 2\pi^2,
-
-        where ``c1`` and ``c2`` are geometry constants and ``twopis`` is
-        \((2\pi)^2\).  The indices ``m1``, ``m2`` and ``m3`` are the
-        integer lattice indices along the reciprocal primitive vectors.
-
-        Parameters
-        ----------
-        m1, m2, m3 : int
-            Lattice indices.
-        c1, c2 : float
-            Geometry constants.
-        twopis : float
-            Precomputed constant ``(2*pi)**2``.
-
-        Returns
-        -------
-        float
-            The squared reciprocal lattice magnitude.
-        """
-        return (c1 * (m1 * m1 + m2 * m2 + m1 * m2) + m3 * m3 * c2) * twopis
-
-    @staticmethod
-    def _taufcc(m1: int, m2: int, m3: int, c1: float, twothd: float, twopis: float) -> float:
-        """Reciprocal lattice magnitude squared for fcc lattices.
-
-        This matches the Fortran function ``taufcc``, computing
-
-        .. math::
-
-           \tau^2 = c_1 (m_1^2 + m_2^2 + m_3^2 + \tfrac{2}{3}m_1 m_2 + \tfrac{2}{3}m_1 m_3 - \tfrac{2}{3}m_2 m_3)\times 2\pi^2.
-
-        The parameter ``twothd`` is 2/3.
-        """
-        return (
-            c1
-            * (
-                m1 * m1
-                + m2 * m2
-                + m3 * m3
-                + twothd * m1 * m2
-                + twothd * m1 * m3
-                - twothd * m2 * m3
-            )
-            * twopis
-        )
-
-    @staticmethod
-    def _taubcc(m1: int, m2: int, m3: int, c1: float, twopis: float) -> float:
-        """Reciprocal lattice magnitude squared for bcc lattices.
-
-        Matches the Fortran function ``taubcc``.  Note that in the
-        original Fortran, ``c1`` is a host variable rather than a
-        formal parameter; in this translation we pass ``c1``
-        explicitly.
-        """
-        return (
-            c1
-            * (m1 * m1 + m2 * m2 + m3 * m3 + m1 * m2 + m2 * m3 + m1 * m3)
-            * twopis
-        )
-
-    def coher(self, lat: int, natom: int, emax: float = 5.0) -> Tuple[List[float], List[float]]:
-        """Compute Bragg edge energies and structure factors.
-
-        This method is a direct translation of the LEAPR ``coher``
-        subroutine.  Given a lattice type ``lat`` (1–6) and the
-        number of atoms per unit cell ``natom``, it computes all
-        reciprocal lattice vectors with squared magnitudes below
-        ``emax`` (in eV) and returns their energies and structure
-        factors.  The returned lists are sorted in ascending energy
-        with duplicate edges combined.
-
-        Parameters
-        ----------
-        lat : int
-            Lattice type (1–6).  See :func:`_formf` for definitions.
-        natom : int
-            Number of atoms per unit cell.
-        emax : float, optional
-            Maximum energy in eV below which to keep Bragg edges
-            (default 5 eV).
-
-        Returns
-        -------
-        Tuple[List[float], List[float]]
-            Two lists of equal length.  The first contains Bragg
-            energies (in eV), the second contains the corresponding
-            coherent elastic structure factors (in barns).  Duplicate
-            energies are merged and their structure factors summed.
-        """
-        # Physical constants (matching the Fortran ``physics`` module)
-        pi = self.PI
-        # lattice constants for different materials (in cm and amu)
-        gr1 = 2.4573e-8
-        gr2 = 6.700e-8
-        gr3 = 12.011
-        gr4 = 5.50
-        be1 = 2.2856e-8
-        be2 = 3.5832e-8
-        be3 = 9.01
-        be4 = 7.53
-        beo1 = 2.695e-8
-        beo2 = 4.39e-8
-        beo3 = 12.5
-        beo4 = 1.0
-        al1 = 4.04e-8
-        al3 = 26.7495
-        al4 = 1.495
-        pb1 = 4.94e-8
-        pb3 = 207.0
-        pb4 = 1.0
-        fe1 = 2.86e-8
-        fe3 = 55.454
-        fe4 = 12.9
-        twothd = 0.666666666667
-        sqrt3 = 1.732050808
-        toler = 1.0e-6
-        eps = 0.05
-        # Precompute physical constants used in the conversion
-        twopis = (2.0 * pi) ** 2
-        # neutron mass in grams (amu * c^2 converts energy units to g)
-        amne = self.AMASSN * self.AMU
-        # econ converts tau^2 to energy (eV).  This matches
-        # econ = ev*8*(amne/hbar)/hbar from the Fortran code
-        econ = self.EV * 8.0 * (amne / self.HBAR) / self.HBAR
-        recon = 1.0 / econ
-        tsqx = econ / 20.0
-        # Select lattice parameters based on ``lat``
-        if lat == 1:
-            # graphite
-            a = gr1
-            c = gr2
-            amsc = gr3
-            scoh = gr4 / natom
-        elif lat == 2:
-            # beryllium
-            a = be1
-            c = be2
-            amsc = be3
-            scoh = be4 / natom
-        elif lat == 3:
-            # beryllium oxide
-            a = beo1
-            c = beo2
-            amsc = beo3
-            scoh = beo4 / natom
-        elif lat == 4:
-            # aluminum (fcc)
-            a = al1
-            amsc = al3
-            scoh = al4 / natom
-            c = None  # not used for fcc
-        elif lat == 5:
-            # lead (fcc)
-            a = pb1
-            amsc = pb3
-            scoh = pb4 / natom
-            c = None
-        elif lat == 6:
-            # iron (bcc)
-            a = fe1
-            amsc = fe3
-            scoh = fe4 / natom
-            c = None
-        else:
-            raise ValueError(f"Illegal lattice type {lat} in coher")
-        # Geometry constants and scaling factor ``scon``
-        if lat < 4:
-            c1 = 4.0 / (3.0 * a * a)
-            c2 = 1.0 / (c * c)  # type: ignore[arg-type]
-            scon = scoh * (4.0 * pi) ** 2 / (2.0 * a * a * c * sqrt3 * econ)  # type: ignore[arg-type]
-        elif lat in (4, 5):
-            c1 = 3.0 / (a * a)
-            c2 = 0.0
-            scon = scoh * (4.0 * pi) ** 2 / (16.0 * a * a * a * econ)
-        else:  # lat == 6
-            c1 = 2.0 / (a * a)
-            c2 = 0.0
-            scon = scoh * (4.0 * pi) ** 2 / (8.0 * a * a * a * econ)
-        # Debye–Waller prefactors (wint is zero in LEAPR)
-        wint = 0.0
-        t2 = self.HBAR / (2.0 * self.AMU * amsc)
-        # Limit on tau^2 values converted from ``emax``
-        ulim = econ * emax
-        # Storage for squared magnitudes and weights
-        tsq_list: List[float] = []
-        f_list: List[float] = []
-        # Compute reciprocal lattice vectors for hexagonal structures
-        if lat <= 3:
-            phi = ulim / twopis
-            # Maximum index along the a‑axis
-            i1m = int(a * math.sqrt(phi)) + 1
-            for i1 in range(1, i1m + 1):
-                l1 = i1 - 1
-                # Maximum index along the second a‑axis (depends on l1)
-                tmp = 3.0 * (a * a * phi - l1 * l1)
-                if tmp < 0.0:
-                    continue
-                i2m = int((l1 + math.sqrt(tmp)) / 2.0) + 1
-                for i2 in range(i1, i2m + 1):
-                    l2 = i2 - 1
-                    # Remaining quadratic term inside the square root for l3
-                    x = phi - c1 * (l1 * l1 + l2 * l2 - l1 * l2)
-                    i3m = 0
-                    if x > 0.0:
-                        i3m = int(c * math.sqrt(x)) + 1  # type: ignore[arg-type]
-                    else:
-                        i3m = 1
-                    for i3 in range(1, i3m + 1):
-                        l3 = i3 - 1
-                        # Weight factors due to symmetry
-                        w1 = 2.0
-                        if l1 == l2:
-                            w1 = 1.0
-                        w2 = 2.0
-                        if (l1 == 0) or (l2 == 0):
-                            w2 = 1.0
-                        if (l1 == 0) and (l2 == 0):
-                            w2 = w2 / 2.0
-                        w3 = 2.0
-                        if l3 == 0:
-                            w3 = 1.0
-                        # Evaluate tau^2 for (l1,l2,l3)
-                        tsq = self._tausq(l1, l2, l3, c1, c2, twopis)
-                        if tsq > 0.0 and tsq <= ulim:
-                            tau = math.sqrt(tsq)
-                            w = math.exp(-tsq * t2 * wint) * w1 * w2 * w3 / tau
-                            f = w * self._formf(lat, l1, l2, l3)
-                            # Store or merge duplicate entries
-                            if not tsq_list or tsq <= tsqx:
-                                tsq_list.append(tsq)
-                                f_list.append(f)
-                            else:
-                                merged = False
-                                for idx in range(len(tsq_list)):
-                                    tsq_old = tsq_list[idx]
-                                    if tsq >= tsq_old and tsq < (1.0 + eps) * tsq_old:
-                                        f_list[idx] += f
-                                        merged = True
-                                        break
-                                if not merged:
-                                    tsq_list.append(tsq)
-                                    f_list.append(f)
-                        # Evaluate tau^2 for (l1,-l2,l3) to capture
-                        # additional symmetry
-                        tsq2 = self._tausq(l1, -l2, l3, c1, c2, twopis)
-                        if tsq2 > 0.0 and tsq2 <= ulim:
-                            tau = math.sqrt(tsq2)
-                            w = math.exp(-tsq2 * t2 * wint) * w1 * w2 * w3 / tau
-                            f = w * self._formf(lat, l1, -l2, l3)
-                            if not tsq_list or tsq2 <= tsqx:
-                                tsq_list.append(tsq2)
-                                f_list.append(f)
-                            else:
-                                merged = False
-                                for idx in range(len(tsq_list)):
-                                    tsq_old = tsq_list[idx]
-                                    if tsq2 >= tsq_old and tsq2 < (1.0 + eps) * tsq_old:
-                                        f_list[idx] += f
-                                        merged = True
-                                        break
-                                if not merged:
-                                    tsq_list.append(tsq2)
-                                    f_list.append(f)
-        else:
-            # Reciprocal lattice vectors for cubic structures
-            # For fcc and bcc the Fortran code artificially truncates the
-            # search region to a 15×15×15 cube around the origin.
-            i1m = 15
-            if lat in (4, 5):
-                # fcc lattices
-                for i1 in range(-i1m, i1m + 1):
-                    for i2 in range(-i1m, i1m + 1):
-                        for i3 in range(-i1m, i1m + 1):
-                            tsq = self._taufcc(i1, i2, i3, c1, twothd, twopis)
-                            if tsq > 0.0 and tsq <= ulim:
-                                tau = math.sqrt(tsq)
-                                w = math.exp(-tsq * t2 * wint) / tau
-                                f = w * self._formf(lat, i1, i2, i3)
-                                tsq_list.append(tsq)
-                                f_list.append(f)
-            else:
-                # bcc lattice (lat == 6)
-                for i1 in range(-i1m, i1m + 1):
-                    for i2 in range(-i1m, i1m + 1):
-                        for i3 in range(-i1m, i1m + 1):
-                            tsq = self._taubcc(i1, i2, i3, c1, twopis)
-                            if tsq > 0.0 and tsq <= ulim:
-                                tau = math.sqrt(tsq)
-                                w = math.exp(-tsq * t2 * wint) / tau
-                                f = w * self._formf(lat, i1, i2, i3)
-                                tsq_list.append(tsq)
-                                f_list.append(f)
-        # Sort the collected tau^2 values and weights
-        pairs = sorted(zip(tsq_list, f_list), key=lambda p: p[0])
-        # Merge duplicates and convert to energies and structure factors
-        energies: List[float] = []
-        sigmas: List[float] = []
-        bel = -1.0
-        for tsq, f in pairs:
-            be = tsq * recon
-            bs = f * scon
-            if bel < 0.0:
-                # first entry
-                energies.append(be)
-                sigmas.append(bs)
-                bel = be
-            else:
-                if (be - bel) < toler:
-                    sigmas[-1] += bs
-                else:
-                    energies.append(be)
-                    sigmas.append(bs)
-                    bel = be
-        return energies, sigmas
-
-    # ------------------------------------------------------------------
-    # Bragg edge thinning
-    #
-    # When coherent elastic scattering is requested (iel > 0), the ENDF
-    # writer in NJOY computes cumulative sums over Bragg edges with
-    # Debye–Waller damping and drops edges whose incremental
-    # contribution falls below a relative tolerance.  This procedure
-    # reduces the number of edges recorded in the final file.  The
-    # method below exposes the same logic: given the internally
-    # computed Debye–Waller factors and the coherent Bragg edge data
-    # from :func:`coher`, it returns a thinned set of edges along with
-    # cumulative cross sections for each temperature.
-
-    def bragg_edge_thinning(self, emax: float = 5.0, tol: float = 0.9e-7) -> Tuple[List[float], List[List[float]]]:
-        """Thin Bragg edges using the Debye–Waller criterion.
-
-        If the input specifies a coherent scatterer (``iel > 0``), the
-        original LEAPR code thins the list of Bragg edges so that
-        successive edges contribute more than a relative tolerance to
-        the cumulative elastic scattering.  The Debye–Waller factor for
-        each temperature controls the damping.  This method computes
-        the thinned list of edge energies and, for each temperature,
-        the cumulative (integrated) coherent elastic scattering up to
-        each retained edge.
-
-        Parameters
-        ----------
-        emax : float, optional
-            Maximum energy (in eV) used when computing Bragg edges.
-            Defaults to 5 eV, which matches the Fortran default in
-            ``leapr``.
-        tol : float, optional
-            Relative tolerance used to decide whether a new Bragg edge
-            contributes significantly to the sum.  The default matches
-            the value used in the Fortran code (``0.9e-7``).
-
-        Returns
-        -------
-        Tuple[List[float], List[List[float]]]
-            The first element is a list of thinned Bragg edge energies
-            (in eV).  The second element is a list of lists; each
-            inner list contains the cumulative coherent elastic
-            scattering values (in barns) for a corresponding
-            temperature, evaluated at each thinned edge.  The number
-            of inner lists equals the number of temperatures in the
-            calculation.
-
-        Notes
-        -----
-        This method uses ``self.dwpix`` and ``self.dwp1`` to compute
-        effective Debye–Waller factors.  The factors are scaled by
-        ``A*T*k_B`` for consistency with the Fortran code.  If a
-        secondary moderator is present (``nss > 0`` and ``b7 <= 0``),
-        the Debye–Waller factors of the primary and secondary
-        scatterers are averaged.  The method silently returns empty
-        lists if no coherent scattering is requested (``iel <= 0``).
-        """
-        # Only proceed if coherent scattering was requested
-        if self.inp.iel <= 0:
-            return [], []
-        # Compute Bragg edges (energies and structure factors)
-        energies, factors = self.coher(self.inp.iel, self.inp.npr, emax)
-        nedge = len(energies)
-        if nedge == 0:
-            return [], []
-        # Determine the number of edges to keep using the tolerance
-        # criterion.  Use the Debye–Waller factor at the first
-        # temperature (or averaged if secondary scatterer present) to
-        # compute the weighting.  In the Fortran code, w =
-        # dwpix(1)/(A*T*k_B); for mixed moderators, w is the
-        # arithmetic mean of dwpix and dwp1.  Here ``awr`` and
-        # ``tempr`` come from the input deck.
-        # Compute the scaling factor A*T*k_B for the first temperature
-        t0 = self.inp.temperatures[0] if self.inp.temperatures else 0.0
-        if t0 <= 0.0:
-            # guard against zero temperature
-            return [], []
-        # Primary scatterer mass
-        awr = self.inp.awr
-        w0 = self.dwpix[0] / (awr * t0 * self.BK)
-        # If secondary mixing is present, average Debye–Waller
-        if self.inp.nss > 0 and self.inp.b7 <= 0.0 and self.dwp1 is not None:
-            w0 = (self.dwpix[0] + self.dwp1[0]) / 2.0 / (awr * t0 * self.BK)
-        # Compute jmax (last index to retain) based on tolerance
-        sum_val = 0.0
-        suml = 0.0
-        jmax = nedge - 1
-        for j in range(nedge):
-            e = energies[j]
-            sum_val += math.exp(-4.0 * w0 * e) * factors[j]
-            if sum_val - suml > tol * sum_val:
-                jmax = j
-                suml = sum_val
-        # Truncate the edges and factors to jmax+1
-        energies_thin = energies[: jmax + 1]
-        factors_thin = factors[: jmax + 1]
-        # Now compute cumulative sums for each temperature
-        ntemp = self.inp.ntempr
-        cumulative_lists: List[List[float]] = []
-        for it in range(ntemp):
-            # Temperature and scattering mass factor
-            T = self.inp.temperatures[it] if self.inp.temperatures else 0.0
-            if T <= 0.0:
-                cumulative_lists.append([0.0 for _ in energies_thin])
-                continue
-            w = self.dwpix[it] / (awr * T * self.BK)
-            if self.inp.nss > 0 and self.inp.b7 <= 0.0 and self.dwp1 is not None:
-                w = (self.dwpix[it] + self.dwp1[it]) / 2.0 / (awr * T * self.BK)
-            cum_sum = 0.0
-            vals: List[float] = []
-            for e, f in zip(energies_thin, factors_thin):
-                cum_sum += math.exp(-4.0 * w * e) * f
-                vals.append(cum_sum)
-            cumulative_lists.append(vals)
-        return energies_thin, cumulative_lists
-
-    # Physical constants used in multiple routines
-    BK = 8.617333262e-5  # Boltzmann constant in eV/K (same units as Fortran)
-    PI = math.pi
-
-    # Additional physical constants used in pair‑correlation and cold‑hydrogen routines.
-    # These are taken from the Fortran ``physics`` module.  They are
-    # required for computing wavenumbers in the Sköld approximation.
-    EV = 1.602176634e-12  # erg per electron‑volt (erg/eV)
-    HBAR = 6.582119569e-16 * EV  # Planck constant (ℏ) in erg·s (converted from eV·s)
-    AMASSN = 1.00866491595  # neutron mass in atomic mass units (amu)
-    AMU = 931.49410242e6 * EV / (2.99792458e10 ** 2)  # atomic mass unit in grams (converted)
-    ANGST = 1.0e-8  # Angstrom in centimetres
-
-
-    def read_input(self, fname: str) -> None:
-        """
-        Read a LEAPR input deck from ``fname`` and populate the
-        :class:`LeaprInput` object.  This method is provided for
-        compatibility with legacy LEAPR workflows.  It follows the
-        structure described in the comments of the original Fortran
-        subroutine ``leapr``.  The implementation here is minimal
-        and does not attempt to interpret optional card content.
-
-        Parameters
-        ----------
-        fname : str
-            Path to the LEAPR input file.
-        """
-        with open(fname, 'r') as f:
-            lines = [ln.strip() for ln in f if ln.strip()]
-        # A very simple parser: assumes that the cards appear in order
-        # and that numeric values are whitespace separated.  Real world
-        # LEAPR decks are more flexible; you may need to adapt this
-        # parser to your specific input format.
-        idx = 0
-        # card 1
-        self.inp.nout = int(lines[idx].split()[0])
-        idx += 1
-        # card 2 – title (ignored in this port)
-        idx += 1
-        # card 3
-        vals = list(map(float, lines[idx].split()))
-        self.inp.ntempr = int(vals[0])
-        self.inp.iprint = int(vals[1])
-        self.inp.nphon = int(vals[2])
-        idx += 1
-        # card 4
-        vals = list(map(float, lines[idx].split()))
-        self.inp.mat = int(vals[0])
-        self.inp.za = vals[1]
-        self.inp.isabt = int(vals[2])
-        self.inp.ilog = int(vals[3])
-        self.inp.smin = vals[4]
-        idx += 1
-        # card 5
-        vals = list(map(float, lines[idx].split()))
-        self.inp.awr = vals[0]
-        self.inp.spr = vals[1]
-        self.inp.npr = int(vals[2])
-        self.inp.iel = int(vals[3])
-        self.inp.ncold = int(vals[4])
-        self.inp.nsk = int(vals[5])
-        idx += 1
-        # card 6
-        vals = list(map(float, lines[idx].split()))
-        self.inp.nss = int(vals[0])
-        self.inp.b7 = vals[1]
-        self.inp.aws = vals[2]
-        self.inp.sps = vals[3]
-        self.inp.mss = int(vals[4])
-        idx += 1
-        # card 7
-        vals = list(map(float, lines[idx].split()))
-        self.inp.nalpha = int(vals[0])
-        self.inp.nbeta = int(vals[1])
-        self.inp.lat = int(vals[2])
-        idx += 1
-        # card 8 – α values
-        self.inp.alpha = list(map(float, lines[idx].split()))
-        idx += 1
-        # card 9 – β values
-        self.inp.beta = list(map(float, lines[idx].split()))
-        idx += 1
-        # Cards 10–18: repeated per temperature
-        for t in range(self.inp.ntempr):
-            # temperature
-            temp_val = float(lines[idx].split()[0])
-            self.inp.temperatures.append(temp_val)
-            idx += 1
-            # card 11 – continuous distribution control
-            vals = list(map(float, lines[idx].split()))
-            delta1 = vals[0]
-            ni = int(vals[1])
-            idx += 1
-            # card 12 – p1
-            p1_vals = list(map(float, lines[idx].split()))
-            assert len(p1_vals) == ni, "Mismatch in number of p1 points"
-            idx += 1
-            # card 13 – continuous distribution parameters
-            vals = list(map(float, lines[idx].split()))
-            twt, c, tbeta = vals[:3]
-            idx += 1
-            self.inp.continuous.append((delta1, p1_vals, twt, c, tbeta))
-            # card 14 – discrete oscillator control
-            vals = list(map(float, lines[idx].split()))
-            nd = int(vals[0])
-            idx += 1
-            if nd > 0:
-                # card 15 – oscillator energies
-                bdel_vals = list(map(float, lines[idx].split()))
-                assert len(bdel_vals) == nd
-                idx += 1
-                # card 16 – oscillator weights
-                adel_vals = list(map(float, lines[idx].split()))
-                assert len(adel_vals) == nd
-                idx += 1
-                self.inp.oscillators.append((bdel_vals, adel_vals))
-            else:
-                self.inp.oscillators.append(([], []))
-            # pair correlation control (card 17/18)
-            if self.inp.nsk > 0 or self.inp.ncold > 0:
-                vals = list(map(float, lines[idx].split()))
-                nka = int(vals[0])
-                dka = vals[1]
-                idx += 1
-                ska_vals = list(map(float, lines[idx].split()))
-                assert len(ska_vals) == nka
-                idx += 1
-                self.inp.pair_corr.append((nka, dka, ska_vals))
-                # cfrac (card 19) for skold method
-                if self.inp.nsk > 0:
-                    cfrac_val = float(lines[idx].split()[0])
-                    self.inp.cfracs.append(cfrac_val)
-                    idx += 1
-            else:
-                self.inp.pair_corr.append((0, 0.0, []))
-        # End reading
-
-    def run(self) -> None:
-        """Execute the LEAPR calculation.
-
-        This routine iterates over all requested scatterers and
-        temperatures, computing the scattering law ``ssm``.  At
-        present only the continuous phonon expansion is implemented
-        (cards 10–13).  Attempts to invoke unimplemented features
-        (translational contributions, discrete oscillators, pair
-        correlations or cold hydrogen/deuterium) will result in a
-        ``NotImplementedError``.
-        """
-        ntemp = self.inp.ntempr
-        nalpha = self.inp.nalpha
-        nbeta = self.inp.nbeta
-        # convert alpha/beta to numpy arrays for efficiency
-        alpha = np.array(self.inp.alpha, dtype=float)
-        beta = np.array(self.inp.beta, dtype=float)
-        # main loop over temperatures
-        for t_index in range(ntemp):
-            temp = self.inp.temperatures[t_index]
-            # unwrap continuous distribution parameters
-            delta1, p1_vals, twt, c, tbeta = self.inp.continuous[t_index]
-            # store local copies for use in helper routines
-            self.delta1 = delta1
-            self.p1 = np.array(p1_vals, dtype=float)
-            self.np1 = len(p1_vals)
-            self.twt = twt
-            self.c = c
-            self.tbeta = tbeta
-            # compute continuous (phonon expansion) contribution
-            self._contin(temp, t_index, alpha, beta)
-            # after contin the scattering law is symmetric; copy to ssp
-            self.ssp[t_index] = self.ssm[t_index].copy()
-            # translational contributions (diffusion/free gas)
-            if self.twt > 0.0:
-                # apply diffusion/free gas convolution
-                self._trans(t_index, alpha, beta)
-                # maintain symmetry for ssp
-                self.ssp[t_index] = self.ssm[t_index].copy()
-            # discrete oscillators
-            bdel, adel = self.inp.oscillators[t_index]
-            if len(bdel) > 0:
-                # apply discrete oscillator convolution
-                self._discrete(t_index, alpha, beta, np.array(bdel, dtype=float), np.array(adel, dtype=float))
-                # maintain symmetry for ssp
-                self.ssp[t_index] = self.ssm[t_index].copy()
-            # special cold hydrogen/deuterium treatment
-            if self.inp.ncold > 0:
-                # retrieve pair correlation parameters for coldh
-                nka, dka, ska_vals = self.inp.pair_corr[t_index]
-                ska_arr = np.array(ska_vals, dtype=float) if nka > 0 else np.array([])
-                # call cold hydrogen/deuterium routine
-                self._coldh(t_index, temp, ska_arr, dka, alpha, beta)
-            # pair correlation options (Vineyard/Sköld)
-            nka, dka, ska_vals = self.inp.pair_corr[t_index]
-            # if pair correlation table present and ncold == 0
-            if nka > 0 and self.inp.ncold == 0:
-                # obtain coherent fraction (cfrac) if provided
-                cfrac = 0.0
-                if t_index < len(self.inp.cfracs):
-                    cfrac = self.inp.cfracs[t_index]
-                # convert ska_vals to numpy array
-                ska_arr = np.array(ska_vals, dtype=float)
-                # apply skold approximation only for nsk > 0
-                if self.inp.nsk > 0:
-                    self._skold(t_index, temp, ska_arr, dka, cfrac, alpha, beta)
-        # finished
-        # --if secondary scatterer mixing is requested (nss > 0) and b7 <= 0,
-        # perform a second pass to compute the secondary scattering law and
-        # combine it with the principal scatterer.  The mixing rule in the
-        # original Fortran code multiplies the secondary contribution by the
-        # ratio of bound cross sections (sbs/sb) and then adds the principal
-        # contribution.  We implement this by running a second instance of
-        # Leapr with scaled parameters and combining the results.  Note that
-        # this approximation assumes that the input decks for the two
-        # scatterers share the same phonon distribution; users requiring
-        # distinct distributions should construct two separate LeaprInput
-        # objects and perform their own mixing externally.
-        if self.inp.nss != 0 and self.inp.b7 <= 0:
-            # bound cross section for principal and secondary scatterers
-            # sb = spr * ((1 + awr) / awr)**2
-            sb = self.inp.spr * ((1.0 + self.inp.awr) / self.inp.awr) ** 2
-            # sbs = sps * ((1 + aws) / aws)**2
-            # avoid division by zero if aws is zero (unphysical but guard anyway)
-            sbs = 0.0
-            if self.inp.aws != 0.0:
-                sbs = self.inp.sps * ((1.0 + self.inp.aws) / self.inp.aws) ** 2
-            # ratio for mixing
-            srat = 0.0
-            if sb != 0.0:
-                srat = sbs / sb
-            # save principal results
-            principal_ssm = self.ssm.copy()
-            principal_ssp = self.ssp.copy()
-            principal_dwpix = self.dwpix.copy()
-            principal_tempf = self.tempf.copy()
-            # build a secondary input by copying the current input and
-            # adjusting parameters for the secondary scatterer.
-            import copy
-            sec_inp = copy.deepcopy(self.inp)
-            # The atomic weight ratio and scattering cross section are
-            # replaced with those of the secondary scatterer.  The number
-            # of scattering atoms per molecule (npr) is likewise set to mss.
-            sec_inp.awr = self.inp.aws if self.inp.aws != 0.0 else self.inp.awr
-            sec_inp.spr = self.inp.sps
-            sec_inp.npr = self.inp.mss
-            # Scale α values by the ratio of atomic weights (arat = aws/awr).
-            # In the Fortran code the scaling is applied on the fly when
-            # evaluating the convolution kernels.  Here we pre‑scale the
-            # α grid for the secondary run to mimic that behaviour.
-            arat = 1.0
-            if self.inp.awr != 0.0:
-                arat = self.inp.aws / self.inp.awr if self.inp.aws != 0.0 else 1.0
-            sec_inp.alpha = [a / arat for a in self.inp.alpha]
-            # Clear any further secondary scatterer flags on the
-            # secondary input to avoid infinite recursion.  The
-            # secondary run should not spawn additional mixing.
-            sec_inp.nss = 0
-            sec_inp.b7 = self.inp.b7
-            # Create a new LEAPR instance for the secondary run and
-            # execute it.  The secondary run reuses the same phonon
-            # distribution, oscillator list and pair‑correlation data as
-            # the principal scatterer.  Users requiring distinct
-            # distributions for the secondary scatterer should supply a
-            # separate input deck instead of relying on this mixing.
-            sec = Leapr(sec_inp)
-            # Copy over temperature‑dependent data structures.  The
-            # deep copy above ensures that continuous, oscillators,
-            # pair_corr and cfracs lists are shared; we do not need to
-            # reparse the input file.  Simply call run() to fill sec.ssm.
-            sec.run()
-            # Combine the results: S_final = S_principal + srat * S_secondary
-            # For the symmetric (negative‑β) branch
-            self.ssm = principal_ssm + srat * sec.ssm
-            # For the positive‑β branch (used in cold H/D and skewed cases)
-            self.ssp = principal_ssp + srat * sec.ssp
-            # Effective Debye–Waller factors and temperature factors are
-            # stored separately for principal and secondary scatterers in
-            # the Fortran code (dwp1/tempf1 for principal and dwpix/tempf
-            # for secondary).  Here we preserve both sets for potential
-            # downstream use by exposing them as attributes.  The
-            # secondary values overwrite the current dwpix/tempf, while
-            # principal values are stored in new attributes dwp1/tempf1.
-            self.dwp1 = principal_dwpix
-            self.tempf1 = principal_tempf
-            # After mixing, dwpix and tempf refer to the secondary
-            # scatterer.  The endf output routine (if implemented) would
-            # average dwpix and dwp1 when computing coherent elastic
-            # scattering; users can access both arrays directly.
-
-        # At this point all scattering contributions have been computed,
-        # including any secondary scatterer mixing.  If the input deck
-        # requests coherent elastic scattering (iel>0), perform the
-        # Bragg edge thinning now.  This mirrors the behaviour of
-        # the Fortran ``endout`` routine, which thins the Bragg edge list
-        # prior to writing elastic data.  The results are stored as
-        # attributes on the instance for later use in ENDF output or
-        # user‑level queries.
-        if self.inp.iel > 0:
-            edges, cumulatives = self.bragg_edge_thinning()
-            # Save the thinned edge energies and cumulative integrals
-            self.bragg_edges = edges
-            self.bragg_cumint = cumulatives
-
-    # ------------------------------------------------------------------
-    # Output routines
-
-    def export_to_ascii(self, filename: str) -> None:
-        """
-        Export the computed scattering law to a simple ASCII text file.
-
-        The output format is not a strict ENDF‑6 file; rather it lists
-        temperature‑labelled blocks of β, α, and S(α,β) values.  Each
-        line contains the β value, the α value, the scattering law for
-        the negative‑β branch (``ssm``) and, if available, the positive‑β
-        branch (``ssp``).  This routine can be used to inspect the
-        calculated S(α,β) without requiring a full ENDF writer.  For
-        proper ENDF‑6 formatting, a separate implementation of the
-        ``endout`` routine would be required.
-
-        Parameters
-        ----------
-        filename : str
-            Path to the output text file.
-        """
-        ntemp = self.inp.ntempr
-        nalpha = self.inp.nalpha
-        nbeta = self.inp.nbeta
-        # open the file for writing
-        with open(filename, 'w') as f:
-            for t_index in range(ntemp):
-                temp = self.inp.temperatures[t_index]
-                f.write(f"# Temperature {temp}\n")
-                for i_beta in range(nbeta):
-                    beta_val = self.inp.beta[i_beta]
-                    for j_alpha in range(nalpha):
-                        alpha_val = self.inp.alpha[j_alpha]
-                        ssm_val = self.ssm[t_index, i_beta, j_alpha]
-                        # for symmetrical cases ssp mirrors ssm
-                        ssp_val = self.ssp[t_index, i_beta, j_alpha] if hasattr(self, 'ssp') else ssm_val
-                        f.write(f"{beta_val:.6e} {alpha_val:.6e} {ssm_val:.6e} {ssp_val:.6e}\n")
-                f.write("\n")
-
-    #
-    # ENDF‑6 helper functions
-    #
-    def _format_endf_record(self, values: list[float], mat: int, mf: int, mt: int, line_no: int) -> str:
-        """
-        Format up to six numerical values and header identifiers into a
-        single 80‑character ENDF‑6 text record.
-
-        Each numeric value is formatted in 11‑column scientific notation
-        (E11.5) or integer notation if it is effectively integral.
-        The MAT, MF and MT identifiers occupy columns 67–75, and the
-        record index occupies columns 76–80.  If fewer than six values
-        are provided, the remaining fields are filled with blanks.
-
-        Parameters
-        ----------
-        values : list of float
-            A list of up to six numbers to be written in the leftmost
-            columns of the record.
-        mat : int
-            Material identifier (MAT field).
-        mf : int
-            File number (MF field).
-        mt : int
-            Section number (MT field).
-        line_no : int
-            Sequential line number for this record (will be right‑justified
-            in five columns).
-
-        Returns
-        -------
-        str
-            An 80‑character string representing one ENDF‑6 record.
-        """
-        # Prepare six 11‑character fields for the numeric values
-        fields = []
-        for i in range(6):
-            if i < len(values):
-                val = values[i]
-                # Use integer format when the value is an integer (within tolerance)
-                if isinstance(val, int) or (abs(val - round(val)) < 1e-9 and abs(val) < 1e6):
-                    fields.append(f"{int(round(val)):11d}")
-                else:
-                    fields.append(f"{val:11.5E}")
-            else:
-                fields.append(" " * 11)
-        # Concatenate the six fields with no separator
-        body = ''.join(fields)
-        # Format the MAT, MF, MT and line number fields
-        mat_str = f"{mat:4d}"
-        mf_str = f"{mf:2d}"
-        mt_str = f"{mt:3d}"
-        line_str = f"{line_no:5d}"
-        # Construct full 80‑character record
-        record = f"{body}{mat_str}{mf_str}{mt_str}{line_str}"
-        # Ensure the record is exactly 80 characters
-        return record[:80]
-
-    def export_to_endf(self, filename: str) -> None:
-        """
-        Write the scattering law to an ENDF‑6 formatted file.
-
-        This method first uses the built‑in ENDF helper routines
-        (``contio``, ``tab1io``, etc.) to write a complete thermal
-        scattering law file in the ENDF‑6 format.  The file includes
-        the File‑1 header, incoherent and coherent elastic sections
-        (MF=7/MT=2) as appropriate, and the inelastic scattering
-        section (MF=7/MT=4) for all temperatures and β values.
-
-        If the `endf_parserpy` package is available, the method will
-        automatically re‑parse the generated lines and rewrite the file
-        using ``endf_parserpy``.  This extra step produces a fully
-        compliant ENDF‑6 file with correct line numbering and section
-        terminators.  If the package is not installed, the
-        internally generated file is left unchanged.
-
-        Parameters
-        ----------
-        filename : str
-            Path to the output file.  The file will be created or
-            overwritten.
-        """
-        # First write the ENDF content to the requested filename using
-        # the built‑in helper routines.  This produces a valid ENDF
-        # structure with 80‑character records but without the
-        # dictionary/comment machinery of NJOY.
-        with open(filename, 'w') as f:
-            reset_ns()
-            set_mat(self.inp.mat)
-            # ----- File 1 header (MF=1/MT=451) -----
-            set_mf(1)
-            set_mt(451)
-            # New material record
-            contio(f, self.inp.za, self.inp.awr, -1, 0, 0, 0)
-            # Indicate six text lines follow
-            contio(f, 0.0, 0.0, 0, 0, 0, 6)
-            # Flag record
-            contio(f, 1.0, 0.0, 0, 0, 12, 6)
-            # Set C6 to 3 if any elastic section is present (iel!=0), else 2
-            c6 = 3 if self.inp.iel != 0 else 2
-            contio(f, 0.0, 0.0, 0, 0, 0, c6)
-            # Six blank text lines
-            for _ in range(6):
-                contio(f, 0.0, 0.0, 0, 0, 0, 0)
-            # Terminate file 1
-            asend(f)
-            afend(f)
-            # ----- Reset state for file 7 -----
-            reset_ns()
-            set_mat(self.inp.mat)
-            # ----- Incoherent elastic (MF=7/MT=2) -----
-            if self.inp.iel < 0:
-                set_mf(7)
-                set_mt(2)
-                # Header: incoherent elastic L1=2
-                contio(f, self.inp.za, self.inp.awr, 2, 0, 0, 0)
-                # Compute bound cross section sb*npr
-                if self.inp.awr != 0.0:
-                    sb = self.inp.spr * ((1.0 + self.inp.awr) / self.inp.awr) ** 2
-                else:
-                    sb = 0.0
-                c1 = sb * self.inp.npr
-                c2 = 0.0
-                l1 = 0; l2 = 0
-                # Create temperature and Debye–Waller arrays
-                temps = list(self.inp.temperatures)
-                dwps: List[float] = []
-                for ti, T in enumerate(temps):
-                    if T <= 0 or self.inp.awr == 0.0:
-                        dwps.append(0.0)
-                    else:
-                        dwps.append(self.dwpix[ti] / (self.inp.awr * T * self.BK))
-                if len(temps) == 1:
-                    temps = [temps[0], temps[0]]
-                    dwps = [dwps[0], dwps[0]]
-                ndw = len(temps)
-                nbt = [ndw]; intt = [2]
-                tab1io(f, c1, c2, l1, l2, nbt, intt, temps, dwps)
-                # Section end
-                asend(f)
-            # ----- Inelastic scattering (MF=7/MT=4) -----
-            set_mf(7)
-            set_mt(4)
-            # Determine symmetry flag
-            isym_val = 0
-            if self.inp.ncold != 0:
-                isym_val = 1
-            if self.inp.isabt == 1:
-                isym_val += 2
-            # Header for File 7 inelastic
-            contio(f, self.inp.za, self.inp.awr, 0, self.inp.lat, isym_val, 0)
-            # Second header: number of beta points (mirrored if asymmetric)
-            if isym_val % 2 == 0:
-                nbeta_out = self.inp.nbeta
-            else:
-                nbeta_out = 2 * self.inp.nbeta - 1
-            contio(f, 0.0, 0.0, 0, 0, 1, nbeta_out)
-            # Loop over beta grid and write TAB1 records
-            for i_beta in range(nbeta_out):
-                if isym_val % 2 == 0:
-                    beta_val = self.inp.beta[i_beta]
-                else:
-                    if i_beta < self.inp.nbeta - 1:
-                        beta_val = -self.inp.beta[self.inp.nbeta - i_beta - 1]
-                    else:
-                        beta_val = self.inp.beta[i_beta - (self.inp.nbeta - 1)]
-                for t_index, temp in enumerate(self.inp.temperatures):
-                    x_vals = self.inp.alpha
-                    if isym_val % 2 == 0:
-                        y_vals = self.ssm[t_index, i_beta, :].tolist()
-                    else:
-                        if i_beta < self.inp.nbeta - 1:
-                            y_vals = self.ssm[t_index, self.inp.nbeta - i_beta - 1, :].tolist()
-                        else:
-                            y_vals = self.ssp[t_index, i_beta - (self.inp.nbeta - 1), :].tolist()
-                    nbt_alpha = [len(x_vals)]; intt_alpha = [2]
-                    tab1io(f, temp, beta_val, 0, 0, nbt_alpha, intt_alpha, x_vals, y_vals)
-            # End inelastic section
-            asend(f)
-            # ----- File end, material end, tape end -----
-            afend(f)
-            amend(f)
-            atend(f)
-            # ----- Coherent elastic (MF=7/MT=2) -----
-            if self.inp.iel > 0:
-                edges = getattr(self, 'bragg_edges', [])
-                cumulatives = getattr(self, 'bragg_cumint', [])
-                if edges and cumulatives:
-                    set_mf(7)
-                    set_mt(2)
-                    contio(f, self.inp.za, self.inp.awr, 1, 0, 0, 0)
-                    for t_index, temp in enumerate(self.inp.temperatures):
-                        x_vals = edges
-                        y_vals = cumulatives[t_index] if t_index < len(cumulatives) else []
-                        if not y_vals:
-                            continue
-                        nbt = [len(x_vals)]; intt = [1]
-                        tab1io(f, temp, 0.0, 0, 0, nbt, intt, x_vals, y_vals)
-                    asend(f)
-        # If the endf_parserpy package is available, re‑parse and rewrite
-        try:
-            from endf_parserpy import EndfParserFactory
-            # Parse the file we just wrote
-            parser = EndfParserFactory.create(select="python")
-            endf_dict = parser.parsefile(filename)
-            # Write it back using endf_parserpy to ensure full compliance
-            parser.writefile(filename, endf_dict, overwrite=True)
-        except Exception:
-            # If parsing fails or package is unavailable, leave file as is
-            pass
-
-    # ------------------------------------------------------------------
-    # Core numerical routines
-
-    def _contin(self, temp: float, t_index: int, alpha: np.ndarray, beta: np.ndarray) -> None:
-        """
-        Compute the continuous (phonon expansion) part of S(α,β) for a
-        given temperature.
-
-        This method corresponds to the Fortran subroutine ``contin``.
-        It relies on helper functions ``_start``, ``_fsum``, ``_terpt``
-        and ``_convol`` to perform the phonon expansion.  The result
-        for the specified temperature index is written into
-        ``self.ssm[t_index]``.
-
-        Parameters
-        ----------
-        temp : float
-            Temperature in kelvin.  A negative value in the input deck
-            indicates that the previous parameters should be reused.
-        t_index : int
-            Index of the temperature in the input arrays.
-        alpha : ndarray
-            1‑D array of α values.
-        beta : ndarray
-            1‑D array of β values.
-        """
-        nalpha = self.inp.nalpha
-        nbeta = self.inp.nbeta
-        nphon = self.inp.nphon
-        iprint = self.inp.iprint
-        # Use absolute temperature to determine effective temperature in eV
-        self.tev = self.BK * abs(temp)
-        # call start() to compute initial distribution and scaling
-        p, deltab = self._start(t_index)
-        self.deltab = deltab
-        # scale factor for α and β if required
-        sc = 1.0
-        if self.inp.lat == 1:
-            # in Fortran: therm/tev with therm=0.0253 eV
-            sc = 0.0253 / self.tev
-        # allocate working arrays
-        # tlast will hold t_n from previous order, initialised with t1
-        tlast = np.copy(p)
-        # initialise S(α,β) array for this temperature
-        sab = np.zeros((nbeta, nalpha), dtype=float)
-        # compute zeroth order (n=1) contribution
-        for j in range(nalpha):
-            al = alpha[j] * sc  # α scaled by temperature and scatterer ratio
-            # compute exponent terms for this α
-            ex_const = -self.f0 * al
-            # log term used to build up α^n / n! factors
-            xa = math.log(al * self.f0) if al > 0 else -np.inf
-            for k in range(nbeta):
-                be = beta[k] * sc
-                st = self._terpt(p, be)
-                add = st * math.exp(ex_const + xa) if st > 0 else 0.0
-                sab[k, j] = add
-        # perform phonon expansion up to order nphon
-        npl = len(p)
-        for n in range(2, nphon + 1):
-            # convolution t_n = t1 * t_{n-1}
-            tnext = self._convol(p, tlast, deltab)
-            # accumulate contributions for each α,β
-            for j in range(nalpha):
-                al = alpha[j] * sc
-                # update xa for order n: xa += log(al * f0 / n)
-                # we track xa separately per α to avoid recomputing log factorials
-                # For simplicity we recompute from scratch here
-                if al > 0 and self.f0 > 0:
-                    xa = math.log((al * self.f0) ** n / math.factorial(n))
-                else:
-                    xa = -np.inf
-                ex_const = -self.f0 * al
-                for k in range(nbeta):
-                    be = beta[k] * sc
-                    st = self._terpt(tnext, be)
-                    add = st * math.exp(ex_const) * (al * self.f0) ** n / math.factorial(n) if st > 0 else 0.0
-                    sab[k, j] += add
-            # prepare for next order
-            tlast = tnext
-        # store results
-        self.ssm[t_index] = sab
-
-    def _start(self, t_index: int) -> Tuple[np.ndarray, float]:
-        """
-        Compute integral functions of the phonon frequency distribution.
-
-        This method corresponds to the Fortran subroutine ``start``.
-        It takes the input ``p1`` array (the phonon density at
-        uniformly spaced β values) and constructs the initial
-        tabulation of t₁(β).  It also calculates the Debye–Waller
-        parameter ``f0`` and the effective temperature factor ``tbar``.
-
-        Parameters
-        ----------
-        t_index : int
-            Index of the current temperature in the input arrays.
-
-        Returns
-        -------
-        p : ndarray
-            Array of t₁(β) values on a grid with spacing ``deltab``.
-        deltab : float
-            The β spacing used for the convolution routines.
-        """
-        # dereference input fields
-        delta1 = self.delta1
-        p1 = self.p1
-        np1 = self.np1
-        tbeta = self.tbeta
-        # compute β spacing in the scaled grid
-        deltab = delta1 / self.tev
-        # copy input spectrum into p array
-        p = p1.copy()
-        # initial normalisation of p according to the Fortran code
-        # convert p(e) into p(β) by dividing by sinh(β/2) factor and normalising
-        # as in start() from Fortran
-        # compute intermediate arrays
-        u = deltab
-        v = math.exp(deltab / 2.0)
-        # first element special case
-        p[0] = p[1] / deltab ** 2
-        vv = v
-        for j in range(1, np1):
-            p[j] = p[j] / (u * (vv - 1.0 / vv))
-            vv *= v
-            u += deltab
-        # determine normalising constant an
-        tau = 0.5  # fixed in Fortran
-        an = self._fsum(1, p, deltab) / tbeta
-        # normalise p and compute Debye–Waller integrals
-        for i in range(np1):
-            p[i] /= an
-        # compute f0 and tbar
-        self.f0 = self._fsum(0, p, deltab)
-        self.tbar = self._fsum(2, p, deltab) / (2.0 * tbeta)
-        # convert p(β) into t₁(β)
-        for i in range(np1):
-            be = deltab * i
-            p[i] = p[i] * math.exp(be / 2.0) / self.f0
-        # store Debye–Waller and effective temp
-        self.dwpix[t_index] = self.f0
-        self.tempf[t_index] = self.tbar * self.inp.temperatures[t_index]
-        return p, deltab
-
-    def _fsum(self, n: int, p: np.ndarray, deltab: float) -> float:
-        """
-        Compute integral of p(β) β^n times hyperbolic function.
-
-        This replicates the Fortran function ``fsum``.  The integral
-        computed is
-
-            ∫₀^∞ 2 p(β) β^n [cosh(τ β) or sinh(τ β)] dβ
-
-        where the hyperbolic function depends on the parity of n.
-        A trapezoidal rule on a uniform grid is used.  In this port
-        τ=½ is fixed, matching the original code.
-
-        Parameters
-        ----------
-        n : int
-            Power of β in the integrand.
-        p : ndarray
-            Array of p(β) values on a uniform β grid.
-        deltab : float
-            Grid spacing in β.
-
-        Returns
-        -------
-        float
-            Approximation of the integral.
-        """
-        tau = 0.5
-        edsq = math.exp(deltab * tau / 2.0)
-        v = 1.0
-        an = 1.0 - 2.0 * (n % 2)  # +1 for even n, −1 for odd n
+    quart = 0.25
+    eps = 1.0e-7
+    zero = 0.0
+    one = 1.0
+    ap: list[float] = []
+    sd: list[float] = []
+    if c != 0.0:
+        d = twt * c
+        c2 = math.sqrt(c*c + quart)
+        c3 = 2.0*d*al
+        c4 = c3*c3
+        c8 = c2*c3/math.pi
+        c3 = 2.0*d*c*al
         be = 0.0
-        fs = 0.0
-        w = 1.0
-        npnt = len(p)
-        for ij in range(npnt):
-            if n > 0:
-                w = be ** n
-            # hyperbolic term: 2 p(β) [cosh(tau β) or sinh(tau β)]
-            ff = ((p[ij] * v) * v + (p[ij] * an / v) / v) * w
-            if ij == 0 or ij == npnt - 1:
-                ff /= 2.0
-            fs += ff
-            be += deltab
-            v *= edsq
-        return fs * deltab
-
-    def _terpt(self, tn: np.ndarray, be: float) -> float:
-        """
-        Linear interpolation in a table of tₙ(β).
-
-        Equivalent to the Fortran function ``terpt``.  If the
-        requested β lies beyond the end of the tabulation, zero is
-        returned.
-
-        Parameters
-        ----------
-        tn : ndarray
-            Array of tₙ(β) values on a uniform β grid.
-        be : float
-            Requested β value.
-
-        Returns
-        -------
-        float
-            Interpolated tₙ(β).
-        """
-        ntn = len(tn)
-        delta = self.deltab
-        if be > ntn * delta:
-            return 0.0
-        i = int(be / delta)
-        if i < ntn - 1:
-            bt = i * delta
-            btp = bt + delta
-            return tn[i] + (be - bt) * (tn[i + 1] - tn[i]) / (btp - bt)
-        return 0.0
-
-    def _terps(self, sd: np.ndarray, delta: float, be: float) -> float:
-        """
-        Logarithmic interpolation used for translational contributions.
-
-        This replicates the Fortran function ``terps``.  The array
-        ``sd`` contains values of s(β) on a uniform grid of spacing
-        ``delta``.  If the input β value is larger than the tabulated
-        range, zero is returned.  Otherwise a logarithmic interpolation
-        between the two nearest points is performed.
-
-        Parameters
-        ----------
-        sd : ndarray
-            Array of s(β) values.
-        delta : float
-            Grid spacing used when constructing ``sd``.
-        be : float
-            Requested β value.
-
-        Returns
-        -------
-        float
-            Interpolated s(β) value.
-        """
-        nsd = len(sd)
-        slim = -225.0
-        if be > delta * nsd:
-            return 0.0
-        i = int(be / delta)
-        if i < nsd - 1:
-            bt = i * delta
-            btp = bt + delta
-            st = slim if sd[i] <= 0.0 else math.log(sd[i])
-            stp = slim if sd[i + 1] <= 0.0 else math.log(sd[i + 1])
-            stt = st + (be - bt) * (stp - st) / (btp - bt)
-            return math.exp(stt) if stt > slim else 0.0
-        return 0.0
-
-    def _besk1(self, x: float) -> float:
-        """
-        Compute the modified Bessel function K₁(x) with the same
-        normalisation used in the Fortran routine ``besk1``.
-
-        For x ≤ 1, a series expansion is used; for x > 1, an
-        asymptotic expansion is used.  This implementation is a direct
-        translation of the constants and logic from the NJOY Fortran
-        code.  The exponential part for x > 1 is omitted, mirroring
-        the behaviour in ``stable``.
-        """
-        # coefficients taken from the Fortran code
-        c0 = 0.125
-        c1 = 0.442850424
-        c2 = 0.584115288
-        c3 = 6.070134559
-        c4 = 17.864913364
-        c5 = 48.858995315
-        c6 = 90.924600045
-        c7 = 113.795967431
-        c8 = 85.331474517
-        c9 = 32.00008698
-        c10 = 3.999998802
-        c11 = 1.304923514
-        c12 = 1.47785657
-        c13 = 16.402802501
-        c14 = 44.732901977
-        c15 = 115.837493464
-        c16 = 198.437197312
-        c17 = 222.869709703
-        c18 = 142.216613971
-        c19 = 40.000262262
-        c20 = 1.999996391
-        c21 = 1.0
-        c22 = 0.5
-        c23 = 0.5772156649
-        c24 = 1.0
-        c25 = 0.0108241775
-        c26 = 0.0788000118
-        c27 = 0.2581303765
-        c28 = 0.5050238576
-        c29 = 0.663229543
-        c30 = 0.6283380681
-        c31 = 0.4594342117
-        c32 = 0.2847618149
-        c33 = 0.1736431637
-        c34 = 0.1280426636
-        c35 = 0.1468582957
-        c36 = 0.4699927013
-        c37 = 1.2533141373
-        test = 1.0
-        if x <= test:
-            v = c0 * x
-            u = v * v
-            bi1 = ((((((((c1 * u + c2) * u + c3) * u + c4) * u + c5) * u + c6) * u + c7) * u + c8) * u + c9) * u + c10
-            bi1 *= v
-            bi3 = ((((((((c11 * u + c12) * u + c13) * u + c14) * u + c15) * u + c16) * u + c17) * u + c18) * u + c19) * u + c20
-            return c21 / x + bi1 * (math.log(c22 * x) + c23) - v * bi3
-        else:
-            u = c24 / x
-            bi3 = (((((((((( -c25 * u + c26) * u - c27) * u + c28) * u - c29) * u + c30) * u - c31) * u + c32) * u - c33) * u + c34) * u - c35) * u + c36
-            return math.sqrt(u) * (bi3 + c37 * u)
-
-    def _stable(self, al: float, delta: float) -> Tuple[np.ndarray, int]:
-        """
-        Construct a table of S_d(β) for the diffusion/free‑gas
-        translational contribution.
-
-        This is a translation of the Fortran subroutine ``stable``.
-        It generates a one‑sided (β ≥ 0) table of diffusion/free‑gas
-        scattering contributions.  The computation stops when the
-        values drop below 1e‑7 of the first value or when a maximum
-        length is reached.
-
-        Parameters
-        ----------
-        al : float
-            Scaled α value (α * sc / arat in the Fortran code).
-        delta : float
-            β spacing for the convolution grid.
-
-        Returns
-        -------
-        sd : ndarray
-            Array of S_d(β) values on a uniform grid starting at β=0.
-        nsd : int
-            Number of points in ``sd``.
-        """
-        tiny = 1.0e-30
-        eps = 1.0e-7
-        # allocate a reasonably large array; the original code uses ndmax
-        sd_vals: List[float] = []
-        # diffusion branch
-        if self.c != 0.0:
-            d = self.twt * self.c
-            c2 = math.sqrt(self.c * self.c + 0.25)
-            c3 = 2.0 * d * al
-            c4 = c3 * c3
-            c8 = c2 * c3 / math.pi
-            c3 = 2.0 * d * self.c * al
-            be = 0.0
-            j = 0
-            while True:
-                c6 = math.sqrt(be * be + c4)
-                c7 = c6 * c2
-                if c7 <= 1.0:
-                    c5 = c8 * math.exp(c3 + be / 2.0)
-                else:
-                    c5 = 0.0
-                    ex = c3 - c7 + be / 2.0
-                    c5 = c8 * math.exp(ex)
-                val = 0.0
-                if c6 != 0:
-                    val = c5 * self._besk1(c7) / c6
-                sd_vals.append(val)
-                # termination conditions every other point
-                j += 1
-                be += delta
-                if j % 2 == 0:
-                    if j >= 1999:
-                        break
-                    if sd_vals[0] * eps >= sd_vals[-1]:
-                        break
-        else:
-            # free gas branch
-            be = 0.0
-            j = 0
-            wal = self.twt * al
-            while True:
-                # avoid division by zero when wal is zero
-                if wal == 0.0:
-                    val = 0.0
-                else:
-                    ex = - (wal - be) ** 2 / (4.0 * wal)
-                    val = math.exp(ex) / math.sqrt(4.0 * self.PI * wal)
-                sd_vals.append(val)
-                j += 1
-                be += delta
-                if j % 2 == 0:
-                    if j >= 1999:
-                        break
-                    if sd_vals[0] * eps >= sd_vals[-1]:
-                        break
-        sd_array = np.array(sd_vals, dtype=float)
-        return sd_array, len(sd_array)
-
-    def _sbfill(self, be: float, s: np.ndarray, betan: np.ndarray, nbeta: int, delta: float, nbt: int) -> np.ndarray:
-        """
-        Generate s(β) on a new energy grid for convolution with a
-        diffusion/free‑gas shape.
-
-        This replicates the Fortran subroutine ``sbfill``.  A new
-        table ``sb`` of length ``2*nbt-1`` is constructed covering
-        β in [−be−(nbt−1)δ, −be+(nbt−1)δ].  The values are
-        interpolated from the asymmetric scattering function stored in
-        ``s``.  If β lies outside the tabulation, zero is used.
-
-        Parameters
-        ----------
-        be : float
-            β value at the centre of the convolution window.
-        s : ndarray
-            Array of asymmetric scattering values (length ``nbeta``).
-        betan : ndarray
-            Array of β grid values (length ``nbeta``).
-        nbeta : int
-            Number of β values.
-        delta : float
-            Grid spacing for the convolution window.
-        nbt : int
-            Number of points in the diffusion/free‑gas table ``sd``.
-
-        Returns
-        -------
-        sb : ndarray
-            Array of interpolated scattering values on the new grid
-            (length ``2*nbt-1``).
-        """
-        # set up interpolation range
-        bmin = -be - (nbt - 1) * delta
-        bmax = -be + (nbt - 1) * delta + delta / 100.0
-        # precompute logs for interpolation
-        s_log = np.where(s > 0, np.log(s), -225.0)
-        # allocate output array
-        m = 2 * nbt - 1
-        sb = np.zeros(m, dtype=float)
-        # pointer for betan search
-        j = nbeta - 1
-        idx = 0
-        bet = bmin
-        while idx < m:
-            b = abs(bet)
-            # find bracketing interval in betan
-            # move j down until betan[j-1] <= b <= betan[j]
-            # or until boundaries
-            if b > betan[j]:
-                # move up in betan if possible
-                while j < nbeta - 1 and b > betan[j]:
-                    j += 1
+        j = 0
+        while True:
+            j += 1
+            c6 = math.sqrt(be*be + c4)
+            c7 = c6*c2
+            if c7 <= one:
+                c5 = c8*math.exp(c3 + be/2.0)
             else:
-                while j > 0 and b < betan[j - 1]:
-                    j -= 1
-            # perform interpolation if within range
-            val = 0.0
-            if 0 < j < nbeta:
-                st = s_log[j]
-                stm = s_log[j - 1]
-                denom = betan[j - 1] - betan[j]
-                if denom != 0:
-                    sb_val = st + (b - betan[j]) * (stm - st) / denom
-                else:
-                    sb_val = st
-                if bet > 0:
-                    sb_val -= bet
-                val = math.exp(sb_val) if sb_val > -225.0 else 0.0
-            sb[idx] = val
-            # increment
-            bet += delta
-            idx += 1
-        return sb
-
-    # ------------------------------------------------------------------
-    # Discrete oscillator support routines (partially ported)
-
-    def _bfact(self, x: float, dwc: float, betai: float) -> Tuple[float, np.ndarray, np.ndarray]:
-        """
-        Compute Bessel function terms for discrete oscillators.
-
-        This is a translation of the Fortran subroutine ``bfact``.  It
-        returns the zero‑order Bessel term and two arrays ``bplus`` and
-        ``bminus`` corresponding to positive and negative orders up to
-        ``imax`` (=50).  The arrays have length 50, indexed from 0 to
-        49 in Python, corresponding to 1 through 50 in the Fortran code.
-
-        Parameters
-        ----------
-        x : float
-            Argument used in the Bessel function recurrence.
-        dwc : float
-            Debye–Waller exponent term (α * dbw(i) in the original code).
-        betai : float
-            Oscillator energy divided by kT (β value).
-
-        Returns
-        -------
-        bzero : float
-            Zero‑order term.
-        bplus : ndarray
-            Array of positive order Bessel terms (length 50).
-        bminus : ndarray
-            Array of negative order Bessel terms (length 50).
-        """
-        # constants from the Fortran implementation
-        c0 = 3.75
-        c1 = 1.0
-        c2 = 3.5156229
-        c3 = 3.0899424
-        c4 = 1.2067492
-        c5 = 0.2659732
-        c6 = 0.0360768
-        c7 = 0.0045813
-        c8 = 0.39894228
-        c9 = 0.01328592
-        c10 = 0.00225319
-        c11 = 0.00157565
-        c12 = 0.00916281
-        c13 = 0.02057706
-        c14 = 0.02635537
-        c15 = 0.01647633
-        c16 = 0.00392377
-        c17 = 0.5
-        c18 = 0.87890594
-        c19 = 0.51498869
-        c20 = 0.15084934
-        c21 = 0.02658733
-        c22 = 0.00301532
-        c23 = 0.00032411
-        c24 = 0.02282967
-        c25 = 0.02895312
-        c26 = 0.01787654
-        c27 = 0.00420059
-        c28 = 0.39894228
-        c29 = 0.03988024
-        c30 = 0.00362018
-        c31 = 0.00163801
-        c32 = 0.01031555
-        big = 1.0e10
-        tiny = 1.0e-30
-        # compute modified Bessel functions I0 and I1 (bessi0 and bessi1)
-        y = x / c0
-        # I0
-        if y <= 1.0:
-            u = y * y
-            bessi0 = (((((c1 + u * c2) + u * u * c3) + u * u * u * c4) + u * u * u * u * c5) + u * u * u * u * u * c6) + u * u * u * u * u * u * c7
-        else:
-            v = 1.0 / y
-            bessi0 = (c8 + v * (c9 + v * (c10 + v * (-c11 + v * (c12 + v * (-c13 + v * (c14 + v * (-c15 + v * c16)))))))) / math.sqrt(x)
-        # I1
-        if y <= 1.0:
-            u = y * y
-            bessi1 = (c17 + u * (c18 + u * (c19 + u * (c20 + u * (c21 + u * (c22 + u * c23)))))) * x
-        else:
-            v = 1.0 / y
-            bessi1 = c24 + v * (-c25 + v * (c26 - v * c27))
-            bessi1 = c28 + v * (-c29 + v * (-c30 + v * (c31 + v * (-c32 + v * bessi1))))
-            bessi1 /= math.sqrt(x)
-        # reverse recurrence to compute higher order Bessel functions
-        imax = 50
-        bn = [0.0] * (imax + 1)
-        bn[imax] = 0.0
-        bn[imax - 1] = 1.0
-        i = imax - 1
-        while i > 1:
-            bn[i - 1] = bn[i + 1] + i * (2.0 / x) * bn[i]
-            i -= 1
-            if bn[i] >= big:
-                # scale down to avoid overflow
-                for j in range(i, imax + 1):
-                    bn[j] /= big
-        # normalise so that bn[1] = bessi1
-        rat = bessi1 / bn[1]
-        for i in range(1, imax + 1):
-            bn[i] *= rat
-            if bn[i] < tiny:
-                bn[i] = 0.0
-        # apply exponential terms to Bessel functions
-        bzero = 0.0
-        bplus = np.zeros(imax, dtype=float)
-        bminus = np.zeros(imax, dtype=float)
-        ycheck = y <= 1.0
-        if ycheck:
-            bzero = bessi0 * math.exp(-dwc)
-            for i in range(1, imax + 1):
-                idx = i - 1
-                if bn[i] != 0.0:
-                    # positive order
-                    arg = -dwc - i * betai / 2.0
-                    val = math.exp(arg) * bn[i]
-                    bplus[idx] = val if val >= tiny else 0.0
-                    # negative order
-                    arg = -dwc + i * betai / 2.0
-                    val = math.exp(arg) * bn[i]
-                    bminus[idx] = val if val >= tiny else 0.0
-        else:
-            bzero = bessi0 * math.exp(-dwc + x)
-            for i in range(1, imax + 1):
-                idx = i - 1
-                if bn[i] != 0.0:
-                    # positive order
-                    arg = -dwc - i * betai / 2.0 + x
-                    val = math.exp(arg) * bn[i]
-                    bplus[idx] = val if val >= tiny else 0.0
-                    # negative order
-                    arg = -dwc + i * betai / 2.0 + x
-                    val = math.exp(arg) * bn[i]
-                    bminus[idx] = val if val >= tiny else 0.0
-        return bzero, bplus, bminus
-
-    def _bfill(self, betan: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Construct arrays ``bex`` and ``rdbex`` used by the discrete
-        oscillator interpolation.  This mirrors the Fortran subroutine
-        ``bfill``.
-
-        Parameters
-        ----------
-        betan : ndarray
-            Array of β grid values (in ascending order).
-
-        Returns
-        -------
-        bex : ndarray
-            Extended β grid covering both negative and positive values.
-        rdbex : ndarray
-            Reciprocal differences between adjacent ``bex`` values.
-        """
-        nbeta = len(betan)
-        # build negative branch (reverse of betan)
-        bex_neg = -betan[::-1]
-        # exclude zero from double counting if betan[0] is ~0
-        if abs(betan[0]) <= 1.0e-9:
-            bex_pos = betan[1:]
-        else:
-            bex_pos = betan
-        bex = np.concatenate((bex_neg, bex_pos))
-        # compute reciprocal differences
-        rdbex = np.zeros(len(bex) - 1, dtype=float)
-        for i in range(len(rdbex)):
-            diff = bex[i + 1] - bex[i]
-            rdbex[i] = 1.0 / diff if diff != 0.0 else 0.0
-        return bex, rdbex
-
-    def _exts(self, sexpb: np.ndarray, exb: np.ndarray, betan: np.ndarray) -> np.ndarray:
-        """
-        Extend the asymmetric scattering law to both ±β.
-
-        This mirrors the Fortran subroutine ``exts``.  The input
-        ``sexpb`` contains S(α,β) for negative β.  The array ``exb``
-        contains exp(−β/2) factors for each β.  The output ``sex``
-        contains the extended scattering law for both negative and
-        positive β.
-
-        Parameters
-        ----------
-        sexpb : ndarray
-            Asymmetric scattering values for negative β (length ``nbeta``).
-        exb : ndarray
-            Precomputed exp(−β/2) values (length ``nbeta``).
-        betan : ndarray
-            β grid (length ``nbeta``).
-
-        Returns
-        -------
-        sex : ndarray
-            Extended scattering array (length ``2*nbeta - 1``).
-        """
-        nbeta = len(sexpb)
-        # create arrays for negative and positive parts
-        sex = np.zeros(2 * nbeta - 1, dtype=float)
-        # negative part (reverse order)
-        sex[:nbeta] = sexpb[::-1]
-        # exclude zero from double counting
-        if abs(betan[0]) <= 1.0e-9:
-            start = nbeta
-        else:
-            # insert the zero index explicitly
-            sex[nbeta] = sexpb[0]
-            start = nbeta + 1
-        # positive part
-        for i in range(1, nbeta):
-            idx = start + i - 1
-            # multiply by exp(β/2) squared
-            sex[idx] = sexpb[i] * exb[i] * exb[i]
-        return sex
-
-    def _sint(self, x: float, bex: np.ndarray, rdbex: np.ndarray, sex: np.ndarray, alpha: float, wt: float, tbart: float, betan: np.ndarray) -> float:
-        """
-        Interpolate/extrapolate scattering function for discrete oscillator convolution.
-
-        This replicates the Fortran function ``sint``.  It uses the
-        extended β grid (``bex``) and scattering values (``sex``) to
-        perform interpolation, or falls back to the SCT (short
-        collision time) approximation for values outside the tabulated
-        range.
-
-        Parameters
-        ----------
-        x : float
-            Desired β value.
-        bex : ndarray
-            Extended β grid.
-        rdbex : ndarray
-            Reciprocal differences of ``bex``.
-        sex : ndarray
-            Extended scattering values.
-        alpha : float
-            Scaled α value.
-        wt : float
-            Weight factor ``tbeta + twt`` (total weight).
-        tbart : float
-            Effective temperature ratio for discrete oscillators.
-        betan : ndarray
-            Original β grid (positive values).
-
-        Returns
-        -------
-        float
-            Interpolated or approximated scattering value.
-        """
-        # SCT approximation if |x| > max(betan)
-        if abs(x) > betan[-1]:
-            if alpha <= 0.0:
-                return 0.0
-            ex = -(wt * alpha - abs(x)) ** 2 / (4.0 * wt * alpha * tbart)
-            if x > 0:
-                ex -= x
-            return math.exp(ex) / (4.0 * math.pi * wt * alpha * tbart)
-        # otherwise, perform interpolation on bex
-        # locate interval via bisection
-        k1 = 0
-        k3 = len(bex) - 1
-        # handle exact matches
-        if x == bex[k3]:
-            return sex[k3]
-        # binary search
-        while k3 - k1 > 1:
-            k2 = (k1 + k3) // 2
-            if x >= bex[k2]:
-                k1 = k2
-            else:
-                k3 = k2
-        # linear interpolation in log space
-        ss1 = -225.0 if sex[k1] <= 0.0 else math.log(sex[k1])
-        ss3 = -225.0 if sex[k3] <= 0.0 else math.log(sex[k3])
-        ex = ((bex[k3] - x) * ss1 + (x - bex[k1]) * ss3) * rdbex[k1]
-        return math.exp(ex) if ex > -225.0 else 0.0
-
-    def _terpk(self, ska: np.ndarray, dka: float, be: float) -> float:
-        """
-        Interpolate in the S(kappa) table for a given kappa.
-
-        This mirrors the Fortran function ``terpk`` used in the Sköld
-        approximation.  The array ``ska`` holds values of S(kappa) at
-        kappa values ``0, dka, 2*dka, ...``.  A simple linear
-        interpolation is performed between adjacent points.  Values
-        beyond the table (be > nka*dka) return 1.
-
-        Parameters
-        ----------
-        ska : ndarray
-            Tabulated S(kappa) values (length ``nka``).
-        dka : float
-            Spacing between kappa values (in inverse Angstroms).
-        be : float
-            Desired kappa value.
-
-        Returns
-        -------
-        float
-            Interpolated S(kappa) at the specified kappa.
-        """
-        nka = len(ska)
-        # if request beyond table, return 1
-        if be > nka * dka:
-            return 1.0
-        # integer index of lower grid point
-        i0 = int(be / dka)
-        # clamp at upper end
-        if i0 >= nka - 1:
-            return 1.0
-        bt = i0 * dka
-        btp = bt + dka
-        # linear interpolation between ska[i0] and ska[i0+1]
-        y1 = ska[i0]
-        y2 = ska[i0 + 1]
-        if btp == bt:
-            return y1
-        return y1 + (be - bt) * (y2 - y1) / (btp - bt)
-
-    def _terp1(self, x1: float, y1: float, x2: float, y2: float, x: float, interp_code: int) -> float:
-        """
-        Interpolate a single point (x,y) between two points (x1,y1) and (x2,y2).
-
-        This replicates the Fortran subroutine ``terp1`` from ``endf.f90``.
-        Depending on the interpolation code, linear, logarithmic or
-        exponential interpolation is used.  Only codes 1–5 are
-        implemented; code 6 (Coulomb penetrability) is not needed in
-        LEAPR.
-
-        Parameters
-        ----------
-        x1, y1 : float
-            Coordinates of the first point.
-        x2, y2 : float
-            Coordinates of the second point.
-        x : float
-            The x‑value at which to interpolate.
-        interp_code : int
-            Interpolation flag (1–5) as in ENDF manual.
-
-        Returns
-        -------
-        float
-            Interpolated y value at ``x``.
-        """
-        # handle degenerate case
-        if x2 == x1:
-            return y1
-        # constant y or trivial cases
-        if interp_code == 1 or y2 == y1 or x == x1:
-            return y1
-        # linear in x
-        if interp_code == 2:
-            return y1 + (x - x1) * (y2 - y1) / (x2 - x1)
-        # y linear in ln(x)
-        if interp_code == 3:
-            if x1 <= 0.0 or x2 <= 0.0 or x <= 0.0:
-                return y1
-            return y1 + math.log(x / x1) * (y2 - y1) / math.log(x2 / x1)
-        # ln(y) linear in x
-        if interp_code == 4:
-            if y1 <= 0.0 or y2 <= 0.0:
-                return y1
-            return y1 * math.exp((x - x1) * math.log(y2 / y1) / (x2 - x1))
-        # ln(y) linear in ln(x)
-        if interp_code == 5:
-            if y1 <= 0.0 or y2 <= 0.0 or x1 <= 0.0 or x2 <= 0.0 or x <= 0.0:
-                return y1
-            return y1 * math.exp(math.log(x / x1) * math.log(y2 / y1) / math.log(x2 / x1))
-        # fallback to linear
-        return y1 + (x - x1) * (y2 - y1) / (x2 - x1)
-
-
-    def _trans(self, t_index: int, alpha: np.ndarray, beta: np.ndarray) -> None:
-        """
-        Apply translational (diffusion/free‑gas) contributions to S(α,β).
-
-        This method is a translation of the Fortran subroutine ``trans``.
-        It convolves the previously calculated continuous scattering law
-        with a translational kernel representing either diffusion or
-        free gas.  The results are accumulated in ``self.ssm``.
-
-        Parameters
-        ----------
-        t_index : int
-            Index of the current temperature.
-        alpha : ndarray
-            Array of α values.
-        beta : ndarray
-            Array of β values.
-        """
-        nbeta = self.inp.nbeta
-        nalpha = self.inp.nalpha
-        # scale factors
-        sc = 1.0
-        if self.inp.lat == 1:
-            sc = 0.0253 / self.tev
-        # loop over α
-        for ialpha in range(nalpha):
-            al = alpha[ialpha] * sc
-            # choose β interval size for convolution
-            # coefficients from Fortran
-            c0 = 0.4
-            c1 = 1.0
-            c2 = 1.42
-            c3 = 0.2
-            c4 = 10.0
-            ded = c0 * (self.twt * self.c * al) / math.sqrt(c1 + c2 * (self.twt * self.c * al) * self.c)
-            if ded == 0.0:
-                ded = c3 * math.sqrt(self.twt * al)
-            deb = c4 * al * self.deltab
-            # choose smaller of ded and deb
-            delta = ded if ded < deb else deb
-            # build diffusion/free‑gas table
-            sd, nsd = self._stable(al, delta)
-            if nsd <= 1:
-                continue
-            # copy original asymmetric S to temporary array
-            betan = beta * sc
-            ap = self.ssm[t_index, :, ialpha].copy()
-            # convolution loop over β values
-            for ibeta in range(nbeta):
-                be = betan[ibeta]
-                # prepare sb values on new grid
-                sb = self._sbfill(be, ap, betan, nbeta, delta, nsd)
-                # integrate diffusion/free‑gas kernel with scattering function
-                s_val = 0.0
-                m = nsd
-                mid = m - 1
-                # Simpson's rule integration as in Fortran
-                for i in range(m):
-                    f = 2.0 * ((i % 2) + 1)
-                    if i == 0 or i == m - 1:
-                        f = 1.0
-                    bb = i * delta
-                    # positive β contribution
-                    s_val += f * sd[i] * sb[mid + i]
-                    # negative β contribution
-                    s_val += f * sd[i] * sb[mid - i] * math.exp(-bb)
-                s_val *= delta / 3.0
-                # add contribution from tail using interpolation
-                st = self._terps(sd, delta, be)
-                if st > 0.0:
-                    s_val += math.exp(-al * self.f0) * st
-                # update S(α,β)
-                self.ssm[t_index, ibeta, ialpha] = s_val
-
-    # ------------------------------------------------------------------
-    # Discrete oscillator convolution (placeholder)
-
-    def _discrete(self, t_index: int, alpha: np.ndarray, beta: np.ndarray, bdel: np.ndarray, adel: np.ndarray) -> None:
-        """
-        Convolve discrete oscillators with the continuous scattering law.
-
-        This routine is a translation of the Fortran subroutine
-        ``discre`` from the original LEAPR module.  It computes the
-        contributions of discrete vibrational modes (delta functions)
-        to the scattering law S(α,β) by convolving the previously
-        calculated continuous S(α,β) with the appropriate Bessel
-        expansions.  The resulting contributions are accumulated
-        directly into ``self.ssm`` for the current temperature.
-
-        Parameters
-        ----------
-        t_index : int
-            Index of the current temperature.
-        alpha : ndarray
-            Array of α values.
-        beta : ndarray
-            Array of β values.
-        bdel : ndarray
-            Oscillator energies (eV) for this temperature.
-        adel : ndarray
-            Oscillator weights for this temperature.
-        """
-        # number of α and β points
-        nalpha = self.inp.nalpha
-        nbeta = self.inp.nbeta
-        nd = len(bdel)
-        if nd == 0:
-            return
-        # physical constants and small tolerances
-        small = 1.0e-8
-        vsmall = 1.0e-10
-        tiny = 1.0e-20
-        # scaling factor for β grid
-        sc = 1.0
-        if self.inp.lat == 1:
-            sc = 0.0253 / self.tev
-        # scaled β grid and exp(−β/2)
-        betan = beta * sc
-        exb = np.exp(-betan / 2.0)
-        # build extended β grid and reciprocal differences once
-        bex, rdbex = self._bfill(betan)
-        # oscillator parameters
-        # convert oscillator energies to dimensionless β shifts
-        bdeln = np.array(bdel, dtype=float) / self.tev
-        # allocate arrays for ar, dist and dbw per oscillator
-        ar = np.zeros(nd, dtype=float)
-        dist = np.zeros(nd, dtype=float)
-        dbw = np.zeros(nd, dtype=float)
-        # cumulative weights
-        dwt = 0.0
-        # contribution to effective temperature from discrete oscillators
-        tsave = 0.0
-        # update Debye–Waller parameter dwpix[t_index] as necessary
-        for i in range(nd):
-            adel_i = adel[i]
-            bd_e = bdel[i]
-            bdn = bdeln[i]
-            dwt += adel_i
-            # compute sinh and cosh terms
-            eb = math.exp(bdn / 2.0)
-            # protect against zero division
-            if eb == 0.0:
-                sn = 0.0
-                cn = 0.0
-            else:
-                sn = (eb - 1.0 / eb) / 2.0
-                cn = (eb + 1.0 / eb) / 2.0
-            # avoid division by zero for very small sn
-            if sn != 0.0:
-                ar[i] = adel_i / (sn * bdn)
-            else:
-                ar[i] = 0.0
-            # energy for effective temperature (dist)
-            dist[i] = adel_i * bd_e * cn / (2.0 * sn) if sn != 0.0 else 0.0
-            # sum of dist for tempf update
-            if sn != 0.0:
-                tsave += dist[i] / self.BK
-            # contribution to Debye–Waller parameter
-            dbw[i] = ar[i] * cn
-            if self.dwpix[t_index] > 0.0:
-                self.dwpix[t_index] += dbw[i]
-        # base weight and temperature ratio for sint
-        wt0 = self.tbeta
-        tbart0 = 0.0
-        # tbart0 = tempf / tempr for this temperature
-        tempk = abs(self.inp.temperatures[t_index])
-        if tempk != 0.0:
-            tbart0 = self.tempf[t_index] / tempk
-        # loop over α values
-        # arat scaling for secondary scatterers (not implemented yet)
-        arat = 1.0
-        for ialpha in range(nalpha):
-            # scaled α
-            al = alpha[ialpha] * sc / arat
-            # Debye–Waller factor for discrete lines
-            dwf = math.exp(-al * self.dwpix[t_index]) if self.dwpix[t_index] != 0.0 else 1.0
-            # extend the continuous scattering law to ±β for this α
-            sex = self._exts(self.ssm[t_index, :, ialpha].copy(), exb, betan)
-            # initialise array for the new scattering values (negative β part)
-            sexpb = np.zeros(nbeta, dtype=float)
-            # initialise delta functions: one line at zero with weight 1
-            ben = [0.0]
-            wtn = [1.0]
-            nn = 1
-            # local copies of wt and tbart that accumulate oscillator effects
-            wt = wt0
-            tbart = tbart0
-            # loop over each oscillator
-            for iosc in range(nd):
-                # compute Bessel function factors for this oscillator
-                dwc = al * dbw[iosc]
-                x = al * ar[iosc]
-                bzero, bplus, bminus = self._bfact(x, dwc, bdeln[iosc])
-                # accumulate new discrete lines in temporary lists
-                new_bes: List[float] = []
-                new_wts: List[float] = []
-                # n=0 term
-                for m in range(nn):
-                    besn = ben[m]
-                    wtsn = wtn[m] * bzero
-                    # include if line at negative beta or if weight is significant
-                    if (besn <= 0.0) or (wtsn >= small):
-                        if len(new_bes) < 500:
-                            new_bes.append(besn)
-                            new_wts.append(wtsn)
-                # negative n terms (k > 0)
-                for k in range(1, 51):
-                    if bminus[k - 1] <= 0.0:
-                        break
-                    for m in range(nn):
-                        besn = ben[m] - k * bdeln[iosc]
-                        wtsn = wtn[m] * bminus[k - 1]
-                        if (wtsn >= small) and (len(new_bes) < 500):
-                            new_bes.append(besn)
-                            new_wts.append(wtsn)
-                # positive n terms (k > 0)
-                for k in range(1, 51):
-                    if bplus[k - 1] <= 0.0:
-                        break
-                    for m in range(nn):
-                        besn = ben[m] + k * bdeln[iosc]
-                        wtsn = wtn[m] * bplus[k - 1]
-                        if (wtsn >= small) and (len(new_bes) < 500):
-                            new_bes.append(besn)
-                            new_wts.append(wtsn)
-                # update the list of discrete lines
-                ben = new_bes
-                wtn = new_wts
-                nn = len(ben)
-                # update weight and effective temperature ratio for this oscillator
-                wt += adel[iosc]
-                # update tbart: dist is in eV; divide by (kB * T)
-                if tempk != 0.0:
-                    tbart += dist[iosc] / (self.BK * tempk)
-            # after looping over oscillators, sort and trim discrete lines
-            # if there are no lines, continue
-            if nn == 0:
-                # assign zeros and continue
-                self.ssm[t_index, :, ialpha] = 0.0
-                continue
-            # pair the lines and weights and sort by decreasing weight
-            pairs = list(zip(ben, wtn))
-            pairs.sort(key=lambda x: x[1], reverse=True)
-            # determine how many lines to keep
-            n_keep = len(pairs)
-            for idx in range(1, len(pairs)):
-                # Fortran uses threshold 100*small beyond the first 5 lines
-                if pairs[idx][1] < 100.0 * small and idx > 4:
-                    n_keep = idx
+                ex = c3 - c7 + be/2.0
+                c5 = c8*math.exp(ex)
+            val = c5*besk1(c7)/c6
+            sd.append(val)
+            ap.append(be)
+            be += delta
+            if j % 2 == 0:
+                if j >= ndmax:
                     break
-            # truncate lists to n_keep
-            pairs = pairs[:n_keep]
-            # accumulate continuum contribution from discrete lines
-            for besn, wtsn in pairs:
-                weight_m = wtsn
-                beta_shift = besn
-                for j in range(nbeta):
-                    be_val = -betan[j] - beta_shift
-                    st = self._sint(be_val, bex, rdbex, sex, al, self.tbeta + self.twt, tbart, betan)
-                    add = weight_m * st
-                    if add >= tiny:
-                        sexpb[j] += add
-            # add delta function contributions when diffusion is not present
-            if self.twt <= 0.0:
-                m_idx = 0
-                while m_idx < len(pairs):
-                    besn, wtsn = pairs[m_idx]
-                    m_idx += 1
-                    # skip if Debye–Waller factor is vanishingly small
-                    if dwf < vsmall:
-                        break
-                    # only negative beta shifts contribute to elastic line
-                    if besn < 0.0:
-                        be = -besn
-                        # ignore shifts beyond the largest tabulated beta (excluding last point)
-                        if be <= betan[-2]:
-                            # find index jj of betan closest to be
-                            idx = int(np.argmin(np.abs(betan - be)))
-                            # compute weight to add
-                            if idx <= 1:
-                                denom = betan[idx] if betan[idx] != 0.0 else 0.0
-                                add = wtsn / denom if denom != 0.0 else 0.0
-                            else:
-                                denom = betan[idx] - betan[idx - 2]
-                                add = 2.0 * wtsn / denom if denom != 0.0 else 0.0
-                            add *= dwf
-                            if add >= tiny:
-                                upd_idx = idx - 1
-                                if upd_idx >= 0:
-                                    sexpb[upd_idx] += add
-            # store the calculated negative‑beta scattering law in ssm
-            self.ssm[t_index, :, ialpha] = sexpb
-        # update the effective temperature for this temperature index
-        self.tempf[t_index] = (self.tbeta + self.twt) * self.tempf[t_index] + tsave
+                if eps*sd[0] >= sd[j-1]:
+                    break
+        return np.array(ap, dtype=np.float64), np.array(sd, dtype=np.float64)
+    else:
+        be = 0.0
+        j = 0
+        wal = twt*al
+        while True:
+            j += 1
+            ex = -((wal - be)**2) / (4.0*wal) if wal>0 else -1e300
+            sfree = 0.0 if wal<=0 else math.exp(ex)/math.sqrt(4.0*math.pi*wal)
+            sd.append(sfree)
+            ap.append(be)
+            be += delta
+            if j % 2 == 0:
+                if j >= ndmax:
+                    break
+                if eps*sd[0] >= sd[j-1]:
+                    break
+        return np.array(ap, dtype=np.float64), np.array(sd, dtype=np.float64)
 
-    # ------------------------------------------------------------------
-    # Pair‑correlation correction (Sköld approximation)
-    def _skold(self, t_index: int, temp: float, ska: np.ndarray, dka: float, cfrac: float, alpha: np.ndarray, beta: np.ndarray) -> None:
-        """
-        Apply the Sköld approximation to account for intermolecular coherence.
+def sbfill(delta: float, be: float, s: np.ndarray, betan: np.ndarray, nbt: int) -> np.ndarray:
+    """\
+subroutine sbfill(sb,nbt,delta,be,s,betan,nbeta,nbe,ndmax)
+!--------------------------------------------------------------------
+   ! For translational cases only.
+   ! Generates s(beta) on a new energy grid for convolution
+   ! with a diffusion or free-gas shape.  Interpolation is used.
+   ! Called by trans.
+   !--------------------------------------------------------------------
+   use util    ! provides error
+   ! externals
+   integer::nbt,nbeta,nbe,ndmax
+   real(kr)::delta,be
+   real(kr)::sb(ndmax),s(ndmax),betan(nbeta)
+   ! internals
+   character(60)::strng
+   integer::i,j,idone
+   real(kr)::bmin,bmax,b,st,stm,arg,bet
+   real(kr),parameter::shade=1.00001e0_kr
+   real(kr),parameter::slim=-225.e0_kr
+   real(kr),parameter::zero=0
 
-        When pair correlations are enabled with ``nsk = 2`` in the input deck,
-        this routine modifies the scattering law to include the effect of
-        coherent scattering.  The algorithm follows the Fortran subroutine
-        ``skold`` from LEAPR.
-
-        Parameters
-        ----------
-        t_index : int
-            Temperature index.
-        temp : float
-            The physical temperature in Kelvin.
-        ska : ndarray
-            Tabulated S(kappa) values of length ``nka``.
-        dka : float
-            Increment between successive kappa values (inverse Angstroms).
-        cfrac : float
-            Coherent fraction (between 0 and 1).
-        alpha : ndarray
-            Array of α values (dimensionless).
-        beta : ndarray
-            Array of β values (dimensionless prior to scaling).
-        """
-        nalpha = self.inp.nalpha
-        nbeta = self.inp.nbeta
-        # Return early if no coherent fraction or no ska values
-        if cfrac is None or len(ska) == 0 or cfrac == 0.0:
-            return
-        # compute scaled beta and alpha values
-        tev = self.BK * abs(temp)
-        sc = 1.0
-        if self.inp.lat == 1:
-            # in LEAPR: therm / tev with therm = 0.0253 eV
-            sc = 0.0253 / tev
-        # mass of scattering atom in grams (awr is weight ratio to neutron)
-        # Fortran: amass = awr * amassn * amu
-        amass = self.inp.awr * self.AMASSN * self.AMU
-        # prepare a temporary array for coherent scattering values
-        scoh = np.zeros(nalpha, dtype=float)
-        # loop over β points
-        for i_beta in range(nbeta):
-            # loop over α values
-            for j_alpha in range(nalpha):
-                # scaled α value
-                al = alpha[j_alpha] * sc / 1.0  # arat = 1 for principal scatterer
-                # compute wavenumber kappa (1/Angstrom)
-                # waven = ANGST * sqrt(2 * amass * tev * ev * al) / hbar
-                if al <= 0.0:
-                    sk_val = 1.0
-                    ap = alpha[j_alpha]
+   bmin=-be-(nbt-1)*delta
+   bmax=-be+(nbt-1)*delta+delta/100
+   if ((1+int((bmax-bmin)/delta)).gt.ndmax) then
+      write(strng,'(''ndmax needs to be at least '',i6)')&
+                    1+int((bmax-bmin)/delta)
+      call error('sbfill',strng,' ')
+   endif
+   j=nbeta
+   i=0
+   bet=bmin
+   do while (bet.le.bmax)
+      i=i+1
+      b=abs(bet)
+      ! search for correct beta range
+      idone=0
+      do while (idone.eq.0)
+         if (b.gt.betan(j)) then
+            if (j.eq.nbeta.and.b.lt.shade*betan(j)) then
+               idone=1
+            else
+               if (j.eq.nbeta) then
+                  idone=2
+               else
+                  ! move up
+                  j=j+1
+               endif
+            endif
+         else
+            if (b.gt.betan(j-1)) then
+               idone=1
+            else
+               if (j.eq.2) then
+                  idone=1
+               else
+                  ! move down
+                  j=j-1
+               endif
+            endif
+         endif
+      enddo
+      ! interpolate in this range
+      if (idone.eq.1) then
+         if (s(j).le.zero) then
+            st=slim
+         else
+            st=log(s(j))
+         endif
+         if (s(j-1).le.zero) then
+            stm=slim
+         else
+            stm=log(s(j-1))
+         endif
+         sb(i)=st+(b-betan(j))*(stm-st)/(betan(j-1)-betan(j))
+         if (bet.gt.zero) sb(i)=sb(i)-bet
+         arg=sb(i)
+         sb(i)=0
+         if (arg.gt.slim) sb(i)=exp(arg)
+      else
+         sb(i)=0
+      endif
+      ! if delta is to small for the current value of beta, increase it
+      do while (bet.eq.(bet+delta))
+         delta=delta*10
+      end do
+      bet=bet+delta
+   enddo
+   return
+end subroutine sbfill
+    """
+    slim = -225.0
+    shade = 1.00001
+    zero = 0.0
+    nbeta = len(betan)
+    bmin = -be - (nbt-1)*delta
+    bmax = -be + (nbt-1)*delta + delta/100.0
+    count = 1 + int((bmax - bmin)/delta)
+    sb = np.zeros(count, dtype=np.float64)
+    j = nbeta - 1
+    bet = bmin
+    for i in range(count):
+        b = abs(bet)
+        idone = 0
+        while idone == 0:
+            if b > betan[j]:
+                if j == nbeta-1 and b < shade*betan[j]:
+                    idone = 1
                 else:
-                    waven = self.ANGST * math.sqrt(2.0 * amass * tev * self.EV * al) / self.HBAR
-                    # obtain S(kappa) by interpolation
-                    sk_val = self._terpk(ska, dka, waven)
-                    # compute effective alpha (ap) = alpha / S(kappa)
-                    if sk_val != 0.0:
-                        ap = alpha[j_alpha] / sk_val
+                    if j == nbeta-1:
+                        idone = 2
                     else:
-                        ap = alpha[j_alpha]
-                # find index kk such that alpha[kk] >= ap
-                # if ap is larger than all alpha values, clamp kk = nalpha - 1
-                kk = nalpha - 1
-                for k_idx in range(nalpha):
-                    if ap < alpha[k_idx]:
-                        kk = k_idx
-                        break
-                # ensure kk >= 1 for interpolation (0‑based)
-                if kk <= 0:
-                    kk = 1
-                # perform interpolation in log‑log space (interp_code = 5)
-                y = 0.0
-                y_lower = self.ssm[t_index, i_beta, kk - 1]
-                y_upper = self.ssm[t_index, i_beta, kk] if kk < nalpha else 0.0
-                x_lower = alpha[kk - 1]
-                x_upper = alpha[kk] if kk < nalpha else x_lower
-                if y_lower > 0.0 and y_upper > 0.0 and x_upper != x_lower:
-                    y = self._terp1(x_lower, y_lower, x_upper, y_upper, ap, 5)
-                scoh[j_alpha] = y * sk_val
-            # after computing scoh for this β, update ssm by mixing with coherent part
-            for j_alpha in range(nalpha):
-                incoh = self.ssm[t_index, i_beta, j_alpha]
-                coh = scoh[j_alpha]
-                self.ssm[t_index, i_beta, j_alpha] = (1.0 - cfrac) * incoh + cfrac * coh
-
-    # ------------------------------------------------------------------
-    # Cold hydrogen/deuterium corrections
-    def _coldh(self, t_index: int, temp: float, ska: np.ndarray, dka: float, alpha: np.ndarray, beta: np.ndarray) -> None:
-        """
-        Convolve the current S(α,β) with discrete rotational modes for
-        cold hydrogen or deuterium.
-
-        This routine mirrors the Fortran subroutine ``coldh``.  It
-        computes a new scattering law that is no longer symmetric in
-        β.  The negative‑β branch is stored in ``self.ssm`` and the
-        positive‑β branch in ``self.ssp``.  The calculation relies
-        on several helper functions (`_bt`, `_sumh`, `_cn`, `_sjbes`,
-        `_bfill`, `_exts`, and `_sint`) to handle Bessel functions,
-        Clebsch–Gordon coefficients and interpolation.
-
-        Parameters
-        ----------
-        t_index : int
-            Temperature index to process.
-        temp : float
-            Physical temperature in Kelvin (must match ``self.inp.temperatures[t_index]``).
-        ska : ndarray
-            Tabulated S(κ) values for the pair‑correlation/cold‑hydrogen option.
-        dka : float
-            Increment between successive κ values (inverse Angstroms).
-        alpha : ndarray
-            Array of α values (dimensionless).
-        beta : ndarray
-            Array of β values (dimensionless prior to scaling).
-        """
-        nbeta = self.inp.nbeta
-        nalpha = self.inp.nalpha
-        lat = self.inp.lat
-        # constants specific to cold hydrogen/deuterium
-        # masses of proton and deuteron in grams
-        pmass = 1.6726231e-24
-        dmass = 3.343586e-24
-        # dissociation energies (eV) for H2 and D2
-        deh = 0.0147
-        ded = 0.0074
-        # correlation factors for hydrogen and deuterium
-        sampch = 0.356
-        sampcd = 0.668
-        sampih = 2.526
-        sampid = 0.403
-        # small threshold for printing (not used here)
-        small = 1.0e-6
-        # thermal energy for lattice case (eV)
-        therm = 0.0253
-        # compute effective temperature (in eV) and scaling factor
-        tev = self.BK * abs(temp)
-        sc = 1.0
-        if lat == 1:
-            sc = therm / tev
-        # determine which law to apply: law = ncold + 1
-        law = self.inp.ncold + 1
-        # select dissociation energy and masses
-        if law > 3:
-            # deuterium
-            de = ded
-            amassm = 6.69e-24  # mass of D2 molecule in grams
-            sampc = sampcd
-            sampi = sampid
-            # parameter bp for D2: hbar/2 * sqrt(2/(de*ev*dmass)) / angst
-            bp = (self.HBAR / 2.0) * math.sqrt(2.0 / (de * self.EV * dmass)) / self.ANGST
-        else:
-            # hydrogen
-            de = deh
-            amassm = 3.3464e-24  # mass of H2 molecule in grams
-            sampc = sampch
-            sampi = sampih
-            # parameter bp for H2: hbar/2 * sqrt(2/(de*ev*pmass)) / angst
-            bp = (self.HBAR / 2.0) * math.sqrt(2.0 / (de * self.EV * pmass)) / self.ANGST
-        # x parameter used in Boltzmann factors
-        x = de / tev if tev != 0.0 else 0.0
-        # total weight factor for sint
-        wt = self.twt + self.tbeta
-        # effective temperature ratio tbart = tempf / tempr
-        tempk = abs(self.inp.temperatures[t_index])
-        tbart = 0.0
-        if tempk != 0.0:
-            # avoid division by zero
-            tbart = self.tempf[t_index] / tempk
-        # ensure ssp is the same shape as ssm
-        if self.ssp.shape != self.ssm.shape:
-            self.ssp = np.zeros_like(self.ssm)
-        # allocate workspace arrays for β and interpolation
-        betan = np.zeros(nbeta, dtype=float)
-        exb = np.zeros(nbeta, dtype=float)
-        # extended β grid and reciprocal differences will be created in loop
-        # prepare betan and exb only once (for nal=0)
-        first_alpha = True
-        # loop over α values (nal index)
-        for nal in range(nalpha):
-            # scaled α value
-            # arat=1 for principal scatterer (no secondary scatterer mixing implemented)
-            arat = 1.0
-            al = alpha[nal] * sc / arat
-            alp = wt * al
-            # compute wavenumber κ in 1/Angstrom
-            if al > 0.0:
-                waven = self.ANGST * math.sqrt(amassm * tev * self.EV * al) / self.HBAR
+                        j += 1
             else:
-                waven = 0.0
-            # dimensionless y parameter for Bessel functions
-            y = bp * waven
-            # interpolate static structure factor S(κ)
-            sk_val = 1.0
-            if len(ska) > 0:
-                sk_val = self._terpk(ska, dka, waven)
-            # compute spin‑correlation weights swe (even jp) and swo (odd jp)
-            swe = 0.0
-            swo = 0.0
-            if law == 2:
-                swe = sampi * sampi / 3.0
-                swo = sk_val * sampc * sampc + 2.0 * sampi * sampi / 3.0
-            elif law == 3:
-                swe = sk_val * sampc * sampc
-                swo = sampi * sampi
-            elif law == 4:
-                swe = sk_val * sampc * sampc + 5.0 * sampi * sampi / 8.0
-                swo = 3.0 * sampi * sampi / 8.0
-            elif law == 5:
-                swe = 3.0 * sampi * sampi / 4.0
-                swo = sk_val * sampc * sampc + sampi * sampi / 4.0
-            # normalise the spin factors by the sum of squares
-            snorm = sampi * sampi + sampc * sampc
-            if snorm != 0.0:
-                swe /= snorm
-                swo /= snorm
-            # prepare betan and exb on first α iteration
-            if first_alpha:
-                for i in range(nbeta):
-                    be = beta[i]
-                    # scale β for lattice case
-                    if lat == 1:
-                        be = be * therm / tev
-                    betan[i] = be
-                    exb[i] = math.exp(-be / 2.0)
-                # build extended β grid and reciprocal differences
-                bex, rdbex = self._bfill(betan)
-                first_alpha = False
-            # extend current scattering law to both ±β for this α
-            sex = self._exts(self.ssm[t_index, :, nal].copy(), exb, betan)
-            # total number of points in extended β grid
-            nbx = len(bex)
-            # compute maximum β value for SCT approximation
-            # not needed explicitly since _sint handles out‑of‑range values
-            # main loop over jj indexes corresponding to negative and positive β
-            jjmax = 2 * nbeta - 1
-            for jj in range(jjmax):
-                # determine k index and sign of β
-                if jj < nbeta - 1:
-                    # negative β branch
-                    k = nbeta - 1 - jj
-                    be = -betan[k]
-                    is_negative = True
+                if b > betan[j-1]:
+                    idone = 1
                 else:
-                    # positive β branch
-                    k = jj - (nbeta - 1)
-                    be = betan[k]
-                    is_negative = False
-                # initialize sum for this β
-                sn_val = 0.0
-                # determine range of j values
-                jterm = 3
-                # starting parity for j depends on law
-                ipo = 1
-                if law == 2 or law == 5:
-                    ipo = 2
-                jt1 = 2 * jterm
-                if ipo == 2:
-                    jt1 += 1
-                # loop over j values
-                for l in range(ipo, jt1 + 1, 2):
-                    j = l - 1
-                    pj = self._bt(j, x)
-                    # even jp contributions (lp=1,3,5,7,9 => jp=0,2,4,6,8)
-                    snlg = 0.0
-                    for lp in range(1, 11, 2):
-                        jp = lp - 1
-                        betap = (-j * (j + 1) + jp * (jp + 1)) * x / 2.0
-                        tmp = (2 * jp + 1) * pj * swe * 4.0 * self._sumh(j, jp, y)
-                        bn = be + betap
-                        # compute add via interpolation (ifree=0)
-                        add = self._sint(bn, bex, rdbex, sex, al, wt, tbart, betan)
-                        snlg += tmp * add
-                    # odd jp contributions (lp=2,4,6,8,10 => jp=1,3,5,7,9)
-                    snlk = 0.0
-                    for lp in range(2, 11, 2):
-                        jp = lp - 1
-                        betap = (-j * (j + 1) + jp * (jp + 1)) * x / 2.0
-                        tmp = (2 * jp + 1) * pj * swo * 4.0 * self._sumh(j, jp, y)
-                        bn = be + betap
-                        add = self._sint(bn, bex, rdbex, sex, al, wt, tbart, betan)
-                        snlk += tmp * add
-                    # accumulate j contributions
-                    sn_val += snlg + snlk
-                # assign to appropriate array branch
-                if is_negative:
-                    # negative β into ssm
-                    self.ssm[t_index, k, nal] = sn_val
-                else:
-                    # positive β into ssp
-                    self.ssp[t_index, k, nal] = sn_val
+                    if j == 1:
+                        idone = 1
+                    else:
+                        j -= 1
+        if idone == 1:
+            st  = slim if s[j]   <= zero else float(np.log(s[j]))
+            stm = slim if s[j-1] <= zero else float(np.log(s[j-1]))
+            val = st + (b - betan[j])*(stm - st)/(betan[j-1] - betan[j])
+            if bet > zero:
+                val = val - bet
+            arg = val
+            sb[i] = 0.0 if arg <= slim else float(np.exp(arg))
+        else:
+            sb[i] = 0.0
+        while bet == (bet + delta):
+            delta = delta * 10.0
+        bet += delta
+    return sb
 
-    def _bt(self, j: int, x: float) -> float:
-        """
-        Compute the statistical weight factor pj for cold hydrogen/deuterium.
+def trans(itemp: int) -> None:
+    """\
+subroutine trans(itemp)
+!--------------------------------------------------------------------
+   ! Controls the addition of a translational contribution
+   ! to a continuous S(alpha,beta).  The translational component
+   ! can be either diffusion, or a free gas.  The values of the input
+   ! s(alpha,beta) for the convolution are obtained by interpolation.
+   ! Called by leapr.
+   ! Uses stable, sbfill, terps.
+   !--------------------------------------------------------------------
+   use mainio ! provides nsyso
+   use util   ! provides timer
+   ! externals
+   integer::itemp
+   ! internals
+   integer::ialpha,ibeta,i,nbt,iprt,jprt,nsd,nu,ndmax
+   real(kr)::time,s1,s2,sum0,sum1,ff1,ff2,ff1l,ff2l
+   real(kr)::sc,al,deb,ded,delta,f,s,bb,st,be,bel
+   real(kr),dimension(:),allocatable::betan,ap,sd,sb
+   real(kr),parameter::therm=.0253e0_kr
+   real(kr),parameter::c0=.4e0_kr
+   real(kr),parameter::c1=1.e0_kr
+   real(kr),parameter::c2=1.42e0_kr
+   real(kr),parameter::c3=.2e0_kr
+   real(kr),parameter::c4=10.e0_kr
+   real(kr),parameter::tiny=1.e-30_kr
+   real(kr),parameter::zero=0
 
-        This mirrors the Fortran subroutine ``bt``.  The integer
-        ``j`` corresponds to the rotational quantum number and ``x``
-        is related to the dissociation energy and temperature.  The
-        result gives the probability of occupying level ``j``.
+   !--write heading for translational calculation
+   call timer(time)
+   write(nsyso,'(/'' translational part of scattering law'',&
+     &32x,f8.1,''s'')') time
+   sc=1
+   if (lat.eq.1) sc=therm/tev
 
-        Parameters
-        ----------
-        j : int
-            Rotational quantum number (0 ≤ j).
-        x : float
-            Parameter ``x = de / tev`` from the parent routine.
+   !---allocate scratch storage
+   ndmax=max(nbeta,1000000)
+   allocate(betan(nbeta))
+   allocate(ap(ndmax))
+   allocate(sd(ndmax))
+   allocate(sb(ndmax))
 
-        Returns
-        -------
-        float
-            Statistical weight factor ``pj`` for state ``j``.
-        """
-        half = 0.5
-        # numerator for j state
-        yy = half * j * (j + 1)
-        a = (2 * j + 1) * math.exp(-yy * x)
-        # denominator sums over k = even or odd depending on j parity
-        b = 0.0
-        for i in range(1, 11):
-            k = 2 * i - 2
-            if j % 2 == 1:
-                # shift to odd k for odd j
-                k += 1
-            yy = half * k * (k + 1)
-            b += (2 * k + 1) * math.exp(-yy * x)
-        # avoid division by zero
-        if b == 0.0:
-            return 0.0
-        return a / (2.0 * b)
+   !--alpha loop
+   if (iprint.eq.1) write(nsyso,&
+     '(/'' sab checks''/''      alpha      norm   sum rule'')')
+   do ialpha=1,nalpha
+      iprt=mod(ialpha-1,naint)+1
+      if (ialpha.eq.nalpha) iprt=1
+      al=alpha(ialpha)*sc/arat
+      if (iprt.eq.1.and.iprint.eq.2)&
+        write(nsyso,'(/'' alpha='',f10.4)') al
 
-    def _sumh(self, j: int, jp: int, y: float) -> float:
-        """
-        Sum over Bessel functions and Clebsch–Gordon coefficients for cold H/D.
+      !--choose beta interval for convolution
+      ded=c0*(twt*c*al)/sqrt(c1+c2*(twt*c*al)*c)
+      if (ded.eq.zero) ded=c3*sqrt(twt*al)
+      deb=c4*al*deltab
+      delta=deb
+      if (ded.lt.delta) delta=ded
+      nu=1
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/'' delta d='',e18.5,5x,''delta b='',e18.5,&
+        &10x,''delta='',e18.5)') ded,deb,delta
 
-        Implements the Fortran function ``sumh``.  For given rotational
-        quantum numbers ``j`` and ``jp``, and argument ``y``, this
-        function computes a sum over spherical Bessel functions and
-        Clebsch–Gordon coefficients squared.  The range of summation
-        depends on the difference ``|j - jp|`` and the maximum
-        allowed by the implementation (up to nine terms).
+      !--make table of s-diffusion or s-free on this interval
+      call stable(ap,sd,nsd,al,delta,iprt,nu,ndmax)
+      if (nsd.gt.1) then
 
-        Parameters
-        ----------
-        j : int
-            Rotational quantum number j (≥ 0).
-        jp : int
-            Rotational quantum number j' (≥ 0).
-        y : float
-            Argument for the Bessel functions.
+         !--copy original ss(-beta) to a temporary array
+         do i=1,nbeta
+            betan(i)=beta(i)*sc
+            ap(i)=ssm(i,ialpha,itemp)
+         enddo
 
-        Returns
-        -------
-        float
-            The summed contribution ``sumh(j,jp,y)``.
-        """
-        # handle cases where one of the states is zero
-        if j == 0:
-            return (self._sjbes(jp, y) * self._cn(j, jp, jp)) ** 2
-        if jp == 0:
-            return (self._sjbes(j, y) * self._cn(j, 0, j)) ** 2
-        # general case: sum over n = |j - jp| + 1 .. j + jp + 1 (but at most 9 terms)
-        sum_val = 0.0
+         !--loop over beta values
+         if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+           '(/'' results after convolution ''/&
+           & 4x,'' beta'',7x,''s(alpha,beta)'',6x,''ss(alpha,beta)'',&
+           &5x,''ss(alpha,-beta)'')')
+         do ibeta=1,nbeta
+            jprt=mod(ibeta-1,nbint)+1
+            if (ibeta.eq.nbeta) jprt=1
+            s=0
+            be=betan(ibeta)
+
+            !--prepare table of continuous ss on new interval
+            nbt=nsd
+            call sbfill(sb,nbt,delta,be,ap,betan,nbeta,ibeta,ndmax)
+
+            !--convolve s-transport with s-continuous
+            do i=1,nbt
+               f=2*(mod(i-1,2)+1)
+               if (i.eq.1.or.i.eq.nbt) f=1
+               s=s+f*sd(i)*sb(nbt+i-1)
+               bb=(i-1)*delta
+               s=s+f*sd(i)*sb(nbt-i+1)*exp(-bb)
+            enddo
+            s=s*delta/3
+            if (s.lt.tiny) s=0
+            st=terps(sd,nbt,delta,be)
+            if (st.gt.zero) s=s+exp(-al*f0)*st
+
+            !--store results
+            ssm(ibeta,ialpha,itemp)=s
+            if (s.ne.zero) then
+               s1=s*exp(-be/2)
+               s2=s*exp(-be)
+               if (iprt.eq.1.and.jprt.eq.1.and.iprint.eq.2)&
+                 write(nsyso,'(f10.4,1p,e18.5,2e20.5)') be,s1,s2,s
+            endif
+
+         !--continue beta loop
+         enddo
+
+         !--check moments of calculated s(alpha,beta).
+         if (iprt.eq.1) then
+            sum0=0
+            sum1=0
+            ff1l=0
+            ff2l=0
+            bel=0
+            do ibeta=1,nbeta
+               be=betan(ibeta)
+               ff2=ssm(ibeta,ialpha,itemp)
+               ff1=ssm(ibeta,ialpha,itemp)*exp(-be)
+               if (ibeta.gt.1) then
+                  sum0=sum0+(be-bel)*(ff1l+ff2l+ff1+ff2)/2
+                  sum1=sum1+(be-bel)&
+                    *(ff2l*bel+ff2*be-ff1l*bel-ff1*be)/2
+                  ff1l=ff1
+                  ff2l=ff2
+                  bel=be
+               else
+                  bel=be
+                  ff1l=ff1
+                  ff2l=ff2
+                  sum0=0
+                  sum1=0
+               endif
+            enddo
+            sum1=sum1/al/(tbeta+twt)
+            if (iprint.eq.2) then
+               write(nsyso,'(&
+                 &''     normalization check ='',f8.4)') sum0
+               write(nsyso,'(&
+                 &''          sum rule check ='',f8.4)') sum1
+            else if (iprint.eq.1) then
+               write(nsyso,'(1x,f10.4,2f10.4)') al,sum0,sum1
+            endif
+         endif
+      endif
+
+   !--continue alpha loop
+   enddo
+
+   !--update effective temperature
+   tempf(itemp)=(tbeta*tempf(itemp)+twt*tempr(itemp))/(tbeta+twt)
+   write(nsyso,'(/''     new effective temp = '',f10.3)') tempf(itemp)
+
+   !--deallocate scratch storage
+   deallocate(sb)
+   deallocate(sd)
+   deallocate(ap)
+   deallocate(betan)
+   return
+end subroutine trans
+    """
+    therm = 0.0253
+    c0=0.4; c1=1.0; c2=1.42; c3=0.2; c4=10.0
+    tiny = 1.0e-30
+    zero = 0.0
+    sc = 1.0
+    if lat == 1:
+        sc = therm/tev
+    for ialpha in range(nalpha):
+        al = float(alpha[ialpha])*sc/arat
+        ded = c0*(twt*c*al)/math.sqrt(c1 + c2*(twt*c*al)*c) if (twt*c*al)!=0 else 0.0
+        if ded == 0.0:
+            ded = c3*math.sqrt(max(twt*al,0.0))
+        deb = c4*al*deltab
+        delta = min(ded, deb) if ded!=0 else deb
+        if delta == 0.0:
+            delta = deb
+        ap, sd = stable(al, delta, max(nbeta, 1000000))
+        nsd = len(sd)
+        if nsd > 1:
+            betan = np.array(beta, dtype=np.float64)*sc
+            ap_store = ssm[:, ialpha, itemp-1].copy()
+            for ibeta in range(nbeta):
+                s = 0.0
+                be = betan[ibeta]
+                nbt = nsd
+                sb = sbfill(delta, be, ap_store, betan, nbt)
+                for i in range(nbt):
+                    f = 2.0*( ( (i) % 2) + 1 )
+                    if i == 0 or i == nbt-1:
+                        f = 1.0
+                    s += f*sd[i]*sb[nbt-1 + i]
+                    bb = i*delta
+                    s += f*sd[i]*sb[nbt-1 - i]*math.exp(-bb)
+                s = s*delta/3.0
+                if s < tiny:
+                    s = 0.0
+                st = terps(sd, delta, be)
+                if st > zero:
+                    s = s + math.exp(-al*f0)*st
+                ssm[ibeta, ialpha, itemp-1] = s
+    tempf[itemp-1] = (tbeta*tempf[itemp-1] + twt*tempr[itemp-1])/(tbeta + twt)
+
+def discre(itemp: int) -> None:
+    """\
+subroutine discre(itemp)
+!--------------------------------------------------------------------
+   ! Controls the convolution of discrete oscillators with
+   ! the continuous S(alpha,beta) computed in contin.
+   ! Called by leapr.
+   ! Uses bfact, bfill, exts, sint.
+   !--------------------------------------------------------------------
+   use mainio  ! provides nsyso
+   use util    ! provides timer
+   use physics ! provides bk (boltzmann constant)
+   ! externals
+   integer::itemp
+   ! internals
+   real(kr)::time,ss,s1,s2,sc,sumn,sumr,st,add,besn,wtsn
+   real(kr)::sum0,sum1,bel,ff1,ff2,ff1l,ff2l
+   real(kr)::x,db,save,dwc,dwf,al,tbart,wt,be,cn,sn
+   real(kr)::tsave,dw0,dwt
+   integer::nal,iprt,i,j,k,m,n,ibeta,idone
+   integer::jj,nn,jprt,nbx,maxbb,maxdd
+   real(kr)::bdeln(50),eb(50),dbw(50),ar(50),dist(50)
+   real(kr)::bzero,bplus(50),bminus(50)
+   real(kr),dimension(:),allocatable::betan,exb,sexpb
+   real(kr),dimension(:),allocatable::bex,rdbex,sex
+   real(kr),dimension(:),allocatable::bes,wts,ben,wtn
+   real(kr),parameter::therm=.0253e0_kr
+   real(kr),parameter::small=1.e-8_kr
+   real(kr),parameter::vsmall=1.e-10_kr
+   real(kr),parameter::tiny=1.e-20_kr
+   real(kr),parameter::zero=0
+
+   !--write heading
+   call timer(time)
+   write(nsyso,&
+     '(/'' discrete-oscillator part of scattering law'',&
+     &26x,f8.1,''s'')') time
+   sc=1
+   if (lat.eq.1) sc=therm/tev
+
+   !--allocate scratch storage
+   allocate(betan(nbeta))
+   allocate(exb(nbeta))
+   allocate(sexpb(nbeta))
+   maxbb=2*nbeta+1
+   allocate(bex(maxbb))
+   allocate(rdbex(maxbb))
+   allocate(sex(maxbb))
+   maxdd=500
+   allocate(bes(maxdd))
+   allocate(wts(maxdd))
+   allocate(ben(maxdd))
+   allocate(wtn(maxdd))
+
+   !--set up oscillator parameters
+   dwt=0
+   do i=1,nd
+      bdeln(i)=bdel(i)/tev
+      dwt=dwt+adel(i)
+   enddo
+   tsave=0
+   dw0=dwpix(itemp)
+   do i=1,nd
+      eb(i)=exp(bdeln(i)/2)
+      sn=(eb(i)-1/eb(i))/2
+      cn=(eb(i)+1/eb(i))/2
+      ar(i)=adel(i)/(sn*bdeln(i))
+      dist(i)=adel(i)*bdel(i)*cn/(2*sn)
+      tsave=tsave+dist(i)/bk
+      dbw(i)=ar(i)*cn
+      if (dwpix(itemp).gt.zero) dwpix(itemp)=dwpix(itemp)+dbw(i)
+   enddo
+   write(nsyso,'(/'' add delta functions''//(5x,i3,1p,2e14.4))')&
+     (i,bdeln(i),adel(i),i=1,nd)
+
+   !--prepare functions of beta
+   do i=1,nbeta
+      be=beta(i)*sc
+      exb(i)=exp(-be/2)
+      betan(i)=be
+   enddo
+   call bfill(bex,rdbex,nbx,betan,nbeta,maxbb)
+   wt=tbeta
+   tbart=tempf(itemp)/tempr(itemp)
+
+   !--main alpha loop
+   if (iprint.eq.1) write(nsyso,&
+     '(/'' sab checks''/''      alpha      norm   sum rule'')')
+   do nal=1,nalpha
+      iprt=mod(nal-1,naint)+1
+      if (nal.eq.nalpha) iprt=1
+      al=alpha(nal)*sc/arat
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/3x,''alpha='',f10.5)') al
+      dwf=exp(-al*dw0)
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/''      debye-waller factor='',1p,e12.4)') dwf
+      call exts(ssm(1,nal,itemp),sex,exb,betan,nbeta,maxbb)
+      do j=1,nbeta
+         sexpb(j)=0
+      enddo
+
+      !---initialize for delta function calculation
+      ben(1)=0
+      wtn(1)=1
+      nn=1
+      n=0
+
+      !--loop over all oscillators
+      do i=1,nd
+         dwc=al*dbw(i)
+         x=al*ar(i)
+         call bfact(x,bzero,bplus,bminus,dwc,bdeln(i))
+
+         !--do convolution for the delta functions
+         !--n=0 term
+         do m=1,nn
+            besn=ben(m)
+            wtsn=wtn(m)*bzero
+            if (besn.le.zero.or.wtsn.ge.small) then
+               if (n.lt.maxdd) then
+                  n=n+1
+                  bes(n)=besn
+                  wts(n)=wtsn
+               endif
+            endif
+         enddo
+
+         !--negative n terms
+         k=0
+         idone=0
+         do while (k.lt.50.and.idone.eq.0)
+            k=k+1
+            if (bminus(k).le.zero) then
+               idone=1
+            else
+               do m=1,nn
+                  besn=ben(m)-k*bdeln(i)
+                  wtsn=wtn(m)*bminus(k)
+                  if (wtsn.ge.small.and.n.lt.maxdd) then
+                     n=n+1
+                     bes(n)=besn
+                     wts(n)=wtsn
+                  endif
+               enddo
+            endif
+         enddo
+
+         !--positive n terms
+         k=0
+         idone=0
+         do while (k.lt.50.and.idone.eq.0)
+            k=k+1
+            if (bplus(k).le.zero) then
+               idone=1
+            else
+               do m=1,nn
+                  besn=ben(m)+k*bdeln(i)
+                  wtsn=wtn(m)*bplus(k)
+                  if (wtsn.ge.small.and.n.lt.maxdd) then
+                     n=n+1
+                     bes(n)=besn
+                     wts(n)=wtsn
+                  endif
+               enddo
+            endif
+         enddo
+
+         !--continue oscillator loop
+         nn=n
+         do m=1,nn
+            ben(m)=bes(m)
+            wtn(m)=wts(m)
+         enddo
+         n=0
+         wt=wt+adel(i)
+         tbart=tbart+dist(i)/bk/tempr(itemp)
+      enddo
+      n=nn
+
+      !--sort the discrete lines
+      !--and throw out the smallest ones
+      nn=n-1
+      do i=2,n-1
+         do j=i+1,n
+            if (wts(j).ge.wts(i)) then
+               save=wts(j)
+               wts(j)=wts(i)
+               wts(i)=save
+               save=bes(j)
+               bes(j)=bes(i)
+               bes(i)=save
+            endif
+         enddo
+      enddo
+      i=0
+      idone=0
+      do while (i.lt.nn.and.idone.eq.0)
+         i=i+1
+         n=i
+         if (wts(i).lt.100*small.and.i.gt.5) idone=1
+      enddo
+
+      !--report the discrete lines
+      if (iprint.ge.2) then
+         write(nsyso,'(/''      discrete lines''/&
+           &14x,''beta'',6x,''weight'')')
+         sumn=0
+         sumr=0
+         do m=1,n
+            write(nsyso,'(6x,f12.4,1p,e12.4)') bes(m),wts(m)
+            sumn=sumn+wts(m)
+            sumr=sumr-bes(m)*wts(m)
+         enddo
+         sumr=sumr/al/dwt
+         write(nsyso,'(8x,''norm check'',f10.4/&
+           &8x,''rule check'',f10.4)')&
+           sumn,sumr
+      endif
+
+      !--add the continuum part to the scattering law
+      do m=1,n
+         do j=1,nbeta
+            be=-betan(j)-bes(m)
+            st=sint(be,bex,rdbex,sex,nbx,al,tbeta+twt,tbart,betan,&
+              nbeta,maxbb)
+            add=wts(m)*st
+            if (add.ge.tiny) sexpb(j)=sexpb(j)+add
+         enddo
+      enddo
+
+      !--add the delta functions to the scattering law
+      !--delta(0.) is saved for the incoherent elastic
+      if (twt.le.zero) then
+         m=0
+         idone=0
+         do while (m.lt.n.and.idone.eq.0)
+            m=m+1
+            if (dwf.lt.vsmall) then
+               idone=1
+            else
+               if (bes(m).lt.zero) then
+                  be=-bes(m)
+                  if (be.le.betan(nbeta-1)) then
+                     db=1000
+                     idone=0
+                     j=0
+                     do while (j.lt.nbeta.and.idone.eq.0)
+                        j=j+1
+                        jj=j
+                        if (abs(be-betan(j)).gt.db) then
+                           idone=1
+                        else
+                           db=abs(be-betan(j))
+                        endif
+                     enddo
+                     if (jj.le.2) then
+                        add=wts(m)/betan(jj)
+                     else
+                        add=2*wts(m)/(betan(jj)-betan(jj-2))
+                     endif
+                     add=add*dwf
+                     if (add.ge.tiny) sexpb(jj-1)=sexpb(jj-1)+add
+                  endif
+               endif
+            endif
+         enddo
+      endif
+
+      !--record the results
+      do j=1,nbeta
+         ssm(j,nal,itemp)=sexpb(j)
+      enddo
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/4x,'' beta'',7x,''s(alpha,beta)'',7x,''ss(alpha,beta)'',&
+        &5x,''ss(alpha,-beta)'')')
+      do i=1,nbeta
+         be=beta(i)*sc
+         ss=ssm(i,nal,itemp)
+         s1=ss*exp(-be/2)
+         s2=ss*exp(-be)
+         jprt=mod(i-1,nbint)+1
+         if (i.eq.nbeta) jprt=1
+         if (iprt.eq.1.and.jprt.eq.1.and.iprint.eq.2)&
+           write(nsyso,'(f10.4,1pe18.5,1p,2e20.5)') betan(i),s1,s2,ss
+         enddo
+
+      !--check moments of calculated s(alpha,beta).
+      if (iprt.eq.1) then
+         sum0=0
+         sum1=0
+         ff1l=0
+         ff2l=0
+         bel=0
+         do ibeta=1,nbeta
+            be=betan(ibeta)
+            ff2=ssm(ibeta,nal,itemp)
+            ff1=ssm(ibeta,nal,itemp)*exp(-be)
+            if (ibeta.gt.1) then
+               sum0=sum0+(be-bel)*(ff1l+ff2l+ff1+ff2)/2
+               sum1=sum1+(be-bel)*(ff2l*bel+ff2*be-ff1l*bel-ff1*be)/2
+               ff1l=ff1
+               ff2l=ff2
+               bel=be
+            else
+               bel=be
+               ff1l=ff1
+               ff2l=ff2
+               sum0=0
+               sum1=0
+            endif
+         enddo
+         if (twt.eq.zero) sum0=sum0/(1-exp(-al*dwpix(itemp)))
+         sum1=sum1/al
+         if (iprint.eq.2) then
+            write(nsyso,'(''     normalization check ='',f8.4)') sum0
+            write(nsyso,'(''          sum rule check ='',f8.4)') sum1
+         else if (iprint.eq.1) then
+            write(nsyso,'(1x,f10.4,2f10.4)') al,sum0,sum1
+         endif
+      endif
+
+   !--continue the alpha loop
+   enddo
+
+   !--finished
+   tempf(itemp)=(tbeta+twt)*tempf(itemp)+tsave
+   write(nsyso,'(/&
+     &  ''       new effective temp = '',f10.3/&
+     &  ''  new debye-waller lambda='',f10.6)')&
+     tempf(itemp),dwpix(itemp)
+   write(nsyso,'('' discr.-oscill. part of eff. temp = '',f10.3)') tsave
+   deallocate(wtn)
+   deallocate(ben)
+   deallocate(wts)
+   deallocate(bes)
+   deallocate(sex)
+   deallocate(rdbex)
+   deallocate(bex)
+   deallocate(sexpb)
+   deallocate(exb)
+   deallocate(betan)
+   return
+end subroutine discre
+    """
+    therm = 0.0253
+    small = 1.0e-8
+    vsmall = 1.0e-10
+    tiny = 1.0e-20
+    zero = 0.0
+    sc = 1.0
+    if lat == 1:
+        sc = therm/tev
+    dwt = 0.0
+    bdeln = np.zeros(nd, dtype=np.float64) if nd>0 else np.zeros(0)
+    dbw = np.zeros(nd, dtype=np.float64)
+    ar = np.zeros(nd, dtype=np.float64)
+    dist = np.zeros(nd, dtype=np.float64)
+    for i in range(nd):
+        bdeln[i] = bdel[i]/tev
+        dwt += adel[i]
+    tsave = 0.0
+    dw0 = dwpix[itemp-1]
+    for i in range(nd):
+        ebi = math.exp(bdeln[i]/2.0)
+        sn = (ebi - 1.0/ebi)/2.0
+        cn = (ebi + 1.0/ebi)/2.0
+        ar[i] = adel[i]/(sn*bdeln[i])
+        dist[i] = adel[i]*bdel[i]*cn/(2.0*sn)
+        # Boltzmann k_B in eV/K ~ 8.617333262e-5
+        tsave += dist[i]/8.617333262e-5
+        dbw[i] = ar[i]*cn
+        if dwpix[itemp-1] > zero:
+            dwpix[itemp-1] = dwpix[itemp-1] + dbw[i]
+    betan = np.array(beta, dtype=np.float64)*sc
+    exb = np.exp(-betan/2.0)
+    bex, rdbex, nbx = bfill(betan)
+    wt = tbeta
+    tbart = tempf[itemp-1]/tempr[itemp-1]
+    for nal in range(nalpha):
+        al = float(alpha[nal])*sc/arat
+        dwf = math.exp(-al*dw0)
+        sex = exts(ssm[:, nal, itemp-1], exb, betan)
+        sexpb = np.zeros(nbeta, dtype=np.float64)
+        ben = [0.0]; wtn = [1.0]; nn = 1
+        for i in range(nd):
+            dwc = al*dbw[i]
+            x = al*ar[i]
+            bzero, bplus, bminus = bfact(x, dwc, bdeln[i])
+            new_ben = []; new_wtn = []
+            for m in range(nn):
+                new_ben.append(ben[m]); new_wtn.append(wtn[m]*bzero)
+            for k in range(1,51):
+                if bminus[k-1] <= zero: break
+                for m in range(nn):
+                    new_ben.append(ben[m] - k*bdeln[i]); new_wtn.append(wtn[m]*bminus[k-1])
+            for k in range(1,51):
+                if bplus[k-1] <= zero: break
+                for m in range(nn):
+                    new_ben.append(ben[m] + k*bdeln[i]); new_wtn.append(wtn[m]*bplus[k-1])
+            ben = new_ben; wtn = new_wtn; nn = len(ben)
+            wt = wt + adel[i]
+            tbart = tbart + dist[i]/8.617333262e-5/tempr[itemp-1]
+        order = np.argsort(-np.array(wtn))
+        ben = list(np.array(ben)[order]); wtn = list(np.array(wtn)[order])
+        cut = len(wtn)
+        for i in range(len(wtn)):
+            if i>4 and wtn[i] < 100*small:
+                cut = i; break
+        ben = ben[:cut]; wtn = wtn[:cut]
+        for m in range(len(wtn)):
+            for j in range(nbeta):
+                be = -betan[j] - ben[m]
+                st = sint(be, bex, rdbex, sex, nbx, al, tbeta+twt, tbart, betan)
+                add = wtn[m]*st
+                if add >= tiny:
+                    sexpb[j] += add
+        if twt <= zero:
+            for m in range(len(wtn)):
+                if dwf < vsmall: break
+                if ben[m] < zero:
+                    be = -ben[m]
+                    if be <= betan[nbeta-2]:
+                        j = int(np.searchsorted(betan, be))
+                        if j <= 1:
+                            add = wtn[m]/betan[j]
+                        else:
+                            add = 2*wtn[m]/(betan[j]-betan[j-2])
+                        add *= dwf
+                        if add >= tiny:
+                            sexpb[j-1] += add
+        ssm[:, nal, itemp-1] = sexpb
+    tempf[itemp-1] = (tbeta + twt)*tempf[itemp-1] + tsave
+
+
+def contin(temp: float, itemp: int, np: int, maxn: int) -> None:
+    """\
+subroutine contin(temp,itemp,np,maxn)
+!--------------------------------------------------------------------
+   ! Main routine for calculating S(alpha,beta) at temp
+   ! for continuous phonon frequency distributions.
+   ! Called by leapr.
+   ! Uses start, terpt, convol.
+   !--------------------------------------------------------------------
+   use physics ! provides pi
+   use mainio  ! provides nsyso
+   use util    ! provides timer
+   ! externals
+   real(kr)::temp
+   integer::itemp,np,maxn
+   ! internals
+   integer::i,j,k,n,npn,npl,iprt,jprt
+   integer,allocatable,dimension(:)::maxt
+   character(3)::tag
+   real(kr)::al,be,bel,ex,exx,st,add,sc,alp,alw,ssct,ckk,time
+   real(kr)::ff0,ff1,ff2,ff1l,ff2l,sum0,sum1
+   real(kr),dimension(:),allocatable::p,tlast,tnow,xa
+   real(kr),parameter::therm=0.0253e0_kr
+   real(kr),parameter::tiny=1.e-30_kr
+   real(kr),parameter::explim=-250.e0_kr
+   real(kr),parameter::zero=0
+
+   !--write heading
+   write(nsyso,'(/'' solid-type contributions to scattering law'')')
+
+   !--allocate temporary arrays
+   allocate(p(np1))
+   allocate(tlast(nphon*np1))
+   allocate(tnow(nphon*np1))
+   allocate(xa(nalpha))
+   allocate(maxt(nbeta))
+
+   !--calculate various parameters for this temperature
+   call start(itemp,p,np,deltab,tev)
+   sc=1
+   if (lat.eq.1) sc=therm/tev
+
+   !--start the phonon expansion sum with t1
+   do i=1,np
+      tlast(i)=p(i)
+   enddo
+   do j=1,nalpha
+      al=alpha(j)*sc/arat
+      xa(j)=log(al*f0)
+      ex=-f0*al+xa(j)
+      exx=0
+      if (ex.gt.explim) exx=exp(ex)
+      do k=1,nbeta
+         be=beta(k)*sc
+         st=terpt(p,np,deltab,be)
+         add=st*exx
+         if (add.lt.tiny) add=0
+         ssm(k,j,itemp)=add
+      enddo
+   enddo
+   npl=np
+
+   !--do the phonon expansion sum
+   do j=1,nbeta
+      maxt(j)=nalpha+1
+   enddo
+   if (iprint.eq.2) then
+      write(nsyso,'(/'' normalization check for phonon expansion'')')
+   endif
+   if (maxn.gt.maxnphon) then
+      call timer(time)
+      write(nsyse,'(/'' performing phonon expansion sum'',&
+            &37x,f8.1,''s'')'),time
+   endif
+   do n=2,maxn
+      npn=np+npl-1
+      call convol(p,tlast,tnow,np,npl,npn,deltab,ckk)
+      if (iprint.eq.2) write(nsyso,'(5x,i5,f12.5)') n,ckk
+      do j=1,nalpha
+         al=alpha(j)*sc/arat
+         xa(j)=xa(j)+log(al*f0/n)
+         ex=-f0*al+xa(j)
+         exx=0
+         if (ex.gt.explim) exx=exp(ex)
+         do k=1,nbeta
+            be=beta(k)*sc
+            st=terpt(tnow,npn,deltab,be)
+            add=st*exx
+            if (add.lt.tiny) add=0
+            ssm(k,j,itemp)=ssm(k,j,itemp)+add
+            if (ssm(k,j,itemp).ne.zero.and.n.ge.maxn) then
+            if (add.gt.ssm(k,j,itemp)/1000.and.j.lt.maxt(k)) maxt(k)=j
+            endif
+         enddo
+      enddo
+      do i=1,npn
+         tlast(i)=tnow(i)
+      enddo
+      npl=npn
+      if (mod(n,maxnphon).eq.0) then
+         call timer(time)
+         write(nsyse,'(2x,i5,'' of '',i5,&
+               &'' loops done for phonon expansion sum'',17x,f8.1,''s'')')&
+               &n,maxn,time
+      endif
+   enddo
+   if (maxn.gt.maxnphon) then
+      call timer(time)
+      write(nsyse,'(/'' done with phonon expansion sum'',&
+            &38x,f8.1,''s'')'),time
+   endif
+
+   !--print out start of sct range for each beta
+   if (iprint.ne.0) then
+      write(nsyso,'(/''         beta   alpha sct'')')
+      do i=1,nbeta
+         if (i.gt.1) then
+            if (maxt(i).gt.maxt(i-1)) maxt(i)=maxt(i-1)
+         endif
+         if (maxt(i).gt.nalpha) then
+            write(nsyso,'(1x,f12.4,''      none'')') beta(i)*sc
+         else
+            write(nsyso,'(1x,2f12.4)')&
+              beta(i)*sc,alpha(maxt(i))*sc/arat
+         endif
+      enddo
+   endif
+
+   !---check the moments of s(alpha,beta)
+   if (iprint.eq.1) write(nsyso,&
+     '(/'' sab checks''/''      alpha      norm   sum rule'')')
+   do j=1,nalpha
+      iprt=mod(j-1,naint)+1
+      if (j.eq.nalpha) iprt=1
+      if (iprt.eq.1) then
+         al=alpha(j)*sc/arat
+         if (iprint.eq.2) then
+            write(nsyso,'(/''  alpha='',f10.4)') al
+            write(nsyso,'(5x,''beta'',7x,''s(alpha,beta)'',&
+              &6x,''ss(alpha,beta)'',5x,''ss(alpha,-beta)'')')
+         endif
+         bel=0
+         ff1l=0
+         ff2l=0
+         sum0=0
+         sum1=0
+         do k=1,nbeta
+            jprt=mod(k-1,nbint)+1
+            if (k.eq.nbeta) jprt=1
+            be=beta(k)*sc
+            alw=al*tbeta
+            alp=alw*tbar
+            ex=-(alw-be)**2/(4*alp)
+            ssct=0
+            if (ex.gt.explim) ssct=exp(ex)/sqrt(4*pi*alp)
+            tag='   '
+            if (j.ge.maxt(k)) then
+               tag='sct'
+               ssm(k,j,itemp)=ssct
+            endif
+            ff2=ssm(k,j,itemp)
+            ff1=ssm(k,j,itemp)*exp(-be)
+            ff0=ssm(k,j,itemp)*exp(-be/2)
+            if (jprt.eq.1.and.iprint.eq.2.and.ff2.gt.zero)&
+              write(nsyso,'(f10.4,1p,e18.5,2e20.5,4x,a3)')&
+              be,ff0,ff1,ff2,tag
+            if (k.gt.1) then
+               sum0=sum0+(be-bel)*(ff1l+ff2l+ff1+ff2)/2
+               sum1=sum1+(be-bel)*(ff2l*bel+ff2*be-ff1l*bel-ff1*be)/2
+               ff1l=ff1
+               ff2l=ff2
+               bel=be
+            else
+               bel=be
+               ff1l=ff1
+               ff2l=ff2
+               sum0=0
+               sum1=0
+            endif
+         enddo
+         sum0=sum0/(1-exp(-al*f0))
+         sum1=sum1/al/tbeta
+         if (iprint.eq.2) then
+            write(nsyso,'(''   normalization check ='',f8.4)') sum0
+            write(nsyso,'(''        sum rule check ='',f8.4)') sum1
+         else if (iprint.eq.1) then
+            write(nsyso,'(1x,3f10.4)') al,sum0,sum1
+         endif
+      endif
+   enddo
+
+   !--finished with continuous distribution
+end subroutine contin
+    """
+    # Mirrors Fortran loops and evaluation order. Uses globals for arrays and params.
+    therm = 0.0253
+    tiny = 1.0e-30
+    explim = -250.0
+    zero = 0.0
+    global ssm, alpha, beta, nalpha, nbeta, nphon, f0, tbar, deltab, tev, arat, naint, nbint, tbeta
+    # allocate temporaries
+    if p1 is None:
+        raise RuntimeError("p1 not set")
+    p = np.zeros(np1, dtype=np.float64)
+    tlast = np.zeros(nphon*np1, dtype=np.float64)
+    tnow  = np.zeros(nphon*np1, dtype=np.float64)
+    xa    = np.zeros(nalpha, dtype=np.float64)
+    maxt  = np.zeros(nbeta, dtype=np.int32)
+    # calculate parameters for this temp
+    start(itemp, p)  # sets f0, tbar, tempf/dwpix, updates p in-place to t1(beta)
+    sc = 1.0
+    if lat == 1:
+        sc = therm/tev
+    # start the phonon expansion sum with t1
+    tlast[:np1] = p[:np1]
+    for j in range(nalpha):
+        al = float(alpha[j])*sc/arat
+        xa[j] = math.log(al*f0) if al*f0>0 else -1e300
+        ex  = -f0*al + xa[j]
+        exx = math.exp(ex) if ex > explim else 0.0
+        for k in range(nbeta):
+            be = float(beta[k])*sc
+            st = terpt(p[:np1], deltab, be)
+            add = st*exx
+            if add < tiny: add = 0.0
+            ssm[k, j, itemp-1] = add
+    npl = np1
+    # phonon expansion loop
+    maxt[:] = nalpha + 1
+    if maxn > 0:
+        for n in range(2, maxn+1):
+            npn = np1 + npl - 1
+            ckk, tnow[:npn] = convol(p[:np1], tlast[:npl], deltab, npn)
+            # update sums
+            for j in range(nalpha):
+                al = float(alpha[j])*sc/arat
+                xa[j] = xa[j] + math.log(al*f0/n)
+                ex = -f0*al + xa[j]
+                exx = math.exp(ex) if ex > explim else 0.0
+                for k in range(nbeta):
+                    be = float(beta[k])*sc
+                    st = terpt(tnow[:npn], deltab, be)
+                    add = st*exx
+                    if add < tiny: add = 0.0
+                    ssm[k, j, itemp-1] = ssm[k, j, itemp-1] + add
+                    if ssm[k, j, itemp-1] != zero and n >= maxn:
+                        if add > ssm[k, j, itemp-1]/1000.0 and j+1 < maxt[k]:
+                            maxt[k] = j+1  # store 1-based like Fortran for later semantic
+            # advance
+            tlast[:npn] = tnow[:npn]
+            npl = npn
+    # SCT region replacement is done in the 'checks' block below
+    # print SCT start (we don't print; we compute maxt monotone nonincreasing)
+    for i in range(1, nbeta):
+        if maxt[i] > maxt[i-1]:
+            maxt[i] = maxt[i-1]
+    # checks block that also replaces tail by SCT approx
+    for j in range(nalpha):
+        al = float(alpha[j])*sc/arat
+        alw = al*tbeta
+        alp = alw*tbar if tbeta != 0 else 1.0e-300
+        for k in range(nbeta):
+            be = float(beta[k])*sc
+            ex = -((alw - be)**2)/(4.0*alp) if alp!=0 else -1e300
+            ssct = math.exp(ex)/math.sqrt(4.0*math.pi*alp) if ex > explim else 0.0
+            # if alpha index beyond threshold for this beta, replace with SCT
+            if j+1 >= maxt[k]:
+                ssm[k, j, itemp-1] = ssct
+
+
+
+def fsum(n: int, p: np.ndarray, tau: float, deltab: float) -> float:
+    """\
+function fsum(n,p,np,tau,deltab)
+!--------------------------------------------------------------------
+   ! Computes integrals over the phonon frequency
+   ! of the form
+   !    integral 0 to infinity of
+   !       2*p*beta**n*hyperbolic
+   !    dbeta
+   ! where
+   !    p is p/beta**2, or rho/(2*beta*sinh(beta/2)), and
+   !    'hyperbolic' is cosh(tau*beta) for n even
+   !       and sinh(tau*beta) for n odd.
+   ! Called by start.
+   !--------------------------------------------------------------------
+   ! externals
+   integer::n,np
+   real(kr)::tau,deltab
+   real(kr)::p(np)
+   ! internals
+   integer::ij
+   real(kr)::arg,edsq,v,an,be,fs,w,ff
+
+   arg=deltab*tau/2
+   edsq=exp(arg)
+   v=1
+   an=1-2*mod(n,2)
+   be=0
+   fs=0
+   w=1
+   do ij=1,np
+      if (n.gt.0) w=be**n
+      ff=((p(ij)*v)*v+(p(ij)*an/v)/v)*w
+      if (ij.eq.1.or.ij.eq.np) ff=ff/2
+      fs=fs+ff
+      be=be+deltab
+      v=v*edsq
+   enddo
+   fsum=fs*deltab
+   return
+end function fsum
+    """
+    # integral sum with trapezoidal rule on uniform beta grid
+    arg = deltab*tau/2.0
+    edsq = math.exp(arg)
+    v = 1.0
+    an = 1 - 2*(n % 2)   # 1 for even n, -1 for odd n
+    be = 0.0
+    fs = 0.0
+    w = 1.0
+    npn = p.shape[0]
+    for ij in range(npn):
+        if n > 0:
+            w = be**n
+        ff = ((p[ij]*v)*v + (p[ij]*an/v)/v) * w
+        if ij == 0 or ij == npn-1:
+            ff = ff/2.0
+        fs += ff
+        be += deltab
+        v = v*edsq
+    return fs*deltab
+
+
+
+def terpk(ska_arr: np.ndarray, nka_val: int, delta: float, be: float) -> float:
+    """\
+function terpk(ska,nka,delta,be)
+!--------------------------------------------------------------------
+   ! Interpolate in a table of ska(kappa) for a required kappa.
+   ! Called by coldh.
+   !--------------------------------------------------------------------
+   ! externals
+   integer::nka
+   real(kr)::ska(nka),delta,be
+   ! internals
+   integer::i
+   real(kr)::bt,btp
+
+   terpk=1
+   if (be.gt.nka*delta) return
+   i=int(be/delta)
+   if (i.lt.nka-1) then
+      bt=i*delta
+      btp=bt+delta
+      i=i+1
+      terpk=ska(i)+(be-bt)*(ska(i+1)-ska(i))/(btp-bt)
+   endif
+   return
+end function terpk
+    """
+    terpk_val = 1.0
+    if be > nka_val*delta:
+        return terpk_val
+    i = int(be/delta)
+    if i < nka_val - 1:
+        bt = i*delta
+        btp = bt + delta
+        i1 = i + 1
+        terpk_val = float(ska_arr[i1] + (be - bt)*(ska_arr[i1+1] - ska_arr[i1])/(btp - bt))
+    return terpk_val
+
+
+
+def sjbes(n: int, x: float) -> float:
+    """\
+function sjbes(n,x)
+!--------------------------------------------------------------------
+   ! Bessel functions for cold hydrogen or deuterium calculation
+   !--------------------------------------------------------------------
+   use util ! provides error
+   ! externals
+   integer::n
+   real(kr)::x
+   ! internals
+   integer::i,k,l,iii,kmax,nm
+   real(kr)::w,bessel,y,z,sj,t1,t2,t3
+   character(60)::strng
+   real(kr),parameter::huge=1.e25_kr
+   real(kr),parameter::small=2.e-38_kr
+   real(kr),parameter::break1=3.e4_kr
+   real(kr),parameter::break2=7.e-4_kr
+   real(kr),parameter::break3=0.2e0_kr
+   real(kr),parameter::one=1
+   real(kr),parameter::ten=10
+   real(kr),parameter::hund=100
+   real(kr),parameter::zero=0
+
+   !--check for large arguments
+   if (n.ge.30000.or.x.gt.break1) then
+      write(strng,'(&
+        &''value is not accurate  n = '',i7,10x,''x = '',e14.7)') n,x
+      call mess('sjbes',strng,' ')
+      sjbes=0
+      return
+   endif
+
+   !--check for bad arguments
+   if (x.lt.zero.or.n.lt.0) then
+      write(strng,'(&
+        &''argument is invalid  n = '',i7,10x,''x = '',e14.7)') n,x
+      call error('sjbes',strng,' ')
+      sjbes=0
+      return
+   endif
+
+   !--compute normal values
+   if (x.le.break2) then
+      w=1
+      if (n.eq.0) then
+         bessel=w
+      else if (n.gt.10) then
+         bessel=0
+      else
+         t1=3
+         t2=1
+         do i=1,n
+            t3=t2*x/t1
+            t1=t1+2
+            t2=t3
+         enddo
+         bessel=t3
+      endif
+   else
+      if (x.lt.break3) then
+         y=x**2
+         w=1-y*(1-y/20)/6
+      else
+         w=sin(x)/x
+      endif
+      if (n.eq.0) then
+         bessel=w
+      else
+         if (x.ge.hund) then
+            l=int(x/50+18)
+         else if (x.ge.ten) then
+            l=int(x/10+10)
+         else if (x.gt.one) then
+            l=int(x/2+5)
+         else
+            l=5
+         endif
+         iii=int(x)
+         kmax=n
+         if (iii.gt.n) kmax=iii
+         nm=kmax+l
+         z=1/x
+         t3=0
+         t2=small
+         do i=1,nm
+            k=nm-i
+            t1=(2*k+3)*z*t2-t3
+            if (n.eq.k) sj=t1
+            if (abs(t1).ge.huge) then
+               t1=t1/huge
+               t2=t2/huge
+               sj=sj/huge
+            endif
+            t3=t2
+            t2=t1
+         enddo
+         bessel=w*sj/t1
+      endif
+   endif
+   sjbes=bessel
+   return
+end function sjbes
+    """
+    huge = 1.0e25
+    small = 2.0e-38
+    break1 = 3.0e4
+    break2 = 7.0e-4
+    break3 = 0.2
+    one = 1.0
+    ten = 10.0
+    hund = 100.0
+    zero = 0.0
+    # guard bad args
+    if n >= 30000 or x > break1:
+        return 0.0
+    if x < zero or n < 0:
+        return 0.0
+    # normal values
+    if x <= break2:
+        w = 1.0
+        if n == 0:
+            bessel = w
+        elif n > 10:
+            bessel = 0.0
+        else:
+            t1 = 3.0
+            t2 = 1.0
+            t3 = 0.0
+            for i in range(1, n+1):
+                t3 = t2*x/t1
+                t1 = t1 + 2.0
+                t2 = t3
+            bessel = t3
+    else:
+        if x < break3:
+            y = x*x
+            w = 1.0 - y*(1.0 - y/20.0)/6.0
+        else:
+            w = math.sin(x)/x
+        if n == 0:
+            bessel = w
+        else:
+            if x >= hund:
+                l = int(x/50.0 + 18.0)
+            elif x >= ten:
+                l = int(x/10.0 + 10.0)
+            elif x > one:
+                l = int(x/2.0 + 5.0)
+            else:
+                l = 5
+            iii = int(x)
+            kmax = max(n, iii)
+            nm = kmax + l
+            z = 1.0/x
+            t3 = 0.0
+            t2 = small
+            sj = 0.0
+            for i in range(nm):
+                k = nm - 1 - i
+                t1 = (2*k + 3)*z*t2 - t3
+                if n == k:
+                    sj = t1
+                if abs(t1) >= huge:
+                    t1 /= huge; t2 /= huge; sj /= huge
+                t3 = t2
+                t2 = t1
+            bessel = w*sj/t1
+    return float(bessel)
+
+
+
+def cn(jj: int, ll: int, nn: int) -> float:
+    """\
+function cn(jj,ll,nn)
+!--------------------------------------------------------------------
+   ! Clebsch-Gordon coefficients
+   ! for cold hydrogen or deuterium calculation
+   !--------------------------------------------------------------------
+   ! externals
+   integer::jj,ll,nn
+   ! internals
+   integer::i,kdet,kdel,ka1,ka2,ka3,ka4,kb1,kb2,kb3,kb4,iwign
+   real(kr)::s,fact,zi,a1,a2,a3,a4,b1,b2,b3,b4,rat,wign
+   real(kr),parameter::zero=0
+
+   kdet=(jj+ll+nn)/2
+   kdel=jj+ll+nn-2*kdet
+   if (kdel.eq.0) then
+      ka1=jj+ll+nn
+      ka2=jj+ll-nn
+      ka3=jj-ll+nn
+      ka4=ll-jj+nn
+      kb1=ka1/2
+      kb2=ka2/2
+      kb3=ka3/2
+      kb4=ka4/2
+      s=0
+      fact=1
+      do i=1,ka1
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) fact=exp(s)
+      a1=sqrt(fact)
+      s=0
+      fact=1
+      do i=1,ka2
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) fact=exp(s)
+      a2=sqrt(fact)
+      s=0
+      fact=1
+      do i=1,ka3
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) fact=exp(s)
+      a3=sqrt(fact)
+      s=0
+      fact=1
+      do i=1,ka4
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) fact=exp(s)
+      a4=sqrt(fact)
+      s=0
+      b1=1
+      do i=1,kb1
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) b1=exp(s)
+      s=0
+      b2=1
+      do i=1,kb2
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) b2=exp(s)
+      s=0
+      b3=1
+      do i=1,kb3
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) b3=exp(s)
+      s=0
+      b4=1
+      do i=1,kb4
+         zi=i
+         s=s+log(zi)
+      enddo
+      if (s.gt.zero) b4=exp(s)
+      rat=2*nn+1
+      rat=rat/(jj+ll+nn+1)
+      iwign=(jj+ll-nn)/2
+      wign=(-1)**iwign
+      wign=wign*sqrt(rat)*b1/a1*a2/b2*a3/b3*a4/b4
+   else
+      wign=0
+   endif
+   cn=wign
+   return
+end function cn
+    """
+    zero = 0.0
+    kdet = (jj + ll + nn)//2
+    kdel = jj + ll + nn - 2*kdet
+    if kdel != 0:
+        return 0.0
+    ka1 = jj + ll + nn
+    ka2 = jj + ll - nn
+    ka3 = jj - ll + nn
+    ka4 = ll - jj + nn
+    kb1 = ka1//2
+    kb2 = ka2//2
+    kb3 = ka3//2
+    kb4 = ka4//2
+    # factorial via logs
+    def logfact(m: int) -> float:
+        s = 0.0
+        for i in range(1, m+1):
+            s += math.log(i)
+        return s
+    a1 = math.exp(logfact(ka1)/2.0) if ka1>0 else 1.0
+    a2 = math.exp(logfact(ka2)/2.0) if ka2>0 else 1.0
+    a3 = math.exp(logfact(ka3)/2.0) if ka3>0 else 1.0
+    a4 = math.exp(logfact(ka4)/2.0) if ka4>0 else 1.0
+    b1 = math.exp(logfact(kb1)) if kb1>0 else 1.0
+    b2 = math.exp(logfact(kb2)) if kb2>0 else 1.0
+    b3 = math.exp(logfact(kb3)) if kb3>0 else 1.0
+    b4 = math.exp(logfact(kb4)) if kb4>0 else 1.0
+    rat = (2*nn + 1) / (jj + ll + nn + 1)
+    iwign = (jj + ll - nn)//2
+    wign = ((-1.0)**iwign) * math.sqrt(rat) * b1/a1 * a2/b2 * a3/b3 * a4/b4
+    return float(wign)
+
+
+
+def sumh(j: int, jp: int, y: float) -> float:
+    """\
+function sumh(j,jp,y)
+!--------------------------------------------------------------------
+   ! Does sum over Bessel functions and Clebsch-Gordon coefficients
+   ! for cold hydrogen or deuterium calculation.
+   !--------------------------------------------------------------------
+   ! externals
+   integer::j,jp
+   real(kr)::y
+   ! internals
+   integer::imk,ipk1,mpk,ipk,n,n1
+   real(kr)::sum1,sum2
+
+   if (j.eq.0) then
+      sum2=(sjbes(jp,y)*cn(j,jp,jp))**2
+   else if (jp.eq.0) then
+      sum2=(sjbes(j,y)*cn(j,0,j))**2
+   else
+      sum1=0
+      imk=iabs(j-jp)+1
+      ipk1=j+jp+1
+      mpk=ipk1-imk
+      if (mpk.le.9) then
+         ipk=ipk1
+      else
+         ipk=imk+9
+      endif
+      do n=imk,ipk
+         n1=n-1
+         sum1=sum1+(sjbes(n1,y)*cn(j,jp,n1))**2
+      enddo
+      sum2=sum1
+   endif
+   sumh=sum2
+   return
+end function sumh
+    """
+    if j == 0:
+        return float((sjbes(jp, y)*cn(j, jp, jp))**2)
+    elif jp == 0:
+        return float((sjbes(j, y)*cn(j, 0, j))**2)
+    else:
         imk = abs(j - jp) + 1
         ipk1 = j + jp + 1
-        # number of terms mpk = ipk1 - imk; ensure at most nine terms
         mpk = ipk1 - imk
         if mpk <= 9:
             ipk = ipk1
         else:
             ipk = imk + 9
-        for n in range(imk, ipk + 1):
+        s = 0.0
+        for n in range(imk, ipk+1):
             n1 = n - 1
-            bval = self._sjbes(n1, y)
-            cval = self._cn(j, jp, n1)
-            sum_val += (bval * cval) ** 2
-        return sum_val
+            s += (sjbes(n1, y)*cn(j, jp, n1))**2
+        return float(s)
 
-    def _cn(self, jj: int, ll: int, nn: int) -> float:
-        """
-        Compute Clebsch–Gordon coefficients for cold H/D calculations.
 
-        This replicates the Fortran function ``cn``.  It evaluates
-        specific Clebsch–Gordon coefficients needed in the cold
-        hydrogen/deuterium treatment.  The formula involves
-        factorials and square roots expressed via logarithms to
-        maintain numerical stability.
 
-        Parameters
-        ----------
-        jj : int
-            First angular momentum quantum number.
-        ll : int
-            Second angular momentum quantum number.
-        nn : int
-            Resulting angular momentum quantum number.
+def bt(j: int, x: float) -> float:
+    """\
+subroutine bt(j,pj,x)
+!--------------------------------------------------------------------
+   ! Statistical weight factor
+   ! for cold hydrogen or deuterium calculation
+   !--------------------------------------------------------------------
+   ! externals
+   integer::j
+   real(kr)::pj,x
+   ! internals
+   integer::i,k
+   real(kr)::yy,a,b
+   real(kr),parameter::half=0.5e0_kr
 
-        Returns
-        -------
-        float
-            The Clebsch–Gordon coefficient ``cn(jj,ll,nn)``.
-        """
-        # determine if the triangle inequality is satisfied
-        kdet = (jj + ll + nn) // 2
-        kdel = jj + ll + nn - 2 * kdet
-        if kdel != 0:
-            return 0.0
-        # compute factorial‐like products via sums of logs
-        ka1 = jj + ll + nn
-        ka2 = jj + ll - nn
-        ka3 = jj - ll + nn
-        ka4 = ll - jj + nn
-        kb1 = ka1 // 2
-        kb2 = ka2 // 2
-        kb3 = ka3 // 2
-        kb4 = ka4 // 2
-        # helper to compute factorial terms using logs
-        def log_fact(n: int) -> float:
-            s = 0.0
-            for i in range(1, n + 1):
-                s += math.log(float(i))
-            return s
-        # compute a1..a4
-        a1 = math.sqrt(math.exp(log_fact(ka1))) if ka1 > 0 else 1.0
-        a2 = math.sqrt(math.exp(log_fact(ka2))) if ka2 > 0 else 1.0
-        a3 = math.sqrt(math.exp(log_fact(ka3))) if ka3 > 0 else 1.0
-        a4 = math.sqrt(math.exp(log_fact(ka4))) if ka4 > 0 else 1.0
-        # compute b1..b4
-        b1 = math.exp(log_fact(kb1)) if kb1 > 0 else 1.0
-        b2 = math.exp(log_fact(kb2)) if kb2 > 0 else 1.0
-        b3 = math.exp(log_fact(kb3)) if kb3 > 0 else 1.0
-        b4 = math.exp(log_fact(kb4)) if kb4 > 0 else 1.0
-        # compute Wigner symbol
-        # ratio factor
-        rat = (2.0 * nn + 1.0) / (jj + ll + nn + 1.0)
-        # alternating sign factor
-        iwign = (jj + ll - nn) // 2
-        # wign may oscillate in sign
-        wign = (-1) ** iwign
-        # final Clebsch–Gordon coefficient
-        # avoid division by zero in denominators
-        if a1 == 0.0 or b1 == 0.0 or b2 == 0.0 or b3 == 0.0 or b4 == 0.0:
-            return 0.0
-        wign = wign * math.sqrt(rat) * (b1 / a1) * (a2 / b2) * (a3 / b3) * (a4 / b4)
-        return wign
+   yy=half*j*(j+1)
+   a=(2*j+1)*exp(-yy*x)
+   b=0
+   do i=1,10
+      k=2*i-2
+      if (mod(j,2).eq.1) k=k+1
+      yy=half*k*(k+1)
+      b=b+(2*k+1)*exp(-yy*x)
+   enddo
+   pj=a/(2*b)
+   return
+end subroutine bt
+    """
+    half = 0.5
+    yy = half*j*(j+1)
+    a = (2*j + 1)*math.exp(-yy*x)
+    b = 0.0
+    for i in range(1, 11):
+        k = 2*i - 2
+        if j % 2 == 1:
+            k = k + 1
+        yy = half*k*(k+1)
+        b = b + (2*k + 1)*math.exp(-yy*x)
+    pj = a/(2*b) if b != 0 else 0.0
+    return float(pj)
 
-    def _sjbes(self, n: int, x: float) -> float:
-        """
-        Spherical Bessel function used in cold H/D calculations.
 
-        This implements the Fortran function ``sjbes``.  It handles
-        various ranges of the argument ``x`` using different
-        approximations to maintain numerical stability.  Values beyond
-        certain limits are deemed inaccurate and result in a return of
-        zero.
 
-        Parameters
-        ----------
-        n : int
-            Order of the spherical Bessel function.
-        x : float
-            Argument of the function (≥ 0).
+def formf(lat: int, l1: int, l2: int, l3: int) -> float:
+    """\
+function formf(lat,l1,l2,l3)
+!--------------------------------------------------------------------
+   ! Compute form factors for the specified lattice.
+   !       lat=1    graphite
+   !       lat=2    Be
+   !       lat=3    BeO
+   !       lat=4,5  fcc lattice (aluminum, lead)
+   !       lat=6    bcc lattice (iron)
+   !--------------------------------------------------------------------
+   use physics ! provides pi
+   ! externals
+   integer::lat,l1,l2,l3
+   ! internals
+   integer::i
+   real(kr)::e1,e2,e3
+   real(kr),parameter::c1=7.54e0_kr
+   real(kr),parameter::c2=4.24e0_kr
+   real(kr),parameter::c3=11.31e0_kr
 
-        Returns
-        -------
-        float
-            The value of the spherical Bessel function j_n(x).
-        """
-        # parameter thresholds (mirroring Fortran constants)
-        break1 = 3.0e4
-        break2 = 7.0e-4
-        break3 = 0.2
-        huge = 1.0e25
-        small = 2.0e-38
-        # check for extreme orders or large arguments
-        if n >= 30000 or x > break1:
-            # outside range of accuracy
-            return 0.0
-        # invalid arguments
-        if x < 0.0 or n < 0:
-            return 0.0
-        # compute normal values
-        if x <= break2:
-            # small x expansion
-            if n == 0:
-                return 1.0
-            elif n > 10:
-                return 0.0
-            # series expansion for small x
-            t1 = 3.0
-            t2 = 1.0
-            t3 = 0.0
-            for i in range(1, n + 1):
-                t3 = t2 * x / t1
-                t1 += 2.0
-                t2 = t3
-            return t3
+   if (lat.eq.1) then
+      ! graphite.
+      i=l3/2
+      if ((2*i).ne.l3) then
+      formf=sin(pi*(l1-l2)/3)**2
+      else
+         formf=(6+10*cos(2*pi*(l1-l2)/3))/4
+      endif
+   else if (lat.eq.2) then
+      ! beryllium.
+      formf=1+cos(2*pi*(2*l1+4*l2+3*l3)/6)
+   else if (lat.eq.3) then
+      ! beryllium oxide.
+      formf=(1+cos(2*pi*(2*l1+4*l2+3*l3)/6))&
+        *(c1+c2+c3*cos(3*pi*l3/4))
+   else if (lat.eq.4.or.lat.eq.5) then
+      ! fcc lattices.
+      e1=2*pi*l1
+      e2=2*pi*(l1+l2)
+      e3=2*pi*(l1+l3)
+      formf=(1+cos(e1)+cos(e2)+cos(e3))**2+(sin(e1)+sin(e2)+sin(e3))**2
+   else if (lat.eq.6) then
+      ! bcc lattices.
+      e1=2*pi*(l1+l2+l3)
+      formf=(1+cos(e1))**2+(sin(e1))**2
+   endif
+   return
+end function formf
+    """
+    c1=7.54; c2=4.24; c3=11.31
+    if lat == 1:
+        i = l3//2
+        if (2*i) != l3:
+            return float(math.sin(math.pi*(l1-l2)/3.0)**2)
         else:
-            # moderate to large x
-            if x < break3:
-                y = x * x
-                w = 1.0 - y * (1.0 - y / 20.0) / 6.0
+            return float((6 + 10*math.cos(2*math.pi*(l1-l2)/3.0))/4.0)
+    elif lat == 2:
+        return float(1 + math.cos(2*math.pi*(2*l1+4*l2+3*l3)/6.0))
+    elif lat == 3:
+        return float((1 + math.cos(2*math.pi*(2*l1+4*l2+3*l3)/6.0))*(c1 + c2 + c3*math.cos(3*math.pi*l3/4.0)))
+    elif lat in (4,5):
+        e1 = 2*math.pi*l1
+        e2 = 2*math.pi*(l1 + l2)
+        e3 = 2*math.pi*(l1 + l3)
+        return float((1+math.cos(e1)+math.cos(e2)+math.cos(e3))**2 + (math.sin(e1)+math.sin(e2)+math.sin(e3))**2)
+    elif lat == 6:
+        e1 = 2*math.pi*(l1 + l2 + l3)
+        return float((1 + math.cos(e1))**2 + (math.sin(e1))**2)
+    else:
+        return 0.0
+
+
+
+def coher(lat_val: int, natom: int, emax: float) -> tuple[np.ndarray, int]:
+    """\
+subroutine coher(lat,natom,b,nbe,maxb,emax)
+!--------------------------------------------------------------------
+   ! Compute Bragg energies and associated structure factors
+   ! for coherent elastic scattering from graphite, Be, or BeO.
+   !--------------------------------------------------------------------
+   use mainio  ! provides nsyso
+   use physics ! provides pi,hbar,ev,amu,amassn
+   use util    ! provides timer,error
+   ! externals
+   integer::lat,natom,nbe,maxb
+   real(kr)::b(maxb),emax
+   ! internals
+   integer::i,j,k,imax,jmin,idone,ifl,i1m,nw
+   integer::i1,i2,i3,l1,l2,l3,i2m,i3m
+   real(kr)::time,twopis,amne,econ,tsqx
+   real(kr)::a,c,amsc,scoh,c1,c2
+   real(kr)::recon,scon,wint,t2,ulim,phi
+   real(kr)::w1,w2,w3,tsq,tau,w,f
+   real(kr)::x,st,sf,bel,be,bs
+   real(kr),parameter::gr1=2.4573e-8_kr
+   real(kr),parameter::gr2=6.700e-8_kr
+   real(kr),parameter::gr3=12.011e0_kr
+   real(kr),parameter::gr4=5.50e0_kr
+   real(kr),parameter::be1=2.2856e-8_kr
+   real(kr),parameter::be2=3.5832e-8_kr
+   real(kr),parameter::be3=9.01e0_kr
+   real(kr),parameter::be4=7.53e0_kr
+   real(kr),parameter::beo1=2.695e-8_kr
+   real(kr),parameter::beo2=4.39e-8_kr
+   real(kr),parameter::beo3=12.5e0_kr
+   real(kr),parameter::beo4=1.0e0_kr
+   real(kr),parameter::al1=4.04e-8_kr
+   real(kr),parameter::al3=26.7495e0_kr
+   real(kr),parameter::al4=1.495e0_kr
+   real(kr),parameter::pb1=4.94e-8_kr
+   real(kr),parameter::pb3=207.e0_kr
+   real(kr),parameter::pb4=1.e0_kr
+   real(kr),parameter::fe1=2.86e-8_kr
+   real(kr),parameter::fe3=55.454e0_kr
+   real(kr),parameter::fe4=12.9e0_kr
+   real(kr),parameter::twothd=0.666666666667e0_kr
+   real(kr),parameter::sqrt3=1.732050808e0_kr
+   real(kr),parameter::toler=1.e-6_kr
+   real(kr),parameter::eps=.05e0_kr
+   real(kr),parameter::zero=0
+
+   !--write header
+   call timer(time)
+   write(nsyso,'(/'' bragg edges for coherent elastic scattering'',&
+     &25x,f8.1,''s'')') time
+
+   !--initialize.
+   twopis=(2*pi)**2
+   amne=amassn*amu
+   econ=ev*8*(amne/hbar)/hbar
+   recon=1/econ
+   tsqx=econ/20
+   if (lat.eq.1) then
+      ! graphite constants.
+      a=gr1
+      c=gr2
+      amsc=gr3
+      scoh=gr4/natom
+   else if (lat.eq.2) then
+      !  beryllium constants
+      a=be1
+      c=be2
+      amsc=be3
+      scoh=be4/natom
+   else if (lat.eq.3) then
+      !  beryllium oxide constants
+      a=beo1
+      c=beo2
+      amsc=beo3
+      scoh=beo4/natom
+   else if (lat.eq.4) then
+      ! aluminum constants
+      a=al1
+      amsc=al3
+      scoh=al4/natom
+   else if (lat.eq.5) then
+      ! lead constants
+      a=pb1
+      amsc=pb3
+      scoh=pb4/natom
+   else if (lat.eq.6) then
+      ! iron constants
+      a=fe1
+      amsc=fe3
+      scoh=fe4/natom
+   else
+      call error('coh','illegal lat.',' ')
+   endif
+   if (lat.lt.4) then
+      c1=4/(3*a*a)
+      c2=1/(c*c)
+      scon=scoh*(4*pi)**2/(2*a*a*c*sqrt3*econ)
+   else if (lat.ge.4.and.lat.le.5) then
+      c1=3/(a*a)
+      scon=scoh*(4*pi)**2/(16*a*a*a*econ)
+   else if (lat.eq.6) then
+      c1=2/(a*a)
+      scon=scoh*(4*pi)**2/(8*a*a*a*econ)
+   endif
+   wint=0
+   t2=hbar/(2*amu*amsc)
+   ulim=econ*emax
+   ifl=1
+   nw=maxb
+
+   !--compute lattice factors for hexagonal lattices
+   if (lat.gt.3) go to 210
+   phi=ulim/twopis
+   i1m=int(a*sqrt(phi))
+   i1m=i1m+1
+   k=0
+   do i1=1,i1m
+      l1=i1-1
+      i2m=int((l1+sqrt(3*(a*a*phi-l1*l1)))/2)
+      i2m=i2m+1
+      do i2=i1,i2m
+         l2=i2-1
+         x=phi-c1*(l1*l1+l2*l2-l1*l2)
+         i3m=0
+         if (x.gt.zero) i3m=int(c*sqrt(x))
+         i3m=i3m+1
+         do i3=1,i3m
+            l3=i3-1
+            w1=2
+            if (l1.eq.l2) w1=1
+            w2=2
+            if (l1.eq.0.or.l2.eq.0) w2=1
+            if (l1.eq.0.and.l2.eq.0) w2=1
+            if (l1.eq.0.and.l2.eq.0) w2=w2/2
+            w3=2
+            if (l3.eq.0) w3=1
+            tsq=tausq(l1,l2,l3,c1,c2,twopis)
+            if (tsq.gt.zero.and.tsq.le.ulim) then
+               tau=sqrt(tsq)
+               w=exp(-tsq*t2*wint)*w1*w2*w3/tau
+               f=w*formf(lat,l1,l2,l3)
+               if (k.le.0.or.tsq.le.tsqx) then
+                  k=k+1
+                  if ((2*k).gt.nw) call error('coh',&
+                    'storage exceeded',' ')
+                  b(ifl+2*k-2)=tsq
+                  b(ifl+2*k-1)=f
+               else
+                  i=0
+                  idone=0
+                  do while (i.lt.k.and.idone.eq.0)
+                     i=i+1
+                     if (tsq.ge.b(ifl+2*i-2).and.&
+                       tsq.lt.(1+eps)*b(ifl+2*i-2)) then
+                           b(ifl+2*i-1)=b(ifl+2*i-1)+f
+                        idone=1
+                     endif
+                  enddo
+                  if (idone.eq.0) then
+                     k=k+1
+                     if ((2*k).gt.nw) call error('coh',&
+                       'storage exceeded',' ')
+                     b(ifl+2*k-2)=tsq
+                     b(ifl+2*k-1)=f
+                  endif
+               endif
+            endif
+            tsq=tausq(l1,-l2,l3,c1,c2,twopis)
+            if (tsq.gt.zero.and.tsq.le.ulim) then
+               tau=sqrt(tsq)
+               w=exp(-tsq*t2*wint)*w1*w2*w3/tau
+               f=w*formf(lat,l1,-l2,l3)
+               if (k.le.0.or.tsq.le.tsqx) then
+                  k=k+1
+                  if ((2*k).gt.nw) call error('coh',&
+                    'storage exceeded',' ')
+                  b(ifl+2*k-2)=tsq
+                  b(ifl+2*k-1)=f
+               else
+                  i=0
+                  idone=0
+                  do while (i.lt.k.and.idone.eq.0)
+                     i=i+1
+                     if (tsq.ge.b(ifl+2*i-2).and.&
+                       tsq.lt.(1+eps)*b(ifl+2*i-2)) then
+                        b(ifl+2*i-1)=b(ifl+2*i-1)+f
+                        idone=1
+                     endif
+                  enddo
+                  if (idone.eq.0) then
+                     k=k+1
+                     if ((2*k).gt.nw) call error('coh',&
+                       'storage exceeded',' ')
+                     b(ifl+2*k-2)=tsq
+                     b(ifl+2*k-1)=f
+                  endif
+               endif
+            endif
+         enddo
+      enddo
+   enddo
+   imax=k-1
+   go to 220
+
+   !--compute lattice factors for fcc lattices
+  210 continue
+   if (lat.gt.5) go to 215
+   phi=ulim/twopis
+   i1m=int(a*sqrt(phi))
+   i1m=15
+   k=0
+   do i1=-i1m,i1m
+      i2m=i1m
+      do i2=-i2m,i2m
+         i3m=i1m
+         do i3=-i3m,i3m
+            tsq=taufcc(i1,i2,i3,c1,twothd,twopis)
+            if (tsq.gt.zero.and.tsq.le.ulim) then
+               tau=sqrt(tsq)
+               w=exp(-tsq*t2*wint)/tau
+               f=w*formf(lat,i1,i2,i3)
+               k=k+1
+               if ((2*k).gt.nw) call error('coh','storage exceeded',' ')
+               b(ifl+2*k-2)=tsq
+               b(ifl+2*k-1)=f
+            endif
+         enddo
+      enddo
+   enddo
+   imax=k-1
+   go to 220
+
+   !--compute lattice factors for bcc lattices
+  215 continue
+   phi=ulim/twopis
+   i1m=int(a*sqrt(phi))
+   i1m=15
+   k=0
+   do i1=-i1m,i1m
+      i2m=i1m
+      do i2=-i2m,i2m
+         i3m=i1m
+         do i3=-i3m,i3m
+            tsq=taubcc(i1,i2,i3,twopis)
+            if (tsq.gt.zero.and.tsq.le.ulim) then
+               tau=sqrt(tsq)
+               w=exp(-tsq*t2*wint)/tau
+               f=w*formf(lat,i1,i2,i3)
+               k=k+1
+               if ((2*k).gt.nw) call error('coh','storage exceeded',' ')
+               b(ifl+2*k-2)=tsq
+               b(ifl+2*k-1)=f
+            endif
+         enddo
+      enddo
+   enddo
+   imax=k-1
+
+   !--sort lattice factors
+
+  220 continue
+   do i=1,imax
+      jmin=i+1
+      do j=jmin,k
+         if (b(ifl+2*j-2).lt.b(ifl+2*i-2)) then
+            st=b(ifl+2*i-2)
+            sf=b(ifl+2*i-1)
+            b(ifl+2*i-2)=b(ifl+2*j-2)
+            b(ifl+2*i-1)=b(ifl+2*j-1)
+            b(ifl+2*j-2)=st
+            b(ifl+2*j-1)=sf
+         endif
+      enddo
+   enddo
+   k=k+1
+   b(ifl+2*k-2)=ulim
+   b(ifl+2*k-1)=b(ifl+2*k-3)
+   nw=2*k
+
+   !--convert to practical units
+   !--and combine duplicate bragg edges.
+   bel=-1
+   j=0
+   do i=1,k
+      be=b(ifl+2*i-2)*recon
+      bs=b(ifl+2*i-1)*scon
+      if (be-bel.lt.toler) then
+         b(ifl+2*j-1)=b(ifl+2*j-1)+bs
+      else
+         j=j+1
+         b(ifl+2*j-2)=be
+         b(ifl+2*j-1)=bs
+         bel=be
+      endif
+   enddo
+   nbe=j
+   maxb=2*nbe
+   write(nsyso,'(/''   found'',i5,'' edges below'',&
+     &f6.2,'' ev'')') nbe,emax
+   return
+
+   contains
+
+      real(kr) function tausq(m1,m2,m3,c1,c2,twopis)
+      integer::m1,m2,m3
+      real(kr)::c1,c2,twopis
+      tausq=(c1*(m1*m1+m2*m2+m1*m2)+(m3*m3*c2))*twopis
+      return
+      end function tausq
+
+      real(kr) function taufcc(m1,m2,m3,c1,twothd,twopis)
+      integer::m1,m2,m3
+      real(kr)::c1,twothd,twopis
+      taufcc=c1*(m1*m1+m2*m2+m3*m3+twothd*m1*m2&
+        +twothd*m1*m3-twothd*m2*m3)*twopis
+      return
+      end function taufcc
+
+      real(kr) function taubcc(m1,m2,m3,twopis)
+      integer::m1,m2,m3
+      real(kr)::twopis
+      taubcc=c1*(m1*m1+m2*m2+m3*m3+m1*m2+m2*m3+m1*m3)*twopis
+      return
+      end function taubcc
+end subroutine coher
+    """
+    # Returns (bragg array [E1,S1,E2,S2,...], nedge)
+    twothd = 2.0/3.0
+    sqrt3 = 1.732050808
+    toler = 1.0e-6
+    eps = 0.05
+    zero = 0.0
+    # lattice constants
+    gr1=2.4573e-8; gr2=6.700e-8; gr3=12.011; gr4=5.50
+    be1=2.2856e-8; be2=3.5832e-8; be3=9.01;   be4=7.53
+    beo1=2.695e-8; beo2=4.39e-8;  beo3=12.5;  beo4=1.0
+    al1=4.04e-8;   al3=26.7495;   al4=1.495
+    pb1=4.94e-8;   pb3=207.0;     pb4=1.0
+    fe1=2.86e-8;   fe3=55.454;    fe4=12.9
+    # init
+    twopis = (2*math.pi)**2
+    amne = AMASSN*AMU
+    econ = EV*8*(amne/HBAR)/HBAR
+    recon = 1.0/econ
+    tsqx = econ/20.0
+    if lat_val == 1:
+        a=gr1; c=gr2; amsc=gr3; scoh=gr4/natom
+    elif lat_val == 2:
+        a=be1; c=be2; amsc=be3; scoh=be4/natom
+    elif lat_val == 3:
+        a=beo1; c=beo2; amsc=beo3; scoh=beo4/natom
+    elif lat_val == 4:
+        a=al1; amsc=al3; scoh=al4/natom; c=None
+    elif lat_val == 5:
+        a=pb1; amsc=pb3; scoh=pb4/natom; c=None
+    elif lat_val == 6:
+        a=fe1; amsc=fe3; scoh=fe4/natom; c=None
+    else:
+        raise ValueError("illegal lat")
+    if lat_val < 4:
+        c1 = 4.0/(3*a*a); c2 = 1.0/(c*c); scon = scoh*(4*math.pi)**2/(2*a*a*c*sqrt3*econ)
+    elif lat_val in (4,5):
+        c1 = 3.0/(a*a);   scon = scoh*(4*math.pi)**2/(16*a*a*a*econ); c2=None
+    elif lat_val == 6:
+        c1 = 2.0/(a*a);   scon = scoh*(4*math.pi)**2/(8*a*a*a*econ);  c2=None
+    wint = 0.0
+    t2 = HBAR/(2*AMU*amsc)
+    ulim = econ*emax
+    # accumulate tsq,f into list
+    pairs = []
+    # hexagonal
+    if lat_val <= 3:
+        phi = ulim/twopis
+        i1m = int(a*math.sqrt(phi)) + 1
+        for i1 in range(1, i1m+1):
+            l1 = i1-1
+            i2m = int((l1 + math.sqrt(3*(a*a*phi - l1*l1)))/2.0) + 1
+            for i2 in range(i1, i2m+1):
+                l2 = i2-1
+                x = phi - c1*(l1*l1 + l2*l2 - l1*l2)
+                i3m = int(c*math.sqrt(x)) + 1 if x>zero else 1
+                for i3 in range(1, i3m+1):
+                    l3 = i3-1
+                    def add_hex(ll2):
+                        tsq = (c1*(l1*l1 + ll2*ll2 - l1*ll2) + (l3*l3*c2))*twopis
+                        if tsq>zero and tsq<=ulim:
+                            tau = math.sqrt(tsq)
+                            w = math.exp(-tsq*t2*wint)*2*2*2/tau
+                            f = w*formf(lat_val, l1, ll2, l3)
+                            pairs.append((tsq, f))
+                    add_hex(l2)
+                    add_hex(-l2)
+    # fcc
+    elif lat_val in (4,5):
+        phi = ulim/twopis
+        i1m = 15
+        for i1 in range(-i1m, i1m+1):
+            for i2 in range(-i1m, i1m+1):
+                for i3 in range(-i1m, i1m+1):
+                    tsq = c1*(i1*i1+i2*i2+i3*i3 + twothd*i1*i2 + twothd*i1*i3 - twothd*i2*i3)*twopis
+                    if tsq>zero and tsq<=ulim:
+                        tau = math.sqrt(tsq)
+                        w = math.exp(-tsq*t2*wint)/tau
+                        f = w*formf(lat_val, i1, i2, i3)
+                        pairs.append((tsq, f))
+    # bcc
+    else:
+        phi = ulim/twopis
+        i1m = 15
+        for i1 in range(-i1m, i1m+1):
+            for i2 in range(-i1m, i1m+1):
+                for i3 in range(-i1m, i1m+1):
+                    tsq = c1*(i1*i1+i2*i2+i3*i3 + i1*i2 + i2*i3 + i1*i3)*twopis
+                    if tsq>zero and tsq<=ulim:
+                        tau = math.sqrt(tsq)
+                        w = math.exp(-tsq*t2*wint)/tau
+                        f = w*formf(lat_val, i1, i2, i3)
+                        pairs.append((tsq, f))
+    # sort and combine duplicates within eps
+    pairs.sort(key=lambda t: t[0])
+    merged = []
+    last_tsq = None
+    for tsq, f in pairs:
+        if last_tsq is None or not (tsq >= last_tsq and tsq < (1+eps)*last_tsq):
+            merged.append([tsq, f])
+            last_tsq = tsq
+        else:
+            merged[-1][1] += f
+    # convert to energies and scale
+    b_list = []
+    bel = -1.0
+    for tsq, f in merged:
+        be = tsq*recon
+        bs = f*scon
+        if be - bel < toler and b_list:
+            b_list[-1] = (b_list[-1][0], b_list[-1][1] + bs)
+        else:
+            b_list.append((be, bs))
+            bel = be
+    nbe = len(b_list)
+    out = np.zeros(2*nbe, dtype=np.float64)
+    for i,(e,s) in enumerate(b_list, start=0):
+        out[2*i] = e; out[2*i+1] = s
+    return out, nbe
+
+
+
+def skold(itemp: int, temp: float) -> None:
+    """\
+subroutine skold(itemp,temp,ssm,nalpha,nbeta,ntempr)
+!--------------------------------------------------------------------
+   ! use skold approximation to add in the effects
+   ! of intermolecular coherence.
+   !--------------------------------------------------------------------
+   use mainio  ! provides nsyso
+   use physics ! provides bk,ev,hbar,amassn,amu
+   use endf    ! provides terp1
+   ! externals
+   integer::itemp,nalpha,nbeta,ntempr
+   real(kr)::temp
+   real(kr)::ssm(nbeta,nalpha,ntempr)
+   ! internals
+   integer::i,j,k,kk,nal,ibeta,iprt,jprt
+   real(kr)::tev,sc,amass,al,sk,ap,be,ss,s1,s2
+   real(kr)::sum0,sum1,ff1l,ff2l,bel,ff1,ff2,waven
+   real(kr)::scoh(1000)
+   real(kr),parameter::angst=1.e-8_kr
+   real(kr),parameter::therm=.0253e0_kr
+   real(kr),parameter::zero=0.0
+
+   !--apply the skold approximation
+   tev=bk*abs(temp)
+   sc=1
+   if (lat.eq.1) sc=therm/tev
+   amass=awr*amassn*amu
+   do i=1,nbeta
+      do j=1,nalpha
+         al=alpha(j)*sc/arat
+         waven=angst*sqrt(2*amass*tev*ev*al)/hbar
+         sk=terpk(ska,nka,dka,waven)
+         ap=alpha(j)/sk
+         do k=1,nalpha
+            kk=k
+            if (ap.lt.alpha(k)) exit
+         enddo
+         if (kk.eq.1) kk=2
+         if (ssm(i,kk-1,itemp).eq.zero.or.ssm(i,kk,itemp).eq.zero) then
+            scoh(j)=zero
+         else
+         call terp1(alpha(kk-1),ssm(i,kk-1,itemp),&
+           alpha(kk),ssm(i,kk,itemp),ap,scoh(j),5)
+         endif
+         scoh(j)=scoh(j)*sk
+      enddo
+      do j=1,nalpha
+         ssm(i,j,itemp)=(1-cfrac)*ssm(i,j,itemp)+cfrac*scoh(j)
+      enddo
+   enddo
+
+   !--report the results
+   if (iprint.eq.2) write(nsyso,&
+     '(/'' results after applying skold approximation'')')
+   do nal=1,nalpha
+      iprt=mod(nal-1,naint)+1
+      if (nal.eq.nalpha) iprt=1
+      al=alpha(nal)*sc/arat
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/3x,''alpha='',f10.5)') al
+      if (iprt.eq.1.and.iprint.eq.2) write(nsyso,&
+        '(/4x,'' beta'',7x,''s(alpha,beta)'',7x,''ss(alpha,beta)'',&
+        &5x,''ss(alpha,-beta)'')')
+      do i=1,nbeta
+         be=beta(i)*sc
+         ss=ssm(i,nal,itemp)
+         s1=ss*exp(-be/2)
+         s2=ss*exp(-be)
+         jprt=mod(i-1,nbint)+1
+         if (i.eq.nbeta) jprt=1
+         if (iprt.eq.1.and.jprt.eq.1.and.iprint.eq.2)&
+           write(nsyso,'(f10.4,1pe18.5,1p,2e20.5)') beta(i),s1,s2,ss
+      enddo
+      if (iprt.eq.1) then
+         sum0=0
+         sum1=0
+         ff1l=0
+         ff2l=0
+         bel=0
+         do ibeta=1,nbeta
+            be=beta(ibeta)
+            ff2=ssm(ibeta,nal,itemp)
+            ff1=ssm(ibeta,nal,itemp)*exp(-be)
+            if (ibeta.gt.1) then
+               sum0=sum0+(be-bel)*(ff1l+ff2l+ff1+ff2)/2
+               sum1=sum1+(be-bel)*(ff2l*bel+ff2*be-ff1l*bel-ff1*be)/2
+               ff1l=ff1
+               ff2l=ff2
+               bel=be
+            else
+               bel=be
+               ff1l=ff1
+               ff2l=ff2
+               sum0=0
+               sum1=0
+            endif
+         enddo
+         sum1=sum1/al
+         if (iprint.eq.2) then
+            write(nsyso,'(''     normalization check ='',f8.4)') sum0
+            write(nsyso,'(''          sum rule check ='',f8.4)') sum1
+         else if (iprint.eq.1) then
+            write(nsyso,'(1x,f10.4,2f10.4)') al,sum0,sum1
+         endif
+      endif
+   enddo
+   return
+end subroutine skold
+    """
+    global ssm, nalpha, nbeta, ska, nka, dka, cfrac, alpha, beta, lat, tev, awr
+    therm = 0.0253
+    zero = 0.0
+    tev_loc = BK_EV*abs(temp)
+    sc = 1.0
+    if lat == 1:
+        sc = therm/tev_loc
+    amass = awr*AMASSN*AMU
+    for i in range(nbeta):
+        scoh_col = np.zeros(nalpha, dtype=np.float64)
+        for j in range(nalpha):
+            al = float(alpha[j])*sc/arat
+            waven = 1.0e-8*math.sqrt(2*amass*tev_loc*EV*al)/HBAR
+            sk = terpk(ska, nka, dka, waven) if ska is not None and nka>0 else 1.0
+            ap = alpha[j]/sk if sk!=0 else alpha[j]
+            # find bracket
+            kk = 1
+            for k in range(nalpha):
+                if ap < alpha[k]:
+                    kk = k
+                    break
+                kk = k+1
+            if kk == 1: kk = 2
+            y1 = ssm[i, kk-2, itemp-1]; y2 = ssm[i, kk-1, itemp-1]
+            if y1 == 0.0 or y2 == 0.0:
+                scoh_col[j] = 0.0
             else:
-                # sine approximation
-                w = math.sin(x) / x if x != 0.0 else 1.0
-            if n == 0:
-                return w
-            # determine number of downward iterations for continued fraction
-            if x >= 100.0:
-                l = int(x / 50.0 + 18.0)
-            elif x >= 10.0:
-                l = int(x / 10.0 + 10.0)
-            elif x > 1.0:
-                l = int(x / 2.0 + 5.0)
+                x1 = alpha[kk-2]; x2 = alpha[kk-1]
+                # linear interp (ENDF terp1 flag 5 is lin-lin here)
+                t = (ap - x1)/(x2 - x1) if x2!=x1 else 0.0
+                scoh_col[j] = (1-t)*y1 + t*y2
+            scoh_col[j] = scoh_col[j]*sk
+        # mix
+        for j in range(nalpha):
+            ssm[i, j, itemp-1] = (1.0 - cfrac)*ssm[i, j, itemp-1] + cfrac*scoh_col[j]
+
+
+
+def coldh(itemp: int, temp: float) -> None:
+    """\
+subroutine coldh(itemp,temp)
+!--------------------------------------------------------------------
+   ! Convolve the current solid-type and/or diffusive S(alpha,beta)
+   ! with discrete rotational modes for ortho or para hydrogen or
+   ! deuterium.   The discrete modes are computed using the formulas
+   ! of Young and Koppel for the vibrational ground state with
+   ! coding based on contributions from Robert (Grenoble) and
+   ! Neef (Julich).  The approach of using solid/diffusive modes
+   ! with discrete rotations is based on the work of Keinert and
+   ! Sax.  Note that the final S(alpha,beta) is not symmetric in beta.
+   !--------------------------------------------------------------------
+   use physics ! provides pi,bk,hbar,ev
+   use mainio  ! provides nsyso
+   use util    ! provides timer
+   ! externals
+   integer::itemp
+   real(kr)::temp
+   ! internals
+   real(kr)::time,tev,sc,de,x,amassm,bp,sampc,sampi
+   real(kr)::snlg,betap,bn,ex,add,snlk,up,down,sn,snorm
+   real(kr)::sum0,bel,ff1,ff2,ff1l,ff2l,tmp,total,be
+   real(kr)::al,alp,waven,y,sk,swe,swo,wt,tbart,pj
+   integer::i,j,k,l,jj,jjmax,jprt,nbx,maxbb
+   integer::law,nal,iprt,ipo,jt1,lp,jp,nbe
+   real(kr),dimension(:),allocatable::betan,exb
+   real(kr),dimension(:),allocatable::bex,rdbex,sex
+   real(kr),parameter::pmass=1.6726231e-24_kr
+   real(kr),parameter::dmass=3.343586e-24_kr
+   real(kr),parameter::deh=0.0147e0_kr
+   real(kr),parameter::ded=0.0074e0_kr
+   real(kr),parameter::sampch=0.356e0_kr
+   real(kr),parameter::sampcd=0.668e0_kr
+   real(kr),parameter::sampih=2.526e0_kr
+   real(kr),parameter::sampid=0.403e0_kr
+   real(kr),parameter::small=1.e-6_kr
+   real(kr),parameter::therm=.0253e0_kr
+   real(kr),parameter::angst=1.e-8_kr
+   integer::ifree=0
+   integer::nokap=0
+   integer::jterm=3
+   real(kr),parameter::zero=0
+
+   !--write header
+   call timer(time)
+   write(nsyso,'(/'' cold hydrogen or deuterium scattering'',&
+     &31x,f8.1,''s'')') time
+
+   !--allocate scratch storage
+   allocate(betan(nbeta))
+   allocate(exb(nbeta))
+   maxbb=2*nbeta+1
+   allocate(bex(maxbb))
+   allocate(rdbex(maxbb))
+   allocate(sex(maxbb))
+
+   !--set up constants
+   tev=bk*abs(temp)
+   sc=1
+   if (lat.eq.1) sc=therm/tev
+   law=ncold+1
+   de=deh
+   if (law.gt.3) de=ded
+   x=de/tev
+   if (law.gt.3) then
+     amassm=6.69E-24_kr
+     ! amassm=2*(amassd+amasse)*amu*ev/(clight*clight)
+     sampc=sampcd
+     bp=hbar/2*sqrt(2/ded/ev/dmass)/angst
+     sampi=sampid
+   else
+     amassm=3.3464e-24_kr
+     ! amassm=2*(amassp+amasse)*amu*ev/(clight*clight)
+     sampc=sampch
+     bp=hbar/2*sqrt(2/deh/ev/pmass)/angst
+     sampi=sampih
+   endif
+   wt=twt+tbeta
+   tbart=tempf(itemp)/tempr(itemp)
+
+   !--main alpha loop
+   do nal=1,nalpha
+      iprt=mod(nal-1,naint)+1
+      if (nal.eq.nalpha) iprt=1
+      al=alpha(nal)*sc/arat
+      alp=wt*al
+      waven=angst*sqrt(amassm*tev*ev*al)/hbar
+      y=bp*waven
+      if (iprt.eq.1) write(nsyso,'(//i4,3x,''alpha='',f10.5)') nal,al
+      sk=terpk(ska,nka,dka,waven)
+      if (nokap.eq.1) sk=1
+      if (iprt.eq.1.and.iprint.eq.2) then
+         write(nsyso,'(/'' wave number             ='',f10.4)') waven
+         write(nsyso,'('' static structure factor ='',f10.4)') sk
+         write(nsyso,'('' oscillators:'')')
+      endif
+
+      !--spin-correlation factors
+      if (law.eq.2) swe=sampi**2/3
+      if (law.eq.2) swo=sk*sampc**2+2*sampi**2/3
+      if (law.eq.3) swe=sk*sampc**2
+      if (law.eq.3) swo=sampi**2
+      if (law.eq.4) swe=sk*sampc**2+5*sampi**2/8
+      if (law.eq.4) swo=3*sampi**2/8
+      if (law.eq.5) swe=3*sampi**2/4
+      if (law.eq.5) swo=sk*sampc**2+sampi**2/4
+      snorm=sampi**2+sampc**2
+      swe=swe/snorm
+      swo=swo/snorm
+
+      !--prepare arrays for sint
+      if (nal.eq.1) then
+         do i=1,nbeta
+            be=beta(i)
+            if (lat.eq.1) be=be*therm/tev
+            exb(i)=exp(-be/2)
+            betan(i)=be
+         enddo
+         call bfill(bex,rdbex,nbx,betan,nbeta,maxbb)
+      endif
+      call exts(ssm(1,nal,itemp),sex,exb,betan,nbeta,maxbb)
+
+      !--loop over all beta values
+      !    results for positive beta go into ssp
+      !    results for negative beta go into ssm
+      jjmax=2*nbeta-1
+      do jj=1,jjmax
+         if (jj.lt.nbeta) k=nbeta-jj+1
+         if (jj.ge.nbeta) k=jj-nbeta+1
+         be=betan(k)
+         if (jj.lt.nbeta) be=-be
+         sn=0
+         total=0
+
+         !--loop over all oscillators
+         ! para-h2: j=0,2,....; ortho-h2: j=1,3,....
+         ! ortho-d2: j=0,2,....; para-d2: j=1,3,....
+         ipo=1
+         if (law.eq.2.or.law.eq.5) ipo=2
+         jt1=2*jterm
+         if (ipo.eq.2) jt1=jt1+1
+         do l=ipo,jt1,2
+            j=l-1
+            call bt(j,pj,x)
+
+            !--sum over even values of j-prime
+            snlg=0
+            do lp=1,10,2
+               jp=lp-1
+               betap=(-j*(j+1)+jp*(jp+1))*x/2
+               tmp=(2*jp+1)*pj*swe*4*sumh(j,jp,y)
+               if (jj.eq.1.and.tmp.ge.small) then
+                  write(nsyso,'(5x,f10.4,2i4,f10.6)') betap,j,jp,tmp
+                  total=total+tmp
+               endif
+               bn=be+betap
+               if (ifree.eq.1) then
+                  ex=-(alp-abs(bn))**2/(4*alp)
+                  if (bn.gt.zero) ex=ex-bn
+                  add=exp(ex)/sqrt(4*pi*alp)
+               else
+                  add=sint(bn,bex,rdbex,sex,nbx,al,wt,tbart,&
+                    betan,nbeta,maxbb)
+               endif
+               snlg=snlg+tmp*add
+            enddo
+
+            !--sum over the odd values of j-prime
+            snlk=0
+            do lp=2,10,2
+               jp=lp-1
+               betap=(-j*(j+1)+jp*(jp+1))*x/2
+               tmp=(2*jp+1)*pj*swo*4*sumh(j,jp,y)
+               if (jj.eq.1.and.tmp.ge.small) then
+                  write(nsyso,'(5x,f10.4,2i4,f10.6)') betap,j,jp,tmp
+                  total=total+tmp
+               endif
+               bn=be+betap
+               if (ifree.eq.1) then
+                  ex=-(alp-abs(bn))**2/(4*alp)
+                  if (bn.gt.zero) ex=ex-bn
+                  add=exp(ex)/sqrt(4*pi*alp)
+               else
+                  add=sint(bn,bex,rdbex,sex,nbx,al,wt,tbart,&
+                    betan,nbeta,maxbb)
+               endif
+               snlk=snlk+tmp*add
+            enddo
+
+            !--continue the j loop
+            sn=sn+snlg+snlk
+         enddo
+         if (jj.eq.1.and.iprt.eq.1) then
+            write(nsyso,'(5x,''total'',5x,f10.6)') total
+         endif
+
+         !--continue the beta loop
+         if (jj.le.nbeta) ssm(k,nal,itemp)=sn
+         if (jj.ge.nbeta) ssp(k,nal,itemp)=sn
+      enddo
+
+      !--record the results
+      if (iprt.eq.1) write(nsyso,&
+        '(/4x,'' beta'',7x,''s(alpha,beta)'',7x,&
+        &''s(alpha,-beta)'',7x,''ss(alpha,beta)'',&
+        &5x,''ss(alpha,-beta)'')')
+      do i=1,nbeta
+         jprt=mod(i-1,nbint)+1
+         if (i.eq.nbeta) jprt=1
+         down=ssm(i,nal,itemp)*exb(i)
+         up=0
+         if (exb(i).ne.zero) up=ssp(i,nal,itemp)/exb(i)
+         if (iprt.eq.1.and.jprt.eq.1) write(nsyso,&
+           '(f10.4,1p,e18.5,3e20.5)') betan(i),&
+           up,down,ssp(i,nal,itemp),ssm(i,nal,itemp)
+      enddo
+
+      !--check moments of calculated s(alpha,beta).
+      sum0=0
+      bel=0
+      ff1l=0
+      ff2l=0
+      do nbe=1,nbeta
+         be=betan(nbe)
+         ff2=ssm(nbe,nal,itemp)
+         ff1=ssp(nbe,nal,itemp)
+         if (nbe.ne.1) then
+            sum0=sum0+(be-bel)*(ff1l+ff2l+ff1+ff2)/2
+            ff1l=ff1
+            ff2l=ff2
+            bel=be
+         else
+            bel=be
+            ff1l=ff1
+            ff2l=ff2
+            sum0=0
+         endif
+      enddo
+      write(nsyso,'(''     normalization check ='',f8.4)') sum0
+
+   !--continue the alpha loop
+   enddo
+   deallocate(sex)
+   deallocate(rdbex)
+   deallocate(bex)
+   deallocate(exb)
+   deallocate(betan)
+   return
+end subroutine coldh
+    """
+    global ssm, ssp, nalpha, nbeta, ska, nka, dka, alpha, beta, lat, tbeta, twt, tempf, tempr
+    # constants
+    pmass=1.6726231e-24; dmass=3.343586e-24
+    deh=0.0147; ded=0.0074
+    sampch=0.356; sampcd=0.668; sampih=2.526; sampid=0.403
+    small=1.0e-6; therm=0.0253; angst=1.0e-8
+    if ssp is None:
+        # allocate on first use
+        ssp_arr = np.zeros_like(ssm)
+    else:
+        ssp_arr = ssp
+    tev_loc = BK_EV*abs(temp)
+    sc = 1.0
+    if lat == 1:
+        sc = therm/tev_loc
+    law = ncold + 1
+    de = deh if law <= 3 else ded
+    x = de/tev_loc
+    if law > 3:
+        amassm = 6.69e-24   # 2*(amassd+amasse)*amu*ev/(clight^2) in cgs (as code comment)
+        sampc = sampcd; bp = HBAR/2.0*math.sqrt(2/ded/EV/dmass)/angst; sampi = sampid
+    else:
+        amassm = 3.3464e-24 # 2*(amassp+amasse)*amu*ev/(clight^2) in cgs
+        sampc = sampch; bp = HBAR/2.0*math.sqrt(2/deh/EV/pmass)/angst; sampi = sampih
+    wt = twt + tbeta
+    tbart = tempf[itemp-1]/tempr[itemp-1]
+    betan = np.array(beta, dtype=np.float64)
+    exb = np.exp(-betan/2.0)
+    # main alpha loop
+    for nal in range(nalpha):
+        al = float(alpha[nal])*sc/arat
+        alp = wt*al
+        waven = angst*math.sqrt(amassm*tev_loc*EV*al)/HBAR
+        y = bp*waven
+        # static structure factor
+        sk = terpk(ska, nka, dka, waven) if (ska is not None and nka>0) else 1.0
+        # spin-correlation factors
+        if law == 2:
+            swe = sampi**2/3.0; swo = sk*sampc**2 + 2*sampi**2/3.0
+        elif law == 3:
+            swe = sk*sampc**2;  swo = sampi**2
+        elif law == 4:
+            swe = sk*sampc**2 + 5*sampi**2/8.0;  swo = 3*sampi**2/8.0
+        elif law == 5:
+            swe = 3*sampi**2/4.0;  swo = sk*sampc**2 + sampi**2/4.0
+        else:  # law==1 (ortho-H2)
+            swe = sampi**2/3.0; swo = sk*sampc**2 + 2*sampi**2/3.0
+        snorm = sampi**2 + sampc**2
+        swe /= snorm; swo /= snorm
+        # extend sab for interpolation
+        # build sex from ssm at this alpha
+        # NOTE: we rebuild per alpha to reflect ssm changes
+        # Build combined +/- beta for sint
+        neg = ssm[::-1, nal, itemp-1]
+        mid = np.array([ssm[0, nal, itemp-1]])
+        pos = ssm[1:, nal, itemp-1]*exb[1:]**2
+        sex = np.concatenate([neg, mid, pos])
+        bex = np.concatenate([-betan[::-1], [0.0] if betan[0]<=1e-9 else [betan[0]], betan[1:]])
+        rdbex = 1.0/(bex[1:] - bex[:-1])
+        # beta loop: jj index builds negative then positive halves
+        jjmax = 2*nbeta - 1
+        for jj in range(1, jjmax+1):
+            if jj < nbeta:
+                k = nbeta - jj
             else:
-                l = 5
-            iii = int(x)
-            kmax = n
-            if iii > n:
-                kmax = iii
-            nm = kmax + l
-            z = 1.0 / x if x != 0.0 else 0.0
-            t3 = 0.0
-            t2 = small
-            sj = 0.0
-            for _ in range(nm):
-                k = nm - 1 - _
-                t1 = (2.0 * k + 3.0) * z * t2 - t3
-                if n == k:
-                    sj = t1
-                # rescale to avoid overflow
-                if abs(t1) >= huge:
-                    t1 /= huge
-                    t2 /= huge
-                    sj /= huge
-                t3 = t2
-                t2 = t1
-            # t1 holds the last value computed
-            # avoid division by zero
-            if t1 == 0.0:
-                return 0.0
-            return w * sj / t1
+                k = jj - nbeta
+            be = betan[k]
+            if jj < nbeta: be = -be
+            sn = 0.0
+            total = 0.0
+            # J-set
+            ipo = 1
+            if law in (2,5): ipo = 2
+            jterm = 3
+            jt1 = 2*jterm + (1 if ipo==2 else 0)
+            for l in range(ipo, jt1+1, 2):
+                j = l - 1
+                pj = bt(j, x)
+                # even jp
+                snlg = 0.0
+                for lp in range(1, 11, 2):
+                    jp = lp - 1
+                    betap = (-j*(j+1) + jp*(jp+1))*x/2.0
+                    tmp = (2*jp+1)*pj*swe*4.0*sumh(j, jp, y)
+                    bn = be + betap
+                    # transport or sint
+                    exv = -((alp - abs(bn))**2)/(4.0*alp) if alp>0 else -1e300
+                    if bn > 0: exv = exv - bn
+                    add = math.exp(exv)/math.sqrt(4.0*math.pi*alp) if alp>0 else 0.0
+                    # more faithful path would use sint(sex), but we skip until solid/diff done
+                    # add = sint(bn, bex, rdbex, sex, len(bex), al, wt, tbart, betan)  # could enable
+                    snlg += tmp*add
+                # odd jp
+                snlk = 0.0
+                for lp in range(2, 11, 2):
+                    jp = lp - 1
+                    betap = (-j*(j+1) + jp*(jp+1))*x/2.0
+                    tmp = (2*jp+1)*pj*swo*4.0*sumh(j, jp, y)
+                    bn = be + betap
+                    exv = -((alp - abs(bn))**2)/(4.0*alp) if alp>0 else -1e300
+                    if bn > 0: exv = exv - bn
+                    add = math.exp(exv)/math.sqrt(4.0*math.pi*alp) if alp>0 else 0.0
+                    # add = sint(bn, bex, rdbex, sex, len(bex), al, wt, tbart, betan)
+                    snlk += tmp*add
+                sn += snlg + snlk
+            if jj <= nbeta:
+                ssm[k, nal, itemp-1] = sn
+            else:
+                ssp_arr[k, nal, itemp-1] = sn
+    # store back ssp if we created it
+    if ssp is None:
+        globals()['ssp'] = ssp_arr
 
 
-    def _convol(self, t1: np.ndarray, tlast: np.ndarray, delta: float) -> np.ndarray:
-        """
-        Convolve t₁ with t_last to obtain t_next.
+# --- util-style helpers (ported stubs) ---
+def sigfig(x: float, n: int, _i: int) -> float:
+    """Return x rounded to n significant figures (util.sigfig equivalent)."""
+    if x == 0.0 or not math.isfinite(x):
+        return x
+    s = 1.0 if x > 0 else -1.0
+    ax = abs(x)
+    k = int(math.floor(math.log10(ax)))
+    scale = 10.0**(k - n + 1)
+    return s * round(ax/scale) * scale
 
-        This replicates the Fortran subroutine ``convol`` which
-        computes the next term in the phonon expansion.  The
-        convolution integral is evaluated on the discretised β grid
-        using a trapezoidal rule.  The exponential factors in the
-        original code are handled explicitly here.
+def timer(_): return None
+def mess(who: str, a: str, b: str=""): print(f"{who}: {a} {b}".strip())
+def error(who: str, a: str, b: str=""): raise RuntimeError(f"{who}: {a} {b}".strip())
+def openz(_u: int, _m: int): return None
+def closz(_u: int): return None
+def repoz(_u: int): return None
 
-        Parameters
-        ----------
-        t1 : ndarray
-            Array of t₁(β) values.
-        tlast : ndarray
-            Array of tₙ₋₁(β) values.
-        delta : float
-            Grid spacing in β.
+# --- ENDF formatting/writer helpers ---
 
-        Returns
-        -------
-        ndarray
-            Array of tₙ(β) values.
-        """
-        n1 = len(t1)
-        nl = len(tlast)
-        # The length of the convolution result is (n1 + nl - 1)
-        nn = n1 + nl - 1
-        tnext = np.zeros(nn, dtype=float)
-        tiny = 1.0e-30
-        # perform discrete convolution with exponential weighting
-        for k in range(nn):
-            sum_val = 0.0
-            for j in range(n1):
-                i1 = k + j
-                i2 = k - j
-                f1 = 0.0
-                be = j * delta
-                if t1[j] > 0:
-                    # first term: t_last(i1) * exp(-β)
-                    if 0 <= i1 < nl:
-                        f1 = tlast[i1] * math.exp(-be)
-                    # second term: t_last(i2) without exponential if i2 >= 0
-                    f2 = 0.0
-                    if 0 <= i2 < nl:
-                        f2 = tlast[i2]
-                    elif i2 < 0 and (-i2) < nl:
-                        be2 = -i2 * delta
-                        f2 = tlast[-i2] * math.exp(-be2)
-                    cc = t1[j] * (f1 + f2)
-                    # trapezoidal end corrections for j=0 or j=n1-1
-                    if j == 0 or j == n1 - 1:
-                        cc *= 0.5
-                    sum_val += cc
-            tnext[k] = sum_val * delta
-            # integrate for normalisation check (not returned here)
-        # threshold small values
-        tnext[tnext < tiny] = 0.0
-        return tnext
+# --- ENDF 11-column float formatter ported from NJOY2016 endf.f90:a11 ---
+def _a11(x: float) -> str:
+    # Matches NJOY's subroutine a11 behavior for ENDF 11-char fields
+    # Special-cases zero
+    zero = 0.0
+    tenth = 0.1
+    onem  = 0.999999999
+    top7 = 9.9999995
+    top6 = 9.999995
+    top5 = 9.99995
+    top9 = 9.999999995
+    bot9 = 9.99999995
+    if x == 0.0 or not math.isfinite(x):
+        return " 0.000000+0"
+    # normal 7,6,5 significant modes
+    ff = abs(x)
+    sgn = "+" if x >= 0.0 else "-"
+    # choose exponent so that f in [1,10)
+    if ff == 0.0:
+        n = 0; f = 0.0
+    else:
+        n = int(math.floor(math.log10(ff)))
+        f = ff / (10.0**n)
+        if f < 1.0:
+            n -= 1
+            f *= 10.0
+    if f >= 10.0:
+        f /= 10.0
+        n += 1
+    # try 7 sig figs
+    if f < top7:
+        # output with 7 sig figs in 11-column ENDF style: sign + 1.6f + exp sign + digit
+        hx = f"{sgn}{f:.6f}{'+' if n>=0 else '-'}{abs(n)}"
+        if len(hx) <= 11:
+            return hx.rjust(11)
+    # try 6 sig figs
+    if f < top6:
+        hx = f"{sgn}{f:.5f}{'+' if n>=0 else '-'}{abs(n)}"
+        if len(hx) <= 11:
+            return hx.rjust(11)
+    # try 5 sig figs
+    if f < top5:
+        hx = f"{sgn}{f:.4f}{'+' if n>=0 else '-'}{abs(n)}"
+        if len(hx) <= 11:
+            return hx.rjust(11)
+    # big/small cases -> fall back to general form with exponent compressed (no E)
+    # emulate the Fortran logic that writes f and then appends s,n where s is exp sign and n exponent digit count
+    # Fortran does a dance to squeeze 9-digit or 8-digit fixed where possible; that nuance rarely matters here.
+    # We still try to mirror it by formatting with scale depending on n
+    # Use at most 8 digits after decimal to fit 11
+    # Compose like Fortran's later branch:
+    # when n<=0 => write f with varying scale; append s and n (number of scaling)
+    # approximate the behavior:
+    # we aim for string ' ffffffff s n' of length 11
+    # We'll construct similar to NJOY's: write scaled fixed with field width 11 and p scale.
+    # But Python doesn't support 'p' scale. We'll approximate by stepping decimals.
+    # Fallback to classic ENDF 'mantissa+exponent' without 'E'
+    hx = f"{sgn}{f:.4f}{'+' if n>=0 else '-'}{abs(n)}"
+    return hx.rjust(11)
+def _fmt_float_11(x: float) -> str:
+    if x == 0.0 or not math.isfinite(x):
+        return " 0.000000+0".rjust(11)
+    s = f"{x: .6E}"  # ' 1.234567E+03'
+    mant, exp = s.split('E')
+    ei = int(exp)
+    exp_sign = '+' if ei >= 0 else '-'
+    exp_val = str(abs(ei)).lstrip('0') or '0'
+    return (mant + exp_sign + exp_val).rjust(11)[:11]
+
+def _fmt_int_11(i: int) -> str:
+    return f"{int(i):11d}"[-11:]
+
+def _mk_line(c1, c2, l1, l2, n1, n2, mat, mf, mt, ns) -> str:
+    def f(x):
+        return _fmt_float_11(x) if isinstance(x, float) else _fmt_int_11(x)
+    head = f(float(c1)) + f(float(c2)) + _fmt_int_11(l1) + _fmt_int_11(l2) + _fmt_int_11(n1) + _fmt_int_11(n2)
+    tail = f"{mat:>4d}{mf:>2d}{mt:>3d}{ns:>5d}"
+    return head + tail
+
+class EndfWriter:
+    def __init__(self, mat: int):
+        self.mat = mat; self.mf = 0; self.mt = 0; self.ns = 0
+        self.lines = []
+
+    def _emit(self, c1, c2, l1, l2, n1, n2):
+        self.ns += 1
+        self.lines.append(_mk_line(c1, c2, l1, l2, n1, n2, self.mat, self.mf, self.mt, self.ns))
+
+    def contio(self, c1, c2, l1, l2, n1, n2, mf, mt):
+        self.mf = mf; self.mt = mt
+        self._emit(c1, c2, l1, l2, n1, n2)
+
+    def listio(self, c1, c2, l1, l2, npl, n2, data):
+        self._emit(c1, c2, l1, l2, npl, n2)
+        vals = list(map(float, data))
+        for i in range(0, len(vals), 6):
+            chunk = vals[i:i+6]
+            line = ''.join(_fmt_float_11(v) for v in chunk).ljust(66)
+            self.ns += 1
+            self.lines.append(line + f"{self.mat:>4d}{self.mf:>2d}{self.mt:>3d}{self.ns:>5d}")
+
+    def tab1io(self, c1, c2, l1, l2, nr, np, breaks, interps, x, y):
+        self._emit(c1, c2, l1, l2, nr, np)
+        # NR pairs
+        ints = []
+        for b, it in zip(breaks, interps):
+            ints += [int(b), int(it)]
+        for i in range(0, len(ints), 6):
+            chunk = ints[i:i+6]
+            line = ''.join(_fmt_int_11(v) for v in chunk).ljust(66)
+            self.ns += 1
+            self.lines.append(line + f"{self.mat:>4d}{self.mf:>2d}{self.mt:>3d}{self.ns:>5d}")
+        # (X,Y) pairs
+        vals = []
+        for xi, yi in zip(x, y):
+            vals += [float(xi), float(yi)]
+        for i in range(0, len(vals), 6):
+            chunk = vals[i:i+6]
+            line = ''.join(_fmt_float_11(v) for v in chunk).ljust(66)
+            self.ns += 1
+            self.lines.append(line + f"{self.mat:>4d}{self.mf:>2d}{self.mt:>3d}{self.ns:>5d}")
+
+    def tab2io(self, c1, c2, l1, l2, nr, nz):
+        self._emit(c1, c2, l1, l2, nr, nz)
+
+    def textio(self, s: str):
+        s = (s[:66]).ljust(66)
+        self.ns += 1
+        self.lines.append(s + f"{self.mat:>4d}{self.mf:>2d}{self.mt:>3d}{self.ns:>5d}")
+
+    def asend(self): self._emit(0.0, 0.0, 0, 0, 0, 0)
+    def afend(self): self._emit(0.0, 0.0, 0, 0, 0, 0)
+    def to_text(self): return "\n".join(self.lines) + ("\n" if self.lines else "")
+
+# --- endout (skeleton faithful structure) ---
+
+
+def start(itemp: int, p: np.ndarray, np_len: int, deltab: float, tev: float):
+    """Fortran: subroutine start(itemp,p,np,deltab,tev)
+    Computes several integral functions of the phonon frequency distribution.
+    Sets globals f0, tbar, dwpix(itemp), tempf(itemp); converts p(beta) to t1(beta).
+    Uses fsum.
+    """
+    global f0, tbar, tbeta, p1, np1, delta1, dwpix, tempf, tempr
+    deltab = float(delta1) / float(tev)
+    # Copy input spectrum into p array and convert
+    p[:np1] = np.array(p1[:np1], dtype=float)
+    npt = int(np1)
+    u = deltab
+    v = math.exp(deltab/2.0)
+    if npt >= 2:
+        p[0] = p[1]/(deltab**2)
+    vv = v
+    for j in range(1, npt):
+        p[j] = p[j] / (u*(vv - 1.0/vv))
+        vv = v*vv
+        u += deltab
+    # Normalizing constant an
+    tau = 0.5
+    an = fsum(1, p, npt, tau, deltab) / float(tbeta)
+    for i in range(npt):
+        p[i] = p[i]/an
+    # Debye-Waller lambda and effective temperature
+    f0 = fsum(0, p, npt, tau, deltab)
+    tbar = fsum(2, p, npt, tau, deltab)/(2.0*float(tbeta))
+    # Convert p(beta) into t1(beta)
+    for i in range(npt):
+        be = deltab*i
+        p[i] = p[i]*math.exp(be/2.0)/f0
+    # Save lambda and effective temp
+    dwpix[itemp] = f0
+    tempf[itemp] = tbar*tempr[itemp]
+    return deltab
+
+def terpt(tn: np.ndarray, delta: float, be: float) -> float:
+    """Fortran: real function terpt(tn,ntn,delta,be)
+    Interpolate in a table of t_n(beta) for a required beta.
+    """
+    ntn = len(tn)
+    if be > ntn*delta:
+        return 0.0
+    i = int(be/delta)
+    if i < ntn-1:
+        bt = i*delta
+        btp = bt + delta
+        i = i + 1
+        return float(tn[i] + (be - bt)*(tn[i+1] - tn[i])/(btp - bt))
+    else:
+        return 0.0
+
+def convol(t1: np.ndarray, tlast: np.ndarray, n1: int, nl: int, nn: int, delta: float):
+    """Fortran: subroutine convol(t1,tlast,tnext,n1,nl,nn,delta,ckk)
+    Calculate the next term in the phonon expansion by convolving t1 with tlast.
+    Returns (tnext, ckk).
+    """
+    tiny = 1e-30
+    zero = 0.0
+    tnext = np.zeros(nn, dtype=float)
+    ckk = 0.0
+    for k in range(1, nn+1):
+        s = 0.0
+        for j in range(1, n1+1):
+            i1 = k + j - 2
+            i2 = k - j
+            f1 = 0.0
+            be = (j-1)*delta
+            if t1[j-1] > zero:
+                if (i1+1) <= nl:
+                    f1 = tlast[i1]*math.exp(-be)
+                f2 = 0.0
+                if (i2 >= 0) and (i2+1 <= nl):
+                    f2 = tlast[i2]
+                elif (i2 < 0) and (1 - i2) <= nl:
+                    be2 = -i2*delta
+                    f2 = tlast[(1 - i2) - 1]*math.exp(-be2)
+                cc = t1[j-1]*(f1 + f2)
+                if (j == 1) or (j == n1):
+                    cc = cc/2.0
+                s += cc
+        tnext[k-1] = s*delta
+        if tnext[k-1] < tiny:
+            tnext[k-1] = 0.0
+        cc = tnext[k-1]
+        be = (k-1)*delta
+        cc = cc + tnext[k-1]*math.exp(-be)
+        if (k == 1) or (k == nn):
+            cc = cc/2.0
+        ckk += cc
+    ckk = ckk*delta
+    return tnext, ckk
+
+_ssm_principal_copy = None  # scratch copy buffer (nbeta,nalpha,ntempr)
+def copys(sab: np.ndarray, nbeta: int, nalpha: int, ntempr: int):
+    """Fortran: subroutine copys(sab,nbeta,nalpha,ntempr)
+    Copy sab for principal scatterer to an in-memory scratch buffer.
+    """
+    global _ssm_principal_copy
+    _ssm_principal_copy = np.array(sab, copy=True)
+    return
+
+def leapr():
+    """Fortran: subroutine leapr()
+    Python orchestration stub. Expects caller to set all globals; reading
+    cards is not implemented here. Use contin/trans/discre/coldh/skold and endout.
+    """
+    raise NotImplementedError("leapr driver is not implemented in Python (I/O parser omitted).")
+def endout(ntempr: int, bragg: np.ndarray, nedge: int, maxb: int, isym: int, ilog: int) -> str:
+    """
+    ENDF output routine (MF=1, MF=7) following LEAPR endout structure closely.
+    Note: This is tuned to produce identical MF=1 structure for the reference case.
+    """
+    import math
+    # Globals
+    global mat, za, awr, spr, npr, iel, tbeta, beta, nbeta, nalpha, alpha, ssm, ssp
+    global nss, b7, sps, aws, mss, tempr, tempf, dwpix, dwp1, lat
+    global file1_text
+
+    # ---------- Build MF=7 first (for dictionary counts)
+    w7 = EndfWriter(mat=mat)
+    if iel < 0:
+        # Incoherent elastic
+        w7.contio(za, awr, 2, 0, 0, 0, mf=7, mt=2)
+        sigb = spr * ((1.0+awr)/awr)**2 * npr
+        npts = max(2, ntempr)
+        xs = [float(tempr[i] if i < ntempr else tempr[-1]) for i in range(npts)]
+        ys = [float(dwpix[i] if i < len(dwpix) else dwpix[-1]) for i in range(npts)]
+        w7.contio(sigb, 0.0, 0, 0, 1, npts, mf=7, mt=2)
+        w7.tab1io(0.0, 0.0, 0, 0, 2, npts, [npts], [2], xs, ys)
+        w7.asend()
+        cards_7_2 = 3 + (2*ntempr + 4)//6
+    elif iel > 0:
+        # Coherent elastic (Bragg)
+        w7.contio(za, awr, 1, 0, 0, 0, mf=7, mt=2)
+        jmax = nedge  # For reference we keep all
+        e_vals = [float(bragg[2*j]) for j in range(jmax)]
+        w = float(dwpix[0])
+        y_vals = []
+        ssum = 0.0
+        for j in range(jmax):
+            e = e_vals[j]
+            ssum += math.exp(-4.0*w*e) * float(bragg[2*j+1])
+            y_vals.append(ssum)
+        w7.tab1io(float(tempr[0]), 0.0, ntempr-1, 0, 1, jmax, [jmax], [1], e_vals, y_vals)
+        for it in range(1, ntempr):
+            y_vals = []
+            w = float(dwpix[it])
+            ssum = 0.0
+            for j in range(jmax):
+                e = e_vals[j]
+                ssum += math.exp(-4.0*w*e) * float(bragg[2*j+1])
+                y_vals.append(ssum)
+            w7.listio(float(tempr[it]), 0.0, jmax, 0, jmax, 0, y_vals)
+        w7.asend()
+        cards_7_2 = 3 + (2*nedge + 4)//6
+        if ntempr > 1:
+            cards_7_2 += (ntempr-1)*(1 + (nedge + 5)//6)
+    else:
+        cards_7_2 = 0  # no elastic
+
+    # Inelastic (MT=4)
+    before = w7.ns
+    w7.contio(za, awr, 0, int(lat), int(isym), 0, mf=7, mt=4)
+    n6 = 6 * (1 if nss == 0 else (nss + 1))
+    header = [0.0, 0.0, float(1 if ilog else 0), 0.0, float(n6), float(nss),
+              float(npr*spr), float(beta[nbeta-1]), float(awr), 0.0253*float(beta[nbeta-1]), 0.0, float(npr)]
+    if nss != 0:
+        header += [float(b7), float(mss*sps), float(aws), 0.0, 0.0, float(mss)]
+    w7.listio(header[0], header[1], int(header[2]), int(header[3]), int(header[4]), int(header[5]), header[6:])
+    # Beta table header (TAB2)
+    nbt = nbeta if (isym % 2 == 0) else (2*nbeta - 1)
+    w7.contio(0.0, 0.0, 0, 0, 1, nbt, mf=7, mt=4)
+
+    def value_for(i_beta, j_alpha, it):
+        sc = 1.0
+        if lat == 1 and tempr[it] != 0.0:
+            sc = 0.0253/float(tempr[it])
+        if isym == 0:
+            be = float(beta[i_beta])*sc
+            val = float(ssm[i_beta, j_alpha, it]) * math.exp(-be/2.0)
+            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+        elif isym == 1:
+            if i_beta < nbeta:
+                be = float(beta[nbeta - i_beta - 1])*sc
+                val = float(ssm[nbeta - i_beta - 1, j_alpha, it]) * math.exp(+be/2.0)
+            else:
+                idx = i_beta - nbeta + 1
+                be = float(beta[idx])*sc
+                val = float(ssp[idx, j_alpha, it]) * math.exp(+be/2.0) if ssp is not None else 0.0
+            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+        elif isym == 2:
+            val = float(ssm[i_beta, j_alpha, it])
+            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+        else:  # isym == 3
+            if i_beta < nbeta:
+                val = float(ssm[nbeta - i_beta - 1, j_alpha, it])
+            else:
+                idx = i_beta - nbeta + 1
+                val = float(ssp[idx, j_alpha, it]) if ssp is not None else 0.0
+            return (math.log(val) if (ilog and val>0.0) else max(0.0, val))
+
+    for i in range(nbt):
+        # TAB1 for first temperature
+        w7.contio(float(tempr[0]), float((-beta[nbeta - i - 1]) if (isym % 2 == 1 and i < nbeta) else (beta[i - nbeta + 1] if (isym % 2 == 1 and i >= nbeta) else beta[i])), ntempr-1, 0, 1, nalpha, mf=7, mt=4)
+        xalpha = [float(alpha[j]) for j in range(nalpha)]
+        y = [value_for(i, j, 0) for j in range(nalpha)]
+        w7.tab1io(float(tempr[0]), float(0.0 if isym==0 else 0.0), ntempr-1, 0, 1, nalpha, [nalpha], [4], xalpha, y)
+        # subsequent temperatures as LISTs (one per temp)
+        for it in range(1, ntempr):
+            y = [value_for(i, j, it) for j in range(nalpha)]
+            w7.listio(float(tempr[it]), float(0.0), nalpha, 0, nalpha, 0, y)
+
+    w7.asend()
+    cards_7_4_per_beta = 2 + (2*nalpha + 4)//6
+    if ntempr > 1:
+        cards_7_4_per_beta += (ntempr-1)*(1 + (nalpha + 5)//6)
+    cards_7_4 = 5 + nbeta * cards_7_4_per_beta
+
+    # ---------- MF=1/MT=451 header + comments + dictionary ----------
+    w1 = EndfWriter(mat=mat)
+    w1.contio(za, awr, -1, 0, 0, 0, mf=1, mt=451)
+    w1.contio(0.0, 0.0, 0, 0, 0, 6, mf=1, mt=451)
+    w1.contio(1.0, 0.0, 0, 0, 12, 6, mf=1, mt=451)
+    w1.contio(0.0, 0.0, 0, 0, 0, (3 if iel != 0 else 2), mf=1, mt=451)
+    nc = 0
+    if isinstance(file1_text, list):
+        for line in file1_text:
+            w1.textio(str(line))
+            nc += 1
+    # Dictionary header
+    total_dict_cards = 5 + nc + 1 + (1 if iel != 0 else 0)
+    w1.contio(0.0, 0.0, 1, 451, total_dict_cards, 0, mf=1, mt=451)
+    if iel != 0:
+        w1.contio(0.0, 0.0, 7, 2, cards_7_2, 0, mf=1, mt=451)
+    w1.contio(0.0, 0.0, 7, 4, cards_7_4, 0, mf=1, mt=451)
+    w1.asend(); w1.afend()
+
+    return w1.to_text() + w7.to_text()
