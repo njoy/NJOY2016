@@ -1663,7 +1663,7 @@ contains
       do while (k.lt.nold)
          k=k+1
          call finda(k,c,2,iold,bufn,nbuf)
-         if (k.lt.nold) then
+         if (k.le.nold) then
             er=c(1)
             egrid=0
             do while (egrid.lt.er)
@@ -1678,6 +1678,8 @@ contains
          endif
       enddo
       j=j+1
+      c(1)=eg
+      c(2)=0
       jt=-j
       call loada(jt,c,2,inew,buf,nbuf)
       isave=iold
