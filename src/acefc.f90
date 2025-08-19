@@ -2234,7 +2234,7 @@ contains
                call tab1io(nin,0,0,scr,nb,nw)
                zap=c1h
                lf=l2h
-               dzap=abs(zap-1)
+               dzap=abs(zap-izai)
                do while(nb.ne.0)
                   call moreio(nin,0,0,scr,nb,nw)
                enddo
@@ -2328,13 +2328,23 @@ contains
                   ! read in the data
                   call tab2io(nin,0,0,scr,nb,nw)
                   ei=scr(2)
-                  intmu=nint(scr(8))
+                  intmu=mod(nint(scr(8)),10)
+                  if (n1h.ne.1) then
+                    call mess('topfil',&
+                    ' warning nr>1 for cosines interpolation',&
+                    ' check conversion from law7 to law1')
+                  endif
                   nmu=n2h
                   loc=1+nmu
                   do imu=1,nmu
                      scr(imu)=loc
                      call tab1io(nin,0,0,scr(loc),nb,nw)
-                     intep=nint(scr(loc+7))
+                     intep=mod(nint(scr(loc+7)),10)
+                     if (nint(scr(loc+4)).ne.1) then
+                       call mess('topfil',&
+                       ' warning nr>1 for ep',&
+                       ' check conversion from law7 to law1')
+                     endif
                      loc=loc+nw
                      do while (nb.ne.0)
                         call moreio(nin,0,0,scr(loc),nb,nw)
@@ -2482,7 +2492,7 @@ contains
                      l=l+nw
                      l2=l
                      nmu=n2h
-                     l=l+66
+                     l=l+2*nmu
                      l3=l
                      do imu=1,nmu
                         l1=l
@@ -2510,7 +2520,13 @@ contains
                      if (newfor.eq.0) then
                         call pttab(3,scr,nout)
                      else
-                        call tab1io(0,nout,0,scr,nb,nw)
+                        l=1
+                        call tab1io(0,nout,0,scr(l),nb,nw)
+                        l=l+nw
+                        do while (nb.ne.0)
+                           call moreio(0,nout,0,scr(l),nb,nw)
+                           l=l+nw
+                        enddo
                      endif
                      l=l3
                      do imu=1,nmu
@@ -6347,14 +6363,18 @@ contains
       do j=1,ne
          if (newfor.eq.0) then
             call tab1io(nin,0,0,scr,nb,nw)
+            ll=1+nw
             do while (nb.ne.0)
-               call moreio(nin,0,0,scr,nb,nw)
+               call moreio(nin,0,0,scr(ll),nb,nw)
+               ll=ll+nw
             enddo
          else
             if (law.eq.7) then
                call tab1io(nin,0,0,scr,nb,nw)
+               ll=1+nw
                do while (nb.ne.0)
-                  call moreio(nin,0,0,scr,nb,nw)
+                  call moreio(nin,0,0,scr(ll),nb,nw)
+                  ll=ll+nw
                enddo
             else if (ltt.eq.2) then
                call tab1io(nin,0,0,scr,nb,nw)
@@ -6404,7 +6424,8 @@ contains
             if (newfor.ne.0) then
                xss(il+j)=-xss(il+j)
                iso=0
-               iint=nint(scr(8))
+               iint=mod(nint(scr(8)),10)
+               if (iint.gt.2) iint=2
                xss(next)=iint
                xss(next+1)=n
                if (next+2+3*n.gt.nxss) call error('acensd',&
@@ -6427,7 +6448,8 @@ contains
                      xss(next+1+2*n+i)=sigfig(sum,7,0)
                   endif
                enddo
-               renorm=1/xss(next+1+3*n)
+               renorm=1
+               if (xss(next+1+3*n).ne.0.0_kr) renorm=1/xss(next+1+3*n)
                do i=1,n
                   xss(next+1+2*n+i)=renorm*xss(next+1+2*n+i)
                   xss(next+1+2*n+i)=sigfig(xss(next+1+2*n+i),9,0)
@@ -7705,7 +7727,7 @@ contains
                   if (na.eq.2) then
                      aa=scr(10+ncyc*(ki-1))
                   else
-                     aa=bachaa(1,1,iza,ee,ep)
+                     aa=bachaa(izai,nint(zap),iza,ee,ep)
                   endif
                   xss(ki+4*n+nexd)=sigfig(aa,7,0)
 
@@ -7875,7 +7897,7 @@ contains
          else
             jscr=1
             call tab1io(nin,0,0,scr(jscr),nb,nw)
-            intmu=l1h
+            intmu=mod(nint(scr(jscr+7)),10)
             nmu=l2h
             ee=c2h/emev
             xss(next+j)=sigfig(ee,7,0)
@@ -7892,7 +7914,8 @@ contains
                jscr=1
                call tab1io(nin,0,0,scr(jscr),nb,nw)
                npep=n2h
-               intep=nint(scr(jscr+7))
+               intep=mod(nint(scr(jscr+7)),10)
+               if (intep.gt.2) intep=2
                jscr=jscr+nw
                do while (nb.ne.0)
                   call moreio(nin,0,0,scr(jscr),nb,nw)
@@ -9717,7 +9740,8 @@ contains
                scr(llht+7)=5
                amass=awr/awi
                do ie=1,ne
-                  int=nint(xss(loce))
+                  int=mod(nint(xss(loce)),10)
+                  if (int.gt.2) int=2
                   n=nint(xss(loce+1))
                   xss(nb+ie)=-(next-andh+1)
                   xss(next)=int
@@ -10207,9 +10231,11 @@ contains
                            ll=ll+nw
                         enddo
                         nmu=nint(scr(lld+3))
+                        llx=max(2*(nint(scr(lld+4)))+4,6)
                         nx=nint(scr(lld+5))
-                        intx=nint(scr(lld+7))
-                        xss(na+ie)=scr(lld+1)
+                        intx=mod(nint(scr(lld+7)),10)
+                        if (intx.gt.2) intx=2
+                        xss(na+ie)=scr(lld+1)/emev
                         xss(nc+ie)=-(next-andh+1)
                         xss(next)=intx
                         xss(next+1)=nx
@@ -10217,18 +10243,24 @@ contains
                   'insufficient storage for angular distributions.',&
                   ' ')
                         do ix=1,nx
-                           xss(next+1+ix)=sigfig(scr(lld+6+2*ix),7,0)
+                           xss(next+1+ix)=sigfig(scr(lld+llx+2*ix),7,0)
                            xss(next+1+nx+ix)=&
-                             sigfig(scr(lld+7+2*ix),7,0)
+                             sigfig(scr(lld+llx+1+2*ix),7,0)
                            if (xss(next+1+nx+ix).lt.small)&
                              xss(next+1+nx+ix)=0
                            if (ix.eq.1) xss(next+1+2*nx+ix)=0
                            if (ix.gt.1) then
-                              sum=xss(next+1+2*nx+ix-1)&
-                                +(xss(next+1+nx+ix)&
-                                +xss(next+1+nx+ix-1))&
-                                *(xss(next+1+ix)-xss(next+1+ix-1))/2
-                              xss(next+1+2*nx+ix)=sigfig(sum,7,0)
+                             if (intx.eq.1) then
+                               sum=xss(next+1+2*nx+ix-1)&
+                                   +xss(next+1+nx+ix-1)&
+                                   *(xss(next+1+ix)-xss(next+1+ix-1))
+                             else
+                               sum=xss(next+1+2*nx+ix-1)&
+                                   +(xss(next+1+nx+ix)&
+                                   +xss(next+1+nx+ix-1))&
+                                   *(xss(next+1+ix)-xss(next+1+ix-1))/2
+                             endif
+                             xss(next+1+2*nx+ix)=sigfig(sum,7,0)
                            endif
                         enddo
                         renorm=1/xss(next+1+3*nx)
@@ -10885,15 +10917,17 @@ contains
                   else if (law.eq.7) then
                      xss(last+1)=67
                      call tab2io(nin,0,0,scr(ll),nb,nw)
-                     lep=nint(scr(ll+3))
                      ne=nint(scr(ll+5))
+                     xss(next)=0
+                     lee=next
+                     xss(next+1)=2
+                     next=next+2+2*2
                      xss(last+2)=next-dlwh+1
                      xss(next)=0
                      xss(next+1)=ne
-                     lee=next+2
-                     next=lee+2*ne
+                     lle=next+2
+                     next=lle+2*ne
                      llht=ll
-                     llad=llht+8+2*ne
                      scr(llht)=0
                      scr(llht+1)=0
                      scr(llht+2)=0
@@ -10902,6 +10936,7 @@ contains
                      scr(llht+5)=ne
                      scr(llht+6)=ne
                      scr(llht+7)=2
+                     llad=llht+8+2*ne
                      nrr=1
                      npp=2
                      do ie=1,ne
@@ -10912,18 +10947,26 @@ contains
                            call moreio(nin,0,0,scr(ll),nb,nw)
                            ll=ll+nw
                         enddo
-                        intmu=l1h
+                        intmu=mod(nint(scr(llad+7)),10)
+                        if (intmu.gt.2) intmu=2
                         nmu=l2h
                         e=c2h
                         ee=c2h/emev
-                        xss(lee+ie-1)=sigfig(ee,7,0)
-                        xss(lee+ne+ie-1)=next-dlwh+1
+                        if (ie.eq.1) then
+                          xss(lee+2)=sigfig(ee,7,0)
+                          xss(lee+4)=1
+                        elseif (ie.eq.ne) then
+                          xss(lee+3)=sigfig(ee,7,0)
+                          xss(lee+5)=1
+                        endif
+                        xss(lle+ie-1)=sigfig(ee,7,0)
+                        xss(lle+ne+ie-1)=next-dlwh+1
                         xss(next)=intmu
                         xss(next+1)=nmu
                         next=next+2
                         mus=next
                         next=next+2*nmu
-                        lld=llad+nw
+                        lld=ll                        
                         nra=1
                         npa=2
                         ebar=0
@@ -10931,8 +10974,10 @@ contains
                         do imu=1,nmu
                            ll=lld
                            call tab1io(nin,0,0,scr(ll),nb,nw)
+                           llx=max(2*n1h+6,8)
                            npep=n2h
-                           intep=nint(scr(ll+7))
+                           intep=mod(nint(scr(ll+7)),10)
+                           if (intep.gt.2) intep=2
                            ll=ll+nw
                            do while (nb.ne.0)
                               call moreio(nin,0,0,scr(ll),nb,nw)
@@ -10949,51 +10994,51 @@ contains
                            chk=0
                            do ki=1,npep
                               xss(next+ki)=&
-                                sigfig(scr(lld+8+2*(ki-1))/emev,7,0)
+                                sigfig(scr(lld+llx+2*(ki-1))/emev,7,0)
                               xss(next+npep+ki)=&
-                                sigfig(scr(lld+9+2*(ki-1))*emev,7,0)
+                                sigfig(scr(lld+1+llx+2*(ki-1))*emev,7,0)
                               if (ki.ne.1) then
                                  if (intep.eq.1) then
                                     xss(next+2*npep+ki)=&
                                       xss(next+2*npep+ki-1)&
-                                      +scr(lld+9+2*(ki-2))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))
+                                      +scr(lld+1+llx+2*(ki-2))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))
                                     eav=eav&
-                                      +scr(lld+9+2*(ki-2))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      +scr(lld+8+2*(ki-2)))/2
+                                      +scr(lld+1+llx+2*(ki-2))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      +scr(lld+llx+2*(ki-2)))/2
                                     chk=chk&
-                                      +scr(lld+9+2*(ki-2))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))
+                                      +scr(lld+1+llx+2*(ki-2))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))
                                  else if (intep.eq.2) then
                                     xss(next+2*npep+ki)=&
                                       xss(next+2*npep+ki-1)&
-                                      +(scr(lld+9+2*(ki-2))&
-                                      +scr(lld+9+2*(ki-1)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))/2
+                                      +(scr(lld+1+llx+2*(ki-2))&
+                                      +scr(lld+1+llx+2*(ki-1)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))/2
                                     eav=eav&
-                                      +(scr(lld+9+2*(ki-2))&
-                                      *scr(lld+8+2*(ki-2))&
-                                      +scr(lld+9+2*(ki-1))&
-                                      *scr(lld+8+2*(ki-1)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))/2
+                                      +(scr(lld+1+llx+2*(ki-2))&
+                                      *scr(lld+llx+2*(ki-2))&
+                                      +scr(lld+1+llx+2*(ki-1))&
+                                      *scr(lld+llx+2*(ki-1)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))/2
                                     chk=chk&
-                                      +(scr(lld+9+2*(ki-2))&
-                                      +scr(lld+9+2*(ki-1)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))/2
+                                      +(scr(lld+1+llx+2*(ki-2))&
+                                      +scr(lld+1+llx+2*(ki-1)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))/2
                                  endif
                               endif
                            enddo
                            renorm=1
                            if (xss(next+3*npep).ne.zero)&
-                             renorm=1/xss(next+3*npep)
+                               renorm=1/xss(next+3*npep)
                            do ki=1,npep
                               xss(next+npep+ki)=&
                                 sigfig(renorm*xss(next+npep+ki),7,0)
@@ -11006,8 +11051,13 @@ contains
                            eav=ad*eav
                            chk=ad*chk
                            if (imu.gt.1) then
-                              ebar=ebar+(amuu-amulst)*(eav+eavlst)/2
-                              chek=chek+(amuu-amulst)*(chk+chklst)/2
+                             if (intmu.eq.1) then
+                               ebar=ebar+(amuu-amulst)*eavlst
+                               chek=chek+(amuu-amulst)*chklst
+                             else
+                               ebar=ebar+(amuu-amulst)*(eav+eavlst)/2
+                               chek=chek+(amuu-amulst)*(chk+chklst)/2
+                             endif
                            endif
                            eavlst=eav
                            amulst=amuu
@@ -14554,7 +14604,14 @@ contains
          mt=iabs(nint(xss(mtr+n-1)))
          call mtname(mt,name,izai)
          ll=len_trim(name)
-         aprime=1
+         ! In my opinion aprime should be equal to awp*awi to be
+         ! consistent with the LAB -> CM conversion formalism.
+         ! This parameter is used for checking and correcting energy
+         ! distributions represented by law=4 or law=44
+         ! Furthermore, for these reactions awp=awi, so aprime=awi*awi.
+         ! It is only equal to 1 for incident neutrons.
+         ! D. Lopez Aldama, August 2023         
+         aprime=awi*awi
          q=xss(lqr+n-1)
          nlaw=1
          l=nint(xss(ldlw+n-1)+dlw-1)
