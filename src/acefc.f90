@@ -1787,7 +1787,8 @@ contains
                call finda(i,c,nc,iold,buf,nbuf)
                if (c(1).ge.(1-eps)*thresh) then
                   e=c(1)
-                  if (i.eq.1) e=e*(1+eps)
+                  if (i.eq.1.and.&
+                     (mth.ne.2.or.(mth.eq.2.and.izai.le.1))) e=e*(1+eps)
                   call gety1(e,enext,idis,y,nin,scr)
                   if (mth.eq.2.and.e.lt.ethrr) y=0
                   if (i.gt.1.and.ifrst.eq.0) y=0
@@ -6517,7 +6518,16 @@ contains
    allocate(yys(ne))
 
    write(nsyso,'(/'' working on charged-particle elastic'')')
+   write(nsyso,'(a,i7,f7.2,2i7)')' zai spi,lidp,ne =',izai,spi,lidp,ne
    amass=awr/awp
+   i2s=nint(2*spi)
+   ai=awi*amassn
+   at=awr*amassn
+   zt=nint(za/1000)
+   zi=int(izai/1000)
+   cc1=2*amu*ev*fm**2/hbar**2
+   ee=(ev/10000000)*(clight/10)
+   cc2=ee**4*amu/(2*hbar**2*ev)
    llht=1
    scr(llht)=0
    scr(llht+1)=0
@@ -6540,22 +6550,26 @@ contains
       ltp=nint(scr(lld+2))
       scr(lld+3)=lidp
       nl=nint(scr(lld+5))
-      if (ltp.lt.12) then
-         call ptlegc(scr(lld),awi,izai,awr,nint(za),spi)
-         nl=nint(scr(lld+5))
-         ll=lld+6+2*nl
-      endif
-      xss(ie+j)=sigfig(e/emev,7,0)
-      xss(il+j)=-(next-and+1)
       ien=1
       do while (xss(esz+ien+1).lt.e.and.ien.lt.nes)
-         ien=ien+1
+        ien=ien+1
       enddo
       f=(xss(esz+ien+1)-e)/(xss(esz+ien+1)-xss(esz+ien))
       xelas=xss(esz+3*nes+ien)*f+xss(esz+3*nes+ien+1)*(1-f)
-      write(nsyso,'('' e,elas='',1p,2e12.4)') e,xelas
+      if (ltp.lt.12) then
+         call ptlegc(scr(lld),awi,izai,awr,nint(za),spi)
+      else
+         call pttabc(scr(lld),awi,izai,awr,nint(za),spi,xelas)
+      endif
+      nl=nint(scr(lld+5))
+      ll=lld+6+2*nl
+      xss(ie+j)=sigfig(e/emev,7,0)
+      xss(il+j)=-(next-and+1)
+      write(nsyso,'('' e,elas(mf3/mt2),ltp'',1p,2e12.4,i4)')e,xelas,ltp
       write(nsyso,'(15x,''mu'',7x,''signi'',8x,''sigc'',8x,&
-       &''sige'',8x,''ratr'',8x,''cumm'')')
+        &''sige'',8x,''ratr'',8x,''cumm'')')
+      wn=at*sqrt(cc1*e*ai)/(ai+at)
+      eta=zt*zi*sqrt(cc2*ai/e)
       cumm=0
       amul=0
       smul=0
@@ -6567,38 +6581,27 @@ contains
       eht=0
       do jl=1,nl
          ione=0
-         do while (ione.eq.0)
+         do while(ione.eq.0)
             amuu=scr(lld+6+2*(jl-1))
             pmu=scr(lld+7+2*(jl-1))
             itwo=0
             do while (itwo.eq.0)
-               i2s=nint(2*spi)
-               ai=awi*amassn
-               at=awr*amassn
-               zt=nint(za/1000)
-               zi=int(izai/1000)
-               cc1=2*amu*ev*fm**2/hbar**2
-               ee=(ev/10000000)*(clight/10)
-               cc2=ee**4*amu/(2*hbar**2*ev)
-               wn=at*sqrt(cc1*e*ai)/(ai+at)
-               eta=zt*zi*sqrt(cc2*ai/e)
                sigc=0
                if (lidp.eq.0) sigc=(eta**2/wn**2)/(1-amuu)**2
                if (lidp.eq.1) sigc=((2*eta**2/wn**2)&
-                 /(1-amuu**2))*((1+amuu**2)/(1-amuu**2)&
-                 +((-1)**i2s)*cos(eta*log((1+amuu)/(1-amuu)))&
-                 /(2*spi+1))
-               if (ltp.lt.12) pmu=pmu-sigc
+                   /(1-amuu**2))*((1+amuu**2)/(1-amuu**2)&
+                   +((-1)**i2s)*cos(eta*log((1+amuu)/(1-amuu)))&
+                   /(2*spi+1))
                if (iterp.eq.1) then
                   signi=(ratr-1)*sigc
                else
-                  signi=pmu*xelas
+                  signi=pmu-sigc
                   if (signi.lt.-sigc) signi=-sigc
                endif
                ratr=(sigc+signi)/sigc
                itwo=1
                if (jl.gt.1.and.iterp.eq.0.and.sigc.gt.abs(signi)&
-                 .and.sigc.gt.(2*sigcl)) then
+                   .and.sigc.gt.(2*sigcl)) then
                   iterp=1
                   amuu=(amul+amuu)/2
                   ratr=(ratrl+ratr)/2
@@ -6607,7 +6610,7 @@ contains
             enddo
             if (jl.gt.1) cumm=cumm+(amuu-amul)*(signi+sigc+smul)/2
             write(nsyso,'(5x,1p,6e12.4)')&
-              amuu,signi,sigc,sigc+signi,ratr,cumm
+              amuu,signi,sigc,signi+sigc,ratr,cumm
             kk=kk+1
             scr(ll+3*(kk-1))=amuu
             scr(ll+1+3*(kk-1))=signi+sigc
@@ -7997,7 +8000,7 @@ contains
    integer,parameter::maxang=4000
    real(kr)::aco(maxang),cprob(maxang)
    real(kr),parameter::tol1=.001e0_kr
-   real(kr),parameter::tol2=.01e0_kr
+   real(kr),parameter::tol2=.005e0_kr
    real(kr),parameter::one=1.e0_kr
    real(kr),parameter::half=.5e0_kr
    real(kr),parameter::hund=.01e0_kr
@@ -8062,11 +8065,11 @@ contains
    do while (i.lt.nn-1.and.idone.eq.0)
       j=i+1
       check=0
-      do while (j.lt.nn+1.and.check.le.0.and.dco.le.one/2)
+      do while (j.lt.nn+1.and.check.le.0.and.dco.le.one/4)
          j=j+1
          jj=j-1
          dco=aco(j)-aco(i)
-         if (dco.le.one/2) then
+         if (dco.le.one/4) then
             k=i
             do while (k.lt.j-1.and.check.le.0)
                k=k+1
@@ -8077,7 +8080,7 @@ contains
             enddo
          endif
       enddo
-      if (dco.gt.one/2.or.check.gt.zero) then
+      if (dco.gt.one/4.or.check.gt.zero) then
          i=jj
          ii=ii+1
          aco(ii)=aco(i)
@@ -8187,20 +8190,217 @@ contains
    else
       if (lidp.ne.1) then
          sigr=c(7)/2
-         do ip=1,np
+         do ip=1,nt
             sigr=sigr+(2*ip+1)*p(ip+1)*c(ip+7)/2
          enddo
-         y=sigc+sigr
+         y=sigc+sigr/(1-x)
       else
          sigr=c(7)/2
          do it=1,nt
             sigr=sigr+(4*it+1)*p(2*it+1)*c(it+7)/2
          enddo
-         y=sigc+sigr
+         y=sigc+sigr/(1-x*x)
       endif
    endif
    return
    end subroutine coul
+
+    subroutine pttabc(c,awp,izap,awr,iza,spi,sni)
+    !------------------------------------------------------------------
+    ! For charged particle nuclear plus interference representation,
+    ! reconstruct the angular distribution adaptively. The
+    ! distribution returned is the actual elastic cross section.
+    !------------------------------------------------------------------
+    use util ! provides error
+    use endf ! provides terp1
+    use physics ! provides amu,hbar,ev,clight,amassn
+    ! externals
+    real(kr)::c(*),awp,awr,spi,sni
+    integer::izap,iza
+    ! internals
+    integer,parameter::kmax=20
+    integer,parameter::maxang=20000
+    real(kr),parameter::zero=0.0e0_kr
+    real(kr),parameter::half=0.5e0_kr
+    real(kr),parameter::one=1.0e0_kr
+    real(kr),parameter::two=2.0e0_kr
+    real(kr),parameter::fm=1.e-12_kr
+    real(kr),parameter::umax=.995e0_kr
+    real(kr),parameter::tol=0.005e0_kr
+    real(kr),parameter::tol2=2e0_kr
+    real(kr),parameter::hmax=0.25e0_kr
+    real(kr),parameter::hmin=0.0002e0_kr
+    real(kr),parameter::sigmin=1.0e-20_kr
+    integer::ltp,law,nl,i,j,i2s,l,k,lidp,nostop,iconu
+    real(kr)::ai,at,zi,zt,ee,c1,c2,wn,eta,wn2,eta2
+    real(kr)::e,u1,sig1,sigc1,uni1,pni1,u2,sig2,sigc2,uni2,pni2
+    real(kr)::um,sigm,sigcm,pnum,sigl,sigcmin,sigcmax,h,dy
+    real(kr)::x(kmax),y(kmax),z(kmax)
+    real(kr),dimension(:),allocatable::uu,pni
+
+    !  adaptive reconstruction of angular distribution for MF6/LAW5/LTP>10
+    e=c(2)
+    ltp=nint(c(3))
+    lidp=nint(c(4))
+    law=ltp-10
+    nl=nint(c(6))
+    allocate(uu(nl),pni(nl))
+    j=6
+    do i=1,nl
+      j=j+1
+      uu(i)=c(j)
+      j=j+1
+      pni(i)=c(j)
+    enddo
+    if (uu(1).le.-one) then
+      if (lidp.eq.1) then
+        if (-umax.lt.uu(2)) then
+          u1=-umax
+        else
+          u1=half*(-one+uu(2))
+        endif
+      else
+        u1=-one
+      endif
+      call terp1(uu(1),pni(1),uu(2),pni(2),u1,sig1,law)
+      uu(1)=u1
+      pni(1)=sig1
+    endif
+    if (uu(nl).ge.one) then
+      if (umax.gt.uu(nl-1)) then
+        u2=umax
+      else
+        u2=half*(one+uu(nl-1))
+      endif
+      call terp1(uu(nl-1),pni(nl-1),uu(nl),pni(nl),u2,sig2,law)
+      uu(nl)=u2
+      pni(nl)=sig2
+    endif
+    i2s=nint(2*spi)
+    ai=awp*amassn
+    at=awr*amassn
+    zi=dble(int(izai/1000))
+    zt=dble(int(iza/1000))
+    ee=(ev/10000000)*(clight/10)
+    c1=two*amu*ev*fm**2/hbar**2
+    c2=ee**4*amu/(two*hbar**2*ev)
+    wn=at*sqrt(c1*e*ai)/(ai+at)
+    eta=zt*zi*sqrt(c2*ai/e)
+    eta2=eta*eta
+    wn2=wn*wn
+    u1=uu(1)
+    uni1=u1
+    pni1=pni(1)
+    sigc1=zero
+    if (lidp.eq.0) then
+      sigc1=eta2/(wn2*(one-u1)*(one-u1))
+    elseif (lidp.eq.1) then
+      sigc1=two*eta2/(wn2*(one-u1*u1))*((one+u1*u1)/(one-u1*u1) + &
+           ((-1)**i2s)/(two*spi+one)*cos(eta*log((one+u1)/(one-u1))))
+    endif
+    sig1=sigc1+sni*pni1
+    if (sig1.lt.sigmin) sig1=sigmin
+    l=7
+    c(l)=u1
+    l=l+1
+    c(l)=sig1
+    do i=2,nl
+      u2=uu(i)
+      uni2=u2
+      pni2=pni(i)
+      sigc2=zero
+      if (lidp.eq.0) then
+        sigc2=eta2/(wn2*(one-u2)*(one-u2))
+      elseif (lidp.eq.1) then
+        sigc2=two*eta2/(wn2*(one-u2*u2))*((one+u2*u2)/(one-u2*u2) + &
+             ((-1)**i2s)/(two*spi+one)*cos(eta*log((one+u2)/(one-u2))))
+      endif
+      sig2=sigc2+sni*pni2
+      if (sig2.lt.sigmin) sig2=sigmin
+      k=0
+      nostop=1
+      do while (nostop.eq.1)
+        um=half*(u2+u1)
+        h=u2-u1
+        if (um.gt.u1.and.um.lt.u2.and.h.gt.hmin.and.sig1.gt.sigmin.and.sig2.gt.sigmin.and.k.lt.kmax) then
+          ! calculate scattering at midpoint
+          sigcm=zero
+          if (lidp.eq.0) then
+            sigcm=eta2/(wn2*(one-um)*(one-um))
+          elseif (lidp.eq.1) then
+            sigcm=two*eta2/(wn2*(one-um*um))*((one+um*um)/(one-um*um) + &
+                ((-1)**i2s)/(two*spi+one)*cos(eta*log((one+um)/(one-um))))
+          endif
+          call terp1(uni1,pni1,uni2,pni2,um,pnum,law)
+          sigm=sigcm+sni*pnum
+          if (sigm.lt.sigmin) sigm=sigmin
+          sigl=half*(sig1+sig2)
+          dy=abs(sigl-sigm)
+          sigcmin=min(sigc1,sigc2)
+          sigcmax=max(sigc1,sigc2)
+          if ((dy.le.tol*abs(sigm).and.sigcmax.le.tol2*sigcmin.and.h.le.hmax).or.sigm.le.sigmin) then
+            iconu=1
+          else
+            iconu=0
+          endif
+        else
+          iconu=2
+        endif
+        if (iconu.eq.0) then
+          ! no convergence
+          k=k+1
+          x(k)=u2
+          y(k)=sig2
+          z(k)=sigc2
+          u2=um
+          sig2=sigm
+          sigc2=sigcm
+        else
+          ! converged: iconu=1(normal) or iconu=2 (forced)
+          if (l+2.gt.maxang) then
+            call error('pttabc','too many coulomb angles, increase maxang',' ')
+          endif
+          l=l+1
+          c(l)=u2
+          l=l+1
+          c(l)=sig2
+          if (k.gt.0) then
+            u1=u2
+            sig1=sig2
+            sigc1=sigc2
+            u2=x(k)
+            sig2=y(k)
+            sigc2=z(k)
+            k=k-1
+          else
+            nostop=0
+          endif
+        endif
+      enddo
+      u1=u2
+      sig1=sig2
+      sigc1=sigc2
+      uni1=uni2
+      pni1=pni2
+    enddo
+    nl=(l-6)/2
+    if (lidp.eq.1.and.c(7).ge.zero) then
+      do i=nl,1,-1
+        c(3+2*nl+2*i)=c(5+2*i)
+        c(4+2*nl+2*i)=c(6+2*i)
+      enddo
+      do i=nl,2,-1
+        c(7+2*nl-2*i)=-c(3+2*nl+2*i)
+        c(8+2*nl-2*i)=c(4+2*nl+2*i)
+      enddo
+      nl=2*nl-1
+      l=6+2*nl
+    endif
+    c(5)=l
+    c(6)=nl
+    deallocate(uu,pni)
+    return
+    end subroutine pttabc
 
    subroutine acelpp(next,matd,ngmt,nin)
    !-------------------------------------------------------------------
