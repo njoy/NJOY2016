@@ -8447,14 +8447,15 @@ contains
    integer::nk,mto,ik,ifini,jscr,idone,lf,lp,m,n,nn,jnt,i
    integer::ie,je,jn,jfirst,jlast,nlast,law,lff,li,ni,ii,mmm
    integer::ne,lc,imu,nexl,nc,ic,nexd,k,lep,nd,na,ncyc,ki
-   integer::nyp,mtl,loct,nd0,mtdold
+   integer::nyp,mtl,loct,nd0,mtdold,jj,kk
    integer::jp,jpn,jpp
    real(kr)::awr,eg,egamma,ei,en,ep,epu,ef,el,e1,teste,renorm,r
    real(kr),dimension(:),allocatable::scr
    real(kr),dimension(:),allocatable::dise
    real(kr),dimension(:),allocatable::tdise
+   character(120)::line1,line2
    character(66)::strng
-   integer,parameter::nwscr=1000000
+   integer,parameter::nwscr=10000000
    integer,parameter::ndise=5000
    real(kr),dimension(:),allocatable::phot
    real(kr),parameter::emev=1.e6_kr
@@ -8839,7 +8840,8 @@ contains
                         *(scr(7+2*k)-scr(7+2*(k-1)))
                   enddo
                   ! renormalize cdf to sum to 1, and pdf correspondingly
-                  renorm=1/xss(3*n+nexd)
+                  renorm=1
+                  if (xss(3*n+nexd).ne.zero) renorm=1/xss(3*n+nexd)
                   do k=1,n
                      xss(k+n+nexd)=sigfig(xss(k+n+nexd)*renorm,9,0)
                      xss(k+2*n+nexd)=sigfig(xss(k+2*n+nexd)*renorm,9,0)
@@ -8932,6 +8934,17 @@ contains
                      endif
                      do m=1,nd0
                         r=abs(ep/dise(m)-1)
+                        if (r.le.eps.and.r.gt.0.9*eps)then
+                          write(line1,'(a,1pe16.9)')'two discrete photon energies are &
+                          &too close, difference less than ',eps
+                          write(line2,*)'photon energy corresponding to the &
+                          &second read value will be ignored'
+                          call mess('acelpp',line1,line2)
+                          write(line1,'(a,i6,a,1pe16.9)')'mtd= ',mtd,' Incident energy ei= ',ei
+                          write(line2,'(a,i6,a,1pe16.9,a,i6,a,1pe16.9)')'Photon energy(',ki,')= ',ep,&
+                          &' compared against dise(',m,')= ',dise(m)
+                          call mess('acelpp',line1,line2)
+                        endif
                         if (r.le.eps) go to 111
                      enddo
                      !--found a new discrete energy.  insert it into
@@ -8972,8 +8985,8 @@ contains
                   enddo
                endif
                if (nd0.gt.ndise) then
-                  write(strng,'(''nwords is'',i6,'' but need '',i6)')&
-                        nwords,nd0
+                  write(strng,'(''ndise is'',i6,'' but need '',i6)')&
+                        ndise,nd0
                   call error('acelpp',&
                              'too many discrete photons found',strng)
                endif
@@ -9088,9 +9101,11 @@ contains
                !--and insert missing data
                else
                   !--move continuous data, then insert discrete data
-                  do ki=n*2,nd*2+1,-1
-                     scr(6+2*nd0+ki-2*nd)=scr(6+ki)
-                  enddo
+                  if (nd0.gt.nd) then
+                    do ki=n*2,nd*2+1,-1
+                       scr(6+2*nd0+ki-2*nd)=scr(6+ki)
+                    enddo
+                  endif
                   !--loop over union list of photons, inserting
                   !--missing energies with zero probability.  also
                   !--check law and/or sign of photon energy to know
@@ -9116,6 +9131,14 @@ contains
                      enddo
                   enddo
                   !--update length of list record
+                  if (nd.gt.nd0) then
+                    kk=6+2*nd
+                    jj=6+2*nd0
+                    nn=2*(n-nd)
+                    do ki=1,nn
+                      scr(jj+ki)=scr(kk+ki)
+                    enddo
+                  endif
                   n=n-nd+nd0
                endif
                !--update number of discrete photons
@@ -9152,7 +9175,7 @@ contains
                  *(scr(7+ncyc*(ki-1))-scr(7+ncyc*(ki-2)))
             enddo
             renorm=1
-            if (xss(3*n+nexd).ne.0.) renorm=1/xss(3*n+nexd)
+            if (xss(3*n+nexd).ne.zero) renorm=1/xss(3*n+nexd)
             do ki=1,n
                xss(ki+n+nexd)=sigfig(xss(ki+n+nexd)*renorm,9,0)
                xss(ki+2*n+nexd)=sigfig(xss(ki+2*n+nexd)*renorm,9,0)
