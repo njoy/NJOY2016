@@ -7174,7 +7174,7 @@ contains
    real(kr)::test,eemx,yield,xnext,xx,yy,y,xn,eyl,gyl,en
    real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee
    real(kr)::ep,e,bzro,sfe,sfo,bbi,fbarcm,delfcm,akal,rkal
-   real(kr)::emu1,emu2,fbl,ffl,fbcm,ffcm,akak,del,av,renorm
+   real(kr)::emu1,emu2,fbl,ffl,fbcm,ffcm,del,av,renorm
    real(kr)::zap,aa,test1,test2,test3,ex,fx,cx,cxx,val
    real(kr)::e1,p1,e2,p2
    integer::loc(5)
@@ -7292,7 +7292,15 @@ contains
       if (mth.eq.18) ntyr=19
       if (mth.eq.18) lct=1 ! forces lab system for fission
       xss(tyr+i-1)=(3-2*lct)*ntyr
-      if (law.eq.6) xss(tyr+i-1)=-ntyr
+      if (law.eq.6) then ! forces cm system for law6
+        xss(tyr+i-1)=-ntyr
+        if (lct.eq.1) then
+          write(nsyso,&
+          & '(/'' ---warning from acelf6--- lab system found'', &
+          & '' for law6 in mf6/mt'',0p,i0,&
+          & '' - reset to cm'')') mth
+        endif
+      endif
 
    !--generalized yield
    else
@@ -7450,10 +7458,11 @@ contains
       xx=elow
       n=1
       test1=one+one/100000
-      test2=one/10-one/1000000
+      test2=one/10-one/100000
       test3=one-one/10000
       do while (xx.lt.test1)
          n=n+1
+         if (xx.gt.test3) xx=one
          if (xx.lt.test2) then
              xx=xx*step1
          else
@@ -7485,9 +7494,7 @@ contains
          xss(next+2*nn+n)=yn
          xl=xx
          pl=pn
-         test=one/10
-         test=test-test/10000
-         if (xx.lt.test) then
+         if (xx.lt.test2) then
             xx=xx*step1
          else
             xx=xx+step2
@@ -7506,7 +7513,7 @@ contains
       lang=nint(scr(3))
       if (law.eq.1.and.(lang.lt.1.or.(lang.gt.2.and.lang.lt.11)&
         .or.lang.gt.13)) call error('acelf6',&
-        'only lang=1,2,11-13 allowed for endf-6 file 6 neutrons',&
+        'only lang=1,2,11-13 allowed for endf-6 file 6 inc. part.',&
         ' ')
       if (newfor.eq.0.and.law.eq.1.and.lct.eq.2.and.lang.ne.2) then
          write(nsyso,'(/'' converting to kalbach:'',&
@@ -7566,10 +7573,12 @@ contains
             ! extend low histogram bins as sqrt(e) using log energy scale
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
+            ex=40
             if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                lep.eq.1.and.zap.eq.1.and.nd.eq.0) then
+                lep.eq.1.and.nint(zap).eq.1.and.nd.eq.0.and.&
+                scr(7).le.elow.and.scr(8).gt.zero.and.&
+                scr(7+ncyc).gt.ex) then
                fx=.8409
-               ex=40
                cx=scr(7+ncyc)*scr(8)
                do while (n.gt.2)
                   cxx=cx+scr(8+ncyc)*(scr(7+2*ncyc)-scr(7+ncyc))
@@ -7607,8 +7616,7 @@ contains
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
             else if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                     lep.eq.2.and.zap.eq.1.and.n.gt.3.and.nd.eq.0) then
-               ex=40
+                 lep.eq.2.and.nint(zap).eq.1.and.n.gt.3.and.nd.eq.0) then
                fx=0.50
                nn=0
                ! make room for initial data at zero energy, then
@@ -7785,7 +7793,7 @@ contains
                   if (abs(emu1+1).ge.test.or.abs(emu2-1).ge.test) then
                      fbcm=fbl
                      ffcm=ffl
-                     call fndar2(akak,rkal,fbcm,ffcm,emu1,emu2,ee,ep)
+                     call fndar2(akal,rkal,fbcm,ffcm,emu1,emu2,ee,ep)
                      call mess('acelf6',&
                        'tabulated angular distribution',&
                        'does not extend over entire cosine range.')
@@ -7801,10 +7809,10 @@ contains
                         delfcm=0
                      endif
                      call fndar1(akal,rkal,fbarcm,delfcm,ee,ep)
-                     xss(ki+3*n+nexd)=sigfig(rkal,7,0)
-                     xss(ki+4*n+nexd)=sigfig(akal,7,0)
                   endif
-
+                  xss(ki+3*n+nexd)=sigfig(rkal,7,0)
+                  xss(ki+4*n+nexd)=sigfig(akal,7,0)
+                  
                !--convert legendre distribution to law 61
                else if (lang.eq.1.and.newfor.eq.1) then
                   scr(jscr)=0
@@ -7941,7 +7949,8 @@ contains
                        *(scr(9+2*(ki-1))-scr(9+2*(ki-2)))/2
                   endif
                enddo
-               renorm=1/xss(nexd+3*npep)
+               renorm=1
+               if (xss(nexd+3*npep).ne.zero) renorm=1/xss(nexd+3*npep)
                do ki=1,npep
                   xss(nexd+npep+ki)=&
                     sigfig(renorm*xss(nexd+npep+ki),7,0)
