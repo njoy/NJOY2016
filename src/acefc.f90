@@ -7462,7 +7462,6 @@ contains
       test3=one-one/10000
       do while (xx.lt.test1)
          n=n+1
-         if (xx.gt.test3) xx=one
          if (xx.lt.test2) then
              xx=xx*step1
          else
@@ -9571,12 +9570,13 @@ contains
             if ((mt.eq.102.and.izai.eq.1).or.mf.eq.4) then
                xss(tyrh+jp-1)=-1
                if (mt.eq.102) xss(tyrh+jp-1)=1
-               do ie=iaa,nes
+               do ie=it,nes
                   if (mt.eq.2) then
                      xss(hpd+2+ie-it)=&
                        sigfig(xss(esz+3*nes+ie-it),7,0)
                   else
-                     tt=xss(hpd+2+ie-it)+xss(2+k+ie-iaa)
+                     tt=xss(hpd+2+ie-it)
+                     if (ie.ge.iaa) tt=tt+xss(2+k+ie-iaa)
                      xss(hpd+2+ie-it)=sigfig(tt,7,0)
                   endif
                enddo
@@ -9670,18 +9670,19 @@ contains
                   if (ik.eq.lprod(j)) then
                      nrr=1
                      npp=2
-                     do ie=iaa,nes
-                        e=xss(esz+ie-1)*emev
-                        call terpa(y,e,en,idis,scr,npp,nrr)
-                        if (y.lt.delt) y=0
-                        e=e/emev
-                        if (mth.eq.2) then
-                           ss=xss(esz+3*nes+ie-1)
-                        else
-                           ss=xss(2+k+ie-iaa)
-                        endif
-                        tt=xss(hpd+2+ie-it)+y*ss
-                        xss(hpd+2+ie-it)=sigfig(tt,7,0)
+                     do ie=it,nes
+                       e=xss(esz+ie-1)*emev
+                       call terpa(y,e,en,idis,scr,npp,nrr)
+                       if (y.lt.small) y=0
+                       e=e/emev
+                       ss=0
+                       if (mth.eq.2) then
+                          ss=xss(esz+3*nes+ie-1)
+                       else
+                          if (ie.ge.iaa) ss=xss(2+k+ie-iaa)
+                       endif
+                       tt=xss(hpd+2+ie-it)+y*ss
+                       xss(hpd+2+ie-it)=sigfig(tt,7,0)
                      enddo
 
                      !--store the yield
@@ -9807,7 +9808,8 @@ contains
                          *(xss(next+1+i)+xss(next+1+i-1))/4
                      endif
                   enddo
-                  renorm=1/xss(next+1+3*n)
+                  renorm=1
+                  if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                   do i=1,n
                      xss(next+1+n+i)= &
                        sigfig(renorm*xss(next+1+n+i),7,0)
@@ -9901,11 +9903,12 @@ contains
                      n=nint(scr(lld+5))
                      xss(il+iie)=next-andh+1
                      xss(il+iie)=-xss(il+iie)
-                     int=nint(scr(lld+7))
+                     int=mod(nint(scr(lld+7)),10)
+                     if (int.gt.2) int=2
                      xss(next)=int
                      xss(next+1)=n
                      if (next+2+3*n.gt.nxss) call error('acelcp',&
-                  'insufficient storage for angular distributions.',&
+                     'insufficient storage for angular distributions.',&
                      ' ')
                      do i=1,n
                         xss(next+1+i)=&
@@ -9937,7 +9940,8 @@ contains
                              *(xss(next+1+i)+xss(next+1+i-1))/4
                         endif
                      enddo
-                     renorm=1/xss(next+1+3*n)
+                     renorm=1.0
+                     if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                      do i=1,n
                         xss(next+1+n+i)=&
                           sigfig(renorm*xss(next+1+n+i),7,0)
@@ -10004,11 +10008,12 @@ contains
                      n=nint(scr(lld+5))
                      xss(il+iie)=next-andh+1
                      xss(il+iie)=-xss(il+iie)
-                     int=nint(scr(lld+7))
+                     int=mod(nint(scr(lld+7)),10)
+                     if (int.gt.2) int=2
                      xss(next)=int
                      xss(next+1)=n
                      if (next+2+3*n.gt.nxss) call error('acelcp',&
-                   'insufficient storage for angular distributions.',&
+                     'insufficient storage for angular distributions.',&
                      ' ')
                      do i=1,n
                         xss(next+1+i)=&
@@ -10042,7 +10047,8 @@ contains
                              *(xss(next+1+i)+xss(next+1+i-1))/4
                         endif
                      enddo
-                     renorm=1/xss(next+1+3*n)
+                     renorm=1
+                     if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                      do i=1,n
                         xss(next+1+n+i)=&
                           sigfig(renorm*xss(next+1+n+i),7,0)
@@ -10176,12 +10182,13 @@ contains
                         n=nint(scr(lld+5))
                         xss(il+iie)=next-andh+1
                         xss(il+iie)=-xss(il+iie)
-                        int=nint(scr(lld+7))
+                        int=mod(nint(scr(lld+7)),10)
+                        if (int.gt.2) int=2
                         xss(next)=int
                         xss(next+1)=n
                         if (next+2+3*n.gt.nxss) call error('acelcp',&
-                  'insufficient storage for angular distributions.',&
-                  ' ')
+                        'insufficient storage for angular distributions.',&
+                        ' ')
                         do i=1,n
                            xss(next+1+i)=&
                              sigfig(scr(lld+4+2*m+2*i),7,0)
@@ -10214,7 +10221,8 @@ contains
                                 *(xss(next+1+i)+xss(next+1+i-1))/4
                            endif
                         enddo
-                        renorm=1/xss(next+1+3*n)
+                        renorm=1
+                        if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                         do i=1,n
                            xss(next+1+n+i)=&
                              sigfig(renorm*xss(next+1+n+i),7,0)
@@ -10272,8 +10280,8 @@ contains
                         xss(next)=intx
                         xss(next+1)=nx
                         if (next+2+3*nx.gt.nxss) call error('acelcp',&
-                  'insufficient storage for angular distributions.',&
-                  ' ')
+                        'insufficient storage for angular distributions.',&
+                        ' ')
                         do ix=1,nx
                            xss(next+1+ix)=sigfig(scr(lld+llx+2*ix),7,0)
                            xss(next+1+nx+ix)=&
@@ -10295,7 +10303,8 @@ contains
                              xss(next+1+2*nx+ix)=sigfig(sum,7,0)
                            endif
                         enddo
-                        renorm=1/xss(next+1+3*nx)
+                        renorm=1
+                        if (xss(next+1+3*nx).ne.zero) renorm=1/xss(next+1+3*nx)
                         do ix=1,nx
                            xss(next+1+nx+ix)=&
                              sigfig(renorm*xss(next+1+nx+ix),7,0)
@@ -10397,6 +10406,10 @@ contains
                xss(last+1)=33
                xss(next)=0
                xss(next+1)=2
+               xss(next+2)=sigfig(xss(esz+it-1),7,0)
+               xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+               xss(next+4)=1
+               xss(next+5)=1               
                next=next+2+2*2
                xss(last+2)=next-dlwh+1
                amass=awr/awi
@@ -10469,6 +10482,7 @@ contains
                !--go back and process the subsection
                call findf(matd,mf,mt,nin)
                call contio(nin,0,0,scr,nb,nw)
+               lct=l2h
                nk=n1h
                ik=0
                idone=0
@@ -10624,12 +10638,12 @@ contains
                               akal=0
                               ! kalbach distribution
                               if (lang.eq.2) then
-                                 rkal=scr(lld+8+ncyc*(ig-1))
+                                 if (na.gt.0) rkal=scr(lld+8+ncyc*(ig-1))
                                  xss(next+1+ig+3*ng)=sigfig(rkal,7,0)
                                  ep=xss(next+1+ig)
                                  if (na.eq.2) then
                                     akal=scr(lld+9+ncyc*(ig-1))
-                                 else
+                                 elseif (na.eq.1) then
                                     akal=bachaa(izai,izap,iza,ee,ep)
                                  endif
                                  xss(next+1+ig+4*ng)=sigfig(akal,7,0)
@@ -10692,12 +10706,25 @@ contains
                                  enddo
                                  nexcd=nexcd+2+3*nmu
                               endif
-                              ! average lab energy
+                              !
+                              ! Average laboratory energy calculation:
+                              !
+                              ! - For lang = 2 (Kalbach-Mann):
+                              !   lct must be equal to 2 (center-of-mass system).
+                              !   The angular anisotropy is represented by the
+                              !   parameters AKAL and RKAL.
+                              ! 
+                              ! - For lang = 1 (Legendre) or lang = 11 (Tabular):
+                              !   Only the isotropic component is considered,
+                              !   regardless of the reference system. if lct=2
+                              !   the conversion from cm to lab system is performed
+                              !   setting akal=rkal=0 (isotropic distribution)
+                              !
                               if (ig.ne.1) then
                                  eavi=xss(next+1+ig)
-                                 if (na.eq.0) then
+                                 if (lct.eq.1) then ! lab system
                                     avl=eavi
-                                 else
+                                 else ! cm system
                                     avcm=sqrt(2*eavi/amass)
                                     sign=1
                                     avl=eavl(akal,amass,avcm,&
@@ -10714,7 +10741,8 @@ contains
                                  avll=avl
                               endif
                            enddo
-                           renorm=1/xss(next+1+3*ng)
+                           renorm=1
+                           if (xss(next+1+3*ng).ne.zero) renorm=1/xss(next+1+3*ng)
                            do ig=1,ng
                               xss(next+1+ng+ig)=&
                                 sigfig(renorm*xss(next+1+ng+ig),7,0)
@@ -10780,6 +10808,10 @@ contains
                      if (law.eq.3) xss(landh+jp-1)=0
                      xss(next)=0
                      xss(next+1)=2
+                     xss(next+2)=sigfig(xss(esz+it-1),7,0)
+                     xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+4)=1
+                     xss(next+5)=1
                      next=next+2+2*2
                      xss(last+2)=next-dlwh+1
                      amass=awr/awi
@@ -10810,8 +10842,11 @@ contains
                      apsx=scr(ll)
                      npsx=nint(scr(ll+5))
                      xss(next)=0
-                     lee=next
                      xss(next+1)=2
+                     xss(next+2)=sigfig(xss(esz+it-1),7,0)
+                     xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+4)=1
+                     xss(next+5)=1
                      next=next+2+2*2
                      xss(last+2)=next-dlwh+1
                      xss(next)=npsx
@@ -11126,7 +11161,7 @@ contains
             xss(hpd+2+naa+ie-it)=xss(hpd+2+naa+ie-it)&
               /xss(esz+nes+ie-1)
          endif
-         if (xss(hpd+2+naa+ie-it).lt.delt) xss(hpd+2+naa+ie-it)=0
+         if (xss(hpd+2+naa+ie-it).lt.small) xss(hpd+2+naa+ie-it)=0
          if (ip.eq.1) xss(hpd+2+naa+ie-it)=0
          if (izai.gt.1) then
             xss(esz+4*nes+ie-1)=xss(esz+4*nes+ie-1)&
@@ -11175,6 +11210,7 @@ contains
             q=xss(lqr+ir-1)
          enddo
          nk=n1h
+         lct=l2h
          lly=1
          do ik=1,nk
             ll=lly
@@ -11216,19 +11252,36 @@ contains
                         call moreio(nin,0,0,scr(ll),nb,nw)
                         ll=ll+nw
                      enddo
-                     e=c2h
+                     e=scr(lld+1)
                      if (law.ne.2) then
+                        ! should be law=1
+                        ! heating calculation assuming isotropic distribution
+                        ! if lct=2(cm system) a first order average correction
+                        ! is applied to convert ep from cm to lab system
+                        avadd=awi*awp/((awr+awi)*(awr+awi))*e
+                        avll=0
+                        epl=0
                         heat=0
                         np=nint(scr(lld+5))
                         call terpa(y,e,en,idis,scr(lly),npp,nrr)
                         do ip=1,np
                            ep=scr(lld+4+2*ip)
                            g=scr(lld+5+2*ip)
-                           if (ip.gt.1) then
-                              heat=heat+(ep-epl)*gl*(ep+epl)/2
+                           if (lct.eq.2) then
+                             avl=ep+avadd
+                           else
+                             avl=ep
                            endif
-                              epl=ep
+                           if (ip.gt.1) then
+                              if (lep.eq.1) then
+                                 heat=heat+(ep-epl)*gl*(avl+avll)/2
+                              else
+                                 heat=heat+(ep-epl)*(avl*g+avll*gl)/2
+                              endif
+                           endif
+                           epl=ep
                            gl=g
+                           avll=avl
                         enddo
                         scr(llh+6+2*ie)=e
                         scr(llh+7+2*ie)=y*heat
@@ -11253,9 +11306,11 @@ contains
                         amass=awr/awp
                         h=2*amass*e/(1+amass)**2
                      endif
-                     h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
-                     xss(esz+4*nes+ie-1)=&
-                       sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     if (xss(esz+nes+ie-1).ne.zero) then
+                       h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
+                       xss(esz+4*nes+ie-1)=&
+                         sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     endif
                   enddo
                else if (law.eq.4) then
                   izarec=izap
@@ -11307,9 +11362,11 @@ contains
                   do ie=iaa,nes
                      e=xss(esz+ie-1)*emev
                      call terpa(h,e,en,idis,scr(llht),npp,nrr)
-                     h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
-                     xss(esz+4*nes+ie-1)=&
-                       sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     if (xss(esz+nes+ie-1).ne.zero) then
+                       h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
+                       xss(esz+4*nes+ie-1)=&
+                         sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     endif
                   enddo
                else if (law.eq.6) then
                   write(nsyso,'('' warning: law=6 heating for '',&
