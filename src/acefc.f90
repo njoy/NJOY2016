@@ -13938,8 +13938,7 @@ contains
                call write_real(nout,l)               ! EG
 
             !--law 4 and law 44
-            ! this piece is NOT compatible with LAW=44 (need two additional
-            ! arrays for r and a), potential issue?
+            ! LAW=44 need two additional arrays for r and a
             else if (law.eq.4.or.law.eq.44) then
                nrr=nint(xss(l))
                call write_integer(nout,l)               ! NR
@@ -13957,6 +13956,9 @@ contains
                   np=nint(xss(l))
                   call write_integer(nout,l)         ! NP
                   call write_real_list(nout,l,3*np)  ! Eout, PDF, CDF (each NP values)
+                  if (law.eq.44) then
+                    call write_real_list(nout,l,2*np) ! r, a arrays for law44 (each NP values)
+                  endif
                   ielocator=ielocator+1
                enddo
             else
