@@ -14253,6 +14253,7 @@ contains
    !-------------------------------------------------------------------
    use util  ! provides openz,closz
    use acecm ! provides write routines
+   use physics !provides mass ratios for p,d,t,he3,a
    ! externals
    integer::nin,itype,nout,ndir,iprint,nplot,nxtra,mcnpx
    real(kr)::suff
@@ -14267,8 +14268,8 @@ contains
    character(70)::hko
    character(10)::str
    character(3)::ht
-   real(kr),dimension(6),parameter::awit=(/1.0e0_kr,0.99862e0_kr,&
-     1.99626e0_kr,2.98960e0_kr,2.98903e0_kr,3.96713e0_kr/)
+   real(kr),dimension(6),parameter::awit=(/1.0e0_kr,pnratio,&
+     dnratio,tnratio,hnratio,anratio/)
    real(kr),parameter::zero=0
 
    !--branch on input file type
