@@ -1957,8 +1957,8 @@ contains
    real(kr)::b(50)
    real(kr),dimension(:),allocatable::tab1
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwmaxn=1000000
-   real(kr),parameter::big=1.e9_kr
+   integer,parameter::nwmaxn=10000000
+   real(kr),parameter::big=1.e10_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
 
@@ -2010,6 +2010,7 @@ contains
       else if ((mt19.eq.1.and.mth.eq.18).or.(mt19.eq.0.and.&
         (mth.eq.19.or.mth.eq.20.or.mth.eq.21.or.mth.eq.38)).or.&
         (mfh.eq.6.and.mth.eq.10).or.&
+        (mfh.eq.6.and.(mth.gt.207.and.mth.lt.221)).or.&
         (mfh.eq.5.and.mth.gt.900)) then
          call tosend(nin,0,0,scr)
 
@@ -3904,9 +3905,9 @@ contains
    equivalence(t(1),gamid(1))
    real(kr),dimension(:),allocatable::ee,eg,es,yy,aa,rr
    real(kr),dimension(:),allocatable::tot
-   integer,parameter::nwtot=5000
+   integer,parameter::nwtot=100000 !Needed for D1SUNED library generation
    real(kr),dimension(:),allocatable::yold
-   integer,parameter::nyold=1000
+   integer,parameter::nyold=80000 !Needed for D1SUNED library generation
    real(kr),dimension(:),allocatable::scr
    character(4)::blank='    '
    real(kr),parameter::etop=1.e10_kr
@@ -3922,7 +3923,7 @@ contains
    imax=50
    imaxsq=imax*imax
    lmax=imax*(imax-1)/2
-   nned=50
+   nned=100
    allocate(disc(nned))
    allocate(ee(imax))
    allocate(eg(lmax))
@@ -4943,7 +4944,7 @@ contains
    !--initialize
    inow=0
    nnex=0
-   nwscr=1000000
+   nwscr=10000000
    allocate(scr(nwscr))
    do i=1,5
       nxsd(i)=0
@@ -7180,7 +7181,7 @@ contains
    integer::loc(5)
    character(60)::strng
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwscr=1000000
+   integer,parameter::nwscr=10000000
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::small=1.e-30_kr
    real(kr),parameter::etop=1.e10_kr
@@ -7811,7 +7812,7 @@ contains
                   endif
                   xss(ki+3*n+nexd)=sigfig(rkal,7,0)
                   xss(ki+4*n+nexd)=sigfig(akal,7,0)
-                  
+
                !--convert legendre distribution to law 61
                else if (lang.eq.1.and.newfor.eq.1) then
                   scr(jscr)=0
@@ -10409,7 +10410,7 @@ contains
                xss(next+2)=sigfig(xss(esz+it-1),7,0)
                xss(next+3)=sigfig(xss(esz+nes-1),7,0)
                xss(next+4)=1
-               xss(next+5)=1               
+               xss(next+5)=1
                next=next+2+2*2
                xss(last+2)=next-dlwh+1
                amass=awr/awi
@@ -10713,7 +10714,7 @@ contains
                               !   lct must be equal to 2 (center-of-mass system).
                               !   The angular anisotropy is represented by the
                               !   parameters AKAL and RKAL.
-                              ! 
+                              !
                               ! - For lang = 1 (Legendre) or lang = 11 (Tabular):
                               !   Only the isotropic component is considered,
                               !   regardless of the reference system. if lct=2
@@ -11033,7 +11034,7 @@ contains
                         next=next+2
                         mus=next
                         next=next+2*nmu
-                        lld=ll                        
+                        lld=ll
                         nra=1
                         npa=2
                         ebar=0
@@ -11299,7 +11300,7 @@ contains
                   nrr=1
                   npp=2
                   do ie=iaa,nes
-                  e=xss(esz+ie-1)*emev
+                     e=xss(esz+ie-1)*emev
                      if (law.eq.1) then
                         call terpa(h,e,en,idis,scr(llh),npp,nrr)
                      else
@@ -12843,8 +12844,8 @@ contains
    nyp=nint(xss(yp))
    if (nyp.ne.0) then
       write(nsyso,'(//&
-        &'' neutron mts needed as multipliers for photon yields''/&
-        &'' ---------------------------------------------------''//&
+        &'' mts needed as multipliers for photon yields''/&
+        &'' -------------------------------------------''//&
         &(6x,12i6))') (nint(xss(i+yp)),i=1,nyp)
    endif
    if (allocated(indx)) deallocate(indx)
@@ -13347,21 +13348,21 @@ contains
    if (mcnpx.eq.0) then
       if (iurpt.gt.0) then
          write(ndir,&
-           '(a10,f12.6,'' filename route'',i2,i4,1x,i8,2i6,1p,e10.3,&
+           '(a10,f12.6,'' filename route'',i2,i4,1x,i9,2i6,1p,e10.3,&
            &'' ptable'')') hz(1:10),aw0,itype,irec1,len2,lrec,nern,tz
       else
          write(ndir,&
-           '(a10,f12.6,'' filename route'',i2,i4,1x,i8,2i6,1p,e10.3)')&
+           '(a10,f12.6,'' filename route'',i2,i4,1x,i9,2i6,1p,e10.3)')&
            hz(1:10),aw0,itype,irec1,len2,lrec,nern,tz
       endif
    else
       if (iurpt.gt.0) then
          write(ndir,&
-           '(a13,f12.6,'' file route'',i2,i4,1x,i8,2i6,1p,e10.3,&
+           '(a13,f12.6,'' file route'',i2,i4,1x,i9,2i6,1p,e10.3,&
            &'' ptable'')') hz(1:13),aw0,itype,irec1,len2,lrec,nern,tz
       else
          write(ndir,&
-           '(a13,f12.6,'' file route'',i2,i4,1x,i8,2i6,1p,e10.3)')&
+           '(a13,f12.6,'' file route'',i2,i4,1x,i9,2i6,1p,e10.3)')&
           hz(1:13),aw0,itype,irec1,len2,lrec,nern,tz
       endif
    endif
@@ -14566,7 +14567,7 @@ contains
            e=sigfig(e,9,+1)
            xss(esz-1+i)=e
            write(nsyso,'(10x,'' energy set to '',1p,e18.11)')e
-        endif        
+        endif
         nerr=nerr+1
       endif
       elast=e
@@ -14713,7 +14714,7 @@ contains
          ! distributions represented by law=4 or law=44
          ! Furthermore, for these reactions awp=awi, so aprime=awi*awi.
          ! It is only equal to 1 for incident neutrons.
-         ! D. Lopez Aldama, August 2023         
+         ! D. Lopez Aldama, August 2023
          aprime=awi*awi
          q=xss(lqr+n-1)
          nlaw=1
@@ -14780,7 +14781,7 @@ contains
                      else
                         intt=2
                      endif
-                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')& 
+                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')&
                            nint(xss(loci)),intt
                      xss(loci)=intt
                   endif
@@ -14891,7 +14892,7 @@ contains
                      else
                         intt=2
                      endif
-                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')& 
+                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')&
                            nint(xss(loci)),intt
                      xss(loci)=intt
                   endif
@@ -15065,7 +15066,7 @@ contains
                      enddo
                   enddo
                enddo
-               
+
             !--law67
             else if (law.eq.67) then
                if (icm.eq.1) then
@@ -15568,7 +15569,7 @@ contains
                      enddo
                   enddo
                enddo
-               
+
             !--law=67
             else if (law.eq.67) then
                j=nint(xss(l3))
@@ -15719,7 +15720,7 @@ contains
    integer::nnf,mt,kf,iif,kc,iic,nofiss,n,k,iaa
    integer::major,minor,mtl,icurv,mtlast,nlev,iflag
    integer::nure,intunr,nurb,lssf,ie,ib,ii,ll,kk,nunu
-   integer,parameter::pltumx=10000
+   integer,parameter::pltumx=50000
    real(kr)::e,tot,abso,elas,gprod,xtag,ytag,thin,abss
    real(kr)::e1,e2,fiss,cap,heat,dam,x,y,xlast
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,test
@@ -18414,7 +18415,7 @@ contains
                do while (epnext.ne.emax)
                   ep=epnext
                   call getl7(ep,epnext,loci,xss(dlw),f0)
-                  if (f0.lt.zmin) zmin=f0                  
+                  if (f0.lt.zmin) zmin=f0
                   if (f0.gt.zmax2.and.f0.lt.zmax1)zmax2=f0
                   if (f0.gt.zmax1) then
                      zmax2=zmax1
@@ -18480,7 +18481,7 @@ contains
                   write(nout,'(1p,e14.6,''/'')') e
                   ep=-1
                   call getl7(ep,epnext,loci,xss(dlw),f0)
-                  k=0               
+                  k=0
                   do while (epnext.ne.emax)
                      ep=epnext
                      call getl7(ep,epnext,loci,xss(dlw),f0)
@@ -19666,7 +19667,7 @@ contains
             endif
             l3=dlwh+nint(xss(l2+2))-1
             j=nint(xss(l3))
-            if (j.ne.0) l3=l3+2*j            
+            if (j.ne.0) l3=l3+2*j
             ne=nint(xss(l3+1))
             zmin=1000
             zmax1=0
@@ -19935,7 +19936,7 @@ contains
                   write(nout,'(''/'')')
                enddo
                write(nout,'(''/'')')
-            endif            
+            endif
          endif
 
          !--check for an angular distribution
