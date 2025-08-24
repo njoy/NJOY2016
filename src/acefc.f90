@@ -5496,7 +5496,7 @@ contains
             !--store reaction parameters
             j=j+1
             xss(mtr+ir)=mth
-            xss(lqr+ir)=sigfig(scr(2)/emev,7,0)
+            xss(lqr+ir)=sigfig(scr(2)/emev,9,0)
             xss(tyr+ir)=0
             xss(lsig+ir)=next-sig+1
             ir=ir+1
@@ -5628,7 +5628,7 @@ contains
             !--store reaction parameters
             j=j+1
             xss(mtr+ir)=mth
-            xss(lqr+ir)=sigfig(scr(2)/emev,7,0)
+            xss(lqr+ir)=sigfig(scr(2)/emev,9,0)
             xss(tyr+ir)=0
             xss(lsig+ir)=next-sig+1
             ir=ir+1
@@ -5731,7 +5731,7 @@ contains
          !--store reaction parameters
          j=j+1
          xss(mtr+ir)=mth
-         xss(lqr+ir)=sigfig(scr(2)/emev,7,0)
+         xss(lqr+ir)=sigfig(scr(2)/emev,9,0)
          xss(tyr+ir)=0
          xss(lsig+ir)=next-sig+1
          ir=ir+1
