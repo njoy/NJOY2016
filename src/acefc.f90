@@ -14504,7 +14504,7 @@ contains
    ! Do basic consistency checks on the ACE file in memory.
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
-   use util ! provides mess
+   use util ! provides mess,sigfig
    use acecm ! provides mtname
    ! internals
    integer::nerr,i,k,iaa,iin,nrl,nn,nnew,n,na,ic,id,ne,nr1
@@ -14553,10 +14553,21 @@ contains
    do i=1,nes
       e=xss(esz-1+i)
       if (e.le.elast) then
-         write(nsyso,'(''   consis: energy'',1p,e16.8,&
-           &'' less than'',e16.8,'' (see point no.'',i7,'')'')')&
-           e,elast,i
-         nerr=nerr+1
+        if (e.lt.elast) then
+           write(nsyso,'(''   consis: energy '',1p,e18.11,&
+             &'' less than '',e18.11,'' (see point no.'',i7,'')'')')&
+             & e,elast,i
+        else
+           write(nsyso,'(''   consis: energy '',1p,e18.11,&
+             &'' equal to '',e18.11,'' (see point no.'',i7,'')'')')&
+             & e,elast,i
+        endif
+        if (sigfig(e,9,+1).lt.xss(esz+i)) then
+           e=sigfig(e,9,+1)
+           xss(esz-1+i)=e
+           write(nsyso,'(10x,'' energy set to '',1p,e18.11)')e
+        endif        
+        nerr=nerr+1
       endif
       elast=e
    enddo
@@ -14764,13 +14775,21 @@ contains
                        &'' illegal interpolation--'',&
                        &''only int=1 and 2 are allowed'')')
                      nerr=nerr+1
+                     if (mod(intt,10).eq.1) then
+                        intt=1
+                     else
+                        intt=2
+                     endif
+                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')& 
+                           nint(xss(loci)),intt
+                     xss(loci)=intt
                   endif
                   nn=nint(xss(loci+1))
                   loci=loci+1
                   epmax=e
                   if (icm.eq.1) then
                      epmax=(sqrt(e)-sqrt(aprime*e/(aw0+awi)**2))**2
-                     epmax=sigfig(epmax,7,-1)
+                     epmax=sigfig(epmax,7,0)
                   endif
                   n2big=0
                   clast=0
@@ -14867,13 +14886,21 @@ contains
                        &'' illegal interpolation--'',&
                        &''only int=1 and 2 are allowed'')')
                      nerr=nerr+1
+                     if (mod(intt,10).eq.1) then
+                        intt=1
+                     else
+                        intt=2
+                     endif
+                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')& 
+                           nint(xss(loci)),intt
+                     xss(loci)=intt
                   endif
                   nn=nint(xss(loci+1))
                   loci=loci+1
                   epmax=e
                   if (icm.eq.1) then
                      epmax=(sqrt(e)-sqrt(aprime*e/(aw0+awi)**2))**2
-                     epmax=sigfig(epmax,7,-1)
+                     epmax=sigfig(epmax,7,0)
                   endif
                   n2big=0
                   clast=0
@@ -15020,22 +15047,109 @@ contains
                         co=xss(locj+1+k)
                         cc=xss(locj+1+2*nmu+k)
                         if (cc.lt.zero.or.cc.gt.oplus) then
-                           write(nsyso,'('' consis:'',&
+                           write(nsyso,'(''   consis:'',&
                              &'' bad angular cumm. prob. for '',a,&
-                             &''at'',1p,e14.6,'' ->'',e13.6,e14.6)')&
-                             name(1:ll),e,ep,co
+                             &''at'',1p,e14.6,'' -> '',e13.6,'' mu='',&
+                             & 0p,f9.6)')name(1:ll),e,ep,co
                            nerr=nerr+1
                         endif
                         if (cc.lt.cclast) then
                            write(nsyso,'(''   consis:'',&
                              &'' decreasing angular'',&
                              &'' cumm. prob for '',a,&
-                             &'' at '',1p,e14.6,'' ->'',e13.6,e14.6)')&
-                             name(1:ll),e,ep,co
+                             &'' at '',1p,e14.6,'' -> '',e13.6,'' mu='',&
+                             & 0p,f9.6)')name(1:ll),e,ep,co
                            nerr=nerr+1
                         endif
                         cclast=cc
                      enddo
+                  enddo
+               enddo
+               
+            !--law67
+            else if (law.eq.67) then
+               if (icm.eq.1) then
+                 write(nsyso,'(''   consis:'',&
+                   &'' Bad reference system (CM) for law67'')')
+                 write(nsyso,'(''   consis:'',&
+                   &'' Forced to laboratory reference system (LAB)'',&
+                   &'' without corrections'')')
+                 xss(tyr+n-1)=-xss(tyr+n-1)
+                 icm=0
+               endif
+               j=nint(xss(l))
+               if (j.ne.0) then
+                  l=l+2*j
+               endif
+               l=l+1
+               ne=nint(xss(l))
+               do ie=1,ne
+                  e=xss(ie+l)
+                  loci=nint(xss(ie+ne+l))+dlw-1
+                  intt=nint(xss(loci))
+                  if (intt.ne.1.and.intt.ne.2) then
+                    write(nsyso,'(''   consis:'',&
+                      & '' bad interpolation law intmu='',i3,'' at e'',&
+                      & 1p,e13.6,'' correction applied'')')intt,e
+                    nerr=nerr+1
+                    intt=mod(intt,10)
+                    if (intt.gt.2) intt=2
+                    xss(loci)=intt
+                    write(nsyso,'(''   consis:'',&
+                      &'' new interpolation law intmu='',i3)')intt
+                  endif
+                  loci=loci+1
+                  nmu=nint(xss(loci))
+                  do k=1,nmu
+                    co=xss(loci+k)
+                    locj=nint(xss(loci+nmu+k))+dlw-1
+                    intt=nint(xss(locj))
+                    if (intt.ne.1.and.intt.ne.2) then
+                      write(nsyso,'(''   consis:'',&
+                        &'' bad interpolation law intep='',i3,&
+                        &'' at e'',1p,e13.6,'' mu='',0p,f9.6,&
+                        &'' correction applied'')')intt,e,co
+                      nerr=nerr+1
+                      intt=mod(intt,10)
+                      if (intt.gt.2) intt=2
+                      xss(locj)=intt
+                      write(nsyso,'(''   consis:'',&
+                        &'' new interpolation law intep='',i3)')intt
+                    endif
+                    locj=locj+1
+                    nn=nint(xss(locj))
+                    clast=0.
+                    do j=1,nn
+                      ep=xss(locj+j)
+                      p=xss(locj+nn+j)
+                      c=xss(locj+2*nn+j)
+                      if (p.lt.zero) then
+                        write(nsyso,'('' consis:'',&
+                          &'' negative pdf='',1p,e13.6,'' for mt'',&
+                          & 1p,i0,'' law'',1p,i0,'' mu='',&
+                          & 0p,f9.6,'' at e='',1p,e13.6,&
+                          & '' ep='',e13.6)')p,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.zero.or.c.gt.oplus) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' bad cumm. prob.='',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law'',1p,i0,&
+                          &'' mu='',0p,f9.6,&
+                          &'' at e'',1p,e13.6,'' ep'',e13.6)')&
+                          c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.clast) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' decreasing cumm. prob '',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law'',1p,i0,&
+                          &'' mu='',0p,f9.6,'' at e'',1p,e13.6,&
+                          &'' ep'',e13.6)')c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      c=clast
+                    enddo
                   enddo
                enddo
             endif
@@ -15225,9 +15339,9 @@ contains
          gg=xss(gpd+ie-1)
          if (abs(gg-gsum).gt.gg/10000) then
             nerr=nerr+1
-            write(nsyso,'(''   consis: mismatch at'',&
-              &1p,e14.6,''  gpd='',e14.6,&
-              &''  sum='',e14.6)') e,gg,gsum
+            write(nsyso,'(''   consis: mismatch for mftype '',i3,&
+              &'' at'',1p,e14.6,''  gpd='',e14.6,&
+              &''  sum='',e14.6)') mftype,e,gg,gsum
          endif
       enddo
 
@@ -15454,6 +15568,93 @@ contains
                      enddo
                   enddo
                enddo
+               
+            !--law=67
+            else if (law.eq.67) then
+               j=nint(xss(l3))
+               if (j.ne.0) then
+                  l3=l3+2*j
+               endif
+               l3=l3+1
+               ne=nint(xss(l3))
+               do ie=1,ne
+                  e=xss(ie+l3)
+                  loci=nint(xss(ie+ne+l3))+dlwh-1
+                  intt=nint(xss(loci))
+                  if (intt.ne.1.and.intt.ne.2) then
+                    write(nsyso,'('' consis:'',&
+                      & '' bad interpolation law intmu='',i3,'' at e'',&
+                      & 1p,e13.6,'' correction applied'')')intt,e
+                    nerr=nerr+1
+                    intt=mod(intt,10)
+                    if (intt.gt.2) intt=2
+                    xss(loci)=intt
+                    write(nsyso,'('' consis:'',&
+                      &'' new interpolation law intmu='',i3)')intt
+                  endif
+                  loci=loci+1
+                  nmu=nint(xss(loci))
+                  do k=1,nmu
+                    co=xss(loci+k)
+                    locj=nint(xss(loci+nmu+k))+dlwh-1
+                    intt=nint(xss(locj))
+                    if (intt.ne.1.and.intt.ne.2) then
+                      write(nsyso,'('' consis:'',&
+                        &'' bad interpolation law intep='',i3,&
+                        &'' at e'',1p,e13.6,'' mu='',0p,f9.6,&
+                        &'' correction applied'')')intt,e,co
+                      nerr=nerr+1
+                      intt=mod(intt,10)
+                      if (intt.gt.2) intt=2
+                      xss(locj)=intt
+                      write(nsyso,'('' consis:'',&
+                        &'' new interpolation law intep='',i3)')intt
+                    endif
+                    locj=locj+1
+                    nn=nint(xss(locj))
+                    clast=0.
+                    cclast=0.
+                    do j=1,nn
+                      ep=xss(locj+j)
+                      p=xss(locj+nn+j)
+                      c=xss(locj+2*nn+j)
+                      if (ep.lt.cclast) then
+                        write(nsyso,'('' consis:'',&
+                          & '' decreasing ep '',1p,e13.6,'' for mt'',&
+                          & 1p,i0,'' law'',1p,i0,'' mu='',0p,f9.6,&
+                          & '' at e'',1p,e13.6)')ep,mt,law,co,e
+                        nerr=nerr+1
+                      endif
+                      if (p.lt.zero) then
+                        write(nsyso,'('' consis:'',&
+                          & '' negative pdf='',1p,e13.6,'' for mt'',&
+                          & 1p,i0,'' law'',1p,i0,'' mu='',&
+                          & 0p,f9.6,'' at e'',1p,e13.6,&
+                          & '' ep'',e13.6)')p,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.zero.or.c.gt.oplus) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' bad cumm. prob.='',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law'',1p,i0,&
+                          &'' mu='',0p,f9.6,&
+                          &'' at e'',1p,e13.6,'' ep'',e13.6)')&
+                          c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.clast) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' decreasing cumm. prob '',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law '',1p,i0,&
+                          &'' mu='',0p,f9.6,'' at e'',1p,e13.6,&
+                          &'' ep'',e13.6)')c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      c=clast
+                      cclast=ep
+                    enddo
+                  enddo
+               enddo
             endif
          enddo
       enddo
@@ -15462,7 +15663,7 @@ contains
    if (nerr.eq.0) then
       write(nsyso,'(/'' no problems found'')')
    else
-      write(nsyso,'(/i5,'' problems found'')') nerr
+      write(nsyso,'(/i9,'' problems found'')') nerr
       call mess('consis','consistency problems found',' ')
    endif
 
