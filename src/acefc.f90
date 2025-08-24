@@ -18226,7 +18226,7 @@ contains
                         ep=xss(j+loci)
                         p=xss(j+nn+loci)
                         if (p.lt.zmin) p=zmin
-                        if (ep.le.xmax) then
+                        if (ep.ge.xmin.and.ep.le.xmax) then
                            if (intt.eq.1) write(nout,&
                               '(1p,2e14.6,''/'')') ep,ylast
                            write(nout,'(1p,2e14.6,''/'')') ep,p
@@ -18414,6 +18414,7 @@ contains
                do while (epnext.ne.emax)
                   ep=epnext
                   call getl7(ep,epnext,loci,xss(dlw),f0)
+                  if (f0.lt.zmin) zmin=f0                  
                   if (f0.gt.zmax2.and.f0.lt.zmax1)zmax2=f0
                   if (f0.gt.zmax1) then
                      zmax2=zmax1
@@ -18479,12 +18480,20 @@ contains
                   write(nout,'(1p,e14.6,''/'')') e
                   ep=-1
                   call getl7(ep,epnext,loci,xss(dlw),f0)
+                  k=0               
                   do while (epnext.ne.emax)
                      ep=epnext
                      call getl7(ep,epnext,loci,xss(dlw),f0)
-                     if (f0.lt.zmin) f0=zmin
-                     write(nout,'(1p,2e14.6,''/'')') ep,f0
+                     if (ep.ge.xmin.and.ep.le.xmax) then
+                       if (f0.lt.zmin) f0=zmin
+                       write(nout,'(1p,2e14.6,''/'')') ep,f0
+                       k=k+1
+                     endif
                   enddo
+                  if (k.lt.2) then
+                     write(nout,'(1p,2e14.6,''/'')') xmin,zmin
+                     write(nout,'(1p,2e14.6,''/'')') xmax,zmin
+                  endif
                   write(nout,'(''/'')')
                enddo
                write(nout,'(''/'')')
@@ -19294,7 +19303,7 @@ contains
    integer::ipt,mtrh,nmtr
    integer hpd,lsigh,sigh,landh,andh,ldlwh,dlwh,yh
    real(kr)::test,e,xs,xstep,ystep,xtag,ytag,thin,xlast
-   real(kr)::ep,pd,epl,pdl,ylast,break,cc,pp,rat,stepm,elast
+   real(kr)::ep,epnext,pd,epl,pdl,ylast,break,cc,pp,rat,stepm,elast
    real(kr)::xmin,xmax,ymin,ymax,zmin,zmax,zmax1,zmax2,heat
    character(10)::name
    character(1)::qu=''''
@@ -19441,7 +19450,7 @@ contains
          hpd=nint(xss(ploct+10*(j-1)))
          iaa=nint(xss(hpd))
          naa=nint(xss(hpd+1))
-         ie=i-iaa-1
+         ie=i-iaa+1
          if (ie.ge.1.and.ie.le.naa) heat=heat-xss(hpd+1+naa+ie)
       enddo
       if (e.lt.xmin) xmin=e
@@ -19486,7 +19495,7 @@ contains
                   hpd=nint(xss(ploct+10*(k-1)))
                   iaa=nint(xss(hpd))
                   naa=nint(xss(hpd+1))
-                  ie=i-iaa-1
+                  ie=i-iaa+1
                   if (ie.ge.1.and.ie.le.naa) heat=heat-xss(hpd+1+naa+ie)
                enddo
                j=j+1
@@ -19656,6 +19665,8 @@ contains
                endif
             endif
             l3=dlwh+nint(xss(l2+2))-1
+            j=nint(xss(l3))
+            if (j.ne.0) l3=l3+2*j            
             ne=nint(xss(l3+1))
             zmin=1000
             zmax1=0
@@ -19797,6 +19808,134 @@ contains
                endif
             enddo
             write(nout,'(''/'')')
+         else if (law.eq.67) then
+            call mtname(mt,name,izai)
+            if (name(1:1).eq.'(') then
+               if (izai.eq.1) then
+                  name(2:2)='n'
+               else if (izai.eq.1001) then
+                  name(2:2)='p'
+               else if (izai.eq.1002) then
+                  name(2:2)='d'
+               else if (izai.eq.1003) then
+                  name(2:2)='t'
+               else if (izai.eq.2003) then
+                  name(2:2)='s'
+               else if (izai.eq.2004) then
+                  name(2:2)='a'
+               endif
+            endif
+            l3=dlwh+nint(xss(l2+2))-1
+            j=nint(xss(l3))
+            if (j.ne.0) l3=l3+2*j
+            l3=l3+1
+            ne=nint(xss(l3))
+            xmin=1000
+            xmax=0
+            ymin=1000
+            ymax=0
+            zmin=1000
+            zmax1=0
+            zmax2=0
+            do ie=2,ne
+               e=xss(ie+l3)
+               if (e.lt.ymin) ymin=e
+               if (e.gt.ymax) ymax=e
+               loci=nint(xss(ie+ne+l3))
+               ep=-1
+               call getl7(ep,epnext,loci,xss(dlwh),pd)
+               do while (epnext.ne.big)
+                  ep=epnext
+                  call getl7(ep,epnext,loci,xss(dlwh),pd)
+                  if (pd.lt.zmin) zmin=pd
+                  if (pd.gt.zmax2.and.pd.lt.zmax1)zmax2=pd
+                  if (pd.gt.zmax1) then
+                     zmax2=zmax1
+                     zmax1=pd
+                  endif
+               enddo
+            enddo
+            if (zmax1.gt.zero) then
+               if ((zmax2/zmax1.lt.1.e-4_kr).and.(zmax2.ne.zero)) then
+                  zmax=zmax2
+               else
+                  zmax=zmax1
+               endif
+               zmin=zmax/10000
+               call ascll(zmin,zmax)
+               do ie=2,ne
+                  e=xss(ie+l3)
+                  loci=nint(xss(ie+ne+l3))
+                  ep=-1
+                  call getl7(ep,epnext,loci,xss(dlwh),pd)
+                  epl=ep
+                  pdl=0
+                  do while (epnext.ne.big)
+                     ep=epnext
+                     call getl7(ep,epnext,loci,xss(dlwh),pd)
+                     if (pd.ge.zmin.and.epl.lt.xmin) xmin=epl
+                     if (pdl.ge.zmin.and.ep.gt.xmax) xmax=ep
+                     epl=ep
+                     pdl=pd
+                  enddo
+               enddo
+               call ascle(2,xmin,xmax,major,minor)
+               xstep=(xmax-xmin)/major
+               call ascle(4,ymin,ymax,major,minor)
+               ystep=(ymax-ymin)/major
+               write(nout,'(''1'',i3,''/'')') iwcol
+               it=1
+               do j=1,70
+                  if (hk(j:j).ne.' ') it=j
+               enddo
+               write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
+               if (ipt.eq.1) write(nout,&
+                  '(a,''neutrons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.9) write(nout,&
+                  '(a,''protons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.31) write(nout,&
+                  '(a,''deuterons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.32) write(nout,&
+                  '(a,''tritons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.33) write(nout,&
+                  '(a,''he3s from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.34) write(nout,&
+                  '(a,''alphas from '',a,a,''/'')') qu,name,qu
+               write(nout,'(''-1 2/'')')
+               write(nout,'(1p,3e12.3,''/'')') xmin,xmax,xstep
+               write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
+               write(nout,'(1p,3e12.3,''/'')') ymin,ymax,ystep
+               write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
+               write(nout,'(1p,3e12.3,''/'')') zmin,zmax,one
+               write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
+               write(nout,'(''/'')')
+               write(nout,'(''/'')')
+               write(nout,'(''1/'')')
+               do ie=2,ne
+                  e=xss(ie+l3)
+                  loci=nint(xss(ie+ne+l3))
+                  write(nout,'(1p,e14.6,''/'')') e
+                  ep=-1
+                  call getl7(ep,epnext,loci,xss(dlwh),pd)
+                  ylast=zmin
+                  k=0
+                  do while (epnext.ne.big)
+                     ep=epnext
+                     call getl7(ep,epnext,loci,xss(dlwh),pd)
+                     if (ep.ge.xmin.and.ep.le.xmax) then
+                       if (pd.lt.zmin) pd=zmin
+                       write(nout,'(1p,2e14.6,''/'')') ep,pd
+                       k=k+1
+                     endif
+                  enddo
+                  if (k.lt.2) then
+                     write(nout,'(1p,2e14.6,''/'')') xmin,zmin
+                     write(nout,'(1p,2e14.6,''/'')') xmax,zmin
+                  endif
+                  write(nout,'(''/'')')
+               enddo
+               write(nout,'(''/'')')
+            endif            
          endif
 
          !--check for an angular distribution
@@ -19970,10 +20109,12 @@ contains
    real(kr)::ep,epnext,a7(*),f0
    ! internals
    integer::intmu,nmu,locmu,imu,locimu,intep,npep,iep,inow,idone
-   real(kr)::ulast,flast,u,ep1,ep2,epn,fact1,fact2,f
+   real(kr)::ulast,flast,u,ep1,ep2,epn,f
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
+   real(kr),parameter::fact1=one-one/10000
+   real(kr),parameter::fact2=one-2.*one/10000
 
    !--initialize
    inow=0
@@ -20020,8 +20161,6 @@ contains
       else
          call terp1(ep1,a7(inow+npep),ep2,a7(inow+1+npep),ep,f,intep)
          epn=ep2
-         fact1=one-one/10000
-         fact2=one-2*one/10000
          if (intep.eq.1.and.ep.lt.fact2*ep2) epn=fact1*ep2
          if (epn.lt.epnext) epnext=epn
       endif
