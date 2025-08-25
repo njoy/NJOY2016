@@ -1,49 +1,42 @@
-
- njoy 2016.0   21Dec16                                       01/13/17 10:48:21
+1*****************************************************************************
+ *                                         *              *                  *
+ *   $$   $$       $$   $$$$$   $$    $$   *              *  vers: 2016.78   *
+ *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 03Feb25   *
+ *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: lanl t2   *
+ *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 08/25/25  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 13:32:19  *
+ *                                         *              *                  *
  *****************************************************************************
 
- moder...                                                                 0.0s
+ moder...change the mode of an endf tape or njoy output tape              0.0s
 
- reconr...                                                                0.0s
+ input unit (+ for coded, - for bb) ...         20
+ output unit (+ for coded, - for bb) ..        -21
 
- ---message from emerge---nonpositive elastic cross sections found.
+ tape label
+ --------------------------------------
+   e70 n-252Cf file with modified decay mf5/mt18 and mf35/mt18        
 
- broadr...                                                                0.1s
-
- groupr...                                                                1.3s
-
- ---message from conver---cannot do complete particle production for mt= 16
-                          only mf4/mf5 provided
-
- ---message from conver---cannot do complete particle production for mt= 17
-                          only mf4/mf5 provided
-
- ---message from conver---cannot do complete particle production for mt= 37
-                          only mf4/mf5 provided
-
- ---message from conver---cannot do complete particle production for mt= 91
-                          only mf4/mf5 provided
-
- errorr...                                                                1.3s
-
- ---message from errorr---mf35 processing with the mf5 spectrum vector
-
- processing mat  9999
- ---------------------
-  98-Cf-252 SRL,LLNL+  EVAL-JUL76 Benjamin,McCrosson,Howerton,+      
-
- ---message from sumchk---zero-sum test passed
-
- ---message from covbin---converting mf35 convariance data to errorj format
-
- covariances calculated for  1 reactions and   71 groups                  1.4s
-
- covr...                                                                  1.4s
-
- viewr...                                                                 1.5s
-                                                                          1.5s
+ using endf-6 format
+                                                                          0.0s
  *****************************************************************************
- tolerance .............      0.001
+
+ reconr...reconstruct pointwise cross sections in pendf format            0.0s
+
+ unit for endf tape ...................        -21
+ unit for pendf tape ..................        -22
+
+ label for pendf tape
+ ------------------------------------------------------------------
+ processing e70 252Cf with decay mf5/mt18 & mf35/mt18                
+
+ tape label
+ ------------------------------------------------------------------
+  e70 n-252Cf file with modified decay mf5/mt18 and mf35/mt18        
+
+ material to be processed .............       9999
+ reconstruction tolerance .............      0.001
  reconstruction temperature ...........       0.00k
  resonance-integral-check tolerance ...      0.010
  max resonance-integral error .........  5.000E-08
@@ -92,18 +85,18 @@
   2.00E+02     9.27E+00   0.000    4.33E+00   0.000    1.09E+01   0.000
   3.67E+02     8.16E+00   0.000    2.31E+00   0.000    5.84E+00   0.000
 
- points added by resonance reconstruction     =    9555
+ points added by resonance reconstruction     =    9535
  points affected by resonance integral check  =     171
- final number of resonance points             =    9978
+ final number of resonance points             =    9958
 
  ---message from emerge---nonpositive elastic cross sections found.
 
- number of nonpositive cross sections removed =     247
- number of points in final unionized grid     =   10053
-                                                                          0.1s
+ number of nonpositive cross sections removed =     235
+ number of points in final unionized grid     =   10033
+                                                                          0.0s
  *****************************************************************************
 
- broadr...doppler broadening of endf data                                 0.1s
+ broadr...doppler broadening of endf data                                 0.0s
 
  unit for input endf tape .............        -21
  unit for input pendf tape ............        -22
@@ -125,15 +118,15 @@
  resolved resonance range upper limit         =    3.66500E+02 eV.
 
  final maximum energy for broadening/thinning =    3.66500E+02 eV
-                                                                          0.2s
+                                                                          0.1s
 
  broadened mat9999 from  0.0000E+00 to  3.0000E+02 k
-         points in=  10053  points out=   7654
+         points in=  10033  points out=   7628
          mt   2  18 102
-                                                                          1.3s
+                                                                          0.4s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             1.3s
+ groupr...compute self-shielded group-averaged cross-sections             0.4s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -23
@@ -145,6 +138,7 @@
  weight function option ...............          2
  legendre order .......................          1
  print option (0 min, 1 max) ..........          1
+ smoothing option (0 off, 1 on) .......          1
 
  run title
  --------------------------------------
@@ -246,13 +240,13 @@
  --------------------------------------
                                                                       
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt  1 (n,total) cross section                                     
  
  enrgy  group constants at
  group  infinite dilution
  
-     1    2.09430+1
+     1    2.09431+1
   flx   1.50000+4
      2    2.12735+1
   flx   2.00000+4
@@ -395,7 +389,7 @@
     71    6.05812+0
   flx   9.00000+5
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt  2 (n,elastic) cross section                                   
  
  enrgy  group constants at
@@ -473,7 +467,7 @@
     70    2.93740+0
     71    3.01625+0
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt  4 (n,inel) cross section                                      
  
  enrgy  group constants at
@@ -549,7 +543,7 @@
     70    1.50000-1
     71    1.50000-1
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt 16 (n,2n) cross section                                        
  
  enrgy  group constants at
@@ -578,7 +572,7 @@
     70    1.50000-1
     71    1.50000-1
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt 17 (n,3n) cross section                                        
  
  enrgy  group constants at
@@ -597,7 +591,7 @@
     70    2.50000-1
     71    2.50000-1
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt 18 (n,fission) cross section                                   
  
  enrgy  group constants at
@@ -675,7 +669,7 @@
     70    2.44615+0
     71    2.41385+0
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt 37 (n,4n) cross section                                        
  
  enrgy  group constants at
@@ -684,7 +678,7 @@
     70    2.52080-2
     71    7.74999-2
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt 91 (n,nc) cross section                                        
  
  enrgy  group constants at
@@ -760,7 +754,7 @@
     70    1.50000-1
     71    1.50000-1
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  3 and mt102 (n,g) cross section                                         
  
  enrgy  group constants at
@@ -838,7 +832,7 @@
     70    5.75000-4
     71    5.22500-4
  
- group constants at t=3.000E+02 deg k                                     1.3s
+ group constants at t=3.000E+02 deg k                                     0.4s
  for mf  5 and mt 18 chi                                                         
 
  spectrum constant below 2.0000E+07 ev  (  71 groups)
@@ -854,10 +848,10 @@
     61    2.41879-4  1.72563-4  1.23026-4  8.74750-5  6.21894-5  4.77954-5  6.26595-5  2.15184-5  1.08596-5  6.11592-6
     71    2.17986-6
  
-                                                                          1.3s
+                                                                          0.4s
  *****************************************************************************
 
- errorr...produce cross section covariances                               1.3s
+ errorr...produce cross section covariances                               0.4s
 
  unit for endf tape ...................         20
  unit for pendf tape ..................          0
@@ -889,78 +883,77 @@
   2  3.665E+02 1.000E+04   2   2   normal
 
  neutron group structure......read in
- 
-     1   1.00000E-05  -   1.50000E+04
-     2   1.50000E+04  -   3.50000E+04
-     3   3.50000E+04  -   5.50000E+04
-     4   5.50000E+04  -   7.50000E+04
-     5   7.50000E+04  -   9.50000E+04
-     6   9.50000E+04  -   1.15000E+05
-     7   1.15000E+05  -   1.35000E+05
-     8   1.35000E+05  -   1.65000E+05
-     9   1.65000E+05  -   1.95000E+05
-    10   1.95000E+05  -   2.25000E+05
-    11   2.25000E+05  -   2.55000E+05
-    12   2.55000E+05  -   3.05000E+05
-    13   3.05000E+05  -   3.55000E+05
-    14   3.55000E+05  -   4.05000E+05
-    15   4.05000E+05  -   4.55000E+05
-    16   4.55000E+05  -   5.05000E+05
-    17   5.05000E+05  -   5.55000E+05
-    18   5.55000E+05  -   6.05000E+05
-    19   6.05000E+05  -   6.55000E+05
-    20   6.55000E+05  -   7.05000E+05
-    21   7.05000E+05  -   7.55000E+05
-    22   7.55000E+05  -   8.05000E+05
-    23   8.05000E+05  -   8.55000E+05
-    24   8.55000E+05  -   9.05000E+05
-    25   9.05000E+05  -   9.55000E+05
-    26   9.55000E+05  -   1.05000E+06
-    27   1.05000E+06  -   1.15000E+06
-    28   1.15000E+06  -   1.25000E+06
-    29   1.25000E+06  -   1.35000E+06
-    30   1.35000E+06  -   1.45000E+06
-    31   1.45000E+06  -   1.55000E+06
-    32   1.55000E+06  -   1.65000E+06
-    33   1.65000E+06  -   1.75000E+06
-    34   1.75000E+06  -   1.85000E+06
-    35   1.85000E+06  -   1.95000E+06
-    36   1.95000E+06  -   2.15000E+06
-    37   2.15000E+06  -   2.35000E+06
-    38   2.35000E+06  -   2.55000E+06
-    39   2.55000E+06  -   2.75000E+06
-    40   2.75000E+06  -   2.95000E+06
-    41   2.95000E+06  -   3.25000E+06
-    42   3.25000E+06  -   3.55000E+06
-    43   3.55000E+06  -   3.85000E+06
-    44   3.85000E+06  -   4.15000E+06
-    45   4.15000E+06  -   4.45000E+06
-    46   4.45000E+06  -   4.75000E+06
-    47   4.75000E+06  -   5.05000E+06
-    48   5.05000E+06  -   5.55000E+06
-    49   5.55000E+06  -   6.05000E+06
-    50   6.05000E+06  -   6.55000E+06
-    51   6.55000E+06  -   7.05000E+06
-    52   7.05000E+06  -   7.55000E+06
-    53   7.55000E+06  -   8.05000E+06
-    54   8.05000E+06  -   8.55000E+06
-    55   8.55000E+06  -   9.05000E+06
-    56   9.05000E+06  -   9.55000E+06
-    57   9.55000E+06  -   1.00500E+07
-    58   1.00500E+07  -   1.05500E+07
-    59   1.05500E+07  -   1.10500E+07
-    60   1.10500E+07  -   1.15500E+07
-    61   1.15500E+07  -   1.20500E+07
-    62   1.20500E+07  -   1.25500E+07
-    63   1.25500E+07  -   1.30500E+07
-    64   1.30500E+07  -   1.35500E+07
-    65   1.35500E+07  -   1.40500E+07
-    66   1.40500E+07  -   1.46000E+07
-    67   1.46000E+07  -   1.59000E+07
-    68   1.59000E+07  -   1.69000E+07
-    69   1.69000E+07  -   1.79000E+07
-    70   1.79000E+07  -   1.91000E+07
-    71   1.91000E+07  -   2.00000E+07
+     1   1.00000E-05  -  1.50000E+04
+     2   1.50000E+04  -  3.50000E+04
+     3   3.50000E+04  -  5.50000E+04
+     4   5.50000E+04  -  7.50000E+04
+     5   7.50000E+04  -  9.50000E+04
+     6   9.50000E+04  -  1.15000E+05
+     7   1.15000E+05  -  1.35000E+05
+     8   1.35000E+05  -  1.65000E+05
+     9   1.65000E+05  -  1.95000E+05
+    10   1.95000E+05  -  2.25000E+05
+    11   2.25000E+05  -  2.55000E+05
+    12   2.55000E+05  -  3.05000E+05
+    13   3.05000E+05  -  3.55000E+05
+    14   3.55000E+05  -  4.05000E+05
+    15   4.05000E+05  -  4.55000E+05
+    16   4.55000E+05  -  5.05000E+05
+    17   5.05000E+05  -  5.55000E+05
+    18   5.55000E+05  -  6.05000E+05
+    19   6.05000E+05  -  6.55000E+05
+    20   6.55000E+05  -  7.05000E+05
+    21   7.05000E+05  -  7.55000E+05
+    22   7.55000E+05  -  8.05000E+05
+    23   8.05000E+05  -  8.55000E+05
+    24   8.55000E+05  -  9.05000E+05
+    25   9.05000E+05  -  9.55000E+05
+    26   9.55000E+05  -  1.05000E+06
+    27   1.05000E+06  -  1.15000E+06
+    28   1.15000E+06  -  1.25000E+06
+    29   1.25000E+06  -  1.35000E+06
+    30   1.35000E+06  -  1.45000E+06
+    31   1.45000E+06  -  1.55000E+06
+    32   1.55000E+06  -  1.65000E+06
+    33   1.65000E+06  -  1.75000E+06
+    34   1.75000E+06  -  1.85000E+06
+    35   1.85000E+06  -  1.95000E+06
+    36   1.95000E+06  -  2.15000E+06
+    37   2.15000E+06  -  2.35000E+06
+    38   2.35000E+06  -  2.55000E+06
+    39   2.55000E+06  -  2.75000E+06
+    40   2.75000E+06  -  2.95000E+06
+    41   2.95000E+06  -  3.25000E+06
+    42   3.25000E+06  -  3.55000E+06
+    43   3.55000E+06  -  3.85000E+06
+    44   3.85000E+06  -  4.15000E+06
+    45   4.15000E+06  -  4.45000E+06
+    46   4.45000E+06  -  4.75000E+06
+    47   4.75000E+06  -  5.05000E+06
+    48   5.05000E+06  -  5.55000E+06
+    49   5.55000E+06  -  6.05000E+06
+    50   6.05000E+06  -  6.55000E+06
+    51   6.55000E+06  -  7.05000E+06
+    52   7.05000E+06  -  7.55000E+06
+    53   7.55000E+06  -  8.05000E+06
+    54   8.05000E+06  -  8.55000E+06
+    55   8.55000E+06  -  9.05000E+06
+    56   9.05000E+06  -  9.55000E+06
+    57   9.55000E+06  -  1.00500E+07
+    58   1.00500E+07  -  1.05500E+07
+    59   1.05500E+07  -  1.10500E+07
+    60   1.10500E+07  -  1.15500E+07
+    61   1.15500E+07  -  1.20500E+07
+    62   1.20500E+07  -  1.25500E+07
+    63   1.25500E+07  -  1.30500E+07
+    64   1.30500E+07  -  1.35500E+07
+    65   1.35500E+07  -  1.40500E+07
+    66   1.40500E+07  -  1.46000E+07
+    67   1.46000E+07  -  1.59000E+07
+    68   1.59000E+07  -  1.69000E+07
+    69   1.69000E+07  -  1.79000E+07
+    70   1.79000E+07  -  1.91000E+07
+    71   1.91000E+07  -  2.00000E+07
 
  union structure has   71 groups
 
@@ -1046,7 +1039,7 @@
 
  ---message from covbin---converting mf35 convariance data to errorj format
 
- covariances calculated for  1 reactions and   71 groups                  1.4s
+ covariances calculated for  1 reactions and   71 groups                  0.4s
 
  table of multigroup data
 
@@ -1125,7 +1118,7 @@
    70  1.7900E+07  1.2000E+06  6.1159E-06
    71  1.9100E+07  9.0000E+05  2.1799E-06
 
- relative covariance ( mt 18 , ig , mt 18 , igp )                         1.4s
+ relative covariance ( mt 18 , ig , mt 18 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -1981,10 +1974,10 @@
   71    55  4.256E-04  4.414E-04  4.807E-04  5.200E-04  5.545E-04  5.603E-04
   71    61  8.864E-04  9.214E-04  5.121E-04  7.974E-04  1.072E-03  1.582E-03
   71    67  1.052E-03  2.318E-03  3.013E-03  2.538E-03  5.736E-01
-                                                                          1.4s
+                                                                          0.5s
  *****************************************************************************
 
- covr...process covariance data                                           1.4s
+ covr...process covariance data                                           0.5s
 
  unit for input covariance tape .......         28
  unit for output covariance tape ......          0
@@ -2017,10 +2010,10 @@
    8.5500E+06  9.0500E+06  9.5500E+06  1.0050E+07  1.0550E+07  1.1050E+07
    1.1550E+07  1.2050E+07  1.2550E+07  1.3050E+07  1.3550E+07  1.4050E+07
    1.4600E+07  1.5900E+07  1.6900E+07  1.7900E+07  1.9100E+07  2.0000E+07
-                                                                          1.5s
+                                                                          0.5s
  **************************************************************************
 
- viewr...display plots                                                    1.5s
+ viewr...display plots                                                    0.5s
 
  lori .................................          1
  xpage ................................     10.000
@@ -11692,5 +11685,5 @@
 
  data nform ...........................          0
 
-                                                                          1.5s
+                                                                          0.5s
  *****************************************************************************
