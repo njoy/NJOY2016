@@ -167,6 +167,7 @@ contains
             call moreio(nendf,0,0,a(ll),nb,nw)
             ll=ll+nw
          enddo
+         nw=ll-1
          if (izap.eq.1001) then
             l203=lsix
             do i=1,nw
@@ -418,7 +419,7 @@ contains
    if (mth.eq.198) izr=izr-3004
    if (mth.eq.199) izr=izr-4009
    if (mth.eq.200) izr=izr-2007
-   if (izr.eq.4008) izg=1
+   if (izr.eq.4008.or.izr.eq.3008) izg=1
    if (izg.eq.0.and.&
      (izr.gt.2004.or.izr.le.0)) go to 245
    if (enext.lt.thrg) thrg=enext
@@ -824,6 +825,7 @@ contains
    if (izr.eq.2003) y206=y206+1
    if (izr.eq.2004) y207=y207+1
    if (izr.eq.4008) y207=y207+2
+   if (izr.eq.3008) y207=y207+2
    if (y203.eq.zero.and.y204.eq.zero.and.y205.eq.zero&
      .and.y206.eq.zero.and.y207.eq.zero) go to 310
    enext=thrg

@@ -14200,21 +14200,21 @@ newpath
    208.50   594.72 lineto
    211.99   603.60 lineto
    211.99   603.60 lineto
-   214.30   609.48 lineto
-   214.88   610.96 lineto
-   216.62   615.38 lineto
-   219.52   622.76 lineto
-   220.10   624.24 lineto
-   221.26   627.19 lineto
-   224.16   634.57 lineto
-   229.96   649.33 lineto
-   231.70   653.76 lineto
-   234.38   659.66 lineto
-   238.42   668.52 lineto
-   243.79   680.33 lineto
-   245.13   683.28 lineto
-   251.85   698.04 lineto
-   258.57   712.80 lineto
+   214.25   609.48 lineto
+   214.82   610.96 lineto
+   216.31   615.38 lineto
+   218.29   622.76 lineto
+   218.47   624.24 lineto
+   218.81   627.19 lineto
+   220.49   634.57 lineto
+   224.88   649.33 lineto
+   226.30   653.76 lineto
+   228.57   659.66 lineto
+   232.21   668.52 lineto
+   237.06   680.33 lineto
+   238.33   683.28 lineto
+   244.69   698.04 lineto
+   251.23   712.80 lineto
 stroke
 newpath
  0.000 0.000 0.882 setrgbcolor
