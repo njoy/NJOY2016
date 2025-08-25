@@ -1,40 +1,34 @@
-
- njoy 2016.0   21Dec16                                       01/13/17 10:48:26
+1*****************************************************************************
+ *                                         *              *                  *
+ *   $$   $$       $$   $$$$$   $$    $$   *              *  vers: 2016.78   *
+ *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 03Feb25   *
+ *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: lanl t2   *
+ *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 08/25/25  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 13:27:49  *
+ *                                         *              *                  *
  *****************************************************************************
 
- moder...                                                                 0.0s
+ moder...change the mode of an endf tape or njoy output tape              0.0s
 
- reconr...                                                                0.1s
+ input unit (+ for coded, - for bb) ...         20
+ output unit (+ for coded, - for bb) ..        -21
 
- errorr...                                                                0.2s
+ tape label
+ --------------------------------------
+  endf/b-v tape 511 (standards materials)                             
 
- processing mat  1395
- ---------------------
-  92-u -2350bnl        eval-apr77 m.r.bhat                           
-
- covariances calculated for  2 reactions and    9 groups                  0.2s
-
- groupr...                                                                0.2s
-
- ---message from conver---cannot do complete particle production for mt= 16
-                          only mf4/mf5 provided
-
- ---message from conver---cannot do complete particle production for mt= 17
-                          only mf4/mf5 provided
-
- ---message from conver---cannot do complete particle production for mt= 91
-                          only mf4/mf5 provided
-
- errorr...                                                                0.2s
-
- processing mat  1395
- ---------------------
-  92-u -2350bnl        eval-apr77 m.r.bhat                           
-
- covariances calculated for  1 reactions and   15 groups                  0.2s
-                                                                          0.2s
+ using endf-5 format
+                                                                          0.1s
  *****************************************************************************
-------------------------------------------------------------------
+
+ reconr...reconstruct pointwise cross sections in pendf format            0.1s
+
+ unit for endf tape ...................        -21
+ unit for pendf tape ..................        -22
+
+ label for pendf tape
+ ------------------------------------------------------------------
  u-235 10% pendf for errorr test problem from t511                   
 
  tape label
@@ -110,10 +104,10 @@
  points affected by resonance integral check  =       0
  final number of resonance points             =    1729
  number of points in final unionized grid     =    2585
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- errorr...produce cross section covariances                               0.2s
+ errorr...produce cross section covariances                               0.1s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -122,7 +116,7 @@
  unit for input covariance tape .......          0
  unit for ratio-to-standard tape ......          0
  material to be processed .............       1395
- neutron group option .................         19
+ neutron group option .................         -1
  weight function option ...............          3
  print option (0 min, 1 max) ..........          1
  rel. cov. option (0 abs, 1 rel) ......          1
@@ -153,18 +147,18 @@
      8      2.00000E+02  -  4.00000E+02
      9      4.00000E+02  -  1.00000E+03
 
- computing multigroup cross sections                                      0.2s
+ computing multigroup cross sections                                      0.1s
 
  weight function......1/e for all l
 
- group averaging completed                                                0.2s
+ group averaging completed                                                0.1s
 
 
  processing mat  1395
  ---------------------
   92-u -2350bnl        eval-apr77 m.r.bhat                           
 
- covariances calculated for  2 reactions and    9 groups                  0.2s
+ covariances calculated for  2 reactions and    9 groups                  0.1s
 
  table of multigroup cross sections
 
@@ -181,7 +175,7 @@
     8  2.0000E+02  6.9316E-01  1.7186E+01  8.1274E+00
     9  4.0000E+02  9.1631E-01  1.1584E+01  4.7372E+00
 
- relative covariance ( mt 18 , ig , mt 18 , igp )                         0.2s
+ relative covariance ( mt 18 , ig , mt 18 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -204,11 +198,11 @@
    9     1  4.000E-04  4.000E-04  5.998E-04  5.998E-04  7.001E-04  8.999E-04
    9     7  8.999E-04  8.999E-04  9.998E-04
 
- relative covariance ( mt 18 , ig , mt102 , igp )                         0.2s
+ relative covariance ( mt 18 , ig , mt102 , igp )                         0.1s
 
  zero
 
- relative covariance ( mt102 , ig , mt102 , igp )                         0.2s
+ relative covariance ( mt102 , ig , mt102 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -230,10 +224,10 @@
    8     7  5.000E-03  6.400E-03  5.000E-03
    9     1  2.500E-03  2.500E-03  2.500E-03  2.500E-03  2.500E-03  2.500E-03
    9     7  5.000E-03  5.000E-03  6.400E-03
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- groupr...compute self-shielded group-averaged cross-sections             0.2s
+ groupr...compute self-shielded group-averaged cross-sections             0.1s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................        -22
@@ -245,6 +239,7 @@
  weight function option ...............          3
  legendre order .......................          0
  print option (0 min, 1 max) ..........          1
+ smoothing option (0 off, 1 on) .......          1
 
  run title
  --------------------------------------
@@ -303,7 +298,7 @@
                                                                       
  
 
- group constants at t=zero deg k                                          0.2s
+ group constants at t=zero deg k                                          0.1s
  for mf  3 and mt452 total nubar                                                 
  
  enrgy  group constants at
@@ -340,10 +335,10 @@
     29    4.43317+0
     30    4.67845+0
  
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
 
- errorr...produce cross section covariances                               0.2s
+ errorr...produce cross section covariances                               0.1s
 
  unit for endf tape ...................        -21
  unit for pendf tape ..................          0
@@ -371,14 +366,13 @@
  using errorj resonance method
 
  neutron group structure......read in
- 
-     1   1.00000E+00  -   1.00000E+01
-     2   1.00000E+01  -   1.00000E+02
-     3   1.00000E+02  -   1.00000E+03
-     4   1.00000E+03  -   1.00000E+04
-     5   1.00000E+04  -   1.00000E+05
-     6   1.00000E+05  -   1.00000E+06
-     7   1.00000E+06  -   1.00000E+07
+     1   1.00000E+00  -  1.00000E+01
+     2   1.00000E+01  -  1.00000E+02
+     3   1.00000E+02  -  1.00000E+03
+     4   1.00000E+03  -  1.00000E+04
+     5   1.00000E+04  -  1.00000E+05
+     6   1.00000E+05  -  1.00000E+06
+     7   1.00000E+06  -  1.00000E+07
 
  union structure has   15 groups
 
@@ -404,7 +398,7 @@
  ---------------------
   92-u -2350bnl        eval-apr77 m.r.bhat                           
 
- covariances calculated for  1 reactions and   15 groups                  0.2s
+ covariances calculated for  1 reactions and   15 groups                  0.1s
 
  table of multigroup cross sections
 
@@ -419,7 +413,7 @@
     6  1.0000E+05  2.3867E+00  2.4707E+00
     7  1.0000E+06  2.3314E+00  2.9171E+00
 
- relative covariance ( mt452 , ig , mt452 , igp )                         0.2s
+ relative covariance ( mt452 , ig , mt452 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -437,5 +431,5 @@
    6     7  2.806E-05
    7     1  2.775E-05  2.775E-05  2.784E-05  2.784E-05  2.784E-05  2.806E-05
    7     7  3.145E-05
-                                                                          0.2s
+                                                                          0.1s
  *****************************************************************************
