@@ -423,7 +423,7 @@ contains
    isym=0
    if (ncold.ne.0) isym=1
    if (isabt.eq.1) isym=isym+2
-   
+
    ! Based on endout, to write the actual TSL data, the max number of entries
    ! needed in scr is either 8+2*nalpha, or 8+2*nedge. However, we have no way
    ! of knowing how many comment lines were added to the leaper input. The
@@ -522,7 +522,7 @@ contains
    if (maxn.gt.maxnphon) then
       call timer(time)
       write(nsyse,'(/'' performing phonon expansion sum'',&
-            &37x,f8.1,''s'')'),time
+            &37x,f8.1,''s'')')time
    endif
    do n=2,maxn
       npn=np+npl-1
@@ -559,7 +559,7 @@ contains
    if (maxn.gt.maxnphon) then
       call timer(time)
       write(nsyse,'(/'' done with phonon expansion sum'',&
-            &38x,f8.1,''s'')'),time
+            &38x,f8.1,''s'')')time
    endif
 
    !--print out start of sct range for each beta
@@ -1139,6 +1139,7 @@ contains
    terps=0
    if (be.gt.delta*nsd) return
    i=int(be/delta)
+   if (i.lt.0) return
    if (i.lt.nsd-1) then
       bt=i*delta
       btp=bt+delta
