@@ -3,9 +3,13 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.79](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
+  - GROUPR output now correctly distinguishes between level numbers and isomeric numbers when extracting nuclide production.
   - LEAPR now sets the EMAX value in MF1 MT451 to be equal to the B(4) value in MF7 MT4.
 
-## [NJOY2016.78](https://github.com/njoy/NJOY2016/pull/xxx)
+In addition, this update added the following features and changes:
+  - Added optional card9a to GROUPR to support extracting MF=9 and MF=10 production channels with resulting level numbers greater than 9.
+
+## [NJOY2016.78](https://github.com/njoy/NJOY2016/pull/361)
 This update fixes the following issues:
   - Tape numbers are now allowed to go up to 999 instead of 99 previously. This change was made to accommodate processing of the light water evaluation in ENDF/B-VIII.1 that has 94 temperatures. Test 84 was added to detect this issue in the future.
   - A few updates were made related to array sizes and array allocation.
