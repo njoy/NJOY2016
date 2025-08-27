@@ -4,6 +4,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 ## [NJOY2016.79](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
   - GROUPR output now correctly distinguishes between level numbers and isomeric numbers when extracting nuclide production.
+  - LEAPR now sets the EMAX value in MF1 MT451 to be equal to the B(4) value in MF7 MT4.
 
 In addition, this update added the following features and changes:
   - Added optional card9a to GROUPR to support extracting MF=9 and MF=10 production channels with resulting level numbers greater than 9.
