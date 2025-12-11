@@ -9,6 +9,8 @@ This update fixes the following issues:
 In addition, this update added the following features and changes:
   - Added optional card9a to GROUPR to support extracting MF=9 and MF=10 production channels with resulting level numbers greater than 9.
 
+The cmake files were simplified to allow for the use of LLVM's flang compiler. A minor update was mode to GROUPR as well to allow for compilation with LLVM flang.
+
 ## [NJOY2016.78](https://github.com/njoy/NJOY2016/pull/361)
 This update fixes the following issues:
   - Tape numbers are now allowed to go up to 999 instead of 99 previously. This change was made to accommodate processing of the light water evaluation in ENDF/B-VIII.1 that has 94 temperatures. Test 84 was added to detect this issue in the future.
