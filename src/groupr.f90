@@ -9014,7 +9014,7 @@ contains
    use mathm ! provides legndr
    ! externals
    integer::nl,law,int,lang,lep
-   real(kr)::ep,epnext,term(nl),clo(*),chi(*),e
+   real(kr)::ep,epnext,term(*),clo(*),chi(*),e
    ! internals
    integer::ilo,llo,mlo,nclo,ihi,lhi,mhi,nchi,intt,l,idone
    integer::ndlo,ndhi,nplo,nphi,int2,na,i,j,jj,nll
