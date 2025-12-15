@@ -1743,6 +1743,7 @@ contains
    ! Compute damage energy for capture reactions.
    !-------------------------------------------------------------------
    use endf    ! provides iverf,terp1
+   use mainio ! provides nsyso,nsyse                                 
    ! externals
    integer::mtd
    real(kr)::ee,dame,q,za,awr
@@ -1810,7 +1811,12 @@ contains
          ea=q+awr*e*aw1fac
          if (ea.ge.zero) then
             et=(awr+1-ax)*e*aw1fac
-            if (ea.gt.ec*(1+eps)) ea=ec
+            if (ea.gt.ec*(1+eps)) then 
+              ! Just a message on the system console, but ea is not changed
+              write(nsyse,'(/,a,1p,e11.4,a,i3,/,27x,a,e12.5,a,e12.5,a)') &
+              & ' ---message from capdam--- Ea > Vc at E=',e,' for mt=',mtd, &
+              '(',ea,' > ',ec,')'
+            endif                                                                                              
             do iq=1,nq
                er=(et-2*sqrt(et*ax*ea)*qp(iq)+ax*ea)*aw1fac
                dame=dame+qw(iq)*df(er,z-zx,awr+1-ax,z,awr)/2
@@ -3024,7 +3030,7 @@ contains
    endif
 
    !--compute high values of ebar and dame
-   if (mth.ne.102.or.(zap.eq.0.and.irec.eq.0)) then
+   if (mth.ne.102.or.(zap.eq.0.and.irec.eq.0)) then                                                                                                                                               
       call getsix(ehi,fhi,dhi,c(iraw),law,lang,lep,irec)
    else
       ztt=int(zat/1000)
@@ -3084,7 +3090,7 @@ contains
    ! internals
    integer::nl,l,i,nd,na,nep,ncyc,iq,ia,nld,il,nmu,imu
    integer::nr,np,next,ibase,iint
-   real(kr)::zp,zt,ap,at,summ,epnext,el,fl,dy,da,xm
+   real(kr)::zp,zt,ap,at,summ,epnext,el,fl,dy,da,xm,xxe
    real(kr)::epn,ym,test,en,f,f1,h,d,xl,yl,xx,yy
    real(kr)::x2,zpp,ztt,b,er,t1,t2,thresh,beta
    real(kr)::afact,arec,u,e2,ul,fn,dl,hl,f2
@@ -3381,7 +3387,7 @@ contains
    !--law 7.
    !--trapazoidal integration over energy for each angle
    !--then trapazoidal integration over angle
-  510 continue
+  510 continue                                                                                                                                     
    ebar=0
    dame=0
    dl=0
@@ -3401,10 +3407,12 @@ contains
       do i=1,np
          xx=c(ibase+2*i-1)
          yy=c(ibase+2*i)
-         en=yy*xx
-         if (irec.gt.0) then
-            xx=(e-2*sqrt(e*awp*xx)*u+awp*xx)/(awrt+1-awp)
+         if (irec.gt.0) then ! recoil energy
+            xxe=(e-2*sqrt(e*awp*xx)*u+awp*xx)/(awrt+1-awp)
+         else
+            xxe=xx
          endif
+         en=yy*xxe
          if (i.gt.1) then
             if (iint.eq.1) then
                h=h+(xx-xl)*el
@@ -3412,7 +3420,7 @@ contains
                h=h+(xx-xl)*(en+el)/2
             endif
          endif
-         f=yy*df(xx,zp,ap,zt,at)
+         f=yy*df(xxe,zp,ap,zt,at)
          if (i.gt.1) then
             if (iint.eq.1) then
                d=d+(xx-xl)*fl
