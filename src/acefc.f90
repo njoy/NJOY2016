@@ -1663,7 +1663,7 @@ contains
       do while (k.lt.nold)
          k=k+1
          call finda(k,c,2,iold,bufn,nbuf)
-         if (k.lt.nold) then
+         if (k.le.nold) then
             er=c(1)
             egrid=0
             do while (egrid.lt.er)
@@ -1678,6 +1678,8 @@ contains
          endif
       enddo
       j=j+1
+      c(1)=eg
+      c(2)=0
       jt=-j
       call loada(jt,c,2,inew,buf,nbuf)
       isave=iold
@@ -1785,7 +1787,8 @@ contains
                call finda(i,c,nc,iold,buf,nbuf)
                if (c(1).ge.(1-eps)*thresh) then
                   e=c(1)
-                  if (i.eq.1) e=e*(1+eps)
+                  if (i.eq.1.and.&
+                     (mth.ne.2.or.(mth.eq.2.and.izai.le.1))) e=e*(1+eps)
                   call gety1(e,enext,idis,y,nin,scr)
                   if (mth.eq.2.and.e.lt.ethrr) y=0
                   if (i.gt.1.and.ifrst.eq.0) y=0
@@ -1954,8 +1957,8 @@ contains
    real(kr)::b(50)
    real(kr),dimension(:),allocatable::tab1
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwmaxn=1000000
-   real(kr),parameter::big=1.e9_kr
+   integer,parameter::nwmaxn=10000000
+   real(kr),parameter::big=1.e10_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
 
@@ -2007,6 +2010,7 @@ contains
       else if ((mt19.eq.1.and.mth.eq.18).or.(mt19.eq.0.and.&
         (mth.eq.19.or.mth.eq.20.or.mth.eq.21.or.mth.eq.38)).or.&
         (mfh.eq.6.and.mth.eq.10).or.&
+        (mfh.eq.6.and.(mth.gt.207.and.mth.lt.221)).or.&
         (mfh.eq.5.and.mth.gt.900)) then
          call tosend(nin,0,0,scr)
 
@@ -2231,7 +2235,7 @@ contains
                call tab1io(nin,0,0,scr,nb,nw)
                zap=c1h
                lf=l2h
-               dzap=abs(zap-1)
+               dzap=abs(zap-izai)
                do while(nb.ne.0)
                   call moreio(nin,0,0,scr,nb,nw)
                enddo
@@ -2325,13 +2329,23 @@ contains
                   ! read in the data
                   call tab2io(nin,0,0,scr,nb,nw)
                   ei=scr(2)
-                  intmu=nint(scr(8))
+                  intmu=mod(nint(scr(8)),10)
+                  if (n1h.ne.1) then
+                    call mess('topfil',&
+                    ' warning nr>1 for cosines interpolation',&
+                    ' check conversion from law7 to law1')
+                  endif
                   nmu=n2h
                   loc=1+nmu
                   do imu=1,nmu
                      scr(imu)=loc
                      call tab1io(nin,0,0,scr(loc),nb,nw)
-                     intep=nint(scr(loc+7))
+                     intep=mod(nint(scr(loc+7)),10)
+                     if (nint(scr(loc+4)).ne.1) then
+                       call mess('topfil',&
+                       ' warning nr>1 for ep',&
+                       ' check conversion from law7 to law1')
+                     endif
                      loc=loc+nw
                      do while (nb.ne.0)
                         call moreio(nin,0,0,scr(loc),nb,nw)
@@ -2479,7 +2493,7 @@ contains
                      l=l+nw
                      l2=l
                      nmu=n2h
-                     l=l+66
+                     l=l+2*nmu
                      l3=l
                      do imu=1,nmu
                         l1=l
@@ -2507,7 +2521,13 @@ contains
                      if (newfor.eq.0) then
                         call pttab(3,scr,nout)
                      else
-                        call tab1io(0,nout,0,scr,nb,nw)
+                        l=1
+                        call tab1io(0,nout,0,scr(l),nb,nw)
+                        l=l+nw
+                        do while (nb.ne.0)
+                           call moreio(0,nout,0,scr(l),nb,nw)
+                           l=l+nw
+                        enddo
                      endif
                      l=l3
                      do imu=1,nmu
@@ -3885,9 +3905,9 @@ contains
    equivalence(t(1),gamid(1))
    real(kr),dimension(:),allocatable::ee,eg,es,yy,aa,rr
    real(kr),dimension(:),allocatable::tot
-   integer,parameter::nwtot=5000
+   integer,parameter::nwtot=100000 !Needed for D1SUNED library generation
    real(kr),dimension(:),allocatable::yold
-   integer,parameter::nyold=1000
+   integer,parameter::nyold=80000 !Needed for D1SUNED library generation
    real(kr),dimension(:),allocatable::scr
    character(4)::blank='    '
    real(kr),parameter::etop=1.e10_kr
@@ -3903,7 +3923,7 @@ contains
    imax=50
    imaxsq=imax*imax
    lmax=imax*(imax-1)/2
-   nned=50
+   nned=100
    allocate(disc(nned))
    allocate(ee(imax))
    allocate(eg(lmax))
@@ -4924,7 +4944,7 @@ contains
    !--initialize
    inow=0
    nnex=0
-   nwscr=1000000
+   nwscr=10000000
    allocate(scr(nwscr))
    do i=1,5
       nxsd(i)=0
@@ -5477,7 +5497,7 @@ contains
             !--store reaction parameters
             j=j+1
             xss(mtr+ir)=mth
-            xss(lqr+ir)=sigfig(scr(2)/emev,7,0)
+            xss(lqr+ir)=sigfig(scr(2)/emev,9,0)
             xss(tyr+ir)=0
             xss(lsig+ir)=next-sig+1
             ir=ir+1
@@ -5609,7 +5629,7 @@ contains
             !--store reaction parameters
             j=j+1
             xss(mtr+ir)=mth
-            xss(lqr+ir)=sigfig(scr(2)/emev,7,0)
+            xss(lqr+ir)=sigfig(scr(2)/emev,9,0)
             xss(tyr+ir)=0
             xss(lsig+ir)=next-sig+1
             ir=ir+1
@@ -5712,7 +5732,7 @@ contains
          !--store reaction parameters
          j=j+1
          xss(mtr+ir)=mth
-         xss(lqr+ir)=sigfig(scr(2)/emev,7,0)
+         xss(lqr+ir)=sigfig(scr(2)/emev,9,0)
          xss(tyr+ir)=0
          xss(lsig+ir)=next-sig+1
          ir=ir+1
@@ -6344,14 +6364,18 @@ contains
       do j=1,ne
          if (newfor.eq.0) then
             call tab1io(nin,0,0,scr,nb,nw)
+            ll=1+nw
             do while (nb.ne.0)
-               call moreio(nin,0,0,scr,nb,nw)
+               call moreio(nin,0,0,scr(ll),nb,nw)
+               ll=ll+nw
             enddo
          else
             if (law.eq.7) then
                call tab1io(nin,0,0,scr,nb,nw)
+               ll=1+nw
                do while (nb.ne.0)
-                  call moreio(nin,0,0,scr,nb,nw)
+                  call moreio(nin,0,0,scr(ll),nb,nw)
+                  ll=ll+nw
                enddo
             else if (ltt.eq.2) then
                call tab1io(nin,0,0,scr,nb,nw)
@@ -6401,7 +6425,8 @@ contains
             if (newfor.ne.0) then
                xss(il+j)=-xss(il+j)
                iso=0
-               iint=nint(scr(8))
+               iint=mod(nint(scr(8)),10)
+               if (iint.gt.2) iint=2
                xss(next)=iint
                xss(next+1)=n
                if (next+2+3*n.gt.nxss) call error('acensd',&
@@ -6424,7 +6449,8 @@ contains
                      xss(next+1+2*n+i)=sigfig(sum,7,0)
                   endif
                enddo
-               renorm=1/xss(next+1+3*n)
+               renorm=1
+               if (xss(next+1+3*n).ne.0.0_kr) renorm=1/xss(next+1+3*n)
                do i=1,n
                   xss(next+1+2*n+i)=renorm*xss(next+1+2*n+i)
                   xss(next+1+2*n+i)=sigfig(xss(next+1+2*n+i),9,0)
@@ -6515,7 +6541,16 @@ contains
    allocate(yys(ne))
 
    write(nsyso,'(/'' working on charged-particle elastic'')')
+   write(nsyso,'(a,i7,f7.2,2i7)')' zai spi,lidp,ne =',izai,spi,lidp,ne
    amass=awr/awp
+   i2s=nint(2*spi)
+   ai=awi*amassn
+   at=awr*amassn
+   zt=nint(za/1000)
+   zi=int(izai/1000)
+   cc1=2*amu*ev*fm**2/hbar**2
+   ee=(ev/10000000)*(clight/10)
+   cc2=ee**4*amu/(2*hbar**2*ev)
    llht=1
    scr(llht)=0
    scr(llht+1)=0
@@ -6538,22 +6573,26 @@ contains
       ltp=nint(scr(lld+2))
       scr(lld+3)=lidp
       nl=nint(scr(lld+5))
-      if (ltp.lt.12) then
-         call ptlegc(scr(lld),awi,izai,awr,nint(za),spi)
-         nl=nint(scr(lld+5))
-         ll=lld+6+2*nl
-      endif
-      xss(ie+j)=sigfig(e/emev,7,0)
-      xss(il+j)=-(next-and+1)
       ien=1
       do while (xss(esz+ien+1).lt.e.and.ien.lt.nes)
-         ien=ien+1
+        ien=ien+1
       enddo
       f=(xss(esz+ien+1)-e)/(xss(esz+ien+1)-xss(esz+ien))
       xelas=xss(esz+3*nes+ien)*f+xss(esz+3*nes+ien+1)*(1-f)
-      write(nsyso,'('' e,elas='',1p,2e12.4)') e,xelas
+      if (ltp.lt.12) then
+         call ptlegc(scr(lld),awi,izai,awr,nint(za),spi)
+      else
+         call pttabc(scr(lld),awi,izai,awr,nint(za),spi,xelas)
+      endif
+      nl=nint(scr(lld+5))
+      ll=lld+6+2*nl
+      xss(ie+j)=sigfig(e/emev,7,0)
+      xss(il+j)=-(next-and+1)
+      write(nsyso,'('' e,elas(mf3/mt2),ltp'',1p,2e12.4,i4)')e,xelas,ltp
       write(nsyso,'(15x,''mu'',7x,''signi'',8x,''sigc'',8x,&
-       &''sige'',8x,''ratr'',8x,''cumm'')')
+        &''sige'',8x,''ratr'',8x,''cumm'')')
+      wn=at*sqrt(cc1*e*ai)/(ai+at)
+      eta=zt*zi*sqrt(cc2*ai/e)
       cumm=0
       amul=0
       smul=0
@@ -6565,38 +6604,27 @@ contains
       eht=0
       do jl=1,nl
          ione=0
-         do while (ione.eq.0)
+         do while(ione.eq.0)
             amuu=scr(lld+6+2*(jl-1))
             pmu=scr(lld+7+2*(jl-1))
             itwo=0
             do while (itwo.eq.0)
-               i2s=nint(2*spi)
-               ai=awi*amassn
-               at=awr*amassn
-               zt=nint(za/1000)
-               zi=int(izai/1000)
-               cc1=2*amu*ev*fm**2/hbar**2
-               ee=(ev/10000000)*(clight/10)
-               cc2=ee**4*amu/(2*hbar**2*ev)
-               wn=at*sqrt(cc1*e*ai)/(ai+at)
-               eta=zt*zi*sqrt(cc2*ai/e)
                sigc=0
                if (lidp.eq.0) sigc=(eta**2/wn**2)/(1-amuu)**2
                if (lidp.eq.1) sigc=((2*eta**2/wn**2)&
-                 /(1-amuu**2))*((1+amuu**2)/(1-amuu**2)&
-                 +((-1)**i2s)*cos(eta*log((1+amuu)/(1-amuu)))&
-                 /(2*spi+1))
-               if (ltp.lt.12) pmu=pmu-sigc
+                   /(1-amuu**2))*((1+amuu**2)/(1-amuu**2)&
+                   +((-1)**i2s)*cos(eta*log((1+amuu)/(1-amuu)))&
+                   /(2*spi+1))
                if (iterp.eq.1) then
                   signi=(ratr-1)*sigc
                else
-                  signi=pmu*xelas
+                  signi=pmu-sigc
                   if (signi.lt.-sigc) signi=-sigc
                endif
                ratr=(sigc+signi)/sigc
                itwo=1
                if (jl.gt.1.and.iterp.eq.0.and.sigc.gt.abs(signi)&
-                 .and.sigc.gt.(2*sigcl)) then
+                   .and.sigc.gt.(2*sigcl)) then
                   iterp=1
                   amuu=(amul+amuu)/2
                   ratr=(ratrl+ratr)/2
@@ -6605,7 +6633,7 @@ contains
             enddo
             if (jl.gt.1) cumm=cumm+(amuu-amul)*(signi+sigc+smul)/2
             write(nsyso,'(5x,1p,6e12.4)')&
-              amuu,signi,sigc,sigc+signi,ratr,cumm
+              amuu,signi,sigc,signi+sigc,ratr,cumm
             kk=kk+1
             scr(ll+3*(kk-1))=amuu
             scr(ll+1+3*(kk-1))=signi+sigc
@@ -7147,13 +7175,13 @@ contains
    real(kr)::test,eemx,yield,xnext,xx,yy,y,xn,eyl,gyl,en
    real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee
    real(kr)::ep,e,bzro,sfe,sfo,bbi,fbarcm,delfcm,akal,rkal
-   real(kr)::emu1,emu2,fbl,ffl,fbcm,ffcm,akak,del,av,renorm
+   real(kr)::emu1,emu2,fbl,ffl,fbcm,ffcm,del,av,renorm
    real(kr)::zap,aa,test1,test2,test3,ex,fx,cx,cxx,val
    real(kr)::e1,p1,e2,p2
    integer::loc(5)
    character(60)::strng
    real(kr),dimension(:),allocatable::scr
-   integer,parameter::nwscr=1000000
+   integer,parameter::nwscr=10000000
    real(kr),parameter::emev=1.e6_kr
    real(kr),parameter::small=1.e-30_kr
    real(kr),parameter::etop=1.e10_kr
@@ -7265,7 +7293,15 @@ contains
       if (mth.eq.18) ntyr=19
       if (mth.eq.18) lct=1 ! forces lab system for fission
       xss(tyr+i-1)=(3-2*lct)*ntyr
-      if (law.eq.6) xss(tyr+i-1)=-ntyr
+      if (law.eq.6) then ! forces cm system for law6
+        xss(tyr+i-1)=-ntyr
+        if (lct.eq.1) then
+          write(nsyso,&
+          & '(/'' ---warning from acelf6--- lab system found'', &
+          & '' for law6 in mf6/mt'',0p,i0,&
+          & '' - reset to cm'')') mth
+        endif
+      endif
 
    !--generalized yield
    else
@@ -7423,7 +7459,7 @@ contains
       xx=elow
       n=1
       test1=one+one/100000
-      test2=one/10-one/1000000
+      test2=one/10-one/100000
       test3=one-one/10000
       do while (xx.lt.test1)
          n=n+1
@@ -7458,9 +7494,7 @@ contains
          xss(next+2*nn+n)=yn
          xl=xx
          pl=pn
-         test=one/10
-         test=test-test/10000
-         if (xx.lt.test) then
+         if (xx.lt.test2) then
             xx=xx*step1
          else
             xx=xx+step2
@@ -7479,7 +7513,7 @@ contains
       lang=nint(scr(3))
       if (law.eq.1.and.(lang.lt.1.or.(lang.gt.2.and.lang.lt.11)&
         .or.lang.gt.13)) call error('acelf6',&
-        'only lang=1,2,11-13 allowed for endf-6 file 6 neutrons',&
+        'only lang=1,2,11-13 allowed for endf-6 file 6 inc. part.',&
         ' ')
       if (newfor.eq.0.and.law.eq.1.and.lct.eq.2.and.lang.ne.2) then
          write(nsyso,'(/'' converting to kalbach:'',&
@@ -7539,10 +7573,12 @@ contains
             ! extend low histogram bins as sqrt(e) using log energy scale
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
+            ex=40
             if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                lep.eq.1.and.zap.eq.1.and.nd.eq.0) then
+                lep.eq.1.and.nint(zap).eq.1.and.nd.eq.0.and.&
+                scr(7).le.elow.and.scr(8).gt.zero.and.&
+                scr(7+ncyc).gt.ex) then
                fx=.8409
-               ex=40
                cx=scr(7+ncyc)*scr(8)
                do while (n.gt.2)
                   cxx=cx+scr(8+ncyc)*(scr(7+2*ncyc)-scr(7+ncyc))
@@ -7580,8 +7616,7 @@ contains
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
             else if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                     lep.eq.2.and.zap.eq.1.and.n.gt.3.and.nd.eq.0) then
-               ex=40
+                 lep.eq.2.and.nint(zap).eq.1.and.n.gt.3.and.nd.eq.0) then
                fx=0.50
                nn=0
                ! make room for initial data at zero energy, then
@@ -7700,7 +7735,7 @@ contains
                   if (na.eq.2) then
                      aa=scr(10+ncyc*(ki-1))
                   else
-                     aa=bachaa(1,1,iza,ee,ep)
+                     aa=bachaa(izai,nint(zap),iza,ee,ep)
                   endif
                   xss(ki+4*n+nexd)=sigfig(aa,7,0)
 
@@ -7758,7 +7793,7 @@ contains
                   if (abs(emu1+1).ge.test.or.abs(emu2-1).ge.test) then
                      fbcm=fbl
                      ffcm=ffl
-                     call fndar2(akak,rkal,fbcm,ffcm,emu1,emu2,ee,ep)
+                     call fndar2(akal,rkal,fbcm,ffcm,emu1,emu2,ee,ep)
                      call mess('acelf6',&
                        'tabulated angular distribution',&
                        'does not extend over entire cosine range.')
@@ -7774,9 +7809,9 @@ contains
                         delfcm=0
                      endif
                      call fndar1(akal,rkal,fbarcm,delfcm,ee,ep)
-                     xss(ki+3*n+nexd)=sigfig(rkal,7,0)
-                     xss(ki+4*n+nexd)=sigfig(akal,7,0)
                   endif
+                  xss(ki+3*n+nexd)=sigfig(rkal,7,0)
+                  xss(ki+4*n+nexd)=sigfig(akal,7,0)
 
                !--convert legendre distribution to law 61
                else if (lang.eq.1.and.newfor.eq.1) then
@@ -7870,7 +7905,7 @@ contains
          else
             jscr=1
             call tab1io(nin,0,0,scr(jscr),nb,nw)
-            intmu=l1h
+            intmu=mod(nint(scr(jscr+7)),10)
             nmu=l2h
             ee=c2h/emev
             xss(next+j)=sigfig(ee,7,0)
@@ -7887,7 +7922,8 @@ contains
                jscr=1
                call tab1io(nin,0,0,scr(jscr),nb,nw)
                npep=n2h
-               intep=nint(scr(jscr+7))
+               intep=mod(nint(scr(jscr+7)),10)
+               if (intep.gt.2) intep=2
                jscr=jscr+nw
                do while (nb.ne.0)
                   call moreio(nin,0,0,scr(jscr),nb,nw)
@@ -7913,7 +7949,8 @@ contains
                        *(scr(9+2*(ki-1))-scr(9+2*(ki-2)))/2
                   endif
                enddo
-               renorm=1/xss(nexd+3*npep)
+               renorm=1
+               if (xss(nexd+3*npep).ne.zero) renorm=1/xss(nexd+3*npep)
                do ki=1,npep
                   xss(nexd+npep+ki)=&
                     sigfig(renorm*xss(nexd+npep+ki),7,0)
@@ -7995,7 +8032,7 @@ contains
    integer,parameter::maxang=4000
    real(kr)::aco(maxang),cprob(maxang)
    real(kr),parameter::tol1=.001e0_kr
-   real(kr),parameter::tol2=.01e0_kr
+   real(kr),parameter::tol2=.005e0_kr
    real(kr),parameter::one=1.e0_kr
    real(kr),parameter::half=.5e0_kr
    real(kr),parameter::hund=.01e0_kr
@@ -8060,11 +8097,11 @@ contains
    do while (i.lt.nn-1.and.idone.eq.0)
       j=i+1
       check=0
-      do while (j.lt.nn+1.and.check.le.0.and.dco.le.one/2)
+      do while (j.lt.nn+1.and.check.le.0.and.dco.le.one/4)
          j=j+1
          jj=j-1
          dco=aco(j)-aco(i)
-         if (dco.le.one/2) then
+         if (dco.le.one/4) then
             k=i
             do while (k.lt.j-1.and.check.le.0)
                k=k+1
@@ -8075,7 +8112,7 @@ contains
             enddo
          endif
       enddo
-      if (dco.gt.one/2.or.check.gt.zero) then
+      if (dco.gt.one/4.or.check.gt.zero) then
          i=jj
          ii=ii+1
          aco(ii)=aco(i)
@@ -8185,20 +8222,217 @@ contains
    else
       if (lidp.ne.1) then
          sigr=c(7)/2
-         do ip=1,np
+         do ip=1,nt
             sigr=sigr+(2*ip+1)*p(ip+1)*c(ip+7)/2
          enddo
-         y=sigc+sigr
+         y=sigc+sigr/(1-x)
       else
          sigr=c(7)/2
          do it=1,nt
             sigr=sigr+(4*it+1)*p(2*it+1)*c(it+7)/2
          enddo
-         y=sigc+sigr
+         y=sigc+sigr/(1-x*x)
       endif
    endif
    return
    end subroutine coul
+
+    subroutine pttabc(c,awp,izap,awr,iza,spi,sni)
+    !------------------------------------------------------------------
+    ! For charged particle nuclear plus interference representation,
+    ! reconstruct the angular distribution adaptively. The
+    ! distribution returned is the actual elastic cross section.
+    !------------------------------------------------------------------
+    use util ! provides error
+    use endf ! provides terp1
+    use physics ! provides amu,hbar,ev,clight,amassn
+    ! externals
+    real(kr)::c(*),awp,awr,spi,sni
+    integer::izap,iza
+    ! internals
+    integer,parameter::kmax=20
+    integer,parameter::maxang=20000
+    real(kr),parameter::zero=0.0e0_kr
+    real(kr),parameter::half=0.5e0_kr
+    real(kr),parameter::one=1.0e0_kr
+    real(kr),parameter::two=2.0e0_kr
+    real(kr),parameter::fm=1.e-12_kr
+    real(kr),parameter::umax=.995e0_kr
+    real(kr),parameter::tol=0.005e0_kr
+    real(kr),parameter::tol2=2e0_kr
+    real(kr),parameter::hmax=0.25e0_kr
+    real(kr),parameter::hmin=0.0002e0_kr
+    real(kr),parameter::sigmin=1.0e-20_kr
+    integer::ltp,law,nl,i,j,i2s,l,k,lidp,nostop,iconu
+    real(kr)::ai,at,zi,zt,ee,c1,c2,wn,eta,wn2,eta2
+    real(kr)::e,u1,sig1,sigc1,uni1,pni1,u2,sig2,sigc2,uni2,pni2
+    real(kr)::um,sigm,sigcm,pnum,sigl,sigcmin,sigcmax,h,dy
+    real(kr)::x(kmax),y(kmax),z(kmax)
+    real(kr),dimension(:),allocatable::uu,pni
+
+    !  adaptive reconstruction of angular distribution for MF6/LAW5/LTP>10
+    e=c(2)
+    ltp=nint(c(3))
+    lidp=nint(c(4))
+    law=ltp-10
+    nl=nint(c(6))
+    allocate(uu(nl),pni(nl))
+    j=6
+    do i=1,nl
+      j=j+1
+      uu(i)=c(j)
+      j=j+1
+      pni(i)=c(j)
+    enddo
+    if (uu(1).le.-one) then
+      if (lidp.eq.1) then
+        if (-umax.lt.uu(2)) then
+          u1=-umax
+        else
+          u1=half*(-one+uu(2))
+        endif
+      else
+        u1=-one
+      endif
+      call terp1(uu(1),pni(1),uu(2),pni(2),u1,sig1,law)
+      uu(1)=u1
+      pni(1)=sig1
+    endif
+    if (uu(nl).ge.one) then
+      if (umax.gt.uu(nl-1)) then
+        u2=umax
+      else
+        u2=half*(one+uu(nl-1))
+      endif
+      call terp1(uu(nl-1),pni(nl-1),uu(nl),pni(nl),u2,sig2,law)
+      uu(nl)=u2
+      pni(nl)=sig2
+    endif
+    i2s=nint(2*spi)
+    ai=awp*amassn
+    at=awr*amassn
+    zi=dble(int(izai/1000))
+    zt=dble(int(iza/1000))
+    ee=(ev/10000000)*(clight/10)
+    c1=two*amu*ev*fm**2/hbar**2
+    c2=ee**4*amu/(two*hbar**2*ev)
+    wn=at*sqrt(c1*e*ai)/(ai+at)
+    eta=zt*zi*sqrt(c2*ai/e)
+    eta2=eta*eta
+    wn2=wn*wn
+    u1=uu(1)
+    uni1=u1
+    pni1=pni(1)
+    sigc1=zero
+    if (lidp.eq.0) then
+      sigc1=eta2/(wn2*(one-u1)*(one-u1))
+    elseif (lidp.eq.1) then
+      sigc1=two*eta2/(wn2*(one-u1*u1))*((one+u1*u1)/(one-u1*u1) + &
+           ((-1)**i2s)/(two*spi+one)*cos(eta*log((one+u1)/(one-u1))))
+    endif
+    sig1=sigc1+sni*pni1
+    if (sig1.lt.sigmin) sig1=sigmin
+    l=7
+    c(l)=u1
+    l=l+1
+    c(l)=sig1
+    do i=2,nl
+      u2=uu(i)
+      uni2=u2
+      pni2=pni(i)
+      sigc2=zero
+      if (lidp.eq.0) then
+        sigc2=eta2/(wn2*(one-u2)*(one-u2))
+      elseif (lidp.eq.1) then
+        sigc2=two*eta2/(wn2*(one-u2*u2))*((one+u2*u2)/(one-u2*u2) + &
+             ((-1)**i2s)/(two*spi+one)*cos(eta*log((one+u2)/(one-u2))))
+      endif
+      sig2=sigc2+sni*pni2
+      if (sig2.lt.sigmin) sig2=sigmin
+      k=0
+      nostop=1
+      do while (nostop.eq.1)
+        um=half*(u2+u1)
+        h=u2-u1
+        if (um.gt.u1.and.um.lt.u2.and.h.gt.hmin.and.sig1.gt.sigmin.and.sig2.gt.sigmin.and.k.lt.kmax) then
+          ! calculate scattering at midpoint
+          sigcm=zero
+          if (lidp.eq.0) then
+            sigcm=eta2/(wn2*(one-um)*(one-um))
+          elseif (lidp.eq.1) then
+            sigcm=two*eta2/(wn2*(one-um*um))*((one+um*um)/(one-um*um) + &
+                ((-1)**i2s)/(two*spi+one)*cos(eta*log((one+um)/(one-um))))
+          endif
+          call terp1(uni1,pni1,uni2,pni2,um,pnum,law)
+          sigm=sigcm+sni*pnum
+          if (sigm.lt.sigmin) sigm=sigmin
+          sigl=half*(sig1+sig2)
+          dy=abs(sigl-sigm)
+          sigcmin=min(sigc1,sigc2)
+          sigcmax=max(sigc1,sigc2)
+          if ((dy.le.tol*abs(sigm).and.sigcmax.le.tol2*sigcmin.and.h.le.hmax).or.sigm.le.sigmin) then
+            iconu=1
+          else
+            iconu=0
+          endif
+        else
+          iconu=2
+        endif
+        if (iconu.eq.0) then
+          ! no convergence
+          k=k+1
+          x(k)=u2
+          y(k)=sig2
+          z(k)=sigc2
+          u2=um
+          sig2=sigm
+          sigc2=sigcm
+        else
+          ! converged: iconu=1(normal) or iconu=2 (forced)
+          if (l+2.gt.maxang) then
+            call error('pttabc','too many coulomb angles, increase maxang',' ')
+          endif
+          l=l+1
+          c(l)=u2
+          l=l+1
+          c(l)=sig2
+          if (k.gt.0) then
+            u1=u2
+            sig1=sig2
+            sigc1=sigc2
+            u2=x(k)
+            sig2=y(k)
+            sigc2=z(k)
+            k=k-1
+          else
+            nostop=0
+          endif
+        endif
+      enddo
+      u1=u2
+      sig1=sig2
+      sigc1=sigc2
+      uni1=uni2
+      pni1=pni2
+    enddo
+    nl=(l-6)/2
+    if (lidp.eq.1.and.c(7).ge.zero) then
+      do i=nl,1,-1
+        c(3+2*nl+2*i)=c(5+2*i)
+        c(4+2*nl+2*i)=c(6+2*i)
+      enddo
+      do i=nl,2,-1
+        c(7+2*nl-2*i)=-c(3+2*nl+2*i)
+        c(8+2*nl-2*i)=c(4+2*nl+2*i)
+      enddo
+      nl=2*nl-1
+      l=6+2*nl
+    endif
+    c(5)=l
+    c(6)=nl
+    deallocate(uu,pni)
+    return
+    end subroutine pttabc
 
    subroutine acelpp(next,matd,ngmt,nin)
    !-------------------------------------------------------------------
@@ -8213,14 +8447,15 @@ contains
    integer::nk,mto,ik,ifini,jscr,idone,lf,lp,m,n,nn,jnt,i
    integer::ie,je,jn,jfirst,jlast,nlast,law,lff,li,ni,ii,mmm
    integer::ne,lc,imu,nexl,nc,ic,nexd,k,lep,nd,na,ncyc,ki
-   integer::nyp,mtl,loct,nd0,mtdold
+   integer::nyp,mtl,loct,nd0,mtdold,jj,kk
    integer::jp,jpn,jpp
    real(kr)::awr,eg,egamma,ei,en,ep,epu,ef,el,e1,teste,renorm,r
    real(kr),dimension(:),allocatable::scr
    real(kr),dimension(:),allocatable::dise
    real(kr),dimension(:),allocatable::tdise
+   character(120)::line1,line2
    character(66)::strng
-   integer,parameter::nwscr=1000000
+   integer,parameter::nwscr=10000000
    integer,parameter::ndise=5000
    real(kr),dimension(:),allocatable::phot
    real(kr),parameter::emev=1.e6_kr
@@ -8605,7 +8840,8 @@ contains
                         *(scr(7+2*k)-scr(7+2*(k-1)))
                   enddo
                   ! renormalize cdf to sum to 1, and pdf correspondingly
-                  renorm=1/xss(3*n+nexd)
+                  renorm=1
+                  if (xss(3*n+nexd).ne.zero) renorm=1/xss(3*n+nexd)
                   do k=1,n
                      xss(k+n+nexd)=sigfig(xss(k+n+nexd)*renorm,9,0)
                      xss(k+2*n+nexd)=sigfig(xss(k+2*n+nexd)*renorm,9,0)
@@ -8698,6 +8934,17 @@ contains
                      endif
                      do m=1,nd0
                         r=abs(ep/dise(m)-1)
+                        if (r.le.eps.and.r.gt.0.9*eps)then
+                          write(line1,'(a,1pe16.9)')'two discrete photon energies are &
+                          &too close, difference less than ',eps
+                          write(line2,*)'photon energy corresponding to the &
+                          &second read value will be ignored'
+                          call mess('acelpp',line1,line2)
+                          write(line1,'(a,i6,a,1pe16.9)')'mtd= ',mtd,' Incident energy ei= ',ei
+                          write(line2,'(a,i6,a,1pe16.9,a,i6,a,1pe16.9)')'Photon energy(',ki,')= ',ep,&
+                          &' compared against dise(',m,')= ',dise(m)
+                          call mess('acelpp',line1,line2)
+                        endif
                         if (r.le.eps) go to 111
                      enddo
                      !--found a new discrete energy.  insert it into
@@ -8738,8 +8985,8 @@ contains
                   enddo
                endif
                if (nd0.gt.ndise) then
-                  write(strng,'(''nwords is'',i6,'' but need '',i6)')&
-                        nwords,nd0
+                  write(strng,'(''ndise is'',i6,'' but need '',i6)')&
+                        ndise,nd0
                   call error('acelpp',&
                              'too many discrete photons found',strng)
                endif
@@ -8854,9 +9101,11 @@ contains
                !--and insert missing data
                else
                   !--move continuous data, then insert discrete data
-                  do ki=n*2,nd*2+1,-1
-                     scr(6+2*nd0+ki-2*nd)=scr(6+ki)
-                  enddo
+                  if (nd0.gt.nd) then
+                    do ki=n*2,nd*2+1,-1
+                       scr(6+2*nd0+ki-2*nd)=scr(6+ki)
+                    enddo
+                  endif
                   !--loop over union list of photons, inserting
                   !--missing energies with zero probability.  also
                   !--check law and/or sign of photon energy to know
@@ -8882,6 +9131,14 @@ contains
                      enddo
                   enddo
                   !--update length of list record
+                  if (nd.gt.nd0) then
+                    kk=6+2*nd
+                    jj=6+2*nd0
+                    nn=2*(n-nd)
+                    do ki=1,nn
+                      scr(jj+ki)=scr(kk+ki)
+                    enddo
+                  endif
                   n=n-nd+nd0
                endif
                !--update number of discrete photons
@@ -8918,7 +9175,7 @@ contains
                  *(scr(7+ncyc*(ki-1))-scr(7+ncyc*(ki-2)))
             enddo
             renorm=1
-            if (xss(3*n+nexd).ne.0.) renorm=1/xss(3*n+nexd)
+            if (xss(3*n+nexd).ne.zero) renorm=1/xss(3*n+nexd)
             do ki=1,n
                xss(ki+n+nexd)=sigfig(xss(ki+n+nexd)*renorm,9,0)
                xss(ki+2*n+nexd)=sigfig(xss(ki+2*n+nexd)*renorm,9,0)
@@ -9314,12 +9571,13 @@ contains
             if ((mt.eq.102.and.izai.eq.1).or.mf.eq.4) then
                xss(tyrh+jp-1)=-1
                if (mt.eq.102) xss(tyrh+jp-1)=1
-               do ie=iaa,nes
+               do ie=it,nes
                   if (mt.eq.2) then
                      xss(hpd+2+ie-it)=&
                        sigfig(xss(esz+3*nes+ie-it),7,0)
                   else
-                     tt=xss(hpd+2+ie-it)+xss(2+k+ie-iaa)
+                     tt=xss(hpd+2+ie-it)
+                     if (ie.ge.iaa) tt=tt+xss(2+k+ie-iaa)
                      xss(hpd+2+ie-it)=sigfig(tt,7,0)
                   endif
                enddo
@@ -9413,18 +9671,19 @@ contains
                   if (ik.eq.lprod(j)) then
                      nrr=1
                      npp=2
-                     do ie=iaa,nes
-                        e=xss(esz+ie-1)*emev
-                        call terpa(y,e,en,idis,scr,npp,nrr)
-                        if (y.lt.delt) y=0
-                        e=e/emev
-                        if (mth.eq.2) then
-                           ss=xss(esz+3*nes+ie-1)
-                        else
-                           ss=xss(2+k+ie-iaa)
-                        endif
-                        tt=xss(hpd+2+ie-it)+y*ss
-                        xss(hpd+2+ie-it)=sigfig(tt,7,0)
+                     do ie=it,nes
+                       e=xss(esz+ie-1)*emev
+                       call terpa(y,e,en,idis,scr,npp,nrr)
+                       if (y.lt.small) y=0
+                       e=e/emev
+                       ss=0
+                       if (mth.eq.2) then
+                          ss=xss(esz+3*nes+ie-1)
+                       else
+                          if (ie.ge.iaa) ss=xss(2+k+ie-iaa)
+                       endif
+                       tt=xss(hpd+2+ie-it)+y*ss
+                       xss(hpd+2+ie-it)=sigfig(tt,7,0)
                      enddo
 
                      !--store the yield
@@ -9515,7 +9774,8 @@ contains
                scr(llht+7)=5
                amass=awr/awi
                do ie=1,ne
-                  int=nint(xss(loce))
+                  int=mod(nint(xss(loce)),10)
+                  if (int.gt.2) int=2
                   n=nint(xss(loce+1))
                   xss(nb+ie)=-(next-andh+1)
                   xss(next)=int
@@ -9549,7 +9809,8 @@ contains
                          *(xss(next+1+i)+xss(next+1+i-1))/4
                      endif
                   enddo
-                  renorm=1/xss(next+1+3*n)
+                  renorm=1
+                  if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                   do i=1,n
                      xss(next+1+n+i)= &
                        sigfig(renorm*xss(next+1+n+i),7,0)
@@ -9643,11 +9904,12 @@ contains
                      n=nint(scr(lld+5))
                      xss(il+iie)=next-andh+1
                      xss(il+iie)=-xss(il+iie)
-                     int=nint(scr(lld+7))
+                     int=mod(nint(scr(lld+7)),10)
+                     if (int.gt.2) int=2
                      xss(next)=int
                      xss(next+1)=n
                      if (next+2+3*n.gt.nxss) call error('acelcp',&
-                  'insufficient storage for angular distributions.',&
+                     'insufficient storage for angular distributions.',&
                      ' ')
                      do i=1,n
                         xss(next+1+i)=&
@@ -9679,7 +9941,8 @@ contains
                              *(xss(next+1+i)+xss(next+1+i-1))/4
                         endif
                      enddo
-                     renorm=1/xss(next+1+3*n)
+                     renorm=1.0
+                     if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                      do i=1,n
                         xss(next+1+n+i)=&
                           sigfig(renorm*xss(next+1+n+i),7,0)
@@ -9746,11 +10009,12 @@ contains
                      n=nint(scr(lld+5))
                      xss(il+iie)=next-andh+1
                      xss(il+iie)=-xss(il+iie)
-                     int=nint(scr(lld+7))
+                     int=mod(nint(scr(lld+7)),10)
+                     if (int.gt.2) int=2
                      xss(next)=int
                      xss(next+1)=n
                      if (next+2+3*n.gt.nxss) call error('acelcp',&
-                   'insufficient storage for angular distributions.',&
+                     'insufficient storage for angular distributions.',&
                      ' ')
                      do i=1,n
                         xss(next+1+i)=&
@@ -9784,7 +10048,8 @@ contains
                              *(xss(next+1+i)+xss(next+1+i-1))/4
                         endif
                      enddo
-                     renorm=1/xss(next+1+3*n)
+                     renorm=1
+                     if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                      do i=1,n
                         xss(next+1+n+i)=&
                           sigfig(renorm*xss(next+1+n+i),7,0)
@@ -9918,12 +10183,13 @@ contains
                         n=nint(scr(lld+5))
                         xss(il+iie)=next-andh+1
                         xss(il+iie)=-xss(il+iie)
-                        int=nint(scr(lld+7))
+                        int=mod(nint(scr(lld+7)),10)
+                        if (int.gt.2) int=2
                         xss(next)=int
                         xss(next+1)=n
                         if (next+2+3*n.gt.nxss) call error('acelcp',&
-                  'insufficient storage for angular distributions.',&
-                  ' ')
+                        'insufficient storage for angular distributions.',&
+                        ' ')
                         do i=1,n
                            xss(next+1+i)=&
                              sigfig(scr(lld+4+2*m+2*i),7,0)
@@ -9956,7 +10222,8 @@ contains
                                 *(xss(next+1+i)+xss(next+1+i-1))/4
                            endif
                         enddo
-                        renorm=1/xss(next+1+3*n)
+                        renorm=1
+                        if (xss(next+1+3*n).ne.zero) renorm=1/xss(next+1+3*n)
                         do i=1,n
                            xss(next+1+n+i)=&
                              sigfig(renorm*xss(next+1+n+i),7,0)
@@ -10005,31 +10272,40 @@ contains
                            ll=ll+nw
                         enddo
                         nmu=nint(scr(lld+3))
+                        llx=max(2*(nint(scr(lld+4)))+4,6)
                         nx=nint(scr(lld+5))
-                        intx=nint(scr(lld+7))
-                        xss(na+ie)=scr(lld+1)
+                        intx=mod(nint(scr(lld+7)),10)
+                        if (intx.gt.2) intx=2
+                        xss(na+ie)=scr(lld+1)/emev
                         xss(nc+ie)=-(next-andh+1)
                         xss(next)=intx
                         xss(next+1)=nx
                         if (next+2+3*nx.gt.nxss) call error('acelcp',&
-                  'insufficient storage for angular distributions.',&
-                  ' ')
+                        'insufficient storage for angular distributions.',&
+                        ' ')
                         do ix=1,nx
-                           xss(next+1+ix)=sigfig(scr(lld+6+2*ix),7,0)
+                           xss(next+1+ix)=sigfig(scr(lld+llx+2*ix),7,0)
                            xss(next+1+nx+ix)=&
-                             sigfig(scr(lld+7+2*ix),7,0)
+                             sigfig(scr(lld+llx+1+2*ix),7,0)
                            if (xss(next+1+nx+ix).lt.small)&
                              xss(next+1+nx+ix)=0
                            if (ix.eq.1) xss(next+1+2*nx+ix)=0
                            if (ix.gt.1) then
-                              sum=xss(next+1+2*nx+ix-1)&
-                                +(xss(next+1+nx+ix)&
-                                +xss(next+1+nx+ix-1))&
-                                *(xss(next+1+ix)-xss(next+1+ix-1))/2
-                              xss(next+1+2*nx+ix)=sigfig(sum,7,0)
+                             if (intx.eq.1) then
+                               sum=xss(next+1+2*nx+ix-1)&
+                                   +xss(next+1+nx+ix-1)&
+                                   *(xss(next+1+ix)-xss(next+1+ix-1))
+                             else
+                               sum=xss(next+1+2*nx+ix-1)&
+                                   +(xss(next+1+nx+ix)&
+                                   +xss(next+1+nx+ix-1))&
+                                   *(xss(next+1+ix)-xss(next+1+ix-1))/2
+                             endif
+                             xss(next+1+2*nx+ix)=sigfig(sum,7,0)
                            endif
                         enddo
-                        renorm=1/xss(next+1+3*nx)
+                        renorm=1
+                        if (xss(next+1+3*nx).ne.zero) renorm=1/xss(next+1+3*nx)
                         do ix=1,nx
                            xss(next+1+nx+ix)=&
                              sigfig(renorm*xss(next+1+nx+ix),7,0)
@@ -10131,6 +10407,10 @@ contains
                xss(last+1)=33
                xss(next)=0
                xss(next+1)=2
+               xss(next+2)=sigfig(xss(esz+it-1),7,0)
+               xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+               xss(next+4)=1
+               xss(next+5)=1
                next=next+2+2*2
                xss(last+2)=next-dlwh+1
                amass=awr/awi
@@ -10203,6 +10483,7 @@ contains
                !--go back and process the subsection
                call findf(matd,mf,mt,nin)
                call contio(nin,0,0,scr,nb,nw)
+               lct=l2h
                nk=n1h
                ik=0
                idone=0
@@ -10358,12 +10639,12 @@ contains
                               akal=0
                               ! kalbach distribution
                               if (lang.eq.2) then
-                                 rkal=scr(lld+8+ncyc*(ig-1))
+                                 if (na.gt.0) rkal=scr(lld+8+ncyc*(ig-1))
                                  xss(next+1+ig+3*ng)=sigfig(rkal,7,0)
                                  ep=xss(next+1+ig)
                                  if (na.eq.2) then
                                     akal=scr(lld+9+ncyc*(ig-1))
-                                 else
+                                 elseif (na.eq.1) then
                                     akal=bachaa(izai,izap,iza,ee,ep)
                                  endif
                                  xss(next+1+ig+4*ng)=sigfig(akal,7,0)
@@ -10426,12 +10707,25 @@ contains
                                  enddo
                                  nexcd=nexcd+2+3*nmu
                               endif
-                              ! average lab energy
+                              !
+                              ! Average laboratory energy calculation:
+                              !
+                              ! - For lang = 2 (Kalbach-Mann):
+                              !   lct must be equal to 2 (center-of-mass system).
+                              !   The angular anisotropy is represented by the
+                              !   parameters AKAL and RKAL.
+                              !
+                              ! - For lang = 1 (Legendre) or lang = 11 (Tabular):
+                              !   Only the isotropic component is considered,
+                              !   regardless of the reference system. if lct=2
+                              !   the conversion from cm to lab system is performed
+                              !   setting akal=rkal=0 (isotropic distribution)
+                              !
                               if (ig.ne.1) then
                                  eavi=xss(next+1+ig)
-                                 if (na.eq.0) then
+                                 if (lct.eq.1) then ! lab system
                                     avl=eavi
-                                 else
+                                 else ! cm system
                                     avcm=sqrt(2*eavi/amass)
                                     sign=1
                                     avl=eavl(akal,amass,avcm,&
@@ -10448,7 +10742,8 @@ contains
                                  avll=avl
                               endif
                            enddo
-                           renorm=1/xss(next+1+3*ng)
+                           renorm=1
+                           if (xss(next+1+3*ng).ne.zero) renorm=1/xss(next+1+3*ng)
                            do ig=1,ng
                               xss(next+1+ng+ig)=&
                                 sigfig(renorm*xss(next+1+ng+ig),7,0)
@@ -10514,6 +10809,10 @@ contains
                      if (law.eq.3) xss(landh+jp-1)=0
                      xss(next)=0
                      xss(next+1)=2
+                     xss(next+2)=sigfig(xss(esz+it-1),7,0)
+                     xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+4)=1
+                     xss(next+5)=1
                      next=next+2+2*2
                      xss(last+2)=next-dlwh+1
                      amass=awr/awi
@@ -10544,8 +10843,11 @@ contains
                      apsx=scr(ll)
                      npsx=nint(scr(ll+5))
                      xss(next)=0
-                     lee=next
                      xss(next+1)=2
+                     xss(next+2)=sigfig(xss(esz+it-1),7,0)
+                     xss(next+3)=sigfig(xss(esz+nes-1),7,0)
+                     xss(next+4)=1
+                     xss(next+5)=1
                      next=next+2+2*2
                      xss(last+2)=next-dlwh+1
                      xss(next)=npsx
@@ -10683,15 +10985,17 @@ contains
                   else if (law.eq.7) then
                      xss(last+1)=67
                      call tab2io(nin,0,0,scr(ll),nb,nw)
-                     lep=nint(scr(ll+3))
                      ne=nint(scr(ll+5))
+                     xss(next)=0
+                     lee=next
+                     xss(next+1)=2
+                     next=next+2+2*2
                      xss(last+2)=next-dlwh+1
                      xss(next)=0
                      xss(next+1)=ne
-                     lee=next+2
-                     next=lee+2*ne
+                     lle=next+2
+                     next=lle+2*ne
                      llht=ll
-                     llad=llht+8+2*ne
                      scr(llht)=0
                      scr(llht+1)=0
                      scr(llht+2)=0
@@ -10700,6 +11004,7 @@ contains
                      scr(llht+5)=ne
                      scr(llht+6)=ne
                      scr(llht+7)=2
+                     llad=llht+8+2*ne
                      nrr=1
                      npp=2
                      do ie=1,ne
@@ -10710,18 +11015,26 @@ contains
                            call moreio(nin,0,0,scr(ll),nb,nw)
                            ll=ll+nw
                         enddo
-                        intmu=l1h
+                        intmu=mod(nint(scr(llad+7)),10)
+                        if (intmu.gt.2) intmu=2
                         nmu=l2h
                         e=c2h
                         ee=c2h/emev
-                        xss(lee+ie-1)=sigfig(ee,7,0)
-                        xss(lee+ne+ie-1)=next-dlwh+1
+                        if (ie.eq.1) then
+                          xss(lee+2)=sigfig(ee,7,0)
+                          xss(lee+4)=1
+                        elseif (ie.eq.ne) then
+                          xss(lee+3)=sigfig(ee,7,0)
+                          xss(lee+5)=1
+                        endif
+                        xss(lle+ie-1)=sigfig(ee,7,0)
+                        xss(lle+ne+ie-1)=next-dlwh+1
                         xss(next)=intmu
                         xss(next+1)=nmu
                         next=next+2
                         mus=next
                         next=next+2*nmu
-                        lld=llad+nw
+                        lld=ll
                         nra=1
                         npa=2
                         ebar=0
@@ -10729,8 +11042,10 @@ contains
                         do imu=1,nmu
                            ll=lld
                            call tab1io(nin,0,0,scr(ll),nb,nw)
+                           llx=max(2*n1h+6,8)
                            npep=n2h
-                           intep=nint(scr(ll+7))
+                           intep=mod(nint(scr(ll+7)),10)
+                           if (intep.gt.2) intep=2
                            ll=ll+nw
                            do while (nb.ne.0)
                               call moreio(nin,0,0,scr(ll),nb,nw)
@@ -10747,51 +11062,51 @@ contains
                            chk=0
                            do ki=1,npep
                               xss(next+ki)=&
-                                sigfig(scr(lld+8+2*(ki-1))/emev,7,0)
+                                sigfig(scr(lld+llx+2*(ki-1))/emev,7,0)
                               xss(next+npep+ki)=&
-                                sigfig(scr(lld+9+2*(ki-1))*emev,7,0)
+                                sigfig(scr(lld+1+llx+2*(ki-1))*emev,7,0)
                               if (ki.ne.1) then
                                  if (intep.eq.1) then
                                     xss(next+2*npep+ki)=&
                                       xss(next+2*npep+ki-1)&
-                                      +scr(lld+9+2*(ki-2))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))
+                                      +scr(lld+1+llx+2*(ki-2))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))
                                     eav=eav&
-                                      +scr(lld+9+2*(ki-2))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      +scr(lld+8+2*(ki-2)))/2
+                                      +scr(lld+1+llx+2*(ki-2))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      +scr(lld+llx+2*(ki-2)))/2
                                     chk=chk&
-                                      +scr(lld+9+2*(ki-2))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))
+                                      +scr(lld+1+llx+2*(ki-2))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))
                                  else if (intep.eq.2) then
                                     xss(next+2*npep+ki)=&
                                       xss(next+2*npep+ki-1)&
-                                      +(scr(lld+9+2*(ki-2))&
-                                      +scr(lld+9+2*(ki-1)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))/2
+                                      +(scr(lld+1+llx+2*(ki-2))&
+                                      +scr(lld+1+llx+2*(ki-1)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))/2
                                     eav=eav&
-                                      +(scr(lld+9+2*(ki-2))&
-                                      *scr(lld+8+2*(ki-2))&
-                                      +scr(lld+9+2*(ki-1))&
-                                      *scr(lld+8+2*(ki-1)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))/2
+                                      +(scr(lld+1+llx+2*(ki-2))&
+                                      *scr(lld+llx+2*(ki-2))&
+                                      +scr(lld+1+llx+2*(ki-1))&
+                                      *scr(lld+llx+2*(ki-1)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))/2
                                     chk=chk&
-                                      +(scr(lld+9+2*(ki-2))&
-                                      +scr(lld+9+2*(ki-1)))&
-                                      *(scr(lld+8+2*(ki-1))&
-                                      -scr(lld+8+2*(ki-2)))/2
+                                      +(scr(lld+1+llx+2*(ki-2))&
+                                      +scr(lld+1+llx+2*(ki-1)))&
+                                      *(scr(lld+llx+2*(ki-1))&
+                                      -scr(lld+llx+2*(ki-2)))/2
                                  endif
                               endif
                            enddo
                            renorm=1
                            if (xss(next+3*npep).ne.zero)&
-                             renorm=1/xss(next+3*npep)
+                               renorm=1/xss(next+3*npep)
                            do ki=1,npep
                               xss(next+npep+ki)=&
                                 sigfig(renorm*xss(next+npep+ki),7,0)
@@ -10804,8 +11119,13 @@ contains
                            eav=ad*eav
                            chk=ad*chk
                            if (imu.gt.1) then
-                              ebar=ebar+(amuu-amulst)*(eav+eavlst)/2
-                              chek=chek+(amuu-amulst)*(chk+chklst)/2
+                             if (intmu.eq.1) then
+                               ebar=ebar+(amuu-amulst)*eavlst
+                               chek=chek+(amuu-amulst)*chklst
+                             else
+                               ebar=ebar+(amuu-amulst)*(eav+eavlst)/2
+                               chek=chek+(amuu-amulst)*(chk+chklst)/2
+                             endif
                            endif
                            eavlst=eav
                            amulst=amuu
@@ -10842,7 +11162,7 @@ contains
             xss(hpd+2+naa+ie-it)=xss(hpd+2+naa+ie-it)&
               /xss(esz+nes+ie-1)
          endif
-         if (xss(hpd+2+naa+ie-it).lt.delt) xss(hpd+2+naa+ie-it)=0
+         if (xss(hpd+2+naa+ie-it).lt.small) xss(hpd+2+naa+ie-it)=0
          if (ip.eq.1) xss(hpd+2+naa+ie-it)=0
          if (izai.gt.1) then
             xss(esz+4*nes+ie-1)=xss(esz+4*nes+ie-1)&
@@ -10891,6 +11211,7 @@ contains
             q=xss(lqr+ir-1)
          enddo
          nk=n1h
+         lct=l2h
          lly=1
          do ik=1,nk
             ll=lly
@@ -10932,19 +11253,36 @@ contains
                         call moreio(nin,0,0,scr(ll),nb,nw)
                         ll=ll+nw
                      enddo
-                     e=c2h
+                     e=scr(lld+1)
                      if (law.ne.2) then
+                        ! should be law=1
+                        ! heating calculation assuming isotropic distribution
+                        ! if lct=2(cm system) a first order average correction
+                        ! is applied to convert ep from cm to lab system
+                        avadd=awi*awp/((awr+awi)*(awr+awi))*e
+                        avll=0
+                        epl=0
                         heat=0
                         np=nint(scr(lld+5))
                         call terpa(y,e,en,idis,scr(lly),npp,nrr)
                         do ip=1,np
                            ep=scr(lld+4+2*ip)
                            g=scr(lld+5+2*ip)
-                           if (ip.gt.1) then
-                              heat=heat+(ep-epl)*gl*(ep+epl)/2
+                           if (lct.eq.2) then
+                             avl=ep+avadd
+                           else
+                             avl=ep
                            endif
-                              epl=ep
+                           if (ip.gt.1) then
+                              if (lep.eq.1) then
+                                 heat=heat+(ep-epl)*gl*(avl+avll)/2
+                              else
+                                 heat=heat+(ep-epl)*(avl*g+avll*gl)/2
+                              endif
+                           endif
+                           epl=ep
                            gl=g
+                           avll=avl
                         enddo
                         scr(llh+6+2*ie)=e
                         scr(llh+7+2*ie)=y*heat
@@ -10962,16 +11300,18 @@ contains
                   nrr=1
                   npp=2
                   do ie=iaa,nes
-                  e=xss(esz+ie-1)*emev
+                     e=xss(esz+ie-1)*emev
                      if (law.eq.1) then
                         call terpa(h,e,en,idis,scr(llh),npp,nrr)
                      else
                         amass=awr/awp
                         h=2*amass*e/(1+amass)**2
                      endif
-                     h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
-                     xss(esz+4*nes+ie-1)=&
-                       sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     if (xss(esz+nes+ie-1).ne.zero) then
+                       h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
+                       xss(esz+4*nes+ie-1)=&
+                         sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     endif
                   enddo
                else if (law.eq.4) then
                   izarec=izap
@@ -11023,9 +11363,11 @@ contains
                   do ie=iaa,nes
                      e=xss(esz+ie-1)*emev
                      call terpa(h,e,en,idis,scr(llht),npp,nrr)
-                     h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
-                     xss(esz+4*nes+ie-1)=&
-                       sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     if (xss(esz+nes+ie-1).ne.zero) then
+                       h=(h/emev)*xss(2+k+ie-iaa)/xss(esz+nes+ie-1)
+                       xss(esz+4*nes+ie-1)=&
+                         sigfig(xss(esz+4*nes+ie-1)+h,7,0)
+                     endif
                   enddo
                else if (law.eq.6) then
                   write(nsyso,'('' warning: law=6 heating for '',&
@@ -12502,8 +12844,8 @@ contains
    nyp=nint(xss(yp))
    if (nyp.ne.0) then
       write(nsyso,'(//&
-        &'' neutron mts needed as multipliers for photon yields''/&
-        &'' ---------------------------------------------------''//&
+        &'' mts needed as multipliers for photon yields''/&
+        &'' -------------------------------------------''//&
         &(6x,12i6))') (nint(xss(i+yp)),i=1,nyp)
    endif
    if (allocated(indx)) deallocate(indx)
@@ -13006,21 +13348,21 @@ contains
    if (mcnpx.eq.0) then
       if (iurpt.gt.0) then
          write(ndir,&
-           '(a10,f12.6,'' filename route'',i2,i4,1x,i8,2i6,1p,e10.3,&
+           '(a10,f12.6,'' filename route'',i2,i4,1x,i9,2i6,1p,e10.3,&
            &'' ptable'')') hz(1:10),aw0,itype,irec1,len2,lrec,nern,tz
       else
          write(ndir,&
-           '(a10,f12.6,'' filename route'',i2,i4,1x,i8,2i6,1p,e10.3)')&
+           '(a10,f12.6,'' filename route'',i2,i4,1x,i9,2i6,1p,e10.3)')&
            hz(1:10),aw0,itype,irec1,len2,lrec,nern,tz
       endif
    else
       if (iurpt.gt.0) then
          write(ndir,&
-           '(a13,f12.6,'' file route'',i2,i4,1x,i8,2i6,1p,e10.3,&
+           '(a13,f12.6,'' file route'',i2,i4,1x,i9,2i6,1p,e10.3,&
            &'' ptable'')') hz(1:13),aw0,itype,irec1,len2,lrec,nern,tz
       else
          write(ndir,&
-           '(a13,f12.6,'' file route'',i2,i4,1x,i8,2i6,1p,e10.3)')&
+           '(a13,f12.6,'' file route'',i2,i4,1x,i9,2i6,1p,e10.3)')&
           hz(1:13),aw0,itype,irec1,len2,lrec,nern,tz
       endif
    endif
@@ -13597,8 +13939,7 @@ contains
                call write_real(nout,l)               ! EG
 
             !--law 4 and law 44
-            ! this piece is NOT compatible with LAW=44 (need two additional
-            ! arrays for r and a), potential issue?
+            ! LAW=44 need two additional arrays for r and a
             else if (law.eq.4.or.law.eq.44) then
                nrr=nint(xss(l))
                call write_integer(nout,l)               ! NR
@@ -13616,6 +13957,9 @@ contains
                   np=nint(xss(l))
                   call write_integer(nout,l)         ! NP
                   call write_real_list(nout,l,3*np)  ! Eout, PDF, CDF (each NP values)
+                  if (law.eq.44) then
+                    call write_real_list(nout,l,2*np) ! r, a arrays for law44 (each NP values)
+                  endif
                   ielocator=ielocator+1
                enddo
             else
@@ -13910,6 +14254,7 @@ contains
    !-------------------------------------------------------------------
    use util  ! provides openz,closz
    use acecm ! provides write routines
+   use physics !provides mass ratios for p,d,t,he3,a
    ! externals
    integer::nin,itype,nout,ndir,iprint,nplot,nxtra,mcnpx
    real(kr)::suff
@@ -13924,8 +14269,8 @@ contains
    character(70)::hko
    character(10)::str
    character(3)::ht
-   real(kr),dimension(6),parameter::awit=(/1.0e0_kr,0.99862e0_kr,&
-     1.99626e0_kr,2.98960e0_kr,2.98903e0_kr,3.96713e0_kr/)
+   real(kr),dimension(6),parameter::awit=(/1.0e0_kr,pnratio,&
+     dnratio,tnratio,hnratio,anratio/)
    real(kr),parameter::zero=0
 
    !--branch on input file type
@@ -14160,7 +14505,7 @@ contains
    ! Do basic consistency checks on the ACE file in memory.
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
-   use util ! provides mess
+   use util ! provides mess,sigfig
    use acecm ! provides mtname
    ! internals
    integer::nerr,i,k,iaa,iin,nrl,nn,nnew,n,na,ic,id,ne,nr1
@@ -14209,10 +14554,21 @@ contains
    do i=1,nes
       e=xss(esz-1+i)
       if (e.le.elast) then
-         write(nsyso,'(''   consis: energy'',1p,e16.8,&
-           &'' less than'',e16.8,'' (see point no.'',i7,'')'')')&
-           e,elast,i
-         nerr=nerr+1
+        if (e.lt.elast) then
+           write(nsyso,'(''   consis: energy '',1p,e18.11,&
+             &'' less than '',e18.11,'' (see point no.'',i7,'')'')')&
+             & e,elast,i
+        else
+           write(nsyso,'(''   consis: energy '',1p,e18.11,&
+             &'' equal to '',e18.11,'' (see point no.'',i7,'')'')')&
+             & e,elast,i
+        endif
+        if (sigfig(e,9,+1).lt.xss(esz+i)) then
+           e=sigfig(e,9,+1)
+           xss(esz-1+i)=e
+           write(nsyso,'(10x,'' energy set to '',1p,e18.11)')e
+        endif
+        nerr=nerr+1
       endif
       elast=e
    enddo
@@ -14352,7 +14708,14 @@ contains
          mt=iabs(nint(xss(mtr+n-1)))
          call mtname(mt,name,izai)
          ll=len_trim(name)
-         aprime=1
+         ! In my opinion aprime should be equal to awp*awi to be
+         ! consistent with the LAB -> CM conversion formalism.
+         ! This parameter is used for checking and correcting energy
+         ! distributions represented by law=4 or law=44
+         ! Furthermore, for these reactions awp=awi, so aprime=awi*awi.
+         ! It is only equal to 1 for incident neutrons.
+         ! D. Lopez Aldama, August 2023
+         aprime=awi*awi
          q=xss(lqr+n-1)
          nlaw=1
          l=nint(xss(ldlw+n-1)+dlw-1)
@@ -14413,13 +14776,21 @@ contains
                        &'' illegal interpolation--'',&
                        &''only int=1 and 2 are allowed'')')
                      nerr=nerr+1
+                     if (mod(intt,10).eq.1) then
+                        intt=1
+                     else
+                        intt=2
+                     endif
+                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')&
+                           nint(xss(loci)),intt
+                     xss(loci)=intt
                   endif
                   nn=nint(xss(loci+1))
                   loci=loci+1
                   epmax=e
                   if (icm.eq.1) then
                      epmax=(sqrt(e)-sqrt(aprime*e/(aw0+awi)**2))**2
-                     epmax=sigfig(epmax,7,-1)
+                     epmax=sigfig(epmax,7,0)
                   endif
                   n2big=0
                   clast=0
@@ -14516,13 +14887,21 @@ contains
                        &'' illegal interpolation--'',&
                        &''only int=1 and 2 are allowed'')')
                      nerr=nerr+1
+                     if (mod(intt,10).eq.1) then
+                        intt=1
+                     else
+                        intt=2
+                     endif
+                     write(nsyso,'(10x,'' int changed from '',i3,'' to '',i3)')&
+                           nint(xss(loci)),intt
+                     xss(loci)=intt
                   endif
                   nn=nint(xss(loci+1))
                   loci=loci+1
                   epmax=e
                   if (icm.eq.1) then
                      epmax=(sqrt(e)-sqrt(aprime*e/(aw0+awi)**2))**2
-                     epmax=sigfig(epmax,7,-1)
+                     epmax=sigfig(epmax,7,0)
                   endif
                   n2big=0
                   clast=0
@@ -14669,22 +15048,109 @@ contains
                         co=xss(locj+1+k)
                         cc=xss(locj+1+2*nmu+k)
                         if (cc.lt.zero.or.cc.gt.oplus) then
-                           write(nsyso,'('' consis:'',&
+                           write(nsyso,'(''   consis:'',&
                              &'' bad angular cumm. prob. for '',a,&
-                             &''at'',1p,e14.6,'' ->'',e13.6,e14.6)')&
-                             name(1:ll),e,ep,co
+                             &''at'',1p,e14.6,'' -> '',e13.6,'' mu='',&
+                             & 0p,f9.6)')name(1:ll),e,ep,co
                            nerr=nerr+1
                         endif
                         if (cc.lt.cclast) then
                            write(nsyso,'(''   consis:'',&
                              &'' decreasing angular'',&
                              &'' cumm. prob for '',a,&
-                             &'' at '',1p,e14.6,'' ->'',e13.6,e14.6)')&
-                             name(1:ll),e,ep,co
+                             &'' at '',1p,e14.6,'' -> '',e13.6,'' mu='',&
+                             & 0p,f9.6)')name(1:ll),e,ep,co
                            nerr=nerr+1
                         endif
                         cclast=cc
                      enddo
+                  enddo
+               enddo
+
+            !--law67
+            else if (law.eq.67) then
+               if (icm.eq.1) then
+                 write(nsyso,'(''   consis:'',&
+                   &'' Bad reference system (CM) for law67'')')
+                 write(nsyso,'(''   consis:'',&
+                   &'' Forced to laboratory reference system (LAB)'',&
+                   &'' without corrections'')')
+                 xss(tyr+n-1)=-xss(tyr+n-1)
+                 icm=0
+               endif
+               j=nint(xss(l))
+               if (j.ne.0) then
+                  l=l+2*j
+               endif
+               l=l+1
+               ne=nint(xss(l))
+               do ie=1,ne
+                  e=xss(ie+l)
+                  loci=nint(xss(ie+ne+l))+dlw-1
+                  intt=nint(xss(loci))
+                  if (intt.ne.1.and.intt.ne.2) then
+                    write(nsyso,'(''   consis:'',&
+                      & '' bad interpolation law intmu='',i3,'' at e'',&
+                      & 1p,e13.6,'' correction applied'')')intt,e
+                    nerr=nerr+1
+                    intt=mod(intt,10)
+                    if (intt.gt.2) intt=2
+                    xss(loci)=intt
+                    write(nsyso,'(''   consis:'',&
+                      &'' new interpolation law intmu='',i3)')intt
+                  endif
+                  loci=loci+1
+                  nmu=nint(xss(loci))
+                  do k=1,nmu
+                    co=xss(loci+k)
+                    locj=nint(xss(loci+nmu+k))+dlw-1
+                    intt=nint(xss(locj))
+                    if (intt.ne.1.and.intt.ne.2) then
+                      write(nsyso,'(''   consis:'',&
+                        &'' bad interpolation law intep='',i3,&
+                        &'' at e'',1p,e13.6,'' mu='',0p,f9.6,&
+                        &'' correction applied'')')intt,e,co
+                      nerr=nerr+1
+                      intt=mod(intt,10)
+                      if (intt.gt.2) intt=2
+                      xss(locj)=intt
+                      write(nsyso,'(''   consis:'',&
+                        &'' new interpolation law intep='',i3)')intt
+                    endif
+                    locj=locj+1
+                    nn=nint(xss(locj))
+                    clast=0.
+                    do j=1,nn
+                      ep=xss(locj+j)
+                      p=xss(locj+nn+j)
+                      c=xss(locj+2*nn+j)
+                      if (p.lt.zero) then
+                        write(nsyso,'('' consis:'',&
+                          &'' negative pdf='',1p,e13.6,'' for mt'',&
+                          & 1p,i0,'' law'',1p,i0,'' mu='',&
+                          & 0p,f9.6,'' at e='',1p,e13.6,&
+                          & '' ep='',e13.6)')p,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.zero.or.c.gt.oplus) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' bad cumm. prob.='',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law'',1p,i0,&
+                          &'' mu='',0p,f9.6,&
+                          &'' at e'',1p,e13.6,'' ep'',e13.6)')&
+                          c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.clast) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' decreasing cumm. prob '',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law'',1p,i0,&
+                          &'' mu='',0p,f9.6,'' at e'',1p,e13.6,&
+                          &'' ep'',e13.6)')c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      c=clast
+                    enddo
                   enddo
                enddo
             endif
@@ -14874,9 +15340,9 @@ contains
          gg=xss(gpd+ie-1)
          if (abs(gg-gsum).gt.gg/10000) then
             nerr=nerr+1
-            write(nsyso,'(''   consis: mismatch at'',&
-              &1p,e14.6,''  gpd='',e14.6,&
-              &''  sum='',e14.6)') e,gg,gsum
+            write(nsyso,'(''   consis: mismatch for mftype '',i3,&
+              &'' at'',1p,e14.6,''  gpd='',e14.6,&
+              &''  sum='',e14.6)') mftype,e,gg,gsum
          endif
       enddo
 
@@ -15103,6 +15569,93 @@ contains
                      enddo
                   enddo
                enddo
+
+            !--law=67
+            else if (law.eq.67) then
+               j=nint(xss(l3))
+               if (j.ne.0) then
+                  l3=l3+2*j
+               endif
+               l3=l3+1
+               ne=nint(xss(l3))
+               do ie=1,ne
+                  e=xss(ie+l3)
+                  loci=nint(xss(ie+ne+l3))+dlwh-1
+                  intt=nint(xss(loci))
+                  if (intt.ne.1.and.intt.ne.2) then
+                    write(nsyso,'('' consis:'',&
+                      & '' bad interpolation law intmu='',i3,'' at e'',&
+                      & 1p,e13.6,'' correction applied'')')intt,e
+                    nerr=nerr+1
+                    intt=mod(intt,10)
+                    if (intt.gt.2) intt=2
+                    xss(loci)=intt
+                    write(nsyso,'('' consis:'',&
+                      &'' new interpolation law intmu='',i3)')intt
+                  endif
+                  loci=loci+1
+                  nmu=nint(xss(loci))
+                  do k=1,nmu
+                    co=xss(loci+k)
+                    locj=nint(xss(loci+nmu+k))+dlwh-1
+                    intt=nint(xss(locj))
+                    if (intt.ne.1.and.intt.ne.2) then
+                      write(nsyso,'('' consis:'',&
+                        &'' bad interpolation law intep='',i3,&
+                        &'' at e'',1p,e13.6,'' mu='',0p,f9.6,&
+                        &'' correction applied'')')intt,e,co
+                      nerr=nerr+1
+                      intt=mod(intt,10)
+                      if (intt.gt.2) intt=2
+                      xss(locj)=intt
+                      write(nsyso,'('' consis:'',&
+                        &'' new interpolation law intep='',i3)')intt
+                    endif
+                    locj=locj+1
+                    nn=nint(xss(locj))
+                    clast=0.
+                    cclast=0.
+                    do j=1,nn
+                      ep=xss(locj+j)
+                      p=xss(locj+nn+j)
+                      c=xss(locj+2*nn+j)
+                      if (ep.lt.cclast) then
+                        write(nsyso,'('' consis:'',&
+                          & '' decreasing ep '',1p,e13.6,'' for mt'',&
+                          & 1p,i0,'' law'',1p,i0,'' mu='',0p,f9.6,&
+                          & '' at e'',1p,e13.6)')ep,mt,law,co,e
+                        nerr=nerr+1
+                      endif
+                      if (p.lt.zero) then
+                        write(nsyso,'('' consis:'',&
+                          & '' negative pdf='',1p,e13.6,'' for mt'',&
+                          & 1p,i0,'' law'',1p,i0,'' mu='',&
+                          & 0p,f9.6,'' at e'',1p,e13.6,&
+                          & '' ep'',e13.6)')p,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.zero.or.c.gt.oplus) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' bad cumm. prob.='',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law'',1p,i0,&
+                          &'' mu='',0p,f9.6,&
+                          &'' at e'',1p,e13.6,'' ep'',e13.6)')&
+                          c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      if (c.lt.clast) then
+                        write(nsyso,'(''   consis:'',&
+                          &'' decreasing cumm. prob '',1p,e13.6,&
+                          &'' for mt'',1p,i0,'' law '',1p,i0,&
+                          &'' mu='',0p,f9.6,'' at e'',1p,e13.6,&
+                          &'' ep'',e13.6)')c,mt,law,co,e,ep
+                        nerr=nerr+1
+                      endif
+                      c=clast
+                      cclast=ep
+                    enddo
+                  enddo
+               enddo
             endif
          enddo
       enddo
@@ -15111,7 +15664,7 @@ contains
    if (nerr.eq.0) then
       write(nsyso,'(/'' no problems found'')')
    else
-      write(nsyso,'(/i5,'' problems found'')') nerr
+      write(nsyso,'(/i9,'' problems found'')') nerr
       call mess('consis','consistency problems found',' ')
    endif
 
@@ -15167,7 +15720,7 @@ contains
    integer::nnf,mt,kf,iif,kc,iic,nofiss,n,k,iaa
    integer::major,minor,mtl,icurv,mtlast,nlev,iflag
    integer::nure,intunr,nurb,lssf,ie,ib,ii,ll,kk,nunu
-   integer,parameter::pltumx=10000
+   integer,parameter::pltumx=50000
    real(kr)::e,tot,abso,elas,gprod,xtag,ytag,thin,abss
    real(kr)::e1,e2,fiss,cap,heat,dam,x,y,xlast
    real(kr)::xmin,xmax,ymin,ymax,xstep,ystep,test
@@ -17674,7 +18227,7 @@ contains
                         ep=xss(j+loci)
                         p=xss(j+nn+loci)
                         if (p.lt.zmin) p=zmin
-                        if (ep.le.xmax) then
+                        if (ep.ge.xmin.and.ep.le.xmax) then
                            if (intt.eq.1) write(nout,&
                               '(1p,2e14.6,''/'')') ep,ylast
                            write(nout,'(1p,2e14.6,''/'')') ep,p
@@ -17862,6 +18415,7 @@ contains
                do while (epnext.ne.emax)
                   ep=epnext
                   call getl7(ep,epnext,loci,xss(dlw),f0)
+                  if (f0.lt.zmin) zmin=f0
                   if (f0.gt.zmax2.and.f0.lt.zmax1)zmax2=f0
                   if (f0.gt.zmax1) then
                      zmax2=zmax1
@@ -17927,12 +18481,20 @@ contains
                   write(nout,'(1p,e14.6,''/'')') e
                   ep=-1
                   call getl7(ep,epnext,loci,xss(dlw),f0)
+                  k=0
                   do while (epnext.ne.emax)
                      ep=epnext
                      call getl7(ep,epnext,loci,xss(dlw),f0)
-                     if (f0.lt.zmin) f0=zmin
-                     write(nout,'(1p,2e14.6,''/'')') ep,f0
+                     if (ep.ge.xmin.and.ep.le.xmax) then
+                       if (f0.lt.zmin) f0=zmin
+                       write(nout,'(1p,2e14.6,''/'')') ep,f0
+                       k=k+1
+                     endif
                   enddo
+                  if (k.lt.2) then
+                     write(nout,'(1p,2e14.6,''/'')') xmin,zmin
+                     write(nout,'(1p,2e14.6,''/'')') xmax,zmin
+                  endif
                   write(nout,'(''/'')')
                enddo
                write(nout,'(''/'')')
@@ -18742,7 +19304,7 @@ contains
    integer::ipt,mtrh,nmtr
    integer hpd,lsigh,sigh,landh,andh,ldlwh,dlwh,yh
    real(kr)::test,e,xs,xstep,ystep,xtag,ytag,thin,xlast
-   real(kr)::ep,pd,epl,pdl,ylast,break,cc,pp,rat,stepm,elast
+   real(kr)::ep,epnext,pd,epl,pdl,ylast,break,cc,pp,rat,stepm,elast
    real(kr)::xmin,xmax,ymin,ymax,zmin,zmax,zmax1,zmax2,heat
    character(10)::name
    character(1)::qu=''''
@@ -18889,7 +19451,7 @@ contains
          hpd=nint(xss(ploct+10*(j-1)))
          iaa=nint(xss(hpd))
          naa=nint(xss(hpd+1))
-         ie=i-iaa-1
+         ie=i-iaa+1
          if (ie.ge.1.and.ie.le.naa) heat=heat-xss(hpd+1+naa+ie)
       enddo
       if (e.lt.xmin) xmin=e
@@ -18934,7 +19496,7 @@ contains
                   hpd=nint(xss(ploct+10*(k-1)))
                   iaa=nint(xss(hpd))
                   naa=nint(xss(hpd+1))
-                  ie=i-iaa-1
+                  ie=i-iaa+1
                   if (ie.ge.1.and.ie.le.naa) heat=heat-xss(hpd+1+naa+ie)
                enddo
                j=j+1
@@ -19104,6 +19666,8 @@ contains
                endif
             endif
             l3=dlwh+nint(xss(l2+2))-1
+            j=nint(xss(l3))
+            if (j.ne.0) l3=l3+2*j
             ne=nint(xss(l3+1))
             zmin=1000
             zmax1=0
@@ -19245,6 +19809,134 @@ contains
                endif
             enddo
             write(nout,'(''/'')')
+         else if (law.eq.67) then
+            call mtname(mt,name,izai)
+            if (name(1:1).eq.'(') then
+               if (izai.eq.1) then
+                  name(2:2)='n'
+               else if (izai.eq.1001) then
+                  name(2:2)='p'
+               else if (izai.eq.1002) then
+                  name(2:2)='d'
+               else if (izai.eq.1003) then
+                  name(2:2)='t'
+               else if (izai.eq.2003) then
+                  name(2:2)='s'
+               else if (izai.eq.2004) then
+                  name(2:2)='a'
+               endif
+            endif
+            l3=dlwh+nint(xss(l2+2))-1
+            j=nint(xss(l3))
+            if (j.ne.0) l3=l3+2*j
+            l3=l3+1
+            ne=nint(xss(l3))
+            xmin=1000
+            xmax=0
+            ymin=1000
+            ymax=0
+            zmin=1000
+            zmax1=0
+            zmax2=0
+            do ie=2,ne
+               e=xss(ie+l3)
+               if (e.lt.ymin) ymin=e
+               if (e.gt.ymax) ymax=e
+               loci=nint(xss(ie+ne+l3))
+               ep=-1
+               call getl7(ep,epnext,loci,xss(dlwh),pd)
+               do while (epnext.ne.big)
+                  ep=epnext
+                  call getl7(ep,epnext,loci,xss(dlwh),pd)
+                  if (pd.lt.zmin) zmin=pd
+                  if (pd.gt.zmax2.and.pd.lt.zmax1)zmax2=pd
+                  if (pd.gt.zmax1) then
+                     zmax2=zmax1
+                     zmax1=pd
+                  endif
+               enddo
+            enddo
+            if (zmax1.gt.zero) then
+               if ((zmax2/zmax1.lt.1.e-4_kr).and.(zmax2.ne.zero)) then
+                  zmax=zmax2
+               else
+                  zmax=zmax1
+               endif
+               zmin=zmax/10000
+               call ascll(zmin,zmax)
+               do ie=2,ne
+                  e=xss(ie+l3)
+                  loci=nint(xss(ie+ne+l3))
+                  ep=-1
+                  call getl7(ep,epnext,loci,xss(dlwh),pd)
+                  epl=ep
+                  pdl=0
+                  do while (epnext.ne.big)
+                     ep=epnext
+                     call getl7(ep,epnext,loci,xss(dlwh),pd)
+                     if (pd.ge.zmin.and.epl.lt.xmin) xmin=epl
+                     if (pdl.ge.zmin.and.ep.gt.xmax) xmax=ep
+                     epl=ep
+                     pdl=pd
+                  enddo
+               enddo
+               call ascle(2,xmin,xmax,major,minor)
+               xstep=(xmax-xmin)/major
+               call ascle(4,ymin,ymax,major,minor)
+               ystep=(ymax-ymin)/major
+               write(nout,'(''1'',i3,''/'')') iwcol
+               it=1
+               do j=1,70
+                  if (hk(j:j).ne.' ') it=j
+               enddo
+               write(nout,'(a,''<'',a,''>'',a,''/'')') qu,hk(1:it),qu
+               if (ipt.eq.1) write(nout,&
+                  '(a,''neutrons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.9) write(nout,&
+                  '(a,''protons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.31) write(nout,&
+                  '(a,''deuterons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.32) write(nout,&
+                  '(a,''tritons from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.33) write(nout,&
+                  '(a,''he3s from '',a,a,''/'')') qu,name,qu
+               if (ipt.eq.34) write(nout,&
+                  '(a,''alphas from '',a,a,''/'')') qu,name,qu
+               write(nout,'(''-1 2/'')')
+               write(nout,'(1p,3e12.3,''/'')') xmin,xmax,xstep
+               write(nout,'(a,''<s>ec. <e>nergy'',a,''/'')') qu,qu
+               write(nout,'(1p,3e12.3,''/'')') ymin,ymax,ystep
+               write(nout,'(a,''<e>nergy (<m>e<v>)'',a,''/'')') qu,qu
+               write(nout,'(1p,3e12.3,''/'')') zmin,zmax,one
+               write(nout,'(a,''<p>rob/<m>e<v>'',a,''/'')') qu,qu
+               write(nout,'(''/'')')
+               write(nout,'(''/'')')
+               write(nout,'(''1/'')')
+               do ie=2,ne
+                  e=xss(ie+l3)
+                  loci=nint(xss(ie+ne+l3))
+                  write(nout,'(1p,e14.6,''/'')') e
+                  ep=-1
+                  call getl7(ep,epnext,loci,xss(dlwh),pd)
+                  ylast=zmin
+                  k=0
+                  do while (epnext.ne.big)
+                     ep=epnext
+                     call getl7(ep,epnext,loci,xss(dlwh),pd)
+                     if (ep.ge.xmin.and.ep.le.xmax) then
+                       if (pd.lt.zmin) pd=zmin
+                       write(nout,'(1p,2e14.6,''/'')') ep,pd
+                       k=k+1
+                     endif
+                  enddo
+                  if (k.lt.2) then
+                     write(nout,'(1p,2e14.6,''/'')') xmin,zmin
+                     write(nout,'(1p,2e14.6,''/'')') xmax,zmin
+                  endif
+                  write(nout,'(''/'')')
+               enddo
+               write(nout,'(''/'')')
+            endif
          endif
 
          !--check for an angular distribution
@@ -19418,10 +20110,12 @@ contains
    real(kr)::ep,epnext,a7(*),f0
    ! internals
    integer::intmu,nmu,locmu,imu,locimu,intep,npep,iep,inow,idone
-   real(kr)::ulast,flast,u,ep1,ep2,epn,fact1,fact2,f
+   real(kr)::ulast,flast,u,ep1,ep2,epn,f
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
+   real(kr),parameter::fact1=one-one/10000
+   real(kr),parameter::fact2=one-2.*one/10000
 
    !--initialize
    inow=0
@@ -19468,8 +20162,6 @@ contains
       else
          call terp1(ep1,a7(inow+npep),ep2,a7(inow+1+npep),ep,f,intep)
          epn=ep2
-         fact1=one-one/10000
-         fact2=one-2*one/10000
          if (intep.eq.1.and.ep.lt.fact2*ep2) epn=fact1*ep2
          if (epn.lt.epnext) epnext=epn
       endif
