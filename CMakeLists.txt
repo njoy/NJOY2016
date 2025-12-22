@@ -1,249 +1,338 @@
+cmake_minimum_required(VERSION 3.15)
 
-cmake_minimum_required( VERSION 3.15 )
+project(NJOY LANGUAGES Fortran)
+string(TOLOWER ${CMAKE_PROJECT_NAME} CMAKE_PROJECT_NAME_LOWER) # For install paths like "njoy"
 
-find_package( Python3 3.5 REQUIRED )
+# Include standard modules
+include(GNUInstallDirs)
+include(FeatureSummary)
+include(cmake/GenerateScript.cmake)
 
-set( CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configuration types" FORCE )
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configuration types" FORCE)
 
-project( njoy LANGUAGES Fortran )
-get_directory_property( is_subproject PARENT_DIRECTORY )
-include( CMakeDependentOption REQUIRED )
-
-set( njoy_GNU_minimum_version 5.1 )
-
-if( njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version )
-    if( CMAKE_Fortran_COMPILER_VERSION AND
-        CMAKE_Fortran_COMPILER_VERSION VERSION_LESS
-        ${njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version} )
-        message( FATAL_ERROR "${CMAKE_Fortran_COMPILER_ID} version must be greater than ${njoy_${CMAKE_Fortran_COMPILER_ID}_minimum_version}" )
-    endif()
-endif()
-
-# general properties
-option( njoy_strict "Compile time warnings are converted to errors" OFF )
-
-# binary instrumentation
-option( coverage "Enable binary instrumentation to collect test coverage information in the DEBUG configuration" )
-option( profile_generate "Enable binary instrumentation to generation execution profiles in the RELEASE configuration which may be used to guide later optimization" )
-
-# additional optimizations
-option( link_time_optimization "Enable link time optimization in the RELEASE configuration" )
-option( profile_use "In the RELEASE configuration, leverage previously generated exeution profile to inform optimization decisions" )
-option( nonportable_optimization "Enable optimizations which compromise portability of resulting binary in the RELEASE configuration" )
-
-# libraries and linking
-option( static "Statically link component and environment libraries" OFF )
-if ( static AND ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" ) )
-    message( FATAL_ERROR "Static binaries not supported on OSX" )
-endif()
-
-CMAKE_DEPENDENT_OPTION( static_libraries "Statically link component libraries" OFF "NOT static" ON )
-CMAKE_DEPENDENT_OPTION( static_njoy "Statically link the njoy component library" OFF "NOT static;NOT static_libraries" ON )
-
-if ( profile_generate AND profile_use )
-    message( FATAL_ERROR "Cannot both generate and use execution profile in the same configuration" )
-endif()
-
-if ( profile_generate )
-    file( MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/profiling" )
-endif()
-
-set( CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}/fortran_modules" CACHE PATH "directory for fortran modules" )
-file( MAKE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}" )
-
-set( njoy_GNU_Linux_common_flags "-Wall" "-Wextra" )
-set( njoy_GNU_Linux_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
-set( njoy_GNU_Linux_RELEASE_flags "-O3" "-DNDEBUG" )
-set( njoy_GNU_Linux_strict_flags "-Werror" )
-set( njoy_GNU_Linux_coverage_flags "--coverage" )
-set( njoy_GNU_Linux_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
-set( njoy_GNU_Linux_base_project_flags  )
-set( njoy_GNU_Linux_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Linux_link_time_optimization_flags "-flto" )
-set( njoy_GNU_Linux_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Linux_nonportable_optimization_flags "-march=native" )
-set( njoy_GNU_Linux_static_flags "-static" )
-set( njoy_GNU_Windows_common_flags "-Wall" "-Wextra" )
-set( njoy_GNU_Windows_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
-set( njoy_GNU_Windows_RELEASE_flags "-O3" "-DNDEBUG" )
-set( njoy_GNU_Windows_strict_flags "-Werror" )
-set( njoy_GNU_Windows_coverage_flags "--coverage" )
-set( njoy_GNU_Windows_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
-set( njoy_GNU_Windows_base_project_flags  )
-set( njoy_GNU_Windows_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Windows_link_time_optimization_flags "-flto" )
-set( njoy_GNU_Windows_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Windows_nonportable_optimization_flags "-march=native" )
-set( njoy_GNU_Windows_static_flags "-static" )
-set( njoy_GNU_Darwin_common_flags "-Wall" "-Wextra" )
-set( njoy_GNU_Darwin_DEBUG_flags "-O0" "-g" "-gdwarf-3" "-frounding-math" "-fsignaling-nans" "-fcheck=all" "-ffpe-trap=invalid,zero,overflow" )
-set( njoy_GNU_Darwin_RELEASE_flags "-O3" "-DNDEBUG" )
-set( njoy_GNU_Darwin_strict_flags "-Werror" )
-set( njoy_GNU_Darwin_coverage_flags "--coverage" )
-set( njoy_GNU_Darwin_subproject_flags "-Wno-maybe-uninitialized" "-Wno-conversion" "-Wno-unused-parameter" "-Wno-compare-reals" "-Wno-unused-variable" "-Wno-intrinsic-shadow" "-Wno-unused-dummy-argument" "-Wno-uninitialized" "-Wno-unused-function" "-Wno-unused-label" "-Wno-character-truncation" )
-set( njoy_GNU_Darwin_base_project_flags  )
-set( njoy_GNU_Darwin_profile_generate_flags "-fprofile-generate='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Darwin_link_time_optimization_flags "-flto" )
-set( njoy_GNU_Darwin_profile_use_flags "-fprofile-use='${CMAKE_BINARY_DIR}/profiling'" )
-set( njoy_GNU_Darwin_nonportable_optimization_flags "-march=native" )
-set( njoy_GNU_Darwin_static_flags "-static" )
-
-if ( static_njoy )
-    set( njoy_library_linkage STATIC )
-else ()
-    set( njoy_library_linkage SHARED )
-endif ()
-
-set( CMAKE_SKIP_BUILD_RPATH FALSE )
-set( CMAKE_BUILD_WITH_INSTALL_RPATH FALSE )
-if ( CMAKE_SYSTEM_NAME STREQUAL "Darwin" )
-    set( rpath_prefix "@loader_path" )
+# Determine if this is being built as a subproject or the main project
+if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+    set(NJOY_IS_SUBPROJECT FALSE) # This is the main/top-level project
 else()
-    set( rpath_prefix "\\$ORIGIN" )
+    set(NJOY_IS_SUBPROJECT TRUE)  # This is being included as a subproject
 endif()
-list( INSERT 0 CMAKE_INSTALL_RPATH "${rpath_prefix}/../lib" )
-set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
+add_feature_info("Building as Subproject" NJOY_IS_SUBPROJECT "NJOY is being built as part of a larger CMake project.")
 
-if ( NOT GIT_EXECUTABLE )
-    find_package( Git )
-    if ( NOT GIT_FOUND )
-        message( FATAL_ERROR "git installation was not found." )
+# Compiler Version Check
+set(NJOY_GNU_MINIMUM_VERSION 5.1)
+
+if(CMAKE_Fortran_COMPILER_ID AND NJOY_${CMAKE_Fortran_COMPILER_ID}_MINIMUM_VERSION)
+    if(CMAKE_Fortran_COMPILER_VERSION AND
+       CMAKE_Fortran_COMPILER_VERSION VERSION_LESS NJOY_${CMAKE_Fortran_COMPILER_ID}_MINIMUM_VERSION)
+        message(FATAL_ERROR
+            "${CMAKE_Fortran_COMPILER_ID} version ${CMAKE_Fortran_COMPILER_VERSION} "
+            "is less than required minimum ${NJOY_${CMAKE_Fortran_COMPILER_ID}_MINIMUM_VERSION}")
     endif()
 endif()
 
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    OUTPUT_VARIABLE GIT_BRANCH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    OUTPUT_VARIABLE GIT_HASH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+# Build Options
+option(NJOY_STRICT "Compile time warnings are converted to errors" OFF)
+option(NJOY_COVERAGE "Enable binary instrumentation for test coverage (DEBUG configuration)" OFF)
+option(NJOY_PROFILE_GENERATE "Enable binary instrumentation for execution profiling (RELEASE configuration)" OFF)
+option(NJOY_PROFILE_USE "Leverage previously generated execution profile for optimization (RELEASE configuration)" OFF)
+option(NJOY_ENABLE_LTO "Enable Link Time Optimization (IPO)" ON)
+option(NJOY_NONPORTABLE_OPTIMIZATION "Enable optimizations compromising binary portability (RELEASE configuration)" OFF)
+option(NJOY_LINK_EXECUTABLE_STATICALLY "Attempt to link the NJOY executable statically" OFF)
 
-message( STATUS "" )
-message( STATUS "-----------------------------------------------------------" )
-message( STATUS "" )
-message( STATUS "njoy" )
-message( STATUS "Git current branch: ${GIT_BRANCH}" )
-message( STATUS "Git commit hash: ${GIT_HASH}" )
-message( STATUS "" )
-message( STATUS "-----------------------------------------------------------" )
-
-add_library( njoy ${njoy_library_linkage}
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/acecm.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/acedo.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/acefc.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/acepa.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/acepn.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/acer.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/aceth.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/broadr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/ccccr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/covr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/dtfr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/endf.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/errorr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/gaminr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/gaspr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/graph.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/groupr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/heatr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/leapr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/locale.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/main.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/mainio.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/mathm.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/matxsr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/mixr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/moder.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/phys.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/plotr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/powr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/purr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/reconr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/resxsr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/samm.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/thermr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/unresr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/util.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/vers.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/viewr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/wimsr.f90" )
-
-target_include_directories( njoy PUBLIC "${CMAKE_Fortran_MODULE_DIRECTORY}" )
-
-set( PREFIX njoy_${CMAKE_Fortran_COMPILER_ID}_${CMAKE_SYSTEM_NAME} )
-
-target_compile_options( njoy PRIVATE
-${${PREFIX}_common_flags}
-$<$<BOOL:${njoy_strict}>:${${PREFIX}_njoy_strict_flags}>
-$<$<BOOL:${static}>:${${PREFIX}_static_flags}>
-$<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
-$<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>
-$<$<CONFIG:DEBUG>:
-${${PREFIX}_DEBUG_flags}
-$<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags}>>
-$<$<CONFIG:RELEASE>:
-${${PREFIX}_RELEASE_flags}
-$<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}>
-$<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}>
-$<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}>
-$<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>>
-${Fortran_appended_flags} ${njoy_appended_flags} )
-
-target_link_libraries( njoy PUBLIC "$<$<AND:$<CONFIG:RELEASE>,$<BOOL:${link_time_optimization}>>:${${PREFIX}_RELEASE_flags};${${PREFIX}_link_time_optimization_flags}$<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags};>$<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags};>$<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags};>>$<$<CONFIG:DEBUG>:$<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags};>>$<$<BOOL:Fortran_appended_flags>:${Fortran_appended_flags};>$<$<BOOL:njoy_appended_flags>:${njoy_appended_flags};>" )
-
-if ( NOT is_subproject )
-    add_executable( njoy_executable src/main.f90 )
-    set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
-    target_compile_options( njoy_executable PRIVATE
-    ${${PREFIX}_common_flags}
-    $<$<BOOL:${njoy_strict}>:${${PREFIX}_njoy_strict_flags}>
-    $<$<BOOL:${static}>:${${PREFIX}_static_flags}>
-    $<$<BOOL:${is_subproject}>:${${PREFIX}_subproject_flags}>
-    $<$<NOT:$<BOOL:${is_subproject}>>:${${PREFIX}_base_project_flags}>
-    $<$<CONFIG:DEBUG>:
-    ${${PREFIX}_DEBUG_flags}
-    $<$<BOOL:${coverage}>:${${PREFIX}_coverage_flags}>>
-    $<$<CONFIG:RELEASE>:
-    ${${PREFIX}_RELEASE_flags}
-    $<$<BOOL:${profile_generate}>:${${PREFIX}_profile_generate_flags}>
-    $<$<BOOL:${profile_use}>:${${PREFIX}_profile_use_flags}>
-    $<$<BOOL:${link_time_optimization}>:${${PREFIX}_link_time_optimization_flags}>
-    $<$<BOOL:${nonportable_optimization}>:${${PREFIX}_nonportable_optimization_flags}>>
-    ${Fortran_appended_flags} ${njoy_appended_flags} )
-    target_link_libraries( njoy_executable PUBLIC njoy )
+# Standard CMake option to control library type (SHARED vs STATIC)
+# Default to ON (shared libraries) if not set, to match previous default behavior
+# where NJOY_STATIC_SELF_LIBRARY was OFF by default.
+if(NOT DEFINED BUILD_SHARED_LIBS)
+    set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
 endif()
 
-if( NOT is_subproject )
+if(NJOY_PROFILE_GENERATE AND NJOY_PROFILE_USE)
+    message(FATAL_ERROR "Cannot both generate (NJOY_PROFILE_GENERATE) and use (NJOY_PROFILE_USE) execution profiles in the same configuration.")
+endif()
+
+if(NJOY_PROFILE_GENERATE OR NJOY_PROFILE_USE)
+    file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/profiling")
+endif()
+
+# Interprocedural Optimization (LTO)
+if(NJOY_ENABLE_LTO)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+else()
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)
+endif()
+
+# Use PROJECT_BINARY_DIR for the module directory path.
+set(CMAKE_Fortran_MODULE_DIRECTORY "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME_LOWER}_fortran_modules" CACHE PATH "Directory for NJOY Fortran modules")
+file(MAKE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}")
+
+set(NJOY_APPENDED_COMPILE_FLAGS "" CACHE STRING "User-specified compile flags appended to NJOY targets")
+set(NJOY_APPENDED_LINK_FLAGS "" CACHE STRING "User-specified link flags appended to NJOY targets")
+
+# Compiler Specific Flags
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+    set(NJOY_GNU_COMMON_FLAGS "-Wall;-Wextra")
+    set(NJOY_GNU_DEBUG_FLAGS "-O0;-g;-gdwarf-3;-frounding-math;-fsignaling-nans;-fcheck=all;-ffpe-trap=invalid,zero,overflow")
+    set(NJOY_GNU_RELEASE_FLAGS "-O3;-DNDEBUG") # CMake's IPO will add -flto if NJOY_ENABLE_LTO is ON
+    set(NJOY_GNU_STRICT_FLAGS "-Werror")
+    set(NJOY_GNU_COVERAGE_FLAGS "--coverage")
+    set(NJOY_GNU_PROFILE_GENERATE_FLAGS "-fprofile-generate=${PROJECT_BINARY_DIR}/profiling")
+    set(NJOY_GNU_PROFILE_USE_FLAGS "-fprofile-use=${PROJECT_BINARY_DIR}/profiling")
+    set(NJOY_GNU_NONPORTABLE_OPTIMIZATION_FLAGS "-march=native")
+    set(NJOY_GNU_STATIC_LINK_FLAGS "-static") # For njoy_executable if NJOY_LINK_EXECUTABLE_STATICALLY is ON
+    set(NJOY_GNU_SUBPROJECT_COMPILE_FLAGS "-Wno-maybe-uninitialized;-Wno-conversion;-Wno-unused-parameter;-Wno-compare-reals;-Wno-unused-variable;-Wno-intrinsic-shadow;-Wno-unused-dummy-argument;-Wno-uninitialized;-Wno-unused-function;-Wno-unused-label;-Wno-character-truncation")
+    set(NJOY_GNU_BASE_PROJECT_COMPILE_FLAGS "")
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
+    message(WARNING "Intel Fortran compiler flags are placeholders. Please verify and complete them for ${CMAKE_Fortran_COMPILER_ID}.")
+    set(NJOY_INTEL_COMMON_FLAGS "-Wall")
+    set(NJOY_INTEL_DEBUG_FLAGS "-O0;-g;-debug;-check all;-fpe0;-traceback")
+    set(NJOY_INTEL_RELEASE_FLAGS "-O3;-DNDEBUG") # CMake's IPO will add -ipo if NJOY_ENABLE_LTO is ON
+    set(NJOY_INTEL_STRICT_FLAGS "-warn errors")
+    set(NJOY_INTEL_COVERAGE_FLAGS "-prof-gen=srcpos")
+    set(NJOY_INTEL_PROFILE_GENERATE_FLAGS "-prof-gen=${PROJECT_BINARY_DIR}/profiling")
+    set(NJOY_INTEL_PROFILE_USE_FLAGS "-prof-use=${PROJECT_BINARY_DIR}/profiling")
+    set(NJOY_INTEL_NONPORTABLE_OPTIMIZATION_FLAGS "-xHost")
+    set(NJOY_INTEL_STATIC_LINK_FLAGS "-static-intel") # For njoy_executable if NJOY_LINK_EXECUTABLE_STATICALLY is ON
+    set(NJOY_INTEL_SUBPROJECT_COMPILE_FLAGS "-diag-disable remark")
+    set(NJOY_INTEL_BASE_PROJECT_COMPILE_FLAGS "")
+else()
+    message(WARNING "Compiler ${CMAKE_Fortran_COMPILER_ID} is not explicitly supported with optimized flags. Using default CMake flags.")
+endif()
+
+function(njoy_apply_build_options TARGET_NAME)
+    set(COMPILE_OPTIONS_LIST "")
+    set(LINK_OPTIONS_LIST "")
+    set(COMPILER_FLAGS_PREFIX "NJOY_${CMAKE_Fortran_COMPILER_ID}")
+
+    if(DEFINED ${COMPILER_FLAGS_PREFIX}_COMMON_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST ${${COMPILER_FLAGS_PREFIX}_COMMON_FLAGS})
+    endif()
+    if(NJOY_STRICT AND DEFINED ${COMPILER_FLAGS_PREFIX}_STRICT_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST ${${COMPILER_FLAGS_PREFIX}_STRICT_FLAGS})
+    endif()
+
+    if(NJOY_IS_SUBPROJECT)
+        if(DEFINED ${COMPILER_FLAGS_PREFIX}_SUBPROJECT_COMPILE_FLAGS)
+            list(APPEND COMPILE_OPTIONS_LIST ${${COMPILER_FLAGS_PREFIX}_SUBPROJECT_COMPILE_FLAGS})
+        endif()
+    else() # Base project
+        if(DEFINED ${COMPILER_FLAGS_PREFIX}_BASE_PROJECT_COMPILE_FLAGS)
+            list(APPEND COMPILE_OPTIONS_LIST ${${COMPILER_FLAGS_PREFIX}_BASE_PROJECT_COMPILE_FLAGS})
+        endif()
+    endif()
+
+    # Debug specific flags
+    if(DEFINED ${COMPILER_FLAGS_PREFIX}_DEBUG_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST $<$<CONFIG:Debug>:${${COMPILER_FLAGS_PREFIX}_DEBUG_FLAGS}>)
+    endif()
+    if(NJOY_COVERAGE AND DEFINED ${COMPILER_FLAGS_PREFIX}_COVERAGE_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST $<$<CONFIG:Debug>:${${COMPILER_FLAGS_PREFIX}_COVERAGE_FLAGS}>)
+        list(APPEND LINK_OPTIONS_LIST $<$<CONFIG:Debug>:${${COMPILER_FLAGS_PREFIX}_COVERAGE_FLAGS}>)
+    endif()
+
+    # Release specific flags
+    if(DEFINED ${COMPILER_FLAGS_PREFIX}_RELEASE_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST $<$<CONFIG:Release>:${${COMPILER_FLAGS_PREFIX}_RELEASE_FLAGS}>)
+    endif()
+    if(NJOY_PROFILE_GENERATE AND DEFINED ${COMPILER_FLAGS_PREFIX}_PROFILE_GENERATE_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST $<$<CONFIG:Release>:${${COMPILER_FLAGS_PREFIX}_PROFILE_GENERATE_FLAGS}>)
+        list(APPEND LINK_OPTIONS_LIST $<$<CONFIG:Release>:${${COMPILER_FLAGS_PREFIX}_PROFILE_GENERATE_FLAGS}>)
+    endif()
+    if(NJOY_PROFILE_USE AND DEFINED ${COMPILER_FLAGS_PREFIX}_PROFILE_USE_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST $<$<CONFIG:Release>:${${COMPILER_FLAGS_PREFIX}_PROFILE_USE_FLAGS}>)
+        list(APPEND LINK_OPTIONS_LIST $<$<CONFIG:Release>:${${COMPILER_FLAGS_PREFIX}_PROFILE_USE_FLAGS}>)
+    endif()
+
+    # Non-portable optimization flags
+    if(NJOY_NONPORTABLE_OPTIMIZATION AND DEFINED ${COMPILER_FLAGS_PREFIX}_NONPORTABLE_OPTIMIZATION_FLAGS)
+        list(APPEND COMPILE_OPTIONS_LIST $<$<CONFIG:Release>:${${COMPILER_FLAGS_PREFIX}_NONPORTABLE_OPTIMIZATION_FLAGS}>)
+        if(NJOY_ENABLE_LTO) # If LTO is enabled, -march=native might also be needed at final link time
+            list(APPEND LINK_OPTIONS_LIST $<$<CONFIG:Release>:${${COMPILER_FLAGS_PREFIX}_NONPORTABLE_OPTIMIZATION_FLAGS}>)
+        endif()
+    endif()
+
+    if(NJOY_APPENDED_COMPILE_FLAGS)
+        string(REPLACE " " ";" _temp_flags "${NJOY_APPENDED_COMPILE_FLAGS}")
+        list(APPEND COMPILE_OPTIONS_LIST ${_temp_flags})
+    endif()
+    if(NJOY_APPENDED_LINK_FLAGS)
+        string(REPLACE " " ";" _temp_flags "${NJOY_APPENDED_LINK_FLAGS}")
+        list(APPEND LINK_OPTIONS_LIST ${_temp_flags})
+    endif()
+
+    target_compile_options(${TARGET_NAME} PRIVATE ${COMPILE_OPTIONS_LIST})
+    if(LINK_OPTIONS_LIST) # Only call if list is not empty
+        target_link_options(${TARGET_NAME} PRIVATE ${LINK_OPTIONS_LIST})
+    endif()
+endfunction()
+
+
+if(SKBUILD)
+  # By default, scikit-build will install everything to ${SKBUILD_PLATLIB_DIR}/njoy
+  # Install include and bin directories to ${SKBUILD_PLATLIB_DIR}/njoy/SKBUILD_SUBDIR
+  set(SKBUILD_SUBDIR core/)
+  set(CMAKE_INSTALL_BINDIR ${SKBUILD_SUBDIR}${CMAKE_INSTALL_BINDIR})
+  set(CMAKE_INSTALL_INCLUDEDIR ${SKBUILD_SUBDIR}${CMAKE_INSTALL_INCLUDEDIR})
+  set(CMAKE_INSTALL_LIBDIR ${SKBUILD_SUBDIR}${CMAKE_INSTALL_LIBDIR})
+  set(CMAKE_INSTALL_DATADIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_DATADIR})
+  set(CMAKE_INSTALL_DOCDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_DOCDIR})
+  set(CMAKE_INSTALL_INFODIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_INFODIR})
+  set(CMAKE_INSTALL_MANDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_MANDIR})
+  set(CMAKE_INSTALL_LOCALEDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_LOCALEDIR})
+  set(CMAKE_INSTALL_LOCALSTATEDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_LOCALSTATEDIR})
+  set(CMAKE_INSTALL_RUNSTATEDIR ${SKBUILD_DATA_DIR}/${CMAKE_INSTALL_RUNSTATEDIR})
+
+  # Set RPATH
+  if(APPLE)
+    set(CMAKE_MACOSX_RPATH ON)
+    set(NJOY_LIBRARY_RPATH "@loader_path")
+    set(NJOY_BINARY_RPATH "@loader_path/../../${CMAKE_INSTALL_LIBDIR}")
+  elseif(UNIX)
+    set(NJOY_LIBRARY_RPATH "$ORIGIN")
+    set(NJOY_BINARY_RPATH "$ORIGIN/../../${CMAKE_INSTALL_LIBDIR}")
+  endif()
+else()
+  # use, i.e. don't skip the full RPATH for the build tree
+  set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+  # when building, don't use the install RPATH already
+  # (but later on when installing)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+  # the RPATH to be used when installing, but only if it's not a system directory
+  list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" isSystemDir)
+  if("${isSystemDir}" STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
+  endif()
+endif()
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# Feature Summary Setup for NJOY Options
+add_feature_info("Strict Warnings As Errors" NJOY_STRICT "Compile time warnings are converted to errors.")
+add_feature_info("Test Coverage (Debug)" NJOY_COVERAGE "Enable binary instrumentation for test coverage.")
+add_feature_info("Profiling Generation (Release)" NJOY_PROFILE_GENERATE "Enable binary instrumentation for execution profiling.")
+add_feature_info("Profiling Use (Release)" NJOY_PROFILE_USE "Leverage previously generated execution profile for optimization.")
+add_feature_info("CMake LTO/IPO (Release)" NJOY_ENABLE_LTO "Enable Link Time Optimization via CMake's INTERPROCEDURAL_OPTIMIZATION property (Release config).")
+add_feature_info("Non-Portable Optimizations (Release)" NJOY_NONPORTABLE_OPTIMIZATION "Enable optimizations compromising binary portability (e.g., -march=native).")
+add_feature_info("Build NJOY as Shared Library" BUILD_SHARED_LIBS "Build NJOY as a shared library.")
+add_feature_info("Link Executable Statically" NJOY_LINK_EXECUTABLE_STATICALLY "Attempt to link the NJOY executable statically (e.g., using -static).")
+
+# Determine NJOY Library type for messaging
+if(BUILD_SHARED_LIBS)
+    set(NJOY_LIBRARY_TYPE_MESSAGE "SHARED (BUILD_SHARED_LIBS=ON)")
+else()
+    set(NJOY_LIBRARY_TYPE_MESSAGE "STATIC (BUILD_SHARED_LIBS=OFF)")
+endif()
+
+# Configuration Summary
+message(STATUS "")
+message(STATUS "-----------------------------------------------------------")
+message(STATUS " ${CMAKE_PROJECT_NAME} Project Configuration")
+message(STATUS "-----------------------------------------------------------")
+message(STATUS "  Project Source Directory: ${PROJECT_SOURCE_DIR}")
+message(STATUS "  Project Binary Directory: ${PROJECT_BINARY_DIR}")
+message(STATUS "  Installation Prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "    Install Binaries to: ${CMAKE_INSTALL_FULL_BINDIR}")
+message(STATUS "    Install Libraries to: ${CMAKE_INSTALL_FULL_LIBDIR}")
+message(STATUS "    Install Modules/Includes to: ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${CMAKE_PROJECT_NAME_LOWER}")
+message(STATUS "  Fortran Compiler: ${CMAKE_Fortran_COMPILER_ID} ${CMAKE_Fortran_COMPILER_VERSION}")
+message(STATUS "  Build types: ${CMAKE_CONFIGURATION_TYPES}")
+message(STATUS "  NJOY Library Type: ${NJOY_LIBRARY_TYPE_MESSAGE}")
+message(STATUS "  NJOY LTO/IPO Setting: ${NJOY_ENABLE_LTO}")
+message(STATUS "-----------------------------------------------------------")
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+message(STATUS "-----------------------------------------------------------")
+
+set(NJOY_LIBRARY_SOURCES
+    "src/acecm.f90" "src/acedo.f90" "src/acefc.f90" "src/acepa.f90" "src/acepn.f90"
+    "src/acer.f90" "src/aceth.f90" "src/broadr.f90" "src/ccccr.f90" "src/covr.f90"
+    "src/dtfr.f90" "src/endf.f90" "src/errorr.f90" "src/gaminr.f90" "src/gaspr.f90"
+    "src/graph.f90" "src/groupr.f90" "src/heatr.f90" "src/leapr.f90" "src/locale.f90"
+    "src/mainio.f90" "src/mathm.f90" "src/matxsr.f90" "src/mixr.f90" "src/moder.f90"
+    "src/phys.f90" "src/plotr.f90" "src/powr.f90" "src/purr.f90" "src/reconr.f90"
+    "src/resxsr.f90" "src/samm.f90" "src/thermr.f90" "src/unresr.f90" "src/util.f90"
+    "src/vers.f90" "src/viewr.f90" "src/wimsr.f90"
+)
+
+# Add NJOY library. Type (SHARED/STATIC) is controlled by BUILD_SHARED_LIBS.
+add_library(${CMAKE_PROJECT_NAME} ${NJOY_LIBRARY_SOURCES})
+set_target_properties(${CMAKE_PROJECT_NAME} 
+    PROPERTIES 
+    Fortran_MODULE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}"
+    )
+
+# Set RPATH for the library
+if(NJOY_LIBRARY_RPATH)
+    set_target_properties(${CMAKE_PROJECT_NAME}
+        PROPERTIES
+        INSTALL_RPATH "${NJOY_LIBRARY_RPATH}"
+        )
+endif()
+
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_Fortran_MODULE_DIRECTORY}> # For build tree consumption
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME_LOWER}> # For installed consumption
+)
+njoy_apply_build_options(${CMAKE_PROJECT_NAME})
+
+if(NOT NJOY_IS_SUBPROJECT)
+    add_executable(${CMAKE_PROJECT_NAME}_executable src/main.f90)
+    set_target_properties(${CMAKE_PROJECT_NAME}_executable
+        PROPERTIES 
+        OUTPUT_NAME ${CMAKE_PROJECT_NAME_LOWER}
+        )
+
+    # Set RPATH for the executable
+    if(NJOY_BINARY_RPATH)
+        set_target_properties(${CMAKE_PROJECT_NAME}_executable
+            PROPERTIES
+            INSTALL_RPATH "${NJOY_BINARY_RPATH}"
+            )
+    endif()
+    target_link_libraries(${CMAKE_PROJECT_NAME}_executable PRIVATE ${CMAKE_PROJECT_NAME})
+    njoy_apply_build_options(${CMAKE_PROJECT_NAME}_executable)
+
+    # Generate and install the Python script for the executable
+    generate_and_install_python_script(${CMAKE_PROJECT_NAME_LOWER})
+
+    if(NJOY_LINK_EXECUTABLE_STATICALLY)
+        if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+            message(WARNING "NJOY_LINK_EXECUTABLE_STATICALLY=ON: Fully static executables are not well-supported on macOS and may lead to issues or failures. Prefer dynamic linking or linking a static NJOY library to a dynamically linked executable.")
+        endif()
+
+        set(_compiler_static_link_flags_var "NJOY_${CMAKE_Fortran_COMPILER_ID}_STATIC_LINK_FLAGS")
+        if(DEFINED ${_compiler_static_link_flags_var} AND NOT "${${_compiler_static_link_flags_var}}" STREQUAL "")
+            message(STATUS "Applying static link flags to executable ${CMAKE_PROJECT_NAME}_executable: ${${_compiler_static_link_flags_var}}")
+            target_link_options(${CMAKE_PROJECT_NAME}_executable PRIVATE ${${_compiler_static_link_flags_var}})
+        else()
+            message(WARNING "NJOY_LINK_EXECUTABLE_STATICALLY is ON, but no specific static link flags (NJOY_${CMAKE_Fortran_COMPILER_ID}_STATIC_LINK_FLAGS) are defined for compiler ${CMAKE_Fortran_COMPILER_ID}. The executable might not be fully static.")
+        endif()
+    endif()
+
     enable_testing()
-    add_subdirectory( tests )
+    if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+        add_subdirectory(tests)
+    else()
+        message(WARNING "Tests directory not found at ${CMAKE_CURRENT_SOURCE_DIR}/tests. Skipping tests setup.")
+    endif()
 endif()
 
-set( installation_targets njoy )
-if ( NOT is_subproject )
-    list( APPEND installation_targets njoy_executable )
+# Installation
+set(NJOY_INSTALLATION_TARGETS ${CMAKE_PROJECT_NAME})
+if(NOT NJOY_IS_SUBPROJECT)
+    list(APPEND NJOY_INSTALLATION_TARGETS ${CMAKE_PROJECT_NAME}_executable)
 endif()
 
-install( TARGETS ${installation_targets}
-         RUNTIME DESTINATION bin
-         LIBRARY DESTINATION lib
-         ARCHIVE DESTINATION lib
-         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
-                     GROUP_EXECUTE GROUP_READ
-                     WORLD_EXECUTE WORLD_READ )
-
-file( RELATIVE_PATH relative_fortran_module_files_path
-      "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_Fortran_MODULE_DIRECTORY}" )
-file( GLOB fortran_module_files
-      RELATIVE "${relative_fortran_module_files_path}"
-      *.mod )
-install( FILES ${fortran_module_files}
-         DESTINATION include
-         PERMISSIONS OWNER_READ OWNER_WRITE
-                     GROUP_READ
-                     WORLD_READ )
+install(TARGETS ${NJOY_INSTALLATION_TARGETS}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+)
+install(DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}/"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME_LOWER}
+    FILES_MATCHING PATTERN "*.mod"
+    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+)
