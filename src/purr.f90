@@ -2792,20 +2792,49 @@ contains
    integer::k,j
    real(kr)::xt,yt
 
-   do  k=1,n-1
-      do j=k+1,n
-         if (x(k).gt.x(j)) then
-            xt=x(k)
-            yt=y(k)
-            x(k)=x(j)
-            y(k)=y(j)
-            x(j)=xt
-            y(j)=yt
-         endif
-      enddo
-   enddo
+   if (n <= 1) return
+   call qsort_xy(x,y,1,n)
+     
    return
    end subroutine fsort
+
+   recursive subroutine qsort_xy(a,b,l,r)
+    real(kr), intent(inout) :: a(:), b(:)
+    integer, intent(in) :: l, r
+    integer :: i, j
+    real(kr) :: pivot, ta, tb
+
+    i = l
+    j = r
+    pivot = a((l+r)/2)
+
+    do
+        do while (a(i) < pivot)
+            i = i + 1
+        end do
+        do while (a(j) > pivot)
+            j = j - 1
+        end do
+
+        if (i <= j) then
+            ta = a(i)
+            a(i) = a(j)
+            a(j) = ta
+
+            tb = b(i)
+            b(i) = b(j)
+            b(j) = tb
+
+            i = i + 1
+            j = j - 1
+        end if
+
+        if (i > j) exit
+     end do
+
+     if (l < j) call qsort_xy(a,b,l,j)
+     if (i < r) call qsort_xy(a,b,i,r)
+   end subroutine qsort_xy
 
    subroutine fsrch(x,xarray,n,i,k)
    !-------------------------------------------------------------------
