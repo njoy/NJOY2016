@@ -1910,7 +1910,7 @@ contains
          els(itemp,ie)=spot
       enddo
    enddo
-   call fsort(es,xs,ne,1)
+   call fsort(es,ne)
 
    !--loop over sequences
    do 170 k=1,nseq0
@@ -2277,7 +2277,7 @@ contains
       do ie=1,ne
          es(ie)=els(itemp,ie)+fis(itemp,ie)+cap(itemp,ie)+bkg(1)
       enddo
-      call fsort(es,xs,ne,1)
+      call fsort(es,ne)
       tmin(itemp)=es(1)
       tmax(itemp)=es(ne)
       nebin=int(nsamp/(nbin-10+1.76))
@@ -2780,7 +2780,7 @@ contains
    return
    end subroutine uw2
 
-   subroutine fsort(x,y,n,i)
+   subroutine fsort(x,n)
    !-------------------------------------------------------------------
    ! Floating-point sort routine.
    ! Sort x and y into increasing x order.
@@ -2793,16 +2793,16 @@ contains
    real(kr)::xt,yt
 
    if (n <= 1) return
-   call qsort_xy(x,y,1,n)
+   call quicksort(x,1,n)
      
    return
    end subroutine fsort
 
-   recursive subroutine qsort_xy(a,b,l,r)
-    real(kr), intent(inout) :: a(:), b(:)
+   recursive subroutine quicksort(a,l,r)
+    real(kr), intent(inout) :: a(:)
     integer, intent(in) :: l, r
     integer :: i, j
-    real(kr) :: pivot, ta, tb
+    real(kr) :: pivot, ta
 
     i = l
     j = r
@@ -2821,10 +2821,6 @@ contains
             a(i) = a(j)
             a(j) = ta
 
-            tb = b(i)
-            b(i) = b(j)
-            b(j) = tb
-
             i = i + 1
             j = j - 1
         end if
@@ -2832,9 +2828,9 @@ contains
         if (i > j) exit
      end do
 
-     if (l < j) call qsort_xy(a,b,l,j)
-     if (i < r) call qsort_xy(a,b,i,r)
-   end subroutine qsort_xy
+     if (l < j) call quicksort(a,l,j)
+     if (i < r) call quicksort(a,i,r)
+   end subroutine quicksort
 
    subroutine fsrch(x,xarray,n,i,k)
    !-------------------------------------------------------------------
