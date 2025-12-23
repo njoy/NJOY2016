@@ -1,34 +1,28 @@
-
- njoy 2016.0   21Dec16                                       01/13/17 10:47:38
+1*****************************************************************************
+ *                                         *              *                  *
+ *   $$   $$       $$   $$$$$   $$    $$   *              *  vers: 2016.78   *
+ *   $$$  $$       $$  $$$$$$$   $$  $$    *  nuclear     *  vday: 03Feb25   *
+ *   $$$$ $$       $$  $$   $$    $$$$     *  data        *  site: lanl t2   *
+ *   $$ $$$$  $$   $$  $$   $$     $$      *  processing  *  mach:           *
+ *   $$  $$$  $$$$$$$  $$$$$$$     $$      *  system      *  date: 08/25/25  *
+ *   $$   $$   $$$$$    $$$$$      $$      *              *  time: 08:25:12  *
+ *                                         *              *                  *
  *****************************************************************************
 
- moder...                                                                 0.0s
+ moder...change the mode of an endf tape or njoy output tape              0.0s
 
- moder...                                                                 0.1s
+ input unit (+ for coded, - for bb) ...         30
+ output unit (+ for coded, - for bb) ..        -31
 
- errorr...                                                                0.1s
+ tape label
+ --------------------------------------
+  endf/b-v tape 511 (standards materials)                             
 
- ---message from grpav---mt3 cross sections are constructed
-                           from total minus elastic
-
- processing mat  1306
- ---------------------
-   6-c -    ornl       eval-dec73 c.y.fu and f.g.perey               
-
- covariances calculated for 27 reactions and  101 groups                  0.3s
-
- covr...                                                                  1.6s
-
- ---message from corr---epmin reset to  8.0000E-04, xcycle=  4.0873E-01
-
- viewr...                                                                 8.7s
-                                                                          9.6s
- *****************************************************************************
-using endf-5 format
-                                                                          0.1s
+ using endf-5 format
+                                                                          0.0s
  *****************************************************************************
 
- moder...change the mode of an endf tape or njoy output tape              0.1s
+ moder...change the mode of an endf tape or njoy output tape              0.0s
 
  input unit (+ for coded, - for bb) ...        -31
  output unit (+ for coded, - for bb) ..        -32
@@ -50,7 +44,7 @@ using endf-5 format
  unit for input covariance tape .......          0
  unit for ratio-to-standard tape ......          0
  material to be processed .............       1306
- neutron group option .................         19
+ neutron group option .................         -1
  weight function option ...............          2
  print option (0 min, 1 max) ..........          1
  rel. cov. option (0 abs, 1 rel) ......          1
@@ -716,7 +710,7 @@ using endf-5 format
  ---------------------
    6-c -    ornl       eval-dec73 c.y.fu and f.g.perey               
 
- covariances calculated for 27 reactions and  101 groups                  0.3s
+ covariances calculated for 27 reactions and  101 groups                  0.1s
 
  table of multigroup cross sections
 
@@ -1027,7 +1021,7 @@ using endf-5 format
   100  3.4713E-02  1.9549E-04  1.8907E-02  6.8310E-02  4.4064E-02
   101  3.1950E-02  2.0256E-04  1.6020E-02  6.2356E-02  4.1936E-02
 
- relative covariance ( mt  1 , ig , mt  1 , igp )                         0.3s
+ relative covariance ( mt  1 , ig , mt  1 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2233,7 +2227,7 @@ using endf-5 format
  101    94  2.500E-05  1.003E-02  1.003E-02  1.003E-02  1.003E-02  1.003E-02
  101   100  1.003E-02  1.003E-02
 
- relative covariance ( mt  1 , ig , mt  2 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt  2 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -2320,7 +2314,7 @@ using endf-5 format
   21    20  2.000E-05  3.600E-05
  101   101  0.000E+00
 
- relative covariance ( mt  1 , ig , mt  3 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt  3 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -3146,7 +3140,7 @@ using endf-5 format
  101    95  2.441E-02  2.488E-02  2.469E-02  2.457E-02  2.492E-02  2.568E-02
  101   101  2.922E-02
 
- relative covariance ( mt  1 , ig , mt  4 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt  4 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4151,7 +4145,7 @@ using endf-5 format
  101    95  2.926E-02  3.029E-02  3.036E-02  3.061E-02  3.173E-02  3.345E-02
  101   101  3.829E-02
 
- relative covariance ( mt  1 , ig , mt 51 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt 51 , igp )                         0.1s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -4556,75 +4550,75 @@ using endf-5 format
  101    59  9.731E-05  1.090E-04  1.216E-04  1.126E-04  1.280E-04  1.370E-04
  101    65  1.534E-04  1.357E-04  1.327E-04  1.037E-04  9.214E-05
 
- relative covariance ( mt  1 , ig , mt 52 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt 52 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 53 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt 53 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 54 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt 54 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 55 , igp )                         0.4s
+ relative covariance ( mt  1 , ig , mt 55 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 56 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 56 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 57 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 57 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 58 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 58 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 59 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 59 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 60 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 60 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 61 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 61 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 62 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 62 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 63 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 63 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 64 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 64 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 65 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 65 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 66 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 66 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 67 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 67 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 68 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 68 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt 91 , igp )                         0.5s
+ relative covariance ( mt  1 , ig , mt 91 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5229,7 +5223,7 @@ using endf-5 format
  101    91  1.217E-03  1.138E-03  1.013E-03  9.515E-04  3.846E-01  3.834E-01
  101    97  3.773E-01  3.780E-01  3.970E-01  4.186E-01  4.653E-01
 
- relative covariance ( mt  1 , ig , mt102 , igp )                         0.6s
+ relative covariance ( mt  1 , ig , mt102 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -5576,19 +5570,19 @@ using endf-5 format
   21    98  1.241E-07  1.241E-07  1.241E-07  1.241E-07
  101   101  0.000E+00
 
- relative covariance ( mt  1 , ig , mt103 , igp )                         0.6s
+ relative covariance ( mt  1 , ig , mt103 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt104 , igp )                         0.6s
+ relative covariance ( mt  1 , ig , mt104 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  1 , ig , mt107 , igp )                         0.6s
+ relative covariance ( mt  1 , ig , mt107 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt  2 , igp )                         0.6s
+ relative covariance ( mt  2 , ig , mt  2 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -6794,7 +6788,7 @@ using endf-5 format
  101    94  9.250E-04  9.250E-04  9.250E-04  1.093E-02  1.093E-02  1.093E-02
  101   100  1.093E-02  1.093E-02
 
- relative covariance ( mt  2 , ig , mt  3 , igp )                         0.6s
+ relative covariance ( mt  2 , ig , mt  3 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -7599,7 +7593,7 @@ using endf-5 format
  101    95 -1.327E-03 -1.370E-03 -1.598E-02 -1.585E-02 -1.623E-02 -1.706E-02
  101   101 -2.092E-02
 
- relative covariance ( mt  2 , ig , mt  4 , igp )                         0.6s
+ relative covariance ( mt  2 , ig , mt  4 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -8404,7 +8398,7 @@ using endf-5 format
  101    95 -1.591E-03 -1.668E-03 -1.965E-02 -1.974E-02 -2.067E-02 -2.222E-02
  101   101 -2.741E-02
 
- relative covariance ( mt  2 , ig , mt 51 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 51 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -8729,75 +8723,75 @@ using endf-5 format
  101    59 -7.221E-05 -8.385E-05 -9.645E-05 -8.739E-05 -1.023E-04 -1.083E-04
  101    65 -1.207E-04 -1.013E-04 -9.645E-05 -6.985E-05 -5.955E-05
 
- relative covariance ( mt  2 , ig , mt 52 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 52 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 53 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 53 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 54 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 54 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 55 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 55 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 56 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 56 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 57 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 57 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 58 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 58 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 59 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 59 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 60 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 60 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 61 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 61 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 62 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 62 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 63 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 63 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 64 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 64 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 65 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 65 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 66 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 66 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 67 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 67 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 68 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 68 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt 91 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt 91 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -9282,23 +9276,23 @@ using endf-5 format
  101    91 -7.403E-04 -2.602E-02 -2.253E-02 -2.049E-02 -2.091E-02 -2.112E-02
  101    97 -2.442E-01 -2.439E-01 -2.586E-01 -2.781E-01 -3.331E-01
 
- relative covariance ( mt  2 , ig , mt102 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt102 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt103 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt103 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt104 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt104 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  2 , ig , mt107 , igp )                         0.7s
+ relative covariance ( mt  2 , ig , mt107 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt  3 , igp )                         0.7s
+ relative covariance ( mt  3 , ig , mt  3 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -9855,7 +9849,7 @@ using endf-5 format
  101    95  7.368E-02  7.513E-02  1.025E-01  1.019E-01  1.037E-01  1.075E-01
  101   101  1.252E-01
 
- relative covariance ( mt  3 , ig , mt  4 , igp )                         0.7s
+ relative covariance ( mt  3 , ig , mt  4 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -10420,7 +10414,7 @@ using endf-5 format
  101    95  8.832E-02  9.147E-02  1.261E-01  1.270E-01  1.320E-01  1.400E-01
  101   101  1.641E-01
 
- relative covariance ( mt  3 , ig , mt 51 , igp )                         0.7s
+ relative covariance ( mt  3 , ig , mt 51 , igp )                         0.2s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -10649,75 +10643,75 @@ using endf-5 format
  101    59  4.219E-04  4.782E-04  5.391E-04  4.954E-04  5.690E-04  6.068E-04
  101    65  6.780E-04  5.895E-04  5.715E-04  4.361E-04  3.826E-04
 
- relative covariance ( mt  3 , ig , mt 52 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 52 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 53 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 53 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 54 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 54 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 55 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 55 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 56 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 56 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 57 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 57 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 58 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 58 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 59 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 59 , igp )                         0.2s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 60 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 60 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 61 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 61 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 62 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 62 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 63 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 63 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 64 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 64 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 65 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 65 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 66 , igp )                         0.8s
+ relative covariance ( mt  3 , ig , mt 66 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 67 , igp )                         0.9s
+ relative covariance ( mt  3 , ig , mt 67 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 68 , igp )                         0.9s
+ relative covariance ( mt  3 , ig , mt 68 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt 91 , igp )                         0.9s
+ relative covariance ( mt  3 , ig , mt 91 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -11058,7 +11052,7 @@ using endf-5 format
  101    91  4.965E-03  5.314E-02  4.609E-02  4.201E-02  1.161E+00  1.158E+00
  101    97  1.567E+00  1.569E+00  1.652E+00  1.752E+00  1.994E+00
 
- relative covariance ( mt  3 , ig , mt102 , igp )                         0.9s
+ relative covariance ( mt  3 , ig , mt102 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -11082,19 +11076,19 @@ using endf-5 format
   33    98  4.555E-02  4.555E-02  4.555E-02  4.555E-02
  101   101  0.000E+00
 
- relative covariance ( mt  3 , ig , mt103 , igp )                         0.9s
+ relative covariance ( mt  3 , ig , mt103 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt104 , igp )                         0.9s
+ relative covariance ( mt  3 , ig , mt104 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  3 , ig , mt107 , igp )                         0.9s
+ relative covariance ( mt  3 , ig , mt107 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt  4 , igp )                         0.9s
+ relative covariance ( mt  4 , ig , mt  4 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -11649,7 +11643,7 @@ using endf-5 format
  101    95  1.178E-01  1.220E-01  1.674E-01  1.686E-01  1.753E-01  1.859E-01
  101   101  2.175E-01
 
- relative covariance ( mt  4 , ig , mt 51 , igp )                         0.9s
+ relative covariance ( mt  4 , ig , mt 51 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -11874,75 +11868,75 @@ using endf-5 format
  101    59  5.528E-04  6.266E-04  7.064E-04  6.491E-04  7.456E-04  7.951E-04
  101    65  8.885E-04  7.724E-04  7.489E-04  5.714E-04  5.013E-04
 
- relative covariance ( mt  4 , ig , mt 52 , igp )                         0.9s
+ relative covariance ( mt  4 , ig , mt 52 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 53 , igp )                         0.9s
+ relative covariance ( mt  4 , ig , mt 53 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 54 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 54 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 55 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 55 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 56 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 56 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 57 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 57 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 58 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 58 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 59 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 59 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 60 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 60 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 61 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 61 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 62 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 62 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 63 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 63 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 64 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 64 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 65 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 65 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 66 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 66 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 67 , igp )                         1.0s
+ relative covariance ( mt  4 , ig , mt 67 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 68 , igp )                         1.1s
+ relative covariance ( mt  4 , ig , mt 68 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt  4 , ig , mt 91 , igp )                         1.1s
+ relative covariance ( mt  4 , ig , mt 91 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -12277,7 +12271,7 @@ using endf-5 format
  101    91  6.557E-03  1.033E-01  8.939E-02  8.257E-02  1.549E+00  1.544E+00
  101    97  2.080E+00  2.082E+00  2.193E+00  2.327E+00  2.644E+00
 
- relative covariance ( mt  4 , ig , mt102 , igp )                         1.1s
+ relative covariance ( mt  4 , ig , mt102 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -13217,7 +13211,7 @@ using endf-5 format
  101    92 -2.087E-05 -2.087E-05 -2.087E-05 -2.087E-05 -2.087E-05 -2.087E-05
  101    98 -2.087E-05 -2.087E-05 -2.087E-05 -2.087E-05
 
- relative covariance ( mt  4 , ig , mt103 , igp )                         1.1s
+ relative covariance ( mt  4 , ig , mt103 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -13261,7 +13255,7 @@ using endf-5 format
  101    95 -1.650E-03 -1.650E-03 -1.650E-03 -1.650E-03 -1.650E-03 -1.650E-03
  101   101 -1.650E-03
 
- relative covariance ( mt  4 , ig , mt104 , igp )                         1.1s
+ relative covariance ( mt  4 , ig , mt104 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -13286,7 +13280,7 @@ using endf-5 format
  101    92 -6.423E-03 -6.423E-03 -6.423E-03 -6.423E-03 -6.423E-03 -6.423E-03
  101    98 -6.423E-03 -6.423E-03 -6.423E-03 -6.423E-03
 
- relative covariance ( mt  4 , ig , mt107 , igp )                         1.1s
+ relative covariance ( mt  4 , ig , mt107 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -13390,7 +13384,7 @@ using endf-5 format
  101    92 -1.350E-02 -1.350E-02 -1.350E-02 -1.350E-02 -1.350E-02 -1.350E-02
  101    98 -1.350E-02 -1.350E-02 -1.350E-02 -1.350E-02
 
- relative covariance ( mt 51 , ig , mt 51 , igp )                         1.1s
+ relative covariance ( mt 51 , ig , mt 51 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -13679,75 +13673,75 @@ using endf-5 format
  101    94  4.250E-02  4.250E-02  4.250E-02  4.250E-02  4.250E-02  4.250E-02
  101   100  4.250E-02  4.250E-02
 
- relative covariance ( mt 51 , ig , mt 52 , igp )                         1.1s
+ relative covariance ( mt 51 , ig , mt 52 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 53 , igp )                         1.1s
+ relative covariance ( mt 51 , ig , mt 53 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 54 , igp )                         1.1s
+ relative covariance ( mt 51 , ig , mt 54 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 55 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 55 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 56 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 56 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 57 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 57 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 58 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 58 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 59 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 59 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 60 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 60 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 61 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 61 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 62 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 62 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 63 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 63 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 64 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 64 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 65 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 65 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 66 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 66 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 67 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 67 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 68 , igp )                         1.2s
+ relative covariance ( mt 51 , ig , mt 68 , igp )                         0.3s
 
  zero
 
- relative covariance ( mt 51 , ig , mt 91 , igp )                         1.3s
+ relative covariance ( mt 51 , ig , mt 91 , igp )                         0.3s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -14082,7 +14076,7 @@ using endf-5 format
  101    94 -1.448E-01 -1.401E-01 -1.291E-01 -1.226E-01 -1.177E-01 -1.175E-01
  101   100 -1.215E-01 -1.018E-01
 
- relative covariance ( mt 51 , ig , mt102 , igp )                         1.3s
+ relative covariance ( mt 51 , ig , mt102 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -14479,15 +14473,15 @@ using endf-5 format
   69    98 -1.144E-05 -1.144E-05 -1.144E-05 -1.144E-05
  101   101  0.000E+00
 
- relative covariance ( mt 51 , ig , mt103 , igp )                         1.3s
+ relative covariance ( mt 51 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 51 , ig , mt104 , igp )                         1.3s
+ relative covariance ( mt 51 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 51 , ig , mt107 , igp )                         1.3s
+ relative covariance ( mt 51 , ig , mt107 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -14517,7 +14511,7 @@ using endf-5 format
   69    76 -7.554E-04 -7.554E-04 -7.554E-04 -7.554E-04 -7.554E-04
  101   101  0.000E+00
 
- relative covariance ( mt 52 , ig , mt 52 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 52 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -14714,71 +14708,71 @@ using endf-5 format
  101    94  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101   100  4.000E-02  4.000E-02
 
- relative covariance ( mt 52 , ig , mt 53 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 53 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 54 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 54 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 55 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 55 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 56 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 56 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 57 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 57 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 58 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 58 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 59 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 59 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 60 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 61 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 62 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 63 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 64 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 65 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 66 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 67 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 68 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt 91 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -14975,23 +14969,23 @@ using endf-5 format
  101    94 -7.966E-03 -7.397E-03 -6.322E-03 -5.718E-03 -5.013E-03 -3.761E-03
  101   100 -3.103E-03 -2.275E-03
 
- relative covariance ( mt 52 , ig , mt102 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt103 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt104 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 52 , ig , mt107 , igp )                         1.3s
+ relative covariance ( mt 52 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 53 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 53 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -15126,67 +15120,67 @@ using endf-5 format
  101    94  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101   100  4.000E-02  4.000E-02
 
- relative covariance ( mt 53 , ig , mt 54 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 54 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 55 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 55 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 56 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 56 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 57 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 57 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 58 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 58 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 59 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 59 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 60 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 61 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 62 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 63 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 64 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 65 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 66 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 67 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 68 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt 91 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -15321,23 +15315,23 @@ using endf-5 format
  101    94 -4.496E-02 -4.199E-02 -3.640E-02 -3.326E-02 -2.960E-02 -2.308E-02
  101   100 -1.952E-02 -1.487E-02
 
- relative covariance ( mt 53 , ig , mt102 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt103 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt104 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 53 , ig , mt107 , igp )                         1.3s
+ relative covariance ( mt 53 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 54 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 54 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -15434,63 +15428,63 @@ using endf-5 format
  101    91  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    97  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 54 , ig , mt 55 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 55 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 56 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 56 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 57 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 57 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 58 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 58 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 59 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 59 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 60 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 61 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 62 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 63 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 64 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 65 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 66 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 67 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 68 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt 91 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -15587,23 +15581,23 @@ using endf-5 format
  101    91 -8.188E-03 -7.256E-03 -5.888E-03 -5.276E-03 -4.879E-03 -4.126E-03
  101    97 -3.703E-03 -3.210E-03 -2.335E-03 -1.917E-03 -1.449E-03
 
- relative covariance ( mt 54 , ig , mt102 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt103 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt104 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 54 , ig , mt107 , igp )                         1.3s
+ relative covariance ( mt 54 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 55 , igp )                         1.3s
+ relative covariance ( mt 55 , ig , mt 55 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -15696,59 +15690,59 @@ using endf-5 format
  101    92  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    98  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 55 , ig , mt 56 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 56 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 57 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 57 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 58 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 58 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 59 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 59 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 60 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 61 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt 91 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -15841,23 +15835,23 @@ using endf-5 format
  101    92 -2.292E-02 -1.942E-02 -1.785E-02 -1.655E-02 -1.407E-02 -1.268E-02
  101    98 -1.106E-02 -8.179E-03 -6.732E-03 -5.008E-03
 
- relative covariance ( mt 55 , ig , mt102 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt103 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt104 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 55 , ig , mt107 , igp )                         1.4s
+ relative covariance ( mt 55 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 56 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 56 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -15942,55 +15936,55 @@ using endf-5 format
  101    94  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101   100  4.000E-02  4.000E-02
 
- relative covariance ( mt 56 , ig , mt 57 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 57 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 58 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 58 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 59 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 59 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 60 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 61 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt 91 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16075,23 +16069,23 @@ using endf-5 format
  101    94 -4.167E-02 -3.880E-02 -3.333E-02 -3.025E-02 -2.666E-02 -2.028E-02
  101   100 -1.689E-02 -1.258E-02
 
- relative covariance ( mt 56 , ig , mt102 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt103 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt104 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 56 , ig , mt107 , igp )                         1.4s
+ relative covariance ( mt 56 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 57 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 57 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16172,51 +16166,51 @@ using endf-5 format
  101    95  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101   101  4.000E-02
 
- relative covariance ( mt 57 , ig , mt 58 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 58 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 59 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 59 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 60 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 61 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt 91 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16297,23 +16291,23 @@ using endf-5 format
  101    95 -4.679E-02 -4.068E-02 -3.725E-02 -3.325E-02 -2.610E-02 -2.173E-02
  101   101 -1.542E-02
 
- relative covariance ( mt 57 , ig , mt102 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt103 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt104 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 57 , ig , mt107 , igp )                         1.4s
+ relative covariance ( mt 57 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 58 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 58 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16369,47 +16363,47 @@ using endf-5 format
  101    91  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    97  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 58 , ig , mt 59 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 59 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 60 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 61 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt 91 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16465,23 +16459,23 @@ using endf-5 format
  101    91 -5.252E-02 -5.223E-02 -5.050E-02 -4.973E-02 -4.693E-02 -4.151E-02
  101    97 -3.847E-02 -3.491E-02 -2.855E-02 -2.442E-02 -1.817E-02
 
- relative covariance ( mt 58 , ig , mt102 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt103 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt104 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 58 , ig , mt107 , igp )                         1.4s
+ relative covariance ( mt 58 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 59 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 59 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16531,43 +16525,43 @@ using endf-5 format
  101    93  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    99  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 59 , ig , mt 60 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 60 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 61 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt 91 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16617,23 +16611,23 @@ using endf-5 format
  101    93 -4.959E-02 -5.012E-02 -4.786E-02 -4.346E-02 -4.098E-02 -3.810E-02
  101    99 -3.289E-02 -2.871E-02 -2.157E-02
 
- relative covariance ( mt 59 , ig , mt102 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt103 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt104 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 59 , ig , mt107 , igp )                         1.4s
+ relative covariance ( mt 59 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 60 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 60 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16677,39 +16671,39 @@ using endf-5 format
  101    95  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101   101  4.000E-02
 
- relative covariance ( mt 60 , ig , mt 61 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 61 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt 91 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16753,23 +16747,23 @@ using endf-5 format
  101    95 -4.152E-02 -4.153E-02 -4.154E-02 -4.154E-02 -4.136E-02 -3.791E-02
  101   101 -2.908E-02
 
- relative covariance ( mt 60 , ig , mt102 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt103 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt104 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 60 , ig , mt107 , igp )                         1.4s
+ relative covariance ( mt 60 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 61 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 61 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16796,35 +16790,35 @@ using endf-5 format
  101    91  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    97  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 61 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 62 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt 91 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16851,23 +16845,23 @@ using endf-5 format
  101    91 -1.741E-03 -1.083E-02 -2.392E-02 -2.977E-02 -3.112E-02 -3.353E-02
  101    97 -3.489E-02 -3.647E-02 -3.908E-02 -3.684E-02 -2.918E-02
 
- relative covariance ( mt 61 , ig , mt102 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt103 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt104 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 61 , ig , mt107 , igp )                         1.4s
+ relative covariance ( mt 61 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 62 , igp )                         1.4s
+ relative covariance ( mt 62 , ig , mt 62 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16890,31 +16884,31 @@ using endf-5 format
  101    93  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    99  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 62 , ig , mt 63 , igp )                         1.4s
+ relative covariance ( mt 62 , ig , mt 63 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 64 , igp )                         1.4s
+ relative covariance ( mt 62 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 65 , igp )                         1.4s
+ relative covariance ( mt 62 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 66 , igp )                         1.4s
+ relative covariance ( mt 62 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 67 , igp )                         1.4s
+ relative covariance ( mt 62 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 68 , igp )                         1.4s
+ relative covariance ( mt 62 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 62 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16937,23 +16931,23 @@ using endf-5 format
  101    93 -1.125E-02 -2.110E-02 -2.502E-02 -3.233E-02 -3.643E-02 -4.122E-02
  101    99 -4.945E-02 -4.872E-02 -4.106E-02
 
- relative covariance ( mt 62 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 62 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 62 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt104 , igp )                         1.5s
+ relative covariance ( mt 62 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 62 , ig , mt107 , igp )                         1.5s
+ relative covariance ( mt 62 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 63 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt 63 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -16974,27 +16968,27 @@ using endf-5 format
  101    94  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101   100  4.000E-02  4.000E-02
 
- relative covariance ( mt 63 , ig , mt 64 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt 64 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 65 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 66 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 67 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 68 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17015,23 +17009,23 @@ using endf-5 format
  101    94 -9.105E-05 -5.080E-03 -1.461E-02 -1.996E-02 -2.621E-02 -3.707E-02
  101   100 -3.856E-02 -3.480E-02
 
- relative covariance ( mt 63 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt104 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 63 , ig , mt107 , igp )                         1.5s
+ relative covariance ( mt 63 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 64 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt 64 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17042,23 +17036,23 @@ using endf-5 format
  100    96  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    96  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 64 , ig , mt 65 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt 65 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 66 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 67 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 68 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17069,23 +17063,23 @@ using endf-5 format
  100    96 -3.008E-03 -6.572E-03 -1.073E-02 -1.817E-02 -2.292E-02 -2.997E-02
  101    96 -3.008E-03 -6.572E-03 -1.073E-02 -1.817E-02 -2.292E-02 -2.997E-02
 
- relative covariance ( mt 64 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt104 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 64 , ig , mt107 , igp )                         1.5s
+ relative covariance ( mt 64 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 65 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt 65 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17094,19 +17088,19 @@ using endf-5 format
  100    98  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    98  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 65 , ig , mt 66 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt 66 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 67 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 68 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 65 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17115,23 +17109,23 @@ using endf-5 format
  100    98 -5.263E-03 -1.591E-02 -2.223E-02 -3.113E-02
  101    98 -5.263E-03 -1.591E-02 -2.223E-02 -3.113E-02
 
- relative covariance ( mt 65 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 65 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 65 , ig , mt104 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 65 , ig , mt107 , igp )                         1.5s
+ relative covariance ( mt 65 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 66 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt 66 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17139,15 +17133,15 @@ using endf-5 format
  100    99  4.000E-02  4.000E-02  4.000E-02
  101    99  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt 66 , ig , mt 67 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt 67 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 68 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 66 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17155,85 +17149,85 @@ using endf-5 format
  100    99 -3.658E-03 -1.144E-02 -2.650E-02
  101    99 -3.658E-03 -1.144E-02 -2.650E-02
 
- relative covariance ( mt 66 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 66 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 66 , ig , mt104 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 66 , ig , mt107 , igp )                         1.5s
+ relative covariance ( mt 66 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 67 , igp )                         1.5s
+ relative covariance ( mt 67 , ig , mt 67 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
  100   100  4.000E-02  4.000E-02
  101   100  4.000E-02  4.000E-02
 
- relative covariance ( mt 67 , ig , mt 68 , igp )                         1.5s
+ relative covariance ( mt 67 , ig , mt 68 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 67 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 67 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
  100   100 -4.611E-03 -2.204E-02
  101   100 -4.611E-03 -2.204E-02
 
- relative covariance ( mt 67 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 67 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 67 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 67 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 67 , ig , mt104 , igp )                         1.5s
+ relative covariance ( mt 67 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 67 , ig , mt107 , igp )                         1.5s
+ relative covariance ( mt 67 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 68 , ig , mt 68 , igp )                         1.5s
+ relative covariance ( mt 68 , ig , mt 68 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
  101   101  4.000E-02
 
- relative covariance ( mt 68 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 68 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
  101   101 -1.521E-02
 
- relative covariance ( mt 68 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 68 , ig , mt102 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 68 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 68 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 68 , ig , mt104 , igp )                         1.5s
+ relative covariance ( mt 68 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 68 , ig , mt107 , igp )                         1.5s
+ relative covariance ( mt 68 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt 91 , ig , mt 91 , igp )                         1.5s
+ relative covariance ( mt 91 , ig , mt 91 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -17448,7 +17442,7 @@ using endf-5 format
  101    91  2.573E-01  1.901E+00  1.638E+00  1.526E+00  1.933E+01  1.926E+01
  101    97  2.576E+01  2.580E+01  2.716E+01  2.880E+01  3.261E+01
 
- relative covariance ( mt 91 , ig , mt102 , igp )                         1.5s
+ relative covariance ( mt 91 , ig , mt102 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -18048,7 +18042,7 @@ using endf-5 format
  101    92 -2.536E-04 -2.536E-04 -2.536E-04 -2.536E-04 -2.536E-04 -2.536E-04
  101    98 -2.536E-04 -2.536E-04 -2.536E-04 -2.536E-04
 
- relative covariance ( mt 91 , ig , mt103 , igp )                         1.5s
+ relative covariance ( mt 91 , ig , mt103 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -18092,7 +18086,7 @@ using endf-5 format
  101    95 -2.006E-02 -2.006E-02 -2.006E-02 -2.006E-02 -2.006E-02 -2.006E-02
  101   101 -2.006E-02
 
- relative covariance ( mt 91 , ig , mt104 , igp )                         1.6s
+ relative covariance ( mt 91 , ig , mt104 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -18117,7 +18111,7 @@ using endf-5 format
  101    92 -7.807E-02 -7.807E-02 -7.807E-02 -7.807E-02 -7.807E-02 -7.807E-02
  101    98 -7.807E-02 -7.807E-02 -7.807E-02 -7.807E-02
 
- relative covariance ( mt 91 , ig , mt107 , igp )                         1.6s
+ relative covariance ( mt 91 , ig , mt107 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -18206,7 +18200,7 @@ using endf-5 format
  101    92 -1.641E-01 -1.641E-01 -1.641E-01 -1.641E-01 -1.641E-01 -1.641E-01
  101    98 -1.641E-01 -1.641E-01 -1.641E-01 -1.641E-01
 
- relative covariance ( mt102 , ig , mt102 , igp )                         1.6s
+ relative covariance ( mt102 , ig , mt102 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -19912,19 +19906,19 @@ using endf-5 format
  101    92  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    98  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt102 , ig , mt103 , igp )                         1.6s
+ relative covariance ( mt102 , ig , mt103 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt102 , ig , mt104 , igp )                         1.6s
+ relative covariance ( mt102 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt102 , ig , mt107 , igp )                         1.6s
+ relative covariance ( mt102 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt103 , ig , mt103 , igp )                         1.6s
+ relative covariance ( mt103 , ig , mt103 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -19968,15 +19962,15 @@ using endf-5 format
  101    95  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101   101  4.000E-02
 
- relative covariance ( mt103 , ig , mt104 , igp )                         1.6s
+ relative covariance ( mt103 , ig , mt104 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt103 , ig , mt107 , igp )                         1.6s
+ relative covariance ( mt103 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt104 , ig , mt104 , igp )                         1.6s
+ relative covariance ( mt104 , ig , mt104 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -20001,11 +19995,11 @@ using endf-5 format
  101    92  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02  4.000E-02
  101    98  4.000E-02  4.000E-02  4.000E-02  4.000E-02
 
- relative covariance ( mt104 , ig , mt107 , igp )                         1.6s
+ relative covariance ( mt104 , ig , mt107 , igp )                         0.4s
 
  zero
 
- relative covariance ( mt107 , ig , mt107 , igp )                         1.6s
+ relative covariance ( mt107 , ig , mt107 , igp )                         0.4s
 
   ig   igp         +0         +1         +2
  ---   ---       ----       ----       ----
@@ -20108,10 +20102,10 @@ using endf-5 format
  100    98  1.250E-01  1.250E-01  1.250E-01  1.250E-01
  101    92  1.250E-01  1.250E-01  1.250E-01  1.250E-01  1.250E-01  1.250E-01
  101    98  1.250E-01  1.250E-01  1.250E-01  1.250E-01
-                                                                          1.6s
+                                                                          0.4s
  *****************************************************************************
 
- covr...process covariance data                                           1.6s
+ covr...process covariance data                                           0.4s
 
  unit for input covariance tape .......         33
  unit for output covariance tape ......          0
@@ -21222,10 +21216,10 @@ using endf-5 format
    1306    103   1306    104   null                                             
    1306    103   1306    107   null                                             
    1306    104   1306    107   null                                             
-                                                                          8.7s
+                                                                          5.1s
  **************************************************************************
 
- viewr...display plots                                                    8.7s
+ viewr...display plots                                                    5.1s
 
  lori .................................          1
  xpage ................................     10.000
@@ -82713,5 +82707,5 @@ using endf-5 format
 
  data nform ...........................          0
 
-                                                                          9.6s
+                                                                          5.5s
  *****************************************************************************
