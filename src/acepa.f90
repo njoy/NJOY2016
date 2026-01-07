@@ -406,6 +406,7 @@ contains
      .3275397612e0_kr,.3275397612e0_kr,.2920426836e0_kr,&
      .2248893420e0_kr,.1333059908e0_kr,.0222222222e0_kr/)
    real(kr),parameter::c2=0.249467e0_kr
+   !---conversion coefficient E (MeV) to k = E / m_e / c / c
    real(kr),parameter::c3=1.95693e-6_kr
    real(kr),parameter::c4=0.0485262e0_kr
    real(kr),parameter::c5=20.60744e0_kr
@@ -413,21 +414,22 @@ contains
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::one=1
 
-   !--photon incoherent scattering and heating.
-   zz=a(2)
-   enow=c3*e
-   enowi=1/enow
-   enow2=enow*enow
-   pnow=enow
+   !---photon incoherent scattering and heating.
+   zz=a(2)         ! z number of the element
+   enow=c3*e       ! k = E / m_e / c / c
+   enowi=1/enow    ! 1/k
+   enow2=enow*enow ! k * k
+   pnow=enow       ! kprime = k / ( 1 + k ( 1 - mu ) ) = k for mu = 1
    xnow=0
    xzz=c5*sqrt(enow/500)
-   q2m=(2*enow*(1+enow)/(1+2*enow))**2
+   q2m=(2*enow*(1+enow)/(1+2*enow))**2 ! ( 2 k ( 1 + k ) / ( 1 + 2 k ) )^2
+   !---calculate the value of the scattering function
    if (xzz.le.zz) then
       ip=2
       ir=1
-      call terpa(snow,xnow,xnext,idis,a(1),ip,ir)
+      call terpa(snow,xnow,xnext,idis,a(1),ip,ir) ! interpolate scattering function to x
    else
-      snow=zz
+      snow=zz ! large x value so scattering function value = z number
       xnext=big
    endif
    arg=0
@@ -455,40 +457,41 @@ contains
          endif
       enddo
       idone=0
-      pnext=enow/(1+2*enow)
-      px=enow/(1+enow*(1-unext))
+      pnext=enow/(1+2*enow)      ! kprime = k / ( 1 + k ( 1 - mu ) ) = k / ( 1 + 2 k ) for mu = -1
+      px=enow/(1+enow*(1-unext)) ! kprime = k / ( 1 + k ( 1 - mu ) )
       if (px.gt.pnext) pnext=px
       if (pnext.lt.pnow/2) pnext=pnow/2
       if (pnext.gt.pnow/rndoff) pnext=pnow/rndoff
-      aq=(pnext+pnow)/2
+      aq=(pnext+pnow)/2  ! coordinate transform to bring interval to -1,1 for integration?
       bq=(pnext-pnow)/2
-      nq=10
-      do iq=1,nq
+      nq=10              ! code mentions either 6 or 10 point Gauss-Lobatto but 10 is hardcoded
+      do iq=1,nq         ! loop over quadrature points and weights
          if (nq.eq.6) then
-            uq=aq+bq*qp6(iq)
+            uq=aq+bq*qp6(iq)      ! unreachable code
             wq=-c2*bq*qw6(iq)
          else if (nq.eq.10) then
-            uq=aq+bq*qp10(iq)
+            uq=aq+bq*qp10(iq)     ! kprime corresponding to quadrature point
             wq=-c2*bq*qw10(iq)
          endif
          pnow=uq
          if (iq.gt.1) then
             pnowi=1/pnow
-            unow=1+enowi-pnowi
+            unow=1+enowi-pnowi    ! mu = 1 + 1 / k + 1 / kprime
+            ! evaluate the scattering function
             if (xzz.le.zz) then
-               rm2=(1-unow)/2
-               rm=sqrt(rm2)
-               rt=1+2*enow*rm2
+               rm2=(1-unow)/2     ! ( 1 - mu ) / 2
+               rm=sqrt(rm2)       ! sqrt( ( 1 - mu ) / 2 )
+               rt=1+2*enow*rm2    ! 1 + 2 k sqrt( ( 1 - mu ) / 2 )
                xnow=c5*2*enow*rm*sqrt(rt+enow2*rm2)/rt
                xnow=xnow*rndoff
                call terpa(snow,xnow,xnext,idis,a(1),ip,ir)
             endif
             dk=unow-1
-            fact=snow*(enow*pnowi+pnow*enowi+dk*(2+dk))/enow2
+            fact=snow*(enow*pnowi+pnow*enowi+dk*(2+dk))/enow2  $ probably scattering function times Klein-Nishina?
             arg=fact
          endif
-         siginc=siginc+wq*arg
-         ebar=ebar+wq*arg*pnow/c3
+         siginc=siginc+wq*arg       ! accumulate integral of differential cross section
+         ebar=ebar+wq*arg*pnow/c3   ! accumulate integral of Eprime times differential cross section
       enddo
       if (unow.lt.-.9999) idone=1
    enddo

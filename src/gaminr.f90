@@ -1335,6 +1335,9 @@ contains
 
       !--photon incoherent scattering and heating.
       !--compute for all legendre orders and all sink groups.
+      !--see subroutine iheat in groupr.f90 for comments, same code
+      !--and algorithm for calculation of ebar from incoherent/Compton
+      !--scattering
       else if (mtd.eq.504) then
          igp=1
          do while (e.ge.egg(igp+1))
