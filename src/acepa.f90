@@ -487,7 +487,7 @@ contains
                call terpa(snow,xnow,xnext,idis,a(1),ip,ir)
             endif
             dk=unow-1
-            fact=snow*(enow*pnowi+pnow*enowi+dk*(2+dk))/enow2  $ probably scattering function times Klein-Nishina?
+            fact=snow*(enow*pnowi+pnow*enowi+dk*(2+dk))/enow2  ! probably scattering function times Klein-Nishina?
             arg=fact
          endif
          siginc=siginc+wq*arg       ! accumulate integral of differential cross section
