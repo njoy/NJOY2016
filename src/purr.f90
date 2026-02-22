@@ -37,6 +37,10 @@ module purm
    real(kr),dimension(:),allocatable::sb
    real(kr), dimension(:),allocatable::sb_raw
 
+   ! variance-budgeting: within-bin File 3 variance at each grid point
+   ! v3arr(ie, ir) where ir=1:total, 2:elastic, 3:fission, 4:capture
+   real(kr),dimension(:,:),allocatable::v3arr
+
    ! probability table globals
    real(kr),dimension(:,:,:),allocatable::bval
    real(kr),dimension(:),allocatable::tmin,tmax,tsum
@@ -114,6 +118,8 @@ contains
    real(kr)::time,za,awr,ez,sigx,temz,h
    real(kr)::bkgz(4)
    real(kr)::varpres(4)
+   real(kr)::ptvar,a_scale
+   integer::jj
    character(60)::strng1,strng2
    real(kr),dimension(:),allocatable::a
    real(kr),dimension(:,:,:),allocatable::tabl
@@ -265,6 +271,9 @@ contains
    endif
    call findf(matd,3,1,nendf)
    call rdf3un(a)
+
+   !--compute within-bin variance of File 3 for variance budgeting
+   call compute_v3(a,matd)
 
    !--read in the total and partial heating cross sections
    if (allocated(heat)) deallocate(heat)
@@ -516,12 +525,37 @@ contains
          n=n+1
          a(n)=0
       enddo
+      !--compute variance-budgeting a parameter per reaction
+      !--ir=1:total, 2:elastic, 3:fission, 4:capture
+      !--ptvar = sampled p-table variance for reaction ir
+      !--v3arr(ie,ir) = within-bin File 3 variance for reaction ir
+      !--a_scale = sqrt(max(0, 1 - V3/V)) per reaction
+      if (iprint.gt.0) write(nsyso,&
+        '(''  e='',1p,e11.4,''  reaction-wise variance budget:'')') eunr(ie)
       do i=2,5
+         !--compute p-table variance for this reaction
+         !--tabl(:,i,it) holds the bin-averaged cross section for reaction i-1
+         !--sigu(i-1,1,1) is the infinitely-dilute mean for reaction i-1
+         ptvar=0
+         do jj=1,nbin
+            ptvar=ptvar+tabl(jj,1,it)*(tabl(jj,i,it)-sigu(i-1,1,1))**2
+         enddo
+         if (ptvar.gt.0.and.v3arr(ie,i-1).lt.ptvar) then
+            a_scale=sqrt(1.0_kr-v3arr(ie,i-1)/ptvar)
+         else if (ptvar.gt.0) then
+            !--V3 >= V: File 3 already carries all variance, no p-table modulation
+            a_scale=0
+         else
+            a_scale=1
+         endif
+         if (iprint.gt.0) write(nsyso,&
+           '(''    rxn'',i2,'': V3='',1p,e11.4,'' V='',e11.4,&
+           &'' a='',0p,f8.5)') i-1,v3arr(ie,i-1),ptvar,a_scale
          do j=1,nbin
             l=n1+j+nbin*(i-1)
             if (lssf.eq.1) then
                if (sigu(i-1,1,1).ne.0 .and. varpres(i-1).ne.0) then
-                  a(l)=(a(l) + varpres(i-1) - sigu(i-1,1,1))/varpres(i-1)
+                  a(l)=1.0_kr+a_scale*(a(l)-sigu(i-1,1,1))/varpres(i-1)
                else
                   a(l)=1
                endif
@@ -593,6 +627,7 @@ contains
    write(nsyso,'(/'' generated cross sections at '',i3,&
      &'' points'',30x,f8.1,''s'')') nunx,time
    deallocate(sb)
+   if (allocated(v3arr)) deallocate(v3arr)
    go to 110
 
    !--mat has no resonance parameters. copy as is to nout.
@@ -1244,6 +1279,134 @@ contains
    return
    end subroutine rdf3un
 
+   subroutine compute_v3(a_main,matd)
+   !-------------------------------------------------------------------
+   ! Compute within-bin variance of File 3 cross sections at each
+   ! URR grid point for all four reaction types, using half-interval
+   ! centered sampling.
+   !
+   ! v3arr(ie, ir) stores variance for grid point ie, reaction ir:
+   !   ir=1: total (MT=1)
+   !   ir=2: elastic (MT=2)
+   !   ir=3: fission (MT=18)
+   !   ir=4: capture (MT=102)
+   !
+   ! For each grid point ie, V3 is computed over an energy window
+   ! centered on eunr(ie):
+   !   [geomean(ie-1,ie), geomean(ie,ie+1)]
+   ! with one-sided windows at the URR boundaries.
+   !
+   ! File 3 is read sequentially from the ENDF tape. MTs that do
+   ! not exist for a given material (e.g., fission for non-fissile)
+   ! are left with V3=0.
+   !-------------------------------------------------------------------
+   use mainio ! provides nsyso
+   use util   ! provides sigfig
+   use endf   ! provides endf routines, mfh, mth, gety1, contio, findf
+   ! externals
+   real(kr)::a_main(*)
+   integer,intent(in)::matd
+   ! internals
+   integer,parameter::nsub=200
+   integer,parameter::mxwork=20000
+   real(kr)::a_work(mxwork)
+   real(kr)::elo,ehi,de,e_sub,enext,sig_sub
+   real(kr)::sum_sig,sum_sig2,mean_sub,v3_val
+   integer::ie,isub,nb,nw,idis,iscr,ir
+   real(kr),parameter::up=1.00001e0_kr
+   real(kr),parameter::dn=0.99999e0_kr
+   real(kr),parameter::zero=0
+   character(3),dimension(4),parameter::rxnm=(/&
+     'tot','els','fis','cap'/)
+
+   iscr=1
+
+   !--allocate v3arr for all reactions at each grid point
+   if (allocated(v3arr)) deallocate(v3arr)
+   allocate(v3arr(nunr,4))
+   v3arr=zero
+
+   !--position to start of File 3 on ENDF tape
+   call findf(matd,3,1,nendf)
+   call contio(nendf,0,0,a_work(iscr),nb,nw)
+
+   !--read through File 3 sections sequentially
+   do while (mfh.eq.3.and.mth.le.102)
+
+      !--identify reaction index for this MT
+      ir=0
+      if (mth.eq.1)   ir=1
+      if (mth.eq.2)   ir=2
+      if (mth.eq.18)  ir=3
+      if (mth.eq.102) ir=4
+
+      if (ir.eq.0) then
+         !--not a reaction we need, skip to next section
+         call tosend(nendf,0,0,a_work(iscr))
+         call contio(nendf,0,0,a_work(iscr),nb,nw)
+         cycle
+      endif
+
+      !--initialize gety1 interpolation for this section
+      e_sub=0
+      call gety1(e_sub,enext,idis,sig_sub,nendf,a_work(iscr))
+
+      !--loop over URR grid points (energies are monotonically
+      !--increasing, satisfying gety1's sequential access requirement)
+      do ie=1,nunr
+
+         !--determine half-interval boundaries (geometric midpoints)
+         if (ie.eq.1) then
+            elo=eunr(1)*up
+         else
+            elo=sqrt(eunr(ie-1)*eunr(ie))
+         endif
+         if (ie.eq.nunr) then
+            ehi=eunr(nunr)*dn
+         else
+            ehi=sqrt(eunr(ie)*eunr(ie+1))
+         endif
+
+         !--skip degenerate intervals
+         if (ehi.le.elo) then
+            v3arr(ie,ir)=zero
+            cycle
+         endif
+
+         !--dense sampling of File 3 within half-interval
+         de=(ehi-elo)/(nsub+1)
+         sum_sig=zero
+         sum_sig2=zero
+         do isub=1,nsub
+            e_sub=elo+de*isub
+            call gety1(e_sub,enext,idis,sig_sub,nendf,a_work(iscr))
+            sum_sig=sum_sig+sig_sub
+            sum_sig2=sum_sig2+sig_sub*sig_sub
+         enddo
+         mean_sub=sum_sig/nsub
+         v3_val=sum_sig2/nsub-mean_sub*mean_sub
+         if (v3_val.lt.zero) v3_val=zero
+         v3arr(ie,ir)=v3_val
+      enddo
+
+      !--advance past remaining section data to SEND record
+      call tosend(nendf,0,0,a_work(iscr))
+      !--read next section head
+      call contio(nendf,0,0,a_work(iscr),nb,nw)
+   enddo
+
+   !--print diagnostic table
+   write(nsyso,'(/'' variance budgeting: File 3 within-bin variance'')')
+   write(nsyso,'(''   ie'',6x,''energy'',10x,''V3_tot'',&
+     &8x,''V3_els'',8x,''V3_fis'',8x,''V3_cap'')')
+   do ie=1,nunr
+      write(nsyso,'(i5,1p,5e14.5)') ie,eunr(ie),&
+        v3arr(ie,1),v3arr(ie,2),v3arr(ie,3),v3arr(ie,4)
+   enddo
+
+   return
+   end subroutine compute_v3
+
    subroutine rdheat(a,heat,eunr,temp,ntemp,nunr,ihave,matd)
    !-------------------------------------------------------------------
    ! Read the total heating (MT=301) and partial heating cross
@@ -1825,6 +1988,11 @@ contains
    real(kr)::efact,cfact,ffact
    real(kr)::tot,tem,argt,arge,argf,argc,tnorm,enorm
    real(kr)::fnorm,cnorm,denom,den,ttt
+   ! sampled cross-section statistics accumulators
+   real(kr)::sum_tot,sum_els,sum_fis,sum_cap
+   real(kr)::sumsq_tot,sumsq_els,sumsq_fis,sumsq_cap
+   integer::ntotal_samples
+   real(kr)::smean(4),svar(4),xsval
    character(3),dimension(4),parameter::nmr=(/&
      'tot','els','fis','cap'/)
    character(60)::strng
@@ -1907,6 +2075,9 @@ contains
 
    !--loop over ladders
    !--use first pass to set prob table limits
+   sum_tot=0; sum_els=0; sum_fis=0; sum_cap=0
+   sumsq_tot=0; sumsq_els=0; sumsq_fis=0; sumsq_cap=0
+   ntotal_samples=0
    do 150 iladr=1,nladr
    ne=nsamp
 
@@ -2225,6 +2396,24 @@ contains
       enddo
    enddo
 
+   !--accumulate sampled cross-section statistics (first temperature)
+   !--these are the raw sampled xs BEFORE binning into the probability table
+   do ie=1,ne
+      xsval=els(1,ie)+fis(1,ie)+cap(1,ie)+bkg(1)
+      sum_tot=sum_tot+xsval
+      sumsq_tot=sumsq_tot+xsval*xsval
+      xsval=els(1,ie)+bkg(2)
+      sum_els=sum_els+xsval
+      sumsq_els=sumsq_els+xsval*xsval
+      xsval=fis(1,ie)+bkg(3)
+      sum_fis=sum_fis+xsval
+      sumsq_fis=sumsq_fis+xsval*xsval
+      xsval=cap(1,ie)+bkg(4)
+      sum_cap=sum_cap+xsval
+      sumsq_cap=sumsq_cap+xsval*xsval
+   enddo
+   ntotal_samples=ntotal_samples+ne
+
    !--compute infinitely-dilute cross sections
    if (iladr.eq.1) then
       tav=0
@@ -2367,6 +2556,25 @@ contains
 
    !--close loop over ladders
   150 continue
+
+   !--compute and report sampled cross-section mean and variance
+   !--these come directly from the ladder samples, not from the ptable
+   smean(1)=calc_sampled_mean(sum_tot,ntotal_samples)
+   smean(2)=calc_sampled_mean(sum_els,ntotal_samples)
+   smean(3)=calc_sampled_mean(sum_fis,ntotal_samples)
+   smean(4)=calc_sampled_mean(sum_cap,ntotal_samples)
+   svar(1)=calc_variance(sum_tot,sumsq_tot,ntotal_samples)
+   svar(2)=calc_variance(sum_els,sumsq_els,ntotal_samples)
+   svar(3)=calc_variance(sum_fis,sumsq_fis,ntotal_samples)
+   svar(4)=calc_variance(sum_cap,sumsq_cap,ntotal_samples)
+   write(nsyso,'(/'' sampled cross-section statistics'',&
+     &'' (all ladders, T='',1p,e10.3,'' K)'')')temp(1)
+   write(nsyso,'(''   N_samples = '',i10)') ntotal_samples
+   write(nsyso,'(''   reaction    sampled_mean    sampled_var'')')
+   write(nsyso,'(''   total   '',1p,e14.6,2x,e14.6)')smean(1),svar(1)
+   write(nsyso,'(''   elastic '',1p,e14.6,2x,e14.6)')smean(2),svar(2)
+   write(nsyso,'(''   fission '',1p,e14.6,2x,e14.6)')smean(3),svar(3)
+   write(nsyso,'(''   capture '',1p,e14.6,2x,e14.6)')smean(4),svar(4)
 
    !--write overall average cross sections
    tav=tav/nladr
@@ -2925,5 +3133,44 @@ contains
    if (rann.eq.zero) go to 100
    return
    end function rann
+
+   real(kr) function calc_sampled_mean(xsum,n)
+   !-------------------------------------------------------------------
+   ! Compute the mean from a running sum and sample count.
+   !   mean = sum / N
+   !-------------------------------------------------------------------
+   ! externals
+   real(kr),intent(in)::xsum
+   integer,intent(in)::n
+
+   if (n.gt.0) then
+      calc_sampled_mean=xsum/n
+   else
+      calc_sampled_mean=0
+   endif
+   return
+   end function calc_sampled_mean
+
+   real(kr) function calc_variance(xsum,xsumsq,n)
+   !-------------------------------------------------------------------
+   ! Compute the population variance from running sum and sum-of-squares.
+   !   var = (sum_sq / N) - (sum / N)^2
+   ! Clamp to zero if round-off produces a small negative value.
+   !-------------------------------------------------------------------
+   ! externals
+   real(kr),intent(in)::xsum,xsumsq
+   integer,intent(in)::n
+   ! internals
+   real(kr)::xmean
+
+   if (n.gt.0) then
+      xmean=xsum/n
+      calc_variance=xsumsq/n-xmean*xmean
+      if (calc_variance.lt.0) calc_variance=0
+   else
+      calc_variance=0
+   endif
+   return
+   end function calc_variance
 
 end module purm
