@@ -7,7 +7,7 @@ module acecm
    private
 
    ! main ace container array
-   integer,parameter,public::nxss=50000000
+   integer,parameter,public::nxss=100000000
    real(kr),dimension(:),allocatable,public::xss
 
    !--Public routines
@@ -30,13 +30,13 @@ contains
    integer::i
    character(10),dimension(500),parameter::hndf=(/&
      'total     ','elastic   ','nonelastic','inelastic ','(n,x)     ',&
-     '(n,1/2*1) ','(n,1/2*2) ','(n,1/2*3) ','(n,1/2*4) ','(n,x)     ',&
+     '(n,1/2*1) ','(n,1/2*2) ','(n,1/2*3) ','(n,1/2*4) ','(n,cont)  ',&
      '(n,2nd)   ','(n,x)     ','(n,x)     ','(n,x)     ','(n,x)     ',&
      '(n,2n)    ','(n,3n)    ','fission   ','(n,f)     ','(n,n*f)   ',&
-     '(n,2nf)   ','(n,n*)a   ','(n,n*)3a  ','(n,2n)a   ','(n,3n)a   ',&
-     '(n,2n)iso ','(n,abs)   ','(n,n*)p   ','(n,n*)2a  ','(n,2n)2a  ',&
-     '(n,x)     ','(n,n*)d   ','(n,n*)t   ','(n,n*)he3 ','(n,n*)d2a ',&
-     '(n,n*)t2a ','(n,4n)    ','(n,3nf)   ','(n,x)     ','(n,x)     ',&
+     '(n,2nf)   ','(n,na)    ','(n,n3a)   ','(n,2na)   ','(n,3na)   ',&
+     '(n,2n)iso ','(n,abs)   ','(n,np)    ','(n,n2a)   ','(n,2n2a)  ',&
+     '(n,x)     ','(n,nd)    ','(n,nt)    ','(n,nhe3)  ','(n,nd2a)  ',&
+     '(n,nt2a)  ','(n,4n)    ','(n,3nf)   ','(n,x)     ','(n,x)     ',&
      '(n,2np)   ','(n,3np)   ','(n,x)     ','(n,n2p)   ','(n,npa)   ',&
      '(n,2/2*1) ','(n,2/2*2) ','(n,2/2*3) ','(n,2/2*4) ','(n,n*0)   ',& !50
      '(n,n*1)   ','(n,n*2)   ','(n,n*3)   ','(n,n*4)   ','(n,n*5)   ',&
@@ -49,7 +49,7 @@ contains
      '(n,n*36)  ','(n,n*37)  ','(n,n*38)  ','(n,n*39)  ','(n,n*40)  ',&
      '(n,n*c)   ','(n,x)     ','(n,x)     ','(n,x)     ','(n,x)     ',&
      '(n,x)     ','(n,x)     ','(n,x)     ','(n,n*)gma ','(n,x)     ',& !100
-     '(n,parab) ','(n,gma)   ','(n,p)     ','(n,d)     ','(n,t)     ',&
+     '(n,disap) ','(n,gma)   ','(n,p)     ','(n,d)     ','(n,t)     ',&
      '(n,he3)   ','(n,a)     ','(n,2a)    ','(n,3a)    ','(n,x)     ',&
      '(n,2p)    ','(n,pa)    ','(n,t2a)   ','(n,d2a)   ','(n,pd)    ',&
      '(n,pt)    ','(n,da)    ','(n,x)     ','(n,x)     ','(n,dest)  ',&
@@ -207,10 +207,25 @@ contains
 
    !--alternate name when processing incident charged particle files
    if (izai.gt.1) then
+      if (mt.gt.3) then
+        if (izai.eq.1001) then
+          name(1:2)='(p'
+        elseif (izai.eq.1002) then
+          name(1:2)='(d'
+        elseif (izai.eq.1003) then
+          name(1:2)='(t'
+        elseif (izai.eq.2003) then
+          name(1:2)='(s'
+        elseif (izai.eq.2004) then
+          name(1:2)='(a'
+        else
+          name(1:2)='(z'
+        endif
+      endif
       if (mt.eq.4) then
-         name='(z,n)    '
+         name(3:10)=',n)     '
       elseif (mt.eq.5) then
-         name='(z,x)    '
+         name(3:10)=',x)     '
       elseif ((izai.eq.1001.and.mt.eq.103).or.&
               (izai.eq.1002.and.mt.eq.104).or.&
               (izai.eq.1003.and.mt.eq.105).or.&
@@ -697,16 +712,16 @@ contains
    ! internals
    character(66)::text
    if (l.lt.locator) then
-      write(text,'(''expected xss index ('',i6,'') greater than '',&
-                   &''current index ('',i6,'')'')') locator, l
+      write(text,'(''expected xss index ('',i9,'') > '',&
+                   &''current index ('',i9,'')'')') locator, l
       call mess('advance',text,'xss array was padded accordingly')
       do while (l.lt.locator)
          call typen(l,nout,1)
          l=l+1
       enddo
    else if (l.gt.locator) then
-      write(text,'(''expected xss index ('',i6,'') less than '',&
-                   &''current index ('',i6,'')'')') locator, l
+      write(text,'(''expected xss index ('',i9,'') < '',&
+                   &''current index ('',i9,'')'')') locator, l
       call error('advance',text,'this may be a serious problem')
    endif
    return

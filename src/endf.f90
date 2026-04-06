@@ -525,8 +525,9 @@ contains
    integer::inin,inout,inscr,i
 
    !--input.
+   inin=iabs(nin)
+   if (inin.ne.0) rewind inin
    if (nin.lt.0) then
-      inin=iabs(nin)
       read(inin) math,mfh,mth,nb,nw,(a(i),i=1,17)
    else if (nin.gt.0) then
       read(nin,'(16a4,a2,i4,i2,i3,i5)') (hb(i),i=1,17),math,mfh,mth

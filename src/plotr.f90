@@ -383,9 +383,9 @@ contains
    real(kr)::st1,st2,st3,st4,stmax,stmin,ststp,temp,dleth,dener
    real(kr)::sigig,flag,factx1,facty1,temper2,reset,enxt,zz,z2,itypx
    real(kr)::z(15)
-   integer,parameter::mmax=20000   !same in plotr and viewr
+   integer,parameter::mmax=50000   !same in plotr and viewr
    integer,parameter::nwamax=45000
-   integer,parameter::maxaa=200000
+   integer,parameter::maxaa=500000
    real(kr),dimension(nwamax)::a
    real(kr),dimension(maxaa)::aa
    real(kr),dimension(mmax)::x,y,b,dxm,dxp,dym,dyp

@@ -47970,13 +47970,10 @@ newpath
 (n) show
    175.68   212.01 moveto
 /Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
-(*) show
-   175.68   217.61 moveto
+(p) show
+   175.68   220.02 moveto
 /Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
 (\)) show
-   175.68   222.41 moveto
-/Helvetica findfont [  -0.00  14.40 -14.40   0.00 0. 0.] makefont setfont
-(p) show
 stroke grestore newpath
 %gend
 %gset
@@ -68066,13 +68063,10 @@ newpath
 (n) show
     94.32   343.28 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
-(*) show
-    94.32   351.68 moveto
+(p) show
+    94.32   355.29 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
-    94.32   358.88 moveto
-/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
-(p) show
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
@@ -73075,13 +73069,10 @@ newpath
 (n) show
     94.32   334.90 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
-(*) show
-    94.32   343.30 moveto
+(p) show
+    94.32   346.91 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
-    94.32   350.50 moveto
-/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
-(p) show
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
@@ -106671,13 +106662,10 @@ newpath
 (n) show
     94.32   265.26 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
-(*) show
-    94.32   273.66 moveto
+(p) show
+    94.32   277.27 moveto
 /Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
 (\)) show
-    94.32   280.86 moveto
-/Helvetica findfont [  -0.00  21.60 -21.60   0.00 0. 0.] makefont setfont
-(p) show
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
