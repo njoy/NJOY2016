@@ -202,6 +202,13 @@ contains
    !    mtname  description of section to be processed
    !          repeat for all reactions desired
    !          mfd=0/ terminates this temperature/material.
+   ! card9a     Extended residual format (mfd = -1 only)
+   !    file    The file (MF) to extract data from
+   !    section The section (MT) to extract data from
+   !    zaid    The ZZZAAA value of the residual
+   !    m       The metastable (file = 3, 6) or excited level (file = 9, 10)
+   !             number
+   !
    ! card10
    !    matd    next mat number to be processed
    !            matd=0/ terminates groupr run.
@@ -244,6 +251,8 @@ contains
    !     32           ukaea 1102-group structure   (1 GeV)
    !     33           ukaea  142-group structure (200 MeV)
    !     34           lanl 618-group structure
+   !     35           apollo 99-group structure
+   !     36           ecco 1962-group structure
    !
    !     igg          meaning
    !     ---          -------
@@ -313,6 +322,9 @@ contains
    !                     subsection from file 10
    !    40000000       fission product production (mtd=18 only)
    !                     subsection from file 10
+   !     -1            Use extended format (card9a) from the following
+   !                     line, ignoring the rest of card9. Useful when
+   !                     m > 9.
    !
    !     mtd          meaning
    !     ---          -------
@@ -348,6 +360,7 @@ contains
    integer::naed,ng2,nl,idis,lim,nlg,ng2g,mfdn,jzam
    integer::itmp
    real(kr)::time,za,tempin,eps,diff,ee,first,en
+   real(kr)::fzam
    real(kr)::enext,elo,ehi,yld,test
    real(kr),dimension(:,:),allocatable::flux,sig
    character(4)::mtname(15)
@@ -362,6 +375,7 @@ contains
    real(kr),dimension(:,:,:),allocatable::prod
    real(kr),parameter::small=1.e-6_kr
    real(kr),parameter::zero=0
+   logical::need_name
 
    !--initialize
    nwscr=10000
@@ -598,10 +612,12 @@ contains
    mtd=1
    mtdp=1
    iauto=0
+   need_name=.false.
   360 continue
    lfs=0
    isom=0
    izam=0
+   fzam=0.0_kr
    if (mtd+mtdp.lt.0) go to 400
    if (iauto.eq.0) go to 365
    call nextr(iauto,matd,mfd,mtdp,scr)
@@ -610,7 +626,7 @@ contains
    mtdp=-1000
    strng=' '
    read(nsysi,*) mfd,mtdp,strng
-   if (mfd.lt.0.or.mfd.eq.1.or.mfd.eq.2.or.mfd.eq.4) go to 381
+   if (mfd.lt.-1.or.mfd.eq.1.or.mfd.eq.2.or.mfd.eq.4) go to 381
    if (mfd.eq.7.or.mfd.eq.9.or.mfd.eq.11) go to 381
    if (mfd.eq.14.or.mfd.eq.15) go to 381
    if (mfd.gt.18.and.mfd.lt.21) go to 381
@@ -619,6 +635,7 @@ contains
    if (mfd.ge.12.and.mfd.le.18.and.igg.eq.0)&
      call error('groupr','photons not allowed with igg=0.',' ')
    if (mfd.eq.0) go to 590
+   if (mfd.eq.-1) go to 383
    if (mtdp.eq.-1000) go to 382
    read(strng,'(15a4)') (mtname(i),i=1,15)
    go to 390
@@ -627,12 +644,36 @@ contains
    call error('groupr',strng,' ')
   382 continue
    iauto=1
+   need_name=.true.
    mtdp=0
    call nextr(iauto,matd,mfd,mtdp,scr)
    if (mtdp.ne.0) go to 390
    write(strng,'(''auto finds no reactions for mf='',i3)') mfd
    call mess('groupr',strng,' ')
    go to 365
+  383 continue
+   ! Read card9a format and down-convert
+   read(nsysi,*) mfd, mtdp, izar, lfs
+   if (mtdp.ge.0) mtd=mtdp
+   isom=lfs
+   select case(mfd)
+   case(3)
+      mfd=10000000
+   case(6)
+      mfd=20000000
+   case(9)
+      mfd=30000000
+   case(10)
+      mfd=40000000
+   case default
+      write(strng,'(''illegal file ='',i3)') mfd
+      call error('groupr',strng,' ')
+   end select
+   mfd = mfd + izar*10
+   izam = izar*1000 + lfs
+   fzam = real(izar, kind=kr) + real(lfs, kind=kr) / 1000.0_kr
+   need_name=.true.
+   go to 400
   390 continue
    if (mtdp.ge.0) mtd=mtdp
    ! -- if auto processing, already have level number (lfs) and isomer
@@ -674,7 +715,7 @@ contains
    if (mtdp.lt.0) mtd=mtd+1
    if (iauto.eq.0.and.(mfd.eq.13.or.mfd.eq.16)) call mfchk(mfd,mtd)
    if (iauto.eq.0.and.mfd.ge.21.and.mfd.le.26) call mfchk2(mfd,mtd)
-   if (iauto.eq.1) call namer(izap,izam,mfd,mtd,mtname)
+   if (need_name) call namer(izap,izar,lfs,mfd,mtd,mtname)
    if (iaddmt.le.0) go to 490
   410 continue
    call contio(ngout1,0,0,scr,nb,nw)
@@ -801,19 +842,19 @@ contains
             jzam=izam
             if (mfdn.eq.1) then
                write(nsyso,'(&
-                 &'' for mf3 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf3 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             else if (mfdn.eq.2) then
                write(nsyso,'(&
-                 &'' for mf3*mf6 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf3*mf6 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             else if (mfdn.eq.3) then
                write(nsyso,'(&
-                 &'' for mf3*mf9 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf3*mf9 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             else if (mfdn.eq.4) then
                write(nsyso,'(&
-                 &'' for mf10 mt'',i3,'' zam'',i8,1x,15a4)')&
+                 &'' for mf10 mt'',i3,'' zam'',i10,1x,15a4)')&
                  mtd,jzam,(mtname(i),i=1,15)
             endif
          endif
@@ -832,6 +873,10 @@ contains
          mth=mtd
          scr(1)=za
          scr(2)=izam
+         if (fzam /= 0) then
+            ! Write extended format ZZZAAA.SSS format.
+            scr(2) = fzam
+         end if
          scr(3)=nl
          scr(4)=nz
          scr(5)=lrflag
@@ -1271,14 +1316,14 @@ contains
    return
    end subroutine nextr
 
-   subroutine namer(izad,izam,mfd,mtd,mtname)
+   subroutine namer(izad,izar,lfs,mfd,mtd,mtname)
    !-------------------------------------------------------------------
    ! Generates standard names for ENDF reactions in 4 char. words.
    ! The letter 'h' is used for He-3.
    !-------------------------------------------------------------------
    use endf ! provides iverf
    ! externals
-   integer::izad,izam,mfd,mtd
+   integer::izad,izar,lfs,mfd,mtd
    character(4)::mtname(15)
    ! internals
    integer::i,j,izaa,imm
@@ -1286,7 +1331,7 @@ contains
    character(1)::proj
    character(7)::reac
    character(8)::part
-   character(8)::azam
+   character(10)::azam
    integer,dimension(7),parameter::ip=(/&
      0,1,1001,1002,1003,2003,2004/)
    character(1),dimension(7),parameter::np=(/&
@@ -1441,19 +1486,16 @@ contains
    if (mfd.eq.3) then
       dummy='('//proj//','//reac//')-cross-section.'
    else if (mfd.ge.10000000) then
-      izaa=izam/10
-      imm=isom
-      if (imm.eq.0) then
-         write(azam,'(i6)') izaa
-         dummy='('//proj//','//reac//')-'//azam(1:6)//'-production.'
-      else if (imm.lt.10) then
-         write(azam,'(i6,''m'',i1)') izaa,imm
-         dummy='('//proj//','//reac//')-'//azam//'-production.'
+      if (lfs.eq.0) then
+         write(azam,'(i0)') izar
       else
-         izaa=izaa/10
-         write(azam,'(i6,''m'',i2)') izaa,imm
-         dummy='('//proj//','//reac//')-'//azam//'-production.'
-      endif
+         if (mfd.lt.30000000) then
+            write(azam,'(i0,"m",i0)') izar, lfs
+         else
+            write(azam,'(i0,"e",i0)') izar, lfs
+         end if
+      end if
+      dummy='('//proj//','//reac//')-'//trim(azam)//'-production.'
    else
       part='?'
       do i=1,npart
@@ -1595,6 +1637,8 @@ contains
    !    32      UKAEA 1102-group structure
    !    33      UKAEA  142-group structure
    !    34      LANL 618 group structure
+   !    35      APOLLO 99-group structure
+   !    36      ECCO 1962-group structure
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
@@ -2633,8 +2677,8 @@ contains
      6.772865E+02_kr,7.485173E+02_kr,8.322179E+02_kr,9.096813E+02_kr,&
      9.824941E+02_kr,1.064323E+03_kr,1.134667E+03_kr,1.343582E+03_kr,&
      1.586197E+03_kr,1.811833E+03_kr,2.084104E+03_kr,2.397290E+03_kr,&
-     2.700236E+03_kr,2.996183E+03_kr,3.481068E+03_kr,4.097345E+03_kr,&
-     5.004508E+03_kr,6.112520E+03_kr,7.465848E+03_kr,9.118808E+03_kr,&
+     2.700236E+03_kr,2.996183E+03_kr,3.481068E+03_kr,3.936685E+03_kr,&
+     4.856602E+03_kr,5.991484E+03_kr,7.391562E+03_kr,9.118808E+03_kr,&
      1.113774E+04_kr,1.360366E+04_kr,1.489967E+04_kr,1.620045E+04_kr,&
      1.858471E+04_kr,2.269941E+04_kr,2.499908E+04_kr,2.610010E+04_kr,&
      2.739441E+04_kr,2.928101E+04_kr,3.345961E+04_kr,3.697859E+04_kr,&
@@ -2725,8 +2769,8 @@ contains
      8.322179E+02_kr,9.096813E+02_kr,9.824941E+02_kr,1.064323E+03_kr,&
      1.134667E+03_kr,1.343582E+03_kr,1.586197E+03_kr,1.811833E+03_kr,&
      2.084104E+03_kr,2.397290E+03_kr,2.700236E+03_kr,2.996183E+03_kr,&
-     3.481068E+03_kr,4.097345E+03_kr,5.004508E+03_kr,6.112520E+03_kr,&
-     7.465848E+03_kr,9.118808E+03_kr,1.113774E+04_kr,1.360366E+04_kr,&
+     3.481068E+03_kr,3.936685E+03_kr,4.856602E+03_kr,5.991484E+03_kr,&
+     7.391562E+03_kr,9.118808E+03_kr,1.113774E+04_kr,1.360366E+04_kr,&
      1.489967E+04_kr,1.620045E+04_kr,1.858471E+04_kr,2.269941E+04_kr,&
      2.499908E+04_kr,2.610010E+04_kr,2.739441E+04_kr,2.928101E+04_kr,&
      3.345961E+04_kr,3.697859E+04_kr,4.086766E+04_kr,4.991587E+04_kr,&
@@ -2803,8 +2847,8 @@ contains
      1.343584E+03_kr,1.586199E+03_kr,1.811835E+03_kr,2.034684E+03_kr,&
      2.284941E+03_kr,2.423809E+03_kr,2.571117E+03_kr,2.768596E+03_kr,&
      2.951579E+03_kr,3.146656E+03_kr,3.354626E+03_kr,3.707435E+03_kr,&
-     4.097350E+03_kr,4.528272E+03_kr,5.004514E+03_kr,5.530844E+03_kr,&
-     6.112528E+03_kr,6.755388E+03_kr,7.465858E+03_kr,8.251049E+03_kr,&
+     3.936685E+03_kr,4.372518E+03_kr,4.856602E+03_kr,5.394280E+03_kr,&
+     5.991484E+03_kr,6.654805E+03_kr,7.391562E+03_kr,8.209886E+03_kr,&
      9.118820E+03_kr,1.007785E+04_kr,1.113775E+04_kr,1.360368E+04_kr,&
      1.503439E+04_kr,1.620047E+04_kr,1.858473E+04_kr,2.269944E+04_kr,&
      2.478752E+04_kr,2.610013E+04_kr,2.739445E+04_kr,2.928104E+04_kr,&
@@ -4060,6 +4104,32 @@ contains
      1.92500000000000e+07_kr,1.93750000000000e+07_kr,1.95000000000000e+07_kr,&
      1.96250000000000e+07_kr,1.97500000000000e+07_kr,1.98750000000000e+07_kr,&
      2.00000000000000e+07_kr/)
+   real(kr),parameter::eg35(100)=(/&
+     1.100000E-04_kr,3.000000E-03_kr,5.500000E-03_kr,1.000000E-02_kr,&
+     1.500000E-02_kr,2.000000E-02_kr,3.000000E-02_kr,4.300000E-02_kr,&
+     5.900000E-02_kr,7.700000E-02_kr,9.500000E-02_kr,1.150000E-01_kr,&
+     1.340000E-01_kr,1.600000E-01_kr,1.890000E-01_kr,2.200000E-01_kr,&
+     2.480000E-01_kr,2.825000E-01_kr,3.145000E-01_kr,3.520000E-01_kr,&
+     3.910000E-01_kr,4.330000E-01_kr,4.850000E-01_kr,5.400000E-01_kr,&
+     6.250000E-01_kr,7.050000E-01_kr,7.900000E-01_kr,8.600000E-01_kr,&
+     9.300000E-01_kr,9.860001E-01_kr,1.035000E+00_kr,1.070000E+00_kr,&
+     1.110000E+00_kr,1.170000E+00_kr,1.235000E+00_kr,1.305000E+00_kr,&
+     1.370000E+00_kr,1.440000E+00_kr,1.510000E+00_kr,1.590000E+00_kr,&
+     1.670000E+00_kr,1.755000E+00_kr,1.840000E+00_kr,1.930000E+00_kr,&
+     2.020000E+00_kr,2.130000E+00_kr,2.360000E+00_kr,2.767920E+00_kr,&
+     3.380745E+00_kr,4.129250E+00_kr,5.043477E+00_kr,6.160121E+00_kr,&
+     7.523987E+00_kr,9.189817E+00_kr,1.122447E+01_kr,1.370959E+01_kr,&
+     1.674495E+01_kr,2.045232E+01_kr,2.498051E+01_kr,3.051126E+01_kr,&
+     3.726653E+01_kr,4.551748E+01_kr,5.559517E+01_kr,6.790408E+01_kr,&
+     9.166093E+01_kr,1.367420E+02_kr,2.039952E+02_kr,3.043250E+02_kr,&
+     4.539993E+02_kr,6.772877E+02_kr,1.010394E+03_kr,1.507332E+03_kr,&
+     2.248674E+03_kr,3.354626E+03_kr,5.004517E+03_kr,7.465859E+03_kr,&
+     1.113776E+04_kr,1.661558E+04_kr,2.478752E+04_kr,3.697866E+04_kr,&
+     5.516566E+04_kr,8.229753E+04_kr,1.227735E+05_kr,1.831564E+05_kr,&
+     2.732374E+05_kr,4.076221E+05_kr,6.081011E+05_kr,9.071799E+05_kr,&
+     1.108032E+06_kr,1.353353E+06_kr,1.652990E+06_kr,2.018966E+06_kr,&
+     2.465971E+06_kr,3.011943E+06_kr,3.678794E+06_kr,4.493290E+06_kr,&
+     5.488117E+06_kr,6.703201E+06_kr,8.187308E+06_kr,1.000000E+07_kr/)
    real(kr),parameter::ezero=1.e7_kr
    real(kr),parameter::tenth=0.10e0_kr
    real(kr),parameter::eighth=0.125e0_kr
@@ -4459,6 +4529,30 @@ contains
          egn(ig)=eg618(ig)
       enddo
 
+   !--apollo 99-group structure
+   else if (ign.eq.35) then
+      ngn=99
+      ngp=ngn+1
+      allocate(egn(ngp))
+      do ig=1,ngp
+         egn(ig)=eg35(ig)
+      enddo
+
+   !--ecco 1962-group structure
+   else if (ign.eq.36) then
+      ngn=1962
+      ngp=ngn+1
+      allocate(egn(ngp))
+      do ig=1,392
+         egn(ig)=eg20a(ig)
+      enddo
+      do ig=1,392
+         egn(ig+392)=eg20b(ig)
+      enddo
+      do ig=785,ngp
+         egn(ig)=egn(ig-1)*exp(1.0d0/120.0d0)
+      enddo
+
    !--illegal ign
    else
       call error('gengpn','illegal group structure.',' ')
@@ -4539,6 +4633,12 @@ contains
      &  '' neutron group structure......ukaea 1102-group'')')
    if (ign.eq.33) write(nsyso,'(/&
      &  '' neutron group structure......ukaea 142-group'')')
+   if (ign.eq.34) write(nsyso,'(/&
+     &  '' neutron group structure......lanl 618-group'')')
+   if (ign.eq.35) write(nsyso,'(/&
+     &  '' neutron group structure......apollo 99-group'')')
+   if (ign.eq.36) write(nsyso,'(/&
+     &  '' neutron group structure......ecco  1962-group'')')
    if (ign.ne.-1) then
       do ig=1,ngn
          write(nsyso,'(1x,i5,2x,1p,e12.5,''  - '',e12.5)')&
@@ -8974,7 +9074,7 @@ contains
    use mathm ! provides legndr
    ! externals
    integer::nl,law,int,lang,lep
-   real(kr)::ep,epnext,term(nl),clo(*),chi(*),e
+   real(kr)::ep,epnext,term(*),clo(*),chi(*),e
    ! internals
    integer::ilo,llo,mlo,nclo,ihi,lhi,mhi,nchi,intt,l,idone
    integer::ndlo,ndhi,nplo,nphi,int2,na,i,j,jj,nll
@@ -11765,7 +11865,7 @@ contains
    ethi=0
    if (ed.eq.zero) then
       ier=1
-      ntmp=250000
+      ntmp=300000
       do while (ier.ne.0)
          if (allocated(tmp)) deallocate(tmp)
          allocate(tmp(ntmp),stat=ier)
