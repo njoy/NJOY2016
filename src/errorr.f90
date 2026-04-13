@@ -1126,7 +1126,7 @@ contains
    if (iread.ne.1) then
       allocate(ak(nmtmax*2,irmax))
    endif
-   nwscr=1400000
+   nwscr=5000000
    allocate(scr(nwscr))
    neki=0
    neni=0
@@ -1832,7 +1832,7 @@ contains
    if (mfcov.eq.35) then
       namx=max(npage+6,ncovl)
    else
-      namx=2000000
+      namx=5000000
    endif
    allocate(scr(namx))
    mfd=3
@@ -5923,13 +5923,14 @@ contains
       b(2)=awr
       ! pass iverf on to covr
       b(3)=iverf
-      b(4)=0
+      b(4)=irelco
       b(5)=-11
       b(6)=0
       call contio(0,nout,0,b,nb,nw)
       b(1)=tempin
       b(2)=0
       b(3)=ngn
+      b(4)=0
       nw=6
       ngnp1=ngn+1
       do i=1,ngnp1
@@ -6094,13 +6095,14 @@ contains
       b(1)=za
       b(2)=awr
       b(3)=iverf
-      b(4)=0
+      b(4)=irelco
       b(5)=-12
       b(6)=0
       call contio(0,nout,0,b,nb,nw)
       b(1)=tempin
       b(2)=0
       b(3)=ngn
+      b(4)=0
       nw=6
       ngnp1=ngn+1
       do i=1,ngnp1
@@ -7062,6 +7064,7 @@ contains
    real(kr),dimension(:,:),allocatable::cova
    real(kr),dimension(:,:),allocatable::alsig,clflx
    real(kr),parameter::eps=1.e-20_kr
+   real(kr),parameter::epsvar0=5.0e-7_kr
    real(kr),parameter::zero=0
 
    !--allocate storage.
@@ -7564,6 +7567,22 @@ contains
                endif
             endif
          endif
+         if (mfcov.eq.33.and.mth.eq.mts(ixp).and.(ig.eq.igp).and.&
+           & (mats(ixp).eq.0.or.math.eq.mats(ixp))) then
+           if (scr(ibase+ip).lt.zero) then
+             write(nsyse,*)
+             write(nsyse,'(a,i3,a,i5)') &
+               & ' ---message from covout--- negative variance for mt=',&
+               &  mth,' in group=',ig
+             write(nsyse,'(27x,a,1pe11.3)')'var=',scr(ibase+ip)
+             if (irelco.ne.0) then
+               scr(ibase+ip)=epsvar0
+             else
+               scr(ibase+ip)=epsvar0*csig(ig,ix)*csig(ig,ix)
+             endif
+             write(nsyse,'(27x,a,1pe10.3)')'reset to ',scr(ibase+ip)
+           endif
+         endif
          if (abs(scr(ibase+ip)).le.eps) then
             if (ig2lo.eq.0) ip=ip-1
          else
@@ -7819,7 +7838,7 @@ contains
       b(1)=za
       b(2)=awr
       b(3)=iverf
-      b(4)=0
+      b(4)=irelco
       b(5)=-11
       if (mfcov.eq.40) b(5)=-14
       b(6)=0
@@ -7827,6 +7846,7 @@ contains
       b(1)=tempin
       b(2)=0
       b(3)=ngn
+      b(4)=0
       nw=6
       ngnp1=ngn+1
       do i=1,ngnp1
