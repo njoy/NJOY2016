@@ -99809,163 +99809,183 @@ newpath
    489.60   122.40 moveto
    0.965 setlinewidth
    489.60   111.60 lineto
-   496.08    83.26 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(0) show
-   496.08    92.87 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(.) show
    496.08    97.67 moveto
 /Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (0) show
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   428.40   122.40 moveto
-   428.40   111.60 lineto
-   434.88    83.26 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(0) show
-   434.88    92.87 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(.) show
-   434.88    97.67 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(1) show
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   367.20   122.40 moveto
-   367.20   111.60 lineto
-   373.68    83.26 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(0) show
-   373.68    92.87 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(.) show
-   373.68    97.67 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(2) show
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   306.00   122.40 moveto
-   306.00   111.60 lineto
-   312.48    83.26 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(0) show
-   312.48    92.87 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(.) show
-   312.48    97.67 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(3) show
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   244.80   122.40 moveto
-   244.80   111.60 lineto
-   251.28    83.26 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(0) show
-   251.28    92.87 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(.) show
-   251.28    97.67 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(4) show
-stroke
-newpath
- 0.000 0.000 0.000 setrgbcolor
-   183.60   122.40 moveto
-   183.60   111.60 lineto
-   190.08    83.26 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(0) show
-   190.08    92.87 moveto
-/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(.) show
-   190.08    97.67 moveto
+   437.14   122.40 moveto
+   437.14   111.60 lineto
+   443.62    88.06 moveto
 /Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
 (5) show
+   443.62    97.67 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   384.69   122.40 moveto
+   384.69   111.60 lineto
+   391.17    78.46 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(1) show
+   391.17    88.06 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+   391.17    97.67 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   332.23   122.40 moveto
+   332.23   111.60 lineto
+   338.71    78.46 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(1) show
+   338.71    88.06 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(5) show
+   338.71    97.67 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   279.77   122.40 moveto
+   279.77   111.60 lineto
+   286.25    78.46 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(2) show
+   286.25    88.06 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+   286.25    97.67 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   227.31   122.40 moveto
+   227.31   111.60 lineto
+   233.79    78.46 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(2) show
+   233.79    88.06 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(5) show
+   233.79    97.67 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   174.86   122.40 moveto
+   174.86   111.60 lineto
+   181.34    78.46 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(3) show
+   181.34    88.06 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+   181.34    97.67 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
    122.40   122.40 moveto
    122.40   111.60 lineto
-   128.88    83.26 moveto
+   128.88    78.46 moveto
 /Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(0) show
-   128.88    92.87 moveto
+(3) show
+   128.88    88.06 moveto
 /Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(.) show
+(5) show
    128.88    97.67 moveto
 /Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
-(6) show
-   417.03    74.62 moveto
+(0) show
+   149.62    75.53 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(*) show
+   149.62    82.26 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(1) show
+   149.62    91.86 moveto
+/Helvetica findfont [  -0.00  17.28 -17.28   0.00 0. 0.] makefont setfont
+(0) show
+   140.98   101.47 moveto
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+(-) show
+   140.98   106.07 moveto
+/Helvetica findfont [  -0.00  13.82 -13.82   0.00 0. 0.] makefont setfont
+(3) show
+   417.03    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (H) show
-   401.44    74.62 moveto
+   401.44    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
-   389.43    74.62 moveto
+   389.43    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
-   377.42    74.62 moveto
+   377.42    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
-   371.42    74.62 moveto
+   371.42    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
-   366.62    74.62 moveto
+   366.62    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
-   354.61    74.62 moveto
+   354.61    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (g) show
-   342.60    74.62 moveto
+   342.60    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 ( ) show
-   336.60    74.62 moveto
+   336.60    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\() show
-   329.40    74.62 moveto
+   329.40    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (M) show
-   311.41    74.62 moveto
+   311.41    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
-   299.40    74.62 moveto
+   299.40    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (V) show
-   284.99    74.62 moveto
+   284.99    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (/) show
-   278.99    74.62 moveto
+   278.99    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (r) show
-   271.80    74.62 moveto
+   271.80    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (e) show
-   259.79    74.62 moveto
+   259.79    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (a) show
-   247.78    74.62 moveto
+   247.78    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (c) show
-   236.98    74.62 moveto
+   236.98    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (t) show
-   230.97    74.62 moveto
+   230.97    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (i) show
-   226.18    74.62 moveto
+   226.18    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (o) show
-   214.17    74.62 moveto
+   214.17    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (n) show
-   202.16    74.62 moveto
+   202.16    69.82 moveto
 /Helvetica findfont [ -21.60   0.00  -0.00 -21.60 0. 0.] makefont setfont
 (\)) show
 stroke
@@ -99983,28 +100003,33 @@ newpath
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   428.40   712.80 moveto
-   428.40   723.60 lineto
+   437.14   712.80 moveto
+   437.14   723.60 lineto
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   367.20   712.80 moveto
-   367.20   723.60 lineto
+   384.69   712.80 moveto
+   384.69   723.60 lineto
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   306.00   712.80 moveto
-   306.00   723.60 lineto
+   332.23   712.80 moveto
+   332.23   723.60 lineto
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   244.80   712.80 moveto
-   244.80   723.60 lineto
+   279.77   712.80 moveto
+   279.77   723.60 lineto
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   183.60   712.80 moveto
-   183.60   723.60 lineto
+   227.31   712.80 moveto
+   227.31   723.60 lineto
+stroke
+newpath
+ 0.000 0.000 0.000 setrgbcolor
+   174.86   712.80 moveto
+   174.86   723.60 lineto
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
@@ -100024,624 +100049,624 @@ newpath
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
-   485.93   128.30 moveto
+   483.31   128.30 moveto
    0.965 setlinewidth
-   485.66   128.75 lineto
-   485.52   129.04 lineto
-   485.31   129.34 lineto
-   485.12   129.63 lineto
-   485.03   129.78 lineto
-   484.78   130.22 lineto
-   484.57   130.52 lineto
-   484.38   130.81 lineto
-   484.20   131.11 lineto
-   484.11   131.26 lineto
-   484.02   131.40 lineto
-   483.86   131.70 lineto
-   483.72   131.99 lineto
-   483.56   132.29 lineto
-   483.40   132.58 lineto
-   483.22   132.88 lineto
-   483.06   133.17 lineto
-   482.90   133.47 lineto
-   482.76   133.77 lineto
-   482.63   134.06 lineto
-   482.55   134.21 lineto
-   482.48   134.36 lineto
-   482.28   134.65 lineto
-   482.08   134.95 lineto
-   481.88   135.24 lineto
-   481.72   135.54 lineto
-   481.55   135.83 lineto
-   481.38   136.13 lineto
-   481.22   136.42 lineto
-   481.22   136.72 lineto
-   481.01   137.01 lineto
-   480.90   137.16 lineto
-   480.56   137.60 lineto
-   480.43   137.90 lineto
-   480.20   138.60 lineto
-   479.04   140.11 lineto
-   479.00   140.27 lineto
-   478.92   140.43 lineto
-   478.81   140.58 lineto
-   478.74   140.73 lineto
-   478.65   140.88 lineto
-   478.55   141.03 lineto
-   478.48   141.18 lineto
-   478.43   141.32 lineto
-   478.34   141.48 lineto
-   478.25   141.64 lineto
-   478.11   141.79 lineto
-   478.05   141.94 lineto
-   477.86   142.09 lineto
-   477.86   142.24 lineto
-   477.80   142.40 lineto
-   477.69   142.56 lineto
-   477.58   142.74 lineto
-   477.51   142.89 lineto
-   477.32   143.04 lineto
-   477.36   143.19 lineto
-   477.24   143.34 lineto
-   477.16   143.49 lineto
-   477.13   143.65 lineto
-   477.16   143.82 lineto
-   477.00   143.96 lineto
-   476.74   144.12 lineto
-   476.85   144.27 lineto
-   476.75   144.44 lineto
-   476.66   144.59 lineto
-   476.54   144.77 lineto
-   476.45   144.91 lineto
-   476.16   145.07 lineto
-   476.17   145.23 lineto
-   476.06   145.39 lineto
-   475.93   145.54 lineto
-   475.79   145.72 lineto
-   475.67   145.87 lineto
-   475.56   146.02 lineto
-   475.43   146.17 lineto
-   475.43   146.32 lineto
-   475.44   146.47 lineto
-   475.34   146.63 lineto
-   475.33   146.79 lineto
-   475.27   146.94 lineto
-   475.15   147.09 lineto
-   475.08   147.26 lineto
-   474.96   147.42 lineto
-   474.88   147.57 lineto
-   474.73   147.72 lineto
-   474.59   147.87 lineto
-   474.53   148.03 lineto
-   474.56   148.18 lineto
-   474.46   148.33 lineto
-   473.87   148.48 lineto
-   473.77   148.65 lineto
-   473.75   148.81 lineto
-   473.75   148.97 lineto
-   473.75   149.13 lineto
-   473.75   149.28 lineto
-   473.72   149.44 lineto
-   473.76   149.59 lineto
-   473.66   149.74 lineto
-   473.54   149.89 lineto
-   473.52   150.07 lineto
-   473.40   150.23 lineto
-   473.38   150.38 lineto
-   473.30   150.55 lineto
-   473.17   150.70 lineto
-   473.18   150.85 lineto
-   473.19   151.00 lineto
-   473.07   151.15 lineto
-   472.90   151.30 lineto
-   472.72   151.45 lineto
-   472.58   151.61 lineto
-   472.42   151.77 lineto
-   472.15   151.92 lineto
-   472.20   152.07 lineto
-   472.23   152.25 lineto
-   472.25   152.40 lineto
-   472.25   152.56 lineto
-   472.21   152.76 lineto
-   472.09   152.92 lineto
-   471.98   153.09 lineto
-   471.87   153.24 lineto
-   471.82   153.40 lineto
-   471.74   153.58 lineto
-   471.68   153.74 lineto
-   471.60   153.91 lineto
-   471.55   154.07 lineto
-   471.50   154.22 lineto
-   471.40   154.38 lineto
-   471.33   154.55 lineto
-   471.19   154.73 lineto
-   470.93   154.91 lineto
-   470.69   155.07 lineto
-   470.47   155.23 lineto
-   470.25   155.39 lineto
-   470.41   155.54 lineto
-   470.34   155.69 lineto
-   470.04   155.85 lineto
-   470.32   156.03 lineto
-   470.07   156.18 lineto
-   470.16   156.33 lineto
-   470.21   156.50 lineto
-   470.37   156.68 lineto
-   470.25   156.83 lineto
-   470.17   157.00 lineto
-   470.39   157.15 lineto
-   470.16   157.31 lineto
-   470.05   157.49 lineto
-   470.02   157.64 lineto
-   469.99   157.79 lineto
-   469.84   157.94 lineto
-   469.82   158.12 lineto
-   469.60   158.27 lineto
-   469.62   158.45 lineto
-   469.56   158.60 lineto
-   469.69   158.76 lineto
-   469.49   158.92 lineto
-   469.56   159.08 lineto
-   469.57   159.24 lineto
-   469.44   159.42 lineto
-   469.31   159.57 lineto
-   469.18   159.76 lineto
-   469.51   159.91 lineto
-   468.95   160.07 lineto
-   468.89   160.25 lineto
-   468.98   160.41 lineto
-   468.63   160.59 lineto
-   468.82   160.74 lineto
-   468.73   160.90 lineto
-   468.56   161.09 lineto
-   468.37   161.25 lineto
-   468.47   161.43 lineto
-   468.25   161.58 lineto
-   468.09   161.73 lineto
-   468.19   161.93 lineto
-   468.00   162.09 lineto
-   467.83   162.25 lineto
-   467.79   162.41 lineto
-   468.02   162.56 lineto
-   468.16   162.73 lineto
-   467.56   162.88 lineto
-   467.57   163.05 lineto
-   467.47   163.21 lineto
-   467.62   163.37 lineto
-   467.39   163.53 lineto
-   467.38   163.75 lineto
-   467.45   163.92 lineto
-   467.08   164.10 lineto
-   467.00   164.29 lineto
-   466.90   164.45 lineto
-   466.88   164.62 lineto
-   466.78   164.81 lineto
-   466.68   164.96 lineto
-   466.79   165.11 lineto
-   466.54   165.29 lineto
-   466.61   165.44 lineto
-   466.37   165.66 lineto
-   466.27   165.86 lineto
-   466.37   166.05 lineto
-   466.29   166.24 lineto
-   466.26   166.42 lineto
-   466.19   166.59 lineto
-   466.10   166.75 lineto
-   466.13   166.94 lineto
-   466.13   167.11 lineto
-   466.05   167.28 lineto
-   466.01   167.46 lineto
-   465.99   167.62 lineto
-   465.94   167.77 lineto
-   465.88   167.96 lineto
-   465.94   168.11 lineto
-   465.84   168.30 lineto
-   465.91   168.49 lineto
-   465.82   168.66 lineto
-   465.77   168.82 lineto
-   465.76   168.98 lineto
-   465.70   169.18 lineto
-   465.69   169.35 lineto
-   465.27   169.50 lineto
-   465.38   169.66 lineto
-   465.35   169.81 lineto
-   465.87   169.97 lineto
-   465.59   170.13 lineto
-   465.66   170.28 lineto
-   465.76   170.45 lineto
-   465.35   170.69 lineto
-   465.50   170.84 lineto
-   465.55   170.99 lineto
-   465.41   171.16 lineto
-   465.41   171.30 lineto
-   465.23   171.47 lineto
-   465.66   171.64 lineto
-   465.46   171.83 lineto
-   465.23   171.99 lineto
-   465.20   172.16 lineto
-   465.08   172.33 lineto
-   464.67   172.50 lineto
-   465.53   172.69 lineto
-   465.36   172.87 lineto
-   465.62   173.03 lineto
-   465.02   173.21 lineto
-   465.09   173.38 lineto
-   464.66   173.54 lineto
-   465.12   173.75 lineto
-   464.59   173.92 lineto
-   464.95   174.12 lineto
-   464.50   174.27 lineto
-   464.68   174.44 lineto
-   464.31   174.63 lineto
-   464.92   174.78 lineto
-   463.81   174.99 lineto
-   463.22   175.18 lineto
-   463.52   175.34 lineto
-   463.20   175.52 lineto
-   462.89   175.71 lineto
-   462.85   175.88 lineto
-   462.66   176.05 lineto
-   462.22   176.21 lineto
-   462.10   176.40 lineto
-   462.13   176.58 lineto
-   462.23   176.76 lineto
-   462.43   176.92 lineto
-   462.24   177.09 lineto
-   462.14   177.24 lineto
-   461.81   177.42 lineto
-   461.32   177.61 lineto
-   461.62   177.79 lineto
-   461.79   177.98 lineto
-   462.00   178.15 lineto
-   461.61   178.37 lineto
-   462.02   178.54 lineto
-   461.44   178.73 lineto
-   461.50   178.89 lineto
-   460.92   179.16 lineto
-   460.54   179.36 lineto
-   460.73   179.53 lineto
-   461.12   179.71 lineto
-   461.17   179.87 lineto
-   460.54   180.04 lineto
-   460.11   180.20 lineto
-   460.58   180.39 lineto
-   460.84   180.60 lineto
-   460.97   180.78 lineto
-   460.83   180.94 lineto
-   460.65   181.14 lineto
-   460.62   181.32 lineto
-   460.49   181.50 lineto
-   460.14   181.69 lineto
-   459.61   181.86 lineto
-   459.97   182.04 lineto
-   460.09   182.25 lineto
-   459.83   182.40 lineto
-   459.74   182.58 lineto
-   459.82   182.73 lineto
-   459.87   182.92 lineto
-   459.49   183.07 lineto
-   460.09   183.25 lineto
-   459.67   183.45 lineto
-   459.29   183.64 lineto
-   459.71   183.81 lineto
-   459.59   183.96 lineto
-   459.84   184.20 lineto
-   459.19   184.37 lineto
-   458.92   184.55 lineto
-   459.19   184.73 lineto
-   459.21   184.89 lineto
-   459.54   185.09 lineto
-   459.78   185.26 lineto
-   459.38   185.41 lineto
-   459.78   185.62 lineto
-   459.30   185.77 lineto
-   459.18   185.92 lineto
-   458.09   186.11 lineto
-   458.86   186.27 lineto
-   458.39   186.47 lineto
-   458.38   186.67 lineto
-   458.95   186.87 lineto
-   458.38   187.07 lineto
-   458.49   187.24 lineto
-   458.90   187.40 lineto
-   458.95   187.65 lineto
-   458.41   187.83 lineto
-   457.68   188.02 lineto
-   458.63   188.17 lineto
-   459.06   188.33 lineto
-   458.05   188.51 lineto
-   458.53   188.68 lineto
-   458.64   188.83 lineto
-   458.27   188.98 lineto
-   458.82   189.15 lineto
-   458.69   189.31 lineto
-   458.52   189.47 lineto
-   458.17   189.67 lineto
-   458.06   189.93 lineto
-   457.60   190.12 lineto
-   458.38   190.29 lineto
-   457.42   190.48 lineto
-   458.55   190.64 lineto
-   457.99   190.87 lineto
-   457.01   191.03 lineto
-   457.71   191.24 lineto
-   457.50   191.39 lineto
-   456.89   191.57 lineto
-   457.92   191.76 lineto
-   457.50   191.92 lineto
-   457.52   192.23 lineto
-   456.85   192.45 lineto
-   456.04   192.62 lineto
-   457.32   192.83 lineto
-   456.46   193.05 lineto
-   457.81   193.24 lineto
-   456.45   193.41 lineto
-   457.02   193.62 lineto
-   456.31   193.77 lineto
-   455.74   193.92 lineto
-   457.01   194.11 lineto
-   456.58   194.35 lineto
-   456.99   194.55 lineto
-   456.20   194.71 lineto
-   456.94   194.86 lineto
-   456.52   195.01 lineto
-   456.55   195.26 lineto
-   456.53   195.42 lineto
-   455.12   195.63 lineto
-   455.18   195.79 lineto
-   456.87   195.99 lineto
-   456.12   196.20 lineto
-   455.14   196.36 lineto
-   454.58   196.59 lineto
-   455.11   196.77 lineto
-   454.92   196.93 lineto
-   455.56   197.09 lineto
-   455.00   197.28 lineto
-   454.90   197.54 lineto
-   455.51   197.82 lineto
-   455.61   197.98 lineto
-   455.19   198.21 lineto
-   455.04   198.36 lineto
-   454.69   198.57 lineto
-   455.79   198.76 lineto
-   455.22   198.95 lineto
-   454.71   199.13 lineto
-   455.41   199.34 lineto
-   455.93   199.51 lineto
-   455.18   199.75 lineto
-   454.36   199.93 lineto
-   455.14   200.13 lineto
-   454.20   200.34 lineto
-   454.09   200.57 lineto
-   454.57   200.74 lineto
-   454.15   200.92 lineto
-   454.75   201.12 lineto
-   454.03   201.35 lineto
-   454.92   201.52 lineto
-   454.80   201.73 lineto
-   452.96   201.92 lineto
-   454.75   202.07 lineto
-   454.39   202.27 lineto
-   453.35   202.43 lineto
-   454.24   202.67 lineto
-   454.45   202.86 lineto
-   454.16   203.08 lineto
-   453.56   203.33 lineto
-   454.02   203.50 lineto
-   452.67   203.70 lineto
-   452.69   203.87 lineto
-   453.47   204.04 lineto
-   454.31   204.22 lineto
-   453.12   204.48 lineto
-   453.81   204.65 lineto
-   454.05   204.82 lineto
-   453.19   205.05 lineto
-   454.94   205.35 lineto
-   454.73   205.54 lineto
-   453.12   205.89 lineto
-   452.46   206.06 lineto
-   452.72   206.21 lineto
-   452.90   206.47 lineto
-   454.22   206.67 lineto
-   453.55   206.85 lineto
-   453.36   207.09 lineto
-   453.66   207.38 lineto
-   453.06   207.53 lineto
-   453.24   207.87 lineto
-   453.21   208.07 lineto
-   453.00   208.36 lineto
-   453.71   208.61 lineto
-   453.01   208.77 lineto
-   452.08   208.95 lineto
-   453.54   209.18 lineto
-   451.63   209.46 lineto
-   452.12   209.62 lineto
-   452.77   209.83 lineto
-   452.82   209.99 lineto
-   454.52   210.20 lineto
-   452.90   210.46 lineto
-   451.77   210.62 lineto
-   452.63   210.88 lineto
-   453.11   211.19 lineto
-   452.05   211.38 lineto
-   452.14   211.64 lineto
-   451.92   211.80 lineto
-   451.92   212.00 lineto
-   451.71   212.23 lineto
-   452.87   212.41 lineto
-   451.36   212.57 lineto
-   453.29   212.78 lineto
-   451.34   213.12 lineto
-   451.34   213.39 lineto
-   451.79   213.61 lineto
-   450.87   213.83 lineto
-   450.37   214.03 lineto
-   452.32   214.21 lineto
-   451.43   214.36 lineto
-   451.15   214.78 lineto
-   450.21   214.99 lineto
-   452.65   215.44 lineto
-   450.34   215.75 lineto
-   450.71   215.98 lineto
-   450.12   216.29 lineto
-   453.09   216.55 lineto
-   451.72   216.86 lineto
-   451.45   217.25 lineto
-   449.96   217.54 lineto
-   451.15   217.96 lineto
-   450.03   218.15 lineto
-   450.63   218.38 lineto
-   451.05   218.87 lineto
-   449.75   219.08 lineto
-   450.95   219.49 lineto
-   451.19   219.84 lineto
-   450.71   220.03 lineto
-   450.72   220.33 lineto
-   451.65   220.53 lineto
-   451.88   220.75 lineto
-   450.24   220.97 lineto
-   451.27   221.25 lineto
-   449.87   221.41 lineto
-   451.21   221.69 lineto
-   450.54   222.29 lineto
-   451.94   222.71 lineto
-   451.08   222.88 lineto
-   449.49   223.17 lineto
-   449.71   223.34 lineto
-   449.52   223.53 lineto
-   452.52   223.71 lineto
-   451.01   224.19 lineto
-   451.41   224.44 lineto
-   450.63   224.93 lineto
-   449.55   225.17 lineto
-   450.99   225.52 lineto
-   450.94   225.72 lineto
-   450.29   226.36 lineto
-   451.49   226.56 lineto
-   450.44   227.12 lineto
-   448.91   227.37 lineto
-   450.39   227.68 lineto
-   449.72   228.25 lineto
-   450.03   228.61 lineto
-   449.43   229.07 lineto
-   448.11   229.81 lineto
-   448.51   230.07 lineto
-   450.85   230.81 lineto
-   448.93   231.14 lineto
-   447.12   231.46 lineto
-   446.99   231.67 lineto
-   448.23   232.16 lineto
-   449.04   232.65 lineto
-   450.26   233.20 lineto
-   448.98   233.37 lineto
-   447.71   233.81 lineto
-   447.98   234.48 lineto
-   447.24   235.50 lineto
-   447.40   235.72 lineto
-   449.28   236.18 lineto
-   448.66   236.53 lineto
-   446.81   236.93 lineto
-   447.28   237.51 lineto
-   447.81   237.75 lineto
-   445.30   238.16 lineto
-   446.70   238.45 lineto
-   447.97   238.81 lineto
-   445.96   240.48 lineto
-   445.89   241.22 lineto
-   446.84   241.71 lineto
-   448.18   242.21 lineto
-   446.51   242.58 lineto
-   445.56   242.96 lineto
-   445.71   243.77 lineto
-   446.76   244.15 lineto
-   446.99   244.60 lineto
-   444.86   245.05 lineto
-   444.61   245.37 lineto
-   446.82   245.89 lineto
-   446.74   246.47 lineto
-   445.95   247.52 lineto
-   446.37   248.32 lineto
-   444.80   248.79 lineto
-   442.33   249.33 lineto
-   445.79   249.74 lineto
-   447.47   250.01 lineto
-   447.66   250.49 lineto
-   447.32   250.69 lineto
-   445.46   251.04 lineto
-   445.56   251.46 lineto
-   444.97   252.72 lineto
-   445.72   253.35 lineto
-   447.88   253.92 lineto
-   447.73   254.35 lineto
-   446.53   254.78 lineto
-   445.96   255.24 lineto
-   445.60   255.72 lineto
-   445.05   256.82 lineto
-   443.16   259.14 lineto
-   444.31   259.97 lineto
-   446.76   260.51 lineto
-   445.58   260.82 lineto
-   442.33   261.05 lineto
-   442.99   261.44 lineto
-   448.54   261.98 lineto
-   448.21   262.21 lineto
-   445.20   262.53 lineto
-   443.50   263.24 lineto
-   443.04   264.19 lineto
-   443.38   265.48 lineto
-   442.16   266.13 lineto
-   442.12   266.45 lineto
-   443.56   266.78 lineto
-   446.62   267.19 lineto
-   445.98   267.52 lineto
-   442.68   268.44 lineto
-   443.43   268.94 lineto
-   446.20   269.95 lineto
-   444.06   270.89 lineto
-   442.38   271.49 lineto
-   442.98   272.62 lineto
-   439.34   278.26 lineto
-   434.71   283.66 lineto
-   437.33   284.76 lineto
-   435.26   291.71 lineto
-   429.91   299.52 lineto
-   434.03   300.37 lineto
-   430.02   314.28 lineto
-   429.02   315.59 lineto
-   426.10   327.86 lineto
-   425.91   329.04 lineto
-   426.22   341.33 lineto
-   425.77   343.80 lineto
-   419.40   357.08 lineto
-   419.68   358.56 lineto
-   429.00   358.91 lineto
-   418.09   373.32 lineto
-   408.44   381.07 lineto
-   409.79   388.08 lineto
-   403.01   401.14 lineto
-   406.73   402.84 lineto
-   415.57   403.79 lineto
-   403.63   417.60 lineto
-   413.11   418.34 lineto
-   395.28   441.25 lineto
-   389.58   447.12 lineto
-   394.27   456.96 lineto
-   381.10   476.64 lineto
-   375.31   486.78 lineto
-   364.12   506.16 lineto
-   283.24   535.68 lineto
-   276.68   542.87 lineto
-   327.89   550.44 lineto
-   281.45   565.20 lineto
-   151.50   594.72 lineto
-   192.16   598.92 lineto
-   207.40   624.24 lineto
-   147.68   639.00 lineto
-   211.28   650.47 lineto
-   272.86   653.76 lineto
-   187.68   683.28 lineto
-   149.75   694.91 lineto
-   170.68   712.80 lineto
+   482.84   128.75 lineto
+   482.60   129.04 lineto
+   482.24   129.34 lineto
+   481.92   129.63 lineto
+   481.77   129.78 lineto
+   481.34   130.22 lineto
+   480.97   130.52 lineto
+   480.64   130.81 lineto
+   480.34   131.11 lineto
+   480.18   131.26 lineto
+   480.03   131.40 lineto
+   479.76   131.70 lineto
+   479.53   131.99 lineto
+   479.24   132.29 lineto
+   478.97   132.58 lineto
+   478.66   132.88 lineto
+   478.39   133.17 lineto
+   478.12   133.47 lineto
+   477.87   133.77 lineto
+   477.64   134.06 lineto
+   477.52   134.21 lineto
+   477.40   134.36 lineto
+   477.06   134.65 lineto
+   476.70   134.95 lineto
+   476.36   135.24 lineto
+   476.08   135.54 lineto
+   475.80   135.83 lineto
+   475.51   136.13 lineto
+   475.23   136.42 lineto
+   475.24   136.72 lineto
+   474.87   137.01 lineto
+   474.68   137.16 lineto
+   474.10   137.60 lineto
+   473.88   137.90 lineto
+   473.50   138.60 lineto
+   471.52   140.11 lineto
+   471.43   140.27 lineto
+   471.30   140.43 lineto
+   471.11   140.58 lineto
+   470.99   140.73 lineto
+   470.82   140.88 lineto
+   470.65   141.03 lineto
+   470.55   141.18 lineto
+   470.45   141.32 lineto
+   470.30   141.48 lineto
+   470.14   141.64 lineto
+   469.90   141.79 lineto
+   469.81   141.94 lineto
+   469.48   142.09 lineto
+   469.47   142.24 lineto
+   469.37   142.40 lineto
+   469.18   142.56 lineto
+   469.00   142.74 lineto
+   468.88   142.89 lineto
+   468.54   143.04 lineto
+   468.62   143.19 lineto
+   468.42   143.34 lineto
+   468.27   143.49 lineto
+   468.21   143.65 lineto
+   468.28   143.82 lineto
+   468.01   143.96 lineto
+   467.57   144.12 lineto
+   467.74   144.27 lineto
+   467.56   144.44 lineto
+   467.41   144.59 lineto
+   467.21   144.77 lineto
+   467.05   144.91 lineto
+   466.58   145.07 lineto
+   466.58   145.23 lineto
+   466.38   145.39 lineto
+   466.16   145.54 lineto
+   465.93   145.72 lineto
+   465.73   145.87 lineto
+   465.53   146.02 lineto
+   465.32   146.17 lineto
+   465.32   146.32 lineto
+   465.33   146.47 lineto
+   465.14   146.63 lineto
+   465.13   146.79 lineto
+   465.03   146.94 lineto
+   464.84   147.09 lineto
+   464.70   147.26 lineto
+   464.51   147.42 lineto
+   464.37   147.57 lineto
+   464.12   147.72 lineto
+   463.87   147.87 lineto
+   463.78   148.03 lineto
+   463.81   148.18 lineto
+   463.65   148.33 lineto
+   462.60   148.48 lineto
+   462.44   148.65 lineto
+   462.44   148.81 lineto
+   462.43   148.97 lineto
+   462.42   149.13 lineto
+   462.42   149.28 lineto
+   462.38   149.44 lineto
+   462.42   149.59 lineto
+   462.28   149.74 lineto
+   462.03   149.89 lineto
+   462.04   150.07 lineto
+   461.83   150.23 lineto
+   461.79   150.38 lineto
+   461.63   150.55 lineto
+   461.46   150.70 lineto
+   461.45   150.85 lineto
+   461.46   151.00 lineto
+   461.25   151.15 lineto
+   460.97   151.30 lineto
+   460.67   151.45 lineto
+   460.40   151.61 lineto
+   460.16   151.77 lineto
+   459.69   151.92 lineto
+   459.76   152.07 lineto
+   459.82   152.25 lineto
+   459.83   152.40 lineto
+   459.90   152.56 lineto
+   459.80   152.76 lineto
+   459.60   152.92 lineto
+   459.41   153.09 lineto
+   459.21   153.24 lineto
+   459.14   153.40 lineto
+   459.05   153.58 lineto
+   458.88   153.74 lineto
+   458.79   153.91 lineto
+   458.63   154.07 lineto
+   458.54   154.22 lineto
+   458.38   154.38 lineto
+   458.26   154.55 lineto
+   458.08   154.73 lineto
+   457.55   154.91 lineto
+   457.16   155.07 lineto
+   456.81   155.23 lineto
+   456.43   155.39 lineto
+   456.71   155.54 lineto
+   456.64   155.69 lineto
+   456.07   155.85 lineto
+   456.61   156.03 lineto
+   456.13   156.18 lineto
+   456.27   156.33 lineto
+   456.34   156.50 lineto
+   456.66   156.68 lineto
+   456.41   156.83 lineto
+   456.28   157.00 lineto
+   456.74   157.15 lineto
+   456.27   157.31 lineto
+   456.10   157.49 lineto
+   456.04   157.64 lineto
+   456.04   157.79 lineto
+   455.71   157.94 lineto
+   455.70   158.12 lineto
+   455.31   158.27 lineto
+   455.30   158.45 lineto
+   455.23   158.60 lineto
+   455.51   158.76 lineto
+   455.07   158.92 lineto
+   455.28   159.08 lineto
+   455.28   159.24 lineto
+   455.06   159.42 lineto
+   454.79   159.57 lineto
+   454.57   159.76 lineto
+   455.21   159.91 lineto
+   454.19   160.07 lineto
+   454.04   160.25 lineto
+   454.27   160.41 lineto
+   453.63   160.59 lineto
+   454.03   160.74 lineto
+   453.85   160.90 lineto
+   453.50   161.09 lineto
+   453.17   161.25 lineto
+   453.44   161.43 lineto
+   452.96   161.58 lineto
+   452.71   161.73 lineto
+   452.91   161.93 lineto
+   452.54   162.09 lineto
+   452.25   162.25 lineto
+   452.22   162.41 lineto
+   452.63   162.56 lineto
+   452.90   162.73 lineto
+   451.82   162.88 lineto
+   451.85   163.05 lineto
+   451.65   163.21 lineto
+   451.95   163.37 lineto
+   451.54   163.53 lineto
+   451.50   163.75 lineto
+   451.71   163.92 lineto
+   450.97   164.10 lineto
+   450.84   164.29 lineto
+   450.64   164.45 lineto
+   450.67   164.62 lineto
+   450.53   164.81 lineto
+   450.30   164.96 lineto
+   450.49   165.11 lineto
+   450.08   165.29 lineto
+   450.20   165.44 lineto
+   449.76   165.66 lineto
+   449.58   165.86 lineto
+   449.79   166.05 lineto
+   449.68   166.24 lineto
+   449.59   166.42 lineto
+   449.44   166.59 lineto
+   449.32   166.75 lineto
+   449.41   166.94 lineto
+   449.36   167.11 lineto
+   449.23   167.28 lineto
+   449.20   167.46 lineto
+   449.13   167.62 lineto
+   449.07   167.77 lineto
+   448.96   167.96 lineto
+   449.02   168.11 lineto
+   448.88   168.30 lineto
+   448.91   168.49 lineto
+   448.80   168.66 lineto
+   448.76   168.82 lineto
+   448.73   168.98 lineto
+   448.62   169.18 lineto
+   448.60   169.35 lineto
+   447.94   169.50 lineto
+   448.04   169.66 lineto
+   448.08   169.81 lineto
+   448.91   169.97 lineto
+   448.47   170.13 lineto
+   448.53   170.28 lineto
+   448.67   170.45 lineto
+   448.08   170.69 lineto
+   448.21   170.84 lineto
+   448.26   170.99 lineto
+   448.10   171.16 lineto
+   448.14   171.30 lineto
+   447.80   171.47 lineto
+   448.53   171.64 lineto
+   448.24   171.83 lineto
+   447.88   171.99 lineto
+   447.75   172.16 lineto
+   447.61   172.33 lineto
+   446.85   172.50 lineto
+   448.24   172.69 lineto
+   448.10   172.87 lineto
+   448.50   173.03 lineto
+   447.53   173.21 lineto
+   447.59   173.38 lineto
+   446.88   173.54 lineto
+   447.60   173.75 lineto
+   446.84   173.92 lineto
+   447.34   174.12 lineto
+   446.58   174.27 lineto
+   446.95   174.44 lineto
+   446.30   174.63 lineto
+   447.18   174.78 lineto
+   445.46   174.99 lineto
+   444.47   175.18 lineto
+   444.75   175.34 lineto
+   444.33   175.52 lineto
+   443.85   175.71 lineto
+   443.79   175.88 lineto
+   443.46   176.05 lineto
+   442.72   176.21 lineto
+   442.59   176.40 lineto
+   442.50   176.58 lineto
+   442.67   176.76 lineto
+   443.03   176.92 lineto
+   442.65   177.09 lineto
+   442.50   177.24 lineto
+   442.04   177.42 lineto
+   441.21   177.61 lineto
+   441.55   177.79 lineto
+   441.76   177.98 lineto
+   442.18   178.15 lineto
+   441.66   178.37 lineto
+   442.14   178.54 lineto
+   441.41   178.73 lineto
+   441.50   178.89 lineto
+   440.59   179.16 lineto
+   439.94   179.36 lineto
+   440.12   179.53 lineto
+   440.75   179.71 lineto
+   440.88   179.87 lineto
+   439.96   180.04 lineto
+   439.18   180.20 lineto
+   439.73   180.39 lineto
+   440.22   180.60 lineto
+   440.45   180.78 lineto
+   440.29   180.94 lineto
+   439.88   181.14 lineto
+   439.91   181.32 lineto
+   439.63   181.50 lineto
+   438.99   181.69 lineto
+   438.29   181.86 lineto
+   438.78   182.04 lineto
+   438.88   182.25 lineto
+   438.61   182.40 lineto
+   438.57   182.58 lineto
+   438.63   182.73 lineto
+   438.63   182.92 lineto
+   438.02   183.07 lineto
+   438.84   183.25 lineto
+   438.36   183.45 lineto
+   437.78   183.64 lineto
+   438.35   183.81 lineto
+   438.09   183.96 lineto
+   438.40   184.20 lineto
+   437.63   184.37 lineto
+   437.05   184.55 lineto
+   437.58   184.73 lineto
+   437.51   184.89 lineto
+   437.97   185.09 lineto
+   438.30   185.26 lineto
+   437.88   185.41 lineto
+   438.32   185.62 lineto
+   437.66   185.77 lineto
+   437.58   185.92 lineto
+   435.93   186.11 lineto
+   436.73   186.27 lineto
+   436.21   186.47 lineto
+   436.13   186.67 lineto
+   437.08   186.87 lineto
+   436.29   187.07 lineto
+   436.34   187.24 lineto
+   436.85   187.40 lineto
+   436.89   187.65 lineto
+   436.25   187.83 lineto
+   435.13   188.02 lineto
+   436.27   188.17 lineto
+   437.07   188.33 lineto
+   435.80   188.51 lineto
+   436.24   188.68 lineto
+   436.42   188.83 lineto
+   435.99   188.98 lineto
+   436.69   189.15 lineto
+   436.63   189.31 lineto
+   436.37   189.47 lineto
+   435.85   189.67 lineto
+   435.34   189.93 lineto
+   434.99   190.12 lineto
+   435.83   190.29 lineto
+   434.58   190.48 lineto
+   436.19   190.64 lineto
+   435.41   190.87 lineto
+   434.05   191.03 lineto
+   434.74   191.24 lineto
+   434.61   191.39 lineto
+   433.75   191.57 lineto
+   435.01   191.76 lineto
+   434.66   191.92 lineto
+   434.61   192.23 lineto
+   433.70   192.45 lineto
+   432.41   192.62 lineto
+   433.88   192.83 lineto
+   433.02   193.05 lineto
+   434.73   193.24 lineto
+   433.18   193.41 lineto
+   433.62   193.62 lineto
+   432.77   193.77 lineto
+   431.71   193.92 lineto
+   433.28   194.11 lineto
+   433.05   194.35 lineto
+   433.72   194.55 lineto
+   432.56   194.71 lineto
+   433.36   194.86 lineto
+   433.07   195.01 lineto
+   432.80   195.26 lineto
+   432.88   195.42 lineto
+   430.93   195.63 lineto
+   430.68   195.79 lineto
+   432.82   195.99 lineto
+   432.35   196.20 lineto
+   430.84   196.36 lineto
+   429.97   196.59 lineto
+   430.42   196.77 lineto
+   430.00   196.93 lineto
+   431.11   197.09 lineto
+   430.51   197.28 lineto
+   430.27   197.54 lineto
+   430.96   197.82 lineto
+   431.26   197.98 lineto
+   430.84   198.21 lineto
+   430.63   198.36 lineto
+   430.04   198.57 lineto
+   431.25   198.76 lineto
+   430.89   198.95 lineto
+   430.12   199.13 lineto
+   430.75   199.34 lineto
+   431.55   199.51 lineto
+   430.81   199.75 lineto
+   429.61   199.93 lineto
+   430.24   200.13 lineto
+   429.27   200.34 lineto
+   428.95   200.57 lineto
+   429.37   200.74 lineto
+   429.32   200.92 lineto
+   429.72   201.12 lineto
+   428.88   201.35 lineto
+   429.83   201.52 lineto
+   429.93   201.73 lineto
+   427.72   201.92 lineto
+   429.24   202.07 lineto
+   429.68   202.27 lineto
+   428.09   202.43 lineto
+   428.62   202.67 lineto
+   428.84   202.86 lineto
+   428.75   203.08 lineto
+   428.04   203.33 lineto
+   428.32   203.50 lineto
+   426.76   203.70 lineto
+   426.41   203.87 lineto
+   427.27   204.04 lineto
+   428.37   204.22 lineto
+   427.69   204.48 lineto
+   428.26   204.65 lineto
+   428.53   204.82 lineto
+   427.76   205.05 lineto
+   429.41   205.35 lineto
+   429.29   205.54 lineto
+   427.79   205.89 lineto
+   427.00   206.06 lineto
+   426.85   206.21 lineto
+   426.75   206.47 lineto
+   428.23   206.67 lineto
+   427.94   206.85 lineto
+   427.64   207.09 lineto
+   427.89   207.38 lineto
+   427.71   207.53 lineto
+   427.42   207.87 lineto
+   427.15   208.07 lineto
+   427.07   208.36 lineto
+   427.76   208.61 lineto
+   427.11   208.77 lineto
+   426.12   208.95 lineto
+   427.24   209.18 lineto
+   425.44   209.46 lineto
+   425.76   209.62 lineto
+   426.15   209.83 lineto
+   426.32   209.99 lineto
+   428.44   210.20 lineto
+   427.28   210.46 lineto
+   425.61   210.62 lineto
+   426.03   210.88 lineto
+   426.74   211.19 lineto
+   425.77   211.38 lineto
+   425.55   211.64 lineto
+   425.69   211.80 lineto
+   425.24   212.00 lineto
+   425.07   212.23 lineto
+   426.58   212.41 lineto
+   424.95   212.57 lineto
+   426.76   212.78 lineto
+   425.02   213.12 lineto
+   424.47   213.39 lineto
+   424.94   213.61 lineto
+   423.86   213.83 lineto
+   423.30   214.03 lineto
+   425.10   214.21 lineto
+   424.53   214.36 lineto
+   424.25   214.78 lineto
+   423.07   214.99 lineto
+   425.18   215.44 lineto
+   423.11   215.75 lineto
+   423.85   215.98 lineto
+   422.47   216.29 lineto
+   425.37   216.55 lineto
+   424.98   216.86 lineto
+   424.63   217.25 lineto
+   422.87   217.54 lineto
+   423.35   217.96 lineto
+   422.46   218.15 lineto
+   422.98   218.38 lineto
+   423.11   218.87 lineto
+   422.07   219.08 lineto
+   422.93   219.49 lineto
+   423.38   219.84 lineto
+   423.08   220.03 lineto
+   423.08   220.33 lineto
+   424.00   220.53 lineto
+   424.25   220.75 lineto
+   423.07   220.97 lineto
+   423.63   221.25 lineto
+   422.54   221.41 lineto
+   423.35   221.69 lineto
+   423.12   222.29 lineto
+   424.36   222.71 lineto
+   423.33   222.88 lineto
+   422.40   223.17 lineto
+   422.18   223.34 lineto
+   421.47   223.53 lineto
+   424.13   223.71 lineto
+   422.70   224.19 lineto
+   424.22   224.44 lineto
+   422.85   224.93 lineto
+   422.49   225.17 lineto
+   423.06   225.52 lineto
+   423.03   225.72 lineto
+   422.70   226.36 lineto
+   423.79   226.56 lineto
+   422.65   227.12 lineto
+   421.73   227.37 lineto
+   422.57   227.68 lineto
+   421.56   228.25 lineto
+   422.24   228.61 lineto
+   421.22   229.07 lineto
+   420.38   229.81 lineto
+   420.26   230.07 lineto
+   422.00   230.81 lineto
+   420.21   231.14 lineto
+   419.34   231.46 lineto
+   418.37   231.67 lineto
+   419.11   232.16 lineto
+   419.42   232.65 lineto
+   420.86   233.20 lineto
+   419.82   233.37 lineto
+   419.37   233.81 lineto
+   419.20   234.48 lineto
+   418.42   235.50 lineto
+   418.40   235.72 lineto
+   419.57   236.18 lineto
+   419.04   236.53 lineto
+   418.01   236.93 lineto
+   418.21   237.51 lineto
+   418.13   237.75 lineto
+   416.07   238.16 lineto
+   417.23   238.45 lineto
+   417.26   238.81 lineto
+   416.44   240.48 lineto
+   415.76   241.22 lineto
+   416.62   241.71 lineto
+   417.36   242.21 lineto
+   416.41   242.58 lineto
+   416.00   242.96 lineto
+   415.76   243.77 lineto
+   416.40   244.15 lineto
+   416.36   244.60 lineto
+   415.02   245.05 lineto
+   414.77   245.37 lineto
+   415.86   245.89 lineto
+   415.74   246.47 lineto
+   415.88   247.52 lineto
+   416.23   248.32 lineto
+   414.91   248.79 lineto
+   413.11   249.33 lineto
+   415.07   249.74 lineto
+   415.30   250.01 lineto
+   416.54   250.49 lineto
+   416.38   250.69 lineto
+   415.59   251.04 lineto
+   415.67   251.46 lineto
+   415.18   252.72 lineto
+   415.90   253.35 lineto
+   416.98   253.92 lineto
+   417.18   254.35 lineto
+   416.84   254.78 lineto
+   416.56   255.24 lineto
+   416.06   255.72 lineto
+   415.67   256.82 lineto
+   414.43   259.14 lineto
+   414.87   259.97 lineto
+   415.49   260.51 lineto
+   414.79   260.82 lineto
+   412.79   261.05 lineto
+   412.88   261.44 lineto
+   415.68   261.98 lineto
+   415.45   262.21 lineto
+   414.95   262.53 lineto
+   413.78   263.24 lineto
+   413.39   264.19 lineto
+   413.17   265.48 lineto
+   412.07   266.13 lineto
+   411.61   266.45 lineto
+   411.78   266.78 lineto
+   413.54   267.19 lineto
+   413.23   267.52 lineto
+   412.36   268.44 lineto
+   412.73   268.94 lineto
+   414.02   269.95 lineto
+   413.12   270.89 lineto
+   412.08   271.49 lineto
+   411.95   272.62 lineto
+   409.74   278.26 lineto
+   408.10   283.66 lineto
+   407.96   284.76 lineto
+   405.95   291.71 lineto
+   405.58   299.52 lineto
+   405.27   300.37 lineto
+   404.49   314.28 lineto
+   403.38   315.59 lineto
+   396.02   327.86 lineto
+   395.56   329.04 lineto
+   395.48   341.33 lineto
+   396.22   343.80 lineto
+   388.86   357.08 lineto
+   388.36   358.56 lineto
+   388.06   358.91 lineto
+   385.68   373.32 lineto
+   378.82   381.07 lineto
+   371.83   388.08 lineto
+   366.75   401.14 lineto
+   366.41   402.84 lineto
+   365.96   403.79 lineto
+   359.50   417.60 lineto
+   359.19   418.34 lineto
+   350.74   441.25 lineto
+   348.29   447.12 lineto
+   344.85   456.96 lineto
+   336.72   476.64 lineto
+   330.99   486.78 lineto
+   321.99   506.16 lineto
+   301.11   535.68 lineto
+   297.83   542.87 lineto
+   295.72   550.44 lineto
+   283.91   565.20 lineto
+   271.85   594.72 lineto
+   267.29   598.92 lineto
+   247.14   624.24 lineto
+   242.55   639.00 lineto
+   223.23   650.47 lineto
+   218.33   653.76 lineto
+   185.41   683.28 lineto
+   178.48   694.91 lineto
+   172.91   712.80 lineto
 stroke
 newpath
  0.000 0.000 0.000 setrgbcolor
