@@ -7246,7 +7246,7 @@ contains
       mth=251
       scr(4)=irelco
       scr(5)=legord
-      scr(6)=legord
+      scr(6)=ifissp
    endif
    call contio(0,nout,0,scr,nb,nw)
 
