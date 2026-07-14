@@ -11,6 +11,7 @@ module util
    public loada,finda,scana
    public sigfig
    public a10
+   public rdtabl
 
 contains
 
@@ -463,6 +464,37 @@ contains
    endif
    return
    end subroutine a10
+
+   subroutine rdtabl(iunit, arr)
+   !--------------------------------------------------------------------
+   ! Read a table from iunit in ENDF/B-TAB1 format.
+   ! This subroutine handles allocating/deallocating as necessary.
+   !--------------------------------------------------------------------
+   integer, intent(in) :: iunit
+   real(kr), allocatable, intent(out) :: arr(:)
+
+   real(kr), allocatable :: dmy(:)
+
+   integer :: nr, np, arrlen
+   integer :: i
+
+   allocate(dmy(6))
+
+   read(iunit, *) (dmy(i),i=1,6)
+   nr = nint(dmy(5))
+   np = nint(dmy(6))
+   arrlen = 6 + 2*nr + 2*np
+   
+   if (allocated(arr)) then
+      deallocate(arr)
+   end if
+   allocate(arr(arrlen))
+
+   backspace(iunit)
+   read(iunit, *) (dmy(i),i=1,arrlen)
+
+   deallocate(dmy)
+   end subroutine rdtabl
 
 end module util
 
