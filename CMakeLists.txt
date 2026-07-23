@@ -7,6 +7,15 @@ set( CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported configura
 
 project( njoy LANGUAGES Fortran )
 
+# Guarantee that a Release build is actually optimised. Some toolchains and CMake
+# presets leave CMAKE_Fortran_FLAGS_RELEASE empty, which silently produces an
+# unoptimised (-O0) executable that runs several times slower with identical
+# results. Only inject -O3 when no optimisation level has been requested, so any
+# user-provided optimisation flags take precedence.
+if( NOT CMAKE_Fortran_FLAGS_RELEASE MATCHES "(^| )-O" )
+  set( CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE} -O3" )
+endif()
+
 message( STATUS "" )
 message( STATUS "-----------------------------------------------------------" )
 message( STATUS "" )
