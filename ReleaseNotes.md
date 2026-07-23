@@ -3,7 +3,7 @@ Given here are some release notes for NJOY2016. Each release is made through a f
 
 ## [NJOY2016.80](https://github.com/njoy/NJOY2016/pull/xxx)
 This update fixes the following issues:
-  - The ismooth option in ACER assumes that the first outgoing energy in a distribution is always 0, which can lead to outgoing energies out of order and other issues. We now ensure ismooth does not perform its smoothing operation when the first ougoing energy value is zero.
+  - The ismooth option in ACER assumes that the first outgoing energy in a distribution is always 0, which can lead to outgoing energies out of order and other issues. We now ensure ismooth does not perform its smoothing operation when the first ougoing energy value is not zero.
 
 ## [NJOY2016.79](https://github.com/njoy/NJOY2016/pull/395)
 This update fixes the following issues:
