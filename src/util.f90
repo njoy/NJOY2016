@@ -491,7 +491,7 @@ contains
    allocate(arr(arrlen))
 
    backspace(iunit)
-   read(iunit, *) (dmy(i),i=1,arrlen)
+   read(iunit, *) (arr(i),i=1,arrlen)
 
    deallocate(dmy)
    end subroutine rdtabl
