@@ -4888,7 +4888,7 @@ contains
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
-   use util   ! provides error
+   use util   ! provides error,rdtabl
    ! internals
    integer::iwtt,i,nr,np,ntmp,iw
    real(kr)::eb,tb,ec,tc,ab,ac
@@ -5113,7 +5113,7 @@ contains
    !-------------------------------------------------------------------
    use physics ! provides bk
    use endf    ! provides terpa
-   use util    ! provides sigfig,rdtabl
+   use util    ! provides sigfig
    ! externals
    integer::idis,lord
    real(kr)::e,enext,wtf
