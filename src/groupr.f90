@@ -4888,7 +4888,7 @@ contains
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
-   use util   ! provides error
+   use util   ! provides error,rdtabl
    ! internals
    integer::iwtt,i,nr,np,ntmp,iw
    real(kr)::eb,tb,ec,tc,ab,ac
@@ -5011,14 +5011,8 @@ contains
    !--arbitary
    if (iwtt.eq.1) then
       write(nsyso,'(/'' weight function......read in'')')
-      ntmp=10000
-      allocate(tmp(ntmp))
-      read(nsysi,*) (tmp(i),i=1,ntmp)
-      nr=nint(tmp(5))
-      np=nint(tmp(6))
-      iw=6+2*nr+2*np
-      if (iw.gt.ntmp) call error('genwtf',&
-        'exceeded storage reading user weight function',' ')
+      call rdtabl(nsysi, tmp)
+      iw = size(tmp)
       allocate(wght(iw))
       do i=1,iw
          wght(i)=tmp(i)
