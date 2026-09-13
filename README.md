@@ -1,4 +1,7 @@
-![](https://github.com/njoy/NJOY2016/workflows/Continuous%20Integration/badge.svg)
+![](https://github.com/HunterBelanger/NJOY2016/workflows/Continuous%20Integration/badge.svg)
+
+> [!IMPORTANT]
+> This is a modified version of NJOY2016, based on the NEA GitLab version with additional DRAGON related modules (DRAGR, CALENR, and ECCOR) written by Alain Hébert which you can find [here](https://git.oecd-nea.org/njoy/NJOY2016/-/tree/1-include-module-dragr-and-related-energy-meshes-in-groupr?ref_type=heads). The master branch of this repository is a merge of the NEA DRAGON branch and the [upstream NJOY2016 repository](https://github.com/njoy/NJOY2016). Because this version of NJOY2016 is a bit particular, I have also copied the manual for the NEA DRAGON version (found [here](https://git.oecd-nea.org/njoy/NJOY2016-manual/-/tree/1-document-module-dragr-and-related-energy-meshes-in-groupr?ref_type=heads)) and integrated it into this repository. Unfortunately, the git history for that portion has been lost in doing this, but I prefer to have them as one repository for my own use.
 
 # NJOY2016
 
@@ -31,20 +34,44 @@ git clone https://github.com/njoy/NJOY2016.git
 cd NJOY2016
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release ../
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j8
+```
+
+To force using gfortran, you may replace the cmake line with
+```
+cmake -DCMAKE_Fortran_COMPILER=gfortran -DCMAKE_BUILD_TYPE=Release ..
 ```
 
 The above instructions will produce a release build consisting of a dynamic library and dynamically linked executable. To compile a static version (i.e. the executable is not a dynamically linked executable), the cmake command shown above should be replaced with the following cmake command:
 ```
 cmake -DCMAKE_BUILD_TYPE=Release -Dstatic_libraries=ON
-      -Dstatic_njoy=ON -DCMAKE_EXE_LINKER_FLAGS=-static ../
+      -Dstatic_njoy=ON -DCMAKE_EXE_LINKER_FLAGS=-static ..
 ```
 
 When you have already cloned the NJOY2016 repository and wish to update to the latest version, you can use the following instructions (inside the build folder):
 ```
 git pull
 make -j8
+```
+
+You can run all tests using
+```
+make test
+```
+
+You can run a single test using
+```
+ctest -R Test14 -V
+```
+
+```
+ctest -R calendf01 -V
+```
+
+or
+```
+ctest -R drag01 -V
 ```
 
 ## Module overview
@@ -72,6 +99,9 @@ make -j8
 +  `PURR` generates unresolved-resonance probability tables for use in representing resonance self-shielding effects in the MCNP Monte Carlo code.
 +  `LEAPR` generates ENDF scattering-law files (File 7) for moderator materials in the thermal range. These scattering-law files can be used by `THERMR` to produce the corresponding cross sections.
 +  `GASPR` generates gas-production cross sections in pointwise format from basic reaction data in an ENDF evaluation. These results can be converted to multigroup form using `GROUPR`, passed to `ACER`, or displayed using `PLOTR`.
++  `CALENR` generates CALENDF probability tables and store them in a GENDF tape.
++  `DRAGR` generates a Draglib-formatted cross-section library for the lattice code DRAGON.
++  `ECCOR` generates an Eccolib-formatted cross-section library for the lattice code ECCO.
 
 ## License and Copyright
 This software is distributed and copyrighted according to the [LICENSE](LICENSE) file.

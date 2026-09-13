@@ -1,0 +1,2547 @@
+\section{CCCCR}
+\label{sCCCCR}
+
+\hypertarget{sCCCCRhy}{This}
+module is used to produce the standard CCCC interface files
+ISOTXS, BRKOXS, and DLAYXS from
+\hyperlink{sGROUPRhy}{GROUPR} output.
+
+This chapter describes the CCCCR module in NJOY2016.0.
+
+\subsection{Introduction}
+\label{ssCCCCR_intro}
+
+The CCCC interface files (commonly pronounced ``four cees'') were
+developed by the Committee for Computer Code Coordination for the
+US Fast Breeder Reactor Program.\index{CCCC interface files}
+\index{Fast Breeder Reactor Program}  When
+the members of this committee started work in 1970,
+they noted that because of the large variety of
+computers and computer systems, computer codes developed at one
+laboratory were often incompatible with computers at other
+laboratories.  Major rewrites of codes or wasteful duplicate efforts
+were common.  They hoped to create a system that would allow different
+laboratories to create codes that could be moved to other sites more
+easily.  Moreover, they hoped that the codes developed at different
+laboratories could easily work together, thereby achieving larger and
+more capable calculational systems than any one laboratory could hope to
+develop by itself.
+
+Much of the following discussion was developed long ago, and so some
+of the code examples conform to FORTRAN-77.  We assume the reader can
+easily convert this into modern Fortran.
+
+They approached this problem in two ways.  First, they tried to establish
+general programming standards that would make computer codes more
+portable.  And second, they tried to establish standard interface files
+for reactor physics codes that would make it easier for computer codes to
+communicate with each other.  The results of this work appeared in fullest
+form as the CCCC-III and CCCC-IV standards\cite{CCCC3,CCCC4}.
+\index{CCCC format!CCCC-III}
+\index{CCCC format!CCCC-IV}
+
+The MINX\index{MINX} code\cite{MINX}, which was the predecessor of NJOY,
+was able to produce libraries \cite{LIBIV}\index{LIB-IV} that used
+the CCCC-III interface formats.  The LINX\index{LINX} and
+BINX\index{BINX} library management codes\cite{LINXBINX} and the
+CINX\index{CINX} group collapse code\cite{CINX} were also released
+during this period.  Major codes that used data in CCCC-format
+included SPHINX\cite{SPHINX}\index{SPHINX} from
+Westinghouse\index{Westinghouse}, TDOWN\cite{TDOWN}\index{TDOWN}
+from General Electric\index{General Electric},
+DIF3D\cite{DIF3D}\index{DIF3D} from Argonne National Laboratory,
+\index{Argonne National Laboratory!ANL} and ONEDANT\cite{ONEDANT}\index{ONEDANT}
+from LANL\index{Los Alamos National Laboratory!LANL}.  It was indeed found that
+codes could be moved more easily than before.  Analysts could use
+ONEDANT and DIF3D on similar problems; they could even use one code to
+generate utility files (for example, mixture and geometry files) that
+would work with the other code!  When NJOY was developed, it first
+produced version III formats and was later upgraded to the CCCC-IV
+standard.
+
+With the demise of the breeder reactor program, development of the CCCC
+system has stopped.  However, many good programs are still available
+that make use of CCCC files and programming standards.  The LANL
+DANDE system\cite{DANDE} was an example of how the use of standard
+interface files can be used to couple several reactor physics programs
+together into an easy-to-use and powerful product.  In areas where the
+CCCC standards were not very successful, such as gamma ray cross
+sections and cross sections for the fusion energy range,
+the MATXS format is available as an alternative.  This generalized
+material cross section library format uses CCCC-type techniques.
+The modern S$_{\rm N}$ code PARTISN\cite{PARTISN} makes very heavy
+use of both standard and non-standard CCCC files  Thus, the CCCC
+spirit is not dead.
+\index{DANDE}
+\index{MATXS format}
+
+\subsection{CCCC Procedures and Programming Standards}
+\label{ssCCCCR_Proc}
+
+Although the CCCC programming standards went so far as to give advice on
+program structure, documentation, and good coding practice, their main
+purpose was to make it easier to move computer codes from one machine
+to another.  The main problems in those days were the slightly different
+implementations of input/output on CDC and IBM machines, the different
+word size on CDC and IBM machines, and the relatively small size of the
+main memory on the CDC 7600.  The last of these problems was attacked by
+limiting the maximum memory requirements for CCCC-compliant codes.  This
+problem has disappeared for modern computers.
+
+The word-size problem has three components.  First, it is often
+necessary to change the statements that allocate space for variables
+and arrays [for example, ``\cword{DIMENSION A(10)}'' might have to be
+changed to ``\cword{REAL*8 A(10)}'' when moving from a long-word
+machine (CDC, Cray) to a short-word machine (IBM, VAX, Sun)].  Second,
+the names of functions that work with double-precision variables
+normally must be changed (for example, \cword{ALOG10} to \cword{DLOG10}).
+And third, the word boundaries of double-precision variables must be
+properly aligned in common blocks and equivalenced arrays.  The standard
+CCCC method for handling name changes has been based on using standard
+control cards.  As an example, a code for a long-word machine might
+contain the following code fragment:
+
+\newpage
+\small
+\begin{ccode}
+
+CSW
+C     REAL*8 HA(10)
+CSW
+CLW
+      INTEGER HA(10)
+CLW
+
+\end{ccode}
+\normalsize
+
+The variable \cword{HA} is intended to hold 10 words of Hollerith
+information using the standard CCCC 6-character word length.  Such a
+variable must be declared as double precision on short-word machines,
+which typically allow four Hollerith characters per word.  To change
+this code to its short-word version, a special utility code reads
+through each line removing the comment ``C'' from lines bracketed by
+the ``SW'' comments and inserting a ``C'' in column 1 for all lines
+bracketed by ``LW'' comments.  Early versions of NJOY used this
+scheme; later versions used UPD\cite{UPD} conditional
+\index{UPD}
+statements instead.  For example, the source file contained
+
+\small
+\begin{ccode}
+
+*IF SW
+      REAL*8 HA(10)
+*ELSE
+      INTEGER HA(10)
+*ENDIF
+
+\end{ccode}
+\normalsize
+
+\noindent
+and the compile file produced by UPD had only one of the two
+alternatives activated, depending on whether \cword{SW} has been
+set or not.  NJOY2016 uses built-in features of Fortran-90 to
+handle this problem.  The \cword{locale} module defines a
+special "kind" for the Hollerith data that is packed into
+CCCC records.
+
+The word-alignment problem requires that some care be used in
+allocating arrays and common blocks.  For example,
+
+\small
+\begin{ccode}
+
+REAL*8 HA
+COMMON/BAD/IA(3),HA(10)
+
+\end{ccode}
+\normalsize
+
+\noindent
+should be avoided; it would be OK with \cword{IA(4)}.  Most CCCC records
+contain mixtures of Hollerith, floating-point, and integer variables.
+The desired data is normally extracted by making use of equivalenced
+arrays.  For example, a code could contain the following declarations:
+
+\small
+\begin{ccode}
+
+REAL*8 HA(10)
+DIMENSION A(20),IA(20)
+EQUIVALENCE (HA(1),A(1)),(IA(1),A(1))
+
+\end{ccode}
+\normalsize
+
+\noindent
+Assume that a record containing 2 Hollerith variables (which require
+two single-precision variables each), 2 floating-point numbers (at
+single precision), and 2 integers has been read into array \cword{A}.
+How do you extract the first of the integers? The solution depends on
+defining a CCCC-standard quantity called \cword{mult},
+\index{mult@{\ty mult}}
+which is 1 for long-word machines and 2 for short-word machines.  Now,
+the desired value can be obtained with an expression of the form
+
+\small
+\begin{ccode}
+
+I1=IA(2*MULT+3)
+
+\end{ccode}
+\normalsize
+
+\noindent
+The second Hollerith variable would be extracted using the simple
+expression
+
+\small
+\begin{ccode}
+
+H2=HA(2)
+
+\end{ccode}
+\normalsize
+
+\noindent
+Changing the value of \cword{mult} when transporting a code to a
+different machine is easily handled using control-card brackets or UPD
+conditionals as described above.
+
+In NJOY2012 and later, common blocks are no longer used, but equivalencing
+is still used to pack Hollerith (or character), integer, and real data
+into the CCCC records.  While such coding techniques may bring tears to
+the eyes of modern programmers, it remains a valid coding mechanism and
+we continue to exploit this capability.
+
+The remaining feature of the CCCC programming standards that is used
+in codes like PARTISN is the concept of standardized input/output subroutines.
+The CCCC interface files are sequential binary files (binary for
+efficiency and sequential for simplicity).  The interface formats are
+arranged so that the length of any record can be calculated using
+parameters already read from previous records.  It is convenient to
+insulate CCCC input/output from system variations by defining two
+standard routines:
+\index{REED@{\ty REED}}
+\index{RITE@{\ty RITE}}
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{REED(NREF,IREC,ARRAY,NWDS,MODE)}] ~\par
+  Read record \cword{IREC} from unit \cword{NREF} into
+  \cword{ARRAY}.  The record has length \cword{NWDS}
+  in single-precision words.  The \cword{MODE} parameter
+  is used to control I/O buffering, and it is not used
+  in NJOY. Records can be read out of sequence; the
+  routine does any record skipping (forward or backward)
+  needed to arrive at record number \cword{IREC}.
+\item[\cword{RITE(NREF,IREC,ARRAY,NWDS,MODE)}] ~\par
+  Write record \cword{IREC} onto unit \cword{NREF} using
+  the data in \cword{ARRAY}.  The first \cword{NWDS}
+  single-precision words will be written.  The \cword{MODE}
+  parameter is ignored.  The records \cword{NREF} must be
+  written in sequence.  The unit will be rewound if
+  \cword{IREC=1}.
+
+\end{singlespace}
+\end{description}
+
+\noindent
+When transporting a code between different computer systems,
+it is only necessary to have (or prepare) operational versions
+of \cword{REED} and \cword{RITE} for the target machine.
+
+In the conversion to Fortran-90 style, we tried to avoid all these
+tricks.  The reading and writing of CCCC records was coded in
+directly to avoid word-length problems (no more REED or RITE).  All
+internal variable and data read from the GENDF file use 8-byte words.
+It is only at the last stage when the data are stored into the CCCC
+records that the 8-byte data are converted to 4-byte words.  Thus,
+\cword{mult} is always equal to 2.  In general, the accuracy
+obtained with 4-byte words is sufficient for multigroup data.
+
+\subsection{The Standard Interface Files}
+\label{ssCCCCR_Interface}
+
+The CCCCR module produces data libraries that use three of the CCCC-IV
+standard interface files, namely:
+\index{ISOTXS}
+\index{BRKOXS}
+\index{DLAYXS}
+
+\begin{description}
+\begin{singlespace}
+
+\item[ISOTXS] for nuclide (isotope)-ordered multigroup neutron
+  cross sections including cross section versus energy functions
+  for the principal cross sections, group-to-group scattering
+  matrices, and fission neutron production and spectra tables;
+\item[BRKOXS] for Bondarenko-type self-shielding factors versus
+  energy group, temperature, and background cross section for
+  the reactions with major resonance contributions; and
+\item[DLAYXS] for delayed-neutron precursor yields, emission
+  spectra, and decay constants for the major fissionable
+  isotopes.
+
+\end{singlespace}
+\end{description}
+
+\noindent
+The format of each of these files, the definition of the types of data
+included, and the uses and weaknesses of these three standard file
+formats are discussed in the following three sections.
+
+As mentioned in the preceding section, the normal form of the CCCC files
+is binary and sequential.  CCCCR writes its output in this binary mode.
+Of course, coded versions (ASCII for modern systems) are needed to move
+library files between different machines, and the formats used for the
+coded versions are given in the file descriptions below.  A separate
+program, BINX\cite{LINXBINX}, is used to convert back and forth between
+coded and binary modes.  BINX can also be used to prepare an
+interpreted listing of a library.  CCCCR can prepare an entire
+multimaterial library in one run if a multimaterial GENDF file is
+available.  It can also be used to prepare an interface file containing
+only one material.  These one-material files can be merged into
+multimaterial libraries using the LINX code\cite{LINXBINX}.
+
+\subsection{ISOTXS}
+\label{ssCCCCR_ISOTXS}
+
+The format for the ISOTXS\index{ISOTXS} material (isotope)-ordered
+cross section file is given below.  This computer-text format is
+standard for the CCCC interface files.  Of course, if these lines
+were to be inserted into a modern Fortran (say .f90 or later)
+code, the initial "C" will have to be changed to ``!".
+
+\small
+\begin{ccode}
+
+C***********************************************************************
+C                       REVISED 11/30/76                               -
+C                                                                      -
+CF          ISOTXS-IV                                                  -
+CE          MICROSCOPIC GROUP NEUTRON CROSS SECTIONS                   -
+C                                                                      -
+CN                      THIS FILE PROVIDES A BASIC BROAD GROUP         -
+CN                      LIBRARY, ORDERED BY ISOTOPE                    -
+CN                      FORMATS GIVEN ARE FOR FILE EXCHANGE PURPOSES   -
+CN                      ONLY.                                          -
+C                                                                      -
+C***********************************************************************
+
+C-----------------------------------------------------------------------
+CS          FILE STRUCTURE                                             -
+CS                                                                     -
+CS             RECORD TYPE                        PRESENT IF           -
+CS             ===============================    ===============      -
+CS             FILE IDENTIFICATION                ALWAYS               -
+CS             FILE CONTROL                       ALWAYS               -
+CS             FILE DATA                          ALWAYS               -
+CS             FILE-WIDE CHI DATA                 ICHIST.GT.1          -
+CS   **************(REPEAT FOR ALL ISOTOPES)                           -
+CS   *         ISOTOPE CONTROL AND GROUP                               -
+CS   *                        INDEPENDENT DATA    ALWAYS               -
+CS   *         PRINCIPAL CROSS SECTIONS           ALWAYS               -
+CS   *         ISOTOPE CHI DATA                   ICHI.GT.1            -
+CS   *  **********(REPEAT TO NSCMAX SCATTERING BLOCKS)                 -
+CS   *  *  *******(REPEAT FROM 1 TO NSBLOK)                            -
+CS   *  *  *   SCATTERING SUB-BLOCK               LORD(N).GT.0         -
+CS   *************                                                     -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE IDENTIFICATION                                        -
+C                                                                      -
+CL    HNAME,(HUSE(I),I=1,2),IVERS                                      -
+C                                                                      -
+CW    1+3*MULT=NUMBER OF WORDS                                         -
+C                                                                      -
+CB    FORMAT(11H 0V ISOTXS  ,1H*,2A6,1H*,I6)                           -
+C                                                                      -
+CD    HNAME       HOLLERITH FILE NAME - ISOTXS -                       -
+CD    HUSE(I)     HOLLERITH USER IDENTIFICATION (A6)                   -
+CD    IVERS       FILE VERSION NUMBER                                  -
+CD    MULT        DOUBLE PRECISION PARAMETER                           -
+CD                    1- A6 WORD IS SINGLE WORD                        -
+CD                    2- A6 WORD IS DOUBLE PRECISION WORD              -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE CONTROL   (1D RECORD)                                 -
+C                                                                      -
+CL    NGROUP,NISO,MAXUP,MAXDN,MAXORD,ICHIST,NSCMAX,NSBLOK              -
+C                                                                      -
+CW    8=NUMBER OF WORDS                                                -
+C                                                                      -
+CB    FORMAT(4H 1D ,8I6)                                               -
+C                                                                      -
+CD    NGROUP        NUMBER OF ENERGY GROUPS IN FILE                    -
+CD    NISO          NUMBER OF ISOTOPES IN FILE                         -
+CD    MAXUP         MAXIMUM NUMBER OF UPSCATTER GROUPS                 -
+CD    MAXDN         MAXIMUM NUMBER OF DOWNSCATTER GROUPS               -
+CD    MAXORD        MAXIMUM SCATTERING ORDER (MAXIMUM VALUE OF         -
+CD                     LEGENDRE EXPANSION INDEX USED IN FILE).         -
+CD    ICHIST        FILE-WIDE FISSION SPECTRUM FLAG                    -
+CD                     ICHIST.EQ.0,      NO FILE-WIDE SPECTRUM         -
+CD                     ICHIST.EQ.1,      FILE-WIDE CHI VECTOR          -
+CD                     ICHIST.GT.1,      FILE-WIDE CHI MATRIX          -
+CD    NSCMAX        MAXIMUM NUMBER OF BLOCKS OF SCATTERING DATA        -
+CD    NSBLOK        SUBBLOCKING CONTROL FOR SCATTER MATRICES. THE      -
+CD                     SCATTERING DATA ARE SUBBLOCKED INTO NSBLOK      -
+CD                     RECORDS (SUBBLOCKS) PER SCATTERING BLOCK.       -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE DATA   (2D RECORD)                                    -
+C                                                                      -
+CL    (HSETID(I),I=1,12),(HISONM(I),I=1,NISO),                         -
+CL   1(CHI(J),J=1,NGROUP),(VEL(J),J=1,NGROUP),                         -
+CL   2(EMAX(J),J=1,NGROUP),EMIN,(LOCA(I),I=1,NISO)                     -
+C                                                                      -
+CW    (NISO+12)*MULT+1+NISO                                            -
+CW    +NGROUP*(2+ICHIST*(2/ICHIST+1)))=NUMBER OF WORDS                 -
+C                                                                      -
+CB    FORMAT(4H 2D ,1H*,11A6,1H*/     HSETID,HISONM                    -
+CB   11H*,A6,1H*,9(1X,A6)/(10(1X,A6)))                                 -
+CB    FORMAT(6E12.5)                  CHI (PRESENT IF ICHIST.EQ.1)     -
+CD    FORMAT(6E12.5)                  VEL,EMAX,EMIN                    -
+CD    FORMAT(12I6)                    LOCA                             -
+C                                                                      -
+CD    HSETID(I)     HOLLERITH IDENTIFICATION OF FILE (A6)              -
+CD    HISONM(I)     HOLLERITH ISOTOPE LABEL FOR ISOTOPE I (A6)         -
+CD    CHI(J)        FILE-WIDE FISSION SPECTRUM(PRESENT IF ICHIST.EQ.1) -
+CD    VEL(J)        MEAN NEUTRON VELOCITY IN GROUP J (CM/SEC)          -
+CD    EMAX(J)       MAXIMUM ENERGY BOUND OF GROUP J (EV)               -
+CD    EMIN          MINIMUM ENERGY BOUND OF SET (EV)                   -
+CD    LOCA(I)       NUMBER OF RECORDS TO BE SKIPPED TO READ DATA FOR   -
+CD                     ISOTOPE I.  LOCA(1)=0                           -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE-WIDE CHI DATA   (3D RECORD)                           -
+C                                                                      -
+CC        PRESENT IF ICHIST.GT.1                                       -
+C                                                                      -
+CL    ((CHI(K,J),K=1,ICHIST),J=1,NGROUP),(ISSPEC(I),I=1,NGROUP)        -
+C                                                                      -
+CW    NGROUP*(ICHIST+1)=NUMBER OF WORDS                                -
+C                                                                      -
+CB    FORMAT(4H 3D ,5E12.5/(6E12.5))   CHI                             -
+CB    FORMAT(12I6)                     ISSPEC                          -
+C                                                                      -
+CD    CHI(K,J)      FRACTION OF NEUTRONS EMITTED INTO GROUP J AS A     -
+CD                     RESULT OF FISSION IN ANY GROUP,USING SPECTRUM K -
+CD    ISSPEC(I)     ISSPEC(I)=K IMPLIES THAT SPECTRUM K IS USED        -
+CD                     TO CALCULATE EMISSION SPECTRUM FROM FISSION     -
+CD                     IN GROUP I                                      -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          ISOTOPE CONTROL AND GROUP INDEPENDENT DATA   (4D RECORD)   -
+C                                                                      -
+CL    HABSID,HIDENT,HMAT,AMASS,EFISS,ECAPT,TEMP,SIGPOT,ADENS,KBR,ICHI, -
+CL   1IFIS,IALF,INP,IN2N,IND,INT,LTOT,LTRN,ISTRPD,                     -
+CL   2(IDSCT(N),N=1,NSCMAX),(LORD(N),N=1,NSCMAX),                      -
+CL   3((JBAND(J,N),J=1,NGROUP),N=1,NSCMAX),                            -
+CL   4((IJJ(J,N),J=1,NGROUP),N=1,NSCMAX)                               -
+C                                                                      -
+CW    3*MULT+17+NSCMAX*(2*NGROUP+2)=NUMBER OF WORDS                    -
+C                                                                      -
+CB    FORMAT(4H 4D ,3(1X,A6)/6E12.5/                                   -
+CB   1(12I6))                                                          -
+C                                                                      -
+CD    HABSID        HOLLERITH ABSOLUTE ISOTOPE LABEL - SAME FOR ALL    -
+CD                            VERSIONS OF THE SAME ISOTOPE IN FILE (A6)-
+CD    HIDENT        IDENTIFIER OF LIBRARY FROM WHICH BASIC DATA        -
+CD                            CAME (E.G. ENDF/B) (A6)                  -
+CD    HMAT          ISOTOPE IDENTIFICATION (E.G. ENDF/B MAT NO.) (A6)  -
+CD    AMASS         GRAM ATOMIC WEIGHT                                 -
+CD    EFISS         TOTAL THERMAL ENERGY YIELD/FISSION (W.SEC/FISS)    -
+CD    ECAPT         TOTAL THERMAL ENERGY YIELD/CAPTURE (W.SEC/CAPT)    -
+CD    TEMP          ISOTOPE TEMPERATURE (DEGREES KELVIN)               -
+CD    SIGPOT        AVERAGE EFFECTIVE POTENTIAL SCATTERING IN          -
+CD                            RESONANCE RANGE (BARNS/ATOM)             -
+CD    ADENS         DENSITY OF ISOTOPE IN MIXTURE IN WHICH ISOTOPE     -
+CD                            CROSS SECTIONS WERE GENERATED (A/BARN-CM)-
+CD    KBR           ISOTOPE CLASSIFICATION                             -
+CD                     0=UNDEFINED                                     -
+CD                     1=FISSILE                                       -
+CD                     2=FERTILE                                       -
+CD                     3=OTHER ACTINIDE                                -
+CD                     4=FISSION PRODUCT                               -
+CD                     5=STRUCTURE                                     -
+CD                     6=COOLANT                                       -
+CD                     7=CONTROL                                       -
+CD    ICHI          ISOTOPE FISSION SPECTRUM FLAG                      -
+CD                      ICHI.EQ.0,     USE FILE-WIDE CHI               -
+CD                      ICHI.EQ.1,     ISOTOPE CHI VECTOR              -
+CD                      ICHI.GT.1,     ISOTOPE CHI MATRIX              -
+CD    IFIS          (N,F) CROSS SECTION FLAG                           -
+CD                     IFIS=0, NO FISSION DATA IN PRINCIPAL CROSS      -
+CD                                       SECTION RECORD                -
+CD                         =1, FISSION DATA PRESENT IN PRINCIPAL       -
+CD                                       CROSS SECTION RECORD          -
+CD    IALF          (N,ALPHA) CROSS SECTION FLAG                       -
+CD                     SAME OPTIONS AS IFIS                            -
+CD    INP           (N,P) CROSS SECTION FLAG                           -
+CD                     SAME OPTIONS AS IFIS                            -
+CD    IN2N          (N,2N) CROSS SECTION FLAG                          -
+CD                     SAME OPTIONS AS IFIS                            -
+CD    IND           (N,D) CROSS SECTION FLAG                           -
+CD                     SAME OPTIONS AS IFIS                            -
+CD    INT           (N,T) CROSS SECTION FLAG                           -
+CD                     SAME OPTIONS AS IFIS                            -
+CD    LTOT          NUMBER OF MOMENTS OF TOTAL CROSS SECTION PROVIDED  -
+CD                     IN PRINCIPAL CROSS SECTIONS RECORD              -
+CD    LTRN          NUMBER OF MOMENTS OF TRANSPORT CROSS SECTION       -
+CD                     PROVIDED IN PRINCIPAL CROSS SECTION RECORD      -
+CD    ISTRPD        NUMBER OF COORDINATE DIRECTIONS FOR WHICH          -
+CD                     COORDINATE DEPENDENT TRANSPORT CROSS SECTIONS   -
+CD                     ARE GIVEN, IS ISTRPD=0, NO COORDINATE DEPENDENT -
+CD                     TRANSPORT CROSS SECTIONS ARE GIVEN.             -
+CD    IDSCT(N)      SCATTERING MATRIX TYPE IDENTIFICATION FOR          -
+CD                     SCATTERING BLOCK N, SIGNIFICANT ONLY IF         -
+CD                     LORD(N).GT.0                                    -
+CD                     IDSCT(N)=000 + NN, TOTAL SCATTERING, (SUM OF    -
+CD                         ELASTIC, INELASTIC, AND N2N SCATTERING      -
+CD                         MATRIX TERMS),                              -
+CD                             =100 + NN, ELASTIC SCATTERING           -
+CD                             =200 + NN, INELASTIC SCATTERING         -
+CD                             =300 + NN, (N,2N) SCATTERING,----SEE    -
+CD                              NOTE BELOW----                         -
+CD                     WHERE NN IS THE LEGENDRE EXPANSION INDEX OF THE -
+CD                     FIRST MATRIX IN BLOCK N                         -
+CD    LORD(N)       NUMBER OF SCATTERING ORDERS IN BLOCK N.  IF        -
+CD                     LORD(N)=0, THIS BLOCK IS NOT PRESENT FOR THIS   -
+CD                     ISOTOPE.  IF NN IS THE VALUE TAKEN FROM         -
+CD                     IDSCT(N), THEN THE MATRICES IN THIS BLOCK       -
+CD                     HAVE LEGENDRE EXPANSION INDICES OF NN,NN+1,     -
+CD                     NN+2,...,NN+LORD(N)-1                           -
+CD    JBAND(J,N)    NUMBER OF GROUPS THAT SCATTER INTO GROUP J,        -
+CD                     INCLUDING SELF-SCATTER, IN SCATTERING BLOCK N.  -
+CD                     IF JBAND(J,N)=0, NO SCATTER DATA IS PRESENT IN  -
+CD                     BLOCK N                                         -
+CD    IJJ(J,N)      POSITION OF IN-GROUP SCATTERING CROSS SECTION IN   -
+CD                     SCATTERING DATA FOR GROUP J, SCATTERING BLOCK   -
+CD                     N, COUNTED FROM THE FIRST WORD OF GROUP J DATA. -
+CD                     IF JBAND(J,N).NE.0 THEN IJJ(J,N) MUST SATISFY   -
+CD                     THE RELATION 1.LE.IJJ(J,N).LE.JBAND(J,N)        -
+C                                                                      -
+CD                  NOTE- FOR N,2N SCATTER, THE MATRIX CONTAINS TERMS  -
+CD                     SCAT(J TO G), WHICH ARE EMISSION (PRODUCTION)-  -
+CD                     BASED, I.E., ARE DEFINED SUCH THAT MACROSCOPIC  -
+CD                     SCAT(J TO G) TIMES THE FLUX IN GROUP J GIVES    -
+CD                     THE RATE OF EMISSION (PRODUCTION) OF NEUTRONS   -
+CD                     INTO GROUP G.                                   -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          PRINCIPAL CROSS SECTIONS   (5D RECORD)                     -
+C                                                                      -
+CL    ((STRPL(J,L),J=1,NGROUP),L=1,LTRN),                              -
+CL   1((STOTPL(J,L),J=1,NGROUP),L=1,LTOT),(SNGAM(J),J=1,NGROUP).       -
+CL   2(SFIS(J),J=1,NGROUP),(SNUTOT(J),J=1,NGROUP),                     -
+CL   3(CHISO(J),J=1,NGROUP),(SNALF(J),J=1,NGROUP),                     -
+CL   4(SNP(J),J=1,NGROUP),(SN2N(J),J=1,NGROUP),                        -
+CL   5(SND(J),J=1,NGROUP),(SNT(J),J=1,NGROUP),                         -
+CL   6((STRPD(J,I),J=1,NGROUP),I=1,ISTRPD)                             -
+C                                                                      -
+CW   (1+LTRN+LTOT+IALF+INP+IN2N+IND+ISTRPD+2*IFIS+                     -
+CW   ICHI*(2/(ICHI+1)))*NGROUP=NUMBER OF WORDS                         -
+C                                                                      -
+CB   FORMAT(4H 5D ,5E12.5/(6E12.5)) LENGTH OF LIST AS ABOVE            -
+C                                                                      -
+CD    STRPL(J,L)   PL WEIGHTED TRANSPORT CROSS SECTION                 -
+CD                    THE FIRST ELEMENT OF ARRAY STRPL IS THE          -
+CD                    CURRENT (P1) WEIGHTED TRANSPORT CROSS SECTION    -
+CD                    THE LEGENDRE EXPANSION COEFFICIENT FACTOR (2L+1) -
+CD                    IS NOT INCLUDED IN STRPL(J,L).                   -
+CD    STOTPL(J,L)  PL WEIGHTED TOTAL CROSS SECTION                     -
+CD                    THE FIRST ELEMENT OF ARRAY STOTPL IS THE         -
+CD                    FLUX (P0) WEIGHTED TOTAL CROSS SECTION           -
+CD                    THE LEGENDRE EXPANSION COEFFICIENT FACTOR (2L+1) -
+CD                    IS NOT INCLUDED IN STOTPL(J,L).                  -
+CD    SNGAM(J)     (N,GAMMA)                                           -
+CD    SFIS(J)      (N,F)        (PRESENT IF IFIS.GT.0)                 -
+CD    SNUTOT(J)    TOTAL NEUTRON YIELD/FISSION (PRESENT IF IFIS.GT.0)  -
+CD    CHISO(J)I    ISOTOPE CHI  (PRESENT IF ICHI.EQ.1)                 -
+CD    SNALF(J)     (N,ALPHA)    (PRESENT IF IALF.GT.0)                 -
+CD    SNP(J)       (N,P)        (PRESENT IF INP.GT.0)                  -
+CD    SN2N(J)      (N,2N)       (PRESENT IF IN2N.GT.0)  ----SEE        -
+CD                    NOTE----                                         -
+CD    SND(J)       (N,D)        (PRESENT IF IND.GT.0)                  -
+CD    SNT(J)       (N,T)        (PRESENT IF INT.GT.0)                  -
+CD    STRPD(J,I)   COORDINATE DIRECTION I TRANSPORT CROSS SECTION      -
+CD                              (PRESENT IF ISTRPD.GT.0)               -
+C                                                                      -
+CN                 NOTE - THE PRINCIPAL N,2N CROSS SECTION SN2N(J)     -
+CN                    IS DEFINED AS THE N,2N REACTION CROSS SECTION,   -
+CN                    I.E., SUCH THAT MACROSCOPIC SN2N(J) TIMES THE    -
+CN                    FLUX IN GROUP J GIVES THE RATE AT WHICH N,2N     -
+CN                    REACTIONS OCCUR IN GROUP J.  THUS, FOR N,2N      -
+CN                    SCATTERING, SN2N(J) = 0.5*(SUM OF SCAT(J TO G)   -
+CN                    SUMMED OVER ALL G).                              -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          ISOTOPE CHI DATA   (6D RECORD)                             -
+C                                                                      -
+CC          PRESENT IF ICHI.GT.1                                       -
+C                                                                      -
+CL    ((CHIISO(K,J),K=1,ICHI),J=1,NGROUP),(ISOPEC(I),I=1,NGROUP)       -
+C                                                                      -
+CW    NGROUP*(ICHI+1)=NUMBER OF WORDS                                  -
+C                                                                      -
+CB    FORMAT(4H 6D ,5E12.5/(6E12.5))   CHIISO                          -
+CB    FORMAT(12I6)                     ISOPEC                          -
+C                                                                      -
+CD    CHIISO(K,J)   FRACTION OF NEUTRONS EMITTED INTO GROUP J AS       -
+CD                     RESULT OF FISSION IN ANY GROUP,USING SPECTRUM K -
+CD    ISOPEC(I)     ISOPEC(I)=K IMPLIES THAT SPECTRUM K IS USED        -
+CD                     TO CALCULATE EMISSION SPECTRUM FROM FISSION     -
+CD                     IN GROUP I                                      -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          SCATTERING SUB-BLOCK   (7D RECORD)                         -
+C                                                                      -
+CC          PRESENT IF LORD(N).GT.0                                    -
+C                                                                      -
+CL    ((SCAT(K,L),K=1,KMAX),L=1,LORDN)                                 -
+C                                                                      -
+CC    KMAX=SUM OVER J OF JBAND(J,N) WITHIN THE J-GROUP RANGE OF THIS   -
+CC       SUB-BLOCK.  IF M IS THE INDEX OF THE SUB-BLOCK, THE J-GROUP   -
+CC       RANGE CONTAINED WITHIN THIS SUB-BLOCK IS                      -
+CC       JL=(M-1)*((NGROUP-1)/NSBLOK+1 TO JU=MIN0(NGROUP,JUP),         -
+CC       WHERE JUP=M*((NGROUP-1)/NSBLOK+1).                            -
+C                                                                      -
+CC    LORDN=LORD(N)                                                    -
+CC    N IS THE INDEX FOR THE LOOP OVER NSCMAX (SEE FILE STRUCTURE)     -
+C                                                                      -
+CW    KMAX*LORDN=NUMBER OF WORDS                                       -
+C                                                                      -
+CB    FORMAT(4H 7D ,5E12.5/(6E12.5))                                   -
+C                                                                      -
+CD    SCAT(K,L)     SCATTERING MATRIX OF SCATTERING ORDER L, FOR       -
+CD                     REACTION TYPE IDENTIFIED BY IDSCT(N) FOR THIS   -
+CD                     BLOCK, JBAND(J,N) VALUES FOR SCATTERING INTO    -
+CD                     GROUP J ARE STORED AT LOCATIONS K=SUM FROM 1    -
+CD                     TO (J-1) OF JBAND(J,N) PLUS 1 TO K-1+JBAND(J,N).-
+CD                     THE SUM IS ZERO WHEN J=1, J-TO-J SCATTER IS     -
+CD                     THE IJJ(J,N)-TH ENTRY IN THE RANGE JBAND(J,N),  -
+CD                     VALUES ARE STORED IN THE ORDER (J+JUP),         -
+CD                     (J+JUP-1),...,(J+1),J,(J-1),...,(J-JDN),        -
+CD                     WHERE JUP=IJJ(J,N)-1 AND JDN=JBAND(J,N)-IJJ(J,N)-
+C                                                                      -
+C-----------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+\vspace{1 pt}
+
+Most of the variables in the ``File Identification and File Control''
+record are taken from the user's input.  Note that \cword{MAXUP}
+is always set to zero.  CCCCR does not process the NJOY thermal data
+at the present time.  The \cword{ICHIST} parameter will always be
+zero.  CCCCR does not produce a file-wide fission spectrum or matrix.
+The old practice of using a single fission spectrum for all calculations
+is inaccurate and obsolete.  Actually, the effective fission spectrum
+depends on the mixture of isotopes and the flux.  Any file-wide spectrum
+would have to be at least problem dependent, and it should also be
+region dependent.  The parameters \cword{NSCMAX} and \cword{NSBLOK}
+in the ``File Control'' record will be discussed in connection with
+the scattering matrix format.
+
+In the ``File Data'' record, the Hollerith set identification and the
+isotope names are taken from the user's input.  As mentioned above,
+the file-wide fission spectrum \cword{CHI} never appears.  The mean
+neutron velocities by group (\cword{VEL}) are obtained from the inverse
+velocities computed by \hyperlink{sGROUPRhy}{GROUPR}:
+
+\begin{equation}
+  \Big<\frac{1}{v}\Big>_g=\frac{\displaystyle\int_g \,\frac{1}{v}\,\phi(E)\,dE}
+        {\displaystyle\int_g \phi(E)\,dE} \,\,,
+\end{equation}
+\vspace{1 pt}
+
+\noindent
+where $g$ is the group index, $\phi(E)$ is the
+\hyperlink{sGROUPRhy}{GROUPR} weighting spectrum,
+and $v$ is the neutron velocity, which is computed from the neutron mass
+and energy using $v{=}\sqrt{2E/m}$.  The units of these quantities are s/m;
+they are converted to cm/s for ISOTXS by inverting and multiplying by 100.
+The group structure [see \cword{EMAX(J)} and \cword{EMIN}] is obtained
+directly from \cword{mf}=1, \cword{mt}=451 on the GENDF tape.  Note
+that \hyperlink{sGROUPRhy}{GROUPR} energy groups
+are given in order of increasing energy and ISOTXS energy groups are given
+in order of decreasing energy.  CCCCR handles the conversion.
+
+The ``File-Wide Chi Data'' record never appears; see the discussion
+above for the reasons.
+
+In the ``Isotope Control and Group Independent Data'' record, the first
+ten parameters are  taken from the user's input.  The gram atomic weight
+for the material (\cword{AMASS}) can be computed from the ENDF AWR
+parameter available on the GENDF file using the gram atomic weight of
+the neutron as a multiplier.  The energy-release parameters \cword{EFISS}
+and \cword{ECAPT} must also be computed by the user.  The \cword{ECAPT}
+values are normally based on the ENDF Q values given in File 3, but,
+in some cases, it is also necessary to add additional decay energy
+coming from short-lived activation steps.  For example, the \cword{ECAPT}
+value for $^{238}$U should include the energy for the $^{239}$U
+$\beta$-decay step, and perhaps even the energy from the $^{239}$Np
+$\beta$ decay.  The values for \cword{EFISS} should be based on the total
+non-neutrino energy release, which can be obtained from
+\cword{mf}=3, \cword{mt}=18 or
+\cword{mf}=1, \cword{mt}=458 on the ENDF tape.  The \cword{TEMP}
+parameter is normally set
+to 300K.  The value of \cword{SIGPOT} can be computed from the
+scattering-radius parameter AP in File 2 of the ENDF tape using
+$\sigma_p{=}4\pi a^2$.  The parameter \cword{ADENS} is usually set
+to zero to imply infinite dilution.  \cword{KBR} can be chosen based
+on the normal use of the material by the community for which the library
+is being produced.
+
+The \cword{ICHI} parameter is related to the \cword{ichix} parameter in
+the user's input.  As discussed above, the option \cword{ICHI=0} is
+never used by CCCCR.  Beyond that, the NJOY user has the option of producing
+a fission $\chi$ vector using the default GROUPR flux (which is available
+on the GENDF tape) or a user-supplied weighting flux \cword{SPEC}.  This
+enables the user to produce an ISOTXS library appropriate to a class of
+problems with a flux similar to \cword{SPEC}.  In general, the
+incident-energy dependence of the fission spectrum is weak, so the
+choice of this weighting spectrum is not critical.  Noticeable differences
+might be expected between a thermal spectrum on the one hand and a
+fast-reactor or fusion-blanket spectrum on the other.  The $\chi$ vector
+is defined as follows:
+
+\begin{equation}
+   \chi_{g'}=\frac{\displaystyle\sum_g \sigma_{f g\rightarrow g'}\,\phi_g}
+       {\displaystyle\sum_{g'} \sum_g \sigma_{f g\rightarrow g'}\,\phi_g}\,\, ,
+\end{equation}
+
+\noindent
+where $\sigma_f$ is the fission group-to-group matrix from
+\hyperlink{sGROUPRhy}{GROUPR},
+$\phi_g$ is either the model flux or \cword{SPEC}, and the denominator
+assures that $\chi_{g'}$ will be normalized.  Actually, the calculation
+is more complicated than that because of the necessity to include
+delayed-neutron production.  A ``steady-state'' value for the fission
+spectrum can be obtained as follows:
+
+\begin{equation}
+   \chi^{SS}_{g'}=\frac{\displaystyle\sum_g\sigma_{f g\rightarrow g'}
+     \,\phi_g + \chi^D_{g'}\sum_g\bar{\nu}^D_g\sigma_{fg}\,\phi_g}
+     {\displaystyle\sum_{g'}\sum_g\sigma_{f g\rightarrow g'}\,\phi_g
+     +\sum_g\bar{\nu}^D_g\sigma_{fg}\,\phi_g} \,\,,
+\end{equation}
+
+\noindent
+where $\bar{\nu}^D_g$ is the delayed-neutron yield obtained from
+\cword{mf}=3, \cword{mt}=455 on the GENDF tape, $\chi^D_g$ is the
+total delayed-neutron
+spectrum obtained by summing over the time groups in
+\cword{mf}=5, \cword{mt}=455,
+and $\sigma_{fg}$ is the fission cross section for group $g$ obtained
+from \cword{mf}=3, \cword{mt}=18.
+
+This is still not the end of the complications of fission.  If the
+partial fission reactions MT=19, 20, 21, and 38 are present, the fission
+matrix term in the above equations is obtained by adding the contributions
+from all the partial reactions found.  In these cases, a matrix for
+MT=18 will normally  not be present on the GENDF tape.  If it is, it will
+be ignored.  Beginning with NJOY 91.0, a new and more efficient
+representation is used for the fission matrix computed in
+\hyperlink{sGROUPRhy}{GROUPR}.  It is well known that the shape
+of the fission spectrum is independent of energy up to energies of
+several hundred keV.  \hyperlink{sGROUPRhy}{GROUPR} takes advantage
+of this by computing this low-energy spectrum only once.  It then
+computes a fission neutron production cross section for all the groups
+up to the energy at which significant energy dependence starts.  At
+higher energies, the full group-to-group fission matrix is computed as
+in earlier versions of NJOY.  Therefore, it is now necessary to compute
+the values of $\sigma_{fg\rightarrow g'}$ as used in the above equations
+using
+
+\begin{equation}
+   \sigma_{fg\rightarrow g'}=\chi^{LE}_{g'}(\bar{\nu}\sigma_f)^{LE}_g
+     +\sigma^{HE}_{fg\rightarrow g'} \,\,,
+\end{equation}
+
+\noindent
+where LE stands for low energy, HE stands for high energy; the
+low-energy production cross sections written as $\nu\sigma_f$ will be
+found on the GENDF tape using the special flag \cword{IG2LO=0}, and the
+low-energy $\chi$ will be found on the GENDF tape with \cword{IG=0}.
+
+In order to obtain still better accuracy, CCCCR can produce
+a fission $\chi$ matrix instead of the vector.  Using the above
+notation, the full $\chi$ matrix becomes
+
+\begin{equation}
+   \chi^{SS}_{g\rightarrow g'}=\frac{\chi^{LE}_{g'}(\bar{\nu}\sigma_f)^{LE}_g
+     +\sigma^{HE}_{fg\rightarrow g'}+\chi^D_{g'}\bar{\nu}^D_g\sigma_{fg}}
+      {{\rm NORM}} \,\,,
+\end{equation}
+
+\noindent
+where NORM is just the value that normalizes the $\chi$ matrix; that is,
+the sum of the numerator over all $g'$.  Note that the ``Isotope Chi
+Data'' record allows for a rectangular fission matrix similar to the
+one produced by \hyperlink{sGROUPRhy}{GROUPR}.  It is obtained
+by using the input \cword{SPEC} array to define the range of groups
+that will be averaged into each
+of the final \cword{ICHIX} spectra.  For example, to collapse a
+ten-group $\chi$ matrix into a five-group matrix, \cword{SPEC} might
+contain the ten values 1, 2, 3, 4, 5, 5, 5, 5, 5, 5. More formally,
+
+\begin{equation}
+   \chi^{SS}_{k\rightarrow g'}=\frac{\displaystyle\sum_{s(g)=k}\big(
+       \chi^{LE}_{g'}(\bar{\nu}\sigma_f)^{LE}_g
+     +\sigma^{HE}_{fg\rightarrow g'}+\chi^D_{g'}\bar{\nu}^D_g
+        \sigma_{fg}\big)\,\phi_g}
+      {{\rm NORM}} \,\,,
+\end{equation}
+
+\noindent
+where $\phi_g$ is the default weighting function from the GENDF tape,
+$s(g)$ is the \cword{SPEC} array provided by the user, and the summation
+is over all groups $g$ satisfying the condition that $s(g){=}k$.  Future
+versions of CCCCR could construct the \cword{SPEC} array automatically
+using the information in the new GENDF format.
+
+Continuing with the description of the ``Isotope Control and Group
+Independent Data'' record, the next 9 parameters are flags that tell
+what reactions will be described in the ``Principal Cross Sections''
+record.  They will be described below.  Similarly, the parameters
+\cword{IDSCT}, \cword{LORDN}, \cword{JBAND}, and \cword{IJJ}
+will be described later in connection with the ``Scattering Sub-Block''
+records.
+
+The ISOTXS format allows for a fixed set of principal cross sections that
+was chosen based on the needs of fission reactor calculations.  This
+is one of its main defects; the list does not allow for other reactions
+that become important above 6--10 MeV, and it does not allow for other
+quantities of interest, such as gas production, KERMA factors, and
+radiation damage production cross sections.  Most of the reactions are
+simply copied from \cword{mf}=3 on the GENDF tape with the group order
+inverted --- this is true for \cword{SNGAM}, the (n,$\gamma$) cross
+section, which is taken from \cword{mt}=102; for \cword{SFIS}, the (n,f) cross
+section, which is taken from \cword{mt}=18; for \cword{SNALF}, the (n,$\alpha$)
+cross section, which is taken from \cword{mt}=107; for \cword{SNP}, the (n,p)
+cross section, which is taken from \cword{mt}=103; for \cword{SND}, the (n,d)
+cross section, which is taken from \cword{mt}=104; and for \cword{SNT}, the
+(n,t) cross section, which is taken from \cword{mt}=105.  The (n,2n) cross
+section, \cword{SN2N}, is normally taken from \cword{mt}=16.  However, earlier
+versions of ENDF represented the sequential (n,2n) reaction in $^9$Be
+using \cword{mt}=6, 7, 8, and 9.  If present, these partial (n,2n) reactions
+are added into \cword{SN2N}.  The flags \cword{IFIS}, \cword{IALF},
+\cword{INP}, \cword{IN2N}, \cword{IND}, and \cword{INT} in the
+``Isotope Control and Group Independent Data'' record are set to
+indicate which of these reactions have been found for this material.
+
+In going from version III of the CCCC specifications to version IV,
+there was some controversy over the appropriate definition for the
+(n,2n) cross section and matrix.  It was decided that the quantity
+in \cword{SN2N} would be the (n,2n) reaction cross section; that
+is, it would define the probability that an (n,2n) reaction takes
+place.  The (n,2n) matrix would be defined such that the sum over
+all secondary groups would produce the (n,2n) production cross section,
+which is two times larger than the reaction cross section.
+
+The \cword{CHISO} vector, which contains the fission spectrum vector
+(if any), was discussed above.  A complete calculation of the fission
+source also requires the fission yield, \cword{SNUTOT}, which can be used
+together with the fission cross section to calculated the fission neutron
+production cross section, $\bar{\nu}\sigma_f$.  The fission yield can be
+calculated from the \hyperlink{sGROUPRhy}{GROUPR} fission matrix using
+
+\begin{equation}
+   \bar{\nu}_g=\frac{\displaystyle\sum_{g'}\sigma_{fg\rightarrow g'}}
+      {\sigma_{fg}} \,\,.
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+Adding delayed neutron contributions and accounting for the partition of
+the fission matrix into low-energy and high-energy parts (see the
+discussion of $\chi$ above) gives the equation actually used by CCCCR:
+
+\begin{equation}
+   \bar{\nu}^{SS}_g=\frac{\displaystyle\sum_{g'}\sigma^{HE}_{fg\rightarrow g'}
+     +(\bar{\nu}\sigma_f)^{LE}_g + \bar{\nu}^D_g\sigma_{fg}}
+      {\sigma_{fg}} \,\,.
+\end{equation}
+\vspace{0.5 pt}
+
+The total cross section produced by \hyperlink{sGROUPRhy}{GROUPR}
+contains two components:
+the flux-weighted or P$_0$ total cross section, and the current-weighted
+or P$_1$ total cross section.  The P$_0$ part is stored into
+\cword{STOTPL}, and the \cword{LTOT} flag is set to 1.  \cword{STRPL}
+contains the transport cross section used by diffusion codes; this is,
+
+\begin{equation}
+   \sigma_{tr,g}= \sigma_{t1,g}-\sum_{g'}\sigma_{e1,g\rightarrow g'} \,\,,
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+where $\sigma_{t1,g}$ is the P$_1$ total cross section and
+$\sigma_{e1,g\rightarrow g'}$ is the P$_1$ component of the elastic
+scattering matrix, which is obtained from \cword{mf}=6,
+\cword{mt}=2 on the GENDF tape from
+\hyperlink{sGROUPRhy}{GROUPR}.  The flag \cword{LTRN} is set to
+1; that is, no higher-order transport corrections are
+provided.  Direction-dependent transport cross sections are not
+computed by CCCCR; therefore, \cword{ISTRPD} is always zero, and
+the \cword{STRPD} vectors are missing.
+
+As discussed above, the ``Isotope Chi Data'' record may be present
+if the user set \cword{ICHIX>1} and supplied a \cword{SPEC} vector to
+define how the full $\chi$ matrix is to be collapsed into a
+rectangular $\chi$ matrix.
+
+The treatment of scattering matrices in the ISOTXS format is complex
+and has lots of possible variations.  Only the variations supported
+by CCCCR will be described here.  First of all, the scattering data are
+divided into blocks and subblocks.  A block is either one of the
+designated scattering reactions [that is, total, elastic, inelastic,
+or (n,2n)] and contains all the group-to-group elements and Legendre
+orders for that reaction (\cword{IFOPT=1}), or it is one particular
+Legendre order for one of the designated reactions and contains all
+the group-to-group elements for that order and reaction (\cword{IFOPT=2}).
+Its actual content is determined by \cword{IDSCT} and \cword{LORDN}.
+If \cword{IFOPT=1} has been selected, \cword{IDSCT(1)=100} and
+\cword{LORDN(1)=4} would designate a block for the elastic scattering
+matrix of order P$_3$ that contains all 4 Legendre orders and all
+group-to-group elements.  If \cword{IFOPT=2} has been selected,
+\cword{IDSCT(1)=100} with \cword{LORDN(1)=1} would designate a block
+containing all group-to-group elements for the P$_0$ elastic matrix,
+\cword{IDSCT(2)=101} with \cword{LORDN(2)=1} would designate
+a block containing the P$_1$ elastic matrix, and so on.  In CCCCR,
+\cword{LORDN} is always equal to 1 for \cword{IFOPT=2}.
+
+The ISOTXS format attempts to pack scattering matrices efficiently.
+First, all the scattering matrices treated here are triangular
+because only downscatter is present.  And second, because of the
+limited range of elastic downscatter, only a limited range of groups
+above the inscatter group will contribute to the scattering into
+a given secondary-energy group.  Therefore, ISOTXS removes zero
+cross sections by defining bands of incident energy groups that
+contribute to each final energy group.  The bands are defined by
+\cword{JBAND}, the number of initial energy groups in the band,
+and \cword{IJJ}, an index to identify the position of the ingroup
+element in the band.  The following table illustrates banding for
+a hypothetical elastic scattering reaction:
+
+\begin{center}
+\begin{tabular}{cccc}
+Band & Element & JBAND & IJJ \\ \hline
+1    & 1$\rightarrow$1 & 1 & 1 \\
+2    & 2$\rightarrow$2 & 2 & 1 \\
+     & 1$\rightarrow$2 &   &   \\
+3    & 3$\rightarrow$3 & 2 & 1 \\
+     & 2$\rightarrow$3 &   &   \\
+4    & 4$\rightarrow$4 & 2 & 1 \\
+     & 3$\rightarrow$4 &   &   \\ \hline
+\end{tabular}
+\end{center}
+
+Note that \cword{IJJ} is always 1 in the absence of upscatter.  This
+scheme is efficient for elastic scattering, but it is not efficient
+for threshold reactions because the ingroup element must always be
+included in the band.  This means that lots of zeros must be given
+for final energy groups below the threshold group.  An improved
+and simplified scheme is used in the MATXS format.
+
+For \cword{IFOPT=2}, the elements in the table above would be stored
+in the sequence shown, top to bottom.  Each Legendre order would
+have its own block arranged in the same order.  For \cword{IFOPT=1},
+the Legendre order data are intermixed with the group-to-group
+data.  In each band, the elements for all initial groups for
+P$_0$ are given, then all initial groups for P$_1$, and so on
+through \cword{LORDN} Legendre orders.
+
+Scattering matrices can be very large.  For example, an 80-group
+elastic matrix can have as many as $80\times 79/2=3160$ elements
+per Legendre order.  That would be 12 640 words for a P$_3$ block
+using \cword{IFOPT=1}, or four blocks of 3160 words each for
+\cword{IFOPT=2}.  The latter is practical; the former is not
+\footnote{At least it was not practical many years ago.  However
+we see no benefit in revising the existing algorithm, and so
+keep this description}.  The
+corresponding numbers for 200 groups would be 79 600 and 19 900.
+Both of these numbers are clearly impractical as record sizes.  This
+is where subblocking comes in.  If each block is divided up so that
+there is one subblock for each energy group, the maximum record size
+is reduced substantially.  For \cword{IFOPT=1}, the maximum record
+size is equal to the number of groups times the number of Legendre
+orders, or 800 for the 200-group P$_3$ case.  For \cword{IFOPT=2},
+the maximum record size is just equal to the number of groups.
+Although the ISOTXS formats allows subblocks to contain several
+groups, CCCCR does not.  The possible values of \cword{NSBLOK} are
+limited to 1 and \cword{NGROUP}.  In summary, the CCCCR user has
+four matrix blocking options:
+\begin{enumerate}
+\begin{singlespace}
+\item  {\it IFOPT=1 and NSBLOK=1}. This produces a single block and a
+  single subblock for each reaction.  It is probably the best
+  choice for small group structures (up to about 30 groups).
+  The maximum record size is $n_\ell\times n_g(n_g{-}1)/2$.
+
+\item {\it IFOPT=1 and NSBLOK=NGROUP}. This produces a block for
+  each reaction, and each block contains $n_g$ subblocks.  The
+  maximum record size is $n_\ell\times n_g$.  This is a good
+  choice for larger group structures because it keeps the
+  record size up as compared with option 4 below.
+
+\item {\it IFOPT=2 and NSBLOK=1}. This produces $n_\ell$ blocks
+  and subblocks for each reaction.  The maximum record size is
+  $n_g(n_g{-}1)/2$.  It has only a modest advantage in the maximum
+  number of groups over option 1. Unless the application that uses
+  the library finds it convenient to read one Legendre order at a time,
+  the user might just as well choose option 2 if option 1 produces
+  records that are too large.
+\item {\it IFOPT=2 and NSBLOK=NGROUP}.  This produces $n_\ell$ blocks for
+  each reaction, each with $n_g$ subblocks.  The maximum record size
+  is $n_g$.  The number of groups would have to be on the order
+  of 1000 before this option would be preferred to option 2.
+\end{singlespace}
+\end{enumerate}
+
+If CCCCR does not have enough memory to process option 1 or 3, the
+code automatically sets \cword{NSBLOK} to \cword{NGROUP}, thereby
+activating option 2 or 4, respectively.
+
+Note that the ISOTXS format specifies that the total scattering matrix
+is the sum of the elastic, inelastic, and (n,2n) matrices [see the
+definition of \cword{IDSCT(N)}].  This implies that the inelastic
+matrix must contain the normal (n,n$'$) reactions from \cword{mt}=51-91,
+and also any other neutron-producing reactions that might be
+present.  Examples are (n,n$'\alpha$), (n,n$'$p), and (n,3n).
+
+\subsection{BRKOXS}
+\label{ssCCCCR_BRKOXS}
+
+The format for the BRKOXS\index{BRKOXS} Bondarenko-type self-shielding
+factor file is given below in the standard format.
+
+\small
+\begin{ccode}
+
+C***********************************************************************
+C                       REVISED 11/30/76                               -
+C                                                                      -
+CF          BRKOXS-IV                                                  -
+CE          MICROSCOPIC GROUP DELAYED NEUTRON PRECURSOR DATA           -
+C                                                                      -
+CN                      THIS FILE PROVIDES DATA NECESSARY FOR          -
+CN                      BONDARENKO TREATMENT IN ADDITION TO            -
+CN                      THOSE DATA IN FILE ISOTXS                      -
+CN                      FORMATS GIVEN ARE FOR FILE EXCHANGE PURPOSES   -
+CN                      ONLY.                                          -
+C                                                                      -
+C***********************************************************************
+
+C-----------------------------------------------------------------------
+CS          FILE STRUCTURE                                             -
+CS                                                                     -
+CS             RECORD TYPE                        PRESENT IF           -
+CS             ===============================    ===============      -
+CS             FILE IDENTIFICATION                ALWAYS               -
+CS             FILE CONTROL                       ALWAYS               -
+CS             FILE DATA                          ALWAYS               -
+CS   **************(REPEAT FROM 1 TO NISOSH)                           -
+CS   *         SELF-SHIELDING FACTORS             ALWAYS               -
+CS   *         CROSS SECTIONS                     ALWAYS               -
+CS   **************                                                    -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE IDENTIFICATION                                        -
+C                                                                      -
+CL    HNAME,(HUSE(I),I=1,2),IVERS                                      -
+C                                                                      -
+CW    1+3*MULT=NUMBER OF WORDS                                         -
+C                                                                      -
+CB    FORMAT(11H 0V BRKOXS  ,1H*,2A6,1H*,I6)                           -
+C                                                                      -
+CD    HNAME       HOLLERITH FILE NAME - BRKOXS -                       -
+CD    HUSE(I)     HOLLERITH USER IDENTIFICATION (A6)                   -
+CD    IVERS       FILE VERSION NUMBER                                  -
+CD    MULT        DOUBLE PRECISION PARAMETER                           -
+CD                    1- A6 WORD IS SINGLE WORD                        -
+CD                    2- A6 WORD IS DOUBLE PRECISION WORD              -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE CONTROL   (1D RECORD)                                 -
+C                                                                      -
+CL    NGROUP,NISOSH,NSIGPT,NTEMPT,NREACT,IBLK                          -
+C                                                                      -
+CW    6 = NUMBER OF WORDS                                              -
+C                                                                      -
+CB    FORMAT(4H 1D ,6I6)                                               -
+C                                                                      -
+CD    NGROUP        NUMBER OF ENERGY GROUPS IN SET                     -
+CD    NISOSH        NUMBER OF ISOTOPES WITH SELF-SHIELDING FACTORS     -
+CD    NSIGPT        TOTAL NUMBER OF VALUES OF VARIABLE X (SEE FILE DATA-
+CD                     RECORD) WHICH ARE GIVEN.  NSIGPT IS EQUAL TO    -
+CD                     THE SUM FROM 1 TO NISOSH OF NTABP(I)            -
+CD    NTEMPT        TOTAL NUMBER OF VALUES OF VARIABLE TB (SEE FILE    -
+CD                     DATA RECORD) WHICH ARE GIVEN.  NTEMPT IS EQUAL  -
+CD                     TO THE SUM FROM 1 TO NISOSH OF NTABT(I)         -
+CD    NREACT        NUMBER OF REACTION TYPES FOR WHICH SELF-SHIELDING  -
+CD                     FACTORS ARE GIVEN (IN PREVIOUS VERSIONS OF THIS -
+CD                     FILES NREACT HAS BEEN IMPLICITLY SET TO 5).     -
+CD    IBLK          BLOCKING OPTION FLAG FOR SELF-SHIELDING FACTORS,   -
+CD                     IBLK=0, FACTORS NOT BLOCKED BY REACTION TYPE,   -
+CD                     IBLK=1, FACTORS ARE BLOCKED BY REACTION TYPE.   -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE DATA   (2D RECORD)                                    -
+C                                                                      -
+CL    (HISONM(I),I=NISOSH),(X(K),K=1,NSIGPT),(TB(K),K=1,NTEMPT),       -
+CL   1(EMAX(J),J=1,NGROUP),EMIN,(JBFL(I),I=1,NISOSH),                  -
+CL   2(JBFH(I),I=NISOSH),(NTABP(I),I=1,NISOSH),(NTABT(I),I=1,NISOSH)   -
+C                                                                      -
+CW    (4+MULT)*NISOSH+NSIGPT+NTEMPT+NGROUP+1=NUMBER OF WORDS           -
+C                                                                      -
+CB    FORMAT(4H 2D ,9(1X,A6)/          HISONM                          -
+CB   1(10(1X,A6)))                                                     -
+CB    FORMAT(6E12.5)                   X,TB,EMAX,EMIN                  -
+CB    FORMAT(12I6)                     JBFL,JBFH,NTABP,NTABT           -
+C                                                                      -
+CD    HISONM(I)     HOLLERITH ISOTOPE LABEL FOR ISOTOPE I (A6).  THESE -
+CD                     LABELS MUST BE A SUBSET OF THOSE IN FILE ISOTXS -
+CD                     OR GRUPXS, IN THE CORRESPONDING ARRAY.          -
+CD    X(K)          ARRAY OF LN(SIGP0)/LN(10) VALUES FOR ALL ISOTOPES, -
+CD                     WHERE SIGP0 IS THE TOTAL CROSS SECTION OF THE   -
+CD                     OTHER ISOTOPES IN THE MIXTURE IN BARNS PER ATOM -
+CD                     OF THIS ISOTOPE.  FOR ISOTOPE I, THE NTABP(I)   -
+CD                     VALUES OF X FOR WHICH SELF-SHIELDING FACTORS    -
+CD                     ARE GIVEN ARE STORED STARTING AT LOCATION L=1+  -
+CD                     SUM FROM 1 TO I-1 OF NTABP(K).                  -
+CD    TB(K)         ARRAY OF TEMPERATURES (DEGREES C) FOR ALL ISOTOPES.-
+CD                     FOR ISOTOPE I, THE NTBT(I) VALUES OF TB FOR     -
+CD                     WHICH SELF-SHIELDING FACTORS ARE GIVEN ARE      -
+CD                     STORED AT LOCATION L=1+SUM FROM 1 TO I-1 OF     -
+CD                     NTABT(K).                                       -
+CD    EMAX(J)       MAXIMUM ENERGY BOUND OF GROUP J (EV)               -
+CD    EMIN          MINIMUM ENERGY BOUND OF SET (EV)                   -
+CD    JBFL(I)       LOWEST NUMBERED OF HIGHEST ENERGY GROUP FOR WHICH  -
+CD                     SELF-SHIELDING FACTORS ARE GIVEN                -
+CD    JBFH(I)       HIGHEST NUMBERED OR LOWEST ENERGY GROUP FOR WHICH  -
+CD                     SELF-SHIELDING FACTORS ARE GIVEN                -
+CD    NTABP(I)      NUMBER OF SIGP0 VALUES FOR WHICH SELF-SHIELDING    -
+CD                     FACTORS ARE GIVEN FOR ISOTOPE I.                -
+CD    NTABT(I)      NUMBER OF TEMPERATURE VALUES FOR WHICH SELF-       -
+CD                     SHIELDING FACTORS ARE GIVEN FOR ISOTOPE I.      -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          SELF-SHIELDING FACTORS   (3D RECORD)                       -
+C                                                                      -
+CL    ((((FFACT(N,K,J,M),N=1,NBINT),K=1,NBTEM),J=JBFLI,JBFHI),M=ML,MU) -
+CL                  ------ SEE DESCRIPTION BELOW ------                -
+C                                                                      -
+CC    NBINT=NTABP(I)                                                   -
+CC    NBTEM=NTABT(I)                                                   -
+CC    JBFLI=JBFL(I)                                                    -
+CC    JBFHI=JBFH(I)                                                    -
+CC    FOR ML, MU SEE STRUCTURE BELOW                                   -
+C                                                                      -
+CW    NBINT*NBTEM*(JBFHI-JBFLI+1)*(MU-ML+1) = NUMBER OF WORDS          -
+C                                                                      -
+CB    FORMAT(4H 3D ,5E12.5/(6E12.5))                                   -
+C                                                                      -
+CC    DO 1 L=1,NBLOK                                                   -
+CC  1 READ(N) *LIST AS ABOVE*                                          -
+C                                                                      -
+CC          IF IBLK=0, NBLOK=1, ML=1, MU=NREACT                        -
+CC          IF IBLK=1, NBLOK=NREACT, ML=MU=L, WHERE L IS THE BLOCK     -
+C                                                                      -
+CD    FFACT(N,K,J,M)    SELF-SHIELDING FACTOR EVALUATED AT X(N) AND    -
+CD                         TB(K) FOR ENERGY GROUP J, THE M INDEX IS    -
+CD                         A DUMMY INDEX TO DENOTE THE REACTION TYPE,  -
+CD                         THE FIRST FIVE REACTION TYPES ARE, IN       -
+CD                         ORDER, TOTAL, CAPTURE, FISSION, TRANSPORT,  -
+CD                         AND ELASTIC.                                -
+C                                                                      -
+CB          NOTE THAT IS IBLK=1, EACH REACTION TYPE WILL CONSTITUTE    -
+CB             A SEPARATE DATA BLOCK.                                  -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          CROSS SECTIONS   (4D RECORD)                               -
+C                                                                      -
+CL    (XSPO(J),J=1,NGROUP),(XSIN(J),J=1,NGROUP),(XSE(J),J=1,NGROUP),   -
+CL   1(XSMU(J),J=1,NGROUP),(XSED(J),J=1,NGROUP),(XSX(J),J=1,NGROUP)    -
+C                                                                      -
+CW    6*NGROUP=NUMBER OF WORDS                                         -
+C                                                                      -
+CB    FORMAT(4H 4D ,5E12.5/(6E12.5))                                   -
+C                                                                      -
+CD    XSPO(J)       POTENTIAL SCATTERING CROSS SECTION (BARNS)         -
+CD    XSIN(J)       INELASTIC CROSS SECTION (BARNS)                    -
+CD    XSE(J)        ELASTIC CROSS SECTION (BARNS)                      -
+CD    XSMU(J)       AVERAGE COSINE OF ELASTIC SCATTERING ANGLE         -
+CD    XSED(J)       ELASTIC DOWN-SCATTERING TO ADJACENT GROUP          -
+CD    XSXI(J)       AVERAGE ELASTIC SCATTERING LETHARGY INCREMENT      -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+The BRKOXS file is used to supply self-shielding factors for use
+with the Bondarenko method\cite{Bondarenko} for calculating effective
+macroscopic cross sections for the components of nuclear systems.
+As discussed in detail in the
+\hyperlink{sGROUPRhy}{GROUPR} chapter of this manual, this
+system is based on using a model flux for isotope $i$ of the form
+
+\begin{equation}
+   \phi^i_\ell(E,T)=\frac{C(E)}{[\sigma^i_0+\sigma^i_t(E,T)]^{\ell+1}}\,\,,
+\end{equation}
+
+\noindent
+where $C(E)$ is a smooth weighting flux, $\sigma^i_t(E,T)$ is the
+total cross section for material $i$ at temperature $T$, $\ell$
+is the Legendre order, and $\sigma^i_0$ is a parameter that can
+be used to account for the presence of other materials and the
+possibility of escape from the absorbing region
+(heterogeneity).  \hyperlink{sGROUPRhy}{GROUPR} uses
+this model flux to calculate effective multigroup
+cross sections for the resonance-region reactions (total, elastic,
+fission, capture) for user specified values of $\sigma_0$ and $T$.
+
+When $\sigma_0$ is large with respect to the highest peaks in
+$\sigma_t$, the flux is essentially proportional to $C(E)$.  This
+is called infinite dilution, and the corresponding cross
+sections are appropriate for an absorber in a dilute mixture or
+for a very thin sample of the absorber.  As $\sigma_0$ decreases,
+the flux $\phi(E)$ develops dips where $\sigma_t$ has peaks.  These
+dips cancel out part of the effect of the corresponding peaks in
+the resonance cross sections, thereby reducing, or self-shielding,
+the reaction rate.  It is convenient to represent this effect
+as a self-shielding factor; that is,
+
+\begin{equation}
+   \sigma_{xg}(T,\sigma_0)=f_{xg}(T,\sigma_0)\times
+     \sigma_{xg}(300^{\circ}K,\infty)\,\,.
+\end{equation}
+
+\noindent
+In the CCCC system, the f-factors are stored in the BRKOXS file
+and the infinitely dilute cross sections are stored in the ISOTXS file.
+A code that prepares effective cross sections, such as
+SPHINX\cite{SPHINX} or 1DX\cite{1DX}, determines the appropriate
+$T$ and $\sigma_0$ values for each region and group in a reactor
+problem, using equivalence theory together with the user's
+specifications for composition and geometry.  It then reads
+in the cross sections and f-factors from the ISOTXS
+and BRKOXS files, interpolates in the $T$ and $\sigma_0$ tables
+to obtain the desired f-factors, and multiplies to obtain the
+effective cross sections.
+
+In the BRKOXS file specification given above, the components of the
+``File Identification'' record are the same as for ISOTXS.
+The parameters in the ``File Control'' record are used to
+calculate the sizes and locations of data in the records
+to follow.  The ``File Data'' record contains all the
+isotope names, all the $\sigma_0$ values for every isotope, all
+the $T$ values for every isotope, the group structure, and several
+arrays used for unpacking the other data.  The Hollerith material
+names in \cword{HISONM} are the same as those used in ISOTXS, and
+they are obtained from the user's input.  The $\sigma_0$ values are
+packed into \cword{X(K)} using \cword{NTABP(I)}.  Note that the
+base-10 logarithm of $\sigma_0$ is stored.  Therefore, a typical
+library might contain the following:
+
+\begin{center}
+\begin{tabular}{ccl}
+   material \cword{I} & \cword{NTABP(I)} & \cword{X(K)} \\ \hline
+      1  & 3  &  3.0 2.0 1.0 \\
+      2  & 7  &  4.0 3.0 2.0 1.477 1. 0. -1. \\
+      3  & 5  &  4.0 3.0 2.0 1.0 0.0 \\
+     $\cdots$ & $\cdots$ & $\cdots$  \\ \hline
+\end{tabular}
+\end{center}
+
+\noindent
+Similarly, the $T$ values are stored in \cword{TB(K)} using
+\cword{NTABT(I)}.  The absolute temperatures used by
+\hyperlink{sGROUPRhy}{GROUPR} must
+be changed to $^\circ$C before being stored.
+The energy bounds for the group structure found
+on the GENDF tape are stored in \cword{EMAX(J)} and \cword{EMIN}.
+As discussed in connection with the ISOTXS format, group boundaries
+are stored in order of decreasing energy in the BRKOXS file.
+
+The self-shielding factor approach is designed to account for
+resonance self-shielding.  It is not necessarily
+appropriate for low energies if only broad resonance features
+are apparent, or for high energies where only small residual
+fluctuations in the cross section are seen.  For
+this reason, the BRKOXS format provides the \cword{JBFL(I)}
+and \cword{JBFH(I)} arrays in the ``File Data'' record.  They
+are used to limit the range of the numbers given
+in the ``Self-Shielding Factors'' record.  The reactions that
+are active in the resonance energy range usually include
+only the total, elastic, fission, and capture channels.  The
+total cross section is usually computed for the two Legendre
+orders $\ell{=}0$ and $\ell{=}1$.  This second value is often
+called the current-weighted total cross section, and it is
+needed to compute the self-shielded diffusion
+coefficient.  \hyperlink{sGROUPRhy}{GROUPR} also computes
+a self-shielded elastic scattering matrix.
+It can be used to provide two quantities for the BRKOXS file.
+First, the diffusion coefficient requires the calculation of
+a transport cross section for diffusion.  The relationships are
+as follows:
+
+\begin{equation}
+   D_g=\frac{1}{3\sigma_{tr,g}}\,\,,
+\end{equation}
+
+\noindent
+and
+
+\begin{equation}
+   \sigma_{tr,g}=\sigma_{t1,g}- \sum_{g'}
+      \sigma_{e1,g\rightarrow g'}\,\,.
+\end{equation}
+
+\noindent
+Therefore, the current-weighted P$_1$ elastic cross section
+contributes to the transport self-shielding factor.  The
+second use for the self-shielded elastic scattering matrix
+is to compute a self-shielding factor for elastic removal.  For
+heavy isotopes, the energy lost in elastic scattering is small,
+and all the removal is normally to one group.  The format requires
+that at least the five standard reactions be given in a specified
+order.  NJOY is able to add one more as follows:
+
+\begin{singlespace}
+\begin{enumerate}
+\item total (P$_0$ weighted),
+\item capture (P$_0$),
+\item fission (P$_0$),
+\item transport (P$_1$),
+\item elastic (P$_0$), and
+\item elastic removal (P$_0$)
+\end{enumerate}
+\end{singlespace}
+
+The normal pattern for the BRKOXS file expects that there will be
+one record of self-shielding factors for each material.  Such a record
+could get quite large.  For example, with 6 reactions, 6 temperatures,
+6 $\sigma_0$ values, and 100 resonance groups, a ``Self-Shielding Factors''
+record could have over 20 000 words.  This number can be made more
+manageable by setting the \cword{IBLK} flag in the ``File Control''
+record to 1.  Then there will be a separate record of self-shielding
+factors for each reaction; this would reduce the record size for the
+example to a more reasonable 3600 words.
+
+The actual self-shielding factors are computed from the cross
+sections given on the GENDF tape and stored into the
+\cword{FFACT(N,K,J,M)} array of the ``Self-Shielding Factors''
+record with group order converted to the standard decreasing-energy
+convention.  Following the FORTRAN convention, \cword{N} is the fastest
+varying index in this array, \cword{K} is the next fastest varying
+index, and so on.  The identities of these indices are
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{    N}] $\sigma_0$,
+\item[\cword{    K}] temperature $T$,
+\item[\cword{    J}] group, and
+\item[\cword{    M}] reaction
+
+\end{singlespace}
+\end{description}
+
+The ``Cross Sections'' record contains some additional cross sections
+and special parameters that are often used in self-shielding codes
+and are not included in the ISOTXS file.  The \cword{XSPO} cross
+section is taken to be constant and equal to the CCCCR input parameter
+\cword{XSPO}, which is computed as $4\pi a^2$.  The \cword{XSIN}
+cross section is obtained by summing over the final group index for every
+group-to-group matrix in File 6 except elastic, (n,2n), and fission.
+Therefore, it may contain effects of multiplicities greater than
+1 if reactions like (n,3n) or (n,2n$\alpha$) are active for the
+material.  It may be slightly larger in high-energy groups
+than the cross section that
+would be obtained using the same sum over reactions in
+File 3.  The \cword{XSE} cross section is obtained from \cword{mf}=6,
+\cword{mt}=2 on the GENDF tape by summing over final groups.  The
+parameters for continuous slowing down theory, \cword{XSMU} and
+\cword{XSXI}, are obtained from \cword{mt}=251
+and \cword{mt}=252, respectively.  The methods used for calculating these
+quantities are described in the
+\hyperlink{sGROUPRhy}{GROUPR} section of this report.
+Finally, the elastic downscattering cross section is obtained from
+the elastic matrix on the GENDF tape (\cword{mf}=6, \cword{mt}=2).
+
+
+\subsection{DLAYXS}
+\label{ssCCCCR_DLAYXS}
+
+The format for the DLAYXS\index{DLAYXS} delayed-neutron data file is given
+below in the standard format.
+
+\small
+\begin{ccode}
+
+C***********************************************************************
+C                       REVISED 11/30/76                               -
+C                                                                      -
+CF          DLAYXS-IV                                                  -
+CE          MICROSCOPIC GROUP DELAYED NEUTRON PRECURSOR DATA           -
+C                                                                      -
+CN                      THIS FILE PROVIDES PRECURSOR YIELDS,           -
+CN                      EMISSION SPECTRA, AND DECAY CONSTANTS          -
+CN                      ORDERED BY ISOTOPE.  ISOTOPES ARE IDENTIFIED   -
+CN                      BY ABSOLUTE ISOTOPE LABELS FOR RELATION TO     -
+CN                      ISOTOPES IN EITHER FILE ISOTXS OR GRUPXS.      -
+CN                      FORMATS GIVEN ARE FOR FILE EXCHANGE PURPOSES   -
+CN                      ONLY.                                          -
+C                                                                      -
+C***********************************************************************
+
+C-----------------------------------------------------------------------
+CS          FILE STRUCTURE                                             -
+CS                                                                     -
+CS             RECORD TYPE                        PRESENT IF           -
+CS             ===============================    ===============      -
+CS             FILE IDENTIFICATION                ALWAYS               -
+CS             FILE CONTROL                       ALWAYS               -
+CS             FILE DATA, DECAY CONSTANTS, AND                         -
+CS                EMISSION SPECTRA                ALWAYS               -
+CS   *************(REPEAT TO NISOD)                                    -
+CS   *         DELAYED NEUTRON PRECURSOR                               -
+CS   *            YIELD DATA                      ALWAYS               -
+CS   *************                                                     -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE IDENTIFICATION                                        -
+C                                                                      -
+CL    HNAME,(HUSE(I),I=1,2),IVERS                                      -
+C                                                                      -
+CW    1+3*MULT=NUMBER OF WORDS                                         -
+C                                                                      -
+CB    FORMAT(11H 0V DLAYXS  ,1H*,2A6,1H*,I6)                           -
+C                                                                      -
+CD    HNAME       HOLLERITH FILE NAME - DLAYXS -                       -
+CD    HUSE(I)     HOLLERITH USER IDENTIFICATION (A6)                   -
+CD    IVERS       FILE VERSION NUMBER                                  -
+CD    MULT        DOUBLE PRECISION PARAMETER                           -
+CD                    1- A6 WORD IS SINGLE WORD                        -
+CD                    2- A6 WORD IS DOUBLE PRECISION WORD              -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE CONTROL   (1D RECORD)                                 -
+C                                                                      -
+CL    NGROUP,NISOD,NFAM,IDUM                                           -
+C                                                                      -
+CW    4=NUMBER OF WORDS                                                -
+C                                                                      -
+CB    FORMAT(4H 1D ,4I6)                                               -
+C                                                                      -
+CD    NGROUP        NUMBER OF NEUTRON ENERGY GROUPS IN SET             -
+CD    NISOD         NUMBER OF ISOTOPES IN DELAYED NEUTRON SET          -
+CD    NFAM          NUMBER OF DELAYED NEUTRON FAMILIES IN SET          -
+CD    IDUM          DUMMY TO MAKE UP FOUR-WORD RECORD                  -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          FILE DATA, DECAY CONSTANTS, AND EMISSION SPECTRA           -
+C                             (2D RECORD)                              -
+C                                                                      -
+CL    (HABSID(I),I=1,NISOD),(FLAM(N),N=1,FAM),((CHID(J,N),J=1,NGROUP), -
+CL    N=1,NFAM),(EMAX(J),J=1,NGROUP),EMIN,(NKFAM(I),I=1,NISOD),        -
+CL    (LOCA(I),I=1,NISOD)                                              -
+C                                                                      -
+CW    (2+MULT)*NISOD+(NGROUP+1)*(NFAM+1)=NUMBER OF WORDS               -
+C                                                                      -
+CB    FORMAT(4H 2D ,9(1X,A6))          HABSID                          -
+CB   1(10(1X,A6)))                                                     -
+CB    FORMAT(6E12.5)                   FLAM,CHID,EMAX,EMIN             -
+CB    FORMAT(12I6)                     NKFAM,LOCA                      -
+C                                                                      -
+CD    HABSID(I)     HOLLERITH ABSOLUTE ISOTOPE LABEL FOR ISOTOPE I (A6)-
+CD    FLAM(N)       DELAYED NEUTRON PRECURSOR DECAY CONSTANT           -
+CD                     FOR FAMILY N                                    -
+CD    CHID(J,N)     FRACTION OF DELAYED NEUTRONS EMITTED INTO NEUTRON  -
+CD                     ENERGY GROUP J FROM PRECURSOR FAMILY N          -
+CD    EMAX(J)       MAXIMUM ENERGY BOUND OF GROUP J (EV)               -
+CD    EMIN          MINIMUM ENERGY BOUND OF SET (EV)                   -
+CD    NKFAM(I)      NUMBER OF FAMILIES TO WHICH FISSION IN ISOTOPE I   -
+CD                     CONTRIBUTES DELAYED NEUTRON PRECURSORS          -
+CD    LOCA(I)       NUMBER OF RECORDS TO BE SKIPPED TO READ DATA FOR   -
+CD                     ISOTOPE I, LOCA(1)=0                            -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+CR          DELAYED NEUTRON PRECURSOR YIELD DATA   (3D RECORD)         -
+C                                                                      -
+CL    (SNUDEL(J,K),J=1,NGROUP),K=1,NKFAMI),(NUMFAM(K),K=1,NKFAMI)      -
+C                                                                      -
+CC    NKFAMI=NKFAM(I)                                                  -
+C                                                                      -
+CW    (NGROUP+1)*NKFAMI=NUMBER OF WORDS                                -
+C                                                                      -
+CB    FORMAT(4H 3D ,5E12.5/(6E12.5))  SNUDEL                           -
+CB    FORMAT(12I6)                    NUMFAM                           -
+C                                                                      -
+CD    SNUDEL(J,K)   NUMBER OF DELAYED NEUTRON PRECURSORS PRODUCED IN   -
+CD                     FAMILY NUMBER NUMFAM(K) PER FISSION IN          -
+CD                     GROUP J                                         -
+CD    NUMFAM(K)     FAMILY NUMBER OF THE K-TH YIELD VECTOR IN          -
+CD                     ARRAY SNUDEL(J,K)                               -
+C                                                                      -
+C-----------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+This file is used to communicate delayed-neutron data to reactor kinetics
+codes.  The ENDF files give a total delayed-neutron yield $\bar{\nu}_d$
+in the section labeled \cword{mf}=1,
+\cword{mt}=455.  \hyperlink{sGROUPRhy}{GROUPR} averages this
+yield for each neutron group $g$ using
+
+\begin{equation}
+   \bar{\nu}^D_g=\frac{\displaystyle\int_g \nu_d(E)\sigma_f(E)\phi(E)\,dE}
+      {\displaystyle\int_g\sigma_f(E)\phi(E)\,dE} \,\,.
+\end{equation}
+
+\noindent
+This same section of the ENDF tape contains the decay constants for the
+delayed-neutron time groups.  These numbers are passed on to the
+\hyperlink{sGROUPRhy}{GROUPR} routine that averages the
+delayed-neutron spectra, and they end up in the \cword{mf}=5
+record on the GENDF tape.  The ENDF evaluations give the
+delayed-neutron spectra for the time groups in \cword{mf}=5,
+\cword{mt}=455.  These spectra are not separately
+normalized.  Rather, the sum over all
+time groups is normalized, but the integral of any one of the spectra
+gives the ``delayed fraction'' for that time
+group.  \hyperlink{sGROUPRhy}{GROUPR} simply
+averages these spectra using the specified neutron group structure.
+The resulting group spectra (and the decay constants from File 1) are
+written onto the GENDF tape.
+
+Returning to the DLAYXS format description, the parameters in the
+``File Identification'' record are obtained from the user's input,
+just as for ISOTXS and BRKOXS.  The parameter \cword{NGROUP} is also
+a user input quantity.  \cword{NISOD} is determined after the entire
+GENDF tape has been searched for isotopes that are on the user's list
+of \cword{NISO} materials and that have delayed-neutron data.
+The \cword{NFAM} parameter needs some additional explanation.
+A ``family'' for the DLAYXS file is actually an index that selects
+one particular spectrum from the \cword{CHID} array.  It could
+correspond to an actual delayed-neutron precursor isotope left after
+a fission event.  In such a case, there would be many ``families''
+corresponding to the many possible fission fragment isotopes.
+The \cword{SNUDEL} yields would be analogous to fission product
+yields.  The ENDF evaluations take a more macroscopic approach.
+Spectra are chosen to include all the emissions from a group of
+delayed-neutron precursors for a particular fissioning nucleus with
+similar decay constants.  In this representation, the DLAYXS ``family''
+corresponds to a particular decay constant and spectrum for a
+particular target isotope.  Therefore, the number of families is
+simply six or eight times the number of isotopes, {\it e.g.},
+\cword{NFAM=6*NISOD}.
+
+In the ``File Data, Decay Constants, and Emission Spectra'' record,
+the Hollerith isotope names \cword{HABSID} are obtained from the names
+in the user's input.  The \cword{FLAM} values come directly from the
+decay constant values originally extracted from File 1 of the ENDF tape.
+The family index for isotope \cword{ISO} and time group \cword{I} is
+simply computed as \cword{6*(ISO-1)}+\cword{I} or \cword{8*(ISO-1)}+\cword{I}.
+The \cword{CHID} array is loaded from the \cword{mf}=5, \cword{mt}=455 section
+on the GENDF tape using the family index and the group index.  As usual, the
+order of groups has to be changed from the GROUPR convention with
+increasing-energy order to the CCCC convention with decreasing-energy
+order.  The group structure itself is obtained from the GENDF header
+record and stored into \cword{EMAX} and \cword{EMIN} in the
+conventional order.  The value of \cword{NKFAM} is simply 6 or 8
+for every isotope.  The \cword{LOCA} values are also easy to compute;
+they are just \cword{ISO} minus 1.
+
+The delayed-neutron yields versus incident neutron energy group and
+family index are given in the ``Delayed Neutron Precursor Yield Data''
+record.  As mentioned above, the total yield is given in \cword{mf}=3 of the
+GENDF tape, and the delayed fractions can be computed by summing the
+spectrum for each time group over the energy group index.  The array
+\cword{SNUDEL} in this DLAYXS record contains the product of these
+values.  Note that there is one of these yield records for each
+delayed-neutron isotope, and each record contains six or eight families.
+The \cword{NKFAM} vector is used to establish the correspondence
+between these families and the entire list of families used in the
+file data record.  As an example, \cword{NUMFAM(1)} would contain
+1, 2, 3, 4, 5, 6; \cword{NUMFAM(2)} would contain 7, 8, 9, 10, 11,
+12, and so on.
+
+\subsection{Coding Details}
+\label{ssCCCCR_code}
+
+Subroutine \cword{ccccr}\index{ccccr@{\ty ccccr}}
+is the only public call for
+module \cword{ccccm}\index{modules!ccccm@{\ty ccccm}}.
+The module has a number of global variables and
+arrays defined.  One key set of variables and arrays provides the
+area for accumulating the CCCC data.  It provides a set of
+equivalenced arrays so that integers, reals, and Hollerith strings
+can all be stored in the same binary records.  It sets up both
+integers and reals to be 4-byte quantities.  Hollerith words
+(with up to 8 characters each) are 8-byte quantities.  The CCCC
+\cword{mult} value is set to 2.  See \cword{a(50000)},
+\cword{ia(50000)}, and \cword{ha(25000)}.  The parameter
+\cword{isiza=50000} defines the size of these equivalenced arrays
+in 4-byte units.
+
+The main subroutine of CCCCR starts by allocating an array \cword{maxe}
+for reading in data from the input ENDF-format files.  Note that this
+array uses 8-byte words.  The values read in will be converted to the
+4-byte words used in the CCCC \cword{a,ia,ha} set as necessary.  Note
+the variable \cword{next}.  It will keep track of the next available
+location in the \cword{a,ia,ha} area.
+
+Next, the unit numbers for input and output are read.  The signs given
+for CCCC units are ignored; they are opened as binary files.  The
+subroutine continues by reading input cards 2 through 5.  At this
+point, CCCCR branches to different subroutines for each of the three
+interface file types that have been requested (see
+\cword{cisotx}\index{cisotx@{\ty cisotx}},
+\cword{cbrkxs}\index{cbrkxs@{\ty cbrkxs}}, and
+\cword{cdlyxs}\index{cdlyxs@{\ty cdlyxs}}).  Each of these routines is
+paired with a print routine that is called if the \cword{iprint} flag has
+been set to 1 (see \cword{pisotx}\index{pisotx@{\ty pisotx}},
+\cword{pbrkxs}\index{pbrkxs@{\ty pbrkxs}}, and
+\cword{pdlyxs}\index{pdlyxs@{\ty pdlyxs}}).
+When the last of these routines returns, CCCCR closes its active
+I/O units, writes a report, and terminates.
+
+\paragraph{ISOTXS File Preparation.}
+The \cword{cisotx}\index{cisotx@{\ty cisotx}} routine starts by calling
+\cword{ruinis}\index{ruinis@{\ty ruinis}} to read in
+the portion of the user's input specific to the ISOTXS file.  It then
+calls \cword{isxdat}\index{isxdat@{\ty isxdat}} to read through the
+input GENDF file and extract the ISOTXS data.
+
+Subroutine \cword{ISXDAT}\index{isxdat@{\ty isxdat}} starts by
+setting up pointers in the \cword{a,ia,ha} area for the different
+types of data to be read in.  These pointers are identified in the
+comments at the start of the subroutine.  The routine then reads
+the GENDF header record for the first material and extracts
+the group boundary energies.  If the group structure found does
+not match the one requested in the user's input, an error message
+is issued.  Otherwise, the order of the groups is changed from
+the \hyperlink{sGROUPRhy}{GROUPR}/ENDF convention
+of increasing energy to the
+CCCC convention of decreasing energy (which is the normal ordering for
+application programs) as the 8-byte GENDF data are copied into the
+4-byte words of the \cword{a} array.  The routine then begins a loop
+over all the materials (isotopes) requested (see \cword{do 300 i=1,niso}).
+It searches through the input GENDF tape for the first material with
+the requested MAT number (that is, the first temperature for the MAT)
+and copies it to a scratch file.  Note that materials are written in the
+order requested by the user's input material list, not in the
+order that they are found on the GENDF tape.
+
+This scratch tape is scanned for the ISOTXS principal cross section data
+in \cword{prinxs}\index{prinxs@{\ty prinxs}}.  This process is fairly
+simple for most of the ENDF File 3 cross sections.  Each MT number
+in File 3 is compared to the list of desired principal cross sections
+in \cword{nstx}; if a match is found, the corresponding element
+of \cword{iflag} is set, and the cross section table is copied
+into memory using a pointer from the \cword{iptr} array.
+The (n,2n) reaction is a special case.  In addition to \cword{mt}=16, the
+routine watches for the partial (n,2n) representation used in the
+ENDF/B-IV and -V evaluations for $^9$Be (namely, \cword{mt}=6, 7, 8, and 9),
+and adds them into the appropriate memory locations.  Fission is
+obtained from \cword{mt}=18, but if the partial fission reactions are present
+(\cword{mt}=19, 20, 21, 38), the flag \cword{mt=19} is set.  Average neutron
+velocities are obtained from the special
+\hyperlink{sGROUPRhy}{GROUPR}-produced section labeled
+by \cword{mt}=259.  These are inverse velocities in s/m, and \cword{prinxs}
+inverts them and multiplies by 100 to get velocities in cm/s.  In
+addition to the normal flux-weighted total cross section, the routine
+also stores the current-weighted, or P$_1$, cross section for use in
+calculating the transport cross section (see below).  Finally, File 3
+may also contain \cword{mt}=455, the delayed-neutron $\bar{\nu}$ parameter.
+The GENDF record for this parameter also contains $\sigma_f$ and the
+flux for each group.  The delayed-neutron production rate
+$\bar{\nu}_d\sigma_f$ is stored for use in calculating the total
+$\bar{\nu}$ parameter, and $\bar{\nu}_d\sigma_f\phi$ is added into
+the \cword{dnorm} array for later use in normalizing the total fission
+spectrum, $\chi$.  Note that there are two options for the flux used
+in this normalization: it can be the default library flux found on each
+record of the GENDF file, or it can be a flux spectrum \cword{spec}
+provided by the user.
+
+While reading through the scratch tape, \cword{prinxs} also watches for
+the elastic scattering matrix (\cword{mf}=6, \cword{mt}=2).  The total
+P$_1$ elastic
+cross section is calculated by summing over all secondary neutron groups,
+and the result is subtracted from the current-weighted total cross section
+to obtain the transport cross section.
+
+The processing of the fission matrix (\cword{mf}=6, \cword{mt}=18) and
+the delayed-fission
+spectra (\cword{mf}=5, \cword{mt}=455) depend on the \cword{ichix} option.  The
+$\bar{\nu}$ parameter \cword{SNUTOT} is always calculated for fissionable
+isotopes.  \cword{CHISO} is only calculated if the vector representation
+was requested; in addition, it can be calculated using the flux from GENDF
+or using the input flux in \cword{SPECT}.  Starting with NJOY 91.0, the
+fission matrix is represented by a real group-to-group matrix at high
+energies, and by a single spectrum  (with \cword{IG=0}) and an associated
+production cross section (with \cword{IG2LO=0}) at low energies.  This
+representation can lead to great savings for libraries with many
+low-energy groups.  The contributions to \cword{SNUTOT} from the
+low-energy range are easily obtained by adding in the production
+cross section.  At high energies, the sum of the group-to-group matrix
+over all secondary-energy groups is added in.  After \cword{mf}=3,
+\cword{mt}=455 and \cword{mf}=6, \cword{mt}=18 have been processed,
+it is only necessary to divide the total
+production rate in memory by the fission cross section to obtain the
+required total $\bar{\nu}$ values.
+
+The prompt part of the fission $\chi$ vector or matrix is obtained from
+\cword{mf}=6, \cword{mt}=18, or if the \cword{MT=19} flag was set while
+reading File 3,
+from \cword{mt}=19, 20, 21, and 38.  The code starts at statement number 207,
+and it is fairly complicated because it has to cope with the following
+options:
+
+\begin{singlespace}
+\begin{enumerate}
+\item $\chi$ vector versus $\chi$ matrix,
+
+\item default weighting for the vector versus input weighting,
+
+\item square matrix versus collapsed rectangular matrix, and
+
+\item constant and matrix parts of \cword{mf}=6 GENDF record.
+\end{enumerate}
+\end{singlespace}
+
+\noindent
+Note that separate normalization sums are accumulated in
+\cword{cnorm(ispec)} for the chi vector or for each column of the
+matrix while the $\chi$ elements are being stored.  The delayed
+contributions to the fission $\chi$ vector or matrix are taken from
+\cword{mf}=5, \cword{mt}=455 (see statement number 230).  The
+time group spectra are added and multiplied by the delayed neutron
+production rate \cword{dnorm} (which can be incident energy dependent
+through the \cword{ispec} index if a matrix is being constructed).
+The delayed contributions to the normalization sum for the $\chi$ vector
+or for each column of the $\chi$ matrix are added into \cword{cnorm}
+during this step.  After all the components of the fission spectrum
+have been read from the GENDF file, the $\chi$ vector or the
+columns of the $\chi$ matrix are normalized using this quantity.
+
+When all sections of the scratch tape have been processed,
+\cword{prinxs} goes through the principal cross section block,
+removing any parts that have zero cross sections.  The resulting
+block is written to scratch file \cword{nscrt2}.  Finally, it writes
+the chi matrix data, if any, to the same scratch file and returns
+to \cword{isxdat}.
+
+Subroutine \cword{isomtx}\index{isomtx@{\ty isomtx}} is then called
+to read through the scratch tape and process the group-to-group
+matrices into CCCC format.  In order to allow large matrices
+to be processed on machines with limited memory, one
+or more passes can be made through the scratch tape (see
+\cword{do 400 nj=1,npass}).  The number of passes used depends upon the
+amount of space available in scratch array \cword{b} and on the
+subblocking option requested by the user.  The four options supported
+by CCCCR were discussed in connection with the ISOTXS format description.
+Only one pass is required for the first option.  In the other cases, the
+length of one subblock is divided into the length of the scratch array
+to determine the number of subblocks that can be accumulated on one
+pass (\cword{nrec}) and the number of passes required (\cword{npass}).
+
+Four matrix reactions are extracted from the scratch tape (see
+\cword{do 500 i=1,4}).  The total matrix is obtained by adding all
+matrices found on the GENDF tape except the fission matrices.  The
+elastic matrix is obtained from \cword{mt}=2 only.  The (n,2n) matrix is
+normally obtained from MT=16, but the sum of \cword{mt}=6, 7, 8, 9, 46, 47, 48,
+and 49 will be used for the old $^9$Be representation, if found.  The
+inelastic matrix is the sum of everything else; that is, it includes
+the normal inelastic reactions \cword{mt}=51-91, and it also includes other
+neutron-producing reactions like (n,3n), (n,n$'$p), and (n,n$'\alpha$).
+Each GENDF section found is passed to \cword{shuffl}, which rearranges
+the input data into the CCCC order in scratch array \cword{b}, and
+then to \cword{wrtmtx}, which repacks the data into banded form
+and writes the results to \cword{nscrt2}.
+
+Subroutine \cword{shuffl}\index{shuffl@{\ty shuffl}} reads each
+of the group-to-group cross sections for a given reaction (MT)
+and calculates a location for each cross section in the
+scratch array (\cword{noloc}).   Different formulas are used
+for the location of the two allowed values of \cword{IFOPT}.
+For \cword{IFOPT=1}, the data are stored with incident group index
+\cword{jg1} changing fastest, then Legendre index \cword{il}, and with
+final group index \cword{jg2} changing slowest.  Note that the indexing
+scheme only stores the triangle of the matrix corresponding to ingroup
+scattering and downscatter (that is, \cword{jg2}$\ge$\cword{jg1}).  In
+addition, the first group in a subblocking range \cword{ng2z} is used.
+This means that values of \cword{jg2} less than \cword{ng2z} will result
+in storage locations less than \cword{irsize}, and they will not be
+stored (see statement 200).  Groups with \cword{jg2} above the subblock
+might be stored in memory, or they might end up above the upper limit
+of the memory area and be suppressed by statement number 200.  Similarly,
+the data for \cword{IFOPT=2} are stored with \cword{jg1} as the fastest
+varying index, then \cword{jg2}, and finally with \cword{il} as the
+slowest varying index.  Here also, the storage pointer \cword{noloc}
+is calculated so that only elements with \cword{jg2}$\ge$\cword{jg1} are
+stored, and elements that are outside of a given subblock are removed
+if they fall outside the bounds of the memory array.
+
+Subroutine \cword{wrtmtx}\index{wrtmtx@{\ty wrtmtx}} searches
+through the memory area loaded in \cword{shuffl} to find the
+bands of group-to-group elements that will be written on the
+final ISOTXS file.  The calculation of locations in the memory
+array depends on the blocking and subblocking options selected.
+In general, the routine calculates locations \cword{NOLOCA} and tests the
+cross section found there against the value \cword{eps=1.E-10}.  The
+highest index that violates this test for a given final energy group
+determines the bandwidth for that group.  (Remember that the
+inscattering group is always kept, even if it has zero cross section.)
+Once the band limits have been found, the subroutine loops back through
+the memory area and squeezes out the locations that are not included in
+the bands.  At this point, all the elements of the ``Scattering Sub-Block''
+are in their final locations, and the record is written out to
+scratch tape \cword{nscrt2}.
+
+When \cword{isomtx} returns to \cword{isxdat}, the ``Isotope
+Control and Group Independent Data'' record is completed by filling
+in the values of \cword{IDSCT} and \cword{IJJ}, and the record is
+written to scratch tape \cword{nscrt3}.  The \cword{LOCA} values for
+the ``File Date'' record are also calculated at this point.  They
+remain in memory at \cword{l19}.  Once the ``\cword{do 300}'' loop
+over the requested isotopes has finished, the \cword{isxdat} routine
+returns.
+
+Back in \cword{cisotx}, all the data needed for the ISOTXS file are now
+in memory or on one of the CCCC-style scratch files \cword{nscrt2} or
+\cword{nscrt3}.  The routine simply steps through the ISOTXS records
+and either constructs them or copies them from a scratch file.  When
+the file has been written, the routine returns to \cword{ccccr}, which
+checks the print flag, and calls \cword{pisotx}, if requested.
+
+Subroutine \cword{pisotx}\index{pisotx@{\ty pisotx}} is a fairly
+simple routine.  It reads through the ISOTXS file produced by CCCCR
+and prepares an interpreted listing of the data.
+
+\paragraph{BRKOXS File Preparation.}
+Subroutine \cword{cbrkxs}\index{cbrkxs@{\ty cbrkxs}} is used to
+prepare the BRKOXS file, if requested.  Following the same pattern
+as \cword{cisotx}, it calls \cword{ruinbr}\index{ruinbr@{\ty ruinbr}}
+to read the user's input, then it calls \cword{brkdat} to extract
+the desired data from the GENDF file, and finally it writes
+the output BRKOXS file using data stored in memory and on a scratch
+tape by \cword{brkdat}.
+
+The storage locations used by \cword{brkdat}\index{brkdat@{\ty brkdat}}
+are outlined in the comment cards at the beginning of the subroutine.
+The subroutine now opens the input GENDF file and reads in the header
+record.  After checking for possibly incompatible group structures, it
+reverses the order of the group bounds and loads them into the \cword{emax}
+and \cword{emin} arrays.  The data block starting at \cword{l19} is
+sized to hold 13 infinitely dilute cross section vectors that will
+either be needed during the processing (vectors 1 through 7) or
+will be written into the ``Cross Sections'' record.  These
+13 quantities are
+
+\begin{singlespace}
+\begin{enumerate}
+
+\item P$_0$ total cross section,
+\item capture cross section,
+\item fission cross section,
+\item P$_1$ total - P$_1$ elastic,
+\item elastic cross section,
+\item P$_1$ total cross section,
+\item P$_1$ flux,
+\item \cword{XSPO},
+\item inelastic cross section,
+\item elastic cross section,
+\item average elastic scattering cosine $\bar{\mu}$,
+\item elastic downscatter to adjacent group, and
+\item average elastic lethargy increment $\xi$.
+
+\end{enumerate}
+\end{singlespace}
+
+\noindent
+Pointer \cword{l20} defines the balance of the available memory.
+
+The next step is to determine whether it is necessary to subblock
+the self-shielding factor record.  The amount of space available
+in the memory area is compared with the maximum amount of memory
+required for the f-factors.  If there is not enough space,
+\cword{nsblk} is increased to \cword{nreact}; otherwise, it is
+left at 1.  The value of \cword{nsblk} is stored into the \cword{IBLK}
+field of the BRKOXS ``File Control'' record.
+
+The isotope loop is complicated because CCCCR allows the materials
+on the GENDF tape to be in any order, but it arranges things so that the
+materials on the BRKOXS files are in the order that the materials are
+named in the user's input.  The main loop is controlled by
+\cword{do 370 i=1,niso}.  For each pass, the input GENDF tape is rewound
+and searched for isotope \cword{I} (see \cword{do 170 j=1,niso}).  Once
+a desired material has been found, the $\sigma_0$ list in the header
+record is examined.  Either the first abs(\cword{nzi}) values are
+extracted (for \cword{nzi} negative), or the particular values that
+occur on the input \cword{asig} list are extracted (for \cword{nzi}
+positive).  In either case, \cword{nzj} is the number of $\sigma_0$
+values found, \cword{isig} contains the pointers to the values selected,
+and \cword{csig} contains the actual values of $\sigma_0$.
+
+GENDF tapes contain one or more temperatures for each material recorded
+as consecutive MATs.  Starting at statement number 190,
+\cword{brkdat}\index{brkdat@{\ty brkdat}} reads through all the
+materials with the current MAT number selecting the desired
+temperatures and copying them to a scratch file \cword{nscrt1}.
+The procedure used to select temperatures is similar to the one used to
+select $\sigma_0$ values.  If \cword{nti} is negative, the first
+abs(\cword{nti}) temperatures are extracted.  If \cword{nti} is positive,
+only temperatures on the list in \cword{atem} are extracted. In either
+case, \cword{ntj} is the number of temperatures found for this material,
+\cword{item} contains indices to those temperatures, and \cword{ctem}
+contains the actual temperature values.
+
+In the loop beginning at \cword{do 340 nsb=1,nsblk}, a pass through the
+scratch tape is made for each subblock (1 or \cword{nreact}).  Each
+section of the GENDF format is located, and either \cword{xsproc}
+(for \cword{mf}=3) or \cword{mxproc} (for \cword{mf}=6) is called to
+process the data in the section.
+
+Subroutine \cword{xsproc}\index{xsproc@{\ty xsproc}} is called
+once for each reaction in File 3 of the GENDF tape.  It reads in
+all the data, checks which reaction is present, and stores the data
+in one of the 13 cross section locations (see \cword{l19}), or
+in one of the f-factor locations (see \cword{l20}).  If the
+denominator for the f-factor calculation is zero, the division
+is skipped, and a warning message is issued.
+
+Subroutine \cword{mxproc}\index{mxproc@{\ty mxproc}} is  called
+once for each reaction in File 6 of the GENDF tape.  It loops
+through statement number 120 to read all of the incident groups,
+and then it uses different sections of coding to  fill in
+or fix up the rest of the 13 elements in the infinitely dilute
+cross section block at \cword{l19}.  These quantities include the
+elastic and inelastic cross sections, the transport cross section, and
+the removal cross section.  This routine also computes the elastic
+removal self-shielding factors from \cword{mf}=6, \cword{mt}=2, and stores
+the results in the f-factor area at \cword{l20}.
+
+Back in \cword{brkdat}, the self-shielded transport cross sections are
+converted into f-factors.  A check is then made to see if the transport
+values were properly computed.  This requires that a self-shielded
+elastic matrix was available for all the higher temperatures.  A
+warning message is issued if the required data were not present.  The
+last 6 of the 13 vectors stored starting at \cword{l19} are the data
+needed for the ``Cross Sections'' record; that block is written to
+scratch file \cword{nscrt2}.  Next, the accumulated f-factor data at
+\cword{l20} are written to \cword{nscrt2}, and the \cword{NTABP} and
+\cword{NTABT} arrays are stored at \cword{l14} and \cword{l15},
+respectively.
+
+The last step inside the isotope loop is to call
+\cword{thnwrt}\index{thnwrt@{\ty thnwrt}} to thin
+out the f-factor data and write the results onto scratch file
+\cword{nscrt3}.  It starts by reading the cross section data from
+\cword{nscrt2} into memory. Then it reads the f-factor data into memory
+and repacks it to take account of the group range for interesting
+self-shielding factors, namely, \cword{JBFL} to \cword{JBFH}.  When this
+is finished, it writes the f-factor array out to \cword{nscrt3}, and
+then it writes the unchanged cross section block out to \cword{nscrt3}.
+Note that these two records are now in the correct order to be copied
+to the BRKOXS file.
+
+Subroutine \cword{thnwrt} now returns control to \cword{brkdat}.
+When the ``\cword{do 370}'' loop has finished, the routine cleans
+up the ``File Data'' information in memory and returns to the
+main BRKOXS routine.  At this point, all the information required
+to construct the output file is present in memory or on scratch
+tape \cword{nscrt3}.  The routine steps through the records of the
+BRKOXS format constructing them or copying them from the CCCC-style
+scratch file.  It then returns to \cword{ccccr}, which checks to
+see whether \cword{pbrkxs} should be called.
+
+Subroutine \cword{pbrkxs}\index{pbrkxs@{\ty pbrkxs}} is a
+fairly simple routine.  It reads through the BRKOXS file produced
+by \cword{ccccr} and prepares an interpreted listing of the data.
+
+\paragraph{DLAYXS File Preparation.}
+Subroutine \cword{cdlyxs}\index{cdlyxs@{\ty cdlyxs}} is used
+to prepare a DLAYXS file, if requested.  It starts by calling
+\cword{dldata}\index{dldata@{\ty dldata}} to extract the
+delayed-neutron data from the input GENDF file.  Since all the
+data are stored into memory, \cword{cdlyxs}\index{cdlyxs@{\ty cdlyxs}}
+continues by simply writing out the required ``File Identification",
+``File Control", ``File Data, Decay Constants, and Emission Spectra",
+and ``Delayed Neutron Precursor Yield Data" records.  If no
+delayed-neutron data are found, \cword{cdlyxs} issues a fatal
+error message.  The coding can handle either the traditional
+6 time groups of ENDF/B or the 8 time groups used in some other
+evaluation systems.  For convenience, the following discussion will
+just use the 6 time groups.
+
+Subroutine \cword{dldata}\index{dldata@{\ty dldata}} starts by
+reserving space for the dynamic arrays used to store the
+delayed-neutron data; the purpose for each of these arrays is
+summarized in the comment block at the beginning of the subroutine.
+ENDF delayed-neutron files are based on the traditional 6 time groups;
+therefore, CCCCR makes each time group for each isotope correspond
+to one DLAYXS ``delayed-neutron family'' (see \cword{NFAM=6*NISOD}).
+Next, \cword{dldata} starts reading through the materials on the GENDF
+tape and looking at each material requested in the user's input
+(the material loop goes through statement 110).  For the first
+material, it reads the header record, checks that the group
+structure is compatible with the user's input value \cword{ngroup},
+and stores the structure in \cword{EMAX} and \cword{EMIN} in the
+conventional decreasing-energy order.  For all materials,
+it watches for sections with \cword{mf}=3, \cword{mt}=455 or
+\cword{mf}=5, \cword{mt}=455.
+
+When \cword{mf}=3/\cword{mt}=455 is found (see statement 310),
+\cword{dldata}\index{dldata@{\ty dldata}} stores the total delayed-neutron
+yield from \hyperlink{sGROUPRhy}{GROUPR} in the
+\cword{snudel} array (pointer \cword{l8})
+using an offset computed from the time group index (which varies
+from 1 to 6), the group index, and the isotope index.  (The
+group index goes through statement 130).  For the present,
+the same value is stored for every time group.
+
+When \cword{mf}=5/\cword{mt}=455 is found (see statement
+410), the rest of the data
+for this isotope are stored into memory.  The \cword{HABSID} field
+is obtained from the isotope name in the user's input.  The
+\cword{LOCA} field is easy to calculate from the isotope index.
+The decay constants for each of the time groups are copied into
+\cword{FLAM} from the GENDF record.  The number of families
+for this isotope is simply 6; this number is loaded into the
+location corresponding to \cword{NKFAM}.  Finally, the actual
+delayed-neutron spectra for each time group are loaded into
+the \cword{CHID} area using energy group and family number as
+indexes. At this point, the spectrum for each time group is
+summed over group index to determine the delayed fraction for that
+time group [see \cword{FRACT(I)}].  Then this fraction is used
+to change the total delayed-neutron yield for each time group
+in the \cword{SNUDEL} area into the fractional delayed-neutron
+yield for that time group (family).
+
+When all the isotopes containing delayed-neutron data have been
+processed, \cword{dldata} returns to \cword{cdlyxs}.  When
+\cword{cdlyxs} returns to the main subroutine of CCCCR after
+writing the DLAYXS file, the print routine
+\cword{pdlyxs}\index{pdlyxs@{\ty pdlyxs}} may be called.  This
+is a fairly simple routine that reads through a file
+in DLAYXS format and prepares an interpreted listing.
+
+
+\subsection{User Input}
+\label{ssCCCCR_inp}
+
+The user input instructions copied from the comment cards at the
+beginning of the CCCCR source code are given below.  It is always
+a good idea to check the comments cards in the current version of
+the code in case there have been any changes.
+\index{CCCCR!CCCCR input}
+\index{input!CCCCR}
+
+\small
+\begin{ccode}
+
+   !---input specifications (free format)---------------------------
+   !
+   !-ccccr-
+   ! card 1 units
+   !    nin      input unit for data from groupr
+   !    nisot    output unit for isotxs (0 if isotxs not wanted)
+   !    nbrks    output unit for brkoxs (0 if brkoxs not wanted)
+   !    ndlay    output unit for dlayxs (0 if dlayxs not wanted)
+   ! card 2 identification
+   !    lprint    print flag (0/1=not print/printed)
+   !    ivers     file version number (default=0)
+   !    huse      user identification (12 characters)
+   !              delimited by *, ended by /.
+   !              (default=blank)
+   ! card 3
+   !    hsetid    hollerith identification of set (12 characters)
+   !              delimited by *, ended by /.
+   !              (default=blank)
+   ! card 4 file control
+   !    ngroup    number of neutron energy groups
+   !    nggrup    number of gamma energy groups
+   !    niso      number of isotopes desire
+   !    maxord    maximum legendre order
+   !    ifopt     matrix blocking option (1/2=blocking by
+   !                               reaction/legendre order)
+   ! card 5 isotope parameters (one card per isotope)
+   !       (first four words are hollerith, up to six characters
+   !       each, delimited by *)
+   !    hisnm     hollerith isotope label
+   !    habsid    hollerith absolute isotope label
+   !    hident    identifier of data source library (endf)
+   !    hmat      isotope identification
+   !    imat      numerical isotope identifier (endf mat number)
+   !    xspo      average potential scattering cross sect. (brkoxs)
+   !-cisotx- (only if nisot.gt.0)
+   ! card 1 file control
+   !    nsblok    subblocking option for scattering matrix
+   !              (1 or ngrup sub-blocks allowed)
+   !    maxup     maximum number of upscatter groups (always zero)
+   !    maxdn     maximum number of downscatter groups
+   !    ichix     fission chi representation
+   !                   -1   vector (using groupr flux)
+   !                    0   none
+   !                   +1   vector (using input flux)
+   !                .gt.1   matrix
+   ! card 2 chi vector control (ichix=1 only)
+   !    spec      ngroup flux values used to collapse the groupr
+   !              fission matrix into a chi vector
+   ! card 3 chi matrix control (ichix.gt.1 only)
+   !    spec      ngroup values of spec(i)=k define the range of
+   !              groups i to be averaged to obtain spectrum k.
+   !              index k ranges from 1 to ichi.
+   !              the model flux is used to weight each group i.
+   ! card 4 isotope control (one card per isotope)
+   !    kbr       isotope classification
+   !    amass     gram atomic weight
+   !    efiss     total thermal energy/fission
+   !    ecapt     total thermal energy/capture
+   !    temp      isotope temperature
+   !    sigpot     average effective potential scattering
+   !    adens     density of isotope in mixture
+   !
+   !-cbrkxs- (only if nbrks.gt.0)
+   ! card 1 (2i6) file data
+   !    nti       number of temperatures desired
+   !              (-n means accept first n temperatures)
+   !    nzi       number of sigpo values desire
+   !              (-n means accept first n dilution factors)
+   ! card 2 (not needed if nti.lt.0)
+   !    atem(nti) values of desired temperatures
+   ! card 3 (not needed if nzi.lt.0)
+   !    asig(nzi) values of desired sigpo
+   !
+   !-cdlayx-- no input required
+   !--------------------------------------------------------------------
+\end{ccode}
+\normalsize
+
+These instructions are divided into four parts.  First, there is a
+general section that applies to all three interface files following
+\cword{-ccccr-}.  Second, there is a section of special parameters
+for ISOTXS following \cword{-cisotx-}. Third, there is a section of
+special parameters for BRKOXS following \cword{-cbrkxs-}.  And fourth,
+there is a comment following \cword{-cdlaxs-} noting that no special
+input is required for the DLAYXS file.
+
+In the \cword{-ccccr-} section, Card 1 is used to read in the unit
+numbers for input and output.  \cword{nin} must be a GENDF tape
+prepared using \hyperlink{sGROUPRhy}{GROUPR}, and it
+can have either binary (\cword{nin<0})
+or ASCII (\cword{nin>0}) mode.  The units for the output ISOTXS,
+BRKOXS, and DLAYXS files are all binary, but either sign can be
+used on the unit numbers.  If any unit number is given as zero,
+the corresponding CCCC interface file will not be generated.
+On Card 2, the \cword{lprint=1} is used to request a full
+printout of all the CCCC files generated.  The file version number
+\cword{ivers} can be used to distinguish between different libraries
+generated using NJOY.  The user identification field \cword{huse}
+can contain any desired 12-character string.  An example of Card 2
+might be
+
+\small
+\begin{ccode}
+
+  0  7  'T2 LANL NJOY'/
+
+\end{ccode}
+\normalsize
+
+\noindent
+Card 3 contains a description of the library using up to 72
+characters (12 standard CCCC words of 6 characters each).  For
+example,
+
+\small
+\begin{ccode}
+
+  'LIB-IV 50-GROUP LMFBR LIBRARY FROM ENDF/B-IV (1976)'/
+
+\end{ccode}
+\normalsize
+
+On Card 4, the values given for \cword{ngroup} must agree with the
+number of groups on the input GENDF tape or a fatal error message
+will be issued.  \cword{nggrup} is not used.  \cword{niso} is
+the total number of materials or isotopes to be searched for on
+the GENDF tape.  The value of \cword{maxord} should be less than or
+equal to the maximum Legendre order used in the
+\hyperlink{sGROUPRhy}{GROUPR} run.  The
+use of the matrix blocking parameter \cword{ifopt} was discussed
+in detail in connection with the description of the ISOTXS format
+above.  A value of 1 has been normally used for Los Alamos libraries.
+
+A line using the Card 5 format is given for each of the \cword{niso}
+isotopes or materials to be processed.  The Hollerith isotope label
+and the Hollerith absolute isotope label have normally been set
+to the conventional isotope name at Los Alamos; for example,
+\cword{u235} or \cword{cnat}.  The library name in \cword{habsid}
+can vary quite  a lot now that many other libraries are available in
+ENDF format.  The values of \cword{hmat} and \cword{imat} will
+normally be derived from the MAT number characteristic of all
+libraries in ENDF format.  Unfortunately, \cword{xspo}, the
+average potential scattering cross section, must be entered by
+hand.  It can be obtained from \cword{mf}=2, \cword{mt}=151 on
+the ENDF file for
+the material by determining the scattering radius $a$ from the
+\cword{AP} field and computing $\sigma_p{=}4\pi a^2$.  The
+following fragment of an ENDF/B evaluation shows the vicinity
+of \cword{AP}:
+
+\small
+\begin{ccode}
+
+  ...
+ 9.223500+4 2.330248+2          0          0          1          09228 2151
+ 9.223500+4 1.000000+0          0          1          2          09228 2151
+ 1.000000-5 2.250000+3          1          3          0          19228 2151
+ 3.500000+0 9.602000-1          0          0          1          39228 2151
+ 2.330200+2 9.602000-1          0          0      19158       31939228 2151
+-2.038300+3 3.000000+0 1.970300-2 3.379200-2-4.665200-2-1.008800-19228 2151
+  ...
+
+\end{ccode}
+\normalsize
+
+\noindent
+The scattering radius is the second number on the fourth card in the
+section \cword{mf}=2, \cword{mt}=151.  Using it as $a$ gives
+$4\pi(0.96020)^2=11.582$ barns
+for the value of \cword{xspo}.  An example of Card 5 follows:
+
+\small
+\begin{ccode}
+
+  U235 U235 ENDF6 '9228' 9228 11.582
+
+\end{ccode}
+\normalsize
+
+\noindent
+Note that the Hollerith string ``9228'' had to be delimited
+by quotes because it does not begin with a letter.  The delimiters
+are optional for the other Hollerith variables.
+
+The next block of input cards is specific to ISOTXS and only appears
+if ISOTXS processing was requested with a nonzero value for \cword{nisot}.
+The first parameter on Card 1 is \cword{nsblok}, which was
+discussed in connection with matrix blocking and subblocking.
+\cword{nsblok} and \cword{ifopt} work together to control how
+a large scattering matrix is broken up into smaller records on
+the ISOTXS interface file.  The important factor is the maximum
+size of the binary records.  They should be small enough to fit into
+a reasonable amount of memory in any application codes that use
+ISOTXS files, but they should be large enough to keep the
+number of I/O operations to a minimum.  The maximum record size
+for each option is repeated below for the convenience of the
+reader:
+
+\begin{singlespace}
+\begin{enumerate}
+
+\item {\cword{ifopt=1} and \cword{nsblok=1}}: $n_\ell\times n_g(n_g{-}1)/2$,
+\item {\cword{ifopt=1} and \cword{nsblok=ngroup}}: $n_\ell\times n_g$,
+\item {\cword{ifopt=2} and \cword{nsblok=1}}: $n_g(n_g{-}1)/2$.,
+\item {\cword{ifopt=2} and \cword{nsblok=ngroup}}:  $n_g$,
+
+\end{enumerate}
+\end{singlespace}
+
+\noindent
+where $n_\ell$ is the number of Legendre orders and $n_g$ is the
+number of groups.  If the user specifies \cword{nsblok=1} and the
+resulting output record is too large for the available memory,
+\cword{nsblok} will be changed to \cword{ngroup} automatically.
+
+Card 1 of the ISOTXS section continues with \cword{maxup}.  This
+parameter is always zero for CCCCR; thermal upscatter matrices are
+not processed.  The normal value of \cword{maxdn} is \cword{ngroup},
+but it can be made smaller to reduce the size of the matrices.
+The cross section for any removed downscatter groups will be
+lumped into the last group in order to preserve the production
+cross section. The \cword{ichix} is used to control the generation
+of fission $\chi$ vectors and matrices.  The representations allowed
+were discussed above in connection with the description of the
+ISOTXS format (see Section~\ref{ssCCCCR_ISOTXS}).  The most commonly used
+option has been \cword{ichix=-1} because most application codes cannot
+handle fission $\chi$ matrices.  The
+\hyperlink{sGROUPRhy}{GROUPR} flux is normally
+chosen to be characteristic of the class of problems a given
+library is intended to treat; therefore, it is rarely necessary
+to supply an input weighting spectrum (see \cword{ichix}=+1 and
+\cword{spec}).  The following scenario illustrates a case where
+this option might be useful.  Assume that an 80-group library
+is made using the \hyperlink{sGROUPRhy}{GROUPR}
+fast reactor weight function
+(\cword{iwt=8}), which contains a shape in the fission range
+typical of both fast reactors and fusion blankets plus a fusion
+peak at 14 MeV.  This GENDF library could be used to generate
+two different ISOTXS libraries, one using the default flux and
+useful for fusion problems, and one using a spectrum \cword{spec}
+from which the fusion peak has been removed.  The latter would
+be better for fast reactor analysis because the $\chi$ vectors
+would not contain the component of high-energy fission from the
+14 MeV range.  Card 2 is used to input the user's choice for
+\cword{spec}.
+
+CCCCR can also produce fission $\chi$ matrices for codes that can
+use them.  These matrices can be rectangular to take advantage of
+the fact that the $\chi_{g\rightarrow g'}$ function is basically
+independent of $g$ at low energies (large values of $g$).  Taking
+the \hyperlink{sGROUPRhy}{GROUPR} 30-group structure as an
+example, if the energy at
+which significant incident-energy dependence begins is taken to
+be about 100 keV, then groups 16 through 30 will have identical
+$\chi$ vectors.  The value of \cword{ichix} should be set to 16,
+and the \cword{spec} vector of Card 3 should be set to
+
+\small
+\begin{ccode}
+
+  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+  16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16/
+
+\end{ccode}
+\normalsize
+
+\noindent
+The resulting $\chi$ matrix will be rectangular with $16\times 30$
+elements.
+
+Card 4 completes the input specific to ISOTXS.  The value of \cword{kbr}
+can be set to reflect the normal use of this material in the applications
+that this library is intended to treat.  The \cword{amass} parameter
+has units of gram atomic weight.  It can be calculated from the normal
+ENDF AWR parameter (the atomic weight ratio to the neutron) by
+multiplying by the gram atomic weight of the neutron.  \cword{temp}
+was historically 300K for NJOY CCCC libraries.  The same value can be used
+for \cword{sigpot} and \cword{xspo} (see above).  The \cword{adens}
+parameter has no meaning for CCCCR; it can be set to zero to imply
+infinite dilution.
+
+The choice of values for \cword{efiss} and \cword{ecapt} is more
+complicated.  As discussed in Section~\ref{ssCCCCR_ISOTXS}, \cword{efiss}
+is basically
+the total non-neutrino energy released by a fission reaction.  It
+is available in eV as the pseudo Q value in \cword{mf}=3, \cword{mt}=18
+(the energy release from fission is given in more detail in \cword{mf}=1,
+\cword{mt}=458).  The following fragment of the ENDF/B-VI evaluation for
+$^{235}$U shows how to find the Q value:
+
+\footnotesize
+%\small
+\begin{ccode}
+  ...
+                                                                  9228 3  0 4413
+ 9.223500+4 2.330250+2          0          0          0          09228 3 18 4414
+ 1.937200+8 1.937200+8          0          0          1        3339228 3 18 4415
+        333          2                                            9228 3 18 4416
+ 1.000000-5 0.000000+0 7.712960+1 0.000000+0 2.250000+3 0.000000+09228 3 18 4417
+ 2.250000+3 5.362770+0 2.300000+3 5.396710+0 2.500000+3 5.957280+09228 3 18 4418
+  ...
+
+\end{ccode}
+\normalsize
+
+\noindent
+The Q value is the second number on the second card of the section
+\cword{mf}=3, \cword{mt}=18.  Converting to CCCC units gives
+
+\noindent
+\begin{center}
+
+193.72${\times}10^6$ eV $\times$ 1.602${\times}10^{-19}$ watt-s/eV
+     = .31034${\times}10^{-10}$ watt-s/fission
+
+\end{center}
+\noindent
+The value for \cword{ecapt} is determined from the Q value for
+\cword{mf}=3, \cword{mt}=102,
+the radiative capture reaction.  However, if the isotope remaining after
+capture has a relatively short half-life, the energy of the decays leading
+to the final stable daughter should be added onto the capture Q value.
+(The meaning of ``stable'' may vary from application to application).
+As an example, consider aluminum.  The $^{28}$Al capture product
+decays with a half-life of 2.24 minutes producing 9.31 MeV of
+$\beta^-$ energy and a 1.779 MeV photon.  Therefore, the actual
+value of \cword{ecapt} should be calculated as follows:
+
+\begin{center}
+\begin{tabular}{rl}
+  7.724 MeV & \cword{mt}=102 prompt Q value \\
+  9.310 MeV & $\beta^-$  energy \\
+  1.779 MeV & delayed-$\gamma$ energy \\ \cline{1-1}
+ 18.813 MeV &  \\
+ $\times 1.602\times 10^{-13}$ & \\ \cline{1-1}
+ $.3014\times 10^{-11}$ & in watt-s/capture
+\end{tabular}
+\end{center}
+
+The next section of the input file is specific to BRKOXS.  Card 1
+enables the user to just accept all or part of the temperatures
+and sigma-zero values on the input GENDF tape.  If the
+value of \cword{nti} is negative, the first abs(\cword{nti})
+$T$ values for each material will be used.  If fewer
+values are available, only those will be used.  If \cword{nti}
+is positive, input Card 2 will be read for a list of $T$ values,
+and only data with temperatures on that list
+will be extracted from the GENDF tape.  The parameter \cword{nzi}
+and the list of $\sigma_0$ values on Card 3 work in the same way.
+
+No additional input is required for DLAYXS files.
+
+\subsection{Error Messages}
+\label{ssCCCCR_msg}
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{error in isxdat***incompatible group structures}] ~\par
+  The number of groups on the input GENDF tape must match the
+  number of groups specified in the CCCCR input.  Check whether
+  the correct input file was mounted.
+
+\item[\cword{error in isomtx***input record too large}] ~\par
+  There is not enough space in the scratch array \cword{b} to
+  read in the input records from the GENDF tape.  The only
+  solution is to increase the size of the main CCCC equivalanced
+  array set.  See \cword{a,ia,ha} with \cword{isiza=50000}
+  at the beginning of the \cword{ccccm} module.
+
+\item[\cword{error in isomtx***output record too large}] ~\par
+  There is not enough space in the scratch array \cword{b} for
+  the output subblock record, even with \cword{nsblok} changed
+  to \cword{ngroup}.  The only solution is to increase the size of
+  the main CCCC equivalanced array set.  See \cword{a,ia,ha} with
+  \cword{isiza=50000} at the beginning of the \cword{ccccm} module.
+
+\item[\cword{error in shuffl***sigze of endf input array exceeded}] ~\par
+  See the global parameter \cword{maxe=8000} at the start of the module.
+
+\item[\cword{error in pisotx***input record too large}] ~\par
+  One of the binary records on the ISOTXS file is too large
+  for the memory available to \cword{prinxs}.  This should not
+  occur because there was enough memory to create the record
+  in the first place.
+
+\item[\cword{error in brkdat***incompatible group structures}] ~\par
+  The number of groups on the input GENDF tape must match the
+  number of groups specified in the CCCCR input.  Check whether
+  the correct input file was mounted.
+
+\item[\cword{error in brkdat***max size of endf record exceeded.}] ~\par
+  See the global parameter \cword{maxe=8000} at the start of the module.
+
+\item[\cword{message from brkdat---all available mats have been processed}]
+  ~\par
+  This message is issued when all the materials on the GENDF file
+  have been processed, but one or more of the materials requested
+  in the user's input were not found.  Check the input material
+  list, and check which materials were written onto the input
+  GENDF file.
+
+\item[\cword{message from brkdat---no temperatures for mat=nnnn}] ~\par
+  This means that none of the requested temperatures were found for
+  this MAT.  This makes it impossible to include the material in the BRKOXS
+  file.  The warning message is issued, and all references to this
+  material are thinned out of the BRKOXS records.
+
+\item[\cword{message from brkdat---need elastic matrices at higher temps}] ~\par
+  The self-shielded transport cross section requires self-shielded
+  P$_1$ elastic scattering matrices for accurate results.  This means
+  that \cword{mf}=6, \cword{mt}=2 should be available on the GENDF tape for all
+  temperatures.  If this scattering matrix is missing for the higher
+  temperatures, this warning message is issued.
+
+\item[\cword{error in xsproc***max size of endf record exceeded.}] ~\par
+  See the global parameter \cword{maxe=8000} at the start of the module.
+
+\item[\cword{message from xsproc---infinite f-factor mt jg jz temp}] ~\par
+  The calculation of an f-factor requires division by the infinitely
+  dilute cross section.  This message means that the divisor was
+  zero for reaction \cword{mt}, group \cword{jg}, background cross
+  section \cword{jz}, and temperature \cword{temp}.  The division is skipped,
+  and the numerator is used unchanged.
+
+\item[\cword{error in mxproc***max size of endf record exceeded.}] ~\par
+  See the global parameter \cword{maxe=8000} at the start of the module.
+
+\item[\cword{error in pbrkxs***input record too large}] ~\par
+  One of the binary records on the BRKOXS file is too large
+  for the memory available to \cword{pbrkxs}.  This should not
+  occur because there was enough memory to create the record
+  in the first place.
+
+\item[\cword{message from cdlyxs---no delayed neutron data found}] ~\par
+  There was no delayed-neutron data found by \cword{DLDATA}.  Make
+  sure that \cword{mf}=3, \cword{mt}=455 and \cword{mf}=5, \cword{mt}=455
+  were requested during the \hyperlink{sGROUPRhy}{GROUPR}
+  run and that the delayed-neutron isotopes were included in the
+  material list given in the CCCCR input.
+
+\item[\cword{error in dldata***max size of endf record exceeded.}] ~\par
+  See the global parameter \cword{maxe=8000} at the start of the module.
+
+\item[\cword{error in dldata***incompatible group structures}] ~\par
+  The number of groups on the input GENDF tape must match the
+  number of groups specified in the CCCCR input.  Check whether
+  the correct input file was mounted.
+
+\item[\cword{error in pdlyxs***input record too large}] ~\par
+  One of the binary records on the DLAYXS file is too large
+  for the memory available to \cword{pdlyxs}.  This should not
+  occur because there was enough memory to create the record
+  in the first place.
+
+\end{singlespace}
+\end{description}
+
+\cleardoublepage
+

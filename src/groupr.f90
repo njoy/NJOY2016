@@ -173,6 +173,7 @@ contains
    !    fehi    break between computed flux and bondarenko flux
    !            (must be in the resolved resonance range)
    !    sigpot  estimate of potential scattering cross section
+   !            (set to 0. to recover a value from endf evaluation)
    !    nflmax  maximum number of computed flux points
    !    ninwt   tape unit for new flux parameters (default=0)
    !            note: weighting flux file is always written binary
@@ -243,7 +244,7 @@ contains
    !     24           shem cea 281-group structure
    !     25           shem epm 295-group structure
    !     26           shem cea/epm 361-group structure
-   !     27           shem epm 315-group structure
+   !     27           shem epm 370-group structure
    !     28           rahab aecl 89-group structure
    !     29           ccfe   660-group structure  (30 MeV)
    !     30           ukaea 1025-group structure  (30 MeV)
@@ -2785,86 +2786,100 @@ contains
      6.065299E+06_kr,6.703192E+06_kr,7.408173E+06_kr,8.187297E+06_kr,&
      9.048363E+06_kr,9.999987E+06_kr,1.161833E+07_kr,1.384029E+07_kr,&
      1.491823E+07_kr,1.964030E+07_kr/)
-   real(kr),parameter::eg27(316)=(/&
-     1.100028E-04_kr,2.499900E-03_kr,4.556027E-03_kr,7.145272E-03_kr,&
-     1.045051E-02_kr,1.482998E-02_kr,2.001038E-02_kr,2.493945E-02_kr,&
-     2.929893E-02_kr,3.439981E-02_kr,4.029998E-02_kr,4.730192E-02_kr,&
-     5.549822E-02_kr,6.519944E-02_kr,7.649695E-02_kr,8.979694E-02_kr,&
-     1.000001E-01_kr,1.199951E-01_kr,1.379996E-01_kr,1.618955E-01_kr,&
-     1.900051E-01_kr,2.096105E-01_kr,2.311926E-01_kr,2.549968E-01_kr,&
-     2.799892E-01_kr,3.050119E-01_kr,3.250084E-01_kr,3.529940E-01_kr,&
-     3.900016E-01_kr,4.315792E-01_kr,4.750172E-01_kr,5.200115E-01_kr,&
-     5.400010E-01_kr,5.949938E-01_kr,6.249996E-01_kr,7.199998E-01_kr,&
-     8.200382E-01_kr,8.800255E-01_kr,9.199791E-01_kr,9.440234E-01_kr,&
-     9.639611E-01_kr,9.819603E-01_kr,9.965018E-01_kr,1.009036E+00_kr,&
-     1.021013E+00_kr,1.034994E+00_kr,1.077987E+00_kr,1.091983E+00_kr,&
-     1.103951E+00_kr,1.116050E+00_kr,1.129975E+00_kr,1.147971E+00_kr,&
-     1.169991E+00_kr,1.213970E+00_kr,1.250940E+00_kr,1.293040E+00_kr,&
-     1.330954E+00_kr,1.380983E+00_kr,1.410008E+00_kr,1.443969E+00_kr,&
-     1.519978E+00_kr,1.588032E+00_kr,1.668952E+00_kr,1.779968E+00_kr,&
-     1.900079E+00_kr,1.989922E+00_kr,2.070097E+00_kr,2.156951E+00_kr,&
-     2.217090E+00_kr,2.272989E+00_kr,2.330064E+00_kr,2.469944E+00_kr,&
-     2.550006E+00_kr,2.590098E+00_kr,2.620056E+00_kr,2.640044E+00_kr,&
-     2.700118E+00_kr,2.719901E+00_kr,2.740926E+00_kr,2.775125E+00_kr,&
-     2.884050E+00_kr,3.142113E+00_kr,3.543077E+00_kr,3.712092E+00_kr,&
-     3.882175E+00_kr,4.000000E+00_kr,4.219833E+00_kr,4.309818E+00_kr,&
-     4.402161E+00_kr,4.632495E+00_kr,4.958462E+00_kr,5.317991E+00_kr,&
-     5.618674E+00_kr,5.918575E+00_kr,6.228252E+00_kr,6.508413E+00_kr,&
-     6.828436E+00_kr,7.214520E+00_kr,7.622433E+00_kr,7.965308E+00_kr,&
-     8.315287E+00_kr,8.856004E+00_kr,9.310061E+00_kr,9.787398E+00_kr,&
-     1.023789E+01_kr,1.070912E+01_kr,1.120204E+01_kr,1.174110E+01_kr,&
-     1.223249E+01_kr,1.288541E+01_kr,1.370959E+01_kr,1.421213E+01_kr,&
-     1.497071E+01_kr,1.573828E+01_kr,1.656175E+01_kr,1.737610E+01_kr,&
-     1.830356E+01_kr,1.903150E+01_kr,2.010756E+01_kr,2.053428E+01_kr,&
-     2.122322E+01_kr,2.200117E+01_kr,2.260329E+01_kr,2.465786E+01_kr,&
-     2.788519E+01_kr,3.169299E+01_kr,3.308552E+01_kr,3.453923E+01_kr,&
-     3.569804E+01_kr,3.605681E+01_kr,3.641918E+01_kr,3.685885E+01_kr,&
-     3.730382E+01_kr,3.779193E+01_kr,3.878741E+01_kr,4.016900E+01_kr,&
-     4.122709E+01_kr,4.214414E+01_kr,4.312469E+01_kr,4.417220E+01_kr,&
-     4.529043E+01_kr,4.620535E+01_kr,4.751739E+01_kr,4.925918E+01_kr,&
-     5.178475E+01_kr,5.298960E+01_kr,5.406006E+01_kr,5.705956E+01_kr,&
-     5.992511E+01_kr,6.230836E+01_kr,6.363067E+01_kr,6.459233E+01_kr,&
-     6.504606E+01_kr,6.550298E+01_kr,6.583132E+01_kr,6.616130E+01_kr,&
-     6.649293E+01_kr,6.682623E+01_kr,6.790405E+01_kr,6.906828E+01_kr,&
-     7.188702E+01_kr,7.355958E+01_kr,7.633226E+01_kr,7.936803E+01_kr,&
-     8.393945E+01_kr,8.877416E+01_kr,9.166088E+01_kr,9.332571E+01_kr,&
-     9.732887E+01_kr,1.005943E+02_kr,1.010985E+02_kr,1.016053E+02_kr,&
-     1.021146E+02_kr,1.030378E+02_kr,1.056462E+02_kr,1.102881E+02_kr,&
-     1.128541E+02_kr,1.154798E+02_kr,1.165238E+02_kr,1.175773E+02_kr,&
-     1.205537E+02_kr,1.262287E+02_kr,1.327006E+02_kr,1.395043E+02_kr,&
-     1.485759E+02_kr,1.541761E+02_kr,1.630563E+02_kr,1.675188E+02_kr,&
-     1.752293E+02_kr,1.832948E+02_kr,1.849519E+02_kr,1.862511E+02_kr,&
-     1.875594E+02_kr,1.888769E+02_kr,1.902037E+02_kr,1.930783E+02_kr,&
-     1.959963E+02_kr,2.009579E+02_kr,2.121080E+02_kr,2.243249E+02_kr,&
-     2.355906E+02_kr,2.417963E+02_kr,2.567482E+02_kr,2.682973E+02_kr,&
-     2.723521E+02_kr,2.764682E+02_kr,2.848879E+02_kr,2.883271E+02_kr,&
-     2.959219E+02_kr,3.043248E+02_kr,3.199279E+02_kr,3.353235E+02_kr,&
-     3.535750E+02_kr,3.717032E+02_kr,3.907608E+02_kr,4.190942E+02_kr,&
-     4.539993E+02_kr,5.017468E+02_kr,5.392049E+02_kr,5.771462E+02_kr,&
-     5.929414E+02_kr,6.000996E+02_kr,6.128350E+02_kr,6.468379E+02_kr,&
-     6.772874E+02_kr,7.485183E+02_kr,8.322190E+02_kr,9.096825E+02_kr,&
-     9.824954E+02_kr,1.064325E+03_kr,1.134668E+03_kr,1.234098E+03_kr,&
-     1.343584E+03_kr,1.586199E+03_kr,1.811835E+03_kr,2.034684E+03_kr,&
-     2.284941E+03_kr,2.423809E+03_kr,2.571117E+03_kr,2.768596E+03_kr,&
-     2.951579E+03_kr,3.146656E+03_kr,3.354626E+03_kr,3.707435E+03_kr,&
-     3.936685E+03_kr,4.372518E+03_kr,4.856602E+03_kr,5.394280E+03_kr,&
-     5.991484E+03_kr,6.654805E+03_kr,7.391562E+03_kr,8.209886E+03_kr,&
-     9.118820E+03_kr,1.007785E+04_kr,1.113775E+04_kr,1.360368E+04_kr,&
-     1.503439E+04_kr,1.620047E+04_kr,1.858473E+04_kr,2.269944E+04_kr,&
-     2.478752E+04_kr,2.610013E+04_kr,2.739445E+04_kr,2.928104E+04_kr,&
-     3.345965E+04_kr,3.697864E+04_kr,4.086771E+04_kr,4.991594E+04_kr,&
-     5.516564E+04_kr,6.737947E+04_kr,8.229747E+04_kr,9.466462E+04_kr,&
-     1.110900E+05_kr,1.227734E+05_kr,1.400977E+05_kr,1.650652E+05_kr,&
-     1.831564E+05_kr,1.950665E+05_kr,2.300601E+05_kr,2.678268E+05_kr,&
-     3.019738E+05_kr,3.206469E+05_kr,3.838840E+05_kr,4.125017E+05_kr,&
-     4.560217E+05_kr,4.978707E+05_kr,5.784432E+05_kr,7.065121E+05_kr,&
-     7.808167E+05_kr,8.208500E+05_kr,9.508348E+05_kr,1.051150E+06_kr,&
-     1.162049E+06_kr,1.286963E+06_kr,1.353353E+06_kr,1.408584E+06_kr,&
-     1.636541E+06_kr,1.901390E+06_kr,2.231302E+06_kr,2.528396E+06_kr,&
-     2.865048E+06_kr,3.246525E+06_kr,3.678794E+06_kr,4.168620E+06_kr,&
-     4.723666E+06_kr,5.352614E+06_kr,6.065307E+06_kr,6.703200E+06_kr,&
-     7.408182E+06_kr,8.187308E+06_kr,9.048374E+06_kr,1.000000E+07_kr,&
-     1.161834E+07_kr,1.384031E+07_kr,1.491825E+07_kr,1.964033E+07_kr/)
+   real(kr),parameter::eg27(371)=(/&
+     1.100027E-04_kr,2.499897E-03_kr,4.556021E-03_kr,7.145263E-03_kr,&
+     1.045050E-02_kr,1.482996E-02_kr,2.001035E-02_kr,2.493942E-02_kr,&
+     2.929889E-02_kr,3.439976E-02_kr,4.029993E-02_kr,4.730186E-02_kr,&
+     5.549815E-02_kr,6.519936E-02_kr,7.649686E-02_kr,8.979683E-02_kr,&
+     9.999795E-02_kr,1.199949E-01_kr,1.379994E-01_kr,1.618953E-01_kr,&
+     1.900049E-01_kr,2.096102E-01_kr,2.311923E-01_kr,2.549965E-01_kr,&
+     2.799888E-01_kr,3.050115E-01_kr,3.250079E-01_kr,3.529935E-01_kr,&
+     3.900011E-01_kr,4.315786E-01_kr,4.750165E-01_kr,5.200108E-01_kr,&
+     5.399895E-01_kr,5.949930E-01_kr,6.249987E-01_kr,7.199989E-01_kr,&
+     8.200371E-01_kr,8.800244E-01_kr,9.199779E-01_kr,9.440222E-01_kr,&
+     9.639598E-01_kr,9.819591E-01_kr,9.965005E-01_kr,1.009035E+00_kr,&
+     1.021012E+00_kr,1.034993E+00_kr,1.077986E+00_kr,1.091982E+00_kr,&
+     1.103950E+00_kr,1.116049E+00_kr,1.129974E+00_kr,1.147969E+00_kr,&
+     1.169989E+00_kr,1.213968E+00_kr,1.250939E+00_kr,1.293038E+00_kr,&
+     1.330952E+00_kr,1.380981E+00_kr,1.410007E+00_kr,1.443967E+00_kr,&
+     1.519976E+00_kr,1.588030E+00_kr,1.668949E+00_kr,1.779966E+00_kr,&
+     1.900077E+00_kr,1.989920E+00_kr,2.070095E+00_kr,2.156948E+00_kr,&
+     2.217087E+00_kr,2.272986E+00_kr,2.330061E+00_kr,2.469941E+00_kr,&
+     2.550003E+00_kr,2.590094E+00_kr,2.620053E+00_kr,2.640041E+00_kr,&
+     2.700115E+00_kr,2.719898E+00_kr,2.740922E+00_kr,2.775121E+00_kr,&
+     2.884047E+00_kr,3.142109E+00_kr,3.543073E+00_kr,3.712087E+00_kr,&
+     3.882170E+00_kr,4.000000E+00_kr,4.219828E+00_kr,4.309812E+00_kr,&
+     4.402156E+00_kr,4.632489E+00_kr,4.958456E+00_kr,5.317984E+00_kr,&
+     5.618667E+00_kr,5.918567E+00_kr,6.228244E+00_kr,6.508405E+00_kr,&
+     6.828427E+00_kr,7.214511E+00_kr,7.622423E+00_kr,7.965298E+00_kr,&
+     8.315276E+00_kr,8.855993E+00_kr,9.310049E+00_kr,9.787385E+00_kr,&
+     1.023788E+01_kr,1.070911E+01_kr,1.120202E+01_kr,1.174109E+01_kr,&
+     1.223248E+01_kr,1.288539E+01_kr,1.370957E+01_kr,1.421211E+01_kr,&
+     1.497069E+01_kr,1.573825E+01_kr,1.656173E+01_kr,1.737608E+01_kr,&
+     1.830354E+01_kr,1.903148E+01_kr,2.010753E+01_kr,2.053425E+01_kr,&
+     2.122319E+01_kr,2.200114E+01_kr,2.260326E+01_kr,2.465783E+01_kr,&
+     2.788515E+01_kr,3.169295E+01_kr,3.308547E+01_kr,3.453918E+01_kr,&
+     3.569799E+01_kr,3.605676E+01_kr,3.641914E+01_kr,3.685880E+01_kr,&
+     3.730377E+01_kr,3.779188E+01_kr,3.878736E+01_kr,4.016895E+01_kr,&
+     4.122704E+01_kr,4.214409E+01_kr,4.312463E+01_kr,4.417214E+01_kr,&
+     4.529037E+01_kr,4.620529E+01_kr,4.751732E+01_kr,4.925911E+01_kr,&
+     5.178468E+01_kr,5.298953E+01_kr,5.405999E+01_kr,5.705949E+01_kr,&
+     5.992503E+01_kr,6.230828E+01_kr,6.363059E+01_kr,6.459225E+01_kr,&
+     6.504598E+01_kr,6.550290E+01_kr,6.583123E+01_kr,6.616121E+01_kr,&
+     6.649285E+01_kr,6.682614E+01_kr,6.790396E+01_kr,6.906820E+01_kr,&
+     7.188692E+01_kr,7.355948E+01_kr,7.633216E+01_kr,7.936793E+01_kr,&
+     8.393934E+01_kr,8.877405E+01_kr,9.166076E+01_kr,9.332559E+01_kr,&
+     9.732874E+01_kr,1.005942E+02_kr,1.010984E+02_kr,1.016052E+02_kr,&
+     1.021145E+02_kr,1.030376E+02_kr,1.056461E+02_kr,1.102879E+02_kr,&
+     1.128539E+02_kr,1.154797E+02_kr,1.165237E+02_kr,1.175771E+02_kr,&
+     1.205536E+02_kr,1.262286E+02_kr,1.327005E+02_kr,1.395042E+02_kr,&
+     1.486500E+02_kr,1.541759E+02_kr,1.630561E+02_kr,1.675186E+02_kr,&
+     1.752291E+02_kr,1.832945E+02_kr,1.849516E+02_kr,1.862508E+02_kr,&
+     1.875592E+02_kr,1.888767E+02_kr,1.902035E+02_kr,1.930780E+02_kr,&
+     1.959960E+02_kr,2.009577E+02_kr,2.121077E+02_kr,2.243247E+02_kr,&
+     2.355903E+02_kr,2.417960E+02_kr,2.567478E+02_kr,2.682969E+02_kr,&
+     2.723517E+02_kr,2.764678E+02_kr,2.848875E+02_kr,2.883267E+02_kr,&
+     2.959215E+02_kr,3.043244E+02_kr,3.199275E+02_kr,3.353230E+02_kr,&
+     3.535746E+02_kr,3.717027E+02_kr,3.907603E+02_kr,4.190936E+02_kr,&
+     4.539987E+02_kr,5.017462E+02_kr,5.392042E+02_kr,5.771455E+02_kr,&
+     5.929407E+02_kr,6.000988E+02_kr,6.128342E+02_kr,6.468370E+02_kr,&
+     6.772865E+02_kr,7.485173E+02_kr,8.322179E+02_kr,9.096813E+02_kr,&
+     9.824941E+02_kr,1.064323E+03_kr,1.134667E+03_kr,1.234096E+03_kr,&
+     1.343582E+03_kr,1.586197E+03_kr,1.811833E+03_kr,2.034681E+03_kr,&
+     2.284938E+03_kr,2.423806E+03_kr,2.571114E+03_kr,2.768593E+03_kr,&
+     2.951575E+03_kr,3.146652E+03_kr,3.354622E+03_kr,3.707431E+03_kr,&
+     3.936685E+03_kr,4.285937E+03_kr,4.666172E+03_kr,5.080141E+03_kr,&
+     5.530837E+03_kr,5.991484E+03_kr,6.654805E+03_kr,7.391562E+03_kr,&
+     8.209886E+03_kr,9.118808E+03_kr,1.007784E+04_kr,1.043681E+04_kr,&
+     1.080857E+04_kr,1.113774E+04_kr,1.170878E+04_kr,1.230910E+04_kr,&
+     1.294020E+04_kr,1.360366E+04_kr,1.503437E+04_kr,1.620531E+04_kr,&
+     1.696817E+04_kr,1.775805E+04_kr,1.858471E+04_kr,1.986261E+04_kr,&
+     2.122838E+04_kr,2.269941E+04_kr,2.478749E+04_kr,2.609749E+04_kr,&
+     2.739441E+04_kr,2.927808E+04_kr,3.061038E+04_kr,3.200330E+04_kr,&
+     3.345961E+04_kr,3.458220E+04_kr,3.576033E+04_kr,3.697859E+04_kr,&
+     3.887452E+04_kr,4.086766E+04_kr,4.369961E+04_kr,4.670443E+04_kr,&
+     4.991587E+04_kr,5.516557E+04_kr,5.898830E+04_kr,6.304439E+04_kr,&
+     6.737938E+04_kr,7.204847E+04_kr,7.700259E+04_kr,8.229736E+04_kr,&
+     8.625768E+04_kr,9.036338E+04_kr,9.466450E+04_kr,9.981706E+04_kr,&
+     1.053027E+05_kr,1.110898E+05_kr,1.167855E+05_kr,1.227732E+05_kr,&
+     1.282959E+05_kr,1.340669E+05_kr,1.400976E+05_kr,1.459609E+05_kr,&
+     1.520697E+05_kr,1.584342E+05_kr,1.650650E+05_kr,1.708591E+05_kr,&
+     1.768566E+05_kr,1.831562E+05_kr,1.950662E+05_kr,2.060954E+05_kr,&
+     2.177481E+05_kr,2.300598E+05_kr,2.420971E+05_kr,2.546370E+05_kr,&
+     2.678264E+05_kr,2.787566E+05_kr,2.901329E+05_kr,3.019734E+05_kr,&
+     3.206464E+05_kr,3.404741E+05_kr,3.615279E+05_kr,3.838835E+05_kr,&
+     3.979551E+05_kr,4.125424E+05_kr,4.265967E+05_kr,4.411298E+05_kr,&
+     4.559299E+05_kr,4.712266E+05_kr,4.978700E+05_kr,5.233964E+05_kr,&
+     5.502315E+05_kr,5.784425E+05_kr,6.080998E+05_kr,6.392778E+05_kr,&
+     6.720543E+05_kr,7.065112E+05_kr,7.243966E+05_kr,7.427348E+05_kr,&
+     7.615372E+05_kr,7.808157E+05_kr,8.208489E+05_kr,8.620722E+05_kr,&
+     9.053658E+05_kr,9.508336E+05_kr,1.050834E+06_kr,1.162048E+06_kr,&
+     1.286961E+06_kr,1.353351E+06_kr,1.408582E+06_kr,1.636539E+06_kr,&
+     1.901387E+06_kr,2.231299E+06_kr,2.528393E+06_kr,2.865044E+06_kr,&
+     3.246520E+06_kr,3.678790E+06_kr,4.168615E+06_kr,4.723659E+06_kr,&
+     5.352607E+06_kr,6.065299E+06_kr,6.703192E+06_kr,7.408173E+06_kr,&
+     8.187297E+06_kr,9.048363E+06_kr,9.999987E+06_kr,1.161833E+07_kr,&
+     1.384029E+07_kr,1.491823E+07_kr,1.964030E+07_kr/)
    real(kr),parameter::eg28(90)=(/&
      2.000000E-04_kr,5.000000E-03_kr,1.000000E-02_kr,1.500000E-02_kr,&
      2.000000E-02_kr,2.500000E-02_kr,3.000000E-02_kr,3.500000E-02_kr,&
@@ -4457,12 +4472,12 @@ contains
          egn(ig)=eg26(ig)
       enddo
 
-   !--shem epm 315-group structure
+   !--shem epm 370-group structure
    else if (ign.eq.27) then
-      ngn=315
+      ngn=370
       ngp=ngn+1
       allocate(egn(ngp))
-      do ig=1,316
+      do ig=1,371
          egn(ig)=eg27(ig)
       enddo
 
@@ -4620,7 +4635,7 @@ contains
    if (ign.eq.26) write(nsyso,'(/&
      &  '' neutron group structure......shem cea/epm 361-group'')')
    if (ign.eq.27) write(nsyso,'(/&
-     &  '' neutron group structure......shem epm 315-group'')')
+     &  '' neutron group structure......shem epm 370-group'')')
    if (ign.eq.28) write(nsyso,'(/&
      &  '' neutron group structure......rahab aecl 89-group'')')
    if (ign.eq.29) write(nsyso,'(/&
@@ -4888,9 +4903,14 @@ contains
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsyso
-   use util   ! provides error
+   use util   ! provides error,rdtabl
+   use endf   ! provides endf routines and variables
+   use physics! provides pi
    ! internals
    integer::iwtt,i,nr,np,ntmp,iw
+   integer::ie,imf,ns,ner,nis,nrr(10),nb,nw
+   real(kr)::ehi,abnsu,api,apmat,aw,eur,za0,ehigh(10,30),&
+   & abni(10),zai(10),awi(10),ap(10,30),rrf(10,30)
    real(kr)::eb,tb,ec,tc,ab,ac
    real(kr),dimension(:),allocatable::tmp
    real(kr),dimension(92),parameter::w1=(/&
@@ -4987,6 +5007,32 @@ contains
         alpha2,sam,beta,alpha3,gamma
       ninwt=iabs(ninwt)
       call openz(-ninwt,1)
+      !
+      ! Process Evaluated Nuclear Data Library
+      if(sigpot == 0.) then
+        ntmp=10000
+        allocate(tmp(ntmp))
+        call openz(nendf,0)
+        call repoz(nendf)
+        call tpidio(nendf,0,0,tmp,nb,nw)
+        call findf(matb,2,151,nendf)
+        call getaps(nendf,za0,aw,nis,nrr,zai,abni,awi,ehigh,ap,rrf)
+        call repoz(nendf)
+        imf=0
+        apmat=0.0
+        abnsu=0
+        do i=1,nis
+          abnsu=abnsu+abni(i)
+          ner=nrr(i)
+          call ehapi(i,ner,ehigh,ap,rrf,ehi,api,eur)
+          apmat=abni(i)*api+apmat
+        enddo
+        apmat=apmat/abnsu
+        sigpot=4.0*pi*apmat*apmat
+        deallocate(tmp)
+        call repoz(nendf)
+        write(nsyse,*) 'sigpot=',sigpot
+      endif
       write(nsyso,'(/&
         &'' compute flux...fehi, sigpot, nflmax ='',f9.1,f9.2,i8/&
         &4x,''ninwt, jsigz ='',i3,i4)')&
@@ -5011,14 +5057,8 @@ contains
    !--arbitary
    if (iwtt.eq.1) then
       write(nsyso,'(/'' weight function......read in'')')
-      ntmp=10000
-      allocate(tmp(ntmp))
-      read(nsysi,*) (tmp(i),i=1,ntmp)
-      nr=nint(tmp(5))
-      np=nint(tmp(6))
-      iw=6+2*nr+2*np
-      if (iw.gt.ntmp) call error('genwtf',&
-        'exceeded storage reading user weight function',' ')
+      call rdtabl(nsysi, tmp)
+      iw = size(tmp)
       allocate(wght(iw))
       do i=1,iw
          wght(i)=tmp(i)
@@ -8131,6 +8171,320 @@ contains
    enddo
    return
    end subroutine getmf6
+
+   subroutine ehapi(i,ner,ehigh,ap,rrf,ehi,api,eur)
+   integer, parameter :: ni=10
+   real(kr), parameter :: elw=4.0,ehw=9118.0
+   integer :: i,ner,ie,imin,imax,lru
+   real(kr) :: ehigh(ni,*),ap(ni,*),rrf(ni,*),ehi,api,eur,el,sum
+   eur=0
+   if (ner.eq.1) then
+     api=ap(i,1)
+   else if (ehigh(i,ner).lt.elw) then
+     api=ap(i,ner)
+   else if (ehigh(i,1).gt.ehw) then
+     api=ap(i,1)
+   else
+     if (ehigh(i,1).gt.elw) then
+       imin=1
+     else
+       imin=1
+       do while(ehigh(i,imin).le.elw)
+         imin=imin+1
+       enddo
+     endif
+     if (ehigh(i,ner).lt.ehw) then
+       imax=ner
+       ehigh(i,ner)=ehw
+     else
+       imax=imin
+       do while(ehigh(i,imax).lt.ehw)
+         imax=imax+1
+       enddo
+       ehigh(i,imax)=ehw
+     endif
+     sum=0.0
+     el=elw
+     do ie=imin,imax
+       sum=ap(i,ie)*log(ehigh(i,ie)/el)+sum
+       el=ehigh(i,ie)
+     enddo
+     api=sum/log(ehw/elw)
+   endif
+   do ie=1,ner
+    lru=int(rrf(i,ie))
+    if (lru.lt.2) then
+      ehi=ehigh(i,ie)
+    else
+      eur=ehigh(i,ie)
+    endif
+   enddo
+   return
+   end subroutine ehapi
+
+   subroutine getaps(lib,za0,aw,nis,nrr,zai,abni,awi,ehigh,ap,rrf)
+   use util   ! provides mess
+   use endf   ! provides endf routines and variables
+   integer, parameter :: ni=10,npp=100000
+   real(kr), parameter :: xmass=1.008665
+   integer :: lib,nis,nrr(ni)
+   real(kr) :: za0,aw,zai(ni),abni(ni),awi(ni),ehigh(ni,*),ap(ni,*),rrf(ni,*)
+   integer :: it(npp),i,ie,ii,jj,k,lfw,lru,lrf
+   integer :: l,ner,n1,n2,mat,mf,mt,ns,naps,njs,nls,nro,nb,nw
+   real(kr) :: x(npp),y(npp),abn,eh,zaii,sen,sum,za,a(6+npp)
+   !
+   call contio(lib,0,0,a,nb,nw)
+   za=a(1)
+   awr=a(2)
+   nis=nint(a(5))
+   n2=nint(a(6))
+   za0=za
+   aw=awr*xmass
+   call contio(lib,0,0,a,nb,nw)
+   zaii=a(1)
+   abn=a(2)
+   lfw=nint(a(4))
+   ner=nint(a(5))
+   n2=nint(a(6))
+   call contio(lib,0,0,a,nb,nw)
+   eh=a(2)
+   lru=nint(a(3))
+   lrf=nint(a(4))
+   nro=nint(a(5))
+   naps=nint(a(6))
+   if (lru.eq.0.and.nis.eq.1.and.ner.eq.1) then
+     !  only scattering radius is given
+     call contio(lib,0,0,a,nb,nw)
+     zai(1)=zaii
+     abni(1)=abn
+     nrr(1)=ner
+     ehigh(1,1)=eh
+     awi(1)=aw
+     ap(1,1)=a(2)
+     rrf(1,1)=float(lru)+0.1*float(lrf)
+   else
+     !  reso data
+     call skiprz(lib,-2)
+     do ii=1,nis
+      call contio(lib,0,0,a,nb,nw)
+      zaii=a(1)
+      abn=a(2)
+      lfw=nint(a(4))
+      ner=nint(a(5))
+      n2=nint(a(6))
+      zai(ii)=zaii
+      abni(ii)=abn
+      nrr(ii)=ner
+      do ie=1,ner
+       call contio(lib,0,0,a,nb,nw)
+       eh=a(2)
+       lru=nint(a(3))
+       lrf=nint(a(4))
+       nro=nint(a(5))
+       naps=nint(a(6))
+       ehigh(ii,ie)=eh
+       rrf(ii,ie)=float(lru)+0.1*float(lrf)
+       if (lru.eq.1) then
+       ! resolved resonances
+         if (lrf.lt.4) then
+           if (nro.ne.0) then
+             l=1
+             call tab1io(lib,0,0,a(1),nb,nw)
+             l=l+nw
+             if (l.gt.6*npp) call error('getaps',&
+             'storage for a exceeded(1)',' ')
+             do while (nb.ne.0)
+                call moreio(lib,0,0,a(l),nb,nw)
+                l=l+nw
+                if (l.gt.6*npp) call error('getaps',&
+                'storage for a exceeded(2)',' ')
+             enddo
+             n1=nint(a(5))
+             n2=nint(a(6))
+             if (6+2*n1+2*n2.gt.npp) call error('getaps',&
+             'storage for x and y exceeded(1)',' ')
+             do i=1,n2
+               x(i)=a(6+2*n1+2*i-1)
+               y(i)=a(6+2*n1+2*i)
+             enddo
+             sum=0.0
+             sen=0.0
+             do i=2,n2
+               sum=sum+0.5*(x(i)-x(i-1))*(y(i)+y(i-1))
+               sen=sen+    (x(i)-x(i-1))
+             enddo
+             sum=sum/sen
+             print *,'getaps: a degugggg sum=',sum,' sen=',sen
+             ap(ii,ie)=sum
+             call contio(lib,0,0,a,nb,nw)
+           else
+             call contio(lib,0,0,a,nb,nw)
+             ap(ii,ie)=a(2)
+           endif
+           nls=nint(a(5))
+           do k=1,nls
+            l=1
+            call listio(lib,0,0,a(1),nb,nw)
+            l=l+nw
+            if (l.gt.6*npp) call error('getaps',&
+            'storage for a exceeded(3)',' ')
+            do while (nb.ne.0)
+               call moreio(lib,0,0,a(l),nb,nw)
+               l=l+nw
+               if (l.gt.6*npp) call error('getaps',&
+               'storage for a exceeded(4)',' ')
+            enddo
+            awi(ii)=a(1)*xmass
+           enddo
+         else if(lrf.eq.4) then
+           if (nro.ne.0) then
+             l=1
+             call tab1io(lib,0,0,a(1),nb,nw)
+             l=l+nw
+             if (l.gt.6*npp) call error('getaps',&
+             'storage for a exceeded(5)',' ')
+             do while (nb.ne.0)
+                call moreio(lib,0,0,a(l),nb,nw)
+                l=l+nw
+                if (l.gt.6*npp) call error('getaps',&
+                'storage for a exceeded(6)',' ')
+             enddo
+             n1=nint(a(5))
+             n2=nint(a(6))
+             if (6+2*n1+2*n2.gt.npp) call error('getaps',&
+             'storage for x and y exceeded(2)',' ')
+             do i=1,n2
+               x(i)=a(6+2*n1+2*i-1)
+               y(i)=a(6+2*n1+2*i)
+             enddo
+             sum=0.0
+             do i=2,n2
+               sum=0.5*(x(i)-x(i-1))*(y(i)/x(i)+y(i-1)/x(i-1))+sum
+             enddo
+             ap(ii,ie)=sum/log(x(n2)/x(1))
+             call contio(lib,0,0,a,nb,nw)
+           else
+             call contio(lib,0,0,a,nb,nw)
+             ap(ii,ie)=a(2)
+           endif
+           nls=nint(a(5))
+           l=1
+           call listio(lib,0,0,a(1),nb,nw)
+           l=l+nw
+           if (l.gt.6*npp) call error('getaps',&
+           'storage for a exceeded(7)',' ')
+           do while (nb.ne.0)
+              call moreio(lib,0,0,a(l),nb,nw)
+              l=l+nw
+              if (l.gt.6*npp) call error('getaps',&
+              'storage for a exceeded(8)',' ')
+           enddo
+           awi(ii)=a(1)*xmass
+           do jj=1,nls
+            call contio(lib,0,0,a,nb,nw)
+            njs=nint(a(5))
+            do k=1,njs
+             l=1
+             call listio(lib,0,0,a(1),nb,nw)
+             l=l+nw
+             if (l.gt.6*npp) call error('getaps',&
+             'storage for a exceeded(9)',' ')
+             do while (nb.ne.0)
+                call moreio(lib,0,0,a(l),nb,nw)
+                l=l+nw
+                if (l.gt.6*npp) call error('getaps',&
+                'storage for a exceeded(10)',' ')
+             enddo
+            enddo
+           enddo
+         else
+           call error('getaps',&
+           'this program can not work with grm(irf=5) or hrf(irf=6)',' ')
+         endif
+       else if (lru.eq.2) then
+         ! unresolved resonances
+         if(lrf.eq.1) then
+           if(lfw.eq.0) then
+             call contio(lib,0,0,a,nb,nw)
+             nls=nint(a(5))
+             ap(ii,ie)=a(2)
+             do k=1,nls
+               l=1
+               call listio(lib,0,0,a(1),nb,nw)
+               l=l+nw
+               if (l.gt.6*npp) call error('getaps',&
+               'storage for a exceeded(11)',' ')
+               do while (nb.ne.0)
+                  call moreio(lib,0,0,a(l),nb,nw)
+                  l=l+nw
+                  if (l.gt.6*npp) call error('getaps',&
+                  'storage for a exceeded(12)',' ')
+               enddo
+               awi(ii)=a(1)*xmass
+             enddo
+           else
+             l=1
+             call listio(lib,0,0,a(1),nb,nw)
+             l=l+nw
+             if (l.gt.6*npp) call error('getaps',&
+             'storage for a exceeded(13)',' ')
+             do while (nb.ne.0)
+                call moreio(lib,0,0,a(l),nb,nw)
+                l=l+nw
+                if (l.gt.6*npp) call error('getaps',&
+                'storage for a exceeded(14)',' ')
+             enddo
+             ap(ii,ie)=a(2)
+             do k=1,nls
+               call contio(lib,0,0,a,nb,nw)
+               njs=nint(a(5))
+               awi(ii)=a(1)*xmass
+               do jj=1,njs
+                 l=1
+                 call listio(lib,0,0,a(1),nb,nw)
+                 l=l+nw
+                 if (l.gt.6*npp) call error('getaps',&
+                 'storage for a exceeded(15)',' ')
+                 do while (nb.ne.0)
+                    call moreio(lib,0,0,a(l),nb,nw)
+                    l=l+nw
+                    if (l.gt.6*npp) call error('getaps',&
+                    'storage for a exceeded(16)',' ')
+                 enddo
+               enddo
+             enddo
+           endif
+         else
+           call contio(lib,0,0,a,nb,nw)
+           nls=nint(a(4))
+           ap(ii,ie)=a(2)
+           do k=1,nls
+             call contio(lib,0,0,a,nb,nw)
+             awi(ii)=a(1)*xmass
+             do jj=1,njs
+               l=1
+               call listio(lib,0,0,a(1),nb,nw)
+               l=l+nw
+               if (l.gt.6*npp) call error('getaps',&
+               'storage for a exceeded(17)',' ')
+               do while (nb.ne.0)
+                  call moreio(lib,0,0,a(l),nb,nw)
+                  l=l+nw
+                  if (l.gt.6*npp) call error('getaps',&
+                  'storage for a exceeded(18)',' ')
+               enddo
+             enddo
+           enddo
+         endif
+       else if (lru.eq.0.and.nis.gt.1)then
+         call contio(lib,0,0,a,nb,nw)
+         ap(ii,ie)=a(2)
+       endif
+     enddo
+    enddo
+   endif
+   return
+   end subroutine getaps
 
    subroutine cm2lab(inow,jnow,lnow,c,nl,lang,lep,max)
    !-------------------------------------------------------------------
@@ -11494,7 +11848,7 @@ contains
    if (lnu.eq.2) call tab1io(nin,nout,nscr,nu(l),nb,nw)
    do while (nb.ne.0)
       if (l+nw.gt.nnu) call error('conver',&
-        'storage for fission nu exceeded (increase the size of the nu array)',' ')
+      'storage for fission nu exceeded (increase the size of the nu array)',' ')
       l=l+nw
       call moreio(nin,nout,nscr,nu(l),nb,nw)
    enddo

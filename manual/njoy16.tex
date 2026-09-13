@@ -1,0 +1,921 @@
+\DeclareSymbolFont{AMSb}{U}{msb}{m}{n}
+\DeclareMathSymbol{\shadowB}{\mathbin}{AMSb}{'102}
+\DeclareMathSymbol{\shadowI}{\mathbin}{AMSb}{'111}
+\documentclass[11pt,twoside]{NJOYMan}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage[letterpaper, inner=1.5in,outer=1.0in,bottom=1.25in,top=1.25in]
+{geometry}
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage[hang,normalsize]{caption}
+
+%\usepackage{tocloft}
+\usepackage{tocbibind}
+\usepackage{makeidx}
+\usepackage[totoc]{idxlayout}
+
+\setlongtables
+
+\pagestyle{fancy}
+
+\newcommand{\rr}{\raggedright}
+\newcommand{\tn}{\tabularnewline}
+
+\newcommand{\ty}{\tt}
+
+% This provides more subsection indent spacing for toc titles:
+\makeatletter
+\renewcommand\l@subsection{\@dottedtocline{2}{1.6em}{2.8em}}
+\makeatother
+
+% The following gets the document number into the title page header,
+% ... but nothing else
+\fancypagestyle{plain}{
+\fancyhf{}                             %clear headers and footers
+%\fancyhead[R]{LA-UR-17-20093}          %
+
+\renewcommand{\headrulewidth}{0pt}     %no line across the top of this page
+\renewcommand{\footrulewidth}{0pt}}    %no line across the bottom of this page
+
+% Some stuff from the internet to get better figure placement:
+\renewcommand{\topfraction}{0.95}      % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.95}   % max fraction of floats at bottom
+%   Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{2}            % 2 may work better
+\setcounter{dbltopnumber}{2}           % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}    % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.05}     % allow minimal text w. figs
+
+
+\title{\bf The NJOY Nuclear Data Processing System,\\Version 2016}
+%\author{R. E. MacFarlane and A. C. Kahler\\
+%  Theoretical Division\\
+%  Los Alamos National Laboratory}
+\author{\\
+  Original Author:  R. E. MacFarlane\\
+  Theoretical Division\\
+  Los Alamos National Laboratory\\
+\\
+\\
+Contributing Authors\\
+D. W. Muir\\
+R. M Boicourt\\
+A. C. Kahler\\
+J. L. Conlin\\
+W. Haeck\\
+A. Hébert\\
+\\
+\\
+%Current Editor:  A. C. Kahler\\
+\\
+\\
+Original Issue:  December 19, 2016\\
+\\
+\\
+Updated for NJOY2016.79 $+$ NEA Data Bank additions
+\\}
+
+%\date{November 7, 2019}
+
+\makeindex
+
+\includeonly{
+    intro,
+    njoyx,
+    reconx,
+    broadx,
+    unresx,
+    heatx,
+    thermx,
+    groupx,
+    gaminx,
+    errorx,
+    covx,
+    modex,
+    dtfx,
+    ccccx,
+    matxsx,
+    resxsx,
+    acex,
+    powx,
+    wimsx,
+    calenx,
+    eccox,
+    dragx,
+    plotx,
+    viewx,
+    mixx,
+    purx,
+    leapx,
+    gaspx,
+    mandtx
+}
+
+\newcommand{\exx}[1]{{\rm e}^{\textstyle #1}}
+\newcommand{\intall}{\int_{-\infty}^\infty}
+
+\raggedbottom
+\begin{document}
+
+\maketitle
+\abstract{The NJOY Nuclear Data Processing System, version 2016,
+is a comprehensive computer code package for producing pointwise
+and multigroup cross sections and related quantities from evaluated
+nuclear data in the ENDF-4 through ENDF-6 legacy cardimage
+formats.  NJOY works with evaluated files for incident neutrons,
+photons, and charged particles, producing libraries for a wide
+variety of particle transport and reactor analysis codes.}
+
+% Only want a footer on the second page
+% (that will contain the LANL/government disclaimer
+% and copyright statements).
+\clearpage
+\fancyhf{}                           %Clear any header/footer definitions
+%
+\renewcommand{\headrulewidth}{0pt}   %no line across the top of this page
+\renewcommand{\footrulewidth}{0pt}   %no line across the bottom of this page
+
+%
+\begin{center} \textbf{Disclaimer of Liability:} \end{center}
+Neither the United States Government nor the Los Alamos
+National Security, LLC., nor any of their employees, makes any warranty,
+express or implied, including the warranties of merchantability and
+fitness for a particular purpose, or assumes any legal liability or
+responsibility for the accuracy, completeness, or usefulness of any
+information, apparatus, product, or process disclosed, or represents
+that its use would not infringe privately owned rights.
+
+\vspace{0.25in}
+\begin{center} \textbf{Disclaimer of Endorsement:} \end{center}
+Reference herein to any specific commercial products,
+process, or service by trade name, trademark, manufacturer, or otherwise,
+does not necessarily constitute or imply its endorsement, recommendation,
+or favoring by the United States Government or the Los Alamos National
+Security, LLC. The views and opinions of authors expressed herein do not
+necessarily state or reflect those of the United States Government or
+the Los Alamos National Security, LLC., and shall not be used for
+advertising or product endorsement purposes.
+
+\vspace{0.25in}
+\begin{center} \textbf{Copyright Notice:} \end{center}
+Copyright 2016. Los Alamos National Security, LLC. This software was
+produced under U.S. Government contract DE-AC52-06NA25396 for
+Los Alamos National Laboratory (LANL), which is operated by
+Los Alamos National Security, LLC for the U.S. Department of
+Energy. The U.S. Government has rights to use, reproduce, and
+distribute this software.  NEITHER THE GOVERNMENT NOR LOS ALAMOS
+NATIONAL SECURITY, LLC MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR
+ASSUMES ANY LIABILITY FOR THE USE OF THIS SOFTWARE.  If software
+is modified to produce derivative works, such modified software
+should be clearly marked, so as not to confuse it with the version
+available from LANL.
+
+Additionally, redistribution and use in source and binary forms, with
+or without modification, are permitted provided that the following
+conditions are met:
+\begin{enumerate}
+\item Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+\item Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+\item Neither the name of Los Alamos National Security, LLC, Los
+Alamos National Laboratory, LANL, the U.S. Government, nor the
+names of its contributors may be used to endorse or promote products
+derived from this software without specific prior written permission.
+\end{enumerate}
+THIS SOFTWARE IS PROVIDED BY LOS ALAMOS NATIONAL SECURITY,
+LLC AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL LOS ALAMOS NATIONAL SECURITY,
+LLC OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+\vspace{7.1in}
+\begin{center}
+\copyright Copyright 2016 Los Alamos National Security,
+LLC All Rights Reserved
+\end{center}
+%
+% End of disclaimer page stuff.
+
+\newpage
+
+% Define left and right page headers and footers:
+\fancyhf{}
+\fancyhead[RO,LE]{LA-UR-17-20093}
+\fancyhead[RE,LO]{\slshape \leftmark}
+\fancyfoot[RO,LE]{\thepage}
+%
+\fancyfoot[LO,RE]{NJOY2016}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Use lower case roman numerals for table of contents, list of figures
+% and list of table page numbers.
+% Start with page iv since we already have title and two disclaimer pages.
+\pagenumbering{roman}
+\setcounter{page}{4}
+
+%\renewcommand\contentsname{}
+%if active, will delete "CONTENTS" from header & toc
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\cleardoublepage %make sure document starts on an "odd" page.
+
+% Now switch to standard page numbers, and reset to page 1.
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% Standard line spacing command.
+% Can use \begin{singlespace} ... \end{singlespace}  (or use doublespace)
+% within the .tex files as needed.
+\onehalfspacing  %looks nice to me for the primary setting ...
+\normalsize
+
+%
+% Each include file ends with a \cleardoublepage command
+% ... which inserts a blank even numbered page, if necessary
+\include{intro}
+\include{njoyx}
+\include{reconx}
+\include{broadx}
+\include{unresx}
+\include{heatx}
+\include{thermx}
+\include{groupx}
+\include{gaminx}
+\include{errorx}
+\include{covx}
+\include{modex}
+\include{dtfx}
+\include{ccccx}
+\include{matxsx}
+\include{resxsx}
+\include{acex}
+\include{powx}
+\include{wimsx}
+\include{calenx}
+\include{eccox}
+\include{dragx}
+\include{plotx}
+\include{viewx}
+\include{mixx}
+\include{purx}
+\include{leapx}
+\include{gaspx}
+\include{mandtx}
+
+%\section{References}
+%comment out so "References" doesn't get a section number in the TOC
+\begin{thebibliography}{99}
+\begin{singlespace}
+\bibitem{NJ1} R. E. MacFarlane and R. M. Boicourt, ``NJOY:  A
+  Neutron and Photon Processing System,'' {\it Trans. Am. Nucl.
+  Soc.} \underline{22}, 720 (1975).
+
+\bibitem{NJ2} R. E. MacFarlane, D. W. Muir, and R. M. Boicourt,
+  ``The NJOY Nuclear Data Processing System, Volume 1:
+  User's Manual,'' Los Alamos National Laboratory report
+  LA-9303-M, Vol. I (ENDF-324), (May 1982).  R. E. MacFarlane,
+  D. W. Muir, and R. M. Boicourt, ``The NJOY Nuclear Data
+  Processing System, Volume II: The NJOY, RECONR, BROADR,
+  HEATR, and THERMR Modules,'' Los Alamos National Laboratory
+  report LA-9303-M, Vol. II (ENDF-324) (May 1982).
+  R. E. MacFarlane and D. W. Muir, ``The NJOY Nuclear Data
+  Processing System, Volume III: The GROUPR, GAMINR, and
+  MODER Modules,'' Los Alamos National Laboratory report
+  LA-9303-M, Vol. III (ENDF-324) (October 1987).  D. W. Muir
+  and R. E. MacFarlane, ``The NJOY Nuclear Data Processing
+  System, Volume IV: The ERRORR and COVR Modules,'' Los Alamos
+  National Laboratory report LA-9303-M, Vol. IV (ENDF-324)
+  (December 1985).
+
+\bibitem{NJOY91} R. E. MacFarlane and D. W. Muir, ``The NJOY
+  Nuclear Data Processing System, Version 91,'' Los Alamos National
+  Laboratory report LA-12740-M (1994).
+
+\bibitem{NJ10} R. E. MacFarlane and A. C. Kahler, ``Methods
+ for Processing ENDF/B-VII with NJOY," {\it Nuclear Data Sheets},
+ {\bf 111}, 2739--2890 (2010).
+
+\bibitem{NJ12} A. C. Kahler, editor, ``The NJOY Nuclear Data
+  Processing System, Version 2012,'' Los Alamos National
+  Laboratory report LA-UR-12-27079 (2012).
+
+\bibitem{njoytutorial} For an online tutorial on NJOY, see
+ \href{http://t2.lanl.gov}{http://t2.lanl.gov}, and follow links
+ to the ``Nuclear Information Service (NIS)", ``Training area"
+ and ``NJOY" which leads to ``Understanding NJOY,'' Los Alamos
+ National Laboratory report LA-UR-00-1538 (March 2000).
+
+\bibitem{ENDF7} M. B. Chadwick {\it et al.}, ``ENDF/B-VII.0:
+  Next Generation Evaluated Nuclear Data Library for Nuclear
+  Science and Technology,'' {\it Nuclear Data Sheets}, {\bf 107},
+  2931--3060 (2006).
+
+\bibitem{ENDF71} M. B. Chadwick {\it et al.}, ``ENDF/B-VII.1 Nuclear
+  Data for Science and Technology:  Cross Sections, Covariances,
+  Fission Product Yields and Decay Data,'' {\it Nuclear Data Sheets},
+  {\bf 112}, 2887--2996 (2011).
+
+\bibitem{ENDF102} A. Trkov, M. Herman and D. A. Brown, Eds., ``ENDF-6
+  Formats Manual, Data Formats and Procedures for the Evaluated Nuclear
+  Data Files ENDF/B-VI and ENDF/B-VII,'' Brookhaven National Laboratory
+  report BNL-90365-2009 Rev.2 (CSEWG Document
+  ENDF-102) (October 24, 2012). For the latest version of
+  this report, see \href{http://www.nndc.bnl.gov}{http://www.nndc.bnl.gov}
+  and take the ``CSEWG'' tab to ``ENDF-6 Formats Manual.''
+
+\bibitem{endftutorial} For an online tutorial on the ENDF formats,
+ see \href{http://t2.lanl.gov}{http://t2.lanl.gov}, and follow links
+ to the ``Nuclear Information Service (NIS)", ``Training area"
+ and ``ENDF" which leads to ``An Introduction to the ENDF Formats,"
+ Los Alamos National Laboratory report LA-UR-98-1779 (January 1998).
+
+\bibitem{CCCC4} R. D. O'Dell, ``Standard Interface Files and
+  Procedures for Reactor Physics Codes, Version IV,'' Los Alamos
+  Scientific Laboratory report LA-6941-MS (September 1977).
+
+\bibitem{TRANSX} R. E. MacFarlane,  ``TRANSX-CTR: A Code for
+  Interfacing MATXS Cross-Section Libraries to Nuclear Transport
+  Codes for Fusion Systems Analysis,'' Los Alamos National
+  Laboratory report LA-9863-MS (February 1984).
+
+\bibitem{ANISN} W. W. Engle, Jr., ``A Users Manual for ANISN,
+  A One-Dimensional Discrete Ordinates Transport Code with
+  Anisotropic Scattering,'' Oak Ridge Gaseous Diffusion Plant
+  Computing Technology Center report K-1693 (1967).
+
+\bibitem{ONEDANT} R. D O'Dell, F. W. Brinkley, Jr.,
+  D. R. Marr, and R. E. Alcouffe, ``Revised User's
+  Manual for ONEDANT: A Code Package for One-Dimensional,
+  Diffusion-Accelerated, Neutral-Particle Transport,''
+  Los Alamos National Laboratory report LA-9184-M, Rev.
+  (December 1989).
+
+\bibitem{TWODANT} R. E. Alcouffe, F. W. Brinkley, D. R. Marr,
+  and R. D. O'Dell, ``User's Guide for TWODANT: A Code Package
+  for Two-Dimensional, Diffusion-Accelerated, Neutral-Particle
+  Transport,'' Los Alamos National Laboratory report
+  LA-10049 Revised (February 1990).
+
+\bibitem{DIF3D} K. L. Derstine, ``DIF3D: A Code to Solve One-,
+  Two-, and Three-Dimensional Finite-Difference Diffusion Theory
+  Problems,'' Argonne National Laboratory report ANL-82-64
+  (April 1984).
+
+\bibitem{PARTISN} R. E. Alcoufe, R. S. Baker, J. A. Dahl, S. A. Turner,
+  and R. C. Ward, ``PARTISN: A Time-Dependent, Parallel Neutral Particle
+  Transport Code System," Los Alamos National Laboratory report
+  LA-UR-05-3925 (Revised May 2005).
+
+\bibitem{MCNP} X-5 Monte Carlo Team, ``MCNP--A General Monte Carlo
+  N-Particle Transport Code, Version 5," Los Alamos National
+  Laboratory report LA-UR-03-1987 (April 2003).
+
+\bibitem{WIMS} J. R. Askew, F. J. Fayers, and P. B. Kemshell,
+  ``A General Description of the Lattice Code WIMS,''
+  {\it J. Brit. Nucl. Energy Soc.} \underline{5}, 564 (1966).
+
+\bibitem{ribon}
+  P.~Ribon and J.-M.~Maillard, ``Les tables de probabilit\'e -- Application
+  au traitement des sections efficaces pour la neutronique,"
+  Note CEA-N-2485, Commissariat \`a l'\'Energie Atomique, France (1986).
+
+\bibitem{calendf}
+  A. H\'ebert and M. Coste, ``Computing Probability Tables for Self-Shielding
+  Calculations in APOLLO2'', {\sl Int. Conf. on Mathematics and Computation,
+  Reactor Physics and Environmental Analysis in Nuclear Applications}, Madrid,
+  Spain, September 27--30, 1999.
+
+\bibitem{ecco}
+  M. J.~Grimstone, J. D.~Tullett and G.~Rimpault, ``Accurate Treatments of Fast
+  Reactor Fuel Assembly Heterogeneity with the ECCO Cell Code," {\sl Proc. Int.
+  Conf. on the Physics of Reactors: Operation, Design and Computation -- PHYSOR
+  90}, Marseille, France, p.~IX:24, April 23--27, 1990.
+
+\bibitem{eccolib}
+  J.-C. Sublet and D. Niddam, ``GECCO: User Manual'', Note CEA-N2001 build 40,
+  Commissariat \`a l'\'Energie Atomique, France (2003).
+
+\bibitem{PIP2020}
+  A. H\'ebert, {\sl Applied Reactor Physics}, Third Edition, Presses Internationales
+  Polytechnique, ISBN 978-2-553-01735-3, 410 p., Montr\'eal, 2020.
+
+\bibitem{dragon}
+  G. Marleau, A. H\'ebert and R. Roy, ``New Computational Methods Used
+  in the Lattice Code Dragon," {\sl Proc. Int. Topl. Mtg. on Advances in
+  Reactor Physics}, Charleston, USA, March 8--11, 1992, American Nuclear
+  Society (1992). Dragon can be downloaded from the NEA GitLab website at
+  \href{https://git.oecd-nea.org/dragon}.
+
+\bibitem{dragon5}
+  A. H\'ebert, ``DRAGON5 and DONJON5, the contribution of \'Ecole
+  Polytechnique de Montr\'eal to the SALOME platform,"
+  {\sl Ann. nucl. Energy}, \underline{87}, 12--20 (2016).
+
+\bibitem{webinclude} Userinput information may be found on
+ the NJOY homepage, found under the ``Nuclear Information
+ Service (NIS)", ``Codes" and ``NJOY" links at
+ \href{http://t2.lanl.gov}{http://t2.lanl.gov}.
+
+\bibitem{MINX} C. R. Weisbin, P. D. Soran, R. E. MacFarlane,
+  D. R. Harris, R. J. LaBauve, J. S. Hendricks, J. E. White,
+  and R. B. Kidman, ``MINX, A Multigroup Interpretation of
+  Nuclear X-Sections from ENDF/B,'' Los Alamos Scientific
+  Laboratory report LA-6486-MS (ENDF-237) (September 1976).
+
+\bibitem{LAPHAN0} D. J. Dudziak, R. E. Seamon, and D. V. Susco,
+  ``LAPHAN0:  A Multigroup Photon-Production Matrix and Source
+  Code for ENDF,'' Los Alamos Scientific Laboratory report
+  LA-4750-MS (ENDF-156) (January 1972).
+
+\bibitem{GAMLEG} K. D. Lathrop, ``GAMLEG--A FORTRAN Code to
+  Produce Multigroup Cross Sections for Photon Transport Calculations,''
+  Los Alamos Scientific Laboratory report LA-3267 (April 1965).
+
+\bibitem{DTF} K. D. Lathrop, ``DTF-IV, A FORTRAN Program for
+  Solving the Multigroup Transport Equation with Anisotropic
+  Scattering,'' Los Alamos Scientific Laboratory report
+  LA-3373 (November 1965).
+
+\bibitem{ETOPL} R. J. LaBauve, C. R. Weisbin, R. E. Seamon,
+  M. E. Battat, D. R. Harris, P. G. Young, and M. M. Klein,
+  ``PENDF: A Library of Nuclear Data for Monte Carlo
+  Calculations Derived from Data in the ENDF/B Format,''
+  Los Alamos Scientific Laboratory report LA-5687 (October 1974).
+
+\bibitem{RESEND} O. Ozer, Ed. ``Description of the ENDF/B
+  Processing Codes and Retrieval Subroutines,'' Brookhaven
+  National Laboratory report BNL-50300 (ENDF-11) (June 1971).
+
+\bibitem{SIGMA1} D. E. Cullen, ``Program SIGMA1 (Version 74-1),''
+  Lawrence Livermore Laboratory report UCID-16426 (January 1974).
+
+\bibitem{ETOX} R. E. Schenter, J. L. Baker, and R. B. Kidman,
+  ``ETOX, A Code to Calculate Group Constants for Nuclear Reactor
+  Calculations,'' Battelle Northwest Laboratory report
+  BNWL-1002 (1969).
+
+\bibitem{CCCC3} B. M. Carmichael, ``Standard Interface Files and
+  Procedures for Reactor Physics Codes, Version III,'' Los Alamos
+  Scientific Laboratory report LA-5486-MS (1974).
+
+\bibitem{MACK} M. A. Abdou, C. W. Maynard, and R. Q. Wright,
+  ``MACK: A Computer Program to Calculate Neutron Energy Release
+  Parameters (Fluence to Kerma Factors) and Multigroup
+  Neutron Reaction Cross Sections from Nuclear Data in ENDF
+  Format,'' Oak Ridge National Laboratory report ORNL-TM-3994
+  (1973).
+
+\bibitem{FLANGE} H. C. Honek and D. R. Finch, ``FLANGE-II
+  (Version 71-1), A Code to Process Thermal Neutron Data frp, an
+  ENDF/B Tape,'' E. I. DuPont de Nemours and Co. Savannah River
+  Laboratory report DP-1278 (1971).
+
+\bibitem{HEXSCAT} Y. D. Naliboff and J. U. Koppel, ``HEXSCAT,
+  Coherent Elastic Scattering of Neutrons by Hexagonal Lattices,''
+  General Atomic report GA-6026 (1964).
+
+\bibitem{NJ78} R. E. MacFarlane, R. J. Barrett, D. W. Muir, and
+  R. M. Boicourt, ``NJOY: A Comprehensive ENDF/B Processing System,''
+  in A Review of Multigroup Nuclear Cross-Section Processing,
+  Proceedings of a Seminar-Workshop, Oak Ridge, Tennessee,
+  March 14-16, 1978,'' Oak Ridge National Laboratory report
+  ORNL/RSIC-41 (October 1978).
+
+\bibitem{NJ89} R. E. MacFarlane, ``Introducing NJOY89,'' in
+  Proceedings of the Seminar on NJOY and Themis, 20-21 June 1989,
+  OECD/NEA Data Bank, Saclay, France (1989).  See also ``Nuclear
+  Theory and Application Progress Report, January 1, 1989---April
+  1, 1990,'' pp. 21-38, Los Alamos National Laboratory report
+  LA-11972-PR (December 1990).
+
+\bibitem{ERRORJ} Go Chiba, ``ERRORJ, A Code to Process Neutron-Nuclide
+  Reaction Covariance, Version 2.3,'' JAEA-Data/Code 2007-007, March 2007.
+
+\bibitem{SAMMY} N.M.Larson, ``Updated Users' Guide for SAMMY:
+  Multilevel R-Matrix Fits to Neutron Data Using Bayes' Equations,''
+  Oak Ridge National Laboratory report ORNL/TM-9179/R8 (October 2008).
+
+\bibitem{MC2} B. J. Toppel, A. L. Rago, and D. M. O'Shea,
+  ``MC$^2$, A Code to Calculate Multigroup Cross Sections,''
+  Argonne National Laboratory report ANL-7318 (1967).
+
+\bibitem{MC22} H. Henryson II, B. J. Toppel, and C. G. Stenberg,
+  ``MC$^2$-2: A Code to Calculate Fast Neutron Spectra and Multigroup
+  Cross Sections,'' Argonne National Laboratory report ANL-8144
+  (ENDF-239) (1976).
+
+\bibitem{Bondarenko} I. I. Bondarenko, Ed., {\it Group Constants for Nuclear
+  Reactor Calculations} (Consultants Bureau, New York, 1964).
+
+\bibitem{Kidman} R. B. Kidman, ``Cross Section Structure Factor
+   Interpolation Schemes,'' Hanford Engineering Development
+   Laboratory report HEDL-TME-71-40 (1971).
+
+\bibitem{TRANSX2} R. E. MacFarlane, ``TRANSX 2: A Code for Interfacing
+   MATXS Cross-Section Libraries to Nuclear Transport Codes,''
+   Los Alamos National Laboratory report LA-12312-MS (July 1992).
+
+\bibitem{Muir} D. W. Muir, ``Gamma Rays, Q-Values, and Kerma Factors,''
+   Los Alamos Scientific Laboratory report LA-6258-MS (March 1976).
+
+\bibitem{ebal} R. E. MacFarlane, ``Energy Balance of ENDF/B-V,''
+   Trans. Am. Nucl. Soc. \underbar{33}, 681 (1979).  See also
+   R. E. MacFarlane, ``Energy Balance of ENDF/B-V.2,''
+   Minutes of the Cross Section Evaluation Working Group
+   (available from the National Nuclear Data Center, Brookhaven
+   National Laboratory, Upton, NY) (May 1984).
+
+\bibitem{Gabriel} T. A. Gabriel, J. D. Amburgy, and N. M. Greene,
+   ``Radiation-Damage Calculations: Primary Knock-On Atom Spectra,
+   Displacement Rates, and Gas Production Rates,''
+   {\it Nucl. Sci. Eng.} \underline{61}, 21 (1976).
+
+\bibitem{Doran} D. G. Doran, ``Neutron Displacement Cross Sections for
+   Stainless Steel and Tantalum Based on a Linhard Model,'' {\it Nucl. Sci.
+   Eng.} \underline{49}, 130 (1972).
+
+\bibitem{Greenwood} L. R. Greenwood and R. K. Smither, ``Displacement
+   Damage Calculations with ENDF/B-V,'' in Proceedings of the Advisory Group
+   Meeting on Nuclear Data for Radiation Damage Assessment and Reactor
+   Safety Aspects, October 12-16, 1981, IAEA, Vienna, Austria (October 1981).
+
+\bibitem{Robinson} M. T. Robinson, in {\it Nuclear Fusion Reactors}
+   (British Nuclear Energy Society, London, 1970).
+
+\bibitem{Lindhard} J. Lindhard, V. Nielsen, M. Scharff, and P. V. Thomsen,
+   {\it Kgl. Dansk, Vidensk. Selsk, Mat-Fys. Medd.} \underline{33} (1963).
+
+\bibitem{alb} R. E. MacFarlane, D. W. Muir, and F. M. Mann,
+   ``Radiation Damage Calculations with NJOY,''
+   {\it J. Nucl. Materials} \underline{122} and \underline{123},
+   1041 (1984).
+
+\bibitem{advanced} R. E. MacFarlane and D. G. Foster, Jr.,
+   ``Advanced Nuclear Data for Radiation Damage Calculations,''
+   {\it J. Nucl. Materials} \underline{122} and \underline{123},
+   1047 (1984).
+
+\bibitem{old102} R. Kinsey, Ed., ``ENDF-102, Data Formats and Procedures
+   for the Evaluated Nuclear Data File, ENDF,'' Brookhaven National
+   Laboratory report BNL-NCS-50496 (ENDF-102) 2nd Edition
+   (ENDF/B-V) (October 1979).
+
+\bibitem{GAreport} J. U. Koppel and D. H. Houston, ``Reference Manual
+   for ENDF Thermal Neutron Scattering Data,'' General Atomic report
+   GA-8774 revised and reissued as ENDF-269 by the National Nuclear Data
+   Center, Brookhaven National Laboratory (1978).
+
+\bibitem{ref5} G. I. Bell and S. Glasstone, {\it Nuclear Reactor Theory}
+  (Van Nostrand Reinhold, New York, 1970).
+
+\bibitem{1DX} R. W. Hardie and W. W. Little, Jr., ``1DX, A One-Dimensional
+  Diffusion Code for Generating Effective Nuclear Cross Sections,''
+  Battelle Northwest Laboratory report BNWL-954 (1969).
+
+\bibitem{ref9} R. E. MacFarlane, ``ENDF/B-IV and -V Cross Sections for Thermal
+  Power Reactor Analysis,'' in Proc. Intl. Conf. of Nuclear Cross Sections
+  for Technology, Knoxville, TN (October 22-26 1979), National Bureau of
+  Standards Publication 594 (September 1980).
+
+\bibitem{ref10} G. I. Bell, G. E. Hansen, and H. A. Sandmeier, ``Multitable
+  Treatments of Anisotropic Scattering in S$_{\rm N}$ Multigroup
+  Transport Calculations,'' Nucl. Sci. Eng. \underbar{28}, 376 (1967).
+
+\bibitem{ref13}  M. Abramowitz and I. Stegun, {\it Handbook of Mathematical
+  Functions} (Dover Publications, New York, 1965).
+
+\bibitem{ref14}  D. G. Madland, ``New Fission Neutron Spectrum
+  Representation for ENDF,'' Los Alamos National Laboratory
+  report LA-9285-MS (ENDF-321) (April 1982).
+
+\bibitem{km} C. Kalbach and F. M. Mann, ``Phenomenology of Continuum
+   Angular Distributions. I. Systematics and Parameterization,''
+   Phys. Rev. C. \underline{23}, 112 (1981).
+
+\bibitem{k86} C. Kalbach, ``Systematics of Continuum Angular Distributions:
+  Extensions to Higher Energies,''  {\it Phys. Rev. C.}
+  \underline{37}, 2350 (1988).
+
+\bibitem{GNASH} P. G. Young and E. D. Arthur, ``GNASH: A Preequilibrium
+  Statistical Nuclear Model Code for Calculation of Cross Sections and
+  Emission Spectra,''  Los Alamos Scientific Laboratory report LA-6947 (1977).
+
+\bibitem{powr} R. E. MacFarlane, ``ENDF/B-V Cross-Section
+  Library for Reactor Cell Analysis,'' Electric Power Research
+  Institute report EPRI NP-3418 (February 1984).
+
+\bibitem{LIBIV} R. B. Kidman and R. E. MacFarlane, ``LIB-IV, A Library
+  of Group Constants for Nuclear Reactor Calculations,'' Los Alamos
+  Scientific Laboratory report LA-6260-MS (1976).
+
+\bibitem{one} G. Lehner, ``Reaction Rates and Energy Spectra
+  for Nuclear Reactions in High Energy Plasmas,'' {\it Z. Physik}
+  {\bf 232}, 174 (1970).
+
+\bibitem{two} D. E. Nagle, W. E. Quinn, W. B. Riesenfeld,
+  and W. Leland, ``Ion Temperature in Scylla, as Determined from the
+  Reaction D(d,p)T,'' {\it Phys. Rev. Letters} {\bf 3}, 318 (1959).
+
+\bibitem{three} N. Jarmie and J. D. Seagrave (Eds.),
+  ``Charged Particle Cross Sections,'' Los Alamos Scientific
+  Laboratory report LA-2014 (1956).
+
+\bibitem{four} D. W. Muir, ``Sensitivity of Neutron Multigroup
+  Cross Sections to Thermal Broadening of the Fusion Peak,''
+  Proc. 1st Topical Meeting on the Technology of Controlled
+  Nuclear Fusion, San Diego, Calif., April 1974,
+  CONF-740402-P2, p.166 (1975).
+
+\bibitem{HUGO}  R. W. Roussin, J. R. Knight, J. H. Hubbell, and R. J. Howerton,
+  ``Description of the DLC-99/HUGO Package of Photon Interaction Data in
+  ENDF/B-V Format,'' Oak Ridge National Laboratory report ORNL/RSIC-46
+  (ENDF-335) (December 1983).
+
+\bibitem{Hubbell} J. H. Hubbell, Wm. J. Viegle, E. A. Briggs,
+  R. T. Brown, D. T. Cromer, and R. J. Howerton, ``Atomic Form Factors,
+  Incoherent Scattering Functions, and Photon Scattering Cross Sections,''
+  {\it J. Phys. Chem. Ref. Data} {\bf 4}, 471 (1975).
+
+\bibitem{Gerstl} S. A. W. Gerstl, D. J. Dudziak, and D. W. Muir,
+  ``Cross Section Sensitivity and Uncertainty Analysis with Application
+  to a Fusion Reactor,'' {\it Nucl. Sci. Eng.} {\bf 62}, 137 (January 1977).
+
+\bibitem{Reupke} W. A. Reupke, D. W. Muir, and J. N. Davidson,
+  ``Consistency of Neutron Cross-Section Data, S$_{\rm{n}}$ Calculations,
+  and Measured Tritium Production for a 14-MeV Neutron-Driven Sphere of
+  Natural-Lithium Deuteride,'' {\it Nucl. Sci. Eng.} {\bf 82}, 416 (December
+  1982).
+
+\bibitem{Hamilton} D. W. Muir, ``Evaluation of Correlated Data Using
+  Partitioned Least Squares: A Minimum-Variance Derivation,'' {\it Nucl.
+  Sci. and Eng.} {\bf 101}, 88-93 (January 1989).
+
+\bibitem{Weisbin} C. R. Weisbin, E. M. Oblow, J. Ching, J. E. White, R.
+  Q. Wright, and J. Drischler, ``Cross Section and Method Uncertainties:
+  The Application of Sensitivity Analysis to Study Their Relationship in
+  Radiation Transport Benchmark Problems,'' Oak Ridge National Laboratory
+  report ORNL-TM-4847 (ENDF-218) (August 1975).  (See especially Chapter IV.)
+
+\bibitem{Smith} J. D. Smith III, ``Processing ENDF/B-V Uncertainty Data
+  into Multigroup Covariance Matrices,'' Oak Ridge National Laboratory
+  report ORNL/TM-7221 (ENDF-295) (June 1980).
+
+\bibitem{Young-2} P. G. Young, ``Evaluation of n + $^7$Li Reactions
+  using Variance-Covariance Techniques,'' {\it Trans. Am. Nucl. Soc.}
+  {\bf 39}, 272 (1981).
+
+\bibitem{Young} P. G. Young, J. W. Davidson, and D. W. Muir,
+  ``Evaluation of the $^7$Li(n,n't)$^4$He Cross Section for ENDF/B-VI and
+  Application to Uncertainty Analysis,'' {\it Fusion Tech.} {\bf 15},
+  440-448 (1989).
+
+\bibitem{LaBauve} D. W. Muir and R. J. LaBauve, ``COVFILS: A 30-Group
+  Covariance Library Based on ENDF/B-V,'' Los Alamos National Laboratory
+  report LA-8733-MS (ENDF-306)  (March 1981).
+
+\bibitem{COVFILS2} D. W. Muir, ``COVFILS-2: Neutron Data and Covariances
+  for Sensitivity and Uncertainty Analysis,'' {\it Fusion Tech.} {\bf 10}
+  (3), Part 2B, 1461 (November 1986).
+
+\bibitem{sensit} S. A. W. Gerstl, ``SENSIT: A Cross-Section and Design
+  Sensitivity and Uncertainty Analysis Code,'' Los Alamos Scientific
+  Laboratory report LA-8498-MS (August 1980).
+
+\bibitem{sensit-2} M. J. Embrechts, ``SENSIT-2D: A Two-Dimensional
+  Cross-Section Sensitivity and Uncertainty Analysis Code,'' Los Alamos
+  National Laboratory report LA-9515-MS (October 1982).
+
+\bibitem{multigroup} D. W. Muir, R. E. MacFarlane, and R. M. Boicourt,
+  ``Multigroup Processing of ENDF/B Dosimetry Covariances,'' Proc. 4th
+  ASTM-EURATOM Symp. on Reactor Dosimetry, Gaithersburg, Maryland, March
+  22-26, 1982, NUREG/CP-0029 (CONF-820321), p. 655 (1982).
+
+\bibitem{CLAW4} R. J. Barrett and R. E. MacFarlane, ``Coupled
+  Neutron and Photon Cross Sections for Transport Calculations,''
+  Los Alamos Scientific Laboratory report LA-7808-MS (April 1979).
+
+\bibitem{LINXBINX} R. E. MacFarlane and R. B. Kidman,
+  ``LINX and BINX: CCCC Utility Codes for the MINX Multigroup
+  Processing Code,'' Los Alamos Scientific Laboratory report
+  LA-6219-MS (February 1976).
+
+\bibitem{CINX} ``CINX: Collapsed Interpretation of Nuclear
+  X Sections,'' Los Alamos Scientific Laboratory
+  report LA-6287-MS (April 1976).
+
+\bibitem{SPHINX} W. J. Davis, M. B. Yarbrough, and A. B. Bortz,
+  ``SPHINX: A One Dimensional Diffusion and Transport Nuclear
+  Cross Section Processing Code,'' Westinghouse Advanced Reactors
+  Division report WARD-XS-3045-17 (August 1977).
+
+\bibitem{TDOWN} C. L. Cowan, B. A. Hutchins, and J. E. Turner,
+  ``TDOWN -- A Code to Generate Composition and Spatially
+  Dependent Cross Sections,'' General Electric report GEAP-13740
+  (August 1971).
+
+\bibitem{DANDE} R. J. LaBauve, T. R. England, D. C. George,
+  R. E. MacFarlane, and W. B. Wilson, ``DANDE---A Linked Code
+  System for Core Neutronics/Depletion Analysis,'' Los Alamos
+  National Laboratory report LA-10412-MS (June 1985).
+
+\bibitem{UPD} R. E. MacFarlane and D. C. George, ``UPD: A
+  Portable Version-Control Program,'' Los Alamos National Laboratory
+  report LA-12057-MS (April 1991).
+
+\bibitem{KAOS5} Y. Farawila, Y. Gohar, and C. Maynard, ``KAOS/LIB-V:
+  A Library of Nuclear Response Functions Generated by KAOS-V Code
+  From ENDF/B-V and Other Data Files" Argonne National Laboratory
+  report ANL/FPP/TM-241 (April 1989).
+
+\bibitem{MCN} E. D. Cashwell, J. R. Neergaard, W. M. Taylor, and
+  G. D. Turner, ``MCN: A Neutron Monte Carlo Code," Los Alamos Scientific
+  Laboratory report LA-4751 (January 1972).
+
+\bibitem{MCG} E. D. Cashwell, J. R. Neergaard, C. J. Everett,
+  R. G. Schrandt, W. M. Taylor, and G. D. Turner, ``Monte Carlo Photon
+  Codes MCG and MCP," Los Alamos Scientific Laboratory report
+  LA-5157-MS (March 1973).
+
+\bibitem{MCP} C. J. Everett and E. D. Cashwell, ``MCP Code
+  Fluorescence-Routine Revision," Los Alamos Scientific Laboratory
+  report LA-5240-MS (May 1973).
+
+\bibitem{redbook} Adobe Systems Incorporated, {\it Postscript
+  Language Reference Manual}, Addison-Wesley Publishing Company, 1985.
+
+\bibitem{levitt} L. B. Levitt, ``The Probability Table Method
+  for Treating Unresolved Resonances in Monte Carlo Criticality
+  Calculations,'' {\it Trans. Am. Nucl. Soc.} \underline{14}, 648 (1971).
+
+\bibitem{vim} R. E. Prael and L. J. Milton, ``A User's Manual
+  for the Monte Carlo Code VIM,'' Argonne National Laboratory
+  report FRA-TM-84 (1976).  Also, R. Blomquist, ``VIM continuous
+  energy Monte Carlo transport code,'' in Proc. Inter. Conf. on
+  Mathematics, Computations, Reactor Physics and Environmental
+  Analysis, Portland, OR, April 30 -- May 4, 1995.
+
+\bibitem{GASKET} J. U. Koppel, J. R. Triplett, and Y. D. Naliboff,
+  ``GASKET: A Unified Code for Thermal Neutron Scattering,''
+  General Atomics report GA-7417 (Rev.) (March 1967).
+
+\bibitem{McLatchie} R. C. F. McLatchie, 1962, unpublished.
+
+\bibitem{Butland} A. T. Butland, ``LEAP and ADDELT, A Users Guide
+  to Two Complementary Codes on the ICL-470 for Calculating The Scattering
+  Law From a Phonon Frequency Function,''       Atomic Energy Establishment
+  Winfrith report AEEW-M-1200, 1973.
+
+\bibitem{Picton} D. J. Picton, personal communication to G. J. Russell, 1987.
+
+\bibitem{New} R. E. MacFarlane, ``New Thermal Neutron Scattering Files
+  for ENDF/B-VI Release 2,'' Los Alamos National Laboratory report
+  LA-12639-MS (1994).
+
+\bibitem{ICANS} R. E. MacFarlane, ''Cold Moderator Scattering
+  Kernels,'' in {\it Advanced Neutron Sources 1988, Proceedings of
+  the 10th Meeting of the International Collaboration on Advanced
+  Neutron Sources (ICANS-X) held at Los Alamos, 3--7 October 1988},
+  Institute of Physics Conferences Series Number 97 (Institute of
+  Physics, Bristol and New York, 1988), p.157.
+
+\bibitem{coldworkshop} R. E. MacFarlane, ``Cold Moderator Scattering
+  Kernels,'' presented at the International Workshop on Cold Neutron
+  Sources, March 5--8, 1990, Los Alamos, New Mexico, Los Alamos
+  National Laboratory report LA-12146-C (August 1991).
+
+\bibitem{Parks} D. E. Parks,
+  M.  S. Nelkin, J. R. Beyster, and N. F. Wikner,
+  {\it Slow Neutron Scattering and Thermalization}, W. A. Benjamin, Inc.
+  (New York, 1970).
+
+\bibitem{Wycoff} R. W. G. Wycoff, Crystal Structures, John Wiley \& Sons,
+  New York, London, 1963.
+
+\bibitem{YK} J. A. Young and J. U. Koppel, Phys. Rev. \underline{135},
+  A603(1964).
+
+\bibitem{EHW} P. A. Egelstaff, B. C. Haywood, and F. J. Webb,
+  Proc. Phys. Soc., \underline{90}, 681(1967).
+
+\bibitem{Schott} Wolfgang Schott, Z. Physik \underline{231}, 243(1970).
+
+\bibitem{Utsuro} Masahiko Utsuro, Z. Physik B \underline{27}, 111(1977).
+
+\bibitem{Keinert} J. Keinert and J. Sax, ``Investigation of Neutron Scattering
+  Dynamics in Liquid Hydrogen and Deuterium for Cold Neutron Sources,''
+  Kerntechnik \underline{51}, 19 (1987).
+
+\bibitem{mattes} M. Mattes and J. Keinert, ``Thermal Neutron Scattering
+  Data for the Moderator Materials H2O, D2O and ZrHx in ENDF-6 Format
+  and as ACE Library for MCNP(X)", IAEA INDC(NDS)-0470, April 2005.
+
+\bibitem{Dritsa} M. Dritsa, report from misc. OECD countries to EANDC,
+  No. 63, 1967.
+
+\bibitem{Heinloth} K. Heinloth, Zeitscrift fur Physik {\bf 163},
+  218 (1961).
+
+\bibitem{SmithRR} R. R. Smith, private communication held at BNL, 1953.
+
+\bibitem{Walton} W. Walton, private communication held at BNL, 1960.
+
+\bibitem{Springer} V. T. Springer, Nucleonik {\bf 3}, 110 (1961).
+
+\bibitem{Simpson} O. D. Simpson, J. Nuclear Instruments and Methods
+  {\bf 30}, 293 (1964).
+
+\bibitem{Russell} J. L. Russell, Jr., General Atomic report 7581, 1966.
+
+\bibitem{HB} Y. D. Harker and R. M. Brugger,
+  ``Investigation of the Low-Temperature Phase Transitions in Solid
+  Methane by Slow Neutron Inelastic Scattering,'' J. Chem. Phys.
+  \underline{46}, 2201(1967).
+
+\bibitem{AYY} A. K. Agrawal and S. Yip, ``Slow-Neutron
+  Scattering by Molecular Liquids,'' Nucl. Sci. Eng. \underline{37},
+  368(1969).
+
+\bibitem{Gordon} R. G. Gordon, J. Chem. Phys. \underline{43}, 1307(1965).
+
+\bibitem{Ewing} G. E. Ewing, J. Chem. Phys. \underline{40}, 179(1964).
+
+\bibitem{data} These data were obtained from the paper of Keinert
+  and Sax\cite{Keinert} and converted to the numbers shown by
+  subtracting the hydrogen absorption cross section.  The ortho
+  cross sections were converted from normal $^{2}$H cross sections
+  using the theoretical ortho and para cross sections to produce
+  a conversion factor.  The original references are G. L. Squires
+  and A. T. Stewart, Proc. Roy. Soc. \underline{A230}, 19(1955),
+  W. L. Whittemore and A. W. McReynolds, ``Differential Neutron
+  Thermalization,'' General Atomic report GA-2505 (1961), and
+  W. D. Seiffert, ``Messung der Streuquerschnitte von fl\"{u}ssigem
+  und festem Wasserstoff, Deuterium, und Deuteriumhydrid f\"{u}r
+  thermische Neutronen,'' EUR-5566d (1970).
+
+\bibitem{recipes} W. H. Press, B. P. Flannery, Saul A. Teukolsky,
+  and William T. Vetterling, {\it Numerical Recipes in C}, Cambridge
+  University Press, 1988.
+
+\bibitem{UPDATE} ``UPDATE, VERSION 1, Reference Manual,''
+  Revision 11/23/81, Control Data Corporation report 60449900
+  (November 1981).
+
+\bibitem{ICSBEP} J. B. Briggs, {\it et al}, ``International Handbook
+  of Evaluated Criticality Safety Benchmark Experiments,'' Tech. Rep.
+  NEA/NSC/DOC(95)04/I, Nuclear Energy Agency, Paris, France, 2004.  Note
+  that this Handbook is updated annually.
+
+\bibitem{PREPRO} D. E. Cullen, ``PREPRO 2007: 2007 ENDF/B Pre-Processing
+  Codes,'' IAEA-NDS-39, Rev. 13, Nuclear Data Section, International
+  Atomic Energy Agency, Vienna, Austria.
+
+\bibitem{sublet} J. C. Sublet, R. N. Blomquest,
+  S. Goluoglu, and R. E. MacFarlane, ``Unresolved Resonance
+  Range Cross Section Probabiliy and Self Shielding Factors,''
+  CEA-R-6227 (July 2009).
+
+\bibitem{fast} D. E. Cullen, P. Brown, E. Lent,
+  R. MacFarlane, and S. McKinley, ``Criticality Calculations
+  Using LANL and LLNL Neutron Transport Codes,'' Lawrence Livermore
+  National Laboratory report UCRL-TR-237333 (November 22, 2007).
+
+\bibitem{big10} R. E. MacFarlane, R. M. Blomquist (ANL),
+  D. E. Cullen (LLNL), and J. C. Sublet (CEA),
+  ``A Code Comparison Study for the Bigten Critical Assembly,''
+  Los Alamos National Laboratory report LA-UR-08-4668 (August 2008).
+
+\bibitem{GIT} Scott Chacon and Ben Straub, {\it Pro Git}, Apress,
+  Berkeley, CA, USA, 2nd edition.  Downloadable e-book versions
+  are available at \url{https://git-scm.com/book/en/v2}.
+
+\bibitem{ACEFormat} Jeremy Lloyd Conlin, ed., ``A Compact ENDF (ACE) Format Specification'', Los Alamos National Laboratory, \url{https://github.com/NuclearData/ACEFormat}.
+
+\end{singlespace}
+\end{thebibliography}
+
+\cleardoublepage
+
+\printindex
+
+\end{document}

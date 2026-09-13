@@ -56,7 +56,12 @@ add_executable( njoy_executable
              "${CMAKE_CURRENT_SOURCE_DIR}/src/util.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/vers.f90"
              "${CMAKE_CURRENT_SOURCE_DIR}/src/viewr.f90"
-             "${CMAKE_CURRENT_SOURCE_DIR}/src/wimsr.f90" )
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/wimsr.f90"
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/filem.f90"
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/kdim.f90"
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/xsmm.f90"
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/dragr.f90"
+             "${CMAKE_CURRENT_SOURCE_DIR}/src/calenr.f90")
 set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
 
 enable_testing()

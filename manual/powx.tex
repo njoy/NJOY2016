@@ -1,0 +1,225 @@
+\section{POWR}
+\label{sPOWR}
+
+\hypertarget{sPOWRhy}{The}
+POWR module is used to prepare libraries for the Electric
+\index{POWR|textbf}
+Power Research Institute (EPRI)\index{EPRI} reactor analysis codes
+EPRI-CELL and EPRI-CPM.\footnote{EPRI-CELL and EPRI-CPM are
+proprietary products of the Electric Power Research Institute,
+3420 Hillview Avenue, Palo Alto, CA 94304.  For more information,
+please contact the owners.}\index{Electric Power Research Institute|see{EPRI}}
+\index{EPRI!EPRI-CELL}\index{EPRI!EPRI-CPM}
+These codes were originally developed to provide an alternative
+to the reactor manufacturers'
+computer codes for calculating reactor core performance as
+required for operating and reloading power reactors run by
+US electric utility companies.  Because these codes require
+up-to-date accurate cross sections that were not controlled
+by the reactor manufacturers, EPRI contracted with the Los
+Alamos National Laboratory to generate new libraries based on
+the US-standard Evaluated Nuclear Data Files (ENDF).  With this
+funding, we were able to develop the
+\hyperlink{sTHERMRhy}{THERMR} module and the
+associated thermal multigroup methods in
+\hyperlink{sGROUPRhy}{GROUPR}.  We also
+developed this POWR module to format cross section data in
+GENDF format for use in CELL or CPM.  In addition, it was necessary
+to make a number of modifications to EPRI-CELL to make it perform
+well with unadjusted cross sections.  The results of all this
+work were reported in 1984\cite{powr}.
+\index{THERMR}
+\index{GROUPR}
+
+This module has not been used at Los Alamos since 1984,
+although we have had scattered reports of use elsewhere.  A list of
+the input instructions, without further comment, follows.
+
+
+\subsection{Input Instructions}
+\label{ssPOWR_inp}
+
+As an aid to discussions of the user input to POWR, the input
+instructions that appear as comment cards at the beginning of the
+current version of this module are listed below.  Since code changes
+are possible, albeit unlikely for this module, it is always advisable
+to consult the comment-card instructions contained in the version of
+the code actually being used before proceeding with an actual calculation.
+\index{POWR!POWR input}
+\index{input!POWR}
+
+\small
+\begin{ccode}
+
+   !---input specifications (free format)---------------------------
+   !
+   ! card 1
+   !    ngendf  unit for input gout tape
+   !    nout    unit for output tape
+   ! card 2
+   !    lib     library option (1=fast, 2=thermal, 3=cpm)
+   !    iprint  print option (0=minimum, 1=maximum)
+   !            (default=0)
+   !    iclaps  group collapsing option (0=collapse from 185 group
+   !            to desired group structure, 1=no collapse)
+   !            (default=0)
+   !
+   !---for lib=1----------------------------------------------------
+   !
+   ! card 3
+   !    matd    material to be processed
+   !            if matd lt 0, read-in absorption data only for
+   !            this material with mat=abs(matd) directly from
+   !            input deck (see card 6)
+   !   following three parameters irrelevant for matd lt 0
+   !    rtemp   reference temperature (degrees kelvin)
+   !            (default=300  k)
+   !    iff     f-factor option
+   !            (0/1=do not calculate f-factors/calculate if found)
+   !            (default=1)
+   !    nsgz    no. of sigma zeroes to process for this material
+   !            (default=0=all found on input tape)
+   !    izref   ref. sigzero for elastic matrix (default=1)
+   ! cards 4 and 5 for normal run only (matd gt 0)
+   ! card 4
+   !    word    description of nuclide (up to 16 characters,
+   !            delimited with *, ended with /)  (default=blank)
+   ! card 5
+   !    fsn     title of fission spectrum (up to 40 characters,
+   !            delimited with *, ended with /0  (default=blank)
+   !             delimited with *, ended with /)  (default=blank)
+   ! card 6 for reading in absorption data only
+   !    abs     ngnd absorption values (default values=0)
+   ! repeat cards 3 through 6 for each material desired.
+   ! terminate with matd=0/ (i.e., a 0/ card).
+   !
+   !---for lib=2----------------------------------------------------
+   !
+   ! card 3
+   !    matd    material to be processed
+   !    idtemp  temperature id (default=300  k)
+   !    name    hollerith name of isotope (up to 10 characters,
+   !            delimited with *, ended with /)  (default=blank)
+   ! card 4     default for all values=0.
+   !    itrc    transport correction option (0 no, 1 yes)
+   !    mti     thermal inelastic mt
+   !    mtc     thermal elastic mt
+   ! card 5     default for all values=0.
+   !    xi
+   !    alpha
+   !    mubar
+   !    nu
+   !    kappa fission
+   !    kappa capture
+   !    lambda
+   !    sigma s   if 0, set to scattering cross section at group 35
+   ! repeat cards 3 thru 5 for each material and temperature desired
+   ! (maximum number of temperatures allowed is 7.)
+   ! terminate with matd=0/ (i.e., a 0/ card).
+   !
+   !---for lib=3----------------------------------------------------
+   !
+   ! card 3
+   !    nlib    number of library.
+   !    idat    date library is written (i format).
+   !    newmat  number of materials to be added.
+   !    iopt    add option (0=mats will be read in,
+   !                        1=use all mats found on ngendf).
+   !    mode    0/1/2=replace isotope(2) in cpmlib/
+   !                   add/create a new library (default=0)
+   !    if5     file5 (burnup data) option
+   !            0/1/2=do not process file5 burnup data/
+   !                   process burnup data along with rest of data/
+   !                   process burnup data only (default=0)
+   !            (default=0)
+   !    if4     file4 (cross section data) option
+   !            0/1=do not process/process
+   !            (default=1)
+   ! card 4 for iopt=0 only
+   !    mat     endf mat number of all desired materials.
+   !            for materials not on gendf tape, use ident for mat.
+   !            if mat lt 0, add 100 to output ident
+   !            (for second isomer of an isotope)
+   ! card 5
+   !    nina    nina indicator.
+   !            0/1/2/3=normal/
+   !                  no file2 data, calculate absorption in file4/
+   !                  no file2 data, read in absorption in file4/
+   !                  read in all file2 and file4 data.
+   !    ntemp   no. of temperatures to process for this material
+   !            (default=0=all found on input tape)
+   !    nsigz   no. of sigma zeroes to process for this material
+   !            (default=0=all found on input tape)
+   !    sgref   reference sigma zero
+   !    following 2 parameters are for nina=0 or nina=3.
+   !    ires    resonance absorber indicator (0/1=no/yes)
+   !    sigp    potential cross section from endf.
+   !    following 5 parameters are for ntapea=0 only
+   !    mti     thermal inelastic mt
+   !    mtc     thermal elastic mt
+   !    ip1opt  0/1=calculate p1 matrices/
+   !                correct p0 scattering matrix ingroups.
+   !  ******if a p1 matrix is calculated for one of the isotopes
+   !        having a p1 matrix on the old library, file 6 on the
+   !        new library will be completely replaced.******
+   !    inorf   0/1=include resonance fission if found/
+   !                do not include
+   !    following two parameters for mode=0 only
+   !    pos     position of this isotope in cpmlib
+   !    posr    (for ires=1) position of this isotope in resonance
+   !            tabulation in cpmlib
+   !  repeat card 5 for each nuclide.
+   ! following three cards are for if5 gt 0 only
+   ! card 6
+   !    ntis    no. time-dependent isotopes
+   !    nfis    no. fissionable burnup isotopes
+   ! card 7
+   !    identb  ident of each of the nfis isotopes
+   ! card 8
+   !    identa  ident of time-dependent isotope
+   !    decay   decay constant (default=0.)
+   !    yield   nfis yields (default=0.)
+   !  repeat card 8 for each of the ntis isotopes.
+   ! card 9 for if5=2 only
+   !    aw      atomic weight
+   !    indfis  fission indicator
+   !    ntemp   no. temperatures on old library
+   !  repeat card 9 for each of the ntis isotopes.
+   ! card 10
+   !    lambda  resonance group goldstein lambdas
+   !  ******remember that the 69-group structure has 13 resonance
+   !        groups while the collapsed 185-group structure has 15.
+   !        use a slash at end of each line of card 10 input.******
+   !  repeat card 10 for each nuclide having nina=0, nina=3, or
+   !                     ires=1.
+   ! cards 11 and 11a for nuclides having nina=3 only.
+   ! card 11
+   !    resnu    nrg nus values to go with the lambda values
+   ! card 11a
+   !    tot      nrg total xsec values to go with the lambda values
+   !  read cards 11 and 11a for each nuclide having nina=3.
+   ! cards 12 for nina gt 2 only
+   !    aw      atomic weight
+   !    temp    temperature
+   !    fpa     ngnd absorption values (default=0.)
+   ! cards 12a, 12b, 12c for nuclides having nina=3 only.
+   ! card 12a
+   !    nus      ngnd nus values
+   !    fis      ngnd fission values
+   !    xtr      ngnd transport values
+   ! card 12b
+   !    ia       group.  0 means no scattering from this group
+   !    l1       lowest group to which scattering occurs
+   !    l2       highest group to which scattering occurs
+   ! card 12c  for ia gt 0 only
+   !    scat     l2-l1+1 scattering values
+   !  repeat card 12b and 12c for each group
+   ! repeat cards 12 for each of the nina gt 2 nuclides
+   !
+   !--------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+\cleardoublepage
+

@@ -1,0 +1,2394 @@
+\section{NJOY Maintenance and Testing}
+\label{sMandT}
+
+There are several components of the NJOY Quality Assurance
+\index{Quality Assurance!QA}system:  a detailed code manual
+(this report), version control software (\texttt{git})
+\index{git@{\ty git}} that
+keeps track of all changes made to the code, a suite of standard
+test problems to verify installation, and extensive application
+of the code to find special cases that lead to failures.
+
+\subsection{Code Maintenance with GIT}
+\label{ssMandT_GIT}
+
+Begininng with NJOY2016, \texttt{git} is used for software version
+control. This is a significant departure from UPD\index{UPD}\cite{UPD},
+the local version control program used for past NJOY
+versions.  \texttt{git} version control software is used virtually
+everywhere modern software development is utilized and is available
+on platforms using Windows, Linux, and Mac operating
+systems. \texttt{git} will keep track of the changes made to
+all files it is tracking.
+
+This manual is not a proper forum to provide a tutorial on using
+\texttt{git}. A brief tutorial is available at
+\url{https://try.github.io}.  This introduction provides the reader
+with enough understanding to be able to perform basic \texttt{git}
+operations.  For additional information, we recommend users check the
+official \texttt{git} website, \url{https://git-scm.com}, or other
+online resources (e.g., \emph{Pro Git}\cite{GIT}).
+
+\subsection{Standard Test Problems}
+\label{ssMandT_testprob}
+
+Another important part of the NJOY revision control procedure is
+the set of standard test problems used to validate each new
+\index{testing!test problems}
+version.  This kind of systematic testing is also a key part of
+any QA program.  \index{Quality Assurance!QA} The
+NJOY test problems also act as examples in helping new users
+to operate the code system.  Brief descriptions of the current sec
+of test problems follow.  See  the following sections for details.
+
+\begin{description}
+\begin{singlespace}
+\item[Problem 1:]  Process one ENDF/B-V isotope through pointwise
+   and multigroup modules.  It tests heating and damage
+   calculations, thermal calculations for free-gas carbon and
+   carbon bound in graphite, and multigroup averaging.  The
+   full PENDF tape is included in the test comparisons.  ENDF/B-V
+   Tape 511 and ENDF/B-III thermal tape T322 are provided in the
+   NJOY2016 package.
+\item[Problem 2:]  Process one ENDF/B-IV isotope for a practical
+   CCCC library.  It tests resonance reconstruction,
+   Doppler-broadening to several temperatures, self-shielded unresolved
+   cross sections, self-shielded multigroup cross sections, and the
+   CCCC files ISOTXS, BRKOXS, and DLAYXS.  Tape 404 is provided in the
+   NJOY2016 package.
+\item[Problem 3:]  Process photon interaction cross sections
+   into DTF and MATXS formats.  The problem tests photoatomic cross
+   section linearization in \hyperlink{sRECONRhy}{RECONR},
+   multigroup averaging in \hyperlink{sGAMINRhy}{GAMINR}, and
+   output formatting in \hyperlink{sDTFRhy}{DTFR} and
+   \hyperlink{sMATXSRhy}{MATXSR}.  The
+   DLC7E library is provided in the NJOY2016 package.
+\item[Problem 4:]  \hyperlink{sERRORRhy}{ERRORR} is tested,
+   including the calculation of
+   covariances for fission $\bar{\nu}$.  Tape 511 is used.
+\item[Problem 5:]  This run tests \hyperlink{sCOVRhy}{COVR},
+   including the plotting
+   capability.  Tape 511 is used. This calculation produces a
+   large number of covariance graphs.
+\item[Problem 6:]  Includes a number of 2-D sample problems for
+   \hyperlink{sPLOTRhy}{PLOTR}, and one 3-D case.  Plots with
+   special characters,
+   error bars, curve tags, and legend blocks are demonstrated.
+\item[Problem 7:]  Prepares an ACE-format library for a fissionable
+   material.
+\item[Problem 8:] Checks the processing of a typical ENDF/B-VI
+   material using Reich-Moore resonances and File 6 for energy-angle
+   distributions through PENDF production and
+   \hyperlink{sACERhy}{ACER} formatting.
+\item[Problem 9:] Demonstrates the use of
+   \hyperlink{sLEAPRhy}{LEAPR} to generate
+   a scattering kernel for water.  The $\alpha$ and $\beta$ ranges
+   have been reduced to make the case run faster with less output.
+\item[Problem 10:] The production of unresolved resonance probability
+   tables for MCNP is demonstrated.  \hyperlink{sUNRESRhy}{UNRESR}
+   and \hyperlink{sPURRhy}{PURR} are both run to
+   allow comparisons of the Bondarenko results, and then
+   \hyperlink{sACERhy}{ACER} is
+   run to format the results for MCNP.
+\item[Problem 11:] Demonstrates the production of a library for the
+   WIMS reactor lattice code using $^{238}$Pu from ENDF/B-V.  PENDF
+   processing, \hyperlink{sGROUPRhy}{GROUPR}, and
+   \hyperlink{sWIMSRhy}{WIMSR} are all included.
+\item[Problem 12:]  Shows how to use \hyperlink{sGASPRhy}{GASPR}
+   to generate gas-production
+   data on the PENDF file, including color Postscript plots of the
+   resulting cross sections.
+\item[Problem 13:] Demonstrates the ``new'' MCNP formats and ACE
+   plotting.
+\item[Problem 14:] Shows how to prepare ACE incident proton
+   data and demonstrates the charged-particle format.  The necessary
+   evaluation is provided.
+\item[Problem 15:]  Executes \hyperlink{sMODERhy}{MODER}/
+   \hyperlink{sRECONRhy}{RECONR}/\hyperlink{sBROADRhy}{BROADR}/
+   \hyperlink{sGROUPRhy}{GROUPR}/\hyperlink{sERRORRhy}{ERRORR}
+   (once each for MF31, MF33 and MF34).  This job illustrates
+   NJOY's ability
+   to process uncertainty data for $\bar{\nu}$ (MF31), pointwise cross
+   sections (MF33) and angular distributions (MF4/MT2 P$_1$ moment).
+   The ``ENDF' input tape is the JENDL-3.3 $^{238}$U evaluation,
+   demonstrating that non-ENDF libraries that conform to the ENDF-6
+   format can be successfully processed by NJOY.  This input tape is
+   provided in the NJOY2016 package.
+\item[Problem 16:]  This test job is similar to Problem 15, but it
+   omits the \hyperlink{sGROUPRhy}{GROUPR} module,
+   demonstrating that uncertainty data
+   (MF33 \& MF34) processing can proceed directly from PENDF input.
+   We also append multiple \hyperlink{sCOVRhy}{COVR} and
+   \hyperlink{sVIEWRhy}{VIEWR} inputs to this job to
+   illustrate postscript plot generation for a user-specified set
+   of cross sections (MF33) and automatic plot generation for MF34.
+\item[Problem 17:]  This is the longest running job in the NJOY test
+   suite, involving processing of $^{235,238}$U and $^{239}$Pu.  The
+   job suite includes \hyperlink{sRECONRhy}{RECONR},
+   \hyperlink{sBROADRhy}{BROADR}, and \hyperlink{sGROUPRhy}{GROUPR}
+   for each nuclide, a \hyperlink{sMODERhy}{MODER} job to combine
+   the GENDF files and ERRORR processing that includes correlations
+   among the isotopes.  The necessary JENDL-3.3
+   input files are provided in the NJOY2016 package.
+\item[Problem 18:]  Execute \hyperlink{sMODERhy}{MODER}/
+   \hyperlink{sRECONRhy}{RECONR}/\hyperlink{sBROADRhy}{BROADR}/
+   \hyperlink{sGROUPRhy}{GROUPR}/\hyperlink{sERRORRhy}{ERRORR}/
+   \hyperlink{sCOVRhy}{COVR} and \hyperlink{sVIEWRhy}{VIEWR}
+   to process MF35 (spectrum) uncertainty data.  The multigroup
+   energy boundaries used in \hyperlink{sGROUPRhy}{GROUPR}
+   and \hyperlink{sERRORRhy}{ERRORR} match those
+   used to define the uncertainty data on the input tape and allow
+   for easy comparison of the processed output and the original data.
+   The ``ENDF'' input file is a composite of ENDF/B-VII.0 $^{252}$Cf
+   decay data (for MF5 \& MF35, MT18) and ENDF/B-VII.0 $^{252}$Cf
+   neutron transport data (for all other MF/MT data) and given a
+   dummy MATN of 9999.
+\item[Problem 19:] Tests processing of a Reich-Moore evaluation
+   ($^{241}$Pu) in an ACE file for MCNP.  An RM evaluation from ORNL
+   is provided.
+\item[Problem 20:] Tests processing of covariance data from
+   Reich-Moore-Limited resonance parameters using an
+   experimental $^{35}$Cl evaluation from ORNL that is included in
+   the NJOY2016 package.
+\end{singlespace}
+\end{description}
+
+\subsection{Test Problem 1}
+\label{ssMandT_1}
+\index{testing!Problem 01}
+
+This problem demonstrates how to prepare data for natural carbon
+as given on the ENDF/B-V ``Standards Tape'' and one of the ENDF/B-III
+thermal tapes.  We've kept on using these old input libraries
+for this test over all the versions of NJOY for consistency.
+\index{testing!Problem 01}
+\index{ENDF!ENDF/B-V}
+\index{ENDF!ENDF standards tape}
+
+The input cards for NJOY are listed below in the form of
+a UNIX shell script.  We normally run this script in a subdirectory
+called \cword{test}, and the  first few cards copy the
+ENDF general-purpose and thermal data from their normal locations
+in the next higher directory into the test subdirectory.  Note
+that the data files are assigned the local names \cword{tape20}
+and \cword{tape26}.  The \cword{cat} line starts a ``here'' file,
+which continues down to the \cword{eof} line near the end of
+the input.  The NJOY code is then run using this new input file,
+and the output file and PENDF file are saved in the names
+\index{PENDF} \cword{out01}, and \cword{pend01} for later comparisons
+with previous runs.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 1'
+echo 'getting endf tape 511'
+cp ../t511 tape20
+echo 'getting thermal tape 322'
+cp ../t322 tape26
+echo 'running njoy'
+ulimit -s 32768
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for c-nat from endf/b tape 511'/
+ 1306 3/
+ .005/
+ '6-c-nat from tape 511'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original endf/b-v tape for details of evaluation'/
+ 0/
+ broadr
+ -21 -22 -23
+ 1306 1/
+ .005/
+ 300.
+ 0/
+ heatr
+ -21 -23 -22/
+ 1306 1/
+ 444
+ thermr
+ 0 -22 -24
+ 0 1306 8 1 1 0 0 1 221 2
+ 300.
+ .05 1.2/
+ thermr
+ 26 -24 -23
+ 1065 1306 8 1 2 1 0 1 229 2
+ 300.
+ .05 1.2/
+ groupr
+ -21 -23 0 -24
+ 1306 3 3 3 3 1 1 1
+ 'carbon in graphite'/
+ 300
+ 1.e10
+ 3 1 'total'/
+ 3 2 'elastic'/
+ 3 4 'inelastic'/
+ 3 51 'discrete inelastic'/
+ 3 -68 'continued'/
+ 3 91 'continuum inelastic'/
+ 3 102 'n,g'/
+ 3 103 '(n,p)'/
+ 3 104 '(n,d)'/
+ 3 107 '(n,a)'/
+ 3 221 'free thermal scattering'/
+ 3 229 'graphite inelastic thermal scattering'/
+ 3 230 'graphite elastic thermal scattering'/
+ 3 251 'mubar'/
+ 3 252 'xi'/
+ 3 253 'gamma'/
+ 3 301 'total heat production'/
+ 3 444 'total damage energy production'/
+ 6 2 'elastic'/
+ 6 51 'discrete inelastic'/
+ 6 -68 'continued'/
+ 6 91 'continuum inelastic'/
+ 6 221 'free thermal scattering'/
+ 6 229 'graphite inelastic thermal scattering'/
+ 6 230 'graphite elastic thermal scattering'/
+ 17 51 'inelastic gamma production'/
+ 16 102 'capture gamma production'/
+ 0/
+ 0/
+ moder
+ -23 25
+ stop
+EOF
+../xnjoy<input
+echo 'saving output and pendf files'
+cp output out01
+cp tape25 pend01
+
+\end{ccode}
+\normalsize
+
+The first step is to run the \hyperlink{sMODERhy}{MODER}
+module to convert the ASCII ENDF file to binary mode.  Using
+binary mode will often cut the cost of running NJOY
+jobs.  \hyperlink{sRECONRhy}{RECONR} is then used to linearize and
+unionize the cross sections (no resonance reconstruction is
+needed for carbon).  A tolerance of 0.5\% was requested for this
+linearization.  The \hyperlink{sBROADRhy}{BROADR} module
+is used to Doppler-broaden the carbon cross sections to
+300K.  It is recommended that the same thinning and
+reconstruction tolerances be used in
+\hyperlink{sBROADRhy}{BROADR} as are used in
+\hyperlink{sRECONRhy}{RECONR}.
+\index{MODER}
+\index{RECONR}
+\index{BROADR}
+
+This NJOY run supplements the original ENDF data with computed
+values for heating, radiation damage, and thermal scattering.
+The call to the \hyperlink{sHEATRhy}{HEATR} module
+requests MT444 to get the damage cross section; heating
+(MT301) is automatically provided.  The first of the two
+\hyperlink{sTHERMRhy}{THERMR} runs generates thermal scattering data
+for a carbon free gas at 300K (MT221).  The second
+\hyperlink{sTHERMRhy}{THERMR} run generates
+data for graphite (MT229).  The ``1'' in the sixth field
+on the input card directs the module to use the $S(\alpha,\beta)$
+data from MT1065 on \cword{tape26} in order to compute the inelastic
+scattering cross section and scattering matrix, the next field of
+``0'' requests $E,E',\mu$ ordering, and the following ``1'' directs
+it to compute the coherent elastic scattering cross section using
+the built-in parameters for graphite.
+\index{HEATR}
+\index{THERMR}
+\index{graphite}
+
+When the second \hyperlink{sTHERMRhy}{THERMR} run has
+finished, \cword{tape23} contains the complete PENDF tape needed by
+\hyperlink{sGROUPRhy}{GROUPR}.\index{GROUPR}  Multigroup
+neutron reaction and photon production cross sections are computed
+using the Los Alamos 30-group structure for neutrons, the Los Alamos
+12-group structure for photons, and the CLAW weight function.
+\index{30-group structure}
+\index{12-group structure}
+\index{CLAW weight function}
+The scattering order is P$_3$.  Note that the long-input form
+is used to specify the list of reactions to be processed.  Most
+users now prefer the automatic input option.  The user has to
+carefully look at the reactions available on the ENDF tape and
+to consider the additional reactions added by
+\hyperlink{sHEATRhy}{HEATR} and
+\hyperlink{sTHERMRhy}{THERMR}.  Note especially the
+inclusion of several gas production reactions
+from the ENDF tape, the thermal reactions MT221 and MT229 from
+the PENDF tape, and MT301 and MT444 as generated by
+\hyperlink{sHEATRhy}{HEATR} from the PENDF tape.  The
+output is easy to read, but remember that
+groups are given in the order of increasing energy.
+
+The thermal scattering reactions must also be requested in the
+scattering matrix section (MFD=6).  MT230 was automatically
+generated by \hyperlink{sTHERMRhy}{THERMR} as MT229+1
+when coherent elastic scattering
+for graphite was requested.
+
+Photon production matrices are requested in the lines with
+\cword{mfd=17} and \cword{mfd=16}.  Actually, the use of ``17''
+to denote data given in MF13 on the ENDF tape is no longer
+required by \hyperlink{sGROUPRhy}{GROUPR}.
+
+As a last step, this problem runs \hyperlink{sMODERhy}{MODER}
+once more to convert the binary PENDF tape to ASCII mode.
+
+
+\subsection{Test Problem 2}
+\label{ssMandT_2}
+\index{testing!Problem 02}
+
+The second problem supplements the first by adding resonance
+reconstruction and output formatting.  The ENDF/B-IV material
+$^{238}$Pu (MAT1050) was originally chosen for this problem because
+it was freely available and its execution time was fairly small.
+\index{ENDF!ENDF/B-IV}
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 2'
+echo 'getting endf tape 404'
+cp ../t404 tape20
+echo 'running njoy'
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for pu-238 from endf/b-iv tape 404'/
+ 1050 3/
+ .005/
+ '94-pu-238 from endf/b tape t404'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original endf/b-iv tape for details of evaluation'/
+ 0/
+ broadr
+ -21 -22 -23
+ 1050 3 0 1 0/
+ .005/
+ 300. 900. 2100.
+ 0/
+ moder
+ -23 33
+ unresr
+ -21 -23 -24
+ 1050 3 7 1
+ 300 900 2100
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ 0/
+ groupr
+ -21 -24 0 -25
+ 1050 5 0 4 3 3 7 1
+ '94-pu-238'/
+ 300. 900. 2100.
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ .1 0.025 0.8208e06 1.4e06
+ 3 1 'total'/
+ 3 2 'elastic'/
+ 3 16 'n2n'/
+ 3 17 'n3n'/
+ 3 18 'fission'/
+ 3 102 'capture'/
+ 3 251 'mubar'/
+ 3 252 'xi'/
+ 3 253 'gamma'/
+ 3 259 '1/v'/
+ 6 2 'elastic'/
+ 6 16 'n2n'/
+ 6 17 'n,3n'/
+ 6 18 'fission'/
+ 6 51 'discrete inelastic'/
+ 6 -59 'continued'/
+ 6 91 'continuum inelastic'/
+ 0/
+ 3 1 'total'/
+ 3 2 'elastic'/
+ 3 18 'fission'/
+ 3 102 'capture'/
+ 6 2 'elastic'/
+ 0/
+ 3 1 'total'/
+ 3 2 'elastic'/
+ 3 18 'fission'/
+ 3 102 'capture'/
+ 6 2 'elastic'/
+ 0/
+ 0/
+ ccccr
+ -25 26 27 0
+ 1 1 't2lanl njoy'/
+ 'ccccr tests for njoy'/
+ 50 0 1 4 1
+ pu238 pu238 endfb4 ' 1050 ' 1050 10.89
+ 1 0 50 -1
+ 0 2.3821e02 3.3003e-11 1.7461e-12 0. 1.e10 0.0
+ 3 6
+ 300 900 2100
+ 1.e5 1.e4 1000. 100. 10. 1
+ moder
+ -24 28
+ stop
+EOF
+../xnjoy<input
+echo 'saving output and pendf files'
+cp output out02
+cp tape28 pend02
+
+\end{ccode}
+\normalsize
+
+The \hyperlink{sRECONRhy}{RECONR} input is similar to the one
+in Problem 1, but reading the listing file will demonstrate that
+\hyperlink{sRECONRhy}{RECONR} added about 2700
+points to the original grid in the resonance region.  After a
+little thinning, it ended up with about 2800 resonance energy
+points at 0K for 0.5\% reconstruction.  The data from
+\hyperlink{sRECONRhy}{RECONR} was then passed to
+\hyperlink{sBROADRhy}{BROADR} for preparation of cross sections
+at 300, 900, and 2100K.  An examination of the output listing
+shows that some thinning was possible because of the smoothing
+effect of Doppler broadening; the zero degree grid of 3241 points
+changed to 2341 points at 2100 degrees.
+\index{RECONR}
+\index{BROADR}
+
+One of the new features of this run is the call to
+\hyperlink{sUNRESRhy}{UNRESR}.\index{UNRESR}  The
+user will normally notice that unresolved-resonance parameters
+are available for a material by reading the introductory
+information on the ENDF tape, but
+\hyperlink{sUNRESRhy}{UNRESR} will return gracefully
+if no unresolved data are present in the evaluation.  The long output
+from \hyperlink{sUNRESRhy}{UNRESR} gives a table
+of the self-shielded\index{self-shielding}
+cross sections by reaction (vertical) and  sigma-zero\index{$\sigma_0$}
+value (horizontal) for each point of the unresolved-range energy grid.
+The reactions are flux-weighted total, elastic, fission, capture, and
+current-weighted total reading from the top down.  Heating, damage,
+and thermal cross sections were omitted for this particular problem.
+Therefore, the final PENDF tape is on \cword{tape22}, the output
+from \hyperlink{sUNRESRhy}{UNRESR}.
+
+The \hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR} run
+shown here adds several new features over
+the one given for Problem 1.  First, multiple temperatures and sigma-zero
+values are specified in order to get tables of self-shielded
+cross sections for the total, elastic, fission, and capture reactions.
+It is desirable to use the same sigma-zero grid in
+\hyperlink{sGROUPRhy}{GROUPR} that was used
+in \hyperlink{sUNRESRhy}{UNRESR}, although
+\hyperlink{sGROUPRhy}{GROUPR} will attempt to interpolate if the
+grids are different.  Note that a section of
+\hyperlink{sGROUPRhy}{GROUPR} input is given for 300K with
+complete coverage of all the reactions, and additional sections are
+given for the two higher temperatures with only the self-shielded
+reactions included.\index{self-shielding}  An examination of the output
+listing will show that self-shielded cross sections are given for the
+low-energy reactions (total, elastic, fission, capture), with group
+index reading down and sigma-zero value reading across.
+
+Another new feature of this input is the computation of the
+fission matrix (\cword{mfd=6}, \cword{mtd=18}).  More complicated
+input may be necessary for other materials.  Examination of the
+output listing will show that \hyperlink{sGROUPRhy}{GROUPR}
+discovered that the fission spectrum shape was constant over
+the entire energy range; therefore, it only put out a spectrum
+and a fission-neutron production cross section.
+\index{fission matrix}
+
+When the \hyperlink{sGROUPRhy}{GROUPR} run is complete,
+the final GENDF tape will be found on \cword{tape25}.  This file is
+used as input to the \hyperlink{sCCCCRhy}{CCCCR}
+module to produce ISOTXS and BRKOXS files for $^{238}$Pu.
+\index{GENDF}
+\index{CCCCR}
+\index{ISOTXS}
+\index{BRKOXS}
+
+
+\subsection{Test Problem 3}
+\label{ssMandT_3}
+\index{testing!Problem 03}
+
+This problem demonstrates the use of
+\hyperlink{sGAMINRhy}{GAMINR}\index{GAMINR} to prepare
+photon interaction (or photoatomic) cross sections.
+\index{!photoatomic!photoatomic cross sections}
+\index{photon interaction cross sections}
+It also demonstrates \hyperlink{sDTFRhy}{DTFR}\index{DTFR}, including plotting,
+\index{plotting} and \hyperlink{sMATXSRhy}{MATXSR}\index{MATXSR}.  For
+the sake of continuity, this test problem uses a rather old version
+of the photon interaction files called DLC7E\index{DLC7E}.  The MF23
+and MF27 parts of these data are written on two separate files.  Later
+libraries have everything on a single file.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 3'
+echo 'getting photoatomic tape gam23'
+cp ../gam23 tape30
+echo 'getting photoatomic tape gam27'
+cp ../gam27 tape32
+echo 'running njoy'
+cat>input <<EOF
+ reconr
+ 30 31
+ 'pendf tape for photon interaction cross sections from dlc7e'/
+ 1 1 0
+ .001/
+ '1-hydrogen'/
+ 92 1 0
+ .001/
+ '92-uranium'/
+ 0/
+ gaminr
+ 32 31 0 33
+ 1 3 3 4 1
+ '12 group photon interaction library'/
+ -1 0/
+ 92
+ -1 0/
+ 0/
+ dtfr
+ 33 34 31 36
+ 1 1 0
+ 5 12 4 5 16 1 0
+ 'pheat'
+ 1 621 1
+ 0/
+ 'h' 1 1 0./
+ 'u' 92 1 0./
+ /
+ matxsr
+ 0 33 35/
+ 1 't2lanl njoy'/
+ 1 1 1 2
+ '12-group photon interaction library'/
+ 'g'
+ 12
+ 'gscat'/
+ 1
+ 1
+ 'h' 1 1
+ 'u' 92 92
+ viewr
+ 36 37/
+ stop
+EOF
+../xnjoy<input
+echo 'saving output and plot files'
+cp output out03
+cp tape37 plot03
+
+\end{ccode}
+
+\normalsize
+
+This run starts with an application of the
+\hyperlink{sRECONRhy}{RECONR}\index{RECONR}
+module to linearize and unionize the File 23 cross sections.  Of course,
+there is no resonance reconstruction required here.  This
+\hyperlink{sRECONRhy}{RECONR} run demonstrates the use
+of a material loop; both hydrogen and uranium are processed
+in one run.  \hyperlink{sGAMINRhy}{GAMINR}\index{GAMINR} is then used
+to prepare the multigroup photon interaction cross sections, including
+heating; this run also uses a multimaterial loop.  The
+LANL\index{Los Alamos National Laboratory!LANL} 12-group photon
+structure\index{12-group structure} is used.  The GENDF tape
+(\cword{tape33}) is processed into two completely different library
+formats.  First, \hyperlink{sDTFRhy}{DTFR}\index{DTFR} is
+called.  This is a rather old output module, but it is still useful
+for some purposes.  For one thing,
+it automatically produces plots\index{plotting} of the multigroup data
+overlayed with the PENDF data.  Examples of the plots are given in the
+\hyperlink{sDTFRhy}{DTFR} chapter of this manual.  The MATXS
+output is more useful, because it can be used in a much more
+flexible way by the TRANSX code.
+
+\subsection{Test Problem 4}
+\label{ssMandT_4}
+\index{testing!Problem 04}
+
+This problem illustrates several aspects of the calculation of
+covariances (uncertainties) of multigroup data using
+\hyperlink{sERRORRhy}{ERRORR}.\index{ERRORR} The first
+\hyperlink{sERRORRhy}{ERRORR} problem produces, on unit 23,
+a file of multigroup cross section covariances\index{covariances}
+(\cword{mfcov=33}) for all reactions present (\cword{iread=0})
+in File 33 for $^{235}$U.  The group structure employed is identical
+to the energy grid selected by the evaluator (\cword{ign=19});
+however, no covariances are produced for cross sections below 1 eV
+or above 1 keV.  The second \hyperlink{sERRORRhy}{ERRORR}
+run adds to the above results a second data set containing
+multigroup $\overline{\nu}$ covariances.  Note that the
+use of \cword{mfcov=31} dictates that a GENDF file be
+produced (\cword{ngout=24}) prior to the start of
+\hyperlink{sERRORRhy}{ERRORR}.  In the
+$\overline{\nu}$ run, a user-defined group structure is employed
+(\cword{ign=1}).
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 4'
+echo 'getting endf tape 511'
+cp ../t511 tape20
+echo 'running njoy...'
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'u-235 10% pendf for errorr test problem from t511'/
+ 1395/
+ .10/
+ 0/
+ errorr
+ -21 -22 0 23 0/
+ 1395 19 3 1 1/
+ 0 0./
+ 0 33/
+ 1
+ 1.e0 1.e3
+ groupr
+ -21 -22 0 24
+ 1395 3 0 3 0 1 1 1
+ 'u-235 multigroup nubar calculation'/
+ 0.
+ 1.e10
+ 3 452 'total nubar'/
+ 0/
+ 0/
+ errorr
+ -21 0 24 25 23/
+ 1395 1 2 1 1/
+ 1 0
+ 0 31/
+ 7
+ 1.e0 1.e1 1.e2 1.e3 1.e4 1.e5 1.e6 1.e7
+ stop
+EOF
+../xnjoy<input
+echo 'saving output'
+cp output out04
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 5}
+\label{ssMandT_5}
+\index{testing!Problem 05}
+
+This short problem produces multigroup covariances for carbon,
+again using \cword{ign=19}, but here all cross sections from
+\cword{1E-5} to \cword{2E7} are treated.  The
+\hyperlink{sCOVRhy}{COVR}\index{COVR} module
+reads the binary output file from
+\hyperlink{sERRORRhy}{ERRORR}\index{ERRORR} and produces
+publication-quality plots\index{plotting} of all reactions for which
+covariance data exist.  This simple problem setup could be used with
+only a few simple changes for any nuclide, in order to take a quick
+look at the contents of the covariance files.  For applications
+where the resonance region is of interest, it is necessary to replace
+the second \hyperlink{sMODERhy}{MODER}\index{MODER} step with a
+resonance reconstruction step using
+\hyperlink{sRECONRhy}{RECONR}, as in the previous example.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 5'
+echo 'getting endf tape 511'
+cp ../t511 tape30
+echo 'running njoy...'
+cat>input <<EOF
+ moder
+ 30 -31
+ moder
+ -31 -32
+ errorr
+ -31 -32 0 33/
+ 1306 19 2 1/
+ 0 0
+ 0 33/
+ 1
+ 1e-5 2e7/
+ covr
+ 33 0 34/
+ 1/
+ /
+ /
+ 1306/
+ viewr
+ 34 35/
+ stop
+EOF
+../xnjoy<input
+echo 'saving output and plot files'
+cp output out05
+cp tape35 plot05
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 6}
+\label{ssMandT_6}
+\index{testing!Problem 06}
+
+This test problem demonstrates and tests a number of different
+kinds of plots\index{plotting} using data from ENDF/B-V Tape 511
+(the ``Standards Tape'').  The graphs produced and a detailed
+discussion of the input cards will be found in the
+\hyperlink{sPLOTRhy}{PLOTR}\index{PLOTR}
+chapter of this manual.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 6'
+echo 'getting endf tape 511'
+cp ../t511 tape30
+echo 'running njoy'
+cat>input <<EOF
+ plotr
+ 31/
+ /
+ 1/
+ '<endf/b-v carbon'/
+ '<t>otal <c>ross <s>ection'/
+ 4/
+ 1e3 2e7/
+ /
+ .5 10/
+ /
+ 5 30 1306 3 1/
+ /
+ 1/
+ '<endf/b-v carbon'/
+ '(n,]a>) with fake data'/
+ 1 0 2 1 1.3e7 .32/
+ /
+ /
+ /
+ /
+ 5 30 1306 3 107/
+ /
+ '<endf/b-v mat1306'/
+ 2/
+ 0/
+ -1 0/
+ '<s>mith & <s>mith 1914'/
+ 0/
+ 1.1e7 .08 .05 .05/
+ 1.2e7 .10 .05 .05/
+ 1.3e7 .09 .04 .04/
+ 1.4e7 .08 .03 .03/
+ /
+ 3/
+ 0/
+ -1 2/
+ '<b>lack & <b>lue 2008'/
+ 0/
+ 1.15e7 .07 .02 0. .2e6 0./
+ 1.25e7 .11 .02 0. .2e6 0./
+ 1.35e7 .08 .015 0. .2e6 0./
+ 1.45e7 .075 .01 0. .2e6 0./
+ /
+ 1/
+ '<endf/b-v carbon'/
+ '<e>lastic <mf4>'/
+ -1 2/
+ /
+ /
+ /
+ /
+ /
+ /
+ 5 30 1306 4 2/
+ /
+ 1/
+ '<endf/b-v l>i-6'/
+ '(n,2n)]a >neutron distribution'/
+ -1 2/
+ /
+ /
+ 0 12e6 2e6/
+ /
+ /
+ /
+ 5 30 1303 5 24/
+ /
+ 1/
+ '<endf/b-v l>i-6'/
+ '(n,2n)]a >neutron spectra vs <E>'/
+ 4 0 2 2/
+ 10. 2.e7/
+ /
+ 1e-11 1e-6/
+ '<c>ross <s>ection (barns/e<v>)'/
+ 5 30 1303 5 24 0. 12/
+ /
+ '10 <m>e<v'/
+ 1e3 2e-11 1e2/
+ 2/
+ 5 30 1303 5 24 0. 16/
+ /
+ '14 <m>e<v'/
+ 1e4 2e-10 2e3/
+ 3/
+ 5 30 1303 5 24 0. 20/
+ /
+ '20 <m>e<v'/
+ 1e5 2e-9 4e4/
+ 99/
+ viewr
+ 31 32/
+ stop
+EOF
+../xnjoy<input
+echo 'saving plot file'
+cp tape32 plot06
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 7}
+\label{ssMandT_7}
+\index{testing!Problem 07}
+
+This test problem demonstrates the preparation of
+ACE format\index{ACE format} libraries for the MCNP\index{MCNP}
+continuous-energy Monte Carlo\index{Monte Carlo} code.  The
+material selected for processing was $^{235}$U from ENDF/B-V.
+The \hyperlink{sGROUPRhy}{GROUPR} run is included to make a 30x20
+photon production matrix for \hyperlink{sACERhy}{ACER}.  This is
+an obsolete method for handling
+photon production for MCNP -- nowadays, people use the
+``Detailed Photon Production'' option.  This old test problem
+is kept for consistency with the testing in previous versions
+of NJOY.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 7'
+echo 'getting endf tape 511'
+cp ../t511 tape20
+echo 'running njoy...'
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for u-235 from endf/b-v tape 511' /
+ 1395 3 /
+ .005 /
+ '92-u-235 from endf/b-v tape 511 ' /
+ 'processed by the njoy nuclear data processing system' /
+ 'see original endf/b-v tape for details of evaluation' /
+ 0 /
+ broadr
+ -21 -22 -23
+ 1395 1 0 1 0 /
+ .005 /
+ 300.
+ 0 /
+ heatr
+ -21 -23 -24/
+ 1395/
+ moder
+ -24 28
+ groupr
+ -21 -24 0 -25
+ 1395 3 2 9 0 1 1 1 /
+ 'u-235 from tape 511' /
+ 300.
+ 1.0e10
+ 16 /
+ 0 /
+ 0 /
+ acer
+ -21 -24 -25 26 27 /
+ 1/
+ 'njoy test problem 7'/
+ 1395 300. /
+ 0/
+ /
+ stop
+EOF
+../xnjoy<input
+echo 'saving output, pendf, and ace files'
+cp output out07
+cp tape26 ace07
+cp tape28 pend07
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 8}
+\label{ssMandT_8}
+\index{testing!Problem 08}
+
+This problem was added to the NJOY testing suite to verify the
+processing of a typical ENDF/B-VI material with Reich-Moore
+resonances and File 6 energy-angle distributions.  The $^{61}$Ni
+evaluation is from ORNL, and the file is included in the NJOY
+package.  The normal processing sequence is used.  The
+\hyperlink{sGROUPRhy}{GROUPR} run is included to provide
+additional output for comparing to standard results or to older
+testing results.  An \hyperlink{sACERhy}{ACER} run is also included.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 8'
+echo 'getting endf tape for ni-61'
+cp ../eni61 tape20
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for endf/b-vi.1 28-ni-61a'/
+ 2834 1 0 /
+ .01/
+ '28-ni-61a from endf/b-vi.1 t124 (hetrick,fu;ornl)'/
+ 0/
+ broadr
+ -21 -22 -23
+ 2834 1/
+ .01/
+ 300/
+ 0/
+ heatr
+ -21 -23 -24/
+ 2834 6 0 1 0 2/
+ 302 303 304 402 443 444
+ moder
+ -24 28
+ groupr
+ -21 -24 0 -22
+ 2834 3 3 9 4 1 1 1
+ 'ni61a endf/b-vi.1 30x12'/
+ 300
+ 1e10
+  3/
+  3 251 'mubar'/
+  3 252 'xi'/
+  3 253 'gamma'/
+  3 259 '1/v'/
+  6/
+  16/
+ 0/
+ 0/
+ acer
+ -21 -24 0 25 26
+ 1 1 1/
+ '28-ni-61a from endf-vi.1'/
+ 2834 300./
+ 0/
+ /
+ stop
+EOF
+echo "running njoy"
+../xnjoy<input
+echo 'saving output and pendf files'
+cp output out08
+cp tape28 pend08
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 9}
+\label{ssMandT_9}
+\index{testing!Problem 09}
+
+This example demonstrates and tests the use of the
+\hyperlink{sLEAPRhy}{LEAPR} module
+to generate thermal scattering data.  The material is $^{1}$H
+to be used with $^{16}$O for a problem requiring water.  The
+run starts out with the familiar use of
+\hyperlink{sRECONRhy}{RECONR} and
+\hyperlink{sBROADRhy}{BROADR} to construct the basic cross sections
+at 296K.  \hyperlink{sLEAPRhy}{LEAPR} is then
+used to generate an $S(\alpha,\beta)$ scattering kernel on
+\cword{tape24}.  Shortened $\alpha$ and $\beta$ grids are used
+for compactness.  The \hyperlink{sTHERMRhy}{THERMR}
+module is then run using \cword{tape24}
+as input to add the thermal scattering cross section and
+scattering data to the PENDF tape on \cword{tape23}.  The
+new PENDF tape is on \cword{tape25}, and it can be used as
+input to \hyperlink{sGROUPRhy}{GROUPR} for a multigroup library
+or to \hyperlink{sACERhy}{ACER} for an
+MCNP Monte Carlo library.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 9'
+echo 'getting endf tape 511'
+cp ../t511 tape20
+echo 'running njoy'
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for h-1 from endf/b tape 511'/
+ 1301 3/
+ .005/
+ '1-h-1 from tape 511'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original endf/b-v tape for details of evaluation'/
+ 0/
+ broadr
+ -21 -22 -23
+ 1301 1/
+ .005/
+ 296.
+ 0/
+ leapr
+ 24
+ 'h in h2o, shortened endf model'/
+ 1 1/
+  101 1001./
+  0.99917 20.449 2 0 0/
+  1 1. 15.85316 3.8883 1/
+ 65 75 1/
+  .01008 .015 .0252 .033 0.050406
+  .0756 0.100812 0.151218 0.201624 0.252030 0.302436 0.352842
+  0.403248 0.453654 0.504060 0.554466 0.609711 0.670259 0.736623
+  0.809349 0.889061 0.976435 1.072130 1.177080 1.292110 1.418220
+  1.556330 1.707750 1.873790 2.055660 2.255060 2.473520 2.712950
+  2.975460 3.263080 3.578320 3.923900 4.302660 4.717700 5.172560
+  5.671180 6.217580 6.816500 7.472890 8.192280 8.980730 9.844890
+  10.79190 11.83030 12.96740 14.21450 15.58150 17.07960 18.72080
+  20.52030 22.49220 24.65260 27.02160 29.61750 32.46250 35.58160
+  38.99910 42.74530 46.85030 50.0/
+  0.000000 0.006375 0.012750 0.025500 0.038250 0.051000 0.065750
+  .0806495 0.120974 0.161299 0.241949 0.322598 0.403248 0.483897
+  0.564547 0.645197 0.725846 0.806496 0.887145 0.967795 1.048440
+  1.129090 1.209740 1.290390 1.371040 1.451690 1.532340 1.612990
+  1.693640 1.774290 1.854940 1.935590 2.016240 2.096890 2.177540
+  2.258190 2.338840 2.419490 2.500140 2.580790 2.669500 2.767090
+  2.874450 2.992500 3.122350 3.265300 3.422470 3.595360 3.785490
+  3.994670 4.224730 4.477870 4.756310 5.062580 5.399390 5.769970
+  6.177660 6.626070 7.119240 7.661810 8.258620 8.915110 9.637220
+  10.43200 11.30510 12.26680 13.32430 14.48670 15.76600 17.17330
+  18.72180 20.42450 22.29760 24.35720 25.0/
+ 296/
+  .00255 67/
+    0 .0005 .001 .002 .0035 .005 .0075 .01 .013 .0165 .02 .0245
+    .029 .034 .0395 .045 .0506 .0562 .0622 .0686 .075 .083 .091
+    .099 .107 .115 .1197 .1214 .1218 .1195 .1125 .1065 .1005 .09542
+    .09126 .0871 .0839 .0807 .07798 .07574 .0735 .07162 .06974
+    .06804 .06652 .065 .0634 .0618 .06022 .05866 .0571 .05586
+    .05462 .0535 .0525 .0515 .05042 .04934 .04822 .04706 .0459
+    .04478 .04366 .04288 .04244 .042 0./
+ 0.055556 0. 0.444444 0./  for diffusion, use 120. for second number
+  2/
+  .205 .48/
+  .166667 .333333/
+ ' h(h2o) thermal scattering '/
+ ' '/
+ ' temperatures = 296 deg k. '/
+ ' '/
+ ' shortened version of the endf/b-vi.4 evaluation for '/
+ ' hydrogen in water.  the energy transfer is limited to '/
+ ' 0.625 ev.  this is only for njoy testing, not for '/
+ ' real applications. '/
+ /
+ thermr
+ 24 -23 -25
+ 101 1301 8 1 2 1 0 1 222 2
+ 296.
+ .05 .625
+stop
+EOF
+../xnjoy<input
+echo 'saving output and pendf files'
+cp output out09
+cp tape24 pend09
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 10}
+\label{ssMandT_10}
+\index{testing!Problem 10}
+
+This case was constructed to demonstrate unresolved resonance range
+processing for MCNP libraries.  It starts with linearization,
+unionization, resonance reconstruction, and Doppler broadening
+to 300, 900, and 2100K.  The \hyperlink{sUNRESRhy}{UNRESR}
+module to run to generate one version of the self-shielded
+unresolved range cross sections on MF=2/MT152 to \cword{tape24}
+for the three temperatures and seven values of the background
+cross section $\sigma_0$.  Then the \hyperlink{sPURRhy}{PURR}
+module is run to generate probability tables on MF=2/MT153 of the
+PENDF tape and an alternate set of self-shielded cross
+sections.  Actually, once \hyperlink{sPURRhy}{PURR} has run, the
+MT152 values for \hyperlink{sUNRESRhy}{UNRESR} are overwritten
+with the \hyperlink{sPURRhy}{PURR} values.  Both methods are
+provided on this run to allow them to be compared.  Finally,
+\hyperlink{sACERhy}{ACER} is run to format the data for MCNP.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 10'
+echo 'getting endf tape 404'
+cp ../t404 tape20
+echo 'running njoy'
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for pu-238 from endf/b-iv tape 404'/
+ 1050 3/
+ .005/
+ '94-pu-238 from endf/b tape t404'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original endf/b-iv tape for details of evaluation'/
+ 0/
+ broadr
+ -21 -22 -23
+ 1050 3 0 1 0/
+ .005/
+ 300. 900. 2100.
+ 0/
+ unresr
+ -21 -23 -24
+ 1050 3 7 1
+ 300 900 2100
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ 0/
+ purr
+ -21 -24 -25
+ 1050 3 7 20 4/
+ 300 900 2100
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ 0/
+ acer
+ -21 -25 0 26 27/
+ 1/
+ 'njoy test problem 10'/
+ 1050 300./
+ /
+ /
+ moder
+ -25 28
+ stop
+EOF
+../xnjoy<input
+echo 'saving output, ace, and pendf files'
+cp output out10
+cp tape26 ace10
+cp tape28 pend10
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 11}
+\label{ssMandT_11}
+\index{testing!Problem 11}
+
+This case demonstrates and tests the construction of a multigroup
+library for the WIMS reactor physics code.  Here, we will need
+thermal data, so the \hyperlink{sTHERMRhy}{THERMR} module
+is included in the processing path.  Once the
+\hyperlink{sGROUPRhy}{GROUPR} module has been run,
+\hyperlink{sWIMSRhy}{WIMSR} is used for the final formatting.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 11'
+echo 'getting endf tape 404'
+cp ../t404 tape20
+echo 'running njoy'
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for pu-238 from endf/b-iv tape 404'/
+ 1050 3/
+ .005/
+ '94-pu-238 from endf/b tape t404'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original endf/b-iv tape for details of evaluation'/
+ 0/
+ broadr
+ -21 -22 -23
+ 1050 3 0 1 0 /
+ .005/
+ 300. 900. 2100.
+ 0/
+ unresr
+ -21 -23 -24
+ 1050 3 7 1
+ 300 900 2100
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ 0/
+ thermr
+ 0 -24 -25
+ 0 1050 8 3 1 0 0 1 221 0
+ 300. 900. 2100.
+ .05 4.2
+ groupr
+ -21 -25 0 -26
+ 1050 9 0 5 3 3 7 1
+ '94-pu-238'/
+ 300. 900. 2100.
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ 3 1 'total'/
+ 3 2 'elastic'/
+ 3 16 'n2n'/
+ 3 17 'n3n'/
+ 3 18 'fission'/
+ 3 102 'capture'/
+ 3 221 'free gas thermal'/
+ 6 2 'elastic'/
+ 6 16 'n2n'/
+ 6 17 'n,3n'/
+ 6 18 'fission'/
+ 6 51 'discrete inelastic'/
+ 6 -59 'continued'/
+ 6 91 'continuum inelastic'/
+ 6 221 'free gas thermal'/
+ 0/
+ 3 1 'total'/
+ 3 2 'elastic'/
+ 3 18 'fission'/
+ 3 102 'capture'/
+ 3 221 'free gas thermal'/
+ 6 2 'elastic'/
+ 6 221 'free gas thermal'/
+ 0/
+ 3 1 'total'/
+ 3 2 'elastic'/
+ 3 18 'fission'/
+ 3 102 'capture'/
+ 3 221 'free gas thermal'/
+ 6 2 'elastic'/
+ 6 221 'free gas thermal'/
+ 0/
+ 0/
+ wimsr
+ -26 27
+ 1/
+ 1050 1 1050./
+ 3 7 1e10 3 10.890 221 0/
+ 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1./
+ stop
+EOF
+../xnjoy<input
+echo 'saving output and wims files'
+cp output out11
+cp tape27 wims11
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 12}
+\label{ssMandT_12}
+\index{testing!Problem 12}
+
+This case was constructed to demonstrate the methods for adding
+gas production to a processing stream.  The
+\hyperlink{sGASPRhy}{GASPR} module doesn't
+require any special input.  We then use the
+\hyperlink{sPLOTRhy}{PLOTR} and \hyperlink{sVIEWRhy}{VIEWR}
+modules to graph the gas production reactions using color
+Postscript.  The gas production reactions have special MT
+values in the range 203 to 207.  They can also be fed into
+GROUPR for multigroup applications and
+\hyperlink{sACERhy}{ACER} for MCNP Monte Carlo libraries.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 12'
+echo 'getting endf tape for ni-61'
+cp ../eni61 tape20
+cat>input <<EOF
+ reconr
+ 20 21
+ 'pendf tape for endf/b-vi.1 28-ni-61a'/
+ 2834 1 0 /
+ .01/
+ '28-ni-61a from endf/b-vi.1 t124 (hetrick,fu;ornl)'/
+ 0/
+ gaspr
+ 20 21 22
+ plotr
+ 23/
+ 1 1 .3 2/
+ 1 3/
+ '<endf/b-vi n>i-61'/
+ '<r>esonance <c>ross <s>ections'/
+ 2 0 3 1 23e3 5e2/
+ .5e4 3e4 .5e4/
+ /
+ 1e-3 1e3/
+ /
+ 6 22 2834 3 2/
+ 0 0 0 3 2/
+ 'elastic'/
+ 2/
+ 6 22 2834 3 102/
+ 0 0 0 1 2/
+ 'capture'/
+ 1 7/
+ '<endf/b-vi n>i-61'/
+ '<g>as <p>roduction'/
+ 1 0 3 1/
+ 0 2e7 5e6/
+ /
+ /
+ /
+ 6 22 2834 3 203 0./
+ 0 0 0 1 2/
+ 'hydrogen'/
+ 2/
+ 6 22 2834 3 207 0./
+ 0 0 0 2 2/
+ 'helium-4'/
+ 99/
+ viewr
+ 23 24
+ stop
+EOF
+echo "running njoy"
+../xnjoy<input
+echo 'saving output, pendf, and plot files'
+cp output out12
+cp tape22 pend12
+cp tape24 plot12
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 13}
+\label{ssMandT_13}
+\index{testing!Problem 13}
+
+This test problem was constructed when Reich-Moore resonance
+processing and File 6 energy-angle distributions began to be
+used in ENDF/B files.  The sample evaluation for $^{61}$Ni was
+generated at ORNL, and it is provided in the NJOY package.
+Note that \hyperlink{sHEATRhy}{HEATR} and
+\hyperlink{sGASPRhy}{GASPR} are included to satisfy the
+expectations for a complete ACE library.  Two
+\hyperlink{sACERhy}{ACER} runs are used here.  The first one
+generates an ACE library on \cword{tape26}.  The second one reads
+in this new ACE file, does a series of consistency checks, provides
+an eye-readable listing, and makes a large set of color Postscript
+plots showing the various reaction cross sections and
+distributions.  This is a part of the QA procedure for ACE
+libraries.  The file \cword{tape36} output by
+\hyperlink{sVIEWRhy}{VIEWR} is the plot file in Postscript
+format.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 13'
+echo 'getting endf tape for ni-61'
+cp ../eni61 tape20
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for endf/b-vi.1 28-ni-61a'/
+ 2834 1 0 /
+ .01/
+ '28-ni-61a from endf/b-vi.1 t124 (hetrick,fu;ornl)'/
+ 0/
+ broadr
+ -21 -22 -23
+ 2834 1/
+ .01/
+ 300/
+ 0/
+ heatr
+ -21 -23 -24/
+ 2834 6 0 1 0 2/
+ 302 303 304 402 443 444
+ gaspr
+ -21 -24 -25
+ moder
+ -25 28
+ acer
+ -21 -25 0 26 27
+ 1 0 1/
+ '28-ni-61a endf-vi.1 njoy99'/
+ 2834 300./
+ /
+ /
+ acer
+ 0 26 33 34 35
+ 7 1 2/
+ '28-ni-61a endf-vi.1 njoy99'/
+ viewr
+ 33 36/
+ stop
+EOF
+echo "running njoy"
+../xnjoy<input
+echo 'saving output, pendf, ace, and plot files'
+cp output out13
+cp tape28 pend13
+cp tape26 ace13
+cp tape36 plot13
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 14}
+\label{ssMandT_14}
+\index{testing!Problem 14}
+
+This case demonstrates and tests processing for incident charged
+particles, specifically, protons on $^{14}$N.  It is not
+necessary to run reconstruction or Doppler broadening, so
+the evaluation is read directly into
+\hyperlink{sACERhy}{ACER}.  A copy of the
+ENDF/B file is used as the PENDF input.  Once again, two
+\hyperlink{sACERhy}{ACER} runs are used: one to generate the ACE
+file, and one to do the checks and make color Postscript plots.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 14'
+echo 'getting endf tape for p+n14'
+cp ../epn14 tape20
+cp tape20 tape21
+cat>input <<EOF
+ acer
+ 20 21 0 31 32
+ 1 0 1/
+ 'proton + 7-n-14 apt la150 njoy99 mcnpx'/
+ 725 0./
+ /
+ /
+ acer
+ 0 31 33 34 35
+ 7 1 2/
+ 'proton + 7-n-14 apt la150 njoy99 mcnpx'/
+ viewr
+ 33 36/
+ stop
+EOF
+echo "running njoy"
+../xnjoy<input
+echo 'saving output, ace, and plot files'
+cp output out14
+cp tape31 ace14
+cp tape36 plot14
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 15}
+\label{ssMandT_15}
+\index{testing!Problem 15}
+
+This test problem exercises the \hyperlink{sERRORRhy}{ERRORR}
+routines used to process MF31 ($\bar{\nu}$), MF33 (cross sections)
+and MF34 (MF4/MT2 P$_1$ component only) uncertainty
+data.  We use the JENDL-3.3 $^{238}$U evaluation
+for input, demonstrating that non-ENDF/B libraries that conform to
+the ENDF-6 format can be processed by NJOY.  The job includes a
+standard \hyperlink{sMODERhy}{MODER}/
+\hyperlink{sRECONRhy}{RECONR}/
+\hyperlink{sBROADRhy}{BROADR}/
+\hyperlink{sGROUPRhy}{GROUPR} sequence to create Doppler
+broadened PENDF and group-averaged GENDF tapes followed by a
+sequence of \hyperlink{sERRORRhy}{ERRORR} jobs; one for each
+MF value to be processed.  Use of \hyperlink{sGROUPRhy}{GROUPR}
+to process $\bar{\nu}$ (MF=3, MT=whatever MF=31 sections are
+present) is a pre-requisite for MF=31 processing with
+\hyperlink{sERRORRhy}{ERRORR}.  The first
+\hyperlink{sERRORRhy}{ERRORR} job processes MF=31 data
+(specified via the second item on the third input line
+(corresponding to card 7 in the
+\hyperlink{sERRORRhy}{ERRORR} input
+description)).  The first input line specifies the various input and
+output files; \cword{tape21} for a binary ENDF tape, \cword{tape91}
+for a GENDF tape and \cword{tape25} for the
+\hyperlink{sERRORRhy}{ERRORR} output tape in
+this instance.  The material number, multigroup energy structure and
+weighting function options are specified on the second input line.
+This input line could have been terminated here, as the fourth and
+fifth items, related to printing and selection of relative rather than
+absolute covariances, are given their default values.  Users will
+notice that the group structure and weighting function options differ
+from those specified in the
+\hyperlink{sGROUPRhy}{GROUPR} input preceding
+\hyperlink{sERRORRhy}{ERRORR}.  NJOY will
+not flag this as an error, but it is not recommended practice.  The
+third input card (corresponding to card 7 in the
+\hyperlink{sERRORRhy}{ERRORR} input, since
+\cword{ngout.ne.0}, and we are dealing with ENDF-6 format data),
+specifies \cword{iread=0} meaning that all MF=31 (the second item on
+this input card) MT values found on the ENDF input tape will be
+processed.  The remaining items on this card are not germaine to
+MF=31 processing and could have been omitted.  Additional
+\hyperlink{sERRORRhy}{ERRORR} jobs process the cross section
+uncertainties (MF=33) and elastic scattering Legendre (P$_1$ only)
+moment uncertainty (MF=34) using a combination of ENDF and GENDF
+input tapes.  Separate output files (\cword{tape25}, \cword{tape26}
+and \cword{tape27}) are created with these three
+\hyperlink{sERRORRhy}{ERRORR} executions.  These are ASCII files
+that may be viewed in any text editor or saved for use in a
+subsequent NJOY job, such as
+\hyperlink{sCOVRhy}{COVR}/\hyperlink{sVIEWRhy}{VIEWR} for
+plot generation.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 15'
+echo 'getting JENDL-3.3 U-238'
+cp ../J33U238 tape20
+echo 'running njoy'
+ulimit -s 32768
+cat>input <<EOF
+moder
+ 20 -21 /
+reconr
+ -21 -22 /
+ 'processing of U-238 of jendl-3.3.'
+9237 0 0 /
+0.001 /
+0 /
+broadr
+ -21 -22 -23 /
+9237 1 0 0 0 /
+0.001 /
+300. /
+0 /
+groupr
+ -21 -23 0 91 /
+9237 3 0 2 1 1 1 1 /
+'test'
+300. /
+1.0e10 /
+3 /
+3 251 'mubar' /
+3 252 'xi' /
+3 452 'nu' /
+3 455 'nu' /
+3 456 'nu' /
+5 18  'xi' /
+0 /
+0 /
+--
+-- process mf31
+errorr
+ -21 0 91 25 0 0 /
+9237 3 6 1 1 /
+1 300./
+0 31 1 1 -1 /
+--
+-- process mf33
+errorr
+ -21 0 91 26 0 0 /
+9237 3 6 1 1 /
+1 300./
+0 33 1 1 -1 /
+--
+-- process mf34
+errorr
+ -21 0 91 27 0 0 /
+9237 3 6 1 1 /
+1 300./
+0 34 1 1 -1 /
+--
+-- make mf31 plot file
+covr
+ 25 0 35 /
+ 1 /
+ /
+ /
+ 9237 /
+--
+-- make mf33 plot file.
+covr
+ 26 0 36 /
+ 1 /
+ /
+ 1 14 /
+ 9237   1   9237   1 /
+ 9237   1   9237   2 /
+ 9237   2   9237   2 /
+ 9237   2   9237   4 /
+ 9237   2   9237  16 /
+ 9237   2   9237  17 /
+ 9237   2   9237  18 /
+ 9237   2   9237 102 /
+ 9237   4   9237   4 /
+ 9237  16   9237  16 /
+ 9237  17   9237  17 /
+ 9237  18   9237  18 /
+ 9237  18   9237 102 /
+ 9237 102   9237 102 /
+--
+-- make mf34 plot file.
+covr
+ 27 0 37 /
+ 1 /
+ /
+ /
+ 9237 /
+--
+-- make mf31 postscript file.
+viewr
+ 35 45 /
+--
+-- make mf33 postscript file.
+viewr
+ 36 46 /
+--
+-- make mf34 postscript file.
+viewr
+ 37 47 /
+stop
+EOF
+../xnjoy<input
+echo 'saving output file'
+cp output out15
+cp tape45 plot15-31
+cp tape46 plot15-33
+cp tape47 plot15-34
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 16}
+\label{ssMandT_16}
+\index{testing!Problem 16}
+
+This test problem is similar to test 15, but we omit
+\hyperlink{sGROUPRhy}{GROUPR} and only
+process cross section (MF=33) and P$_1$ moment (MF=34) uncertainties
+with \hyperlink{sERRORRhy}{ERRORR}.  As stated in the previous
+problem, \hyperlink{sGROUPRhy}{GROUPR} execution is
+required when using \hyperlink{sERRORRhy}{ERRORR} to process MF=31
+data but, as shown here, is not required to process MF=33 or
+MF=34 uncertainty data.  We also append \hyperlink{sCOVRhy}{COVR}
+and \hyperlink{sVIEWRhy}{VIEWR} to this job to demonstrate Postscript plot
+generation.  The first \hyperlink{sCOVRhy}{COVR} job reads
+\cword{tape26}, the \hyperlink{sERRORRhy}{ERRORR} MF=33
+processed output tape and will create \cword{tape36} containing the
+appropriate plot commands that \hyperlink{sVIEWRhy}{VIEWR}
+uses to create a Postscript formatted \cword{tape46}.  Additional
+\hyperlink{sCOVRhy}{COVR} input includes \cword{icolor=1}
+(card 2) to specify color plots, and a user-specified number of plots,
+\cword{ncase=14}, on the third (card 3a) input card.  This is followed
+by 14 occurrences of card 4.  The second \hyperlink{sCOVRhy}{COVR}
+job reads the \hyperlink{sERRORRhy}{ERRORR} output tape created
+from MF=34 processing and creates all possible
+plots as we use the default input values for the variables defined by
+the third input card.  In reality there will only be a single plot
+since MF=34 processing is only performed for the elastic scattering
+(MF=4/MT=2) P$_1$ Legendre moment.  The output of this
+\hyperlink{sCOVRhy}{COVR} job, \cword{tape37} is fed to
+\hyperlink{sVIEWRhy}{VIEWR}, which generates a Postscript formatted
+file, \cword{tape47}.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 16'
+echo 'getting JENDL-3.3 U-238'
+cp ../J33U238 tape20
+echo 'running njoy'
+ulimit -s 32768
+cat>input <<EOF
+moder
+20 -21 /
+reconr
+-21 -22 /
+'processing of U-238 of jendl-3.3.'
+9237 0 0 /
+0.001 /
+0 /
+broadr
+-21 -22 -23 /
+9237 1 0 0 0 /
+0.001 /
+300. /
+0 /
+--
+-- process mf33 with internal group averaging
+-- since there is no groupr input tape
+errorr
+-21 -23 0 26 0 0 /
+9237 3 6 1 1 /
+0 300. /
+0 33 1 /
+--
+-- process mf34
+errorr
+-21 -23 0 27 0 0 /
+9237 3 6 1 1 /
+ 0 300. /
+0 34 1 1 /
+--
+-- make mf33 plot file.
+covr
+ 26 0 36 /
+ 1 /
+ /
+ 1 14 /
+ 9237   1   9237   1 /
+ 9237   1   9237   2 /
+ 9237   2   9237   2 /
+ 9237   2   9237   4 /
+ 9237   2   9237  16 /
+ 9237   2   9237  17 /
+ 9237   2   9237  18 /
+ 9237   2   9237 102 /
+ 9237   4   9237   4 /
+ 9237  16   9237  16 /
+ 9237  17   9237  17 /
+ 9237  18   9237  18 /
+ 9237  18   9237 102 /
+ 9237 102   9237 102 /
+--
+-- make mf34 plot file.
+covr
+ 27 0 37 /
+ 1 /
+ /
+ /
+ 9237 /
+--
+-- make mf33 postscript file.
+viewr
+ 36 46 /
+--
+-- make mf34 postscript file.
+viewr
+ 37 47 /
+stop
+EOF
+../xnjoy<input
+echo 'saving output file'
+cp output out16
+cp tape46 plot16-33
+cp tape47 plot16-34
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 17}
+\label{ssMandT_17}
+\index{testing!Problem 17}
+
+Test problem 17 is the longest running job in the NJOY test suite,
+involving processing of $^{235,238}$U and $^{239}$Pu.  We start with
+a standard sequence of \hyperlink{sRECONRhy}{RECONR}/
+\hyperlink{sBROADRhy}{BROADR}/
+\hyperlink{sGROUPRhy}{GROUPR} for each of these nuclides.
+Three separate GENDF files are created (\cword{tape91}, \cword{tape92},
+and \cword{tape93}) by these \hyperlink{sGROUPRhy}{GROUPR}
+executions, followed by a \hyperlink{sMODERhy}{MODER}
+job that merges the three GENDF files onto a single GENDF
+tape.  \hyperlink{sMODERhy}{MODER}'s
+card 1 \cword{nin=2} option is specified, followed by multiple card 3
+input to accomplish this merge.  \hyperlink{sERRORRhy}{ERRORR}
+begins with the standard input
+and output tape specifications on card 1 and the material number,
+multigroup and weighting function specification on card 2.  As we've
+included an GENDF tape as part of the input and we're dealing with
+ENDF-6 formatted data, the third input card corresponds to card 7 in
+the \hyperlink{sERRORRhy}{ERRORR} input description.  Here we
+specify \cword{iread=2}, indicating that additional MAT/MT data are
+to be included over those found on the original ENDF input
+(\cword{tape21}).  This additional input follows on the fourth
+and fifth input cards, corresponding to repeated use of card 10
+from the \hyperlink{sERRORRhy}{ERRORR} input description.  Based upon
+this additional input, the effect of $^{235}$U (\cword{mat}=9228) and
+$^{239}$Pu (\cword{mat}=9437) MT=18 uncertainties are included when processing
+$^{238}$U (\cword{mat}=9237) uncertainties.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 17'
+echo 'getting JENDL-3.3 U-238'
+cp ../J33U238 tape21
+echo 'getting JENDL-3.3 U-235'
+cp ../J33U235 tape22
+echo 'getting JENDL-3.3 Pu-239'
+cp ../J33Pu239 tape23
+echo 'running njoy'
+ulimit -s 32768
+cat>input <<EOF
+ reconr
+ 21 41 /
+ 'processing jendl-3.3 238u.'/
+ 9237 0 0 /
+ 0.001 /
+ 0 /
+ broadr
+ 21 41 31 /
+ 9237 1 0 0 0 /
+ 0.001 /
+ 300. /
+ 0 /
+ reconr
+ 22 42 /
+ 'processing jendl-3.3 235u.'/
+ 9228 0 0 /
+ 0.001 /
+ 0 /
+ broadr
+ 22 42 32 /
+ 9228 1 0 0 0 /
+ 0.001 /
+ 300. /
+ 0 /
+ reconr
+ 23 43 /
+ 'processing jendl-3.3 239pu.'/
+ 9437 0 0 /
+ 0.001 /
+ 0 /
+ broadr
+ 23 43 33 /
+ 9437 1 0 0 0 /
+ 0.001 /
+ 300. /
+ 0 /
+ groupr
+ 21 31 0 91 /
+ 9237 3 0 6 1 1 1 0 /
+ 'u-238' /
+ 300. /
+ 1.0e10 /
+ 3 /
+ 3 251 'mubar' /
+ 3 252 'xi' /
+ 3 452 'nu' /
+ 3 455 'nu' /
+ 3 456 'nu' /
+ 5 18  'xi' /
+ 0 /
+ 0 /
+ groupr
+ 22 32 0 92 /
+ 9228 3 0 6 1 1 1 0 /
+ 'u-235' /
+ 300. /
+ 1.0e10 /
+ 3 /
+ 0 /
+ 0 /
+ groupr
+ 23 33 0 93 /
+ 9437 3 0 6 1 1 1 0 /
+ 'pu-239' /
+ 300. /
+ 1.0e10 /
+ 3 /
+ 0 /
+ 0 /
+ moder
+ 2 99 /
+ 'merge u235, u-238 and pu-239' /
+ 92  9228 /
+ 91  9237 /
+ 93  9437 /
+ 0 /
+ errorr
+ 21 0 99 26 0 /
+ 9237 3 6 1 /
+ 1 300./
+ 2 33 1 1 -1 /
+ 9228 18 /
+ 9437 18 /
+ 0 /
+stop
+EOF
+../xnjoy<input
+echo 'saving output file'
+cp output out17
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 18}
+\label{ssMandT_18}
+\index{testing!Problem 18}
+
+This test problem exercises the \hyperlink{sERRORRhy}{ERRORR}
+spectrum uncertainty processing routines followed by a
+\hyperlink{sCOVRhy}{COVR}/\hyperlink{sVIEWRhy}{VIEWR} job to
+produce plots of these data.  There are no spectrum uncertainty
+data in the ENDF/B-VII.0 neutron transport files, but such data
+are provided for the spontaneous fission of $^{252}$Cf in the
+ENDF/B-VII.0 decay file.  Therefore a fictitious transport file has
+been created containing MF5 and MF35, MT18 data from the
+decay file with the remaining MF/MT data coming from the transport
+file.  This tape serves as the ENDF input to a
+\hyperlink{sMODERhy}{MODER}/\hyperlink{sRECONRhy}{RECONR}/
+\hyperlink{sBROADRhy}{BROADR}/\hyperlink{sGROUPRhy}{GROUPR}/
+\hyperlink{sERRORRhy}{ERRORR}/\hyperlink{sCOVRhy}{COVR}/
+\hyperlink{sVIEWRhy}{VIEWR} job.
+
+This job could have started at \hyperlink{sGROUPRhy}{GROUPR}
+with MF5/MT18 processing.  The
+multgroup user input mimics the energy structure appearing in the
+MF35/MT18 input tape and was chosen to allow easy comparison of the
+final calculated uncertainty with the corresponding data provided in
+MF1/MT451 by the evaluator.  The \hyperlink{sGROUPRhy}{GROUPR}
+GENDF output file resides on \cword{tape91} which along with the
+original ENDF input (\cword{tape20}) are input to
+\hyperlink{sERRORRhy}{ERRORR}.  The \hyperlink{sERRORRhy}{ERRORR}
+output will go on \cword{tape28}.  This tape will contain the results
+of processing MATN 9999 for the user-specified multigroup structure
+with no weighting function (based upon the \cword{ign=1},
+\cword{iwt=2} options specified on card 2).  The third line in the
+\hyperlink{sERRORRhy}{ERRORR} input (really card 7 in the
+ERRORR input description) specifies processing MF35 data for an
+incident neutron energy of 1.23 MeV (based upon the \cword{-1, 1.23e6}
+values appearing as the fourth and fifth items on this input card).
+The remaining input identifies the user-specified multigroup structure.
+After \hyperlink{sERRORRhy}{ERRORR}, we pass \cword{tape28} to
+\hyperlink{sCOVRhy}{COVR}, where the appropriate
+plot commands are generated to produce the correlation matrix plot,
+the spectrum plot, and the uncertainty plot.  Card 2 (\cword{icolor})
+requests a color contour plot, and card 3 sets the lower (x-axis)
+energy limit to 1 keV with default values used for the other input
+parameters.  Card 5 specifies the \cword{mat} number for the material of
+interest.  Finally, \hyperlink{sVIEWRhy}{VIEWR} reads the
+\hyperlink{sCOVRhy}{COVR} output file, \cword{tape38}, and produces
+a postscript-formatted file, \cword{tape39}.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 18'
+echo 'getting endf tape for e7 cf252'
+cp ../DCf252 tape20
+echo 'running njoy'
+cat>input <<EOF
+--
+-- Copy ascii input to binary.
+moder
+ 20 -21 /
+--
+-- Resonance reconstruction, to 0.1%.
+reconr
+ -21 -22 /
+ 'processing e70 252Cf with decay mf5/mt18 & mf35/mt18'
+ 9999 0 0 /
+ 0.001 /
+ 0 /
+--
+-- Doppler broaden to 300K.
+broadr
+ -21 -22 -23 /
+ 9999 1 0 0 0 /
+ 0.001 /
+ 300. /
+ 0 /
+--
+-- Group average, 300K with mf35 group structure.
+--  - All file 3 cross sections plus fission spectrum.
+groupr
+ -21 -23 0 91 /
+ 9999 1 0 2 1 1 1 1 /
+ 'test'
+ 300. /
+ 1.0e10 /
+ 71 / # of groups, energy boundaries follow:
+ 1.000000-5 1.500000+4 3.500000+4 5.500000+4 7.500000+4
+ 9.500000+4 1.150000+5 1.350000+5 1.650000+5 1.950000+5
+ 2.250000+5 2.550000+5 3.050000+5 3.550000+5 4.050000+5
+ 4.550000+5 5.050000+5 5.550000+5 6.050000+5 6.550000+5
+ 7.050000+5 7.550000+5 8.050000+5 8.550000+5 9.050000+5
+ 9.550000+5 1.050000+6 1.150000+6 1.250000+6 1.350000+6
+ 1.450000+6 1.550000+6 1.650000+6 1.750000+6 1.850000+6
+ 1.950000+6 2.150000+6 2.350000+6 2.550000+6 2.750000+6
+ 2.950000+6 3.250000+6 3.550000+6 3.850000+6 4.150000+6
+ 4.450000+6 4.750000+6 5.050000+6 5.550000+6 6.050000+6
+ 6.550000+6 7.050000+6 7.550000+6 8.050000+6 8.550000+6
+ 9.050000+6 9.550000+6 1.005000+7 1.055000+7 1.105000+7
+ 1.155000+7 1.205000+7 1.255000+7 1.305000+7 1.355000+7
+ 1.405000+7 1.460000+7 1.590000+7 1.690000+7 1.790000+7
+ 1.910000+7 2.000000+7
+ 3 /
+ 5 18  'chi' /
+ 0 /
+ 0 /
+--
+-- ERRORJ, mf35
+errorr
+ 20 0 91 28 0 0 /
+ 9999 1 2 1 1 /
+ 1 300./
+ 0 35 1 1 -1 1.23e6 /
+ 71 / # of groups, energy boundaries follow:
+ 1.000000-5 1.500000+4 3.500000+4 5.500000+4 7.500000+4
+ 9.500000+4 1.150000+5 1.350000+5 1.650000+5 1.950000+5
+ 2.250000+5 2.550000+5 3.050000+5 3.550000+5 4.050000+5
+ 4.550000+5 5.050000+5 5.550000+5 6.050000+5 6.550000+5
+ 7.050000+5 7.550000+5 8.050000+5 8.550000+5 9.050000+5
+ 9.550000+5 1.050000+6 1.150000+6 1.250000+6 1.350000+6
+ 1.450000+6 1.550000+6 1.650000+6 1.750000+6 1.850000+6
+ 1.950000+6 2.150000+6 2.350000+6 2.550000+6 2.750000+6
+ 2.950000+6 3.250000+6 3.550000+6 3.850000+6 4.150000+6
+ 4.450000+6 4.750000+6 5.050000+6 5.550000+6 6.050000+6
+ 6.550000+6 7.050000+6 7.550000+6 8.050000+6 8.550000+6
+ 9.050000+6 9.550000+6 1.005000+7 1.055000+7 1.105000+7
+ 1.155000+7 1.205000+7 1.255000+7 1.305000+7 1.355000+7
+ 1.405000+7 1.460000+7 1.590000+7 1.690000+7 1.790000+7
+ 1.910000+7 2.000000+7
+--
+-- make plot file.
+covr
+ 28 0 38 /
+ 1 /
+ 1.e3 /
+ /
+ 9999 /
+--
+-- make postscript file.
+viewr
+ 38 39 /
+stop
+EOF
+../xnjoy<input
+echo 'saving output, ace, and pendf files'
+cp output out18
+cp tape39 plot18
+
+\end{ccode}
+\normalsize
+
+\subsection{Test Problem 19}
+\label{ssMandT_19}
+\index{testing!Problem 19}
+
+The input file for this test is an evaluation for $^{241}$Pu using
+Reich-Moore\index{Reich-Moore!RM} resonance parameters.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 19'
+echo 'getting endf tape for e6 pu241c'
+cp ../e6pu241c tape20
+echo 'running njoy'
+cat>input <<EOF
+ moder
+ 20 -21
+ reconr
+ -21 -22
+ 'pendf tape for pu-241 from endf/b-vi.3'/
+ 9443 3/
+ .02/
+ '94-pu-241 from endf/b-vi.3'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original endf/b-iv tape for details of evaluation'/
+ 0/
+ broadr
+ -21 -22 -23
+ 9443 3 0 1 0/
+ .02/
+ 293.6 900. 2100.
+ 0/
+ unresr
+ -21 -23 -24
+ 9443 3 7 1
+ 293.6 900 2100
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ 0/
+ heatr
+ -21 -24 -25/
+ 9443 3/
+ 302 318 402
+ purr
+ -21 -25 -26
+ 9443 3 7 20 4/
+ 293.6 900 2100
+ 1.e10 1.e5 1.e4 1000. 100. 10. 1
+ 0/
+ acer
+ -21 -26 0 27 28/
+ 1/
+ 'njoy test problem 19'/
+ 9443 293.6/
+ /
+ /
+ moder
+ -26 29
+ stop
+EOF
+../xnjoy<input
+echo 'saving output, ace, and pendf files'
+cp output out19
+cp tape27 ace19
+cp tape29 pend19
+
+\end{ccode}
+\normalsize
+
+It starts with a normal \hyperlink{sRECONRhy}{RECONR} run
+using 2\% reconstruction for economy.  The output file will
+disclose that Reich-Moore resonances were processed.  The
+rest of the run follows the pattern of the previous examples.
+
+\subsection{Test Problem 20}
+\label{ssMandT_20}
+\index{testing!Problem 20}
+
+The input file for this case is an experimental evaluation
+from ORNL\index{Oak Ridge National Laboratory!ORNL} for $^{35}$Cl
+that uses the Reich-Moore-Limited\index{Reich-Moore-Limited!RML}
+(RML) format for its resonance parameters (\cword{lrf}=7 in
+MF2/MT151) and for the covariances between resonance
+parameters (MF32).  Utilizing the multi-channel capabilities
+of the RML representation, resonance cross sections and
+their covariances also include the first two inelastic levels
+(MT=51 and 52) in addition to the normal elastic and capture
+channels.
+
+\small
+\begin{ccode}
+
+echo 'NJOY Test Problem 20'
+echo 'getting cl35rml'
+cp ../cl35rml tape20
+echo 'running njoy'
+ulimit -s 32768
+cat>input <<EOF
+errorr
+ 999     /  option to insert dummy file 33 data
+ +20 +21 /  input & output tapes
+   1     /  mt to insert,
+   2     /  continue mt list ...
+ 102     /
+ 600     /
+   0     /  terminate mt list with zero
+reconr
+ +21 +22 /
+ 'processing cl35 with rml'
+ 1725 0 0 /
+ 0.01 /
+ 0 /
+broadr
+ +20 +22 +23 /
+ 1725 1 0 0 0 /
+ 0.01 /
+ 293.6 /
+ 0 /
+groupr
+ +20 +23 0 +91 /
+ 1725 4 0 2 1 1 1 1 /
+ 'test of cl35 with rml'
+ 293.6 /
+ 1.0e10 /
+ 3 /
+ 3 251 'mubar' /
+ 3 252 'xi' /
+ 0 /
+ 0 /
+errorr
+ +21 0 +91 +25 0 0 /
+ 1725 4 2 1 1 /
+ 1 293.6/
+ 0 33 1 1 -1 /
+covr
+ +25 0 +26 /
+ 1 /
+ .01 /
+ 1 /
+ 1725 /
+viewr
+ +26 +27
+stop
+EOF
+../xnjoy<input
+echo 'saving output file'
+cp output out20
+cp tape23 pend20
+cp tape27 plot20
+
+\end{ccode}
+\normalsize
+
+The reconr output from this run will show that it used the RML
+methods and it will list the reactions treated with resonance
+methods (MT=2, 51, 52, 102).  \hyperlink{sBROADRhy}{BROADR}
+and \hyperlink{sGROUPRhy}{GROUPR} are used in the normal way,
+\hyperlink{sERRORRhy}{ERRORR} and \hyperlink{sCOVRhy}{COVR}
+are then run to produce the covariances and prepare plots of the
+results.
+
+
+\subsection{Application of the NJOY System}
+\label{ssMandT_application}
+
+There are not enough standard test problems to exercise all the many
+options that evaluators manage to use.  Therefore, the next step
+in testing is to run NJOY on many different evaluations.  This
+has included running all the materials in recent ENDF/B (as well as
+many JEFF, JENDL and special purpose libraries such as the IAEA's
+International Reactor Dosimetry and Fusion File, IRDFF) neutron,
+thermal, photoatomic, photonuclear, and charged-particle
+sublibraries through to MCNP ``ACE" files followed by
+short MCNP runs to make sure the data have no obvious flaws
+that prevent the code from running.  The output files were examined
+for error messages and other indications of problems.
+This process also produces a useful set of plots that can be
+scanned for possible problems.  Plots from some of these
+tests are available on the web.  Browse to
+\href{http://t2.lanl.gov}{http://t2.lanl.gov} and select the
+``Nuclear Information Service (NIS)", ``Data area"
+and ``US ENDF/B Libraries" links.
+Look in ``ENDF/B-VII Neutron Data,'' ``ENDF/B-VII Thermal
+Scattering Data,'' ``ENDF/B-VII Proton Data,'' and ``ENDF/B-VII
+Photonuclear Data.
+
+As discussed in the \hyperlink{sHEATRhy}{HEATR} section of this
+report, NJOY has the capability to examine ENDF-format evaluations
+for energy balance problems that show up for nuclear heating
+calculations.  These tests can also reveal problems with the
+processing on occasion.  A large set of results, including plots,
+can be found on the web.  As before, browse to
+\href{http://t2.lanl.gov}{http://t2.lanl.gov}, again select
+the ``Nuclear Information Service (NIS)", ``Data area"
+and ``US ENDF/B Libraries" links, but now
+scroll down to ``Energy Balance of ENDF/B-VII.1,'' and click on
+``summary.''  This page lists the materials with their problems
+and provides links to the plots.
+
+Another test of the processing code comes from running
+criticality benchmarks such as those defined in the ICSBEP
+Handbook\cite{ICSBEP} using the processed data
+libraries.  If results are consistent, it gives some confidence
+that the libraries don't contain severe errors.  Table~\ref{crits1}
+shows some benchmark results using ENDF/B-VII.0 data processed
+with NJOY and used by MCNP5.  The results are calculated
+k$_{\rm eff}$ values divided by the evaluated model
+k$_{\rm eff}$ value (C/E).
+
+\begin{table}[thbp]
+\caption[Criticality benchmark results from MCNP5 with NJOY processed \newline
+ ENDF/B-VII.0 data]{Criticality benchmark results from MCNP5 using NJOY
+ processed ENDF/B-VII.0 Cross Sections}
+\setlength{\extrarowheight}{1pt}
+\begin{center}
+\begin{tabular}{lll}
+Critical & k$_{\rm eff}$ C/E & Description \\ \hline
+HMF001 Godiva & 0.99986 & sphere of $^{235}$U \\
+PMF001 Jezebel & 1.00006 & sphere of $^{239}$Pu \\
+UMF001 Jezebel-23 & 0.99970 & sphere of $^{233}$U \\
+HMF028 Flattop-25 & 1.00277 & $^{235}$U core, $^{\rm nat}$U reflector \\
+PMF006 Flattop-Pu & 1.00105 & $^{239}$Pu core, $^{\rm nat}$U reflector \\
+UMF006 Flattop-23 & 0.99937 & $^{233}$U core, $^{\rm nat}$U reflector \\
+IMF007s Bigten & 0.99995 & 10\% enr. U core, $^{nat}$U refl. \\
+HST042-02 & 1.00028 & HEU in nitrate solution \\
+HST042-03 & 1.00065 & HEU in nitrate solution \\
+HST042-05 & 1.00019 & HEU in nitrate solution \\
+LCT006-01 & 0.99995 & low enruiched UO$_2$ lattice \\
+LCT006-02 & 1.00052 & low enriched UO$_2$ lattice \\
+LCT006-03 & 1.00036 & low enriched UO$_2$ lattice \\ \hline
+\end{tabular}
+\end{center}
+\label{crits1}
+\end{table}
+
+Similarly, we can calculate criticality benchmarks using
+multigroup libraries with a discrete-ordinates transport
+code.  The Los Alamos PARTISN code was used with data
+prepared using TRANSX.  Table~\ref{mg1} shows results for a
+selection of fast critical assemblies using three different
+group structures.  Comparing these results with the previous
+table shows that multigroup methods can compare favorably
+with Monte Carlo when using high-accuracy libraries.
+IMF007h is a 2-D cyclindrical homogenized model for
+Big-10.  Table~\ref{mg2} shows results for two of the thermal
+solution criticals from Table~\ref{crits1}.  Once again, the
+results are satisfactory.  These kinds of tests provide some
+confidence that the multigroup processing in NJOY is working
+properly and is consistent with the Monte Carlo processing.
+
+\begin{table}[tp]
+\caption[``FAST" criticality benchmark results from TRANSX/PARTISN
+ with NJOY processed ENDF/B-VII.0 data]{Benchmark Results for Fast
+ Criticals Using ENDF/B-VII.0 Mulitgroup Libraries and TRANSX/PARTISN}
+\setlength{\extrarowheight}{1pt}
+\begin{center}
+\begin{tabular}{lllll}
+Critical & k$_{\rm eff}$ C/E \\
+                  & MCNP  &   30 gp   & 80 gp   &  187 gp \\ \hline
+HMF001 Godiva     & 0.99986 & 1.00234 & 1.00091 & 1.00025 \\
+PMF001 Jezebel    & 1.00006 & 1.00060 & 1.00047 & 1.00036 \\
+UMF001 Jezebel-23 & 0.99970 & 1.00115 & 1.00024 & 0.99992 \\
+HMF028 Flattop-25 & 1.00277 & 1.00349 & 1.00343 & 1.00295 \\
+PMF006 Flattop-Pu & 1.00105 & 1.00126 & 1.00147 & 1.00134 \\
+UMF006 Flattop-23 & 0.99937 & 1.00126 & 1.00010 & 0.99971 \\
+IMF007h Bigten    & 1.00005 &         & 1.00022 & 1.00001 \\ \hline
+\end{tabular}
+\end{center}
+\label{mg1}
+\end{table}
+
+\begin{table}[bp]
+\caption[``THERMAL" criticality benchmark results from TRANSX/PARTISN
+ and NJOY processed ENDF/B-VII.0 data]{Benchmark Results for Thermal
+ Criticals Using ENDF/B-VII.0 Mulitgroup Libraries and TRANSX/PARTISN.}
+\begin{center}
+\begin{tabular}{llll}
+Critical & k$_{\rm eff}$ C/E \\
+         &  MCNP   & 69 gp   &   187 gp  \\ \hline
+HST042-03 & 1.00065 & 0.99931 & 0.99958 \\
+HST042-05 & 1.00019 & 0.99946 & 0.99935 \\ \hline
+\end{tabular}
+\end{center}
+\label{mg2}
+\end{table}
+
+As a further verification of NJOY processing, it is useful to do
+intercomparisons with other processing systems.  Over the years,
+we have periodically compared NJOY results from
+\hyperlink{sRECONRhy}{RECONR} and \hyperlink{sBROADRhy}{BROADR}
+with the PREPRO system of D. E. Cullen\cite{PREPRO}, especially
+when new features have been added to the ENDF system.  We recently
+did a number of comparisons with ORNL results to verify the new
+capabilities for resonance reconstruction and covariance processing
+imported from the ORNL SAMMY code.  In some cases, these
+comparisons have been extended to multiple laboratories.  An
+example of that is a recent comparison of unresolved resonance
+range processing\cite{sublet}.  This study suggests that more work
+is needed in the unresolved resonance range.
+
+The comparisons described above were on cross sections.  It is also
+useful to do multilab comparisons on integral results.  As an example,
+a LANL-LLNL comparison\cite{fast} shows that we can get good
+agreement for the fast criticals Godiva, Jezebel, and Jezebel-23.
+Another recent multilab comparison involving LANL, LLNL, ANL, and
+the CEA demonstrated reasonable results for the softer spectrum of
+the Big-10 critical assembly\cite{big10}.
+
+\cleardoublepage
+

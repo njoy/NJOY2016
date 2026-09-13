@@ -1,0 +1,11 @@
+FROM docker.oecd-nea.org/njoy/njoy2016/base:latest
+COPY . njoy
+WORKDIR njoy
+RUN mkdir -p build
+WORKDIR build
+RUN cmake -D static=YES -D static_njoy=YES -D static_libraries=YES -D CMAKE_EXE_LINKER_FLAGS="-static" ..
+RUN make -j8
+RUN make install
+RUN ctest -j8
+WORKDIR /
+RUN rm -rf njoy

@@ -2399,6 +2399,12 @@ contains
          sigf(3,i,itemp)=bval(3,i,itemp)/bval(6,i,itemp)
          sigf(4,i,itemp)=bval(4,i,itemp)/bval(6,i,itemp)
          sigf(5,i,itemp)=bval(5,i,itemp)/bval(7,i,itemp)
+         if (sigf(3,i,itemp).lt.0.0) sigf(3,i,itemp)=0.0
+         if (sigf(5,i,itemp).lt.0.0) sigf(5,i,itemp)=0.0
+         if (sigf(4,i,itemp).lt.0.0) then
+            sigf(4,i,itemp)=0.0
+            sigf(2,i,itemp)=sigf(1,i,itemp)
+         endif
       enddo
    enddo
    if (iprint.gt.0) then

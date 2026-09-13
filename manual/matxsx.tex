@@ -1,0 +1,2015 @@
+\section{MATXSR}
+\label{sMATXSR}
+\index{MATXSR|textbf}
+
+\hypertarget{sMATXSRhy}{The}
+MATXS\index{MATXS format} material cross section format is
+a generalized CCCC-type\index{CCCC format} interface format for
+neutron, photon, and charged-particle data, including cross sections,
+group-to-group matrices, temperature variations, self-shielding,
+and time-dependence.  The CCCC standards are discussed in more
+detail in the CCCCR chapter of this manual and in the
+CCCC-III\index{CCCC format!CCCC-III} and CCCC-IV\index{CCCC format!CCCC-IV}
+reports\cite{CCCC3,CCCC4}.  MATXS libraries
+can be used with the TRANSX\index{TRANSX} code\cite{TRANSX,TRANSX2}
+to produce effective cross sections for a wide variety of application
+codes.
+
+This chapter describes the MATXSR module in NJOY2016.0.
+
+\subsection{Background}
+\label{ssMATXSR_back}
+
+Even the very best nuclear cross section processing code would be useless
+if it were unable to deliver its products to users.  This is the role of
+the interface file.  There have been interface files since the beginning
+of calculational neutronics; examples include the DTF format (see the
+\hyperlink{sDTFRhy}{DTFR} chapter of this manual) that was devised
+for the early discrete-ordinates transport code DTF-IV\cite{DTF},
+\index{DTF format} and the CCCC ISOTXS\index{ISOTXS}
+format\cite{CCCC4} (see the \hyperlink{sCCCCRhy}{CCCCR}
+section of this manual).  Both of these interface formats are still
+in use today, but both of them have problems and show their age.  Some
+of these problems result from the increase in the capabilities of
+computer systems (capabilities that allow us to consider much more
+complex problems), some arise from the many new kinds of nuclear systems
+that are being studied today, and some come from 20/20 hindsight, which
+makes it easy to see the design flaws in earlier formats.
+
+Based on the problems seen with existing interface files, an
+ideal interface file should be
+
+\begin{description}
+\begin{singlespace}
+\item[extendable,]
+   so that new cross section types, new incident or secondary particle
+   types, or new energy ranges are easy to add without changing the
+   basic format;
+
+\item[comprehensive,]
+   in order to be able to handle as many of the kinds of data produced
+   by the processing code as possible (results should not be lost just
+   because there are no places for them);
+
+\item[generalizable,]
+   to allow common methods to be used for similar kinds of data (for
+   example, $nn$ matrices and $\gamma\gamma$ matrices) in order
+   to transfer the experience gained in one field to another, and in
+   order to simplify coding by allowing components to be reused;
+
+\item[self-contained,]
+   because it should not be necessary to provide additional information
+   that is not in the file in order to use or interpret the file;
+
+\item[compact,]
+   because nuclear data often have many zeros or very small numbers in
+   tables (for example, threshold reactions, scattering matrices),
+   and these zeros must be removed effectively for economic storage
+   and fast transfer of libraries; and
+
+\item[efficient,]
+   thus implying that binary mode should be used, that the records have
+   a well-defined maximum size, and that there is a minimum number of
+   records to reduce the number of I/O operations.
+\end{singlespace}
+\end{description}
+
+Comparing the DTF format to these principles gives the following
+results: it is fairly {\it extendable} because it has no fixed
+particles, energy limits, or reaction types; it is not very {\it
+comprehensive} because it can only transmit the total scattering
+matrix; it is fairly {\it generalizable} because of the lack of fixed
+types; it is not at all {\it self-contained} in that it requires
+outside definitions like table length, position of the total, group
+structure, and identity of edit cross sections; it is not very {\it
+compact} because most zeros must be given explicitly in the tables; and
+it is not very {\it efficient} because it uses coded card-image
+records.
+
+Similarly, studying the ISOTXS format gives the following results:  it
+is not {\it extendable} because it works for neutrons only and allows
+only very limited types of reactions to be included; it is not {\it
+comprehensive} because it works for neutrons only and allows only very
+limited types of reactions to be included; it is not {\it
+generalizable} because of its specialization to fast-reactor problems
+(as proof, note that the CCCC files for $\gamma$ cross sections use
+completely different formats); it is reasonably {\it self-contained}
+because all the parameters are internal, the group structure is given,
+and all names needed for labeling an interpreted listing are well
+determined; it is fairly {\it compact} because many zeros are removed
+(but too many still remain); it is fairly {\it efficient} because it
+uses binary mode, but record sizes are poorly predictable and very
+nonuniform, thereby needlessly increasing the size of application codes
+and the number of I/O operations.
+
+\subsection{The MATXS Format}
+\label{ssMSTXSR_format}
+
+Following these general principles, the MATXS material cross section
+file was designed to extend and generalize the existing interface
+formats while still using the CCCC approach for efficiency and
+familiarity (see the \hyperlink{sCCCCRhy}{CCCCR} section of this
+report for more details).  The
+first design principle was that all information would be identified
+using lists of Hollerith names.  As an example, if the list of reactions
+included in the file contains entries such as \cword{nf}, \cword{ng},
+and \cword{n2n}, it is trivial to add additional reactions such
+as \cword{kerma} or \cword{dpa}.  This approach is much more extendable
+than the fixed set of reaction flags used in ISOTXS.  The second design
+principle was that the file would be designed to hold sets of vectors
+and rectangular matrices and that the same format would be used
+regardless of the contents of the vectors and matrices.  As a
+consequence, once a code can handle $n{\rightarrow}n$, it can also
+handle $\gamma{\rightarrow}\gamma$; once a code can handle
+$n{\rightarrow}\gamma$, it can also handle $\gamma{\rightarrow}n$,
+$n{\rightarrow}\beta$, or even $d{\rightarrow}p$.  This approach
+is an example of generalization.  Each material is now divided into
+data types identified by input and output particle.  As an example,
+$n{\rightarrow}\gamma$ is a data type characterized by input particle
+equals neutron, and output particle equals photon.  The matrices for
+this data type contain cross sections for producing photons in photon
+group $\gamma$ due to reactions of neutrons in group $n$.  The
+vectors, if any, would contain photon production cross sections
+versus neutron group.  The use of completely general data types helps
+make the format comprehensive.
+
+The names for materials are written in the forms \cword{u235},
+\cword{fe56}, \cword{tinat}, or \cword{h2a}.  Note that ``\cword{nat}''
+is used explicitly for elements; names like \cword{be} or \cword{c}
+should be avoided. Suffixes ``\cword{a}'', ``\cword{b}'', or
+``\cword{c}" are used to label different versions of a material in a
+library.  In order to keep names to six characters, isomers should be
+identified by incrementing the ``thousands'' digit in the atomic number
+field; for example, \cword{nb193a} would be the second version of
+the first isomer of $^{93}$Nb.  The standard names for MATXS particles
+are given in Table~\ref{sparts}.
+\index{MATXS!particle names}
+
+\begin{table}[t]
+\caption[Standard MATXSR particle names]{Standard Particle Names}
+\begin{center}
+\begin{tabular}{ll}
+Name & Particle \\ \hline
+\cword{n} & neutron \\
+\cword{g} & gamma \\
+\cword{p} & proton \\
+\cword{d} & deuteron \\
+\cword{t} & triton \\
+\cword{h} & $^3$He nucleus \\
+\cword{a} & alpha \\
+\cword{b} & beta \\
+\cword{r} & residual or recoil (heavier than $\alpha$) \\ \hline
+\end{tabular}
+\label{sparts}
+\end{center}
+\end{table}
+
+The standard names for the data types (\cword{htype}) are mostly based
+on these particle names; the use of the terms \cword{scat}, \cword{dk},
+\cword{therm} are exceptions.  Table~\ref{stypes} illustrates the scheme used.
+\index{MATXS!data type names}
+
+\begin{table}[b]
+\caption[Standard MATXSR data-type names]{Standard Data-Type Names}
+\begin{center}
+\begin{tabular}{ll}
+Name & Data Type \\ \hline
+\cword{nscat} &  neutron scattering \\
+\cword{ng} & neutron-induced gamma production \\
+\cword{np} & neutron-induced proton production \\
+\cword{nr} & neutron-to-recoil matrix \\
+\cword{gscat} & gamma scattering \\
+\cword{pscat} & proton scattering \\
+\cword{pn} & proton-induced neutron production \\
+$\cdots$ & $\cdots$ \\
+\cword{ntherm} & thermal scattering data \\
+\cword{dkn} & delayed-neutron data \\
+\cword{dkhg} & decay heat and gamma data \\
+\cword{dkb} & decay beta data \\ \hline
+\end{tabular}
+\label{stypes}
+\end{center}
+\end{table}
+
+Reactions names are constructed in MATXSR from the ENDF MT number, the
+LR flag (if present), and the incident particle name.  Examples of the
+standard names are given in Tables~\ref{sname3}--\ref{sname11}.
+\index{MATXS!reaction names} Note that the first \cword{n}
+is omitted from the last three reactions in Table~\ref{sname3}.  It
+is implicit in the data-type name.  This convention saves space in
+the name for possible breakup products (see Table~\ref{sname4}).
+The first \cword{n} is also implicit in the reactions of Table~\ref{sname4}.
+No multiplicity is used in the breakup product strings in order to avoid
+possible confusions with the discrete-level number;  just count the
+like letters to get the multiplicity.  The names used for the most
+common neutron absorption reactions are given in Table~\ref{sname5},
+and the names used for the fission reactions are given in
+Table~\ref{sname6}.  MATXS libraries typically give the
+total fission cross section and all the partial cross sections (when
+available) in the vector blocks, but they do not give the total
+fission matrix when the partial matrices are available.
+
+\begin{table}[t]
+\caption[MATXSR neutron emitting reaction names]{Simple Neutron-Emitting
+Reactions}
+\begin{center}
+\begin{tabular}{lll}
+Name & MT & Description \\ \hline
+\cword{nelas} & 2 & neutron elastic scattering \\
+\cword{nnonel} & 3 & neutron nonelastic (MT=1--MT=2) \\
+\cword{ninel} & 4 & neutron inelastic sum (MT=51--91) \\
+\cword{n2n}   & 16 & (n,2n) \\
+\cword{n3n}   & 17 & (n,3n) \\
+\cword{nna}   & 22 & (n,n$'\alpha$) \\
+\cword{nnp}   & 28 & (n,n$'$p) \\
+\cword{n01}   & 51 & (n,n$_1$) \\
+\cword{n02}   & 52 & (n,n$_2$) \\
+\cword{ncn}   & 91 & (n,n$'$) to continuum \\ \hline
+\end{tabular}
+\label{sname3}
+\end{center}
+\end{table}
+
+\begin{table}[b]
+\caption[MATXSR breadkup reaction (LR flag) names]{Breakup Reactions (LR flags)}
+\begin{center}
+\begin{tabular}{llll}
+Name & MT & LR & Description \\ \hline
+\cword{n07a} & 57 & 22 & (n,n$_7$)$\alpha$  \\
+\cword{n51p} & 65 & 28 & (n,n$_{15}$)p  \\
+\cword{n02aa} & 52 & 29 & (n,n$_2$)$2\alpha$ \\
+\cword{ncnaaa} & 91 & 23 & (n,n$'$)$3\alpha$ \\
+\cword{n06na} & 56 & 24 & (n,n$_5$)n$\alpha$ \\
+\cword{n01ee} & 51 & 40 & (n,n$_1$)ee \\ \hline
+\end{tabular}
+\label{sname4}
+\end{center}
+\end{table}
+
+\begin{table}[t]
+\caption[MATXSR neutron absorption reaction names]{Neutron-Absorption Reactions}
+\begin{center}
+\begin{tabular}{lll}
+Name & MT & Description \\ \hline
+\cword{nabs} & 101 & total absorption \\
+\cword{ng} & 102 & radiative capture \\
+\cword{np} & 103 & (n,p) \\
+\cword{na} & 107 & (n,$\alpha$) \\ \hline
+\end{tabular}
+\label{sname5}
+\end{center}
+\end{table}
+
+\begin{table}[b]
+\caption[MATXSR fission reaction names]{Fission Reactions}
+\begin{center}
+\begin{tabular}{lll}
+Name & MT & Description \\ \hline
+\cword{nftot} & 18 & total fission \\
+\cword{nf} & 19 & (n,f) first-chance fission \\
+\cword{nnf} & 20 & (n,n$'$f) second-chance fission\\
+\cword{n2nf} & 21 & (n,n2f) third-chance fission\\
+\cword{n3nf} & 38 & (n,n3f) fourth-chance fission\\
+\cword{nudel} & 455 & delayed-neutron yield (MF=3) \\
+\cword{chid} & 455 & delayed-neutron spectrum (MF=5) \\ \hline
+\end{tabular}
+\label{sname6}
+\end{center}
+\end{table}
+
+Table~\ref{sname7} gives some additional reaction names, some of which
+are special NJOY names.  As discussed in the
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}
+chapter of this report, the total cross section can be averaged with
+the $\ell$th order of the flux to obtain the multigroup total
+cross section components $\sigma_{t\ell,g}$.  These total cross
+section components and the corresponding Legendre fluxes are given
+names like the first four shown in Table~\ref{sname7}.  Related
+names with first letters \cword{g}, \cword{p}, \cword{d}, {\it etc.},
+will also be found in MATXS libraries. The average inverse velocities
+are defined to preserve the time term of the time-dependent
+Boltzmann equation:
+
+\begin{equation}
+  \Big< \frac{1}{v} \Big> = \frac{\displaystyle\int_g
+     (1/v)\phi(E)\,dE}{\displaystyle\int_g \phi(E)\,dE} \,\,.
+\end{equation}
+
+\begin{table}[t]
+\caption[Special MATXSR NJOY names]{Special NJOY Names}
+\begin{center}
+\begin{tabular}{lll}
+Name & MT & Description \\ \hline
+\cword{ntot0} & 1 & P$_0$ total cross section \\
+\cword{ntot1} & 1 & P$_1$ total cross section \\
+\cword{nwt0} & 1 & P$_0$ weight function (flux) \\
+\cword{nwt1} & 1 & P$_1$ weight function (flux) \\
+\cword{mubar} & 251 & scattering $\bar{\mu}$ \\
+\cword{xi} & 252 & scattering $\xi$ \\
+\cword{invel} & 259 & inverse velocity (sec/m) \\
+\cword{heat} & 301 & energy-balance heat production \\
+\cword{kerma} & 443 & kinematic KERMA factor \\
+\cword{dame} & 444 & damage-energy production \\ \hline
+\end{tabular}
+\label{sname7}
+\end{center}
+\end{table}
+
+\begin{table}[b]
+\caption[MATXSR gas production names]{Gas-Production Reactions}
+\begin{center}
+\begin{tabular}{lll}
+Name & MT & Description \\ \hline
+\cword{n.neut} & 201 & total neutron production \\
+\cword{n.gam} & 202 & total $\gamma$ production \\
+\cword{n.h1} & 203 & hydrogen production \\
+\cword{n.h3} & 205 & tritium production \\
+\cword{n.HE4} & 207 & helium production \\ \hline
+\end{tabular}
+\label{sname8}
+\end{center}
+\end{table}
+
+\noindent
+The meaning of the terms energy-balance heat production and kinematic
+KERMA\index{KERMA} factor are discussed in more detail in the
+\hyperlink{sHEATRhy}{HEATR}\index{HEATR} chapter of this
+manual.  Briefly, the
+energy-balance heating (\cword{mt}=301) is computed by subtracting the
+energy carried away by neutrons and photons from the
+energy available for a reaction.  The result should be the energy
+deposited by charged particles and the recoil nucleus, that is, the
+local heating.  Unfortunately, problems with the energy-balance
+consistency of evaluations, the difficulty of determining the
+available energy for elements, and the inaccuracy in the difference
+between relatively large numbers sometimes cause this value to have
+unphysical values (for example, negative heating).  These values do
+have the property of always conserving energy for large systems.  The
+kinematic value (\cword{mt}=443) is computed from reaction kinematics alone.
+It is very accurate at low energies, but when three or more particles
+are involved in the reaction, it begins to fail.  The results in
+\cword{kerma} are always larger than the correct heating value.
+Comparing the two estimates for the local heating can reveal problems
+in the evaluations\cite{ebal,KAOS5}.  The MATXS user is free to
+choose whichever number is more appropriate for the problem. The
+reaction \cword{dame} is also generated using data from
+\hyperlink{sHEATRhy}{HEATR}.  As discussed in the
+\hyperlink{sHEATRhy}{HEATR} section of this report, this ``damage-energy
+production'' cross section can be used to obtain the DPA\index{DP}
+(displacements per atom) parameter used in radiation damage studies.
+
+The gas-production reaction names given in Table~\ref{sname8} can
+also appear with other particle names before the decimal point.  The
+names for reactions induced by incident charged particles follow the
+neutron names in most cases, except that the first letter is changed to
+indicate the incident particle type.  Discrete-level scattering
+reactions are exceptions; \cword{n01} is used for both (n,n$_1$)
+and (p,n$_1$).  Also note the \cword{n00} cannot be used for
+incident neutrons; the name \cword{nelas} is used instead.  Similarly,
+\cword{p00} is not used for incident protons.
+
+As discussed in more detail below, scattering from thermal moderators
+is treated like {\it materials} in ENDF/B libraries, but it is treated
+like {\it reactions} on the GENDF files.  The free-gas scattering
+reaction can appear in any material, but the other thermal MT numbers
+can only appear in the material corresponding to the dominant
+scattering isotope.  For example, \cword{hh2o} only appears in $^{1}$H.
+There are two versions of \cword{zrhyd}; one appears in $^{1}$H and the
+other in Zr.   The coherent and incoherent terms in the thermal
+cross section are kept separate for the convenience of applications;
+all the coherent names  end with \$.  Note that MATXS files contain
+two different representations for the scattering cross sections at
+low energies:
+
+\begin{description}
+\begin{singlespace}
+\item[static,] where the cross section and group-to-group matrix are
+  obtained from \cword{nscat}, which is derived from \cword{mt}=2 on the
+  ENDF evaluation. (This is scattering for ``static'' nuclei;
+  energy loss from recoil is included.); and
+
+\item[thermal,] where the cross section and group-to-group matrix are
+  obtained from one of the thermal reactions in the \cword{ntherm}
+  data type. (The scattering nuclei are in motion with a distribution
+  described by the Maxwell-Boltzmann law; both energy loss and energy
+  gain events are possible.)
+\end{singlespace}
+\end{description}
+
+\noindent
+The TRANSX code gives the user the choice of static or thermal
+scattering, and it also allows the user to choose which binding
+state is desired for a particular moderator material.
+
+\begin{table}[t]\small
+\caption[MATXSR incident proton reaction names]{Incident-Proton Reactions}
+\begin{center}
+\begin{tabular}{lcl}
+Name & MT & Description \\ \hline
+\cword{pelas} & 2 & proton elastic scattering \\
+\cword{p01} & 601 & discrete-level (p,p$_1$) scattering \\
+\cword{n00} & 50 & discrete-level (p,n$_0$)  \\
+\cword{n01} & 51 & discrete-level (p,n$_1$) \\
+\cword{p2n}   & 16 & (p,2n) \\
+\cword{pg}   & 102 & (p,$\gamma$) \\
+\cword{pt}   & 104 & (p,t) \\ \hline
+\end{tabular}
+\label{sname9}
+\end{center}
+\end{table}
+
+\index{MATXS!thermal cross sections}
+\begin{table}[thb]\small
+\caption[MATXSR thermal material names (ENDF/B-VII)]{Thermal Material Names
+for ENDF/B-VII}
+\begin{center}
+\begin{tabular}{lll}
+Name & MT & Description \\ \hline
+\cword{free} & 221 & free-gas scattering \\
+ \cword{hh2o} & 222 & H in H$_2$O \\
+\cword{poly} & 223 &  H in polyethylene (CH$_2$) incoherent \\
+ \cword{poly\textdollar} & 224 & H in polyethylene (CH$_2$) coherent \\
+\cword{hzrh} & 225 & H in ZrH incoherent \\
+ \cword{hzrh\textdollar} & 226 & H in ZrH coherent \\
+\cword{benz} & 227 & Benzene incoherent \\
+ \cword{dd2o} & 228 & D in D$_2$O \\
+\cword{graph} & 229 & C in graphite incoherent \\
+ \cword{graph\textdollar} & 230 & C in graphite coherent \\
+\cword{be} & 231 & Be metal incoherent \\
+ \cword{be\textdollar} & 232 & Be metal coherent \\
+\cword{bebeo} & 233 & Be in BeO incoherent\\
+ \cword{bebeo\textdollar} & 234 & Be in BeO coherent \\
+\cword{zrzrh} & 235 & Zr in ZrH incoherent \\
+ \cword{zrzrh\textdollar} & 236 & Zr in ZrH coherent \\
+\cword{obeo} & 237 & O in BeO incoherent \\
+ \cword{obeo\textdollar} & 238 & O in BeO coherent \\
+\cword{ouo2} & 239 & O in UO$_2$ incoherent \\
+ \cword{ouo2\textdollar} & 240 & O in UO$_2$ coherent \\
+\cword{uuo2} & 241 & U in UO$_2$ incoherent \\
+ \cword{uuo2\textdollar} & 242 & U in UO$_2$ coherent \\
+\cword{al} & 243 & Al metal incoherent \\
+\cword{al} & 244 & Al metal coherent \\
+\cword{fe} & 245 & Fe metal incoherent \\
+\cword{fe} & 246 & Fe metal coherent \\ \hline
+\end{tabular}
+\label{sname10}
+\end{center}
+\end{table}
+
+The ENDF representation of photoatomic reactions was described in the
+\hyperlink{sGAMINRhy}{GAMINR}\index{GAMINR} chapter.  The
+\cword{gheat} reaction, constructed in
+\hyperlink{sGAMINRhy}{GAMINR}, represents the local heating from atomic
+recoil and photo-electric electron production.  Fluorescence
+photons from photoelectric interactions are assumed to deposit their
+energy locally.
+\index{photoatomic}
+
+\index{MATXS!photoatomic cross sections}
+\begin{table}[t]\small
+\caption[MATXSR photoatomic cross section names]{Photoatomic Cross Sections}
+\begin{center}
+\begin{tabular}{lll}
+Name & MT & Description \\ \hline
+\cword{gtot0} & 501 & P$_0$ total \\
+\cword{gwt0} & 501 & P$_0$ weight function (flux) \\
+\cword{gcoh} & 502 & coherent scattering \\
+\cword{ginch} & 504 & incoherent scattering \\
+\cword{gpair} & 516 & pair production $(\gamma,2\gamma)$ \\
+\cword{gabs} & 522 & photoelectric absorption \\
+\cword{gheat} & 525 & heating \\ \hline
+\end{tabular}
+\label{sname11}
+\end{center}
+\end{table}
+
+\hyperlink{sGROUPRhy}{GROUPR} and MATXSR
+are capable of supporting a new experimental
+capability for generating nuclide production cross sections.  This
+capability is most useful for radionuclides and isomers, but it
+is general enough to handle all the possible heavy products of a
+nuclear reaction.  The input GENDF file may contain several different
+sections that produce a given nuclide.  MATXSR
+adds them up into a single named reaction.  The naming convention
+used for capture reactions is \cword{cZZAAA}, where Z and A are
+the charge and mass numbers for the nuclide.  Isomers are
+handled by incrementing the first postion of the ``AAA''
+field.  Products of other reactions
+are named using the pattern \cword{rZZAAA}, with the same convention
+used for isomers.  The reason that capture products are distinguished
+from those from other reactions is that the former may have to be
+self shielded.
+
+The CCCC standards have always used 6-character Hollerith strings
+for names.  These kinds of names are represented as ``\cword{REAL*8}''
+double precision variables on 32-bit machines (IBM, VAX, Sun, {\it etc.})
+and as single-precision variables on 60- to 64-bit machines (CDC, Cray).
+However, a double-precision variable on a short-word machine can
+hold 8 characters.  So can single-precision variables on CDC and
+Cray machines.  There do not seem to be any computer systems
+currently in use that require 6-character words.  Therefore, the
+latest versions of the MATXS format and the MATXSR module
+have been written to handle 8-character names.
+
+The formal format specification for the MATXS material cross
+section file follows, using the standard CCCC presentation
+(except for the ! before the c):
+\index{MATXS format}
+
+\small
+\begin{ccode}
+
+!          Standardized CCCC format listing for MATXS file
+!c
+!c**********************************************************************
+!c               proposed 09/09/77
+!c                       (modified 09/80)
+!c                       (nomenclature changed 06/88)
+!c                       (modified for const sub-blocks 06/90)
+!c                       (ordering changed 10/90)
+!c     c                       (bcd format changed 12/21/91)
+!c
+!cf           matxs
+!ce           material cross section file
+!c
+!cn                       this file contains cross section
+!cn                       vectors and matrices for all
+!cn                       particles, materials, and reactions;
+!cn                       delayed neutron spectra by time group;
+!cn                       and decay heat and photon spectra.
+!c
+!cn           formats given are for file exchange only
+!c
+!c**********************************************************************
+!c
+!c
+!c----------------------------------------------------------------------
+!cs          file structure
+!cs
+!cs              record type                       present if
+!cs              ==============================    ===============
+!cs              file identification                 always
+!cs              file control                        always
+!cs              set hollerith identification        always
+!cs              file data                           always
+!cs
+!cs   *************(repeat for all particles)
+!cs   *          group structures                    always
+!cs   *************
+!cs
+!cs   *************(repeat for all materials)
+!cs   *          material control                    always
+!cs   *
+!cs   * ***********(repeat for all submaterials)
+!cs   * *        vector control                      n1db.gt.0
+!cs   * *
+!cs   * * *********(repeat for all vector blocks)
+!cs   * * *      vector block                        n1db.gt.0
+!cs   * * *********
+!cs   * *
+!cs   * * *********(repeat for all matrix blocks)
+!cs   * * *      matrix control                      n2d.gt.0
+!cs   * * *
+!cs   * * * *******(repeat for all sub-blocks)
+!cs   * * * *    matrix sub-block                    n2d.gt.0
+!cs   * * * *******
+!cs   * * *
+!cs   * * *      constant sub-block                  jconst.gt.0
+!cs   * * *
+!cs   *************
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr           file identification
+!c
+!cl    hname,(huse(i),i=1,2),ivers
+!c
+!cw    1+3*mult
+!c
+!cb    format(4h 0v ,a8,1h*,2a8,1h*,i6)
+!c
+!cd    hname         hollerith file name  - matxs -  (a8)
+!cd    huse          hollerith user identifiation    (a8)
+!cd    ivers         file version number
+!cd    mult          double precision parameter
+!cd                       1- a8 word is single word
+!cd                       2- a8 word is double precision word
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr           file control
+!c
+!cl    npart,ntype,nholl,nmat,maxw,length
+!c
+!cw    6
+!c
+!cb    format(6h 1d   ,6i6)
+!c
+!cd    npart       number of particles for which group
+!cd                   structures are given
+!cd    ntype       number of data types present in set
+!cd    nholl       number of words in set hollerith
+!cd                    identification record
+!cd    nmat        number of materials on file
+!cd    maxw        maximum record size for sub-blocking
+!cd    length      length of file
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr           set hollerith identification
+!c
+!cl    (hsetid(i),i=1,nholl)
+!c
+!cw    nholl*mult
+!c
+!cb    format(4h 2d /(9a8))
+!c
+!cd    hsetid      hollerith identification of set (a8)
+!cd                 (to be edited out 72 characters per line)
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr          file data
+!c
+!cl    (hprt(j),j=1,npart),(htype(k),k=1,ntype),(hmatn(i),i=1,nmat),
+!cl   1(ngrp(j),j=1,npart),(jinp(k),k=1,ntype,(joutp(k),k=1,ntype),
+!cl   2(nsubm(i)i=1,nmat),(locm(i),i=1,nmat)
+!c
+!cw    (npart+ntype+nmat)*mult+2*ntype+npart+2*nmat
+!c
+!cb    format(4h 3d ,4x,8a8/(9a8))    hprt,htype,hmatn
+!cb    format(12i6)                  ngrp,jinp,joutp,nsubm,locm
+!c
+!cd    hprt(j)     hollerith identification for particle j
+!cd                     n         neutron
+!cd                     g         gamma
+!cd                     p         proton
+!cd                     d         deuteron
+!cd                     t         triton
+!cd                     h         he-3 nucleus
+!cd                     a         alpha (he-4 nucleus)
+!cd                     b         beta
+!cd                     r         residual or recoil
+!cd                               (heavier than alpha)
+!cd    htype(k)     hollerith identification for data type k
+!cd                     nscat     neutron scattering
+!cd                     ng        neutron induced gamma production
+!cd                     gscat     gamma scattering
+!cd                     pn        proton induced neutron production
+!cd                       .          .
+!cd                       .          .
+!cd                       .          .
+!cd                     dkn       delayed neutron data
+!cd                     dkhg      decay heat and gamma data
+!cd                     dkb       decay beta data
+!cd    hmatn(i)    hollerith identification for material i
+!cd    ngrp(j)      number of energy groups for particle j
+!cd    jinp(k)     type of incident particle associated with
+!cd                   data type k.  for dk data types, jinp is 0.
+!cd    joutp(k)    type of outgoing particle associated with
+!cd                   data type k
+!cd    nsubm(i)    number of submaterials for material i
+!cd    locm(i)     location of material i
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr          group structure
+!c
+!cl    (gpb(i),i=1,ngr),emin
+!c
+!cc    ngr=ngrp(j)
+!c
+!cw    ngrp(j)+1
+!c
+!cb    format(4h 4d ,8x,1p,5e12.5/(6e12.5))
+!c
+!cd    gpb(i)      maximum energy bound for group i for particle j
+!cd    emin        minimum energy bound for particle j
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr          material control
+!c
+!cl    hmat,amass,(temp(i),sigz(i),itype(i),n1d(i),n2d(i),
+!cl   1locs(i),i=1,nsubm)
+!c
+!cw    mult+1+6*nsubm
+!c
+!cb    format(4h 5d ,a8,1p,2e12.5/(2e12.5,5i6))
+!c
+!cd    hmat        hollerith material identifier
+!cd    amass       atomic weight ratio
+!cd    temp        ambient temperature or other parameters for
+!cd                    submaterial i
+!cd    sigz        dilution factor or other parameters for
+!cd                    submaterial i
+!cd    itype       data type for submaterial i
+!cd    n1d         number of vectors for submaterial i
+!cd    n2d         number of matrix blocks for submaterial i
+!cd    locs        location of submaterial i
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr          vector control
+!c
+!cl    (hvps(i),i=1,n1d),(nfg(i),i=1,n1d),(nlg(i),i=1,n1d)
+!c
+!cw    (mult+2)*n1d
+!c
+!cb    format(4h 6d ,4x,8a8/(9a8))      hvps
+!cb    format(12i6)                    iblk,nfg,nlg
+!c
+!cd    hvps(i)     hollerith identifier of vector
+!cd                      nelas     neutron elastic scattering
+!cd                      n2n       (n,2n)
+!cd                      nnf       second chance fission
+!cd                      gabs      gamma absorption
+!cd                      p2n       protons in, 2 neutrons out
+!cd                         .          .
+!cd                         .          .
+!cd                         .          .
+!cd    nfg(i)      number of first group in band for vector i
+!cd    nlg(i)      number of last group in band for vector i
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr          vector block
+!c
+!cl    (vps(i),i=1,kmax)
+!c
+!cc    kmax=sum over group band for each vector in block j
+!c
+!cw    kmax
+!c
+!cb    format(4h 7d ,8x,1p,5e12.5/(6e12.5))
+!c
+!cd    vps(i)      data for group bands for vectors in block j.
+!cd                block size is determined by taking all the group
+!cd                bands that have a total length less than or equal
+!cd                to maxw.
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr        scattering matrix control
+!c
+!cl    hmtx,lord,jconst,
+!cl   1(jband(l),l=1,noutg(k)),(ijj(l),l=1,noutg(k))
+!c
+!cw    mult+2+2*noutg(k)
+!c
+!cb    format(4h 8d ,4x,a8/(12i6))      hmtx,lord,jconst,
+!cb                                     jband,ijj
+!c
+!cd    hmtx        hollerith identification of block
+!cd    lord        number of orders present
+!cd    jconst      number of groups with constant spectrum
+!cd    jband(l)    bandwidth for group l
+!cd    ijj(l)      lowest group in band for group l
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c----------------------------------------------------------------------
+!cr          scattering sub-block
+!c
+!cl    (scat(k),k=1,kmax)
+!c
+!cc    kmax=lord times the sum over all jband in the group range of
+!cc            this sub-block
+!c
+!cb    format(4h 9d ,8x,1p,5e12.5/(6e12.5))
+!c
+!cw    kmax
+!c
+!cd    scat(k)     matrix data given as bands of elements for initial
+!cd                groups that lead to each final group.  the order
+!cd                of the elements is as follows:  band for p0 of
+!cd                group i, band for p1 of group i, ... , band for p0
+!cd                of group i+1, band for p1 of group i+1, etc.  the
+!cd                groups in each band are given in descending order.
+!cd                the size of each sub-block is determined by the
+!cd                total length of a group of bands that is less than
+!cd                or equal to maxw.
+!cd
+!cd                if jconst.gt.0, the contributions from the jconst
+!cd                low-energy groups are given separately.
+!c
+!c----------------------------------------------------------------------
+!c
+!c
+!c
+!c----------------------------------------------------------------------
+!cr          constant sub-block
+!c
+!cl    (spec(l),l=1,noutg(k)),(prod(l),l=l1,ning(k))
+!c
+!cc    l1=ning(k)-jconst+1
+!c
+!cw    noutg(k)+jconst
+!c
+!cb    format(4h10d ,8x,1p,5e12.5/(6e12.5))
+!c
+!cd    spec        normalized spectrum of final particles for initial
+!cd                particles in groups l1 to ning(k)
+!cd    prod        production cross section (e.g., nu*sigf) for
+!cd                initial groups l1 through ning(k)
+!cd
+!cd         this option is normally used for the energy-independent
+!cd         neutron and photon spectra from fission and radiative
+!cd         capture usually seen at low energies.
+!c
+!c----------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+\vspace{6 pt}
+
+The MATXS format is intended to communicate multigroup cross sections
+and matrices for all reaction types, incident particles, and outgoing
+particles from a nuclear data processing code to applications.  It
+also includes temperature and self-shielding effects, delayed-neutron
+data, and a limited format for decay heat and delayed photon or particle
+emission.  As shown in the ``File Structure'' presentation above, the
+main loop is over material.  Materials are subdivided into submaterials,
+which usually correspond to different data types, temperatures, and
+background cross section ($\sigma_0$) values.  Each submaterial can
+contain a series of ``Vector Blocks'' giving cross section versus energy
+for one of the allowed group structures and incident particles, and it
+can contain a series of matrix blocks and subblocks giving the cross
+sections for group-to-group transfers.
+
+The ``File Identification'' record is the same for all CCCC files.  It
+gives the Hollerith name for the file (which is always \cword{matxs}),
+a version number \cword{ivers}, which can be used to distinguish
+between different libraries in this format, and a Hollerith
+identification string \cword{huse}, which can be used for entries
+like ``\cword{T2 LANL NJOY}''.
+
+The ``File Control'' record contains parameters that are needed to
+compute the lengths of the following records.  The meaning of the
+various names is well explained in the format specification, and the
+values of the parameters are obtained from the user's input.
+The purpose of \cword{maxw} is to tell application codes how much
+memory they will need to read through the records on these MATXS files.
+It is used for both vector blocks and matrix subblocks when deciding
+how to break them up.  The MATXSR value is 5000 words.  The code tries
+to make as many records as possible that have nearly this size in order
+to minimize the number of I/O operations.  The parameter \cword{length} is
+used to help find the end of the file when appending a new material
+to an existing file.  Its units are left unspecified in the format.
+It is usually the length in records, in which case record skipping
+can be used to find the end.  Or it could be the length in words on
+computer systems that allow direct word-addressed I/O operations
+(this used to be possible using CTSS on Cray computers).
+
+The ``Set Hollerith Identification'' record comes next.  It contains
+an arbitrary amount of Hollerith text to describe the contents of the
+library.  The description comes from the user's input.
+
+The ``File Data'' record contains a number of important arrays that
+define the structure of data types and the location of materials.  The
+parameter \cword{hprt} contains the standard names for the \cword{npart}
+particles.  The standard names for particles were discussed above.  The
+standard names for the data types and materials (\cword{htype} and
+\cword{hmatn}) were also discussed above.  The next three parameters
+are used to complete the specification of the data types included in
+this MATXS library.  \cword{ngrp} just gives the number of groups used
+for each particle type; for example, the traditional Los Alamos
+30$\times$12 library (with 30 neutron groups and 12 photon groups)
+would have \cword{ngrp(1)}=30 and \cword{ngrp(2)}=12.  Using the same
+example, the \cword{nscat} data type would have \cword{jinp(1)}=1
+and \cword{joutp(1)}=1; the \cword{ng} data type would have
+\cword{jinp(2)}=1 and \cword{joutp(2)}=2; and the \cword{gscat} data
+type would have \cword{jinp(3)}=2 and \cword{joutp(3)}=2.  The
+information for these 6 arrays is given in the user's input.
+
+The final two parameters in the ``File Data'' record are
+\cword{nsubm} and \cword{locm}.  The value of \cword{nsubm} depends
+on the number of data types, the number of temperatures, and
+the number of background cross sections found on the input
+GENDF tapes.  The value for \cword{locm(i)} is usually the record
+index for material \cword{i}.  A code can then jump directly to a desired
+material using record skipping (forward or backward).  However, the
+units for \cword{locm} have been left unspecified to allow direct
+random access for systems that use word-addressable random-access
+I/O operations.
+
+The ``Group Structure'' records give the energy bounds for
+\cword{npart} group structures.  Following the normal convention for
+application codes, the energy bounds are given in the order of
+decreasing energy.  The numbers are obtained from \cword{mf}=1,
+\cword{mt}=451 on the GENDF tape.  The \hyperlink{sGROUPRhy}{GROUPR}
+module currently uses one group structure for
+all particles (n, p, $\alpha$, {\it etc.}), and another for photons ($\gamma$).
+
+Inside the material loop, there is a ``Material Control'' record for
+each material.  The choice of names for \cword{hmat} was discussed above.
+The \cword{amass} parameter is the same as the ENDF AWR parameter;
+that is, it is the ratio of the target mass to the neutron mass.
+Temperatures \cword{temp} are given in degrees Kelvin, and background
+cross sections for self-shielding codes (\cword{sigz}, or $\sigma_0$)
+are given in barns. The parameter \cword{itype} tells which data-type
+each submaterial belongs to using the data type codes defined by
+\cword{htype}.  Although it is not specified in the format description,
+the order that MATXSR loops through
+submaterials is as follows:
+the outer loop is over data type, the next loop is over temperature,
+and the innermost loop is over background cross section.  The number of
+cross section vector reactions and matrix reactions for each submaterial
+are given in \cword{n1d} and \cword{n2d}.  Finally, \cword{locs(i)}
+normally gives the record index for submaterial \cword{i}.  A code can
+search the arrays \cword{temp}, \cword{sigz}, and \cword{itype} for a
+desired submaterial, and then jump right to the desired submaterial
+using record skipping.  Alternatively, a version that uses word
+addresses in \cword{locs} could use random-access methods to jump to
+the desired submaterial.
+
+Each submaterial that contains vectors (\cword{n1d}$>$0) starts with a
+``Vector Control'' record.  This record gives a list of reaction names
+in \cword{hvps}.  MATXSR constructs these
+reaction names automatically
+based on the MT number, ENDF ``LR flag'' (if any), and the incident
+particle type.  Examples of these names were given above.  The
+parameters \cword{nfg} and \cword{nlg} are used to remove unnecessary
+leading or trailing zeros in reaction cross section vectors. The zeroes
+are usually due to thresholds.  For example, an (n,2n) reaction might only
+have nonzero cross sections for groups 1 through 5 out of an 80-group
+structure.  Storing only the 5-element band will save 75 words on the
+MATXS file.  Even with the zeros removed, the number of words of vector
+cross section data for a submaterial can be quite large.  Therefore,
+the MATXS format provides a way to break the vector data into a number
+of vector blocks.  The idea is to sum up the bandwidths for each
+reaction (that is, \cword{nlg(i)}-\cword{nfg(i)}+1) in order to find the
+largest number of reactions that will fit within a block of length
+less than or equal to \cword{maxw}.  The data for this block are
+written to the output file, and then the next group of reactions is
+found.  This continues until all the vector data have been written out
+as a series of ``Vector Block'' records with lengths less than
+\cword{maxw} (5000 words in MATXSR).  This method minimizes
+the number of records on the file while allowing the application codes
+that read MATXS libraries to allocate space for reading the records
+economically.
+
+Most submaterials will contain \cword{n2b} ``Scattering Matrix Control''
+records.  The convention for the reaction names used in \cword{hmtx}
+were discussed above.  \cword{lord} gives the {\it number} of
+Legendre orders present for this reaction; that is, \cword{lord}=4
+for a P$_3$ matrix.  Matrices are compacted for efficient storage
+and data transfer using two techniques.  First, unnecessary leading
+and trailing zeros for group-to-group transfers into a particular
+final group are removed by banding.  \cword{jband(i)} gives the
+number of incident groups in the band for final group \cword{i},
+and \cword{ijj(i)} gives the group index for the lowest-energy group
+(highest group index) in the band for group \cword{i}.  For example,
+consider an isotropic (n,2n) reaction with a threshold in group 3 of a
+30-group structure.  The values for \cword{jband} and \cword{ijj}
+for group 20 might well be 3 and 3, respectively.  That is, groups
+1 through 3 scatter into group 20.  The order of storage for this
+matrix would be as follows:
+
+\begin{center}
+\begin{tabular}{cccc}
+Band & Element & \cword{jband} & \cword{ijj} \\ \hline
+  1  &  1$\rightarrow$1 & 1 & 1 \\
+  2  &  2$\rightarrow$2 & 2 & 2 \\
+     &  1$\rightarrow$2 &   &   \\
+  3  &  3$\rightarrow$3 & 3 & 3 \\
+     &  2$\rightarrow$3 &   &   \\
+     &  1$\rightarrow$3 &   &   \\
+  4  &  3$\rightarrow$4 & 3 & 3 \\
+     &  2$\rightarrow$4 &   &   \\
+     &  1$\rightarrow$4 &   &   \\
+ $\cdots$ & $\cdots$ & & \\ \hline
+\end{tabular}
+\end{center}
+
+Note that this scheme is more efficient than the similar one used for the
+CCCC ISOTXS file, because that method required that the ingroup element
+had to be included in the band.  For anisotropic matrices, the
+\cword{lord} Legendre components are stored with the source-group
+elements.  Thus, there are \cword{lord(i)}*\cword{jband(i)} elements
+in each band,
+and they are stored in the following order (assuming a P$_1$ matrix):
+
+\begin{center}
+\begin{tabular}{ccccc}
+Band & Element & Order & \cword{jband} & \cword{ijj} \\ \hline
+  1  &  1$\rightarrow$1 & 0 & 1 & 1 \\
+     &  1$\rightarrow$1 & 1 &   &   \\
+  2  &  2$\rightarrow$2 & 0 & 2 & 2 \\
+     &  1$\rightarrow$2 & 0 &   &   \\
+     &  2$\rightarrow$2 & 1 &   &   \\
+     &  1$\rightarrow$2 & 1 &   &   \\
+  3  &  3$\rightarrow$3 & 0 & 3 & 3 \\
+     &  2$\rightarrow$3 & 0 &   &   \\
+     &  1$\rightarrow$3 & 0 &   &   \\
+     &  3$\rightarrow$3 & 1 &   &   \\
+ $\cdots$ & $\cdots$ & & & \\ \hline
+\end{tabular}
+\end{center}
+
+This kind of matrix block can be subdivided into subblocks using a method
+similar to the one described above for vector cross sections.  The code
+starts summing the product of \cword{jband} and \cword{lord} for the
+final energy groups until the data for the next band will cause the sum
+to exceed \cword{maxw} (5000 words in MATXSR).  These data are
+then written out as a matrix subblock.  The code then repeats the process
+for the rest of the group ranges.  The result is a minimal number of
+``Scattering Sub-Blocks,'' none of which has a size larger than the
+file limit.
+
+The second method used to compact scattering matrices is based on the
+observation that the shape of the outgoing neutron or photon spectrum
+from fission and radiative capture reactions tends to be independent of
+energy at low neutron energies. \hyperlink{sGROUPRhy}{GROUPR}
+determines the group where
+significant energy dependence begins.  Below this point, it computes a
+single spectrum to describe the outgoing neutron or photon distribution
+and a production cross section to go with it.  At high energies, it
+produces a group-to-group matrix.  This method can lead to appreciable
+reductions in storage requirements.  For example, consider the 187-group
+structure, which has many low-energy groups.  The fission spectrum
+for $^{235}$U doesn't begin to show significant energy dependence until
+an energy of about 9 keV.  This means that there are  118 constant
+groups.  A 187$\times$187 matrix is thereby reduced to a 187$\times$69
+matrix, and 187-group vector, and a 118-group vector --- a 62 \% reduction in
+storage requirements.  Even larger reductions in size are obtained
+in more favorable cases.  The parameter \cword{jconst} gives the number
+of low-energy groups having a constant spectrum.  If \cword{jconst}$>$0,
+a single ``Constant Sub-Block'' record will be given after the regular
+``Scattering Sub-Block'' records.  This record will contain the spectrum
+\cword{spec} and the production cross section \cword{prod} needed to
+reconstruct the low-energy part of the full matrix.  In mathematical form,
+
+\begin{equation}
+   \sigma_{x,g{\rightarrow}g'} = \chi^{LE}_{g'}
+      \,\sigma^{LE}_{Px,g} + \sigma^{HE}_{x,g{\rightarrow}g'} \,\,,
+\end{equation}
+\vspace{1 pt}
+
+\noindent
+where LE stands for low energy, HE stands for high energy, $\chi^{LE}$ is
+the constant spectrum, $\sigma^{LE}_{Px}$ is the production cross section
+for reaction $x$, and $\sigma^{HE}$ is the normal group-to-group matrix.
+
+\subsection{Historical Notes}
+\label{ssMATXSR_history}
+
+The original version of the MATXS specification was constructed in
+September, 1977.  The ``Matrix Control'' record in this original
+version contained the names and banding parameters for every group of
+every reaction.  As a result, the record could become very large for
+libraries with many groups.  The MATXS format was modified in September
+of 1980 to have a different ``Matrix Control'' record for each reaction.
+For several years following this date, NJOY contained both MATXSR and
+NMATXS modules, and two different versions of TRANSX were in use.  All
+traces of the original version of the format have now disappeared.
+
+Changes beginning in the late 1980's were introduced to make MATXSR
+able to handle data types with either incoming or outgoing charged
+particles.  Actually, the format wasn't changed.  The particle,
+data type, and reaction name conventions described in
+Tables~\ref{sparts} -- \ref{sname11} were chosen, and these new names
+required some corresponding changes in the code.  The TRANSX code
+also had to be modified to recognize the new names and to work with
+multiparticle coupled sets.
+
+The concept of using constant subblocks to reduce the size of GENDF and
+MATXS files is actually quite old.  Various versions of updates to
+install the scheme were written over about a 5-year period.  It was
+finally decided to permanently install the scheme in June of 1990.
+The changes required to \hyperlink{sGROUPRhy}{GROUPR}
+were the easier part of the job; corresponding changes were required
+in \hyperlink{sDTFRhy}{DTFR}, \hyperlink{sCCCCRhy}{CCCCR},
+\hyperlink{sMATXSRhy}{MATXSR}, \hyperlink{sPOWRhy}{POWR},
+and \hyperlink{sWIMSRhy}{WIMSR}.  In addition, TRANSX had
+to be changed to accept the new
+constant subblocks.  Unfortunately, this change was large enough to
+impact all MATXS users.
+
+If many users were to be impacted, other nagging problems with the code
+could also be corrected at that time.  With the original format, it was
+always very difficult to add, replace, or extract a material.  The data
+type loop was outside the material loop, and the pieces for a given
+material were scattered throughout the file.  Therefore, the ordering
+of the file was changed to put the data type loop inside the material
+loop along with the other submaterials.  With this change, it was easy
+to rewrite the BBC library maintenance code from the TRANSX package
+to be able to insert a new material at any point in the library.
+\index{BBC}
+It was also easy to give BBC the capability of extracting a short
+library containing only selected materials from a large MATXS
+library.  Using the short library can significantly speed
+up TRANSX runs to prepare data for reactor design problems.  The only
+disadvantage of the new ordering is that identical photoatomic data
+blocks have to be given for each isotope of an element.  However,
+these data are not too bulky, and the additional overhead is manageable.
+This arrangement might make it easier to add photonuclear data in the
+future.
+
+Finally, the current scheme of dividing the vector and matrix data into
+subblocks was added.  The goal was to keep the record size below some
+fairly large maximum value (5000 words is currently being used).  This
+kind of limit makes it easier to design application codes that make
+efficient use of memory.  In addition, using as few records as possible
+reduces the number of I/O operations needed for a trip through the
+library, thereby improving execution time.  The new subblocking scheme
+is also very simple.
+
+\subsection{MATXS Libraries}
+\label{ssMATXSR_libraries}
+
+The normal process for preparing a MATXS library using NJOY starts with
+a series of runs to prepare PENDF tapes for each of the materials of
+interest. For incident neutrons, these PENDF runs normally involve
+running the modules \hyperlink{sRECONRhy}{RECONR},
+\hyperlink{sBROADRhy}{BROADR}, \hyperlink{sUNRESRhy}{UNRESR},
+\hyperlink{sHEATRhy}{HEATR}, and \hyperlink{sTHERMRhy}{THERMR}.  For
+incident photons and charged particles, only
+\hyperlink{sRECONRhy}{RECONR} is needed.  The
+next step is to run \hyperlink{sGROUPRhy}{GROUPR} for
+each material and incident particle.  Each
+\hyperlink{sGROUPRhy}{GROUPR} run can produce data
+for all outgoing particles and for
+photons.  As an example, consider the problem of producing data for a
+coupled neutron-photon-proton library.  \hyperlink{sGROUPRhy}{GROUPR}
+would be run using the
+ENDF-6 incident-neutron data and requesting \cword{mfd} values of 3 (cross
+sections), 6 (neutron matrices, $nn$), 16 (photon production matrices,
+$n\gamma$), and 21 (proton production matrices,
+$np$).  \hyperlink{sGAMINRhy}{GAMINR} would be
+run to produce the photoatomic cross sections and $\gamma\gamma$
+matrices.  \hyperlink{sGROUPRhy}{GROUPR} can be used to
+produce $\gamma n$ and $\gamma p$
+matrices.  \hyperlink{sGROUPRhy}{GROUPR} would be run again
+for the ENDF-6 format proton
+sublibrary, requesting \cword{mfd} values of 3 (cross sections), 6 (neutron
+production, $pn$), 16 (photon production, $p\gamma$), and 21 (proton
+scattering and production, $pp$).
+
+Once all the GENDF fragments from all these
+\hyperlink{sGROUPRhy}{GROUPR} and
+\hyperlink{sGAMINRhy}{GAMINR} runs
+are available, they can be merged into multimaterial GENDF tapes using
+\hyperlink{sMODERhy}{MODER}.  For the example above,
+three multimaterial GENDF tapes should
+be prepared: one for incident neutrons, one for incident photons, and
+one for incident protons.  The input description in the following
+section shows how the unit numbers for these three GENDF files are
+given to MATXSR.
+
+When the MATXSR run is made, the
+code scans through all the input GENDF
+tapes searching for the specified materials.  For each material, it
+extracts all the data types requested in the
+MATXSR input and appearing
+on the input tapes.  In addition, it extracts every temperature,
+$\sigma_0$ value, reaction, and Legendre order found on the input tapes.
+The following paragraphs describe various special features of the
+formatting process.
+
+\paragraph{Normal Neutron and Photon Data.}
+Normal, infinitely dilute cross sections and group-to-group matrices
+for neutron reactions, photon production, and photonuclear reactions
+are read from the input tapes and stored in the MATXS file using the
+formats described above.  Almost all partial reactions are kept.
+Reaction names are constructed automatically; a number of examples were
+given above in Tables~\ref{sname3} -- \ref{sname11}.  The total cross
+section and weighting flux from
+\hyperlink{sGROUPRhy}{GROUPR} are given in the section \cword{mf}=3,
+\cword{mt}=1 with both P$_0$ and P$_1$ components.  All four vectors are
+written to the MATXS file.  A similar treatment is used for \cword{mt}=501
+in the photoatomic case, except that only P$_0$ terms are saved.
+
+The treatment of fission is also special.  ENDF libraries sometimes
+use only \cword{mt}=18, the total fission reaction, for both cross section and
+emission spectrum data; sometimes the partial fission cross sections
+\index{partial fission}
+(n,f), (n,n$'$f), (n,2nf), and (n,3nf) are also given in File 3
+(\cword{mt}=19, 20, 21, and 38); and sometimes the partial reactions are also
+used to describe the neutron emission matrix.  If the last case is found,
+the \cword{mt}=18 matrix may not  be complete above the threshold for
+second-chance fission, and it should be ignored.  Normally, it would
+\index{second-chance fission}
+not be processed in
+\hyperlink{sGROUPRhy}{GROUPR}, but just in case, MATXSR will ignore it.
+Delayed-neutron spectra processed in
+\hyperlink{sGROUPRhy}{GROUPR} are written into the section
+labeled \cword{mf}=5, \cword{mt}=455 on the GENDF tape, and this
+section includes data
+for all time groups.  MATXSR
+adds up these separate time-group spectra
+to produce a single delayed-neutron spectrum for the MATXS vector data
+blocks.  Application codes can use the fission data in the MATXS library
+to construct steady-state fission vectors as follows:
+\index{fission, steady-state}
+
+\begin{equation}
+   \bar{\nu}^{SS}_g=\frac{\displaystyle\sum_{g'}\sigma^{HE}_{fg{\rightarrow}g'}
+     +\sigma^{LE}_{Pfg} + \bar{\nu}^D_g\sigma_{fg}}
+     {\sigma_{fg}} \,\,,
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+where $\sigma^{HE}$ is the matrix part of the prompt fission reaction,
+$\sigma^{LE}_{Pfg}$ is the low-energy production cross section for
+fission neutrons, $\bar{\nu}^D$ is the total delayed-neutron yield,
+\index{delayed-neutron spectra}
+\index{delayed-neutron yield}
+\index{fission matrix}
+and $\sigma_{fg}$ is the fission cross section.  If partial fission
+matrices are available, the first two terms in the denominator
+would also have to be summed over the reactions present. Continuing,
+
+\begin{equation}
+   \chi^{SS}_{g'}= \frac{\displaystyle\sum_g\sigma^{HE}_{fg{\rightarrow}g'}
+      \phi_g + \chi^{LE}_{g'}\sum_g\sigma^{LE}_{Pfg}\phi_g
+       +\chi^D_{g'}\sum_g\bar{\nu}^D_g\sigma_{fg}\phi_g}
+         {\rm NORM} \,\,,
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+where $\chi^{LE}$ is the constant-spectrum part of the fission reaction,
+$\chi^D$ is the total delayed-neutron spectrum, and NORM is the quantity
+that normalizes $\chi^{SS}$, namely, the sum of the numerator over
+all $g'$.  The weighting flux $\phi_g$ would normally be problem- and
+\index{fission chi}
+region-dependent in the application code.
+
+\paragraph{Self-Shielding Data.}
+If higher temperatures and $\sigma_0$ values are found on the input GENDF
+file, MATXSR automatically prepares
+submaterials for them.  This
+self-shielding information can be used by application codes to prepare
+effective cross sections for mixtures of materials in various geometrical
+arrangements using equivalence theory.  This approach is often called
+the Bondarenko method\cite{Bondarenko}.
+\index{self-shielding}
+\index{Bondarenko method}
+\index{$\sigma_0$}
+\index{equivalence theory}
+
+As discussed in more detail in the
+\hyperlink{sGROUPRhy}{GROUPR} section of this report, this
+system is based on using a model flux for isotope $i$ of the form
+
+\begin{equation}
+   \phi^i_\ell(E,T)=\frac{C(E)}{[\sigma^i_0+\sigma^i_t(E,T)]^{\ell+1}}\,\,,
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+where $C(E)$ is a smooth weighting flux, $\sigma^i_t(E,T)$ is the total
+cross section for material $i$ at temperature $T$, $\ell$ is the Legendre
+order, and $\sigma^i_0$ is a parameter that can be used to account for
+the presence of other materials and the possibility of escape from the
+absorbing region (heterogeneity).  \hyperlink{sGROUPRhy}{GROUPR}
+uses this model flux to
+calculate effective multigroup cross sections for the resonance-region
+reactions (total, elastic, fission, capture) for several values of
+$\sigma_0$ and several values of $T$.
+
+When $\sigma_0$ is large with respect to the highest peaks in
+$\sigma_t$, the flux is essentially proportional to $C(E)$.  This is
+called infinite dilution, and the corresponding cross sections are
+appropriate for an absorber in a dilute mixture or for a very thin
+sample of the absorber.  As $\sigma_0$ decreases, the flux $\phi(E)$
+develops dips where $\sigma_t$ has peaks.  These dips cancel out part
+of the effect of the corresponding peaks in the resonance cross
+sections, thereby reducing, or self-shielding the reaction rate.
+In the MATXS format, these effects are represented by  differences
+instead of the  f-factors used in earlier formats (see the description
+of the BRKOXS file in the \hyperlink{sCCCCRhy}{CCCCR}
+section of this report).  That is,
+\index{CCCCR}
+\index{BRKOXS}
+the submaterial corresponding to temperature $T$ and background cross
+section $\sigma_0$ contains the differences between the cross sections
+found on the GENDF tape for those parameters and the infinitely dilute
+values found in the first submaterial (normally, T=300K and
+$\sigma_0{=}1{\times}10^{10} {\rm barns}$).
+
+This approach has two advantages.  First, data for groups with no
+self-shielding are automatically removed from MATXS vectors and matrices
+by the banding process without having to violate the principle
+of {\it generalization} and define a special format for neglecting
+values of ``1.0'' instead of values of ``0.0.'' Second, effective
+cross sections can be accumulated by simply adding the self-shielding
+effects multiplied by appropriate interpolation weights to an
+accumulating sum that starts out equal to the infinitely dilute
+cross section.  With f-factors, it is necessary to save the infinitely
+dilute cross sections during each step so that they can be multiplied
+by the f-factors.  Thus, using differences is more economical in coding
+and in storage space requirements.  The TRANSX code makes good use of
+this feature.
+
+\paragraph{Thermal Data.}
+ENDF-6 thermal data comes from a thermal sublibrary.  In this sublibrary,
+the various material configurations are handled as separate materials.
+However, after the ENDF data have been processed by the
+\hyperlink{sTHERMRhy}{THERMR} module,
+the different thermal materials are handled as reactions.
+Table~\ref{sname10} gives the correspondence between the special
+NJOY thermal MT numbers and the actual thermal materials.  These are
+the names that work for ENDF/B-VII\cite{ENDF7}.  If MATXSR is
+used for ENDF/B-VII (or earlier) materials, the name for BeO will
+be slightly wrong, but it could be fixed by hand editing of the
+MATXS file.
+\index{thermal cross sections}
+\index{thermal MT numbers}
+
+Each of these thermal reactions corresponds to a particular dominant
+material.  For example, \cword{mt}=222 gives the thermal cross
+section for hydrogen bound in water.  It will only appear in the
+material H1 in a MATXS library.  Similarly, \cword{mt}=223-227
+will only appear in $^{1}$H, \cword{mt}=228 will only appear
+in $^{2}$H, \cword{mt}=229-230 will only appear in $^{nat}$C,
+\cword{mt}=231-234 will only appear in $^{9}$Be, and
+\cword{mt}=235-236 will only appear
+in $^{nat}$Zr.  Free-gas scattering (\cword{mt}=221) will appear
+in all materials.
+
+Many of these materials describe the scattering from one atom of a
+compound bound in that compound; for example, H in H$_2$O, D in D$_2$O,
+or Zr in ZrH.  The application code using this data is expected to add
+on the effects of scattering from the other atoms of the compound.
+For water, the scattering from free oxygen is added to the
+``H in H$_2$O'' scattering.  For zirconium, the scattering for
+``H in ZrH'' is added to the scattering from ``Zr in ZrH''.  There
+are two exceptions in the existing ENDF/B evaluations.  The benzene
+data set contains the entire scattering from the C$_6$H$_6$ molecule
+normalized to the hydrogen cross section.  Therefore, if an application
+code specifies H1 with the benzene scattering option and the correct
+density for H1 in the system, the result will contain all of the benzene
+scattering effect.  No additional scattering is to be added for the
+carbon atoms.  Similarly, BeO contains all the scattering from the
+compound normalized to the beryllium cross section.  Check the
+\hyperlink{sTHERMRhy}{THERMR}
+section of this report for more information.
+
+Six of these materials have names ending with \$.  These reactions
+represent coherent elastic scattering from crystalline powdered
+\index{coherent elastic}
+materials (C, Be, BeO) or incoherent elastic scattering from solids
+containing hydrogen (polyethylene, ZrH).
+\index{incoherent elastic}
+These reactions contain ingroup elements only in the scattering
+matrices; that is, they cause angular redistribution without
+energy loss in scattering.  Each \$ reaction should be added
+to the corresponding inelastic reaction by the application code.
+This part of the scattering can lead to difficulties with
+transport corrections in discrete-ordinates transport codes.
+
+The final unique aspects of the thermal data are that the matrices
+show upscatter, and they are only defined below some maximum
+\index{upscatter}
+energy.  The energy range aspect is easily handled by the banding
+method used to reduce the size of the vector blocks.  The upscatter
+aspect is handled by \cword{jband} and \cword{ijj}.  The order of
+storage for a simple thermal case with only 2 upscatter groups would
+be as follows:
+
+\begin{center}
+\begin{tabular}{cccc}
+Band & Element & \cword{jband} & \cword{ijj} \\ \hline
+ $\cdots$ & $\cdots$ & & \\
+ 27  &  27$\rightarrow$27 & 2 & 27 \\
+     &  26$\rightarrow$27 &   &   \\
+ 28  &  29$\rightarrow$28 & 3 & 29 \\
+     &  28$\rightarrow$28 &   &   \\
+     &  27$\rightarrow$28 &   &   \\
+ 29  &  30$\rightarrow$29 & 3 & 30 \\
+     &  29$\rightarrow$29 &   &   \\
+     &  28$\rightarrow$29 &   &   \\
+ 30  &  30$\rightarrow$30 & 2 & 30 \\
+     &  29$\rightarrow$30 &   &   \\ \hline
+\end{tabular}
+\end{center}
+
+\paragraph{Charged-Particle Data.}
+The treatment of data for incident charged particles is very similar
+\index{charged-particle cross sections}
+to that used for neutron data, except for charged-particle elastic
+scattering.   The elastic channel has  contributions from Coulomb
+scattering that become infinite as the scattering angle goes to zero.
+\index{Coulomb scattering}
+In nature, this singularity is removed by electronic screening, but
+some other approach is needed for a data set that concentrates on
+isolated nuclear reactions.  The approach selected is used in some
+existing applications.  The elastic scattering distribution is broken
+up into two parts: (1) a normal angular distribution for angles from
+some low cutoff, say 20$^\circ$, back to 180$^\circ$, and (2) a
+straight-ahead continuous slowing-down contribution to represent the
+effects of angles below the cutoff.  The continuous slowing-down part
+is closely related to the normal ``stopping power'' for charged particles.
+\index{stopping power}
+The large-angle part can be converted into a normal scattering matrix
+(see the discussion of charged-particle elastic scattering in the
+\hyperlink{sGROUPRhy}{GROUPR} chapter of this manual for more details).
+
+Discrete-ordinates transport codes can often be modified to handle
+charged-particle data in this form, but they require an effective
+total cross section.  The ENDF-6 format for charged-particle data
+does not define a total cross section because of the singularity in
+the elastic contribution.  However, for application purposes, a
+reasonable definition of an effective total cross section is that it
+is the sum of all the partial reaction cross sections including the
+cross section obtained for the truncated elastic scattering reaction.
+This is the method that MATXSR
+uses to compute the quantities
+\cword{ptot0}, \cword{dtot0}, \cword{ttot0}, {\it etc}.
+
+\paragraph{Delayed-Neutron Data.}
+Delayed-neutron yields, spectra, and decay constants by time group are
+required by reactor kinetics codes.  The previous CCCC format for these
+data was DLAYXS (see the \hyperlink{sCCCCRhy}{CCCCR} chapter
+of this manual).  Because of the
+\index{delayed-neutrons}
+\index{DLAYXS}
+generalization inherent in the MATXS format, these data can be added
+without any changes in the structure of the file.  This option has not
+yet been added to MATXSR, and the
+procedures used will be described
+in a future version of this report.
+
+\paragraph{Decay-Photon and Decay-Heat Data.}
+Many nuclear reactions leave radioactive products.  These products
+may be simple daughter isotopes that decay in a few steps to a
+stable final state with the emission of a few photons and electrons
+(or heat), or they may be a complex array of fission product isotopes
+that emit a complex spectrum of photons and electrons (or heat) showing
+many time constants.  Procedures to store these data in MATXS
+libraries will be included in a future version of this report.
+
+\subsection{User Input}
+\label{ssMATXSR_inp}
+
+The user input specifications below were copied from the comment
+cards at the beginning of the MATXSR module.  It is always a good
+idea to check the comment cards in the current version of the
+code for possible changes.
+\index{MATXSR!MATXSR input}
+\index{input!MATXSR}
+
+\small
+\begin{ccode}
+
+   !---input specifications (free format)---------------------------
+   !
+   ! card 1 units
+   !   ngen1     input unit for data from groupr
+   !   ngen2     input unit for data from gaminr
+   !   nmatx     output unit for matxs
+   !   ngen3     incident proton data from groupr (default=0)
+   !   ngen4     incident deuteron data from groupr (default=0)
+   !   ngen5     incident triton data from groupr (default=0)
+   !   ngen6     incident he3 data from groupr (default=0)
+   !   ngen7     incident alpha data from groupr (default=0)
+   !   ngen8     photonuclear data from groupr (default=0)
+   ! card 2 user identification
+   !   ivers     file version number (default=0)
+   !   huse      user id (up to 16 characters, delimited by ',
+   !             ended by /) (default=blank)
+   ! card 3 file control
+   !   npart     number of particles for which group
+   !                structures are given
+   !   ntype     number of data types in set
+   !   nholl     number of cards to be read for hollerith
+   !             identification record.
+   !   nmat      number of materials desired
+   ! card 4 set hollerith identification
+   !   hsetid    hollerith identification of set
+   !             (each line can be up to 72 characters,
+   !             delimited with ', ended by /)
+   ! card 5 particle identifiers
+   !   hpart     hollerith identifiers for particles
+   !             (up to 8 characters each)
+   ! card 6 energy groups
+   !   ngrp      number of groups for each particle
+   ! card 7 data type identifiers
+   !   htype     hollerith identifiers for data types
+   !             (up to 8 characters each)
+   ! card 8 input particle ids
+   !   jinp     input particle id for each data type
+   ! card 9 output particle ids
+   !   joutp    output particle id for each data type
+   ! card 10 material data (one card per material)
+   !   hmat      hollerith material identifier
+   !             (up to 8 characters each)
+   !   matno     integer material identifier
+   !             (endf mat number)
+   !   matgg     mat number for photoatomic data
+   !             (default=100*(matno/100) as in endf-6)
+   !
+   !-------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+Card 1 is used to specify the units for the input GENDF tapes
+and the output MATXS library.  As usual, the sign of a GENDF unit
+number is used to determine its mode; negative numbers mean
+binary, and positive numbers mean coded ({\it i.e.}, ASCII).
+The output file is always binary, and its sign is ignored.
+The most common MATXSR
+runs are for neutron and photon data only.
+In these cases, card 1 can be truncated after the \cword{nmatx}.
+If incident charged-particle GENDF files are available, any of
+the units \cword{ngen3} through \cword{ngen7} can be assigned.
+
+Card 2 is used to control the MATXSR
+print option \cword{iprint}
+and to provide the information for the MATXS ``User Identification''
+record.  An example for Card 2 follows:
+
+\small
+\begin{ccode}
+
+  0  17  'T2 LANL NJOY'/
+
+\end{ccode}
+\normalsize
+
+\noindent
+Card 3 is used to input the counts for the ``File Control'' record and
+to tell the user input routine how many quantities to read in subsequent
+input cards.  Card 4 is repeated \cword{nholl} times to give the Hollerith
+description for the library.  Each line must be delimited by quote
+characters and terminated by /.  For example,
+
+\small
+\begin{ccode}
+
+ ' MATXS17                                27 FEB 91 '/
+ ' 69-GROUP THERMAL LIBRARY FROM ENDF/B-VI          '/
+ '   THIS LIBRARY INCLUDES NEUTRON, PHOTON, AND     '/
+ '   THERMAL SCATTERING DATA FOR 133 MATERIALS.     '/
+
+\end{ccode}
+\normalsize
+
+\noindent
+The lines are written out on the MATXS file as given, except that
+the maximum length for each line is 72 characters.
+
+Card 5 is used to read in the Hollerith names for the \cword{npart}
+particles for this library.  The standard names for the particles
+were given above in Table~\ref{sparts}.  The number of groups desired
+for each particle are given on card 6.  The data-type names (see
+Table~\ref{stypes}) are given on Card 7.  Cards 8 and 9 are used to specify
+the input and output particles for each data type.  The user
+should take care that the number of groups given for each particle
+is consistent with the input data, and that the particle assignments
+to data type names (\cword{jinp} and \cword{joutp}) are consistent
+with the  names.  The code does not check.
+
+Card 10 is repeated \cword{nmat} times to specify the materials
+to be written out on the library.  The rules for constructing the
+material names \cword{hmat} were given in Section~\ref{ssMSTXSR_format}.  The
+\cword{matno} parameter is the ENDF MAT number for this material
+as used on the input GENDF files.  For ENDF/B-VI, the MAT number
+is the same for all sublibraries (that is, for incident neutrons,
+photons, protons, {\it etc.}), and only one value is needed to specify the
+desired material.  However, photoatomic data are
+\index{photoatomic}
+atomic in character, and the MAT numbers always refer to the
+element.  For example, MAT=2600 for the photoatomic data of
+iron.  \hyperlink{sMATXSRhy}{MATXSR} reads a
+second MAT number field, \cword{matgg},
+for the photoatomic data.  Its default value is given by
+
+\newpage
+\small
+\begin{ccode}
+
+  100*(MATNO/100)
+
+\end{ccode}
+\normalsize
+
+\noindent
+and it is, therefore, not usually needed.  The normal form
+for card 10 would be as follows:
+
+\small
+\begin{ccode}
+
+  FE56  2631/
+
+\end{ccode}
+\normalsize
+
+However, the photoatomic libraries for earlier versions of the
+ENDF/B files used MAT numbers like 26 for elements.  The \cword{matgg}
+parameter can be used to process data from these older libraries.
+Note that delimiting quote characters are not required for Hollerith
+names that are single words and start with a letter.
+
+MATXSR always processes all
+submaterials found on all the nonzero GENDF
+units \cword{ngen1} through \cword{ngen7}.  It processes every
+temperature and $\sigma_0$ value found.  It processes (almost) every
+reaction cross section and matrix found, and it processes every Legendre
+order given.  The only way to control the contents of the MATXS library
+is through the input to \hyperlink{sGROUPRhy}{GROUPR} or
+\hyperlink{sGAMINRhy}{GAMINR} and by the materials included
+when building the input GENDF files.  A convenient way to handle
+this task is to assemble the results of a number of single-material
+\hyperlink{sGROUPRhy}{GROUPR} runs into composite
+GENDF tapes using \hyperlink{sMODERhy}{MODER}.
+
+\subsection{Coding Details}
+\label{ssMATXSR_details}
+
+Subroutine \cword{matxsr} is the only public call for module
+\cword{matxsm}.  The module has a number of global variables and
+arrays defined.  One key set of variables and arrays provides the
+area for accumulating the MATXS data.  It provides a set of
+equivalenced arrays so that integers, reals, and Hollerith strings
+can all be stored in the same binary records.  It sets up both
+integers and reals to be 4-byte quantities.  Hollerith words
+(with up to 8 characters each) are 8-byte quantities.  The CCCC
+\cword{mult} value is set to 2.  See a(200000), ia(200000), and
+ha(100000).  The parameter \cword{isiza}=200000 defines the size of
+these equivalenced arrays in 4-byte units.
+
+The internal representation for all the elements of the MATXS file
+and for GENDF data uses 8-byte quantities.
+
+The next step in subroutine \cword{matxsr}\index{matxsr@{\ty matxsr}}
+is to read in the unit numbers for the input and output files and
+to open the files.  Note that the sign for \cword{nmatx} is ignored.
+ It will always be binary.  Several binary scratch files are also
+opened.  Next, the user input for the ``File Identification'' record
+is read (see card 2 in the user input description), and the
+\cword{cmatxs}\index{cmatxs@{\ty cmatxs}} routine is called to read
+the input GENDF files and construct the output MATXS file.  When
+\cword{cmatxs} returns, the main routine closes the units, prints its
+final timer line, and returns to the NJOY program.
+
+Subroutine \cword{cmatxs}\index{cmatxs@{\ty cmatxs}}
+starts by defining three constants:
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{nsubmx}=100] is the maximum number of submaterials
+   allowed for a material, including data types, temperatures, and
+   background cross sections;
+\item[\cword{maxord}=5] is the maximum Legendre order (that is,
+   P$_5$ allowed for group-to-group matrices; and
+\item[\cword{maxw}=5000] is the maximum size for vector block
+   and matrix subblock records on the MATXS file.
+
+\end{singlespace}
+\end{description}
+
+\noindent
+It continues by calling \cword{ruinm}\index{ruinm@{\ty ruinm}}
+to read the user's input.  Some of the quantities read by \cword{ruinm}
+are stored directly into \cword{ia}, \cword{a}, and \cword{ha} using
+pointers like \cword{icont} and \cword{iholl}.  Note the use of
+\cword{mult}=2 to compute the jump in the index when Hollerith
+items or stored, and note the the variable \cword{next} keeps track
+of the current location in the MATXS equivalenced arrays.  Subroutine
+\cword{ruinm} returns to \cword{cmatxs} after loading the ``File Data''
+record.
+
+The next step is to call subroutine
+\cword{mtxdat}\index{mtxdat@{\ty mtxdat}} to read the input
+GENDF data and write it to the scratch tapes used later in this
+subroutine.  The first step is to set up an area at pointer
+\cword{igrup} for the \cword{npart} group structures and to calculate
+its length.  Note that the number of words reserved is forced to be
+even in order to avoid possible word-alignment problems for these
+4-byte words.  With the current version of
+\hyperlink{sGROUPRhy}{GROUPR}, all particles are
+assumed to use the same group structure.  Photons have a different one.
+It is only necessary to look through the unit numbers from input card 1
+and find the first one that contains data.  The group structures are
+then read in from \cword{mf}=1,\cword{mt}=451 and reversed to have
+the conventional decreasing-energy order.  The subroutine now
+reserves space for the ``Material Control'' record starting at
+\cword{imatc} with length \cword{nwmc} and begins the material
+loop (see \cword{do 700 im=1,nmat}).
+Note how the Hollerith material name is loaded into the ``Material Control''
+record storage area by making use of the \cword{mult} parameter and
+the equivalence between the arrays \cword{a} and \cword{ha}.
+
+The first loop inside the material loop is the data-type loop (see
+\cword{do 600 i=1,} \cword{ntype}).  The same MAT number is used for
+all particles,
+but a different one is used for photoatomic data.  The input unit to
+be used depends on the identity of the incident particle.  Since these
+comparisons use constants like \cword{hprot} with values like
+``\cword{6hp     },'' it is important to use the standard names in
+the user input (see Table~\ref{sparts}).  The identity of the
+outgoing particle for the data type determines the MF number for
+the matrices on the GENDF tape, \cword{mfm}.  As described in the
+\hyperlink{sGROUPRhy}{GROUPR} section of this report,
+the MF assignments are as follows:
+
+\begin{center}
+\begin{tabular}{cl}
+MF value & Outgoing Particle \\ \hline
+6 & neutrons \\
+16 &  photons \\
+21 & protons \\
+22 & deuterons \\
+23 & tritons \\
+24 & $^3$He particles \\
+25 & alphas \\
+26 & photoatomic data \\ \hline
+\end{tabular}
+\end{center}
+
+\noindent
+The MF number for the vector data (\cword{mfv}) is 3, except for the
+photoatomic case, where it is 23.
+
+The next step is to search for the desired material \cword{imat} on
+the current input tape.  When the first occurrence of \cword{imat} has
+been found, \cword{mtxdat}\index{mtxdat@{\ty mtxdat}} reads in its
+head record, and then it sets up a loop over all the temperatures
+for this material (the loop goes through statement number 300).  As
+it reads through each temperature, it copies the results to scratch
+file \cword{nscr}.  The data for the first temperature is also copied
+to scratch file \cword{iref}.  File \cword{iref} will be used for
+the higher temperature and $\sigma_0$ values to calculate the
+delta-sigma values.  While the data are being copied, \cword{mtxdat}
+counts the number of one-dimensional reactions, \cword{noned}, and
+the number of two-dimensional reactions, \cword{ntwod},
+for each value of the background cross section, $\sigma_0$.  When the
+scratch tapes are complete, the subroutine starts a loop over $\sigma_0$
+for this material and temperature; it calls
+\cword{vector}\index{vector@{\ty vector}} to produce the vector
+cross sections, it calls \cword{matrix}\index{matrix@{\ty matrix}} to
+produce the matrix cross sections, and it loads the information on
+this submaterial into the ``Material Control'' record.  When the
+$\sigma_0$ loop is complete, the code jumps back to statement
+number 300 to get the next temperature.  When all the temperatures
+have been processed, it reaches statement number 600 and goes back
+through the entire process again for the next data type.  When the
+``\cword{do 600}'' loop exits, the entire ``Material Control' block
+has been filled in, and the subroutine writes the record to scratch
+file \cword{nscrt6}.
+
+At this point, the processing for material \cword{imat} is complete.
+The ``\cword{do 700}'' loop continues until all the requested materials
+have been found and processed.
+
+Subroutine \cword{findg}\index{findg@{\ty findg}} is used to search
+GENDF file \cword{ntape} for a specified section (\cword{mat},
+\cword{mf}, \cword{mt}).  If it does not find the requested section,
+a fatal error message is issued.  Materials (\cword{mat}) do not have to be
+in order on a GENDF tape.  Therefore, this routine simply reads forward
+until it comes to the first record matching the requested \cword{mat},
+\cword{mf}, and \cword{mt} values.  If the section is not found,
+it rewinds once and searches again.  When the section is found, it
+backspaces by one record so that the next record read will be
+the desired record.
+
+Subroutine \cword{hname}\index{hname@{\ty hname}} is used to construct
+a Hollerith reaction name \cword{hreact} from an ENDF MT number
+(\cword{mt}), an ENDF ``LR flag'' (\cword{lr}), and an incident
+particle name (\cword{hp}).   The definitions of the names were
+discussed above in connection with Tables~\ref{sname3}--\ref{sname11},
+and the actual MT numbers and strings used are given in
+parameter arrays in this subroutine.  If no preset name is found for an
+MT number, a default name of the form \cword{MTnnn} is constructed.
+
+Subroutine \cword{vector}\index{vector@{\ty vector}} reads the
+cross section vectors for one submaterial (that is, one data type,
+one temperature, and one $\sigma_0$).  It starts by clearing
+some flags that are used to detect the occurrence of particular
+reactions.  For example, \cword{k107} is set if the (n,$\alpha$)
+reaction (\cword{mt}=107) is found.  Pointers are assigned for the
+vector control and vector data arrays (see \cword{ivcon}, \cword{ivdat}).
+Note that there must be enough container memory available to hold all
+the vector data (\cword{ning}*\cword{n1d} words).  The routine now starts up a
+loop over sections on the input scratch tape (the loop goes through
+statement number 115).  The sections that it processes are determined
+by the value of \cword{mfd}, which will be 3, except for photoatomic
+data, when it will be 23.  Delayed fission $\chi$ is a special case;
+it will be found in the section with an MT value of \cword{mfd}+2.  As
+each interesting section is found, the Hollerith name for the reaction
+is constructed, and the location of the reaction relative to
+\cword{ivdat} is computed.  When the total cross section is
+found (\cword{mt}=1),
+names and locations are set up for the P$_\ell$ components of the weight
+function (for example, \cword{nwt0} and \cword{nwt1}) and for the
+P$_\ell$ components of the total cross section (\cword{ntot0} and
+\cword{ntot1}).  If appropriate, the first letter of these names might
+be \cword{p}, \cword{d}, {\it etc.}, depending on the incident particle.
+When the total photoatomic cross section is found (\cword{mt}=501), names
+and locations are defined for the $\gamma$ weight and the P$_0$ cross
+section (\cword{gwt0} and \cword{gtot0}).  When the charged-particle
+elastic cross section is found for particle \cword{x} (\cword{mt}=2), names and
+locations are set up for the weight function \cword{xwt0} and the
+effective charged-particle total cross section \cword{xtot0}.  Once
+the name and location have been selected, the code reads the data for
+all groups from file \cword{nscr} and stores them at the selected
+location.  If this submaterial corresponds to a higher temperature
+or $\sigma_0$, the corresponding data is also read from file
+\cword{iref} and subtracted from the \cword{nscr} data.  As a result,
+self-shielding information in the MATXS file is given as differences
+rather than f-factors as in the previous CCCC self-shielding file,
+BRKOXS.  The delayed-neutron spectra are read from
+\cword{mf}=5, \cword{mt}=455; the
+spectra from the time groups on the GENDF tape are added to obtain
+a single spectrum $\chi_d$.
+
+There is a special feature in \cword{vector} for incident charged-particle
+reactions.  Although discrete-ordinates transport codes require a
+total cross section, it is not actually possible to compute a
+total cross section for charged-particle reactions because Coulomb
+scattering is singular for straight-ahead scattering (at least in
+the absence of electronic screening).  The solution to this problem
+used by \hyperlink{sGROUPRhy}{GROUPR} is to exclude
+a range of forward angles from the
+charged-particle elastic matrix (this angular range is handled by
+continuous-slowing-down theory in the application codes).  Therefore,
+MATXSR can construct an effective
+total cross section by adding all
+the reaction cross sections found to this truncated elastic cross section.
+However, it must be careful to watch for possibly redundant
+cross sections that must be omitted from the sum; for example, if
+the total ($x$,p) cross section (\cword{mt}=103) is present
+for incident particle
+$x$, the discrete-level ($x$,p$_n$) cross sections and the
+($x$,p) continuum reactions (\cword{mt}=600-649) must be omitted from the sum.
+This is the function of flags like \cword{k103}.
+
+There is another special feature for nuclide production data.  When
+using this experimental ENDF format, there may be a number of different
+sections on the GENDF file producing the same product.  These
+separate contributions are added up into one single production cross
+section in the block of coding starting at statement number 410.
+
+When all the reactions have been entered, subroutine \cword{vector}
+thins the vector data just loaded by removing unneeded leading or
+trailing zeros (actually, numbers less than \cword{small=1.e-30}) from
+each reaction.  These zeros can arise from thresholds and upper limits
+for thermal-range reactions.  In addition, since data for the higher
+temperatures and $\sigma_0$ values are stored as differences, zero
+(or very small) elements can imply that there is no significant
+temperature or $\sigma_0$ dependence.  The subroutine simply steps
+through the \cword{ivdat} data block to find the band limits \cword{nfg}
+and \cword{nlg} for each reaction, to squeeze out the zeros, and to
+record the band limits in the vector control block at \cword{ivcon}.
+When all of the \cword{n1d} reactions have been processed, the resulting
+vector data is written out as a series of ``Vector Block'' records on
+scratch tape \cword{nscr3}.  The subblocking is controlled by \cword{maxw}
+(5000 words).  The code just steps through the cross section
+bands until the next reaction will cause the sum to exceed \cword{maxw}.
+It then writes these reactions to the scratch file, and it repeats the
+process for the next group of reactions.  Each record will have fewer
+than \cword{maxw} words, and the minimum number of records will be
+produced within the restriction that no reaction is broken up between
+records.  The last step in the subroutine is to write the ``Vector
+Control'' record for this submaterial to scratch file \cword{nscrt2}.
+
+Subroutine \cword{matrix}\index{matrix@{\ty matrix}} reads the
+group-to-group matrix data for this submaterial, converts it
+to MATXS format, and writes the results to a scratch file.
+ The pointer \cword{imcon} is used to accumulate matrix control
+information, pointer \cword{icdat} is used for the low-energy
+constant spectrum data (if any), \cword{ijgll} is used for
+banding information, and pointer \cword{imdat} for the
+actual matrix data.  The main loop is over the \cword{n2d} matrix
+reaction types.  The head card for the reaction is read in from
+\cword{nscr}, and for higher temperatures and $\sigma_0$ values, from
+\cword{iref} also.  Subroutine \cword{hname} is called to construct the
+Hollerith reaction name, subroutine \cword{band} is called to read
+through the data and determine the banding parameters used to remove
+excess zero elements, and subroutine \cword{shufl} is called to read
+through the input scratch file again and load the data into memory
+in its final compact form.
+
+Subroutine \cword{band}\index{band@{\ty band}} is fairly simple.  It
+loops over all the groups for this reaction on \cword{nscr} and/or
+\cword{iref}.  When the loop is finished, \cword{jg1lo(i)} and
+\cword{jg1hi(e)} contain lowest and highest initial-group indices
+found for each final group \cword{i}.  Note that the actual
+cross section for a matrix element (or the cross section
+difference when \cword{iref} is being used) is not checked;
+it is assumed that \hyperlink{sGROUPRhy}{GROUPR} has
+done a good job removing excess zeros.
+This should be improved in a future version.  Before returning, these
+limiting group indices are used to compute the MATXS parameters
+\cword{jband} and \cword{ijj}, and to insert them into the accumulating
+matrix control block at pointer \cword{imcon}).
+
+Subroutine \cword{shufl}\index{shufl@{\ty shufl}} starts by
+initializing a loop through statement number 100 that will be used
+to produce ``Matrix Sub-Block'' records.  Inside this loop, the
+code sums the bandwidths found by \cword{band}\index{band@{\ty band}}
+to find out how many final-energy group bands can fit in
+a subblock with length less than or equal to \cword{maxw} words.  The
+result is a pair of group indices \cword{i0} and \cword{imax} that
+define the range of groups to be included in the subblock.  Subroutine
+\cword{shufl} now makes a pass through scratch file \cword{nscr}, and
+also through scratch file \cword{iref} for higher temperatures and
+$\sigma_0$ values.  It stores away the constant subblock data
+(\cword{ig}=0 for the constant spectrum and \cword{ig2lo}=0 for the
+production cross section), if found.  For each group-to-group element,
+it computes the final group index \cword{jg2}.  If the group is in the
+allowed range for this subblock, it computes the output location
+\cword{noloc} and stores the element in memory.  For higher temperatures
+and $\sigma_0$ values, it subtracts the base value found on file
+\cword{iref}.  (This step is normally needed for neutron elastic
+scattering only.) When the group loops for \cword{nscr} and \cword{iref}
+are complete, the subroutine writes out the ``Matrix Sub-Block'' record
+on a scratch file, resets the \cword{ng2z} parameter to the top group
+of the subblock, and continues the loop through statement number 100 to
+produce the rest of the subblocks for this reaction.  The resulting
+series of subblock records on the scratch file are all less than
+\cword{maxw} words in length, and the number of records is minimal
+within the restriction that bands are not split between records.
+
+Returning to \cword{matrix}, data already in memory are used to complete
+the ``Matrix Control'' record, which is written out onto \cword{nscrt2}.
+If no matrix data were found by \cword{band} and \cword{shufl}, a dummy
+matrix control record is written on \cword{nscrt2} and a dummy matrix
+data record is written on \cword{nscrt3}.  Finally, the constant subblock
+data saved in \cword{shufl} (if any) is written to \cword{nscrt3}.
+
+Returning to subroutine \cword{cmatx}, after the call to \cword{mtxdat},
+the data stored in the \cword{a,ia,ha} equivalenced arrays are
+written to the output file for the ``File Identification,''
+``File Control,'' ``Set Hollerith Identification,'' ``File Data,''
+and ``Group Structure'' records.  In a loop over materials, the
+``Material Control'' record is copied from \cword{nscrt6} to the output
+file.  Then, in a loop over the submaterials for this material, the
+``Vector Control'' records are copied from \cword{nscrt2}, the
+``Vector Blocks'' are copied from \cword{nscrt3}, the ``Matrix
+Control'' blocks are copied from \cword{nscrt2}, and the ``Matrix
+Subblocks'' are copied from \cword{nscrt3}.  Subroutine \cword{cmatx}
+then returns to the main MATXSR
+routine, files are closed, and the
+MATXSR run is complete.
+
+\subsection{Error Messages}
+\label{ssMATXSR_err}
+
+The fatal-error and warning messages generated by
+MATXSR are given
+below, along with suggested actions to alleviate the problem.
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{error in mtxdat***input error (nin=0)}] ~\par
+   No input GENDF tape has been given.  Check Card 1 of the
+   user input.
+
+\item[\cword{error in mtxdat***too many submaterials}] ~\par
+   The code is currently limited to 100 submaterials per material.
+   See \cword{nsubmx}=100 in \cword{cmatxs}.
+
+\item[\cword{error in findg***mat or mf or mt le 0 not allowed}] ~\par
+   Subroutine \cword{findg} has been asked to search for an
+   illegal section on the GENDF tape.
+
+\item[\cword{error in findg***mat=nnnn mf=nn mt=nnn not on tape}] ~\par
+   The requested section was not found on the input GENDF tape.
+   Check that the correct tape was mounted.
+
+\item[\cword{error in vector***exceed input data array size.}] ~\par
+   Check the parameter \cword{maxb}=30000 in \cword{vector}.
+
+\item[\cword{error in band***input too large}] ~\par
+   Check the parameter \cword{maxb}=30000 in \cword{matrix}.
+
+\item[\cword{error in shufl***input too large}] ~\par
+   Check the parameter \cword{maxb}=30000 in \cword{shufl}.
+
+\item[\cword{error in lst1io***storage exceeded}] ~\par
+   See \cword{nbmax}=2000 in \cword{mtxdat}, the size of the
+   array \cword{b}.
+
+\end{singlespace}
+\end{description}
+
+\cleardoublepage
+

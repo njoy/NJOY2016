@@ -1,0 +1,294 @@
+\section{RESXSR}
+\label{sRESXSR}
+
+\hypertarget{sRESXSRhy}{In}
+thermal reactor systems, resonance self-shielding in the
+near epithermal range ({\it e.g.,} 4-200 eV) is often poorly
+represented by the simple Bondarenko model\cite{Bondarenko}.
+The normal form of this model as used by the TRANSX code\cite{TRANSX2}
+assumes that all the absorber resonances are narrow with respect
+to the energy lost in neutron scattering.  In this near epithermal
+range, many resonances have widths that violate this assumption.
+A number of ways exist to try to compensate for this problem, one
+example being intermediate-resonance theory as discussed in
+the \hyperlink{sWIMSRhy}{WIMSR} chapter of this
+manual.  The \hyperlink{sGROUPRhy}{GROUPR}
+flux calculator can also
+be used to compensate for wide and intermediate resonances, but
+only for homogeneous systems or idealized reactor cells.
+\index{RESXSR|textbf}
+\index{TRANSX}
+\index{epithermal}
+\index{WIMSR}
+\index{GROUPR}
+\index{flux calculator}
+\index{narrow resonances}
+\index{intermediate resonance effects}
+
+One way to solve this problem accurately is to move the flux
+calculation into TRANSX, where full information on material
+mixtures and geometry can be made available.  To test
+this concept, an experimental version of TRANSX was created
+that could do a full pointwise flux solution using collision
+probabilities for cylindrical systems with an arbitrary number
+\index{collision-probability method}
+\index{self-shielding}
+and arrangement of shells.  It could then take the computed
+flux by region and generate new, accurate, self-shielded cross
+sections for the groups in the near epithermal range.
+
+Of course, this experimental code required pointwise cross
+sections in the epithermal range to do these calculations.  Since
+TRANSX uses CCCC standard interface files\cite{CCCC4} for all other
+communication to the outside world, it was decided to define an
+interface format for resonance-region pointwise cross sections, or
+RESXS.  This RESXSR module was written to produce the RESXS file
+from PENDF tapes produced using the other modules of NJOY.
+\index{CCCC}
+\index{RESXS format}
+\index{PENDF}
+
+This module and the RESXS format may be of use for other applications
+besides TRANSX.
+
+\subsection{Method}
+\label{ssRESXSR_method}
+
+For each material, the data for elastic (\cword{mt}=2), fission (\cword{mt}=18),
+if present, and capture (\cword{mt}=102) for the desired energy range and
+for all the desired temperatures are read in and interpolated
+onto a single union grid.  This large set of cross sections is then
+\index{union grid}
+thinned down using an input tolerance \cword{EPS}.  Using a union
+grid for all reactions and temperatures makes temperature interpolation
+and reconstruction of the total cross section easy.
+
+These data are then written out in the specially defined RESXS
+format.  The key to this format is the ``Cross Section Block.''  For each
+incident energy, it is necessary to give  two or three cross sections
+for each temperature.  If all the many energy points were given in one
+record, the record could be many thousands of words in length.  Therefore, the
+cross section data are broken up into a set of blocks, where each block
+contains \cword{NBLOK} records, except the last block can be shorter.
+
+
+\subsection{RESXS Format Specification}
+\label{ssRESXSR_format}
+
+The specification for the RESXS format follows in the standard
+CCCC style\cite{CCCC4}.  These card images were copied from the
+comment cards at the beginning of the RESXSR source.
+
+\small
+\begin{ccode}
+
+!***********************************************************************
+!               proposed 09/24/90                                      -
+!                                                                      -
+!f           resxs                                                     -
+!e           resonance cross section file                              -
+!                                                                      -
+!n                       this file contains pointwise cross            -
+!n                       sections for the epithermal resonance         -
+!n                       range to be used for hyper-fine flux          -
+!n                       calculations.  elastic, fission, and          -
+!n                       capture cross sections are given vs           -
+!n                       temperature.  linear interpolation is         -
+!n                       assumed.                                      -
+!                                                                      -
+!n           formats given are for file exchange only                  -
+!                                                                      -
+!***********************************************************************
+!
+!
+!-----------------------------------------------------------------------
+!s          file structure                                             -
+!s                                                                     -
+!s              record type                       present if           -
+!s              ==============================    ===============      -
+!s              file identification                 always             -
+!s              file control                        always             -
+!s              set hollerith identification        always             -
+!s              file data                           always             -
+!s                                                                     -
+!s   *************(repeat for all materials)                           -
+!s   *          material control                    always             -
+!s   *                                                                 -
+!s   * ***********(repeat for all cross section blocks)                -
+!s   * *        cross section block                 always             -
+!s   * ***********                                                     -
+!s   *************                                                     -
+!                                                                      -
+!-----------------------------------------------------------------------
+!
+!
+!-----------------------------------------------------------------------
+!r           file identification                                       -
+!                                                                      -
+!l    hname,(huse(i),i=1,2),ivers                                      -
+!                                                                      -
+!w    1+3*mult                                                         -
+!                                                                      -
+!b    format(4h ov ,a8,1h*,2a8,1h*,i6)                                 -
+!                                                                      -
+!d    hname         hollerith file name  - resxs -  (a8)               -
+!d    huse          hollerith user identifiation    (a8)               -
+!d    ivers         file version number                                -
+!d    mult          double precision parameter                         -
+!d                       1- a8 word is single word                     -
+!d                       2- a8 word is double precision word           -
+!                                                                      -
+!-----------------------------------------------------------------------
+!
+!
+!-----------------------------------------------------------------------
+!r           file control                                              -
+!                                                                      -
+!l    efirst,elast,nholl,nmat,nblok
+!                                                                      -
+!w    5                                                                -
+!                                                                      -
+!b    format(4h 1d ,2i6)                                               -
+!                                                                      -
+!d    efirst      lowest energy on file (ev)                           -
+!d    elast       highest enery on file (ev)                           -
+!d    nholl       number of words in set hollerith                     -
+!d                    identification record                            -
+!d    nmat        number of materials on file                          -
+!d    nblok       energy blocking factor                               -
+!                                                                      -
+!-----------------------------------------------------------------------
+!
+!
+!-----------------------------------------------------------------------
+!r           set hollerith identification                              -
+!                                                                      -
+!l    (hsetid(i),i=1,nholl)                                            -
+!                                                                      -
+!w    nholl*mult                                                       -
+!                                                                      -
+!b    format(4h 2d ,8a8/(9a8))                                         -
+!                                                                      -
+!d    hsetid      hollerith identification of set (a8)                 -
+!d                 (to be edited out 72 characters per line)           -
+!                                                                      -
+!-----------------------------------------------------------------------
+!
+!
+!-----------------------------------------------------------------------
+!r          file data                                                  -
+!                                                                      -
+!l    (hmatn(i),i=1,nmat),(ntemp(i),i=1,nmat),(locm(i),i=1,nmat)       -
+!                                                                      -
+!w    (mult+2)*nmat                                                    -
+!                                                                      -
+!b    format(4h 3d ,8a8/(9a8))      hmatn                              -
+!b    format(12i6)                  ntemp,locm                         -
+!                                                                      -
+!d    hmatn(i)    hollerith identification for material i              -
+!d    ntemp(i)    number of temperatures for material i                -
+!d    locm(i)     location of material i                               -
+!                                                                      -
+!-----------------------------------------------------------------------
+!
+!
+!-----------------------------------------------------------------------
+!r          material control                                           -
+!                                                                      -
+!l    hmat,amass,(temp(i),i=1,ntemp),nreac,nener                       -
+!                                                                      -
+!w    mult+3+ntemp                                                     -
+!                                                                      -
+!b    format(4h 6d ,a8,1h*,1p1e12.5/(6e12.5))     hmat,temp            -
+!b    format(2i6)                                 nener,blok           -
+!                                                                      -
+!d    hmat        hollerith material identifier                        -
+!d    amass       atomic weight ratio                                  -
+!d    temp        temperature values for this material                 -
+!d    nreac       number of reactions for this material                -
+!d                  (3 for fissionable, 2 for nonfissionable)          -
+!d    nener       number of energies for this material                 -
+!                                                                      -
+!-----------------------------------------------------------------------
+!
+!
+!-----------------------------------------------------------------------
+!r          cross section block                                        -
+!                                                                      -
+!l    (xsb(i),i=1,imax)                                                -
+!                                                                      -
+!c    imax=3*ntemp*(number of energies in the block)                   -
+!                                                                      -
+!w    imax                                                             -
+!                                                                      -
+!b    format(4h 8d ,1p5e12.5/(6e12.5))                                 -
+!                                                                      -
+!d    xsb(i)      data for a block of nblok or fewer point energy      -
+!d                values.  the data values given for each energy       -
+!d                are nelas, nfis, and ng at temp(1), followed by      -
+!d                nelas, nfis, and ng at temp(2), and so on.           -
+!                                                                      -
+!-----------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+\subsection{User Input}
+\label{ssRESXSR_inp}
+
+The following input specifications were taken from the comment cards
+at the beginning of the RESXSR source.  It is always a good idea to
+check the comment cards in the current version in case there have
+been changes.
+\index{RESXSR!RESXSR input}
+\index{input!RESXSR}
+
+\small
+\begin{ccode}
+
+   !  User input:
+   !
+   !   card 1   units
+   !      nout     output unit
+   !
+   !   card 2   control
+   !      nmat     number of materials
+   !      maxt     max. number of temperatures
+   !      nholl    number of lines of descriptive comments
+   !      efirst   lower energy limit (ev)
+   !      elast    upper energy limit
+   !      eps      thinning tolerance
+   !
+   !   card 3   user id
+   !      huse     hollerith user identification (up to 16 chars)
+   !      ivers    file version number
+   !
+   !   card 4   descriptive data (repeat nholl times)
+   !      holl     line of hollerith data (72 chars max)
+   !
+   !   card 5   material specifications (repeat nmat times)
+   !      hmat     hollerith name for material (up to 8 chars)
+   !      mat      endf mat number for material
+   !      unit     njoy unit number for pendf data
+   !
+
+\end{ccode}
+\normalsize
+
+The only difficulty in constructing the input file for RESXSR is in
+choosing \cword{efirst}, \cword{last}, and \cword{eps}.  The goal is to
+get a set that can be used to generate reasonably good fluxes and
+cross sections without being too expensive.  Also, the energy limits
+should be consistent with the group bounds that will be used for the
+multigroup part of the calculation.  However, the upper energy
+limit should be enough above the highest group to be treated with
+this method that ``Placek'' oscillations from the discontinuity
+in the source from higher energies have some chance to die out.
+It is possible that the values of \cword{eps} could be somewhat
+larger than the value used in \hyperlink{sRECONRhy}{RECONR}
+and \hyperlink{sBROADRhy}{BROADR} to attain additional
+economy.  In practice, it may be necessary to iterate a few times
+to get a good compromise.
+
+\cleardoublepage
+

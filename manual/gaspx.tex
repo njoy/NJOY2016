@@ -1,0 +1,161 @@
+\section{GASPR}
+\label{sGASPR}
+
+\hypertarget{sGASPRhy}{The}
+GASPR\index{GASPR|textbf} module will add gas production\index{gas production}
+reactions (MT=203-207) to the PENDF\index{PENDF} file.  Any existing
+gas-production sections on the input PENDF file are removed, and the
+file directory is updated to show the new reactions.  This module can
+be run anywhere in the PENDF preparation sequence, but as a practical
+matter is should follow \hyperlink{sBROADRhy}{BROADR}\index{BROADR}.
+
+This chapter describes the GASPR module in NJOY2016.0.
+
+\subsection{Gas Production}
+\label{ssGASPR_prod}
+
+The light products of nuclear reactions -- namely, protons, deuterons,
+tritons, $^{3}$He's, and alphas -- can accumulate as gases in a nuclear
+system.  The resulting hydrogen, deuterium, tritium, $^{3}$He, and $^{4}$He
+buildup can have important effects on the original material, such as
+causing embrittlement.  In other cases, the gas may even be the desired
+product, such as in tritium production.
+
+Keeping track of the total production of each gas species is complicated.
+Gases can sometimes be determined from the MT number for the reaction;
+for example, an (n,$\alpha$) reaction produces one $^4$He per reaction.
+The gas might be a residual nucleus as in $^2$H(n,2n)$^1$H or
+$^9$Be(n,2n)2$\alpha$.  Sometimes, the ENDF LR flags are used to
+indicate that the residual nucleus from a reaction breaks up by further
+particle emission.  An example of this is $^{16}$O(n,n$_6$)$\alpha$
+represented using MT=56/LR=22. In other cases, the yield per reaction for
+the light product may be tabulated directly (and even be fractional)
+when File 6 is used for the reaction.  This is common for the
+high-energy data (150 MeV) introduced for ENDF/B-VI Release 6.
+GASPR goes through all the reactions in the evaluation and adds up
+all these various contributions to get the net production of each
+of the light species.
+
+The ENDF format assigns the MT values from 203 to 207 to represent
+the production of hydrogen, deuterium, tritium, $^{3}$He, and $^{4}$He,
+but only a few evaluators have supplied these data in the past.
+By using GASPR to generate these data at the PENDF stage, a number
+of possible inconsistencies are avoided.  Therefore, when gas-production
+MT values are found, GASPR removes them in favor of the ones that it
+calculates.
+
+When the code runs, it prints out a summary of which reactions
+contribute to the production of each gas.  Here is an example for
+aluminum from ENDF/B-VII.0:
+
+\newpage
+\small
+\begin{ccode}
+
+ mf6,mt5 found
+
+ the gas production threshold is  1.8969E+06 ev
+
+ found  1038 points
+
+ pendf mt  mt203  mt204  mt205  mt206  mt207
+ ________  _____  _____  _____  _____  _____
+       5    ***    ***    ***    0.0    ***
+      22    0.0    0.0    0.0    0.0    1.0
+      28    1.0    0.0    0.0    0.0    0.0
+      32    0.0    1.0    0.0    0.0    0.0
+      33    0.0    0.0    1.0    0.0    0.0
+      45    1.0    0.0    0.0    0.0    1.0
+     103    1.0    0.0    0.0    0.0    0.0
+     104    0.0    1.0    0.0    0.0    0.0
+     105    0.0    0.0    1.0    0.0    0.0
+     107    0.0    0.0    0.0    0.0    1.0
+     108    0.0    0.0    0.0    0.0    2.0
+     111    2.0    0.0    0.0    0.0    0.0
+     112    1.0    0.0    0.0    0.0    1.0
+     117    0.0    1.0    0.0    0.0    1.0
+
+ *** means that the yield is energy dependent
+
+ found 8 temperatures
+
+\end{ccode}
+\normalsize
+
+\subsection{User Input}
+\label{ssGASPR_inp}
+
+The following input instructions were copied from the comment cards
+at the beginning of the GASPR source.  It is always a good idea to
+check the cards in the current version of the program for possible
+changes.
+\index{GASPR!GASPR input}
+\index{input!GASPR}
+
+Users are cautioned that only tape numbers are input.  GASPR assumes that
+the first material read from each tape is the material to be processed.
+Therefore, if dealing with multi-material tapes \hyperlink{sMODERhy}{MODER}
+should be run to create a single material tape for input to GASPR.
+
+\newpage
+\small
+\begin{ccode}
+
+   ! card 1
+   !    nendf    unit for endf tape
+   !    nin      unit for input pendf tape
+   !    nout     unit for output pendf tape
+
+\end{ccode}
+\normalsize
+
+\subsection{Coding Details}
+\label{ssGASPR_details}
+
+Subroutine \cword{gaspr} is exported by module
+\cword{gaspm}.\index{modules!gaspm@{\ty gaspm}} The code
+first checks the directory in File 1 of the ENDF tape to
+see whether MF=6/MT=5 is present (see \cword{mf6mt5}).  If so, it
+reads through the MT=5 section of File 6 and saves the various
+light-particle yields in the array \cword{six} using a set of pointers
+like \cword{l203}, \cword{l204}, and so on.
+
+GASPR then proceeds to read through the input PENDF tape.  It copies all
+the sections up to point where the gas production sections will be
+inserted to a scratch file.  It then goes through all these reactions
+computing the direct products and the residual nucleus (with full
+account of the LR flags) and determines the lowest threshold for
+gas production.  It then goes back through the scratch file again
+to get the energy grid for the total cross section starting at the
+threshold (see \cword{egas}).  It continues looping over all the
+reactions on the file, determining again what the direct products
+and residual nuclei are, and accumulating the gas production values
+in the array \cword{sgas(particle,energy)}.
+
+When all the reactions have been processed, GASPR goes back and
+updates the directory in MF=1/MT=451 to reflect the new reactions
+that have been added.  It copies all the reactions on the scratch
+file to the output PENDF tape.  It constructs new MF=3 sections
+for each of the gas-production reactions that was found.  And
+then it copies the remainder of the input PENDF tape to the output
+file.
+
+\subsection{Error Messages}
+\label{ssGASPR_msg}
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{error in gaspr***npend and noutp must both be ...}] ~\par
+   The mode of the PENDF tape must not change, because many of
+   the sections are simply copied.
+
+\item[\cword{error in gaspr***too many gas production energy points.}] ~\par
+   Should not occur, \cword{maxg} used to allocate space for \cword{egas(maxg)}
+   and \cword{sgas(5,maxg)} is determined from the input file.
+
+\end{singlespace}
+\end{description}
+
+\cleardoublepage
+

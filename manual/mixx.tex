@@ -1,0 +1,324 @@
+\section{MIXR}
+\label{sMIXR}
+
+\hypertarget{sMIXRhy}{The}
+MIXR module will construct a new PENDF tape with a specified set of
+reactions that are linear combinations of the cross sections
+on the input tapes.  MIXR can also be used for ENDF tapes, but the
+input interpolation laws are ignored.  The output file contains
+ENDF File 1 and File 3 sections only, and linear-linear interpolation
+is assumed.
+\index{MIXR|textbf}
+
+MIXR can be used for several purposes.  When combined with
+\hyperlink{sPLOTRhy}{PLOTR},
+it can be used to construct mixed cross sections for plotting with
+\hyperlink{sVIEWRhy}{VIEWR}.  One example would be to combine
+the isotopic cross sections
+given in modern evaluations into elemental cross sections
+\index{elemental cross sections} for comparison with older evaluated elemental
+data such as found, for example, in ENDF/B-V.  Such an example is provided
+in the sample deck below.  Another would be to compute the
+difference between two versions of a particular reaction;
+plots that simultaneously show one version of a function and
+the difference between that version and another are sometimes very
+revealing.  In both cases, the mixed cross section is computed on
+the union grid of its components, and all details are preserved.
+
+Another use for MIXR would be to prepare a new ENDF material to
+represent a particular ``enriched uranium,'' having a particular
+amount of $^{235}$U mixed with $^{238}$U.  This file could then
+be run through the \hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}
+flux calculator\index{flux calculator} to generate an accurate
+pointwise flux for enriched uranium mixed with water, or for
+pins of enriched uranium in a typical reactor lattice.  This
+computed flux could then be used as the
+weighting flux\index{weighting flux} for
+computing the self-shielded cross sections of both $^{235}$U and
+$^{238}$U in two subsequent
+\hyperlink{sGROUPRhy}{GROUPR} runs.  This approach handles
+the interference between resonances in $^{235}$U and $^{238}$U
+accurately, including proper treatment of all wide and
+intermediate resonance effects.
+\index{resonance interference}
+\index{intermediate resonance effects}
+
+This chapter describes the MIXR module in NJOY2016.0.
+
+\subsection{User Input}
+\label{ssMIXR_inp}
+
+The following input instructions were copied from the comment cards
+at the beginning of the MIXR source.  It is always a good idea to
+check the cards in the current version of the program for possible
+changes.
+\index{MIXR!MIXR input}
+\index{input!MIXR}
+
+\newpage
+\small
+\begin{ccode}
+
+   !  user input --
+   !
+   !  card 1  --  units
+   !     nout      output unit for mixed cross sections
+   !     nin1      first input unit (endf or pendf)
+   !     nin2      second input unit
+   !      ...      continue for nnin<=nninmx (=10) input units
+   !
+   !  card 2  --  reaction list
+   !      mtn       list of nmt<=nmtmx (=20) mt numbers for
+   !                the output reactions
+   !
+   !  card 3  --  material list
+   !     matn,     list of nmat<=nmatmx (=nninmx=10) pairs (matn,wtn)
+   !      wtn,     of material numbers and associated weighting factors
+   !
+   !  card 4  --  temperature
+   !     temp      temperature (use zero except for pendf tapes)
+   !
+   !  card 5  --  output material
+   !     matd      material number
+   !     za        za value
+   !     awr       awr value
+   !
+   !  card 6  --  file 1 comment card
+   !     des      description (66 char max)
+   !
+   !-------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+\paragraph{Card 1.}
+This card gives the unit numbers for
+the output that will contain the mixed cross sections and the
+input files that contain the materials to be mixed together.
+Note that there is a limit of \cword{nninmx}, currently 10, input files.
+
+\paragraph{Card 2.}
+The code currently allows up to \cword{nmtmx}, currently 20,
+mixed reactions to be generated.  This card contains a list of
+the MT numbers for these reactions.  The number of reactions
+is counted automatically.
+
+\paragraph{Card 3.}
+This card (it may continue onto several
+lines) contains the MAT numbers and weights for the materials to
+be mixed.  The first pair \cword{matn}, \cword{wtn} refers to the
+data on input file \cword{nin1}; the next pair is for \cword{nin2},
+etc.
+
+\paragraph{Card 4.}
+The same temperature is used for all of
+the materials, and its value is given on this card in Kelvin.  The
+appropriate value for ENDF tapes is zero.  The temperatures used
+for PENDF cases must be in the set included on the PENDF tape.
+
+\paragraph{Card 5.}
+This card gives some values that are
+needed to construct the ENDF or PENDF file for the output material.
+\cword{matd} is the conventional material number.  \cword{za}
+is $1000*Z+A$, where $Z$ is the charge number and $A$ is the atomic
+mass number for the mixture.  Finally, \cword{awr} is the mass ratio
+to the neutron for the mixture.
+
+\paragraph{Card 6.}  This card contains one line of text to be
+used for the Hollerith descriptive information in MF=1/MT=451
+on the new ENDF tape for the fixture.  The final tape on
+\cword{NOUT} will contain the section MF=1/MT=451 and sections
+MF=3/MT=MT$_n$ only.
+
+\vspace{6.0 pt}
+The following sample input deck combines the four isotopes of iron
+to generate plots for the total cross section (MT=1), the
+\index{plotting}
+\index{energy-balance heating}
+\index{radiation damage}
+energy-balance heating cross section (MT=301), and the
+radiation damage cross section (MT=444).  See the
+\hyperlink{sPLOTRhy}{PLOTR}
+section of this report for more information on the part of
+the input deck that produces the actual graphs.
+
+\small
+\begin{ccode}
+
+cfs get tape21:/pendf/5/fe/natr2
+cfs get tape22:/pendf/6/fe/54
+cfs get tape23:/pendf/6/fe/56
+cfs get tape24:/pendf/6/fe/57
+cfs get tape25:/pendf/6/fe/58
+cat>input <<EOF
+ mixr
+ 20 -22 -23 -24 -25/
+ 1 301 444/
+ 2625 .0590/
+ 2631 .9172/
+ 2634 .0210/
+ 2637 .0028/
+ 300/
+ 2600 26000 56./
+ 'Fe-nat for ENDF/B-VI from MIXR'/
+ plotr
+ 31/
+ /
+ 1/
+ 'ENDF/B-VI IRON'/
+ 'TOTAL'/
+ 1 0 2 1 13e6 9./
+ 0 20e6 2e6/
+ /
+ 0 10 2/
+ /
+ 6 20 2600 3 1 300/
+ /
+ 'ENDF/B-VI'/
+ 2/
+ 5 -21 1326 3 1 300/
+ 0 0 4/
+ 'ENDF/B-V'/
+ 1/
+ 'ENDF/B-VI IRON'/
+ 'TOTAL'/
+ 4 0 2 1/
+ 1e2 1e5/
+ /
+ /
+ /
+ 6 20 2600 3 1 300/
+ /
+ 'ENDF/B-VI'/
+ 2/
+ 5 -21 1326 3 1 300/
+ 0 0 4/
+ 'ENDF/B-V'/
+ 1/
+ 'ENDF/B-VI IRON'/
+ 'HEATING CHECK'/
+ 1 0 2 1 1e6 2.7e6/
+ 0 20e6 2e6/
+ /
+ 0 3e6 .5e6/
+ *Heating (eV-barns)'/
+ 6 20 2600 3 301 300/
+ /
+ 'ENDF/B-VI'/
+ 3/
+ 5 -21 1326 3 301 300/
+ 0 0 4/
+ 'ENDF/B-V'/
+ 1/
+ 'ENDF/B-VI IRON'/
+ 'DAMAGE CHECK'/
+ 1 0 2 1 13e6 7e4/
+ 0 20e6 2e6/
+ /
+ 0 35e4 5e4/
+ 'Damage (eV-barns)'/
+ 6 20 2600 3 444 300/
+ /
+ 'ENDF/B-VI'/
+ 3/
+ 5 -21 1326 3 444 300/
+ 0 0 4/
+ 'ENDF/B-V'/
+ 99/
+ viewr
+ 31 32/
+ stop
+EOF
+xnjoy<input
+cfs store  plot:/pendf/6/fe/natplot
+
+\end{ccode}
+\normalsize
+
+\noindent
+The first few lines retrieve ENDF/B-V version of $^{nat}$Fe, and
+the four iron isotopes for ENDF/B-VI.  A c-shell ``here file'' is
+then created with the input for MIXR,
+\hyperlink{sPLOTRhy}{PLOTR}, and \hyperlink{sVIEWRhy}{VIEWR}.   The
+lines after the \cword{EOF} line take care of executing NJOY and
+saving the plot file for future use.
+
+Returning to the actual NJOY input cards, note that the MIXR output
+will be on \cword{tape20} in ASCII mode, and the four isotopic input
+files (in binary mode) will be on \cword{tape22} through \cword{tape25}.
+The next input card lists the three reaction types to be written onto
+the output file; it is followed by four cards giving the isotope
+MAT numbers and the atomic fractions that they are to have in the
+mixture.  These mix-specification cards are then followed by a card
+asking for a temperature of 300K.
+
+The last two cards in the MIXR section specify the ENDF parameters
+for the mixed material that will be written on \cword{tape20}.
+The MAT number is to be 2600 (the standard ENDF-6 value for natural
+iron), the ZA value is to be 26000, and the AWR value is to be
+56.0000 (a rather crude choice).  The text line shown will appear
+in MF=1/MT=451 on the output tape.
+
+At this point, the MIXR module will run and produce its output
+file.  The rest of the input deck reads in this output file and
+makes a graphical comparison of the mixed elemental cross section
+with the corresponding elemental values from ENDF/B-V.
+
+\subsection{Coding Details}
+\label{ssMIXR_details}
+
+Subroutine \cword{mixr} is exported by module
+\cword{mixm}\index{modules!mixm@{\ty mixm}}.
+The heart of MIXR is subroutine \cword{gety}\index{gety@{\ty gety}}.
+It is similar to \cword{gety1}\index{gety1@{\ty gety1}} in the
+\cword{endf}\index{modules!endf@{\ty endf}} module, except
+that it works with several TAB1 records in parallel.  The routine
+is initialized for up to \cword{nmtmx} input TAB1 records
+on up to \cword{nninmx} input tapes
+by calling it with \cword{x}=0 for each tape.  It returns the value of
+\cword{xnext} for each tabulation.  The calling program can
+compare these \cword{xnext} values to determine the lowest
+energy point for the mixed reaction (the threshold).
+
+On subsequent calls with \cword{x}$>$0, MIXR returns the value of
+\cword{y} corresponding to \cword{x} for the specified tabulation,
+and it also computes \cword{xnext} for this tabulation.  The
+calling program can loop through all the input tapes, compute
+the mixed value of \cword{y} as a linear combination of the
+separate \cword{gety} results, and compute the next energy
+grid point as the lowest of the values of \cword{xnext} returned
+by the separate \cword{gety} calls.  In this way, the mixed
+results are obtained on a unionized grid, and no features are lost.
+
+To do its job, \cword{gety} has to keep tables of the current
+location and related parameters on each of the input tapes.  These
+tables will be found in the subroutine, all with dimension \cword{nninmx}.
+
+
+\subsection{Error Messages}
+\label{ssMIXR_msg}
+
+%\vspace{12pt}
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{error in mixr***mat and temp not found}] ~\par
+There is an inconsistency between the requested \cword{matn} and
+\cword{temp} values and the materials found on the input files
+\cword{nin1}, \cword{nin2}, ....
+
+\item[\cword{message from mixr***mt=xxx not present for mat=xxxx}] ~\par
+This message is just information.  If the user asked for construction
+of, for example, an (n,2n) reaction for an element, and if one of the isotopes
+did not have an (n,2n) reaction, this message would be issued.
+
+\item[\cword{error in gety***not properly initialized}] ~\par
+The subroutine \cword{gety} has to be called with \cword{x}=0 for
+each material/section combination to be introduced into the mixed
+reaction before it is called with \cword{x}$>$0.
+
+\end{singlespace}
+\end{description}
+
+\cleardoublepage
+

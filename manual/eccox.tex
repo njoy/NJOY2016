@@ -1,0 +1,291 @@
+\section{ECCOR}
+\label{sECCOR}
+
+\hypertarget{sECCORhy}{The}
+ECCOR\index{ECCOR|textbf} module of NJOY is used to prepare libraries for the
+reactor-physics code ECCO\cite{ecco}.\index{ECCO} ECCO is a lattice code
+developed at the Commissariat \`a l'\'Energie Atomique (CEA) and is dedicated
+to the analysis of fast reactor lattices.
+
+The ECCOR module creates an ECCO format library named {\sl eccolib} from the
+GENDF files output by the CALENR module. It is assumed that an input GENDF file
+contains all neutron cross sections, scatter matrices and CALENDF probability
+tables for a single isotope/element to be placed on an ECCO library. The code
+reads data from the GENDF tape, including probability table information, and
+restructures it to the ECCO format. It also forms cross-sections which are
+executes final consistency checks and corrects some data which are slightly
+inconsistent\cite{eccolib}.
+
+\subsection{User Input}
+\label{ssECCOR_UserInp}
+
+The following description of the user input is reproduced from
+the comment cards at the beginning of the ECCOR module.
+\index{ECCOR!ECCOR input}
+\index{input!ECCOR}
+
+\small
+\begin{ccode}
+  !---input specifications (free format)----
+  !
+  ! card 1 file units
+  !   ning      input gendf unit (>0 formatted / <0 unformatted)
+  !   ninr      input unit of reference table (=0 for create option)
+  !   nine      input unit of eccolib (=0 for create option)
+  !   nour      output unit of reference table
+  !   nout      output unit of eccolib
+  !   iprint    long print option (0/1=minimum/maximum) (default=0)
+  !
+  ! card 2 eccolib structure
+  !   lrecl     record length (bytes) for library (usually 4096)
+  !   lwordi    number of bytes in an integer word (usually 4)
+  !   lwordc    cumber of characters in a string (usually 16)
+  !   lwordr    number of bytes in a real(kr) word (usually 4)
+  !
+  ! card 3 group block structure (2 cards)
+  !   nreci     number of group blocks
+  !   ing       array of integer, number of groups stored together in each
+  !             group block. The sum of nreci values must equal the total
+  !             number of energy groups in the eccolib.
+  !
+  ! card 4 title
+  !   title     char(len=80) description of this library
+  !
+  ! card 5 data source for element
+  !   sysour    char(len=16), data source for this element
+  !
+  ! card 6 material number
+  !   matno     material number to be processed from GENDF tape
+  !
+  ! card 7 material number
+  !   type      type of nuclide (either 'FERTILE', 'FISSILE' or
+  !             'NON-FISSILE')
+  !
+  ! card 8 reaction number of thermal scattering matrices (2 cards)
+  !   mtherm    number of MT indices
+  !   ntherm    mtherm values of MT incices (221 is the value for free
+  !             gas scattering)
+  !
+  ! card 9 isotope card
+  !   iel       identifier number for this isotope
+  !   awt       atomic weight
+  !   sycor     char(len=16) isotope name
+  !   sybel     char(len=16) element name
+  !
+  ! card 10 isotope properties
+  !   ecng      non-gamma capture energy (mev)
+  !   ecg       gamma capture energy (mev)
+  !   efng      non-gamma fission energy (mev)
+  !   efg       gamma fission energy (Mev)
+  !   dis       disintegration constant (s-1)
+  !
+  ! card11 vector cross section names (2 cards)
+  !   nsmic2    number of x-section type names. If nsmic2=0, use 'TOTAL',
+  !             'TRANSPORT','CAPTURE','ELASTIC','INELASTIC','FISSION',
+  !             'NU*FISSION','N,XN','AXIAL_TRANSPORT','RADIAL_TRANSPORT'
+  !   listmi    user-defined char(len=16) names (if nsmic2 > 0)
+  !
+  ! card12 matrix cross section names (2 cards)
+  !   nsmtx     number of x-section type names. If nsmtx=0, use 'ELASTIC',
+  !             'INELASTIC','N,XN'
+  !   listmx    user-defined char(len=16) names (if nsmtx > 0)
+  !
+  ! card13 response function names (2 cards)
+  !   nfr       number of response function names. If nsmtx=0, use 'N,P',
+  !             'N,ALPHA','N,2N','N,3N','N,4N','N,GAMMA','N,D','N,T',
+  !             'N,HE3','N,2ALPHA','N,3ALPHA','N,2P',N,P+ALPHA',
+  !             'N,T+2ALPHA','N,D+2ALPHA','N,F','N,N+F','N,2N+F','N,3N+F',
+  !             'N,N+ALPHA','N,N+3ALPHA','N,2N+ALPHA','N,3N+ALPHA',
+  !             'N,N+P','N,N+2ALPHA','N,2N+2ALPHA','N,N+D','N,N+T',
+  !             'N,N+HE3','N,N+D+2ALPHA','N,N+T+2ALPHA','N,2NP','N,3NP',
+  !             'N,PD','N,PT,’N,ANYTHING’
+  !   listfr    user-defined char(len=16) names (if nfr > 0)
+  !
+  ! card14 response function names (2 cards)
+  !   nsgp      number of gamma production x-section names
+  !   listgp    user-defined char(len=16) names (if nsgp > 0)
+  !
+  ! card15 response function names
+  !   nmpn      maximum order of pn
+  !
+  ! card16      gamma energy mesh (2 cards)
+  !   nfgg      number of gamma energy groups
+  !   eg        energy limits (nfgg+1 values)
+  !  ...
+  !
+  !            cards 9 to 16 are set for the first isotope in the library.
+  !            Repeat cards 9 and 10 for all other isotopes present in the
+  !            library.
+  !
+  !-----------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+The following sample run created an eccolib on tape41 and includes data for
+Pu239. The numbers on the left are for reference; they are not part of the
+input.
+
+\small
+\begin{ccode}
+  1.   --
+  2.   -- Pu239
+  3.   --
+  4.   moder
+  5.    40 -21
+  6.   reconr
+  7.    -21 -22
+  8.    'pendf tape from /tmp/endfb8r0'/
+  9.    9437 1/
+ 10.    0.001  0.  0.005/
+ 11.    'Pu239 from /tmp/endfb8r0 at Thu Mar 26 16:01:52 2020' /
+ 12.    0/
+ 13.   broadr
+ 14.    -21 -22 -23
+ 15.    9437 2/
+ 16.    0.001/
+ 17.    2.930000E+02 5.500000E+02/
+ 18.    0/
+ 19.   purr
+ 20.    -21 -23 -24
+ 21.    9437 2 1 20 32/
+ 22.    2.930000E+02 5.500000E+02/
+ 23.    1.000000E+10/
+ 24.    0/
+ 25.   thermr
+ 26.    0 -24 -35
+ 27.    0 9437 16 2 1 0 0 1 221 0
+ 28.    2.930000E+02 5.500000E+02/
+ 29.    0.001 4.0
+ 30.   groupr
+ 31.    -21 -35 0 -26 0 0
+ 32.    9437 35 0 -4 1 2 1 1 0
+ 33.    'Pu239 from /tmp/endfb8r0 at Thu Mar 26 16:06:27 2020' /
+ 34.    2.930000E+02 5.500000E+02/
+ 35.    1.000000E+10/
+ 36.    677.2873 10.8897 20000 / Homog. Flux Calc.Param
+ 37.    0.2 0.0253 820.3e3 1.40e6 / iwt=4 parameters
+ 38.    3/
+ 39.    3 221 /
+ 40.    3 452 /
+ 41.    3 455 /
+ 42.    5 455 /
+ 43.    6 /
+ 44.    6 221 /
+ 45.    0/
+ 46.    3/
+ 47.    3 221 /
+ 48.    3 452 /
+ 49.    3 455 /
+ 50.    5 455 /
+ 51.    6 /
+ 52.    6 221 /
+ 53.    0/
+ 54.    0/
+ 55.   calenr
+ 56.    -21 -35 -26 -27 2 1/
+ 57.    9437 2 /
+ 58.    2.930000E+02 5.500000E+02 /
+ 59.    2.767920E+00 1.227734E+05 /
+ 60.    0/
+ 61.   moder
+ 62.    -27 51
+ 63.   eccor
+ 64.    -27 0 0 40 41 1 /
+ 65.    4096 4 16 4 /
+ 66.    73 /
+ 67.      7   7   8   8   8   8   8   9  10   9   9   9
+ 68.      9   9   9   9  11  16  17  17  18  18  18  18
+ 69.     19  19  19  19  20  20  20  20  20  21  21  21
+ 70.     21  22  22  22  23  23  23  24  24  25  25  26
+ 71.     26  27  28  28  29  30  31  32  34  35  36  38
+ 72.     40  43  43  48  55  63  74  90 144  69  15  67
+ 73.     49 /
+ 74.    'FINE GROUP ENDF-B-VIII.1 LIBRARY' /
+ 75.    'Pu239 data' /
+ 76.    9437 /
+ 77.    'FISSILE' /
+ 78.    1 /
+ 79.    221 /
+ 80.    9437 239.052 'Pu239' 'Pu' /
+ 81.    0.0 6.5336 189.72 11.910 9.1104E-13 /
+ 82.    0 /
+ 83.    0 /
+ 84.    0 /
+ 85.    0 /
+ 86.    1 /
+ 87.    0 /
+ 88.   stop
+\end{ccode}
+\normalsize
+
+Here is the description of the input file necessary to add a nuclide to an
+existing eccolib.
+
+\small
+\begin{ccode}
+  1.   eccor
+  2.    -27 38 39 40 41 1 /
+  3.    4096 4 16 4 /
+  4.    73 /
+  5.      7   7   8   8   8   8   8   9  10   9   9   9
+  6.      9   9   9   9  11  16  17  17  18  18  18  18
+  7.     19  19  19  19  20  20  20  20  20  21  21  21
+  8.     21  22  22  22  23  23  23  24  24  25  25  26
+  9.     26  27  28  28  29  30  31  32  34  35  36  38
+ 10.     40  43  43  48  55  63  74  90 144  69  15  67
+ 11.     49 /
+ 12.    'Pu240 data' /
+ 13.    9440 /
+ 14.    'FISSILE' /
+ 15.    1 /
+ 16.    221 /
+ 17.    9440 240.05381 Pu240 Pu /
+ 18.    0.0 5.24152 186.80 12.67 3.3477446E-12 /
+ 19.   stop
+\end{ccode}
+\normalsize
+
+\subsection{Coding Details}
+\label{ssECCOR_details}
+
+The main entry point is subroutine \cword{eccor} exported by
+module \cword{eccom}\index{modules!eccom@{\ty eccom}}.
+The code begins by reading the user's input. It then locates the
+position for the new material on the GENDF\index{GENDF}
+tape (if any) and copies them to the eccolib, defined as a binary
+direct access file.
+
+To create a new eccolib, ECCOR should first be run in creation
+mode.
+This option reads
+\begin{itemize}
+\item the information required for the reference table package:
+\begin{itemize}
+  \item primary cross section types
+  \item response function types
+  \item matrix types
+  \item sub-group types
+  \item fine group energy boundaries
+\end{itemize}
+\item data describing the first nuclide to be included in the library.
+\item a GENDF tape containing the nuclide to be included in the library,
+including probability table information produced by module CALENR.
+\end{itemize}
+
+Once an eccolib has been produced for one nuclide ECCOR should then be
+run in addition mode. This option reads
+\begin{itemize}
+  \item data describing the nuclide to be added
+  \item a GENDF tape containing the nuclide to be added
+  \item an existing eccolib
+  \item reference table package describing the input eccolib and outputs
+\end{itemize}
+
+At completion, ECCOR outputs
+\begin{itemize}
+  \item a new eccolib
+  \item a reference table package describing the eccolib.
+\end{itemize}
+
+\cleardoublepage

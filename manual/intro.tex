@@ -1,0 +1,1031 @@
+\section{INTRODUCTION}
+\label{sINTRO}
+
+The NJOY nuclear data processing system\cite{NJ1,NJ2,NJOY91,NJ10,
+NJ12,njoytutorial}
+is a comprehensive computer code package for producing pointwise and
+multigroup nuclear cross sections and related quantities from
+evaluated nuclear data in the ENDF format.  The U.S. Evaluated
+Nuclear Data Files (ENDF) have progressed through a number of
+versions, notably ENDF/B-III, ENDF/B-IV, ENDF/B-V, ENDF/B-VI,
+and ENDF/B-VII\cite{ENDF7,ENDF71}.  The ENDF format has also evolved
+through many versions.  Variations of the format called
+``ENDF-6'' were used for ENDF/B-VI and ENDF/B-VII, and will be\
+used in ENDF/B-VIII.  The latest version of the format is
+described in the ENDF-102 document\cite{ENDF102,endftutorial}.
+\index{ENDF}
+\index{ENDF!ENDF/B-III}
+\index{ENDF!ENDF/B-IV}
+\index{ENDF!ENDF/B-V}
+\index{ENDF!ENDF/B-VI}
+\index{ENDF!ENDF/B-VII}
+The ENDF format is also used in other nuclear data
+libraries such as the JEFF libraries in Europe and the JENDL libraries
+in Japan, or in specialized libraries distributed through the Nuclear
+Data Section of the International Atomic Energy Agency (IAEA).
+\index{JEFF}
+\index{JENDL}
+These libraries represent the underlying nuclear data from a physics
+viewpoint, but practical calculations usually require special
+libraries for particle transport codes or reactor core physics codes.
+This is the mission of NJOY --- to take the basic data from the nuclear
+data library and convert it into the forms needed for applications.
+
+\subsection{The Modules of NJOY}
+\label{ssINTRO_Modules_of_NJOY}
+
+The NJOY code consists of a set of main modules, each performing a
+well-defined processing task.  Each of these main modules is
+essentially a separate computer program.  They are linked to one
+another by input and output files.  The main modules are supported
+by a number of subsidiary modules providing things like physics
+constants, utility routines, and mathematics subroutines that can
+be ``used'' by the main modules.  The NJOY modules are grouped as
+follows:
+\begin{singlespace}
+\begin{description}
+\item[\hyperlink{sNJOYhy}{NJOY}] directs the flow of data through
+the other modules.
+  Subsidiary modules for locale, ENDF formats, physics constants,
+  utility routines, and math routines are grouped with the NJOY
+  module for descriptive purposes.
+\index{NJOY}
+\index{data flow}
+
+\item[\hyperlink{sRECONRhy}{RECONR}] reconstructs pointwise (energy-dependent)
+  cross sections from ENDF resonance parameters and interpolation schemes.
+\index{RECONR}
+\index{resonance reconstruction}
+
+\item[\hyperlink{sBROADRhy}{BROADR}] Doppler-broadens and thins pointwise
+ cross sections.
+\index{BROADR}
+\index{Doppler-broadening}
+
+\item[\hyperlink{sUNRESRhy}{UNRESR}] computes effective self-shielded pointwise
+  cross sections in the unresolved energy range.
+\index{UNRESR}
+\index{self-shielding}
+\index{unresolved resonance range}
+
+\item[\hyperlink{sHEATRhy}{HEATR}] generates pointwise heat production cross
+ sections (neutron KERMA factors) and radiation damage production cross
+ sections.
+\index{HEATR}
+\index{heating}
+\index{damage}
+
+\item[\hyperlink{sTHERMRhy}{THERMR}] produces cross sections and
+ energy-to-energy matrices for free or bound scatterers in the thermal
+ energy range.
+\index{THERMR}
+
+\item[\hyperlink{sGROUPRhy}{GROUPR}] generates self-shielded multigroup cross
+  sections, group-to-group scattering matrices, photon production matrices,
+  and charged-particle multigroup cross sections from pointwise input.
+\index{GROUPR}
+
+\item[\hyperlink{sGAMINRhy}{GAMINR}] calculates multigroup photoatomic cross
+ sections, photon KERMA factors, and group-to-group photon scattering matrices.
+\index{GAMINR}
+
+\item[\hyperlink{sERRORRhy}{ERRORR}] computes multigroup covariance matrices
+  from pointwise covariance data.
+\index{ERRORR}
+\index{covariances}
+
+\item[\hyperlink{sCOVRhy}{COVR}] reads the output of ERRORR and performs
+ covariance plotting and output formatting operations.
+\index{COVR}
+
+\item[\hyperlink{sMODERhy}{MODER}] converts ENDF ``tapes'' back and forth
+ between formatted (that is, ASCII) and blocked binary modes.
+\index{MODER}
+
+\item[\hyperlink{sDTFRhy}{DTFR}] formats multigroup data for transport codes
+ that use formats based on the DTF-IV code.
+\index{DTFR}
+\index{DTF-IV}
+
+\item[\hyperlink{sCCCCRhy}{CCCCR}] formats multigroup data for the CCCC standard
+  files ISOTXS, BRKOXS, and DLAYXS.
+\index{CCCCR}
+\index{ISOTXS}
+\index{BRKOXS}
+\index{DLAYXS}
+
+\item[\hyperlink{sMATXSRhy}{MATXSR}] formats multigroup data for the newer
+ MATXS cross-section interface file, which works with the TRANSX code
+ to make libraries for many particle transport codes.
+\index{MATXSR}
+\index{MATXS format}
+\index{TRANSX}
+
+\item[\hyperlink{sRESXSRhy}{RESXSR}] prepares pointwise cross sections in a
+ CCCC-like format for thermal flux calculators.
+\index{RESXSR}
+
+\item[\hyperlink{sACERhy}{ACER}] prepares libraries in ACE format for the
+  Los Alamos continuous-energy Monte Carlo MCNP and MCNPX codes.  The ACER
+  module is supported by subsidiary modules for the different classes
+  of the ACE format.
+\index{ACER}
+\index{MCNP}
+\index{Monte Carlo}
+
+\item[\hyperlink{sPOWRhy}{POWR}] prepares libraries for the EPRI-CELL
+  and EPRI-CPM codes.
+\index{POWR}
+
+\item[\hyperlink{sWIMSRhy}{WIMSR}] prepares libraries for the thermal reactor
+  assembly codes WIMS-D and WIMS\nobreakdash-E.
+\index{WIMSR}
+\index{WIMS!WIMS-D}
+\index{WIMS!WIMS-E}
+
+\item[\hyperlink{sPLOTRhy}{PLOTR}] makes plots of cross sections and
+  perspective plots of distributions for both pointwise and multigroup
+  data by generating input for the VIEWR module.
+\index{PLOTR}
+
+\item[\hyperlink{sVIEWRhy}{VIEWR}] converts plotting files produced by the
+  other modules into high-quality color Postscript plots.
+\index{VIEWR}
+
+\item[\hyperlink{sMIXRhy}{MIXR}] is used to combine cross sections into
+  elements or mixtures, mainly for plotting.
+\index{MIXR}
+
+\item[\hyperlink{sPURRhy}{PURR}] is used to prepare unresolved-region
+  probability tables for the MCNP continuous-energy Monte Carlo code.
+\index{PURR}
+\index{unresolved resonance range}
+\index{probability tables}
+
+\item[\hyperlink{sLEAPRhy}{LEAPR}] produces thermal scattering data in ENDF-6
+  File 7 format that can be processed using the THERMR module.
+\index{LEAPR}
+\index{thermal scattering}
+
+\item[\hyperlink{sGASPRhy}{GASPR}] generates gas-production cross sections
+  in the pointwise PENDF format from basic ENDF cross sections.
+\index{GASPR}
+\index{gas production}
+\end{description}
+\end{singlespace}
+
+\noindent
+The methods used in these modules and instructions on how to use them
+are given in subsequent sections of this report.  The sections on the
+modules are followed by an additional section on NJOY maintenance
+and testing.
+
+\subsection{Data Flow in NJOY}
+\label{ssINTRO_dataflow}
+
+The modules of NJOY can be linked in a number of different ways to
+prepare libraries for various nuclear applications.  The following
+brief summary illustrates the general flow of data in the code.
+\index{data flow}
+
+\hyperlink{sRECONRhy}{RECONR}\index{RECONR}
+reads an ENDF\index{ENDF} file
+and produces a common energy grid for all reactions (the union grid)
+\index{union grid} such that all cross sections can be obtained to
+within a specified tolerance by linear interpolation.  Resonance
+cross sections are reconstructed\index{resonance reconstruction}
+using a method of choosing the energy grid that incorporates
+control over the number of significant figures\index{significant figures}
+generated and a resonance integral criterion to reduce the number
+of grid points generated for some materials.  Summation cross sections
+\index{summation cross sections} (for example, total, inelastic) are
+reconstructed from their parts.  The resulting pointwise cross sections
+\index{pointwise cross sections} are written onto a ``point-ENDF''
+(PENDF) file for future use.  \hyperlink{sBROADRhy}{BROADR}
+\index{BROADR} reads a
+PENDF\index{PENDF} file and Doppler-broadens\index{Doppler-broadening}
+the data using the accurate point-kernel method.\index{kernel broadening}
+The union grid allows all resonance reactions to be broadened
+simultaneously, resulting in a saving of processing time.  After
+broadening and thinning, the summation cross sections are again
+reconstructed from their parts.  The results are written out on a
+new PENDF file for future use.  \hyperlink{sUNRESRhy}{UNRESR}
+\index{UNRESR} produces effective
+self-shielded pointwise cross sections,\index{self-shielding}
+versus energy and background cross section, in the unresolved
+\index{unresolved resonance range} range.  This is done
+for each temperature produced by \hyperlink{sBROADRhy}{BROADR},
+using the average resonance parameters from the ENDF
+evaluation.  The results are added to the PENDF file using a
+special format.
+
+If desired, additional special kinds of data can be added to the
+PENDF file.  \hyperlink{sHEATRhy}{HEATR}\index{HEATR}
+computes energy-balance heating,
+\index{heating} KERMA,\index{KERMA} and damage energy\index{damage}
+using reaction kinematics or by applying conservation of energy.  The
+ENDF photon production files can be used in this step, when available.
+Comparisons of momentum and energy calculations with the photon files
+can be used to find energy-balance errors in the evaluations.
+\index{energy-balance checks} For ENDF-6 formatted data,
+charged-particle distributions in File 6\index{File 6} are used
+directly to compute accurate heating and damage parameters.  The
+energy-balance heating\index{energy-balance heating} results are
+added to the PENDF file using ENDF reaction numbers in the 300 series;
+kinematic KERMA\index{KERMA!kinematic KERMA} uses the special identifier
+443,\index{MT!MT443} and damage results use the special identifier
+444.\index{MT!MT444}  \hyperlink{sTHERMRhy}{THERMR}
+\index{THERMR} produces pointwise cross
+sections in the thermal range.  Energy-to-energy incoherent inelastic
+scattering\index{incoherent inelastic} matrices can be computed for
+free-gas scattering\index{free gas} or for bound scattering using
+a precomputed scattering law S($\alpha$,$\beta$)\index{$S(\alpha,\beta)$}
+in ENDF format.  The secondary angle and energy grids are
+determined adaptively so as to represent the function to a
+desired precision by linear interpolation;  the angular
+representation is then converted to one based on equally probable
+angles.  See the chapter on \hyperlink{sTHERMRhy}{THERMR}
+for another possible representation.
+Coherent-elastic scattering\index{coherent elastic} from crystalline
+materials can be computed using internal lattice information, or
+for ENDF-6 formatted files, using data from the evaluation directly.
+The scheme used provides a detailed representation of the delta
+functions in energy and angle.  Incoherent-elastic scattering
+\index{incoherent elastic} for hydrogenous materials is represented
+using equally probable angles computed analytically or using
+ENDF-6 parameters.  The results for all the processes are added to
+the PENDF file using special formats and special reaction numbers
+between 221 and 250.\index{MT!MT221 -- 250}  Additional reactions describing
+the production of the gases \index{gas production} $^1$H, $^2$H,
+$^3$H, $^3$He, and $^4$He can be added to the PENDF file with
+MT=203 -- 207\index{MT!MT203 -- 207} using the
+\hyperlink{sGASPRhy}{GASPR}\index{GASPR} module.
+
+\hyperlink{sGROUPRhy}{GROUPR}
+\index{GROUPR} processes the pointwise cross sections
+\index{pointwise cross sections} produced by the modules described
+above into multigroup form\index{multigroup cross sections}.  The
+weighting function \index{weight functions} for group averaging
+\index{group structures} can be taken to be the Bondarenko
+\index{Bondarenko method} form, or it can be computed from the
+slowing-down equation for a heavy absorber in a light moderator.
+\index{flux calculator}  Self-shielded cross sections,
+scattering matrices, photon production matrices,
+charged-particle matrices, and photonuclear matrices are all
+averaged in a unified way, the only difference being in the
+function that describes the ``feed'' into a secondary group $g'$
+with Legendre order $\ell$ from initial energy $E$.  The feed
+function\index{feed function} for two-body scattering is computed
+using a center-of-mass (CM) Gaussian integration scheme, which
+provides high accuracy even for small Legendre components of
+the scattering matrix.  Special features are included for delayed
+neutrons,\index{delayed-neutrons} coupled energy-angle distributions
+\index{coupled energy-angle distributions} (either from
+\hyperlink{sTHERMRhy}{THERMR}\index{THERMR}
+or from ENDF-6 evaluations using File 6),
+discrete scattering angles arising from thermal coherent reactions,
+and charged-particle elastic scattering.  Prompt fission is treated
+with a full group-to-group matrix\index{group-to-group fission}.
+The results are written in a special ``groupwise-ENDF'' format
+(GENDF)\index{GENDF} for use by the output formatting modules.
+\hyperlink{sGAMINRhy}{GAMINR}\index{GAMINR} uses
+a specialized version of \hyperlink{sGROUPRhy}{GROUPR} to
+compute photoatomic\index{photoatomic} cross sections and
+group-to-group matrices.  Coherent and incoherent atomic form
+factors\index{atomic form factors} are processed in order to extend
+the useful range of the results to lower energies.  Photon heat
+production cross sections are also generated.  The results are
+saved on a GENDF file.
+
+The covariance module, \hyperlink{sERRORRhy}{ERRORR},
+\index{ERRORR} can either produce its
+own multigroup cross sections using the methods of
+\hyperlink{sGROUPRhy}{GROUPR} or start
+from a precomputed set.  The cross sections and ENDF covariance
+data are combined in a way that includes the effects of deriving
+one cross section from several others.  Special features are
+included to process covariances for data given as resonance
+parameters or ratios (for example, fission $\bar{\nu}$).  It
+is also possible to process covariances for the P$_1$
+component of an angular distribution, a secondary-energy
+distribution, and radionuclide production.  The
+\hyperlink{sCOVRhy}{COVR}\index{COVR}
+module uses the output from \hyperlink{sERRORRhy}{ERRORR}
+together with the \hyperlink{sVIEWRhy}{VIEWR}
+\index{VIEWR} module to make publication-quality plots of
+covariance data; it also provides output in the efficient BOXER
+\index{BOXER format} format, and it provides a site for user-supplied
+routines to prepare covariance libraries\index{covariance libraries}
+for various sensitivity systems.\index{sensitivity systems}
+
+\hyperlink{sMODERhy}{MODER}\index{MODER} is
+often used at the beginning of an NJOY job
+to convert ENDF library files into binary mode for calculational
+efficiency, or at the end of a job to obtain a printable version
+of a result from ENDF, PENDF, GENDF or ERRORR input.  It can also
+be used to extract desired materials from a multimaterial library, or to
+combine several materials into new ENDF, PENDF, GENDF or
+ERRORR files.
+\hyperlink{sDTFRhy}{DTFR} \index{DTFR} is
+a simple reformatting code that produces
+cross-section tables acceptable to many discrete-ordinates transport
+codes.\index{discrete-ordinates transport}  It also converts the
+GROUPR fission matrix to $\chi$ and $\bar{\nu}\sigma_f$ and prepares
+a photon-production matrix, if desired.  The user can define
+edit cross sections that are any linear combination of the
+cross sections on the GENDF file.  This makes complex edits
+such as gas production possible.  \hyperlink{sDTFRhy}{DTFR}
+also produces plotting files for \hyperlink{sVIEWRhy}{VIEWR}
+to use in making routine plots for the
+cross sections, P$_0$ scattering matrix, and photon production
+matrix.  This module has become somewhat obsolete with the advent
+of the MATXS/TRANSX system.\index{MATXS/TRANSX}
+
+A number of other interface file formats are available from
+NJOY.  The \hyperlink{sCCCCRhy}{CCCCR}\index{CCCCR}
+module is a straightforward
+reformatting code that supports all the options of the
+CCCC-IV\cite{CCCC4}\index{CCCC format!CCCC-IV} file specification.  In the
+cross-section file (ISOTXS)\index{ISOTXS}, the user can choose
+either isotope $\chi$ matrices or isotope $\chi$ vectors collapsed
+using any specified flux.  The BRKOXS\index{BRKOXS} file includes
+the normal self-shielding factors plus self-shielding factors for
+elastic removal.  The DLAYXS\index{DLAYXS} provides delayed-neutron
+data for reactor kinetics codes.  Note that some of the
+cross sections producible with NJOY are not defined in the CCCC
+files.  For that reason, we have introduced the new CCCC-type
+material cross section file MATXS\index{MATXS}.  The
+\hyperlink{sMATXSRhy}{MATXSR}
+\index{MATXSR} module reformats GENDF data for neutrons, photons,
+and charged particles into the MATXS format, which is suitable
+for input to the TRANSX (transport cross section)
+code\cite{TRANSX}.\index{TRANSX}  TRANSX can produce libraries
+for a variety of particle transport codes that have been
+used over the years, such as ANISN\cite{ANISN}\index{ANISN},
+ONEDANT\cite{ONEDANT}\index{ONEDANT},
+TWODANT\cite{TWODANT}\index{TWODANT}, and
+DIF3D\cite{DIF3D}.\index{DIF3D}  TRANSX has special features
+to support the latest S$_{\rm N}$ transport code from Los Alamos,
+PARTISN\cite{PARTISN}.\index{PARTISN}  The MATXS format uses
+efficient packing techniques and flexible naming conventions
+that allow it to store all NJOY data types.  A companion module,
+\hyperlink{sRESXSRhy}{RESXSR}, formats \index{RESXSR} pointwise data into
+a CCCC-like format for use in thermal flux calculators.
+
+Pointwise data can also be fed directly into the
+\hyperlink{sACERhy}{ACER}\index{ACER}
+module.  This module prepares cross sections and scattering laws
+in ACE format\index{ACE format} (A Compact ENDF) for the MCNP
+code\cite{MCNP}.\index{MCNP}  All the cross sections are
+represented on a union grid\index{union grid} for linear interpolation
+by taking advantage of the representation used in
+\hyperlink{sRECONRhy}{RECONR} and
+\hyperlink{sBROADRhy}{BROADR}.  ``Laws'' for
+describing scattering and photon production
+are very detailed, providing a faithful representation of the
+ENDF-format evaluation with few approximations.  The data are
+organized for random access for purposes of efficiency.   MCNP
+handles self-shielding in the unresolved-energy range using
+probability tables.  The \hyperlink{sPURRhy}{PURR}
+\index{PURR} module of NJOY can
+be used to prepare these tables and add them to a PENDF file
+for reading by the \hyperlink{sACERhy}{ACER} module.
+
+Another alternate path for multigroup data is to use the
+\hyperlink{sPOWRhy}{POWR}\index{POWR} module
+to produce libraries for the power reactor
+codes EPRI-CELL\index{EPRI!EPRI-CELL} or EPRI-CPM\index{EPRI!EPRI-CPM}
+\footnote{EPRI-CELL and EPRI-CPM are proprietary products
+of the Electric Power Research Institute (EPRI), 3420
+Hillview Avenue, Palo Alto, CA 94304.}.  Similarly, the
+\hyperlink{sWIMSRhy}{WIMSR}\index{WIMSR} module
+can be used to prepare libraries
+for the thermal reactor assembly codes WIMS-D\index{WIMS!WIMS-D}
+and WIMS-E\cite{WIMS}.\index{WIMS!WIMS-E}
+
+At the end of any NJOY run, the \hyperlink{sPLOTRhy}{PLOTR}
+\index{PLOTR} and \hyperlink{sVIEWRhy}{VIEWR}
+\index{VIEWR} modules can be used to view the results
+or the original ENDF data.  \hyperlink{sPLOTRhy}{PLOTR}
+can prepare 2-D plots with
+the normal combinations of linear and log axes, including
+legend blocks or curve tags, titles, and so on.  Several curves
+can be compared on one plot (for example, pointwise data can
+be compared with multigroup results), and experimental data
+points with error bars can be superimposed, if desired.
+Plots can be prepared showing the ratio or percent difference
+of two cross sections.  \hyperlink{sPLOTRhy}{PLOTR}
+can also produce 3-D perspective
+plots of ENDF and GENDF angle or energy distributions
+or thermal S($\alpha,\beta$) tables.   The output of
+\hyperlink{sPLOTRhy}{PLOTR} is passed to
+\hyperlink{sVIEWRhy}{VIEWR}, which renders the plotting commands into
+high-quality color Postscript graphics for printing or for viewing.
+The \hyperlink{sHEATRhy}{HEATR}, \hyperlink{sCOVRhy}{COVR},
+\hyperlink{sDTFRhy}{DTFR}, and \hyperlink{sACERhy}{ACER}
+modules also produce plotting files in \hyperlink{sVIEWRhy}{VIEWR}
+format that are useful for quality reviews of data-processing
+results.  The \hyperlink{sMIXRhy}{MIXR}\index{MIXR} module can be used
+to combine isotopes into elements for plotting and other purposes.
+It only works for simple cross sections at the present time.
+
+\subsection{Computer Implementation}
+\label{ssINTRO_implementation}
+
+NJOY2016 is written in a modern subset of Fortran-90 and
+later, stressing the
+use of modules.  The modules
+help to enforce information hiding.  Thus, for example, the
+\hyperlink{sRECONRhy}{RECONR} module only
+makes the single subroutine \cword{reconr} public; all the internal
+routines and data structures of the module are protected.  The
+modules also help to promote logical structuring.  For example,
+all of the routines and data structures for working with the ENDF
+formats, such as subroutine \cword{contio} and the \cword{math,mfh,mth}
+values are made public by the \cword{endf} module, and they can be
+easily accessed wherever they are need by the \cword{use endf}
+statement.  As another example, what could be a very
+large \hyperlink{sACERhy}{ACER}
+module is made more structured by providing subsidiary modules for
+handling each of the different ``classes'' of the ACE format ({\it e.g.}
+\cword{acefc} for continuous class ``c'' data, or \cword{acepn}
+for ``u'' class photonuclear data).
+
+The advanced capabilities that modern Fortran provides for typing
+variables (the ``kind'' property) have enabled us to remove
+all of the complex short-word/long-word controls from NJOY.
+Almost all of the internal data in NJOY are handled using
+8-byte kinds for real and integer words.  These properties
+are set up in the \cword{locale} module, and they can be changed,
+if necessary, without touching the balance of the code.  An
+exception is made for the CCCC modules
+\hyperlink{sCCCCRhy}{CCCCR}, \hyperlink{sMATXSRhy}{MATXSR},
+and \hyperlink{sRESXSRhy}{RESXSR},
+where 4-byte variables and equivalencing are still used to
+construct records with mixed real, integer, and Hollerith values.
+
+Modern Fortran also provides a capability for the dynamic allocation
+\index{dynamic storage allocation} of memory for data structures.
+In the past, NJOY used its own
+\cword{storag} system for this purpose;
+this system has now been abandoned for the readability, consistency,
+and exportability provided by the new Fortran standard.  We have
+limited ourselves to the use of ``allocatable arrays''.  This
+relieves us of some storage limitations in NJOY, and introduces others.
+
+The earliest versions of NJOY used their own free-form input routine,
+\index{free-form input} \cword{FREE}, which was developed long
+before Fortran supported equivalent capabilities.  More recently we
+have abandoned \cword{FREE} in favor of the standard Fortran READ*
+method.  In doing this, we have lost some capabilities (such as the
+repeat field), but we have gained in transportability.  Test
+fields that were previously delimited with the star character now
+must be delimited with the single-quote character.
+
+For consistency and convenience, the NJOY modules in previous
+versions of the code made use of a set of common functions and
+subroutines located in the \hyperlink{sNJOYhy}{NJOY} module.  Beginning
+with NJOY2012, these utility routines have been repackaged into
+Fortran-90 modules.  They include \cword{locale} for
+localization variables,
+\cword{physics} for physics constants, \cword{mainio} for
+input, output, and scratch units, \cword{util} for utility
+routines like time and date, \cword{endf} for ENDF processing
+routines and variables, and \cword{math} for mathematics
+routines.  Each of these modules only makes public the
+minimum set of routines and variables needed by the other
+modules that ``use'' them.  These modules are described in detail
+in the \hyperlink{sNJOYhy}{NJOY} chapter of this report.
+
+NJOY is heavily commented.\index{commenting}  Each module starts
+with a long block of comment cards that gives a brief description
+of the module and then gives the current user input instructions.
+\index{input instructions} Users should always check the input
+instructions in the current version of the NJOY source code rather
+than the instructions summarized in this manual --- changes may have
+been made.  For the convenience of users, the input instructions
+are also available on the web\cite{webinclude}.  Furthermore, each function
+or subroutine starts with a block of comment cards that describes
+its function and special requirements.  Additional lines of
+comment cards are used inside each procedure to block off its
+major components.
+
+Typography conventions for Fortran differ from place to place.
+On most machines at Los Alamos National Laboratory (LANL), Fortran
+text is given in lowercase.  In
+order to avoid translation problems, previous
+versions of NJOY avoided using mixed-case text
+for comments or for labels on graphs.  We are gradually moving away
+from this limiting convention.  In this report, Fortran text and
+variable names are printed using a lowercase \cword{typewriter font}.
+\index{typewriter font}  ENDF-related formats and variables
+are given using an uppercase \cword{TYPEWRITER FONT}.   CCCC formats were
+traditionally given using uppercase characters,
+but the usage in this report is mixed.
+
+\subsection{History and Acknowledgments}
+\label{ssINTRO_history}
+
+NJOY was started as a successor to MINX\cite{MINX}\index{MINX}
+(A Multigroup Interpretation of Nuclear X-sections) late
+in 1973 (it was called MINX-II then).  The current name was
+chosen in late 1974 to be evocative of ``MINX plus'' and to
+eliminate the reference to ``multigroup.''  The first
+goals were to add a photon production capability like that in
+LAPHAN0\cite{LAPHAN0}\index{LAPHAN0}, to add a photon interaction
+capability like GAMLEG\cite{GAMLEG}\index{GAMLEG}, to provide an
+easy link to the Los Alamos 30-group libraries of the day using
+DTF\cite{DTF}\index{DTF} format, and to merge in the capabilities
+of ETOPL\cite{ETOPL}\index{ETOPL} to produce libraries for the MCN
+Monte Carlo code (the ancestor of MCNP).\index{MCNP}  Most of the work was
+done by MacFarlane\index{MacFarlane}; Rosemary Boicourt\index{Boicourt}
+joined the project in 1975.  First, the RESEND\cite{RESEND}\index{RESEND}
+and SIGMA1\cite{SIGMA1}\index{SIGMA1} modules of MINX were converted
+to use union grids\index{union grid}, and a new method of resonance
+reconstruction\index{resonance reconstruction} was developed.  These
+steps led to \hyperlink{sRECONRhy}{RECONR}\index{RECONR}
+and \hyperlink{sBROADRhy}{BROADR}\index{BROADR}.
+\hyperlink{sUNRESRhy}{UNRESR}\index{UNRESR}, which was based on methods
+from ETOX\cite{ETOX}\index{ETOX}, was moved over from MINX with
+only a few changes.  Next, a completely new multigroup averaging
+program, \hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR},
+was developed around the unifying
+concept of the ``feed function,'' which handled neutron- and
+photon-production cross sections in a parallel manner.  The
+CM Gaussian integration for discrete two-body scattering was
+developed.  \hyperlink{sDTFRhy}{DTFR}\index{DTFR}
+was developed as the first NJOY output module.  The
+first versions of the \hyperlink{sNJOYhy}{NJOY} utility codes were
+introduced; the new concepts of ``structured programming''
+\index{structured programming} inspired some of the features
+of the new NJOY code.
+
+Major influences during this period included Don Harris\index{Harris},
+Raphe LaBauve\index{LaBauve}, Bob Seamon\index{Seamon}, and Pat
+Soran\index{Soran} at Los Alamos, and Chuck Weisbin\index{Weisbin}
+at the Oak Ridge National Laboratory\index{Oak Ridge National Laboratory!ORNL}
+(ORNL).  Odelli Ozer\index{Ozer} at the Brookhaven National Laboratory
+\index{Brookhaven National Laboratory!BNL} (and later EPRI\index{EPRI})
+helped with RESEND, and Red Cullen at Lawrence Livermore National
+Laboratory\index{Lawrence Livermore National Laboratory!LLNL} and John
+Hancock\index{Hancock} at Los Alamos\index{Los Alamos National
+Laboratory!LANL} helped with the Doppler broadening module.  In those days,
+the development of NJOY was supported by the U.S. Fast Breeder
+Reactor\index{Fast Breeder Reactor Program} and Weapons
+Programs.\index{Weapons Program}
+
+Code development continued during 1975.  The \hyperlink{sERRORRhy}{ERRORR}
+\index{ERRORR} module was added for calculating covariances
+\index{covariances} from ENDF/B files.  The \hyperlink{sACERhy}{ACER}
+\index{ACER} module was created by borrowing heavily from
+ETOPL\index{ETOPL} and Chuck Forrest's\index{Forrest}
+MCPOINT \index{MCPOINT} code.  Rich Barrett\index{Barrett}
+joined the project, and he did most of the work in creating a new
+\hyperlink{sCCCCRhy}{CCCCR}\index{CCCC} module for NJOY
+that had several advances over the MINX version and met the
+CCCC-III\index{CCCC format!CCCC-III} standards\cite{CCCC3}.  By
+the end of the year, \hyperlink{sHEATRhy}{HEATR}\index{HEATR}
+had also been added to the code (with ideas from Doug Muir\index{Muir}).
+\hyperlink{sHEATRhy}{HEATR} gave NJOY most of the capabilities of
+the original KERMA factor\index{KERMA} code, MACK
+\cite{MACK}.\index{MACK}
+
+During 1976, free-form input\index{free-form input}
+and dynamic data storage were\index{dynamic data storage}
+added to NJOY.  \hyperlink{sGAMINRhy}{GAMINR}\index{GAMINR}
+was written to complete the original NJOY goal of processing
+photon interaction cross sections, and the \hyperlink{sMATXSRhy}{MATXSR}
+\index{MATXSR} module was designed and written,
+primarily by Rich Barrett.  This completed the capability to
+construct fully coupled cross sections for neutron-photon heating
+problems.  A major new effort was writing the
+\hyperlink{sTHERMRhy}{THERMR}\index{THERMR}
+module to improve upon the thermal moderator scattering cross sections
+then produced using the FLANGE-II\cite{FLANGE}\index{FLANGE-II}
+and HEXSCAT\cite{HEXSCAT}\index{HEXSCAT} codes, and starting the
+\hyperlink{sPOWRhy}{POWR}\index{POWR} module to produce cross
+sections for the EPRI-CELL\index{EPRI!EPRI-CELL} and EPRI-CPM
+\index{EPRI!EPRI-CPM} codes used by the U.S. electric utility
+companies.  This work was funded by the Electric Power Research
+Institute (EPRI).
+
+The first release of NJOY to what was then called the Radiation
+Shielding Information Center (RSIC) at Oak Ridge and to the
+National Energy Software Center (NESC) at Argonne was
+NJOY77\index{NJOY 77} in the summer of 1977.  This
+version was tested and converted for IBM machines by
+R. Q. Wright\index{Wright} (ORNL).  Also, TRANSX\index{TRANSX}
+was developed during 1977, the MATXS1\index{MATXS1} 30x12 library
+\index{30x12 library} was produced based on ENDF/B-IV\index{ENDF!ENDF/B-IV},
+the flux calculator\index{flux calculator} was added to NJOY
+to support the EPRI library work, and the first version of the
+EPRI-CELL\index{EPRI!EPRI-CELL} library was generated and used.
+
+A second release of NJOY called NJOY78\index{NJOY78} was made
+in 1978\cite{NJ78}.  In addition, further improvements were made
+for preparing EPRI cross sections, the MATXS/TRANSX\index{MATXS/TRANSX}
+system was improved, and a thermal capability was added to the
+MCNP\index{MCNP} Monte Carlo\index{Monte Carlo} code using
+cross sections from \hyperlink{sTHERMRhy}{THERMR}\index{THERMR}
+as processed by \hyperlink{sACERhy}{ACER}.\index{ACER}
+
+In 1979, the radiation damage\index{radiation damage} calculation
+was added to \hyperlink{sHEATRhy}{HEATR}\index{HEATR}, and
+the \hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}
+flux calculator\index{flux calculator} was further improved.
+In 1980, a plotting option\index{covariance plotting} was added
+to \hyperlink{sERRORRhy}{ERRORR}\index{ERRORR}.  During this period,
+NJOY had become more stable.  Changes usually consisted of small
+improvements or bug fixes instead of major new capabilities.
+Starting in this period, NJOY received some support from the U.S.
+Magnetic Fusion Energy Program\index{Magnetic Fusion Energy Program},
+mostly for covariance work and TRANSX related library support.
+
+In 1981 and 1982, improvements included the momentum-conservation
+method for radiative capture in \hyperlink{sHEATRhy}{HEATR}
+\index{HEATR}. Analytic $\psi\chi$ broadening\index{$\psi\chi$
+broadening} was added to \hyperlink{sRECONRhy}{RECONR}\index{RECONR}
+for some cases, and the integral criteria for resonance reconstruction
+with significant-figure control were installed in
+\hyperlink{sRECONRhy}{RECONR}.  Several new capabilities
+were added to \hyperlink{sERRORRhy}{ERRORR}\index{ERRORR}, and the
+\hyperlink{sCOVRhy}{COVR}\index{COVR} module was added to NJOY to handle
+both \hyperlink{sERRORRhy}{ERRORR} plotting and covariance library
+output. Much of this
+covariance-related work was done by Doug Muir\index{Muir}. Wiley
+Davidson (LANL) and B.H. Broadhead and R. W. Peele at ORNL were
+helpful.  Some support for the documentation work came from
+the Paul Scherer Institute (PSI) in Switzerland and OECD Nuclear
+Energy agency during visits to those institutions.  In addition,
+\hyperlink{sCCCCRhy}{CCCCR}\index{CCCCR} was updated to the
+CCCC-IV\index{CCCC format!CCCC-IV} standards.  A new release,
+NJOY (10/81),\index{NJOY 10/81} was made to the
+code centers, and the first two volumes of a new
+NJOY report were written and published.  European users began
+to make important contributions about this time.  Enrico
+Sartori\index{Sartori} of the NEA Data Bank\index{NEA Data Bank},
+then at Saclay in France, Margarete Mattes\index{Mattes}
+of the University of Stuttgart in Germany, and Sandro
+Pelloni\index{Pelloni} of the Paul Scherer Institute
+\index{Paul Scherer Institute} in Switzerland deserve mention.
+
+Another major release, NJOY 6/83\index{NJOY 6/83}, was made in 1983.
+By this time, NJOY was in use in at least 20 laboratories in the United States
+and around the world.  Small improvements continued, such as the kinematic
+KERMA calculation\index{KERMA!kinematic KERMA} in
+\hyperlink{sHEATRhy}{HEATR}\index{HEATR}.  The
+temperature dependence of the \hyperlink{sBROADRhy}{BROADR}
+energy grid was introduced early in 1984 based on an
+observation by Ganesan (India).  Volume IV of the NJOY report was
+published in 1985, and Volume III appeared in 1987.
+
+The next big set of improvements in NJOY was associated with the
+introduction of the ENDF-6 format\index{ENDF!ENDF format!ENDF-6 format}.  This
+required significant changes in \hyperlink{sRECONRhy}{RECONR}
+\index{RECONR} to support new resonance formats like
+Reich-Moore\index{Reich-Moore} and Hybrid R-Function
+\index{Hybrid R-Function} (implemented with help from Charlie
+Dunford\index{Dunford} of Brookhaven), in
+\hyperlink{sHEATRhy}{HEATR}\index{HEATR} to implement
+direct calculations of KERMA\index{KERMA!direct KERMA} and
+damage from charged-particle and recoil distributions in
+File 6\index{File 6}, in \hyperlink{sTHERMRhy}{THERMR}\index{THERMR}
+to support new formats for File 7\index{File 7}, and in
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR} to
+support the group-to-group transfer matrices using
+energy-angle\index{energy-angle data} data from
+File 6.  The \hyperlink{sPLOTRhy}{PLOTR}\index{PLOTR}
+module was also developed during
+this period.  The result was the release of NJOY89\cite{NJ89}
+\index{NJOY89} in time for processing the new
+ENDF/B-VI\index{ENDF!ENDF/B-VI} library and the
+JEF-2 \index{JEF-2} library (which was also in ENDF-6 format).
+
+During 1989 and 1990, initial processing of ENDF/B-VI and JEF-2
+exposed a number of small problems that had to be fixed.  In
+addition, the \hyperlink{sACERhy}{ACER}\index{ACER} module
+was rewritten to clean it up,
+to add capabilities to produce ACE dosimetry\index{ACE dosimetry data}
+and photoatomic libraries,\index{ACE photoatomic data} and
+to provide for convenient generation of files in several
+different formats for users away from LANL.  A
+\hyperlink{sMIXRhy}{MIXR} module\index{MIXR} was added
+to NJOY, mostly to allow elemental cross sections to be reconstructed
+from ENDF/B-VI isotopes for plotting purposes.  A new technique
+was introduced into \hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}
+and all the output modules for
+multigroup data that provided for more efficient
+processing of fission and photon production matrices with lots of
+low-energy groups.  Major revisions were made to the
+MATXS format\index{MATXS format} to allow for charged-particle
+cross sections,\index{charged-particle cross sections}
+to pack matrices with lots of low-energy groups more efficiently,
+and to make inserting and extracting new materials easier.  The
+\hyperlink{sWIMSRhy}{WIMSR}\index{WIMSR} module, which
+had been under development for
+a number of years in cooperation with WIMS\index{WIMS} users
+in Canada and Mexico, was introduced into NJOY.  Finally, the
+\hyperlink{sPURRhy}{PURR}\index{PURR} module for generating
+unresolved-region \index{unresolved resonance range} probability
+tables\index{probability tables} for use with MCNP\index{MCNP},
+which had also been under development
+for many years, was formally added to the code.  The result of
+this year-and-a-half of work was NJOY91.\index{NJOY91}
+
+During the balance of 1991 and 1992, a number of changes were made
+in response to problems identified by users as ENDF-6 evaluations
+began to be used in earnest.  The first of a number of attempts to
+handle laboratory-frame Legendre data in File 6 in MCNP was
+made --- namely, the attempt to convert such sections to use Kalbach
+systematics.  Treatments for phase-space and angle-energy versions
+of File 6 were added in 1993, as well as improvements in
+\hyperlink{sWIMSRhy}{WIMSR}\index{WIMSR} (with contributions of
+Fortunato Aguilar\index{Aguilar}, ININ, Mexico).  Plotting was added for
+$S(\alpha,\beta)$ curves from ENDF-6 File 7 and for 2-D
+and 3-D plots from GENDF data.  \hyperlink{sHEATRhy}{HEATR}\index{HEATR}
+was modified to include incident-energy effects on the fission Q values
+in 1993.  In 1994, we made another attempt to handle the cases of
+File 6 using laboratory-frame Legendre expansions for MCNP by
+converting them into the LAW=7 angle-energy format.  A fix to
+the Kalbach option for energy-angle distributions was made based
+on work by Bob Seamon\index{Seamon} (LANL).  Also, work was
+done in \hyperlink{sHEATRhy}{HEATR}\index{HEATR} to properly
+handle the damage energy \index{damage energy} cutoff at low
+energies.  Quite a bit of work was done during this period to
+improve the portability of the code by installing it on a variety
+of systems and using codes like cflint.  Other people providing
+suggestions during this period included Margarete Mattes\index{Mattes}
+(Stuttgart), Piet De Leege\index{DeLeege} (Delft), John White
+\index{White} (RSIC), and the Petten users.  The final version of
+the NJOY91 series was 91.118 in November 1994, and it was
+able to process all of the ENDF/B-VI evaluations that had been
+tried up to that date.  A new user manual for NJOY91\cite{NJOY91}
+was released in 1994.  This document was the
+primary reference for NJOY until the release of
+NJOY2012 manual\cite{NJ12}.
+
+NJOY94\index{NJOY94} was issued at the end of 1994 to clean up
+91.118 after 3 years of changes.  It also provided a new
+direct-to-Postscript plotting\index{Postscript plots} system
+by splitting the old PLOTR module into
+\hyperlink{sPLOTRhy}{PLOTR}\index{PLOTR} and
+\hyperlink{sVIEWRhy}{VIEWR}\index{VIEWR}, an updated
+version of the \hyperlink{sPURRhy}{PURR}\index{PURR}
+module, and a new \hyperlink{sLEAPRhy}{LEAPR}\index{LEAPR}
+module for computing thermal
+scattering functions.  In 1995, a new capability was added to
+handle nuclide production based on a proposed extension
+to the ENDF-6 File 8, and the new \hyperlink{sGASPRhy}{GASPR}
+\index{GASPR} module was added to handle gas production.  Early
+in 1996, a capability to
+pass damage cross sections into MCNP\index{MCNP} was added.
+A number of changes were made based on suggestions from users,
+and based on processing experience with the new 150-MeV evaluations
+becoming available during this period.  A change in the erfc
+function was made to improve the consistency of $1/v$ cross
+sections (problem observed by Cecil Lubitz\index{Lubitz}, KAPL).
+Late in the year, the plotting system was upgraded to promote
+color Postscript plotting.  In mid 1997, a large update to the
+\hyperlink{sWIMSRhy}{WIMSR}\index{WIMSR} module was
+made based on the work of Andrej Trkov\index{Trkov}
+(Slovenia).  Problems with calculational accuracy (especially for
+\hyperlink{sBROADRhy}{BROADR}) led to a major upgrade of the
+math routines.  Routines from the SLATEC library were adopted
+and converted to NJOY style. A new capability was added to
+\hyperlink{sBROADRhy}{BROADR}\index{BROADR}
+to compute and display some standard thermal quantities, such
+as thermal cross sections, g factors, and ratio integrals ($\alpha$, K1).
+ After some additional bug patches and portability improvements,
+the NJOY94\index{NJOY94} series was concluded with the issuance
+of 94.105 in July of 1997.
+
+NJOY 97.0\index{NJOY97} was released in October of 1997.  The
+major change was to move to using 8-byte words throughout the code.
+Modern resonance evaluations push the limit of 6 significant figures
+available using 32-bit words, and obtaining consistency between people
+using 32-bit machines and people on 64-bit machines was becoming more
+and more desirable.  Many changes were associated with this,
+including taking great care with all literal constants in the
+code, removing Hollerith constants, changing from the \cword{FREE}
+input routine to a more standard READ* method, and developing
+the techniques to use either 7-digits or 9-digits in resonance
+grids, as needed.  SAVE statements were added to support stack-based
+compilers.  The code now automatically determined the version of
+ENDF data on the input files, which changed the input a little.
+Finally, some steps were made to remove statement numbers and move
+part way to Fortran-90 style without abandoning Fortran-77
+compatibility.
+
+A number of changes were made during 1998 to cement the features
+of the new version.  The first new capability added was new
+conditional probabilities in \hyperlink{sPURRhy}{PURR}\index{PURR}
+for heating.  This feature requires running \hyperlink{sHEATRhy}{HEATR}
+\index{HEATR} with partial cross sections for
+elastic, fission, and capture.  Corresponding changes were also
+made in \hyperlink{sACERhy}{ACER}\index{ACER}.  The tolerances in
+\hyperlink{sRECONRhy}{RECONR}\index{RECONR}
+and \hyperlink{sBROADRhy}{BROADR}\index{BROADR} were
+modified to use a tighter tolerance in the thermal range to help
+preserve the 0.0253-eV cross section and other thermal parameters
+better (Lubitz\index{Lubitz}).  Piet DeLeege\index{DeLeege} (Delft),
+Sandro Pelloni\index{Pelloni} (PSI), and Andrej Trkov\index{Trkov}
+(IJS/Slovenia) were helpful in finding problems during this
+period.  A large number of changes were made based on
+issues raised by testing the code with the ftnchek program.  These
+help for portability between different computer systems.  This
+work was motivated after Giancarlo Panini\index{Panini} (Italy)
+questioned small differences seen using different compilers.  Early
+in 1999, the method for setting the damage threshold in
+\hyperlink{sHEATRhy}{HEATR}\index{HEATR} was
+revised.  An internal table of default values was provided, and
+a new option to allows the user to enter a value for $E_d$ was added.
+This change affects the damage near the threshold for elastic
+displacements.  John White\index{White} (RSIC) helped with this.
+Based on some code comparisons, Nancy Larson\index{Larson} (ORNL)
+promoted updating the basic constants in the various codes to
+enhance compatibility, and we followed suit in NJOY.  More work
+was done to enhance activation processing and to provide an
+automatic loop over all the production reactions for
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}.  Finally,
+a new option to properly handle
+channel spin in Reich-Moore resonance evaluations was added using
+code contributed by ORNL.  The NJOY97\index{NJOY97} series was
+frozen in September of 2000.
+
+During the last part of the life of NJOY97\index{NJOY97}, we also
+had NJOY99\index{NJOY99} available (dated 31 December 1999).  It is
+a cleaned up version of NJOY97\index{NJOY97} that moves further
+toward using block constructs and eliminating statement numbers
+(but lots of statement numbers are still left).  It is compatible
+with both Fortran-77 and Fortran-90 compilers.  Physical constants
+were moved into a few common blocks and standardized on the 1987
+CODATA values from NIST.  The NJOY Y2K problem was fixed.  The bulk
+of the changes are in the \hyperlink{sACERhy}{ACER}\index{ACER}
+module to support new MCNP\index{MCNP} features, including
+high-energy data, incident charged particles, and photonuclear
+data.  Before release, this version was tested for a large number of
+different machine/compiler combinations, including tests on X86
+PCs.  Compatibility has improved to the point where the unix diff
+function can be used to compare files and only a small number of
+very small differences are found.  This version was able to
+process all the materials from ENDF/B-VI Release 5 into a library
+using the new ACE formats (cumulative elastic distributions,
+LAW=61, and charged-particle production sections) that were
+planned to come out with MCNP4c.
+
+We began making patches to NJOY99\index{NJOY99} in the spring
+of 2000, starting with fixing a problem with the cold hydrogen
+and deuterium calculations in
+\hyperlink{sLEAPRhy}{LEAPR}.\index{LEAPR}  This was
+followed by a number of other small patches.  A capability
+was added for processing anisotropic charged particle emission
+in \hyperlink{sACERhy}{ACER}.\index{ACER}  In 2001 the
+series of MT numbers from 875 -- 891
+was installed to represent levels in the (n,2n) reaction
+(needed for a new European $^{9}$Be evaluation).  We added a capability
+to include delayed neutron data in the ACE files to feed a new
+capability in MCNP\index{MCNP}. A photonuclear capability was added
+to \hyperlink{sMATXSRhy}{MATXSR}\index{MATXSR} --- this enables
+the TRANSX\index{TRANSX} code to generate fully coupled sets
+for n\nobreakdash-$\gamma$ transport.  Some
+coding was added to generate fluorescence data for MCNP\index{MCNP}
+using the existing format with new numbers coming from the ENDF/B-VI
+atomic data.  This work does not completely support all the
+atomic data now available in ENDF/B-VI.  The
+\hyperlink{sACERhy}{ACER}\index{ACER}
+consistency checks were upgraded to include delayed neutrons, and
+plots for $\bar{\nu}$ and the delayed neutron spectra were added.  In
+addition, delayed neutron processing was generalized to allow
+for 8 time bins as used by the JEFF evaluations.
+
+\hyperlink{sPLOTRhy}{PLOTR}\index{PLOTR} was modified
+to allow ratio and difference plots using the right-hand scale.  The
+default tolerances used in \hyperlink{sRECONRhy}{RECONR}\index{RECONR}
+and \hyperlink{sBROADRhy}{BROADR}\index{BROADR} were tightened
+up a bit.  Some changes to the heating for photoatomic data were
+provided by Morgan White\index{White} (LANL).  A change was made
+to \hyperlink{sHEATRhy}{HEATR}\index{HEATR} to provide the photon
+contribution to heating using a special MT number
+(442)\index{MT!MT442}.  When passed to
+MCNP\index{MCNP}, it allows the code to get good answers for
+heating even when photons are not being transported.  Late
+in 2002, \hyperlink{sLEAPRhy}{LEAPR}\index{LEAPR} was updated
+to include coherent elastic scattering for FCC and BCC crystalline
+lattices.  In 2004, some extensions to the energy grid used for
+incoherent inelastic scattering were made.  A few additional
+smaller patches were also made during this period.
+
+In 2005, changes proposed for \hyperlink{sTHERMRhy}{THERMR}
+\index{THERMR} and \hyperlink{sLEAPRhy}{LEAPR}\index{LEAPR}
+by Margarete Mattes\index{Mattes} (IKE/ Stuttgart)
+to support the new IAEA-sponsored evaluations for thermal scattering
+in water, heavy water, and ZrH were installed.  Some additional
+group structures used in Europe were added.  Through this period,
+we were always increasing the storage space allowed as we adapted
+to newer and larger evaluations coming out for ENDF/B-VII.
+During the summer, a number of changes to covariance processing
+were provided by Andrej Trkov\index{Trkov} (working at IAEA).  Early
+in 2006, a new sampling scheme for thermal scattering was developed
+for MCNP\index{MCNP} that uses continuous distributions for
+secondary energy instead of the previous discrete values.  This
+removed unsightly artifacts in computed fluxes at low energies, and
+it alleviated some problems that the cold-neutron-source people were
+having.  More code improvements were made based on detailed compiler
+checking.  Some errors in the treatment of energy-dependent
+fission Q were fixed based on a review of the work of Dave
+Madland\index{Madland} (LANL).  An approximate treatment for the
+relativistic gamma in the ENDF/B-VII evaluation for n+$^1$H was added
+in \hyperlink{sHEATRhy}{HEATR}\index{HEATR} and
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}  based on theoretical
+work from Gerry Hale\index{Hale} (LANL).  We added a new plot to the
+\hyperlink{sACERhy}{ACER}\index{ACER} set that shows the recoil part
+of the heating.  This is a sensitive test of energy-balance.
+
+In the summer of 2007, we added some smoothing options to make
+the low-energy shape of neutron distributions look more like
+the theoretical shape, namely ${\rm sqrt}(E')$.  Similar changes
+were provided for delayed neutron spectra.  Additional smoothing
+was provided for some of the fission spectra at energies above
+10 MeV using an exponential shape. A change was made in
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR} to override
+Cartesian interpolation in favor of unit-base interpolation for
+scattering distributions.  This gives smoother scattering source
+functions and is consistent with what MCNP\index{MCNP} does.
+
+In 2007, a big change was made to covariance processing by
+replacing the original NJOY ERRORR\index{ERRORR} module with
+ERRORJ\cite{ERRORJ}\index{ERRORJ} as contributed to the NJOY project
+by Japan (Go Chiba\index{Chiba}).  This new module added covariance
+capabilities for the more modern resolved-resonance representations,
+angular distributions, and secondary-energy distributions.  A series
+of additional changes to the new \hyperlink{sERRORRhy}{ERRORR} were
+made over the next couple of years.  Go Chiba\index{Chiba}, Andrej
+Trkov\index{Trkov} (IAEA and IJS Slovenia), and Ramon
+Arcilla\index{Arcilla} (BNL) were involved in this.  A capability
+to handle energy-dependent scattering radius data in the unresolved
+range was added.  In 2008, ERRORJ\index{ERRORJ} work continued.
+Some work was done in \hyperlink{sPLOTRhy}{PLOTR}\index{PLOTR}
+to implement graphs of \hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}
+emission spectra.  In 2009, changes were made
+for unresolved resonance cross sections to force log-log interpolation
+to better represent $1/v$ cross sections.  The parameter that
+looked for steps in the unresolved-range energy grids that were
+too large was changed from its former value of 3 to 1.26.  Some
+of the steps in ENDF/B-VII are unreasonably large when representing
+$1/v$ cross sections.  The default energy grid used in the
+unresolved range was upgraded to one using about 13 points per
+decade.  Additional pages were added to the \hyperlink{sACERhy}{ACER}
+\index{ACER} plots to display the unresolved-range self-shielded
+cross sections.  This work was influenced by Red Cullen\index{Cullen}
+(LLNL).  In a related effort, some changes were made in the binning
+logic for \hyperlink{sPURRhy}{PURR}\index{PURR} to improve
+unresolved-range results.  In 2010, changes were made to support
+the processing of the IRDF international dosimetry file, including the
+addition of many new reaction MT numbers.  Some work was done on the
+photonuclear options to support the TENDL-2009 library.  More
+\hyperlink{sERRORRhy}{ERRORR} changes from Trkov\index{Trkov}
+were implemented, and a capability to process the uncertainty
+in the scattering radius was added.  Finally, several updates were
+submitted by the Japan Atomic Energy Agency (JAEA) related to
+processing discrete photon data from file 6 into ACE files.  NJOY 99.364
+was released in February of 2011.
+
+Concurrent with the maintenance of NJOY99\index{NJOY99}, we worked
+on a new Fortran-90 version of NJOY that took advantage of the
+module system, the numerical precision system, and the dynamic storage
+system of modern Fortran.  This enabled us to get rid of COMMON statements
+(always problematic in Fortran) and to obtain a more readable
+scheme for allocated storage.  Additional work was done to upgrade
+to block structures, but some statement numbers still remain.
+That new version was called NJOY2010\index{NJOY2010}, but was only
+released to a few in-house (LANL) users, selected external users
+at Brookhaven, Oak Ridge and Argonne National Laboratories plus the
+Naval Reactors laboratories, Bettis and KAPL in the United States and to
+the Atomic Weapons Establishment in the UK.
+
+Further code revisions
+lead to NJOY2012\cite{NJ12}\index{NJOY2012}.  For most
+applications NJOY2012 is compatible
+with NJOY99.  However, there were some new capabilities in NJOY2012
+that are not supported by NJOY99.  We borrowed coding from the
+SAMMY\cite{SAMMY} code (thanks are due to Nancy Larson\index{Larson},
+ORNL) to handle the new Reich-Moore-Limited resonance parameter
+representation now included in the ENDF-6 format.  This coding
+is used in \hyperlink{sRECONRhy}{RECONR}\index{RECONR} to
+generate pointwise resonance cross sections and angular
+distributions.  It is used in \hyperlink{sERRORRhy}{ERRORR}
+\index{ERRORR} to generate the sensitivity of resonance
+cross sections to the resonance parameters for use in
+calculating cross section uncertainties and covariances in the
+resonance range.  In \hyperlink{sTHERMRhy}{THERMR}\index{THERMR},
+we added an option to construct thermal cross sections using ($E,\mu,E'$)
+ordering in addition to the normal ($E,E',\mu$) ordering.  This
+ordering is convenient for comparing to experiment, and it is used
+for thermal sampling in some Monte Carlo codes.
+
+With NJOY2016 we now have an ``open source'' code release.  The
+current version of the source code is now freely available, and can be
+downloaded from \href{http://njoy.lanl.gov}{http://njoy.lanl.gov}.
+
+\cleardoublepage
+

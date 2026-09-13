@@ -1,0 +1,495 @@
+\section{DRAGR}
+\label{sDRAGR}
+
+\hypertarget{sDRAGRhy}{The}
+DRAGR\index{DRAGR|textbf} module is used to prepare libraries for the
+reactor-physics code DRAGON\cite{PIP2020,dragon}.\index{DRAGON}
+DRAGON is a 1D/2D/3D lattice code developed at \'Ecole Polytrchnique de
+Montr\'eal since 1990 and is currently available under an open source
+license. DRAGON5, released in 2014, is a 64-bit clean version of the
+code, written in Fortran 2003 around an ANSI C kernel\cite{dragon5}.
+
+DRAGON is able to access any standard MATXS-type library (both from NJOY-89
+and subsequent versions), as produced by NJOY, using the cross-section
+reconstruction algorithm of the code TRANSX-2\cite{TRANSX2}. DRAGON also
+has capabilities to use cross-section libraries in the WIMS-AECL, WIMS-D,
+APOLLO and Draglib formats. The DRAGR module is dedicated to the production
+of cross-section libraries in the Draglib format.
+
+This chapter of the report describes DRAGR in NJOY 2016.
+It differs from the version previously reported
+because of the change to Fortran-90 style and storage allocation.
+
+\subsection{An overview of DRAGR}\label{sect:dragr}
+
+The DRAGR module was written as a clean and direct utility to format a Draglib
+library, using PENDF and GENDF data. Care was taken to avoid unnecessary
+processing of nuclear data and to keep the richness of ENDF/B information.
+Other advantages are related to the use of the Draglib format, thanks to the
+careful design of its direct access procedure. The cross-section processing in
+DRAGR is similar to the  approach used in module \uppercase{matxsr}. The basic
+principle is to avoid unnecessary approximations or simplifications. A Draglib
+features the following characteristics:
+\begin{itemize}
+\item The library file can be converted back and forth between a sequential
+ASCII format and a binary direct access format. DRAGR contains all management
+capabilities built-in.
+\item The steady-state fission spectrum, $\chi(g)$, is assumed to be dilution
+independent. It is calculated using
+\begin{equation}
+\chi(g)={\sum\limits_h \sigma_{\rm f}(g \leftarrow h) \phi_0(h) \over
+\sum\limits_g\sum\limits_h\sigma_{\rm f}(g \leftarrow h) \phi_0(h)}
+\label{eq:eq1_605}
+\end{equation}
+
+where $\sigma_{\rm f}(g \leftarrow h)$ and $\phi_0(h)$, the library weight
+function for the first Legendre order,  are recovered from {\tt MF=6} and
+{\tt MT=18} records of the GENDF file.
+
+\vskip 0.08cm
+
+The steady-state $\nu\sigma_{\rm f}$ values are calculated using
+\begin{equation}
+\nu\sigma_{\rm f}(g)=\sum_h \sigma_{\rm f}(h \leftarrow g) .
+\label{eq:eq1_606}
+\end{equation}
+
+\vskip 0.08cm
+
+The delayed fission spectra, $\chi^{\rm del}_\ell(g)$, are assumed to be
+dilution independent. They are calculated using
+\begin{equation}
+\chi^{\rm del}_\ell(g)={ \nu^{\rm del}_\ell(g)\over
+\sum\limits_h\nu^{\rm del}_\ell(h) }
+\label{eq:eq1_607}
+\end{equation}
+
+where $\nu^{\rm del}_\ell(g)$ is recovered from {\tt MF=5} and {\tt MT=455}
+record of the GENDF file.
+
+\vskip 0.08cm
+
+The delayed $\nu\sigma_{\rm f}$ values are calculated using
+\begin{equation}
+\nu^{\rm del}\sigma_{{\rm f},\ell}(g)=\pi(g)\left(
+\sum_h\nu^{\rm del}_\ell(h)\right)\sigma_{\rm f}(g)
+\label{eq:eq1_608}
+\end{equation}
+
+where $\pi(g)$ is recovered from {\tt MF=3} and {\tt MT=455} record of the
+GENDF file and $\sigma_{\rm f}(g)$ is recovered from {\tt MF=3} and {\tt MT=18}
+record of the GENDF file.
+
+\item The scattering matrix for the first Legendre order,
+$\sigma_{\rm scat0}(h \leftarrow g)$, describes the energy transfer that follows
+an isotropic collision in the LAB. The collision can be an elastic or inelastic
+diffusion, a (n,2n), or a (n,3n) reaction. It is calculated from GENDF file
+information, using
+\begin{equation}
+\sigma_{\rm scat0}(h \leftarrow g)=\sigma_{\rm diffusion}(h \leftarrow g)+
+\sigma_{\rm n,2n}(h \leftarrow g)+\sigma_{\rm n,3n}(h \leftarrow g)
+\label{eq:eq1_609}
+\end{equation}
+
+This matrix is stored using the sparse storage scheme of the MATXS format,
+with the help of two $h$-indexed vectors:
+\vskip -0.8cm
+\begin{eqnarray*}
+i_{\rm scat0}(h) \hspace{-0.2em} &=& \hspace{-0.2em}
+\hbox{most thermal group index that can produce a secondary neutron} \\
+&~&  \hspace{-0.2em}\hbox{in group $h$;}
+\\
+n_{\rm scat0}(h) \hspace{-0.2em} &=& \hspace{-0.2em}
+\hbox{number of primary groups that can produce a secondary neutron} \\
+&~& \hspace{-0.2em} \hbox{in group $h$.}
+\end{eqnarray*}
+
+The scattering matrices for subsequent Legendre orders are stored in a similar
+manner. No transport-corrected data is written in the Draglib file; the task
+of transport correction is handled in the lattice code.
+
+\item The thermal cross sections and scattering matrices depend upon the
+binding between the atoms of the material. For the heavier materials, it
+is often a good approximation to treat the atoms as a gas of free particles
+at an appropriate temperature. Thermal cross sections with coherent or
+incoherent effects are included in the GENDF file in addition to the ordinary
+static cross sections. To prepare a corrected set of cross sections, DRAGR
+modifies the total cross section by subtraction of the static elastic cross
+section and by addition of the appropriate incoherent and coherent thermal
+cross sections over the thermal energy range. For the scattering matrix,
+DRAGR uses the static matrix above the thermal cut-off energy and the
+requested incoherent or coherent matrices below.
+
+\item The (n,2n) and (n,3n) cross sections are edited from the GENDF file using
+
+\begin{equation}
+\sigma_{\rm n,2n}(g)={1 \over 2}\sum_k \sigma_{\rm n,2n}(k \leftarrow g) \
+\ \ {\rm and} \ \ \  \sigma_{\rm n,3n}(g)={1 \over 3}\sum_k
+\sigma_{\rm n,3n}(k \leftarrow g)
+\end{equation}
+
+\item DRAGR offers the possibility of including PENDF-type information in the
+Draglib file, to perform a more accurate self-shielding calculation in the
+resolved energy domain. PENDF information is transformed into piecewise uniform
+cross sections defined over micro-energy groups, named {\sl Autolib data},
+which form a superset of the original group structure.
+
+\item File 8 of ENDF evaluation contains half-lives, decay modes, decay
+energies, and radiation spectra for most isotopes. Information concerning
+the decay of the reaction products is also given in this file. In addition,
+fission product yield data ({\tt MT=454} and {\tt 459}) for fissionable
+materials and spontaneous radioactive decay data ({\tt MT=457}) for the
+nucleus are included.
+
+\vskip 0.08cm
+
+File 8 is processed by module DRAGR. A large number of fission products are
+included in
+the evaluated file for each element capable of undergoing fission. For example,
+in the fission product
+yield data file included in ENDF/B-VI rel. 8, one can notice that there is
+information of 1232 fission
+products for 0.0253 eV fission of $^{233}$U, 1247 fission products for 0.0253
+eV fission of $^{235}$U etc. But the
+evaluations are not available for all the nuclides, as most of them have very
+short half-lives, which in the
+reactor context can be considered insignificant. They are subsequently lumped
+by a procedure that is
+built into DRAGR, as depicted in Fig.~\ref{fig:lumped}. If there are nuclides
+with long half-lives, but which are not available as evaluated files, a warning
+is provided before lumping the corresponding element. The DRAGR user has
+complete control over the lumping process. DRAGR currently has no capability
+to produce pseudo-fission product, i.e., custom library isotopes made from
+the combination of many minor ENDF fission products.
+
+\vskip 0.08cm
+
+%
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{figs/lumped.pdf}
+\parbox{11cm}{\caption{Lumping short-lived fission products in $^{235}$U.}
+\label{fig:lumped}}
+\end{figure}
+%
+
+Information on energies for various reaction types like (n, $\gamma$),
+\mbox{(n, f)}, \mbox{(n, 2n)}, \mbox{(n, 3n)}, \mbox{(n, 4n)},
+\mbox{(n, $\alpha$)}, (n, p), (n, 2$\alpha$), (n, np), (n, d) and (n, t)
+are recovered from earlier DRAGR single-isotope calculations and used for
+inclusion in relevant depletion data in Draglib format. The fission energy
+of (n, f) is obtained from {\tt MF=1} and {\tt MT=458} and the energy from
+delayed betas and gammas is subtracted from it. Information regarding
+energies for other reactions is derived by DRAGR from {\tt MF=3}. The
+corresponding {\tt MT} numbers for the above-mentioned reactions (other
+than (n, f)) are 102, 16, 17, 37, 107, 103, 108, 28, 104, 105, respectively.
+The complete information required to do the depletion calculations is
+provided in specific records of the Draglib file.
+
+\end{itemize}
+
+\subsection{Energy deposition data}\label{sect:energy}
+
+Energy deposition data is written in the Draglib in many locations. Two
+categories of information are recovered:
+\begin{enumerate}
+\item Kerma factors (aka., {\tt H-FACTOR} information) are energy values
+(barn-eV) released by each {\sl Draglib isotope} and associated to
+neutron-induced reactions. Microscopic cross section values (barn) for each
+absorption-type reaction are also used.
+\item Depletion chain information ({\tt DEPL-CHAIN} directory) based on File 8
+data of the ENDF evaluation.
+\end{enumerate}
+
+Kerma factors can be computed according to two modes:
+\begin{description}
+\item[{\tt HEATR} is not used:] Energy deposition cross sections are obtained
+as the product of the $Q$ value associated to each reaction times the cross
+section of this reaction. In this mode, energy of secondary neutrons is
+released at the location where the neutron is launched. {\tt H-FACTOR}
+information for each isotope and each energy group $g$ is computed using $Q$
+and pseudo-$Q$ values (expressed in eV/reaction) using
+\vspace{-0.04cm}
+$$
+H_g=Q_{\tt fiss}^{\tt er} \sigma_{{\tt fiss},g} + \sum_{r\neq {\tt fiss}} Q_r
+\, \sigma_{r,g}
+$$
+\noindent where both $Q_{\tt fiss}^{\tt er}$ and $Q_r$ are recovered from
+MF/MT=3/{\tt MT} ({\tt MT} is the reaction index) and where $\sigma_{r,g}$ is
+the microscopic cross section for a non-elastic reaction $r$ in energy group
+$g$.
+
+\item[{\tt HEATR} is used:] Total kerma factors $H_g^{\tt mt301}$ and fission
+kerma factors $H_g^{\tt mt318}$ are recovered from the GENDF file.
+{\tt H-FACTOR} information for each isotope is also using fission $Q$ values
+(expressed in eV/reaction) using
+\vspace{-0.1cm}
+$$
+H_g=H_g^{\tt mt301}-H_g^{\tt mt318}+\left[E_g+Q_{\tt fiss}^{\tt er} -
+Q_{\tt fiss}^{\tt end}-Q_{\tt fiss}^{\tt enp}\right] \sigma_{{\tt fiss},g}
+$$
+\noindent where the fission partial Q-values are recovered from MF/MT=1/458.
+\begin{description}
+\item[$Q_r $:] $Q$ of a non-elastic reaction, as recovered from {\tt QM} in
+File 3.
+\item[$Q_{\tt fiss}^{\tt er}$:] Total energy less the energy of the neutrinos
+({\tt ET} $-$ {\tt ENU)}; equal to the pseudo-$Q$ in File 3 for {\tt MT} $=$18.
+\item[$Q_{\tt fiss}^{\tt end}$:] Kinetic energy of the delayed fission neutrons
+\item[$Q_{\tt fiss}^{\tt egd}$:] Total energy released by the emission of
+delayed $\gamma$ rays.
+\item[$Q_{\tt fiss}^{\tt eb}$:] Total energy released by delayed $\beta$'s.
+\item[$Q_{\tt fiss}^{\tt enp}$:] Kinetic energy of the prompt fission neutrons.
+\item[$E_g$:] Kinetic energy of the incident neutron.
+\end{description}
+\end{description}
+
+$Q$ values used in Kerma factors should be consistent with individual values of
+delayed energy precursors from File 8. $Q_{\tt fiss}$ values assume
+steady-state of precursor concentrations, so that, for each fissile isotope,
+$$Q_{\tt fiss}^{\tt end}+Q_{\tt fiss}^{\tt egd}+Q_{\tt fiss}^{\tt eb}=
+\left(\shadowI-\shadowB \right)^{-1} \mbox{\boldmath Y}_{\rm in} \cdot
+\mbox{\boldmath e}$$
+\noindent where
+\begin{description}
+\item[$\shadowB$:] matrix of branching ratios for the decay of fission products
+\item[$\mbox{\boldmath Y}_{\rm in}$:] vector of independent fission yields for
+the fissile isotope
+\item[$\mbox{\boldmath e}$:] vector of decay energies for the fissile isotope.
+\end{description}
+
+Depletion chain information located in the {\tt DEPL-CHAIN} directory includes
+decay chains, independent fission yields $\mbox{\boldmath Y}_{\rm in}$, decay
+energies $\mbox{\boldmath e}$ and branching ratios $\shadowB$. Lumped decay
+chains are obtained as explained in Sect.~\ref{sect:dragr}. We now focus on
+energy deposition data, as stored in {\tt DEPLETE-ENER} record.
+
+The decay energy of every fission product is already included in
+$Q_{\tt fiss}^{\tt end}$, $Q_{\tt fiss}^{\tt egd}$ and $Q_{\tt fiss}^{\tt eb}$.
+This data can be obtained according to two fission product decay heat options.
+In all cases, the decay heat of fission products is released in the fuel.
+
+\begin{description}
+\item[{\tt idecay} $=$ 0] Production of decay heat by the fission products
+present in the Draglib is released as a decay process, independent of the
+neutron flux (default option). This option is useful to compute decay heat
+in a fuel storage pool where the neutron flux is zero. If a delayed energy
+precursor is a Draglib fission product (index {\tt iso}), its decay energy
+contribution is obtained as
+$$
+Q_{\tt fiss}^{\tt iso}=Y_{\rm c}^{\tt iso} e^{\tt iso}
+$$
+\noindent where $e^{\tt iso}$ is the decay energy of the Draglib fission
+product and $Y_{\rm c}^{\tt iso}$ is its cumulative yield corresponding to the
+fission. Cumulative fission yields are obtained from independent fission yields
+using
+$$
+\mbox{\boldmath Y}_{\rm c} =\left(\shadowI-\shadowB \right)^{-1}
+\mbox{\boldmath Y}_{\rm in} .
+$$
+This decay energy contribution $Q_{\tt fiss}^{\tt iso}$ should be removed from
+$Q_{\tt fiss}^{\tt end}+Q_{\tt fiss}^{\tt egd}+Q_{\tt fiss}^{\tt eb}$. Such a
+(negative) correction is stored in the depletion chain information under
+{\tt ireac} $= 2$.
+
+\item[{\tt idecay} $=$ 1] Use {\tt EGD}$+${\tt EB}$+${\tt END} values in
+MF1/MT458 to include decay heat for all fission products. The heat produced by
+fission products is added to the prompt fission energy. This is the recommended
+option for comparisons with Monte Carlo.
+\end{description}
+
+Decay energy components (MeV) are stored in record {\tt DEPLETE-ENER} of the
+Draglib. An array {\tt dener(ireac,ibiso)} is defined where {\tt ibiso} is a
+Draglib isotope and
+
+\begin{tabular}{ l l }
+\hline
+{\tt ireac} & definition \\
+\hline
+1 & decay of the father isotope \\
+2 & correction to the decay energy of lumped fission products due to a \\
+& fission of the father isotope \\
+3 & decay of the daughter isotope due to a (n,$\gamma$) reaction of the \\
+& father isotope \\
+4 & decay of the daughter isotope due to a (n,2n) reaction of the father \\
+& isotope  \\
+5 & decay of the daughter isotope due to a (n,3n) reaction of the father \\
+& isotope \\
+\hline
+\end{tabular}
+
+\vskip 0.3cm
+
+{\bf Notes:}
+\begin{itemize}
+\item Fission yields and energy components used to compute {\tt DEPLETE-ENER}
+are recovered from MF/MT=8/454 and 8/457, respectively.
+\item Before lumping, all decay energy is assigned to {\tt ireac} $=$ 1. After
+lumping, some decay energy may be assigned to neutron-induced reactions of the
+father isotope. If {\tt idecay} $=$ 1, all values of {\tt dener(1,ibiso)}
+corresponding to fission products are zero.
+\end{itemize}
+
+\subsection{User Input}
+\label{ssDRAGR_inp}
+
+The following user input specifications were copied from the comment
+cards at the beginning of the DRAGR source.  It is always a good idea
+to check the comment cards in the current version to see if there
+have been any changes.
+\index{DRAGR!DRAGR input}
+\index{input!DRAGR}
+
+\small
+\begin{ccode}
+
+   !---input specifications (free format)----
+   !
+   ! card 1 file units
+   !   nendf     input endf unit
+   !   npendf    input pendf unit
+   !   ngendf    input gendf unit
+   !   nfp       input endf unit for fission yield data
+   !   ndcy      input endf unit for radioactive decay data
+   !   nimpo     input draglib unit. A negative value corresponds to
+   !             a binary direct access file named drag**. Set to zero
+   !             if the file is to be created.
+   !   nexpo     output draglib unit. A negative value corresponds to
+   !             a binary direct access file named drag**. Set to nimpo
+   !             to modify its contents in place (both nimpo and nexpo
+   !             must be negative in this case).
+   !   pfflag    scattering storage flag: = 0/1/2. pfflag=1 to avoid
+   !             storing scattering matrices; pfflag=2 to avoid
+   !             storing scattering matrices above thermal energies
+   !             (default=0).
+   !   prflag    probability table flag: off/on = 0/1. prflag=1 if
+   !             purr information is available. (default=0)
+   !   idecay    fission product decay heat option (0 include, 1 don't)
+   !   iprint    long print option (0/1=minimum/maximum) (default=0)
+   ! card 2 hollerith identification for the library (nimpo=0 only)
+   !   labell    72 character identification for the library
+   ! card 3 material data (one card per material)
+   !   matno     integer material identifier (endf/b mat number)
+   !   hmat      hollerith material identifier (up to 8 characters
+   !             each). By default, an ascii identifier is
+   !             constructed.
+   !   nbesp     zero (no energy-dependent fission spectra) or
+   !             number of energy-dependent fission spectra)
+   ! card 4 material readme comment (up to 72 characters)
+   ! card 5 energy mesh for energy-dependent fission spectra
+   ! present if and only if nbesp.ne.0
+   !   e1, e2, e3, etc. nbesp+1 increasing values of energies (eV)
+   ! card 6 energy limits for dilution-dependent xs data. This data
+   !        is important to avoid self-shielding in very low and
+   !        very high energy group xs and to reduce the size of the
+   !        draglib. (one card per material)
+   !   eres0     lower limit of resolved resonance xs data (ev)
+   !   eres1     upper limit of unresolved resonance xs data (ev)
+   ! card 7 thermal cutoff used by thermr, reskr, dragr and acer.
+   !   ether     thermal energy cutoff (ev)
+   ! card 8 autolib energy limits. This data is used with advanced
+   !        self-shielding models such as the Sanchez-Coste, Ribon
+   !        extended and RSE models. It is highly recommended to use
+   !        the same data for all resonant isotopes. (one card per
+   !        material)
+   ! present if and only if npendf.ne.0
+   !   eaut0     lower limit of autolib resonance xs data (ev)
+   !   eaut1     upper limit of autolib resonance xs data (ev)
+   !   deli      elementary lethargy width
+   !
+   !            repeat cards 3 to 8 for all materials desired
+   !            matno=0/ terminates dragr run.
+   !
+   ! card 9 burnup chain data (one or two cards per isotope)
+   ! present if and only if nfp.ne.0 and ndcy.ne.0. Repeat card 9 for
+   ! all isotopes present in the burnup chain.
+   !   hich      hollerith isotope identifier (same as hmat below)
+   !             hich must be constructed in a way compatible with
+   !             subroutine dranam (ex: Am242m). If an isotope is
+   !             missing in this burnup chain, an error message of
+   !             the type 'isotope xxx should not be lumped' may be
+   !             issued by subroutine dralum.
+   !   hrch(1)   hollerith neutron-induced reaction identifier for
+   !             first daughter
+   !   br(1)     branching ratio for an isomeric daughter (=0.000 if
+   !             there is no isomeric daughter)
+   !   hrch(2)   hollerith neutron-induced reaction identifier for
+   !             second daughter
+   !   br(2)     branching ratio for an isomeric daughter (=0.000 if
+   !             there is no isomeric daughter)
+   !  ...
+   !
+   ! card 10 optional incident neutron energies (one card per incident
+   ! neutron energy). By default, the most thermal neutron energy is
+   ! used.
+   !
+   !  'interpol' keyword to set the incident neutron energy
+   !  'at'       mandatory keyword to make dragr happy
+   !   energy    incident neutron energy (eV) with MT454
+   !
+   ! hich='end'/ terminates the burnup data.
+   !
+   !-----------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+The first card specifies the input and output unit numbers, as
+is normal for NJOY modules.  \cword{ngendf} comes from a previous
+\hyperlink{sGROUPRhy}{GROUPR} run, and it can be in
+either binary or ASCII mode.
+Before the multiprocessor version, \cword{nimpo} and \cword{nexpo}
+were always in ASCII mode. Now, they can also be in binary mode.
+
+Card 2 is a comment required if and only if the Draglib is created.
+
+Card 3 is required.  It gives the ENDF MAT number for
+the materials to be processed.  If this MAT doesn't appear on
+the GENDF tape, a fatal error message will be issued. \cword{hmat}
+is the isotope character name on the Draglib. \cword{nbesp} is
+generally set to zero, except for libraries dedicated to fast
+reactor applications where it is set to 5.
+
+Card 4 is a comment for the isotope.
+
+Card 5 is required only if \cword{nbesp} is not equal to zero.
+
+Card 6 is used to limit the self-shielding domain on the Draglib between
+energies \cword{eres0} and \cword{eres1} in eV.
+
+Card 7 provides the thermal cutoff energy in eV.
+
+Card 8 is required if and only if \cword{npendf} is not equal to zero.
+This information is used to define how the pendf data is transformed
+into Autolib data in the Draglib.
+
+Repeat cards 3 to 8 for all materials desired and set \cword{matno=0/}
+to terminates the DRAGR run.
+
+Another data group of input data is defined by card 9. This card
+permit the definition of the lumped depletion chain to be used in Dragon.
+User-defined branching ratios can also be set for Dragon isotopes. This
+information is used to lump depletion chains as explained in
+Sect.~\ref{sect:dragr}. The lumping process also recover information from
+endf units \cword{nfp} and \cword{ndcy} containing fission yield and
+radioactive decay data, respectively.
+
+Repeat card 9 for all isotopes present in the Dragon burnup chain. Set
+\cword{hich='end'/} to terminates the chain.
+
+In the special case where {\tt nendf}, {\tt npendf}, {\tt ngendf}, {\tt nfp}
+and {\tt ndcy} are 0 in card~1, utility operations are performed on the Draglib:
+\begin{itemize}
+\item If {\tt nimpo} $>0$ and {\tt nexpo} $>0$, concatenation of Draglib
+information located in {\tt nimpo} into {\tt nexpo}. Both files are
+ascii-formatted.
+\item If {\tt nimpo} $<0$ and {\tt nexpo} $<0$, concatenation of Draglib
+information located in {\tt nimpo} into {\tt nexpo}. Both files are
+direct-access. If {\tt nimpo} $=$ {\tt nexpo}, the modification is made
+in-place, without copy of the direct-access Draglib.
+\item If {\tt nimpo} $<0$ and {\tt nexpo} $>0$, export a direct-access Draglib 
+{\tt nimpo} into an ascii-formatted file.
+\item If {\tt nimpo} $>0$ and {\tt nexpo} $<0$, import a direct-access Draglib
+{\tt nexpo} from an ascii-formatted file.
+\end{itemize}
+
+\cleardoublepage

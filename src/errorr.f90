@@ -333,7 +333,7 @@ contains
    !      24           shem cea 281-group structure
    !      25           shem epm 295-group structure
    !      26           shem cea/epm 361-group structure
-   !      27           shem epm 315-group structure
+   !      27           shem epm 370-group structure
    !      28           rahab aecl 89-group structure
    !      29           ccfe   660-group structure  (30 MeV)
    !      30           ukaea 1025-group structure  (30 MeV)
@@ -341,6 +341,8 @@ contains
    !      32           ukaea 1102-group structure   (1 GeV)
    !      33           ukaea  142-group structure (200 MeV)
    !      34           lanl 618-group structure
+   !      35           apollo 99-group structure
+   !      36           ecco 1962-group structure
    !
    !      iwt          meaning
    !      ---          -------
@@ -9746,7 +9748,7 @@ contains
    !    24      SHEM CEA 281-group structure
    !    25      SHEM EPM 295-group structure
    !    26      SHEM CEA/EPM 361-group structure
-   !    27      SHEM EPM 315-group structure
+   !    27      SHEM EPM 370-group structure
    !    28      RAHAB AECL 89-group structure
    !    29      CCFE   660-group structure
    !    30      UKAEA 1025-group structure
@@ -9754,6 +9756,8 @@ contains
    !    32      UKAEA 1102-group structure
    !    33      UKAEA  142-group structure
    !    34      LANL 618-group structure
+   !    35      APOLLO 99-group structure
+   !    36      ECCO 1962-group structure
    !
    !-------------------------------------------------------------------
    use mainio ! provides nsyso

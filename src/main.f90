@@ -77,6 +77,13 @@ program njoy
 !
 ! gaspr....add gas production (MT203-207) to PENDF tape.
 !
+! dragr....convert multigroup data into libraries for the lattice
+!          code Dragon.
+!
+! calenr...add CALENDF probability tables to the GENDF tape.
+!
+! eccor ...generate an eccolib for ERANOS.
+!
 ! Each processing module is implemented as a Fortran-90 module with
 ! only one public subroutine named as above.  The modules have the
 ! names as given above with "m" instead of "r".  Processing modules
@@ -138,6 +145,9 @@ program njoy
    use purm    ! provides purr
    use leapm   ! provides leapr
    use gaspm   ! provides gaspr
+   use dragm   ! provides dragr
+   use calenm  ! provides calenr
+!   use eccom   ! provides eccor
 
    implicit none
    character(6)::module
@@ -147,6 +157,7 @@ program njoy
    real(kr)::secs
 
    !--set page size for blocked binary mode in module endf
+   npage=306
    npage=(npage/102)*102
 
    !--open the NJOY listing file
@@ -261,6 +272,15 @@ program njoy
       case('gaspr')  ! add gas production (mt203-207) to pendf
          call gaspr
 
+      case('dragr')  ! produce libraries for Dragon
+         call dragr
+
+      case('calenr') ! generate CALENDF probability tables
+         call calenr
+
+!      case('eccor')  ! generate an eccolib for ERANOS
+!         call eccor
+
       case ('--')    ! comment card; nothing to do
 
       case default
@@ -275,4 +295,3 @@ program njoy
    write(nsyse,'(69x,f8.1,''s''/1x,77(''*''))') secs
 
 end program njoy
-

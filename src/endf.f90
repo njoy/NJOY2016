@@ -16,8 +16,7 @@ module endf
    public a11
 
    !--Public variables
-   integer,public::npage=306
-   integer,public::iverf=-1
+   integer,public::npage,iverf
    real(kr),public::c1h,c2h
    integer,public::l1h,l2h,n1h,n2h,math,mfh,mth,nsh,nsp,nsc
    real(kr),public::thr6
@@ -237,7 +236,7 @@ contains
       if (n1h.le.0) then
          write(strng,'(" illegal TAB1, nr<=0 for mf/mt = ",i2,"/",i3)')&
                       mfh,mth
-         call error('endf',strng,'')
+         call mess('endf',strng,'')
       endif
       a(3)=l1h
       a(4)=l2h
@@ -252,7 +251,7 @@ contains
       if (n1h.le.0) then
          write(strng,'(" illegal TAB1, nr<=0 for mf/mt = ",i2,"/",i3)')&
                       mfh,mth
-         call error('endf',strng,'')
+         call mess('endf',strng,'')
       endif
       nb=6+2*n1h+2*n2h
       call tablio(nin,0,0)
@@ -287,7 +286,7 @@ contains
       if (nbt(n1h).ne.n2h) then
          write(strng,'(" illegal TAB1, nbt(nr)/=np for mf/mt = ",&
                      &i2,"/",i3)')mfh,mth
-         call error('endf',strng,'')
+         call mess('endf',strng,'')
       endif
    endif
 
@@ -1582,7 +1581,8 @@ contains
    400 continue
    write(strng,'('' mat'',i4,'' mf'',i2,'' mt'',i3,&
      &'' not on tape '',i3)') mat,mf,mt,itape
-   call error('findf',strng,' ')
+   call mess('findf',strng,' ')
+   mat=-1
    return
    end subroutine findf
 
@@ -2146,3 +2146,4 @@ contains
    end subroutine gety2
 
 end module endf
+

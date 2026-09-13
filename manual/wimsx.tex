@@ -1,0 +1,1182 @@
+\section{WIMSR}
+\label{sWIMSR}
+
+\hypertarget{sWIMSRhy}{The}
+WIMSR\index{WIMSR|textbf} module is used to prepare libraries for the
+reactor-physics code WIMS\cite{WIMS}.\index{WIMS}  WIMS stands for
+``Winfrith improved multigroup scheme;''\index{AEE/Winfrith}
+it  has been developed through its various versions
+at the UK laboratory AEE/Winfrith.  WIMS-E was the Winfrith
+version {\it circa} 1990, and it was distributed commercially.
+WIMS-D is an older version that is freely available through various
+distribution centers; therefore, it is very popular all around the world.
+\index{WIMS!WIMS-D}
+\index{WIMS!WIMS-E}
+
+WIMS uses collision-probability methods\index{collision-probability method}
+for computing fluxes in reactor pin cells and more complicated
+geometrical arrangements.  Therefore, it requires transport,
+fission, and capture cross sections, a transfer matrix for epithermal
+neutrons, fission-source information ($\overline{\nu}$ and $\chi$),
+and a bound-atom scattering matrix for thermal neutrons.  Self-shielded
+\index{self-shielding}
+cross sections are obtained using equivalence theory\index{equivalence theory}
+from tabulated resonance integrals\index{resonance integrals}
+with intermediate resonance corrections.
+\index{intermediate resonance effects}
+The resonance integrals can be obtained from the
+self-shielded cross sections produced by
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}, and the
+intermediate-resonance $\lambda$ values by group can
+be computed using the NJOY flux calculator\index{flux calculator}.
+WIMS libraries normally use a standard 69-group structure with
+14 fast groups, 13 resonance groups, and 42 thermal groups.
+\index{69-group structure}
+
+This chapter describes the WIMSR module in NJOY2016.0.
+
+\subsection{Resonance Integrals}
+\label{ssWIMSR_RI}
+
+WIMS computes the self-shielded\index{self-shielding} cross sections
+for a wide range of mixtures and fuel geometries using equivalence theory.
+The \hyperlink{sGROUPRhy}{GROUPR} chapter of this
+report describes the narrow-resonance
+(NR) version of equivalence theory; that is, all systems with
+the same value for the ``sigma-zero,"\index{$\sigma_0$}
+
+\begin{equation}
+   \sigma_{0i}=\frac{1}{n_i}\left\{\sum_{j\ne i} n_j\sigma_{tj}
+       +\sigma_e\right\}\;,
+\end{equation}
+
+\noindent
+in a group have the same self-shielded cross section in that
+group.  Here, $n_j$ is the number density for material $j$
+with cross section $\sigma_{tj}$, and $\sigma_e$ is the escape
+cross section (which takes care of the geometry of the fuel).
+
+However, in the near epithermal range ({\it e.g.,} 4-100 eV),
+some resonances are too wide for the NR approximation to apply
+well.\index{narrow resonance approximation}  For these resonances,
+the effect of a moderator material is reduced, because collisions
+with the moderator do not always result in enough energy loss
+to remove the neutron from the resonance.  For this reason, WIMS
+uses an intermediate-resonance (IR) extension\index{intermediate
+resonance effects} to equivalence theory in which the background
+cross section is taken to be the following:
+
+\begin{equation}
+   \sigma_{Pi}=\frac{1}{n_i}\left\{\sum_{j} n_j
+       \lambda_j\sigma_{pj} +\sigma_e\right\}\;,
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+where the $\lambda$ factors\index{IR $\lambda$} are numbers between
+zero and one.  Note that $\sigma_p$, the potential scattering cross
+section, is used here, and that the sum is now over all materials.
+The basic concept is the same:  all systems with the same
+value of the IR ``sigma-P'' for a group will have the same
+self-shielded cross sections for that group.
+
+WIMS takes the additional step of expressing the self-shielding
+data in terms of ``resonance integrals,''
+\index{resonance integrals}
+instead of using the self-shielded cross sections produced by
+\hyperlink{sGROUPRhy}{GROUPR}.  That is
+
+\begin{equation}
+   \sigma_x(\sigma_0)=\frac{\sigma_P I_x(\sigma_P)}
+      {\sigma_P - I_a(\sigma_P)}\;,
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+and
+
+\begin{equation}
+   I_x(\sigma_P)=\frac{\sigma_P\sigma_x(\sigma_0)}
+     {\sigma_P + \sigma_a(\sigma_0)}\;,
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+where $x$ denotes the reaction, either ``a'' for absorption or
+``nf'' for nu*fission, and $I_x$ is the corresponding resonance integral.
+
+In order to clarify the meaning of this pair of equations, consider
+a homogeneous mixture of $^{238}$U and hydrogen with concentrations
+such that there are 50 barns of hydrogen scattering per atom of
+uranium.  The \hyperlink{sGROUPRhy}{GROUPR} flux
+calculator can be used to solve for the
+flux in this mixture, and
+\hyperlink{sGROUPRhy}{GROUPR} can then calculate the corresponding
+absorption cross section for $^{238}$U.  Assuming that $\lambda=0.1$
+and $\sigma_p=10$ for the uranium, the numbers being appropriate
+for WIMS group 25, we get $\sigma_P=51$.  This value of $\sigma_p$
+goes into the \cword{sigz} array in the resonance-integral block on
+the WIMS library, and the corresponding $I_a$ goes into the
+\cword{resa} array.
+
+At some later time, a WIMS user runs a problem for a homogeneous
+mixture of $^{238}$U and hydrogen that matches these specifications.
+WIMS will compute a value of $\sigma_P$ of 51.0, interpolate
+in the table of resonance integrals, and compute a new absorption
+cross section that is exactly equal to the accurate computed result
+from the original \hyperlink{sGROUPRhy}{GROUPR} flux-calculator run.
+
+This argument can be extended to more complex systems.  For example,
+the assembly calculated using the flux calculator could represent
+an enriched uranium-oxide fuel pin of a size typical of a user's
+reactor system with a water moderator.  The computed absorption
+cross section is converted to a resonance integral and stored with
+the computed value of $\sigma_P$.  In any later calculation that
+happens to mimic the same composition and geometry, WIMS will
+return the accurate calculated absorption cross section.  Equivalence
+theory\index{equivalence theory}, with all its approximations, is only
+used to interpolate and extrapolate around these calculated values.
+This is a powerful approach, because it allows a user to optimize the
+library in order to obtain very accurate results for a limited range
+of systems without having to modify the methods used in the
+lattice-physics code.  Unfortunately, the present version of WIMSR
+does not allow you to enter $\sigma_P$ directly; it computes it
+from input data that only consider one material at a time.  A future
+version may include the more general capabilities described in
+this paragraph.
+
+Let us call the homogeneous uranium-hydrogen case discussed above
+``case 0.''  Now, consider a homogeneous mixture of $^{238}$U, oxygen,
+and hydrogen.  Ratio the number densities to the uranium density such
+that there is 1 barn/atom of oxygen scattering and 50 barn/atom of hydrogen
+scattering.    Carry out an accurate flux calculation for the mixture, and
+call the result ``case 1.''  Also do an accurate flux calculation with only
+hydrogen,  but at a density corresponding to 51 barns/atom. Call this result
+``case 2.''  The IR lambda value for oxygen is then given by
+
+\begin{equation}
+\lambda = \frac{\sigma_a(1)-\sigma_a(0)}{\sigma_a(2)-\sigma_a(0)}\;.
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+Note that $\lambda$ will be 1 if the oxygen and hydrogen have
+exactly the same effect on the absorption cross section.  In practice,
+$\lambda=.91$ for WIMS group 27 (which contains the large 6.7 eV
+resonance of $^{238}$U), and $\lambda=1$ for all the other resonance
+groups.  That is, all the resonances above the 6.7 eV resonance are
+effectively narrow with respect to oxygen scattering.
+
+Similarly, do a flux-calculator solution for a homogeneous mixture
+of $^{238}$U combined with 1 barn/atom of $^{235}$U and 50 barn/atom
+of hydrogen.  Call the result ``case 3.''  Now, the lambda value
+for $^{235}$U is given by
+
+\begin{equation}
+\lambda = \frac{\sigma_a(3)-\sigma_a(0)}{\sigma_a(2)-\sigma_a(0)}\;.
+\end{equation}
+\vspace{0.5 pt}
+
+\noindent
+The actual value obtained for WIMS group 27 is .035.  Group 26 gives
+0.50, and group 25 gives 0.09. An examination
+of the flux-calculator equations in the
+\hyperlink{sGROUPRhy}{GROUPR} chapter of this
+manual shows that the effect of the ``admixed'' moderator term
+depends only on its atomic mass (through the $\alpha$ value); therefore,
+the IR $\lambda$ values will be the same for all uranium isotopes
+(and the same values should work for all the actinides).  This
+conclusion neglects the small effects of absorption in the admixed
+isotope on the intraresonance flux for one resonance.
+
+This process can be continued for additional admixed materials from
+each important range of atomic mass.  The result is the table of
+$\lambda_{gi}$ values needed as WIMSR input.
+
+What are the implications of this discussion?  Foremost is the observation
+that the lambda values for the isotopes are a function of the composition
+of the mixture that was used for the base  calculation.  To make the
+effect of this clear, let us consider two different types of cells:
+\begin{enumerate}
+\begin{singlespace}
+\item a homogeneous mixture of $^{238}$U and hydrogen, and
+
+\item a homogeneous mixture of $^{235}$U and hydrogen.
+\end{singlespace}
+\end{enumerate}
+\vspace{0.5 pt}
+
+A look at the pointwise cross sections in group 27 shows very different
+pictures for the two uranium isotopes.  The $^{238}$U cross section has one
+large, fairly wide resonance at 6.7 eV, and the $^{235}$U cross section has
+several narrower resonances scattered across the group.  If the
+lambda values are computed for these two different situations,  the
+results in Table~\ref{lams} are obtained.
+
+\begin{table}[b]
+\begin{center}
+\caption[Sample Intermediate Resonance $\lambda$ Values]{IR $\lambda$ Values
+ for Several Resonance Groups and Two Different Reactor Systems}
+\setlength{\extrarowheight}{1pt}
+\begin{tabular}{c|cc|cc} \hline
+ WIMS  &  $\lambda$(U)   &  $\lambda$(O)  & $\lambda$(U)  &  $\lambda$(O) \\
+ group & $^{238}$U@50b   & $^{238}$U@50b   &  $^{235}$U@200b
+  & $^{235}$U@200b  \\ \hline
+ 27  &  .035  &  .91  &  0.20  &  1.00 \\
+ 26  &  .50   &  1.00 & .38  &  1.00 \\
+ 25 &  .092  &  1.00  & .44  &  1.00  \\
+ 24  &  .090  &  1.00  &  .55  &  1.00  \\
+ 23  &  .29  &  1.00  &  .46  &  1.00 \\ \hline
+\end{tabular}
+\label{lams}
+\end{center}
+\end{table}
+
+\newpage
+It is clear that the energy dependence of the two lambda sets is quite
+different.  This is because of the difference in the resonance structure
+between $^{238}$U and $^{235}$U.  Clearly, the one resonance in group 27
+in $^{238}$U
+is effectively wider than the group of resonances in group 27 for $^{235}$U.
+Group 26 has essentially no resonance character for $^{238}$U, which
+reverses the sense of the difference. In groups 24 and 25, the $^{235}$U
+resonances become more narrow, while the $^{238}$U resonances stay fairly
+wide.  Finally, in group 23, the $^{238}$U resonances begin to get narrower.
+
+These results imply that completely different sets of lambda
+values should be used for different fuel/moderator systems, such as
+$^{238}$U/water, $^{235}$U/water, or $^{238}$U/graphite.  In practice, this is
+rarely done.
+
+The remaining question is, ``How should the self-shielded cross
+sections for the minor isotopes be calculated?''  Formally, the
+best approach using NJOY would be to first do an accurate flux
+calculation for pure $^{238}$U mixed with hydrogen (or to be
+really accurate, a typical reactor cell containing pure $^{238}$U
+oxide), and to save the resulting flux on a scratch file.  This
+flux would then be used as input for the $^{235}$U calculation.  See
+the \hyperlink{sGROUPRhy}{GROUPR} chapter for details.  This
+approach takes care of all
+the complexities of resonance-resonance interference, the drop
+in the average flux across the group caused by accumulated
+$^{238}$U absorptions, and so on.  In practice, this is rarely
+done.  Since the self-shielding effects in the minor actinides are
+much smaller than those in the main absorber, it is usually sufficient
+to do a simple NR calculation for the minor actinides and to
+convert them into WIMS resonance integrals with the normal lambda
+values for heavy isotopes.
+
+\subsection{Cross Sections}
+\label{ssWIMSR_xs}
+
+The first part of the WIMS cross section data contains $\sigma_p$
+for the resonance groups (15-27 in the normal 69-group structure),
+the scattering power per unit lethargy for the resonance groups,
+the transport cross section for the non-thermal groups (1-27 normally),
+the absorption cross section for the non-thermal groups, an obsolete
+quantity for the resonance groups (set to zero), and the
+intermediate-resonance $\lambda$ values for the resonance groups.
+For WIMS-E, the (n,2n) cross section is added between the
+slowing-down power and the transport cross section.
+
+The $\sigma_p$ value is assumed to be constant (see \cword{sigp} in the
+user input instructions).  It must be obtained by finding the scattering
+length $a$ in the ENDF file and computing $\sigma_p=4\pi a^2$.  The
+scattering power per unit lethargy is $\xi\sigma_s/\tau$, where $\xi$
+is the log energy loss parameter given as MT=252 on the GENDF file,
+$\sigma_s$ is the elastic scattering cross section (MT=2), and $\tau$
+is the lethargy width for the group, which can be calculated from the
+group structure given in MF=1/MT=451 on the GENDF file.  The (n,2n)
+cross section is obtained from MF=3/MT=16 on the GENDF file.  The
+absorption cross section is computed by adding up the fission
+cross section (MT=18) and all the cross sections given with
+MT=102-150.  The (n,2n) cross section (MT=16) is then subtracted
+from the sum.  Finally, the $\lambda$ values are obtained from the
+user's input.  See Section~\ref{ssWIMSR_RI} for more details on these
+intermediate-resonance corrections.
+
+The next part of the WIMS data file contains the fission neutron
+production cross section $\overline{\nu}\sigma_f$ and the fission
+cross section $\sigma_f$ for the non-thermal groups (1-27 normally).
+The cross section is always obtained from MT=18 on the GENDF
+file, but there are several complications involved in getting
+$\overline{\nu}$.
+
+A shortcut for obtaining the fission data is to run MFD=3/MTD=452
+and MFD=5/MTD=452 in \hyperlink{sGROUPRhy}{GROUPR}.  This
+approach ignores the energy dependence
+of fission neutron emission at high energies and the effects of
+delayed neutrons on the fission spectrum.  If these options are
+used in GROUPR, it is important not to use the other options
+described below at the same time.  When WIMSR finds a section on
+the GENDF file with MF=3/MT=452, it can read in $\overline{\nu}\sigma_f$
+directly.
+
+A better approach to fission in \hyperlink{sGROUPRhy}{GROUPR}
+is to prepare a full fission
+matrix\index{fission matrix} for MT=18, or to prepare matrices
+for all the partial fission reactions, MT=19, 20, 21, and 38.
+The latter is the recommended approach for evaluations with both
+MT=18 and MT=19 given in File 5.  See the
+\hyperlink{sGROUPRhy}{GROUPR} chapter for more
+details.  WIMSR reads in the data given in MF=6/MT=18, or in
+MF=6/MT=19,20,..., and sums over all secondary-energy groups
+to obtain the prompt part of $\overline{\nu}\sigma_f$.  It adds
+in the delayed part of $\overline{\nu}\sigma_f$ from MF=3/MT=455.
+If the input GENDF file contains both MT=18 and partial fission matrices,
+a diagnostic message will be printed, and the partial-fission
+representation will be used.
+
+The next section of the WIMS data file contains the non-thermal P$_0$
+scattering matrix for incident-energy groups in the non-thermal range
+(1-27 normally).  This matrix is loaded by summing over all of the
+reactions found on the GENDF tape except the thermal reactions
+\cword{mti} and \cword{mtc}.  If requested, this matrix is transport
+corrected by subtracting the sum over secondary-energy groups of the
+P$_1$ matrix for each primary group.  When the individual reactions
+are read, they are loaded into ``full'' matrix (typically 69$\times$69).
+At the same time, a record is kept of the lowest and highest secondary
+groups found for each primary group.  These limits are then used to
+pack the scattering matrix into a more compact form.
+
+The scattering matrix is not actively self-shielded in WIMS, but WIMSR
+allows the user to request that the elastic component be evaluated at
+some reference $\sigma_0$ value different from infinity.  This option
+can be useful for the major fertile component of reactor fuel, that is,
+for $^{238}$U in pins of a uranium system, or for $^{232}$Th for fuel
+in a Thorium/$^{233}$U system.
+
+Because the thermal scattering matrix depends on temperature,
+the next component of the WIMSR data contains the \cword{ntemp}
+versions of the basic cross sections and the P$_0$ scattering matrix
+for the thermal groups (28-69 normally).  The cross sections
+included are transport, absorption, nu*fission, and fission.
+The transport positions contain the sum of the thermal inelastic
+cross section obtained by summing up the P$_0$ matrix (MF=6/MT=MTI),
+the thermal elastic cross section from the diagonal elements of
+the P$_0$ matrix (MF=6/MT=MTC), if present, and the absorption cross
+section.  If separate P$_1$ matrices are not given for this material,
+the P$_1$ cross section obtained by summing the P$_1$ matrices over
+secondary groups for each primary group is subtracted.  The matrix
+data are read from sections on the GENDF file with MF=6/MT=MTI and
+MF=6/MT=MTC (if present).  As for the temperature-independent
+matrices, they can be transport-corrected by subtracting the
+sum over secondary groups of the P$_1$ matrix for each primary group
+from the self-scatter position.  Also, minimum and maximum limits
+on the secondary group are determined for each primary group, and the
+matrix is compacted for efficiency.
+
+The next part of the WIMS data file contains the resonance data,
+which were discussed in Section~\ref{ssWIMSR_RI}.  In some
+cases, these resonance data are followed by a fission spectrum
+block.  The complications of obtaining the fission spectrum are the
+same as those described above for obtaining the fission neutron
+production cross section, $\overline{\nu}\sigma_f$.  If the short-cut
+option was used in \hyperlink{sGROUPRhy}{GROUPR}, the
+fission spectrum can be read directly
+from MF=5/MT=452 on the GENDF file.  The sum over groups is also
+accumulated in \cword{cnorm} in order to allow the final spectrum
+to be normalized accurately.  The shortcut approach neglects the
+effects of delayed neutron emission on the fission spectrum.
+
+If fission matrices are available (either MT=18, or MT=19+20+21...),
+the prompt part of the fission spectrum is obtained by summing
+$\sigma_{gg'}\phi_g$ over all primary groups, $g$.  These numbers are
+also summed into \cword{cnorm} for use later in normalizing $\chi$.
+The delayed part is obtained as
+
+\begin{equation}
+ \left\{ \sum_g \nu_d \sigma_{fg} \phi_g \right\} \chi_{dg'} \;,
+\end{equation}
+
+\noindent
+which also contributes to the normalization.  Note that the energy
+dependence of the fission matrix is factored into the final $\chi$ in
+proportion to the weighting flux used in
+\hyperlink{sGROUPRhy}{GROUPR} to prepare the WIMSR
+input file.  For thermal reactor problems, it is easy to provide a
+good estimate for this weighting flux.
+
+The final block on the WIMS data tape is optional.  If present,
+it contains P$_1$ scattering matrices for each temperature.  These
+matrices are defined over the entire group range (normally 1-69),
+and they contain both the temperature-independent and
+temperature-dependent reactions in each matrix.  The methods
+used to build up these matrices are parallel to those discussed
+above for the P$_0$ matrices.  Note that if P$_1$ matrices are given,
+the transport corrections are \underline{not} included in the transport
+cross sections or P$_0$ matrices.
+
+
+\subsection{Burn Data}
+\label{ssWIMSR_burn}
+
+WIMS uses a simplified burn model for tracking the production and
+depletion of actinides and fission products, and the chains used
+are hard-wired into the code.  WIMSR provides a method to enter
+new fission-yield data into the WIMS library format, but it has not
+been used or tested very much so far.
+
+\subsection{User Input}
+\label{ssWIMSR_inp}
+
+The following user input specifications were copied from the comment
+cards at the beginning of the WIMSR source.  It is always a good idea
+to check the comment cards in the current version to see if there
+have been any changes.
+\index{WIMSR!WIMSR input}
+\index{input!WIMSR}
+
+\small
+\begin{ccode}
+
+   !--------------------------------------------------------------------
+   !
+   ! Format multigroup cross sections from groupr for WIMS.
+   !
+   !---input specifications (free format)----
+   !
+   ! card 1
+   !    ngendf  unit for input gendf tape
+   !    nout    unit for output wims tape
+   !
+   ! card 2
+   !    iprint  print option
+   !               0=minimum (default)
+   !               1=regular
+   !               2=1+intermediate results
+   !    iverw   wims version
+   !               4=wims-d (default)
+   !               5=wims-e
+   !    igroup  group option
+   !               0=69 groups (default)
+   !               9=user's choice
+   !
+   ! card 2a  (igroup.eq.9 only)
+   !    ngnd    number of groups
+   !    nfg     number of fast groups
+   !    nrg     number of resonance groups
+   !    igref   reference group (default is last fast group)
+   !
+   ! card 3
+   !    mat     endf mat number of the material to be processed
+   !    nfid    not used
+   !    rdfid   identification of material for the wims library
+   !    iburn   burnup data option
+   !              -1=suppress printout of burnup data
+   !               0=no burnup data is provided (default)
+   !               1=burnup data is provided in cards 5 and 6
+   !
+   ! card  4
+   !    ntemp   no. of temperatures to process for this material
+   !            in the thermal energy range
+   !               (0=all found on input tape)
+   !    nsigz   no. of sigma zeroes to process for this material
+   !               (0=all found on input tape)
+   !    sgref   reference sigma zero
+   !               (.ge. 1.e10 to select all cross sect. at inf.dil.*
+   !                           but fully shielded elastic x-sect,
+   !                .lt. 1.e10 to select all x-sect at inf.dil.
+   !                =sig0      from the list on groupr input to
+   !                           select all x-sect. at that sig0)
+   !    ires    resonance absorber indicator
+   !               0=no resonance tables
+   !              >0=ires temperatures processed
+   !    sigp    potential cross section from endf.
+   !               (if zero, replace by the elastic cross section)
+   !    mti     thermal inelastic mt (default=0=none)
+   !    mtc     thermal elastic mt (default=0=none)
+   !    ip1opt  include p1 matrices
+   !               0=yes
+   !               1=no, correct p0 ingroups (default)
+   !    inorf   resonance fission (if found)
+   !               0=include resonance fission (default)
+   !               1=do not include
+   !    isof    fission spectrum
+   !               0=do not include fission spectrum (default)
+   !               1=include fission spectrum
+   !    ifprod  fission product flag
+   !               0=not a fission product (default)
+   !               1=fission product, no resonance tables
+   !               2=fission product, resonance tables
+   !    jp1     transport correction neutron current spectrum flag
+   !               0=use p1-flux for transport correction (default)
+   !              >0=read in jp1 values of the neutron current
+   !                   spectrum from input
+   !
+   !   the following cards 5 and 6 are for iburn gt 0 only
+   ! card  5
+   !    ntis    no. of time-dependent isotopes
+   !            for burnable materials ntis=2
+   !            for fissile materials ntis>2 when fission product
+   !            yields are given.
+   !    efiss   energy released per fission
+   !
+   ! card  6a
+   !    identa  ident of capture product isotope
+   !    yield   yield of product identa from capture
+   !
+   ! card  6b
+   !    identa  ident of decay product isotope (zero if stable)
+   !    lambda  decay constant (s-1)
+   !
+   ! card  6c  (repeated ntis-2 times, if necessary)
+   !    identa  ident of fission product isotope
+   !    yield   fission yield of identa from burnup of mat
+   !
+   ! card  7
+   !    lambda  resonance-group goldstein lambdas (13 for
+   !            default 69-group structure, nrg otherwise).
+   !
+   ! card  8    (only when jp1>0)
+   !    p1flx   current spectrum (jp1 entries read, the rest are
+   !            set with the default p1-flux calculated by njoy).
+   !--------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+The first card specifies the input and output unit numbers, as
+is normal for NJOY modules.  \cword{ngendf} comes from a previous
+\hyperlink{sGROUPRhy}{GROUPR} run, and it can be in
+either binary or ASCII mode.
+\cword{nout} is always in ASCII mode.
+
+The options card allows the user to select how much detail will
+be printed on the output listing (\cword{iprint}), whether the
+output is intended for  WIMS-D or WIMS-E (\cword{iverw}), and how
+many groups are desired.  Currently, the only difference between
+WIMS-D and WIMS-E output is that some additional reaction cross
+sections are included for the latter.  If the user selects some
+group structure different from the standard 69-group structure,
+an additional input card is required to give the number of groups
+(\cword{ngnd}), the number of fast groups (\cword{nfg}, 14 for
+69 groups), the number of resonance groups (\cword{nrg}, 13 for
+69 groups), and the reference group used for normalizing the
+flux (\cword{igref}, normally the low-energy group of the
+fast groups).
+
+Card 3 is required.  It gives the ENDF MAT number for
+the materials to be processed.  If this MAT doesn't appear on
+the GENDF tape, a fatal error message will be issued.  \cword{nfid}
+will be the identification number for this material used on the
+output WIMS library, and \cword{rdfid} will be the identification
+number for the resonance data.  Formally, WIMS libraries allow for
+data sets with more than one version of the resonance-integral
+tabulation.  The last parameter on this card is \cword{iburn} to
+flag whether burn data are included in the input stream.
+
+Card 4 starts out with \cword{ntemp} and \cword{nsigz},
+which define the size of the resonance-integral tables.  They
+are normally both set to zero; the code then uses all of the
+values computed by \hyperlink{sGROUPRhy}{GROUPR}.  The
+reference sigma-zero value,
+\cword{sgref}, is used for the elastic cross section and matrix,
+because these quantities are not normally self-shielded by
+WIMS.  Normally, \cword{1e10} is appropriate, but for the major
+fissionable material in the reactor ({\it i.e.,} $^{238}$U or
+$^{232}$Th), it may be better to use a realistic number like
+\cword{sgref}=50.  WIMSR assumes that the potential scattering
+cross section for the material is constant, but this constant
+value is not available from the
+\hyperlink{sGROUPRhy}{GROUPR} output.  The WIMSR user
+will have to look in the ENDF-formatted evaluation for the
+scattering length $a$, compute $\sigma_{p}=4\pi a^2$, and enter
+the value as \cword{sigp}.  As shown in the following ENDF-formatted
+file fragment, the scattering length (\cword{9.56630- 1} in this case)
+is the second item on the fourth line in MF=2, MT=151.
+
+\small
+\begin{ccode}
+ ...
+ 9.22350+ 4 2.33025+ 2          0          0          1          01395 2151
+ 9.22350+ 4 1.00000+ 0          0          1          2          01395 2151
+ 1.00000+ 0 8.20000+ 1          1          1          0          01395 2151
+ 3.50000+ 0 9.56630- 1          0          0          1          01395 2151
+ 2.33025+ 2 0.00000+ 0          0          0        780        1301395 2151
+ ...
+\end{ccode}
+\normalsize
+
+\vspace{1 pt}
+The parameters \cword{mti} and \cword{mtc} select the thermal
+inelastic and elastic data from the sections that might be available
+on the GENDF tape.  Most materials have only free-gas scattering
+available, and the appropriate values would be \cword{mti}=221
+and \cword{mtc}=0.  The conventional values to use for reactor
+moderator materials are given in Table~\ref{thermal}.
+\index{thermal MT numbers}
+
+\vspace{16 pt}
+\begin{table}[b]
+\caption[Conventional thermal material MT numbers used in WIMSR, GROUPR
+ and THERMR]{Conventional values for thermal MT numbers (\cword{mti}
+ and \cword{mte}) used in WIMSR, \hyperlink{sGROUPRhy}{GROUPR}, and
+\hyperlink{sTHERMRhy}{THERMR}}
+\label{thermal}
+\setlength{\extrarowheight}{1pt}
+\begin{center}
+\begin{tabular}{lll}
+Thermal Material & \cword{MTI} Value & \cword{MTC} Value \\ \hline
+H in H$_2$O & 222 &   \\
+D in D$_2$O & 228 &   \\
+Be metal & 231 & 232 \\
+Graphite & 229 & 230 \\
+Benzine  &  227  &  \\
+Zr in ZrH & 235 & 236 \\
+H in ZrH  &  225 & 226 \\
+Be(BeO)  &  233 & 234 \\
+O(BeO)  & 237 & 238 \\
+O(UO$_2$) & 239 & 240 \\
+U(UO$_2$) & 241 & 242 \\
+H in Polyethylene & 223 & 224 \\
+Al metal & 243 & 244 \\
+Fe metal & 245 & 246 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Continuing with Card 4, WIMSR allows P$_1$ scattering
+to be treated in two ways.  If
+\cword{ip1opt}=0, the P$_1$ matrix for the material is written
+to the WIMS output file explicitly.   This option is normally
+used only for major moderator materials, such as the components
+of water.  The other option, \cword{ip1opt}=1, instructs the
+code to use the P$_1$ data to transport-correct the P$_0$
+elastic scattering matrix; that is, the ingroup elements of
+the P$_0$ matrix are reduced by the sum over all outgoing
+groups of the P$_1$ matrix for that ingoing group.
+
+The \cword{inorf} parameter can be set to 1 to eliminate the
+resonance-integral table for nu*fission from the WIMS output.
+Some of the higher actinides are treated this way for some
+WIMS libraries.  The \cword{isof} flag is set to 1 to tell
+WIMSR to produce a fission spectrum.  This is usually done for
+main fissile materials, such as $^{235}$U and $^{239}$Pu.  The
+\cword{ifprod} flag is used to control whether resonance tables
+are included for fission products.
+
+WIMSR has some capability to format burn data for incorporation
+into a WIMS library (see cards 5 and 6).  This part of the code
+has not been used or tested very much.
+
+The final card gives the intermediate-resonance $\lambda$
+values for each of the resonance groups.  Methods for obtaining
+these quantities with NJOY are outlined in Section~\ref{ssWIMSR_RI}.
+
+
+\subsection{Coding Details}
+\label{ssWIMSR_coding}
+
+The main entry point for WIMSR is subroutine \cword{wimsr}
+exported by module \cword{wimsr}\index{modules!wimsr@{\ty wimsr}}.
+WIMSR starts by reserving the scratch files with unit numbers
+from 10 through 14.  The next step is to read and echo the user's input.
+Note that the array \cword{scr} is allocated.  The code will issue
+error messages if more than the default \cword{nwscr}=30000 words
+are needed.  Subroutine \cword{wminit} is then called.  It looks at
+\index{wminit@{\ty wminit}}
+the record MF=1/MT=451 for the desired material on the input GENDF tape
+to obtain the group structure.  It then reads through the entire GENDF
+tape for this material to set the fission flags \cword{i318} and
+\cword{i618} and to count the number of temperatures that are
+available.  The fission flag is used to handle cases where
+both MT=18 and the partial fission representation (MT=19, 20, ...)
+appear on the GENDF tape.
+
+Subroutine \cword{resint} is called next to compute the WIMS
+\index{resint@{\ty resint}}
+resonance integrals from the
+\hyperlink{sGROUPRhy}{GROUPR} self-shielded cross sections.
+It reads through the entire GENDF tape and extracts the flux,
+absorption cross section, fission cross section, and elastic
+cross section versus temperature and sigma-zero for all of the
+resonance groups.  It also extracts the reference-group flux
+versus temperature and sigma-zero and the fission $\overline{\nu}$
+value.  The latter is computed from File 6 with delayed contributions
+from MT=455 in File 3.  Once all the data are in place,
+\cword{resint} uses the $\overline{\nu}$ values to convert
+the self-shielded fission cross sections into self-shielded
+$\overline{\nu}\sigma_f$ values.
+
+If the user has asked for a value of \cword{ntemp} that is larger
+than the number of temperatures on the GENDF tape for this material,
+\cword{resint} will duplicate the values from the last temperature
+given into the higher temperature positions for the flux and
+the absorption cross section.
+
+The final step in \cword{wminit} is to convert the self-shielded
+cross sections into resonance integrals using the method described
+in Section~\ref{ssWIMSR_RI}.  These
+resonance integrals are written out to a scratch
+file and displayed on the output listing using subroutine \cword{rsiout}.
+\index{rsiout@{\ty rsiout}}
+The elastic resonance integrals are only written for WIMS-E.
+
+Next, the main program calls \cword{xsecs} to process the cross
+\index{xsecs@{\ty xsecs}}
+sections.  The outermost loop is over temperature.  A distinction
+has to be made between the temperature-independent matrix data,
+such as (n,2n) and (n,n$'$) reactions, and the temperature-dependent
+matrix data, such as thermal scattering.  While reading through
+the GENDF tape, the following quantities are extracted and
+stored using the allocatable arrays indicated:
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\begin{singlespace}
+
+\item[\cword{abs1}\hfill] radiative capture (MT=102);
+
+\item[\cword{abs2}\hfill] other absorption reactions (MT=103-150);
+
+\item[\cword{sf0}\hfill] the fission cross section (MT=18);
+
+\item[\cword{ab0}\hfill] also the fission cross section (MT=18);
+
+\item[\cword{sn2n}\hfill] the (n,2n) cross section;
+
+\item[\cword{scat}\hfill] the elastic scattering cross section (MT=2),
+possibly using the value corresponding to the reference sigma-zero
+value instead of infinite dilution;
+
+\item[\cword{xi}\hfill] the log slowing down $\xi$ (MT=252);
+
+\item[\cword{snus}\hfill] the fission yield $\overline{\nu}\sigma_f$
+computed from either 3/452 or File 6 plus the delayed part
+from 3/455;
+
+\item[\cword{chi}\hfill] the fission spectrum $\chi$ computed from
+either 5/455 or File 6 plus the delayed contributions from
+MT=455;
+
+\item[\cword{xs}\hfill] the temperature-dependent scattering matrix,
+containing \cword{mti} and \cword{mtc}, the thermal inelastic
+and elastic reactions, respectively;
+
+\item[\cword{l1}\hfill] the smallest group number for a nonzero element
+of the nonelastic part of the matrix stored in \cword{xs};
+
+\item[\cword{l1e}\hfill] the smallest group number for a nonzero element
+of the elastic part of the matrix stored in \cword{xs};
+
+\item[\cword{l2}\hfill] the largest group number for a nonzero element
+of the nonelastic part of the matrix stored in \cword{xs};
+
+\item[\cword{l2e}\hfill] the largest group number for a nonzero element
+of the elastic part of the matrix stored in \cword{xs}; and
+
+\item[\cword{csp1}\hfill] the P$_1$ cross section for the thermal
+matrix obtained by summing over the P$_1$ matrix elements for
+scattering  from each group.
+
+\end{singlespace}
+\end{list}
+
+Once all the data for a temperature have been stored in memory,
+several additional operations are performed on them.  The initial
+absorption cross section in \cword{ab0} contains the fission
+cross section.  The final value is formed by adding the data in
+\cword{abs1} and \cword{abs2}, and then subtracting the (n,2n)
+cross section in \cword{sn2n}.  The final transport cross section in
+\cword{xtr} is formed by adding the absorption and subtracting the
+transport correction (\cword{csp1}).  The slowing-down power per unit
+lethargy is computed from $\xi$, $\sigma_{scat}$, and the group
+boundary energies at \cword{iegb}.
+
+As usual, the treatment of fission is more complex.  For some
+combinations of options, $\overline{\nu}$ is computed by dividing
+the fission neutron production cross section by the fission cross
+section, and for others, the value of $\overline{\nu}\sigma_f$ has
+to be computed from $\overline{\nu}$ and $\sigma_f$.  In addition,
+the fission spectrum, if requested, is normalized.
+
+Subroutine \cword{xseco} starts with a section that writes and
+prints the temperature-independent part of the WIMS data.  This
+section is skipped when \cword{xseco} is called with \cword{itemp>1}.
+\index{xseco@{\ty xseco}}
+It first processes the temperature-independent vectors: potential
+scattering, slowing-down power, transport, absorption, IR
+lambda, and sometimes (n,2n).  Next, it processes the fission
+vectors nu*sigf and sigf.  The temperature-independent part of
+the scattering matrix includes the fast groups and the
+resonance groups (this normally totals 27 groups).  It is
+packed by retrieving the low (\cword{lone}) and high (\cword{ltwo})
+limits for each band of nonzero elements from \cword{l1} and
+\cword{l2}, which were loaded in \cword{xsecs}.  They are used to
+compute the number of elements in the band and the location of the
+self-scatter element in the band (always 1 for this part of the matrix,
+because there is no upscatter).  They are also used to direct
+how the numbers in \cword{xs} are moved into \cword{scr} with
+the zeros outside of the band removed.  Note that the data are
+stored as follows: location of self-scatter for group 1, number
+of elements in band for group 1, the band of elements for group 1,
+location of self-scatter for group 2, number of elements in group 2,
+the band of elements for group 2, {\it etc.}  If the number of elements
+in a band is zero, the two counts are there, but no band data are
+given.  After being printed, the temperature-independent part of
+the matrix is written out on a scratch file \cword{nscr2}.
+
+The next part of \cword{xseco} is executed for \cword{itemp}=1
+and all the higher temperatures.  It prints and writes the
+temperature-dependent transport, and absorption cross sections
+(they are defined in the thermal range only, normally groups
+28-69).  Note that the absorption cross section is also written
+out on scratch file \cword{nscr3}.  If available, the
+temperature-dependent fission neutron production cross section and
+fission cross section are also printed and written.  The
+temperature-dependent scattering matrix is processed as described
+above, except that the incident-neutron group range is limited to
+the thermal range (normally 28-69).  Note that the location of the
+self-scatter element will no longer be 1 for these data, because of
+the presence of upscatter.  The packed matrix length and the packed
+data are written out to scratch file \cword{nscr3}.
+
+If the user has requested that P$_1$ scattering matrices be
+constructed for the material, subroutine \cword{p1scat} is called.
+\index{p1scat@{\ty p1scat}}
+It uses methods similar to those described above.  The results
+are printed and written onto \cword{nscr4} by \cword{p1sout}.
+\index{p1sout@{\ty p1sout}}
+
+The last step in WIMSR is to call \cword{wimout} to prepare the
+\index{wimout@{\ty wimout}}
+final WIMS data library.  The first card on \cword{nout} is slightly
+different for WIMS-D and WIMS-E.  It is followed by lines for
+the burnup data using numbers obtained from common storage.
+
+The data needed for the material identifier card are available
+in global storage.  The temperature-independent data are read from
+\cword{nscr2} and written to \cword{nout}.  Similarly, the
+temperature-dependent data are read from \cword{nscr3}
+(although the \cword{tempr} array is obtained from global storage).
+For WIMS-D, a record mark is written at this point.
+
+The resonance data, if needed, are read from \cword{nscr1} and written
+to \cword{nout}.  The format is slightly different for WIMS-D and WIMS-E.
+The WIMS-D version has extra lines containing \cword{ntnp}, the product
+of the number of temperatures and the number of sigma-zero values, and
+it has a record mark after the resonance data block.  The WIMS-E
+version has an extra section of resonance-integral data for computing
+the self-shielded elastic scattering cross section.
+
+If a fission spectrum was requested, it is written out next by
+using data from the allocatable array \cword{uff}.  If a P$_1$ matrix
+was requested, it is read in from \cword{nscr4} and written out
+onto \cword{nout}.
+
+This completes the entire WIMS library.  The final step takes place
+in the main WIMSR program, where the normal timing and storage
+usage messages are printed.
+
+
+\subsection{WIMS Data File Format}
+\label{ssWIMSR_fileformat}
+
+The following section describes the WIMS data output provided
+by WIMSR.  It consists of a number of logical blocks of
+information written out in coded form.  The output is intended
+to be used by a library maintenance code to prepare a binary
+library for use by the WIMS code.
+\index{WIMS format}
+
+\noindent
+
+\underline{Library Header \cword{(2I5)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{NFID}\hfill] material identifier
+\item[\cword{NPOS}\hfill] position to insert material on a
+    large multimaterial library (given for WIMS-E only)
+\end{list}
+
+\noindent
+\underline{Burnup Data \cword{(3(1PE15.8,I6))}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(YIELD(I),IFISP(I),I=1,JCC/2}] fission yields and
+   fission product flag
+\end{list}
+
+\noindent
+\underline{Material Identifier Data \cword{(I6,1PE15.8,5I6)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{IDENT}\hfill] material identifier
+\item[\cword{AWR}\hfill] atomic weight ratio to neutron
+\item[\cword{IZNUM}\hfill] atomic charge number $Z$ for this material
+\item[\cword{IFIS}\hfill] fission and resonance flag: 0=non-fissile with
+no resonance tabulation, 1=non-fissile with resonance absorption only,
+2=fissile with resonance absorption only ({\it e.g.,} $^{240}$Pu),
+3=fissile with resonance absorption and fission, 4=fissile with no
+resonance tabulations.
+\item[\cword{NTEMP}\hfill] number of temperatures
+\item[\cword{NRESTB}\hfill] number of resonance tables included (0 or 1)
+\item[\cword{ISOF}\hfill] fission spectrum flag (0=no, 1=yes)
+\end{list}
+
+\noindent
+\underline{Temperature-Independent Vectors \cword{(1P5E15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(SIGP(I),I=1,N2)}\hfill] $\sigma_p$ for resonance groups
+\item[\cword{(XX(I),I=1,N2)}\hfill] $\xi\sigma_s/\tau$ for resonance groups
+\item[\cword{(XTR(I),I=1,N1}+\cword{N2)}\hfill] transport cross section for
+  fast and resonance groups
+\item[\cword{(ABS(I),I=N1}+\cword{N2)}\hfill] absorption cross section for fast
+    and resonance groups
+\item[\cword{(DUM,I=1,N2)}\hfill] unused dummy for resonance groups
+\item[\cword{(ALAM(I),I=1,N2)}\hfill] IR $\lambda$ values for resonance groups
+\end{list}
+
+\noindent
+\underline{Temperature-Independent Fission (\cword{IFIS>1} only)
+   \cword{(1P5E15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(NSIGF(I),I=1,N1)}\hfill] $\overline{\nu}\sigma_f$ for fast
+    and resonance groups
+\item[\cword{(SIGF(I),I=1,N1)}\hfill] $\sigma_f$ for fast and resonance groups
+\end{list}
+
+\noindent
+\underline{P$_0$ Matrix Length \cword{(I15)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{NDAT}\hfill] length of P$_0$ scattering block to follow
+\end{list}
+
+\noindent
+\underline{Temperature-Independent P$_0$ Matrix \cword{(1PE15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(XS(I),I=1,NDAT)}\hfill] packed scattering data: \cword{IS} for
+     group 1, \cword{NS} for group 1, \cword{NS} scattering elements
+     for group 1, \cword{IS} for group 2, \cword{NS} for group 2, {\it etc.},
+     through all of the fast and resonance groups (normally through
+     group 27).  \cword{IS} is the position of self-scatter in the
+     band of scattering elements (always 1 here), and \cword{NS} is
+     the number of elements in the band.
+\end{list}
+
+\noindent
+\underline{Temperature Values \cword{(1PE15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(TEMP(I),I=1,NTEMP)}\hfill] temperatures in Kelvin
+\end{list}
+
+\begin{center}
+   \it
+   Repeat the following 4 blocks for\\
+   each of the \cword{NTEMP} temperatures.
+\end{center}
+
+\noindent
+\underline{Temperature-Dependent Transport and Absorption \cword{(1PE15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(XTR(I),I=1,N3)}\hfill] transport cross section
+    for thermal groups
+\item[\cword{(ABS(I),I=1,N3)}\hfill] absorption cross section
+    for thermal groups
+\end{list}
+
+\noindent
+\underline{Temperature-Dependent Fission Vectors \cword{(1PE15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(NSIGF(I),I=1,N3)}\hfill] fission neutron production
+     cross section $\overline{\nu}\sigma_f$ for thermal groups
+\item[\cword{(SIGF(I),I=1,N3)}\hfill] fission cross section $\sigma_f$
+    for thermal groups
+\end{list}
+
+\noindent
+\underline{Temperature-Dependent P$_0$ Matrix Length \cword{(I15)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{NDAT}\hfill] length of P$_0$ scattering block
+\end{list}
+
+\noindent
+\underline{Temperature-Dependent P$_0$ Matrix \cword{(1PE15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{XS(I),I=1,NDAT)}\hfill] packed scattering data: \cword{IS} for
+     group N, \cword{NS} for group N, \cword{NS} scattering elements
+     for group N, \cword{IS} for group N+1, \cword{NS} for group N+1, {\it etc.}
+     through the last group (normally group 69).  \cword{IS} is the
+     position of self-scatter in the band of scattering elements, and
+    \cword{NS} is the number of elements in the band.
+\end{list}
+
+\noindent
+\underline{Record Mark \cword{('   999999999999')}, WIMS-D only}
+\vspace{12pt}
+
+
+\noindent
+\underline{Resonance Control Data}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{RID}\hfill] resonance set identifier
+\item[\cword{NTEMP}\hfill] number of temperatures for this resonance set
+\item[\cword{NSIGZ}\hfill] number of background cross section values
+\end{list}
+
+\noindent
+\underline{Absorption Resonance Data}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(TEMP(I),I=1,NTEMP)}\hfill] temperatures
+\item[\cword{(SIGZ(I),I=1,NSIGZ)}\hfill] background cross section values
+\item[\cword{(RESA(I),I=1,NTEMP}*\cword{NSIGZ}\hfill] absorption resonance
+   integrals
+\end{list}
+
+\noindent
+\underline{Nu*fission Resonance Data}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(TEMP(I),I=1,NTEMP)}\hfill] temperatures
+\item[\cword{(SIGZ(I),I=1,NSIGZ)}\hfill] background cross section values
+\item[\cword{(RESNF(I),I=1,NTEMP}*\cword{NSIGZ}\hfill] nu*fission resonance
+   integrals
+\end{list}
+
+\noindent
+\underline{Scattering Resonance Data, WIMS-E only}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(TEMP(I),I=1,NTEMP)}\hfill] temperatures
+\item[\cword{(SIGZ(I),I=1,NSIGZ)}\hfill] background cross section values
+\item[\cword{(RESS(I),I=1,NTEMP}*\cword{NSIGZ}\hfill] scattering resonance
+   integrals
+\end{list}
+
+
+\noindent
+\underline{Record Mark \cword{('   999999999999')}, WIMS-D only}
+\vspace{12pt}
+
+
+\noindent
+\underline{Fission Spectrum}
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{(FSPECT(I),I=1,NGND)}\hfill] fission spectrum $\chi$
+\end{list}
+
+
+\begin{center}
+     \it
+     Repeat the following two blocks\\
+     for each of \cword{NTEMP} temperatures.
+\end{center}
+
+\noindent
+\underline{P$_1$ Matrix Length \cword{(I15)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{NDAT}\hfill] length of P$_1$ scattering block
+\end{list}
+
+\newpage
+\noindent
+\underline{P$_1$ Matrix \cword{(1PE15.8)}}
+
+\begin{list}{}{\setlength{\leftmargin}{2in}\setlength{\labelwidth}{1.7in}}
+\item[\cword{XS(I),I=1,NDAT)}\hfill] packed scattering data: \cword{IS} for
+     group 1, \cword{NS} for group 1, \cword{NS} scattering elements
+     for group 1, \cword{IS} for group 2, \cword{NS} for group 2, {\it etc.},
+     through the last group (normally group 69).  \cword{IS} is the
+     position of self-scatter in the band of scattering elements, and
+     \cword{NS} is the number of elements in the band.
+\end{list}
+
+\subsection{WIMSR Auxiliary Codes}
+\label{ssWIMSR_aux}
+
+The WIMSR output as described above is not directly usable by
+WIMS.  Two library-maintenance codes are used at Los Alamos.
+An unpublished code called FIXER is used to modify (fix up) an
+existing WIMS-D library, or to create a new one, using WIMSR
+output.  It processes burnup data, main data, resonance data,
+and P$_1$ matrices.  In its fix-up mode, it can replace,
+delete, or add a material.  another unpublished code called
+WRITER is a code to read a WIMS-D library in coded form, convert
+it to binary form, and list it in a user readable form.
+\index{FIXER}
+\index{WRITER}
+\index{WIMS!WIMS-D}
+
+\subsection{Error Messages}
+\label{ssWIMSR_msg}
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{error in wimsr***too many time dependent isotopes}] ~\par
+  See \cword{nymax}=100 in the global variables at the beginning of
+  the \cword{wimsm} module.
+
+\item[\cword{error in wminit***desired material is not on gendf tape}] ~\par
+   Check whether the right input GENDF input tape was mounted.
+
+\item[\cword{error in wminit***incorrect group structure}] ~\par
+   The group structure on the input GENDF file does not agree
+   with the one specified in the WIMSR input deck.
+
+\item[\cword{message from wminit---mat xxxx mf xx has both mt18 and ...}] ~\par
+   If both MT=18 and MT=19 are present in File 3 or File 6, WIMSR
+   must make a choice of which to use.  For materials with partial
+   fission reactions, \hyperlink{sGROUPRhy}{GROUPR} normally
+   does not process the fission
+   matrix from MT=18.  It is more accurate to use the sum of the
+   partial fission matrices.
+
+\item[\cword{message from wminit---mat xxxx has no mf3, mt252 ...}] ~\par
+   In the absence of an input section for $\overline{\mu}$, it will be computed
+   assuming isotropic CM scattering.
+
+\item[\cword{error in resint***storage exceeded}] ~\par
+   The size of the allocatable scratch array is set by the
+   global parameter \cword{nwscr}=30000.
+
+\item[\cword{error in xsecs***storage exceeded}] ~\par
+   The size of the allocatable scratch array is set by the
+   global parameter \cword{nwscr}=30000.
+
+\item[\cword{message from xsecs---ref sig0 xxx not on list...}] ~\par
+   In this case, the first entry will be used as the default.
+
+\item[\cword{message from xsecs---nu-bar calculated from fission ....}] ~\par
+   This is just to alert the user to this situation.
+
+\item[\cword{message from xsecs---use only xx temps for mat xxxx}] ~\par
+   The thermal inelastic sections are missing from some of the
+   higher temperatures on the input GENDF tape.  This message
+   tells you how many temperatures can be used correctly.  Check
+   the \hyperlink{sTHERMRhy}{THERMR} and
+   \hyperlink{sGROUPRhy}{GROUPR} runs if more temperatures are needed.
+
+\item[\cword{error in xseco***scratch storage exceeded}] ~\par
+   The size of the allocatable scratch array is set by the
+   global parameter \cword{nwscr}=30000.
+
+\item[\cword{error in p1scat***storage exceeded}] ~\par
+   The size of the allocatable scratch array is set by the
+   global parameter \cword{nwscr}=30000.
+
+\item[\cword{error in p1scat***no p1 matrices found for mat xxxx}] ~\par
+   Check the \hyperlink{sGROUPRhy}{GROUPR} run to make sure
+   that P$_1$ matrices have been requested for the desired materials.
+
+\item[\cword{error in p1scat***no temperature-dependent reactions ...}] ~\par
+   Check the \hyperlink{sGROUPRhy}{GROUPR} run to make sure that
+   the elastic scattering matrix was requested.
+
+\end{singlespace}
+\end{description}
+
+\cleardoublepage
+

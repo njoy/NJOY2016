@@ -1,0 +1,1433 @@
+\section{NJOY}
+\label{sNJOY}
+
+\hypertarget{sNJOYhy}{The}
+NJOY module of the NJOY system contains the main program for the
+system, which directs the sequence of other modules that makes up the
+desired calculational path.  This section of the report also describes
+a number of subsidiary modules containing common data structures,
+subroutines, and functions for use in the other modules.  This manual
+describes NJOY version 2016
+(or NJOY2016\index{NJOY2016|textbf} for short).
+
+\subsection{The NJOY Program}
+\label{ssNJOY}
+
+The \cword{njoy} program starts by initializing the page size
+for blocked-binary ENDF files, opening the output listing file,
+and writing the NJOY banner on the output listing.  It then sets
+up a loop that simply reads a module name and calls the requested module.
+The loop continues until the ``stop'' name is read, and then NJOY exits.
+The first card read by any module contains the unit numbers for the
+various input and output files.  In this way, the output of one module
+can be assigned to be the input of another module, thereby linking the
+modules to perform the desired processing task.  An example of the
+linking procedure\index{linking modules} is given below:
+
+\small
+\begin{ccode}
+
+     [mount an ENDF file as tape20]
+   -- Optional comment card (signified by "dash" "dash" "space")
+   reconr
+   20 21
+     [input lines for RECONR]
+   groupr
+   20 21 0 22
+     [input lines for GROUPR]
+   dtfr
+   22 23 21
+     [input lines for DTFR]
+   stop
+
+\end{ccode}
+\normalsize
+
+Optional comment cards may only appear at the point in an input deck
+where a module name is expected.  Multiple comment cards are allowed
+and each must start with the three character string ``dash" ``dash" ``space".
+An important feature of a good modular system is that there be a
+minimum of interactions between the modules in order to reduce
+side effects.  In the NJOY system, modules communicate only
+by means of the input and output units specified as shown above,
+and through a limited number of common constants provided by
+the subsidiary modules.  The common constants used in the NJOY
+main program are in the following modules:
+\begin{singlespace}
+\begin{description}
+\item[version] provides the version number string \cword{vers},
+  initially ``2016.0,'' and the corresponding date \cword{vday},
+  initially ``ddmmm16,''
+\item[locale] provides localization information, including the
+  laboratory and machine strings, initially ``our-lab'' and
+  ``our-mx,''
+\item[mainio] provides the system unit numbers, \cword{nsysi},
+  \cword{nsyso}, and \cword{nsyse},
+\item[endf] provides the page size for blocked-binary ENDF files,
+  \cword{npage}.  We recommend users not change this value as there
+  may still be some legacy fixed array definitions sprinkled in
+  the code that were sized based upon the current value.
+\end{description}
+\end{singlespace}
+\index{vers@{\ty vers}}
+\index{vday@{\ty vday}}
+\index{nsysi@{\ty nsysi}}
+\index{nsyso@{\ty nsyso}}
+\index{nsyse@{\ty nsyse}}
+\index{npage@{\ty npage}}
+\index{blocked binary}
+
+\noindent
+The input instructions for the NJOY module are given as comment cards
+at the beginning of the module.  They are reproduced here for the
+convenience of the user.\index{NJOY input}\index{input!NJOY}
+
+\small
+\begin{ccode}
+
+!---input specifications (free format)----------------------------------
+!
+! card 1       module option
+!
+!    module    six character module name, e.g., reconr.
+!              it is not necessary to use quotes.
+!
+!          repeat card 1 for each module desired, and
+!          use the name "stop" to terminate the program.
+!
+! See the comments at the start of each module for its specific input
+! instructions.
+!
+!-----------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+NJOY is usually invoked from a terminal or command window, or from a
+script.  The standard I/O redirection syntax is used to control the
+choice of an input file:
+
+\small
+\begin{ccode}
+
+   njoy < test1
+
+\end{ccode}
+\normalsize
+
+\noindent
+Of course, the system messages that normally appear in the terminal
+or command window could be redirected to a file by appending
+something like ``\cword{ > out1}'' to this execution line.
+
+\subsection{Interface Files}
+\label{ssNJOY_interface}
+
+Another requirement of a good modular system is that the input and
+output files be in a common format so that modules can work with each
+other's output in a flexible way.  Since NJOY is basically an ENDF
+processing code, ENDF-compatible formats were chosen for linking
+modules together.  ``Input'' and ``output'' modules can be specified
+to communicate with other formats (the ``outside world'').  In the
+example above, \cword{tape23} is an example of such an external file.
+The other tapes\footnote{The word ``tape'' will often be used in
+this report as a synonym for ``file''; an actual physical tape is
+not implied.  This is consistent with ENDF custom, where the phrase
+``ENDF tape'' is traditional.  Furthermore, in most NJOY installations,
+the actual files on the machine will have names like ``tape23.''} in the
+example are ENDF-type files, and the sequence shown is fairly typical.
+If the user in the example needs data at a higher temperature, the
+\hyperlink{sRECONRhy}{RECONR}\index{RECONR} point-ENDF,
+or PENDF\index{PENDF}, file (\cword{tape21}) can be run through
+\hyperlink{sBROADRhy}{BROADR}\index{BROADR} to produce
+a Doppler-broadened PENDF file for
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR}.  Many other
+combinations are possible simply by rearranging the sequence of module
+names and changing the unit numbers that link them.  These
+common-format files also provide for convenient restarts\index{restart}
+at many points in the calculational sequence.  For example, if a user
+is trying to produce pointwise cross sections at 300K, 600K, and 900K
+and runs out of time while working on 900K, he or she can save the
+partially completed PENDF file and restart from 600K.  Multigroup
+modules use specially constructed groupwise-ENDF formats
+(GENDF)\index{GENDF} that are compatible with the multigroup output
+modules.  A GENDF file from \hyperlink{sGROUPRhy}{GROUPR}
+can be saved in the NJOY data library, run through
+\hyperlink{sCCCCRhy}{CCCCR} to produce one output\index{CCCCR} format,
+and then run through \hyperlink{sMATXSRhy}{MATXSR} \index{MATXSR}
+for another output format.
+
+In NJOY, unit numbers from 20 through 99 are used for storing results or
+linking modules, units 10 through 19 are reserved for scratch files,
+which will be destroyed after a module has completed its job, and units
+below 10 are reserved for the system.  Negative unit numbers indicate
+binary mode.
+
+There are special utility routines to open, close, and reposition files.
+These routines automatically handle the NJOY conventions on positive or
+negative unit numbers, scratch files, and so on.  These routines are
+available as the following public calls in module
+\cword{util}\index{modules!util@{\ty util}}:
+\begin{description}
+\begin{singlespace}
+\item[\cword{openz(lun,new)}] ~\par
+Open the unit=\cword{abs(lun)}.  If \cword{lun}$\geq$0, use coded
+(formatted) mode, and if \cword{lun}$\leq$0, use binary mode.
+Destroy on close or job termination if 10$\leq$\cword{lun}$\leq$20.
+If \cword{new}=1, destroy the file on this unit (if it exists)
+and open a new file.
+\index{openz@{\ty openz}}
+
+\item[\cword{closz(lun)}] ~\par
+Close the file with unit=\cword{abs(lun)}.  Do nothing if
+\cword{lun}=0 or if \cword{lun} refers to a scratch file.
+\index{closz@{\ty closz}}
+
+\item[\cword{repoz(ntape)}] ~\par
+Rewind the file with unit=\cword{abs(ntape)}.
+Do nothing if \cword{ntape}=0.
+\index{repoz@{\ty repoz}}
+
+\item[\cword{skiprz(lun,nrec)}] ~\par
+Skip \cword{nrec} records forward or backwards.
+Caution: Some systems have a call for this option; others can use
+loops of backspace and dummy reads as given in the NJOY code.
+Both these operations work well for systems that use
+``linked-list'' data structures for I/O files.  On some systems,
+however, backspace is implemented as a rewind followed by forward
+dummy reads to the desired location.  In such cases (for example,
+VAX), \cword{skiprz} must be recoded to avoid calling backspace
+repeatedly.  This caution is somewhat moot for current operating
+systems.
+\index{backspace}
+\index{skiprz@{\ty skiprz}}
+\end{singlespace}
+\end{description}
+
+\subsection{Free Format Input}
+\label{ssNJOY_freeformat}
+
+Free-form input is handled by the standard Fortran-90 READ(* method.
+Previous versions of NJOY used a special routine \cword{FREE} for
+free-form input.  This routine was developed before free-form input
+was routinely available in Fortran, but it has now been retired.  Some
+capabilities that were provided by \cword{FREE}, such as repeat fields,
+are no longer supported using READ(*.  Basically, users can type in
+their input quantities separated by spaces.  Lines can be terminated
+early with the slash (/) symbol, leaving any variables not provided
+at their default values.  Whether all input variables are defined in
+a users input record or not we recommend that every input record be
+terminated with a slash (/).  This assures that all variables have
+been read, or assigned their default values, and provides a more
+robust input file if future code changes specify additional input
+variables.  In the absence of a slash, fortran i/o rules may cause
+the next input record to be read; an action that is certain to cause
+the job to crash.  Text values consisting of single words
+can be entered without delimiters, but more complex strings containing
+spaces must be delimited using the single-quote character (').  Real
+numbers can be entered in a variety of forms; \cword{1}, \cword{1.},
+\cword{1.e0}, and \cword{1e0} should all be equivalent.  Examples of
+NJOY input will be found throughout this report.
+
+
+\subsection{ENDF Input-Output}
+\label{ssNJOY_ENDF_IO}
+
+The ENDF format for evaluated nuclear data is well documented
+\index{ENDF!ENDF format}
+elsewhere,\cite{ENDF102} but for the convenience of the reader,
+some features of the format will be described here.
+
+ENDF ``tapes" are subdivided internally into ``materials'' (MAT),
+``files'' (MF), and ``sections'' (MT).  A MAT contains all data for
+a particular evaluation for an element or isotope (for example, MAT=825
+is an evaluation for $^{16}$O in ENDF/B-VII).  A file contains a
+particular type of data for that MAT: MF=3 is cross-section
+{\it versus} energy data; MF=15 contains secondary photon energy
+distributions.   A section refers to a particular reaction [for
+example, MT=2 is elastic scattering and MT=107 is the ($n,\alpha$)
+reaction].  Every record contains the current MAT, MF and MT values.
+Two materials are separated by a record with MAT=0 (the material-end
+or MEND record).  Two files are separated by a record with MF=0 (the
+file-end or FEND record).  Two sections are separated by a record
+with MT=0 (the section-end or SEND record).  Finally, the tape is
+terminated with a record with MAT$\,=-$1 (tape-end or TEND record).
+
+NJOY has a set of utility subroutines for locating desired positions
+on an ENDF tape.  They are located in module
+\cword{endf}\index{modules!endf@{\ty endf}}, and they
+can be made available to any other module with the statement
+``\cword{use endf}.''
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{findf(mat,mf,mt,nin)}] ~\par
+ Search \cword{nin} backward or forward for the first record with this
+ MAT, MF, MT.  Issue a fatal error message if the record is not found.
+\index{findf@{\ty findf}}
+
+\item[\cword{tosend(nin,nout,nscr,a)}]
+
+\item[\cword{tofend(nin,nout,nscr,a)}]
+
+\item[\cword{tomend(nin,nout,nscr,a)}]
+
+\item[\cword{totend(nin,nout,nscr,a)}] ~\par
+Skip forward past the next SEND, FEND, MEND, or TEND card on NIN.
+If \cword{nout} and/or \cword{nscr} are nonzero, copy the records.
+Input and output files must be in the same mode.
+\index{tosend@{\ty tosend}}
+\index{tofend@{\ty tofend}}
+\index{tomend@{\ty tomend}}
+\index{totend@{\ty totend}}
+\end{singlespace}
+\end{description}
+
+The data on an ENDF tape are written in eight different kinds of
+``structures'', each of which has a binary and a formatted form.
+In modern systems, formatted data is normally coded in ASCII.  The
+words ``coded,'' ``formatted'', and ``ASCII'' will often be
+used interchangeably here). The structures are:
+(1) TAPEID\index{TAPEID@{\ty TAPEID}}, a character-string title
+for the tape; (2) CONT\index{CONT@{\ty CONT}}, a control record
+(includes SEND, FEND, MEND, and TEND); (3) LIST\index{LIST@{\ty LIST}},
+a list of data items; (4) HOLL, a list of character-string words (what
+used to be called Hollerith data); (5) TAB1\index{TAB1@{\ty TAB1}},
+a one-dimensional tabulation of data pairs; (6) TAB2\index{TAB2@{\ty TAB2}},
+a two-dimensional tabulation control record; (7) INTG\index{INTG@{\ty INTG}},
+a special structure of integer fields used for encoding correlation data,
+and (8) DICT\index{DICT@{\ty DICT}}, a directory or index (it used to be
+called the ``dictionary'') to the sections found in the MAT.  It should
+be noted that HOLL is a special case of LIST and DICT is a special
+case of CONT.
+
+In binary mode, each structure is written as a single logical record
+as follows:
+
+\begin{description}
+\begin{singlespace}
+\item[{\cword{TAPEID[MAT,MF,MT/A(I),I=1,17]}}]~\footnote{In
+ENDF/B manuals, the slash is used as a logical divider.  Replace
+it with a comma and add parentheses when constructing a FORTRAN
+I/O list.} \par where \cword{MAT}=tape number,
+\cword{MF}=\cword{MT}=0, and the character data are 16A4,A2;
+
+\item[{\cword{CONT[MAT,MF,MT/C1,C2,L1,L2,N1,N2]}}]
+
+\item[{\cword{LIST[MAT,MF,MT/C1,C2,L1,L2,N1,N2/A(I),I=1,N1]}}]
+
+\item[{\cword{HOLL[MAT,MF,MT/C1,C2,L1,L2,N1,N2/A(I),I=1,N1]}}] ~\par
+where \cword{MF}=1, \cword{MT}=451, and each line of
+Hollerith characters is stored in \cword{A} as 16A4,A2;
+
+\item[{\cword{TAB1[MAT,MF,MT/C1,C2,L1,L2,N1,N2/NBT(I),JNT(I),I=1,N1}}] ~\par
+\cword{/X(I),Y(I),I=1,N2]} where \cword{NBT} and \cword{JNT} are the
+interpolation table and Y(X) is the one-dimensional tabulation;
+
+\item[{\cword{TAB2[MAT,MF,MT/C1,C2,L1,L2,N1,N2/NBT(I),JNT(I),I=1,N1]}}] ~\par
+where the interpolation table is to be used to control a series of
+\cword{N2} LIST or TAB1 structures that follow;
+
+\item[{\cword{INTGIO[MAT,MF,MT/A(I),I=1,NW]}}] ~\par
+where each line of the array can contain 18 I3 integers, 13 I4 integers,
+11 I5 integers, 9 I6 integers, or 8 I7 integers.  The specific format is
+governed by the value of \cword{L1} from the \cword{CONT} record
+immediately preceding this data structure.
+
+\item[{\cword{DICT[MAT MF,MT/0.,0.,MFS,MTS,NCS,MODS]}}] ~\par
+where there is a record for each section in the material
+(\cword{MFS}, \cword{MTS}) giving the card count (\cword{NCS})
+for that section.  For ENDF/B-V, \cword{MODS} indicates the
+revision number for that section.
+\end{singlespace}
+\end{description}
+
+The ENDF format manual\cite{ENDF102} explains how these
+structures are combined to represent various physical quantities.
+
+In formatted mode, each structure is broken up into many card images, each
+containing 6 data words, followed by MAT, MF, MT, and a line sequence
+number.  There is no intrinsic limit to the length of a data structure
+written in coded form because a program reading the data can normally be
+coded to use the data in ``pages'' of reasonable size.  The MINX
+code\cite{MINX}\index{MINX} (the predecessor of NJOY) was forced to use
+coded formats to handle the large tabulations found on
+PENDF\index{PENDF} tapes.  Analysis showed that this code used
+large amounts of its running time coding and decoding number formats.
+In order to eliminate this waste, a blocked binary\index{blocked binary}
+format was developed for the ENDF data structures. A structure is
+divided up into several logical records of intermediate length (typically
+about 300 words), each having the following form:
+
+\small
+\begin{ccode}
+
+   [MAT,MF,MT,NB,NW/A(I),I=1,NW]
+
+\end{ccode}
+\normalsize
+
+\noindent
+where \cword{NB} is the number of words remaining in the data
+structure (the last record has \cword{NB}=0).  This type of record
+is compatible with the official ENDF binary record, but is also
+adaptable to paging methods.  The page size can be chosen to optimize
+input/output rates for a particular computer system.
+
+A set of utility subroutines has been devised to handle both
+blocked-binary and paged-BCD input and output.  They are also
+provided by module \cword{endf}\index{modules!endf@{\ty endf}}.
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{contio(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write a control record from/to \cword{a} (\cword{nb}=0,
+\cword{nw}=6).  \cword{contio} uses \cword{asend}, \cword{amend},
+{\it etc.} for END cards.
+\index{contio@{\ty contio}}
+
+\item[\cword{listio(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write the first record or page of a list record from/to
+\cword{a}.  If \cword{nb} is not zero, continue with
+\cword{moreio}, as shown in Examples 1 and 2 that follow.
+\index{listio@{\ty listio}}
+
+\item[\cword{tab1io(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write the first record or page of a TAB1 structure.  If
+\cword{nb} is not zero, use \cword{moreio}.
+\index{tab1io@{\ty tab1io}}
+
+\item[\cword{tab2io(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write a TAB2 structure (\cword{nb}=0).
+\index{tab2io@{\ty tab2io}}
+
+\item[\cword{moreio(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write continuation records or pages from/to the array
+\cword{a}.  Returns \cword{nb}=0 after processing the last record
+or page.
+\index{moreio@{\ty moreio}}
+
+\item[\cword{tpidio(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write the character-string tape identification record from/to array
+\cword{a} (\cword{nb}=0, \cword{nw}=17).
+\index{tpidio@{\ty tpidio}}
+
+\item[\cword{hdatio(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write the first record or page of the character descriptive
+data (MF=1, MT=451) from/to \cword{a}, taking account of the 16A4,A2
+format needed in ASCII mode.  If \cword{nb} is not zero, use
+\cword{moreio}.
+\index{hdatio@{\ty hdatio}}
+
+\item[\cword{intgio(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write an INTG record.
+\index{intgio@{\ty intgio}}
+
+\item[\cword{dictio(nin,nout,nscr,a,nb,nw)}] ~\par
+Read/write the entire material directory from/to \cword{a}.  On entry,
+\cword{nw} is the number of entries in the dictionary.  \cword{moreio}
+is not used.
+\index{dictio@{\ty dictio}}
+
+\item[\cword{asend(nout,ncr)}]
+
+\item[\cword{afend(nout,nscr)}]
+
+\item[\cword{amend(nout,nscr)}]
+
+\item[\cword{atend(nout,nscr)}] ~\par
+Write a section (MT=0), file (MF=MT=0), material (MAT=MF=MT=0) or tape
+(MAT=-1, MF=MT=0) ``end'' record on the desired units.
+\index{asend@{\ty asend}}
+\index{afend@{\ty afend}}
+\index{amend@{\ty amend}}
+\index{atend@{\ty atend}}
+\end{singlespace}
+\end{description}
+
+In these calling sequences, the unit numbers can be positive,
+negative, or zero.  Positive numbers mean ASCII mode, negative
+numbers mean blocked-binary mode, and zero means the file
+corresponding to this position in the calling sequence is not
+used.  All of these routines use the following variables made
+public by module \cword{endf}\index{modules!endf@{\ty endf}}:
+
+\begin{quote}
+    \cword{c1h,c2h,l1h,l2h,n1h,n2h,math,mfh,mth,nsh,nsp,nsc}
+\end{quote}
+where \cword{c1h} corresponds to the ENDF \cword{C1} field, and so on.
+The variable \cword{nsh} is the sequence number for \cword{nin},
+\cword{nsp} is the sequence number for \cword{nout}, and \cword{nsc}
+is the sequence number for \cword{nscr}.  Two examples may help to make
+clear the use of these routines.
+
+\begin{center}
+{\underline{Example 1.  Read All Data}}
+\end{center}
+
+\small
+\begin{ccode}
+
+      loc=1
+      call tab1io(nin,0,0,a(loc),nb,nw)
+      loc=loc+nw
+      do while (nb.ne.0)
+         call moreio(nin,0,0,a(loc),nb,nw)
+         loc=loc+nw
+      enddo
+      (process data in A)
+
+\end{ccode}
+\normalsize
+
+\begin{center}
+{\underline{Example 2.  Paging}}
+\end{center}
+
+\small
+\begin{ccode}
+
+      call tab1io(nin,0,0,a(1),nb,nw)
+     110 (process this page of data in A)
+      if (nb.eq.0) go to 120
+      call moreio(nin,0,0,a(1),nb,nw)
+      go to 110
+     120 continue
+
+\end{ccode}
+\normalsize
+
+\noindent
+When \cword{nin} is BCD, paging is automatic.  Positive and negative
+unit numbers can be mixed in \cword{tpidio}, \cword{contio},
+\cword{listio}, {\it etc.}, when mode conversion is desired.
+
+\subsection{Buffered Binary Scratch Storage}
+\label{ssNJOY_ScratchStor}
+
+During the execution of a program, large amounts of data often need
+to be stored in mass storage temporarily.  In order to make such
+scratch storage as efficient as possible, NJOY includes  a pair of
+utility subroutines in module \cword{util}\index{modules!util@{\ty util}}
+that automatically buffer such data through fast memory to disk.
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{loada(i,a,na,ntape,buf,nbuf)}]
+
+\item[\cword{finda(i,a,na,ntape,buf,nbuf)}] ~\par
+Load or find data in a buffered binary scratch file.  Here
+\cword{i} is the data point number (\cword{i} must increase, except
+\cword{i}=1 causes a rewind and \cword{i}$<$0 flushes the fast memory
+buffer to mass storage), The array \cword{a} contains data to be
+stored or provides a destination for data to be read, \cword{na}
+is the number of words to be transmitted (must be the same for all
+\cword{i}), \cword{ntape} is the logical unit number of the disk file,
+\cword{buf} is the fast memory buffer array, and \cword{nbuf} is
+the length of the buffer array.
+\index{loada/finda@{\ty loada/finda}}
+\end{singlespace}
+\end{description}
+
+When a point is to be saved, \cword{loada} stores it in
+\cword{buf}.  When \cword{buf} becomes full, it is automatically
+dumped to disk.  When a point is to be retrieved, \cword{finda}
+checks to see whether the desired point is in \cword{buf}.  If
+not, it reads through the disk until the desired point is in
+memory.  It then returns the desired point.  When \cword{na} is
+small with respect to \cword{nbuf}, using \cword{loada/finda}
+reduces the number of I/O operations dramatically.
+Sometimes it is necessary to find a particular part of the
+buffered data.  In such cases, use
+
+\small
+\begin{ccode}
+
+      scana(e,ip,np,na,ntape,buf,nbuf)
+
+\end{ccode}
+\normalsize
+
+\noindent
+where \cword{e} is a value for the first of the \cword{na} words,
+and \cword{ip} points to part of the data whose first word is
+either equal to \cword{e} or is the first value less than \cword{e}.
+\index{scana@{\ty scana}}
+
+\subsection{Dynamic Storage Allocation}
+\label{ssNJOY_dynamicstorage}
+
+Previous versions of NJOY used an internal package called
+\cword{storag} for dynamic memory allocation.  Beginning with
+NJOY2012 we use the
+standard Fortran-90 storage allocation mechanism.  The only
+feature used is the ``allocatable array.''  When needed, an
+array is allocated that will contain a defined number of values.
+The array can be deallocated when no longer needed, and it will
+disappear automatically when the scope within which it is defined
+is exited.  This method produces more transparent code than the
+old \cword{storag} package, because pointers into a single
+container array are not needed.
+
+
+\subsection{ENDF/B Utility Routines}
+\label{ssNJOY_utility}
+
+There are several operations performed on ENDF/B data that are
+needed in so many other modules that it is practical to put them
+into the \cword{endf}\index{modules!endf@{\ty endf}} module.
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{terp1(x1,y1,x2,y2,x,y,i)}] ~\par
+Interpolate for $y(x)$ between $y_1(x_1)$ and $y_2(x_2)$ using the
+ENDF interpolation law \cword{i} (\cword{i}=1 means $y{=}y_1$,
+\cword{i}=2 means $y$ is linear in $x$, \cword{i}=3 means $y$
+is linear in ${\rm ln}(x)$, \cword{i}=4 means ${\rm ln}(y)$ is
+linear in $x$, \cword{i}=5 means ${\rm ln}(y)$ is linear
+in ${\rm ln}(x)$), and \cword{i}=6 means to interpolate
+using the charged-particle penetrability with a kinematic
+threshold of \cword{thr6}.
+\index{terp1@{\ty terp1}}
+
+\item[\cword{terpa(y,x,xnext,idis,a,ip,ir)}] ~\par
+Interpolate for $y(x)$ in the TAB1 structure in array \cword{a}.
+The routine searches for the correct interpolation range starting
+from \cword{ip} and \cword{ir} (initialize to 2 and 1 for first
+call).  It returns \cword{xnext}, the next $x$ value in the
+tabulation.  \cword{idis} is set to 1 if there is a discontinuity
+at \cword{xnext}; it is zero otherwise).
+\index{terpa@{\ty terpa}}
+
+\item[\cword{gety1(x,xnext,idis,y1,itape,a)}]
+
+\item[\cword{gety2(x,xnext,idis,y1,itape,a)}] ~\par
+Find $y(x)$ in a TAB1 structure starting at the current location
+on \cword{itape} by paging the data through array \cword{a}.
+\cword{gety1} and \cword{gety2} are identical for occasions when
+two different tapes are being searched at the same time.
+\cword{xnext} and \cword{idis} behave as in \cword{terpa}.  The
+array \cword{a} must be at least \cword{npage}+50 words in
+length.  These routines are normally used to retrieve cross
+sections from MF=3.
+\index{gety1@{\ty gety1}}
+\index{gety2@{\ty gety2}}
+
+\item[\cword{gral(xl,yl,xh,yh,x1,x2,i)}] ~\par
+This function returns the integral from $x_1$ to $x_2$ of an ENDF
+function with interpolation law \cword{i} (see \cword{terp1}).
+\cword{xl}, \cword{yl}, \cword{xh}, and \cword{yh} are the low
+and high limits of the interpolation panel.
+\index{gral@{\ty gral}}
+
+\item[\cword{intega(f,x1,x2,a,ip,ir)}] ~\par
+Integrate the TAB1 function stored in \cword{a} from $x_1$ to
+$x_2$.  The routine automatically determines the correct
+interpolation law for each panel or fraction of a panel and uses
+\cword{gral} to compute each part of the integral.  Set
+\cword{ip}=2 and \cword{ir}=1 on the first call to
+\cword{intega}. In subsequent calls, the previous values of
+\cword{ip} and \cword{ir} will usually provide a good starting
+point for searching in the TAB1 structure.
+\index{intega@{\ty intega}}
+\end{singlespace}
+\end{description}
+
+\subsection{Math Routines}
+\label{ssNJOY_math}
+
+Several mathematics routines are included in the
+\cword{mathm}\index{modules!mathm@{\ty mathm}} module
+for use by other modules.  Most of these routines are based on
+routines from the SLATEC library converted to NJOY style and Fortran-90.
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{legndr(x,p,np)}] ~\par
+Generate Legendre polynomials $P_{\ell}(x)$.  The $\ell=0$ value
+is in \cword{p(1)}, the $\ell=1$ value in \cword{p(2)}, etc.
+\cword{np} is the maximum Legendre order produced, so the
+largest index for \cword{p} is \cword{np}+1.
+\index{legndr@{\ty legndr}}
+\index{Legendre polynomials}
+\index{math!Legendre polynomials}
+
+\item[\cword{e1(x)}] ~\par
+Compute the first-order exponential integral function $E_1(x)$.
+\index{exponential integral!e1@{\ty e1}}
+\index{exponential integral}
+\index{math!exponential integral}
+
+\item[\cword{gami(a,x)}] ~\par
+Compute the incomplete gamma function $\gamma(a,x)$.
+\index{incomplete gamma function!gami@{\ty gami}}
+\index{incomplete gamma function}
+\index{math!incomplete gamma function}
+
+\item[\cword{erfc(x)}] ~\par
+Compute the complementary error function erfc$(x)$.
+\index{erfc function!erfc@{\ty erfc}}
+\index{erfc function}
+\index{math!erfc function}
+\end{singlespace}
+\end{description}
+
+
+\subsection{System-Related Utility Routines}
+\label{ssNJOY_sysutil}
+
+As much as possible, actions that related to system functions
+have been put into subroutines or functions in the
+\cword{util}\index{modules!util@{\ty util}} module.
+The I/O routines have already been discussed.  Sometimes these
+routines might have to be altered for unusual system environments.
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{timer(time)}] ~\par
+Returns the run time in seconds.  The meaning of this number
+may vary from system to system.  It might be central-processor
+(CP) time, or at some installations, it may include other factors,
+such as I/O time or memory charges.  This makes it difficult to
+compare NJOY runs on different systems.  This routine may have
+to be revised for some systems, because there is no standard
+Fortran-90 call.
+\index{timer@{\ty timer}}
+
+\item[\cword{dater(hdate)}] ~\par
+Returns the date as an 8-character string in one of the forms
+mm/dd/yy or ddmmyy; for example, 11/15/90 or 03jun91.  For the
+Fortran-90 version of NJOY, this is handled using the standard
+\cword{date\_and\_time} call.
+\index{dater@{\ty dater}}
+
+\item[\cword{wclock(htime)}] ~\par
+Returns the ``wall clock'' time.  This is the time of day
+that the NJOY run started, and it shouldn't be confused with
+the elapsed CP time for the run as returned by \cword{timer}.
+The time is represented as an 8-character string in the form
+hh:mm:ss; for example, 12:13:47.  The user is free to use a
+24-hour convention for time.  The standard \cword{date\_and\_time}
+call is used to retrieve the information from the system.
+\index{wclock@{\ty wclock}}
+
+\item[\cword{sigfig(x,ndig,idig)}] ~\par
+Because of the many comparisons and searches that it makes, NJOY
+often has to match two numbers that are different only in the few
+least significant bits.  This routine is intended to make such
+numbers exactly equal to each other by truncating the numbers to
+a given number of digits and removing any low-significance junk
+resulting from nonterminating binary fractions.  The \cword{idig}
+parameter can be used to move the result up or down by \cword{idig}
+in the last significant figure.  Although this routine was sometimes
+machine dependent in previous versions of NJOY, the subroutine
+now used seems to work on all systems tried so far.
+\index{sigfig@{\ty sigfig}}
+\index{significant figures}
+
+\item[\cword{a10(x,hx)}] ~\par
+Converts x to a 10-column format as a string in \cword{hx} to provide
+more digits in some NJOY listings without taking too much space.
+This allows 4, 5, or 6 significant figures to be printed where we
+previously had four.  \cword{hx} has the forms +1.23456+6, +1.2345-38,
+or -1.234+308.
+\end{singlespace}
+\end{description}
+
+\subsection{Error and Warning Messages}
+\label{ssNJOY_msg}
+
+NJOY has a pair of standard routines for printing fatal error messages
+and warning messages.  This helps to enforce consistency in the messages,
+insulates other subroutines from the complexities of the system (for
+example, I/O units, ``console'', ``standard error file''), and provides
+a site for machine-dependent error handling, including such things as
+saving ``drop files'' and generating trace-back listings. These routines
+are in module \cword{util}\index{modules!util@{\ty util}}.
+\index{fatal error messages}
+\index{warning messages}
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{error(from,mess1,mess2)}] ~\par
+This subroutine should result in a fatal error exit and must be
+adjusted to reflect the local system.  Special features such as
+traceback information or saving files for later analysis can be
+performed here.  \cword{from} is a character string containing
+the name of the procedure that called \cword{error}, and
+\cword{mess1} and \cword{mess2} are two 60-character strings
+containing messages describing the error.  \cword{mess2} is not
+printed if it is empty.
+\index{error@{\ty error}}
+
+\item[\cword{mess(from,mess1,mess2)}] ~\par
+This routine is for nonfatal warning messages.  \cword{from} is
+the routine that called it.  It prints \cword{from},
+\cword{mess1}, and \cword{mess2} (if not empty), and returns to
+the calling routine.
+\index{mess@{\ty mess}}
+\end{singlespace}
+\end{description}
+
+\noindent
+The actual error messages produced by functions and subroutines
+in the NJOY module and the subsidiary modules \cword{util}, \cword{endf},
+and \cword{mathm} are listed below, including explanations of the meaning
+of the errors and suggested steps to alleviate them.
+
+\begin{description}
+\begin{singlespace}
+\item[\cword{error in njoy***illegal module name}] ~\par
+Check spelling, and check for missing (/) or incorrect item counts
+in the preceding module.  This error message is generated directly by
+NJOY instead of using \cword{error}.
+
+\item[\cword{error in openz***illegal unit number}] ~\par
+
+\item[\cword{error in closz***illegal unit number}] ~\par
+Units less than 10 are reserved for the system.
+
+\item[\cword{error in tomend***mode conversion not allowed}] ~\par
+
+\item[\cword{error in tofend***mode conversion not allowed}] ~\par
+
+\item[\cword{error in tosend***mode conversion not allowed}] ~\par
+Input and output units must both be binary or both be BCD.
+Check the signs of the unit numbers in the input file.
+
+\item[\cword{error in findf***mat---mf---mt---not on tape}] ~\par
+Desired section cannot be found.  Either the wrong tape was
+mounted, or there is a mistake in the input deck.
+
+\item[\cword{error in scana***initial ip ne 0}] ~\par
+Must be called with \cword{ip}=0.
+
+\item[\cword{error in scana***did not find energy ---}] ~\par
+Energy requested is greater than the highest energy in the
+LOADA/FINDA file.
+
+\item[\cword{error in gral***x2 lt x1}] ~\par
+The integration interval is bad.
+
+\item[\cword{error in e1***x is 0}] ~\par
+Result is not defined.
+
+\item[\cword{error in gami***a must be gt zero}] ~\par
+
+\item[\cword{error in gami***x must be gt zero}] ~\par
+Illegal parameter values.
+
+\item[\cword{error in dlngam***abs(x) so big dlngam overflows}] ~\par
+
+\item[\cword{error in dlngam***x is a negative integer}] ~\par
+Illegal parameter values.
+
+\item[\cword{message from dlngam---answer lt half precision...}] ~\par
+Just a warning.
+
+\item[\cword{error in csevl***number if terms le 0}] ~\par
+
+\item[\cword{error in csevl***number if terms gt 1000}] ~\par
+Won't happen in NJOY.
+
+\item[\cword{error in csevl***x outside the interval (-1,1)}] ~\par
+Bad parameter value.
+
+\item[\cword{error in d9lgit***x should be gt 0 and le a}] ~\par
+
+\item[\cword{error in d9lgit***no convergence in 200 terms...}] ~\par
+Problems computing Tricomi's incomplete gamma function.  This error should
+not occur.
+
+\item[\cword{message from d9lgit---result less than half precision...}] ~\par
+Just a warning.
+
+\item[\cword{error in d9lgmc***x must be ge 10}] ~\par
+Bad parameter value.
+
+\item[\cword{error in dgamit***x is negative}] ~\par
+Bad parameter value.
+
+\item[\cword{message from dgamit---result less than half precision...}] ~\par
+Just a warning.
+
+\item[\cword{error in dgamlm***unable to find xmin}] ~\par
+
+\item[\cword{error in dgamlm***unable to find xmax}] ~\par
+Having trouble finding the minimum and maximum bounds for the
+argument in the gamma function.
+
+\item[\cword{error in dgamma***x is 0}] ~\par
+
+\item[\cword{error in dgamma***x is a negative integer}] ~\par
+
+\item[\cword{error in dgamma***x so big gamma overflows}] ~\par
+Bad parameters for the gamma function.
+
+\item[\cword{message from dgamma---answer lt half precision...}] ~\par
+Just a warning.
+
+\item[\cword{error in d9gmit***x should be gt 0}] ~\par
+
+\item[\cword{error in d9gmit***no convergence in 200 terms...}] ~\par
+Problem's with Tricomi's gamma function at small arguments.
+
+\item[\cword{error in d9lgic***no convergence in 300 terms...}] ~\par
+Problems with the log complementary incomplete gamma function.
+
+\end{singlespace}
+\end{description}
+\subsection{Coding Details for the NJOY Main Program}
+\label{ssNJOY_details}
+
+The \cword{njoy} main program of the NJOY code starts with a
+with a block of comment cards that gives a short description of
+the NJOY module and specifications for the user's input lines.
+(The term ``card'' is used out of respect for the past; this usage
+should not be taken to imply that a real card that can be ``folded,
+spindled, or mutilated'' has to be used.) These blocks of comments
+cards occur at the beginning of every NJOY module.  It is a good idea
+to check the input instructions in the comment cards for the current
+version in order to see whether there have been any changes from the
+input instructions reproduced in this manual.
+
+The first step in the body of the code is to give ``\cword{use module}''
+statements for each module that provides a variable or subroutine
+call to be used here.   There are several common variables used in
+this module.  The \cword{vers} string and its associated date string
+\cword{vday} from the \cword{version}\index{modules!version@{\ty version}}
+module are important parts of the NJOY Quality Assurance (QA) scheme.
+They are updated each time a change is made to the code, and they are
+always printed on the output listing.  They are also available to other
+modules to be written in libraries generated by NJOY or on plots,
+if desired.  The \cword{lab} and \cword{mx} strings are normally used to
+localize NJOY to a particular institution and to tell what machine was used
+for an NJOY run when several are available.  They are carried in the
+\cword{locale}\index{modules!locale@{\ty locale}} module.  The quantity
+\cword{npage} in the \cword{endf} module must be a
+multiple of 6 (because ENDF records have 6 fields on a line) and 17
+(since Hollerith lines use the format ``\cword{16a4,a2}''); therefore,
+a value of 306 was chosen.  We do not recommend changing this value.
+
+Next, NJOY writes an ``banner'' on the output listing file giving the date,
+time, version, and so on, for this NJOY run.  The program now starts an
+infinite loop, reading in module names, and executing the requested module,
+until the name ``stop'' is read.
+\index{banner}
+
+\paragraph{Module ``locale''}
+\index{modules!locale@{\ty locale}}
+
+This purpose for this module is to provide localization information
+for NJOY.  Users may find it necessary to change things in this
+module for their site, machines, or compilers.  The public variables
+provided are
+
+\begin{description}
+\begin{singlespace}
+\item[lab --] a string identifying the user's institution.
+
+\item[mx --] a string identifying the machine used, the system,
+  the compiler, or whatever.
+
+\item[kr --] the kind value for normal real numbers.
+
+\item[k4 --] the kind value for 4-byte real numbers and 4-byte
+  integers (mostly for CCCC records).
+
+\item[k8 --] the kind value for 8-byte Hollerith variables in
+  the CCCC formats.
+\end{singlespace}
+\end{description}
+
+The default value for \cword{lab} is ``our-lab,'' and it can
+be changed to reflect the users site.  Up to 8 characters are
+allowed.  The default value for \cword{mx} is ``our-mx.''  At
+one time, LANL had a system call that would tell which
+machine out of a cluster was being used, and this field was
+used for that.  It can also be used to identify the type of
+machine ({\it e.g.}, sun, vax, x86, linux) or the compiler used.
+
+NJOY2016 uses the built-in features of Fortran-90 to control
+the precision of the numbers used internally.  This allows us
+to remove the complex short-word and long-word controls used for
+the Fortran-77 versions, a great simplification.  The normal
+internal representation used in NJOY2016 is a high-precision
+one, normally implemented using 64-bit reals and the system
+default for integers (either 4 or 8 bytes should be OK).
+The ``kind'' value to obtain these high-precision reals is
+returned using the Fortran-90 \cword{selected\_real\_kind} function,
+and it should be portable.  However, \cword{k4} and \cword{k8} are
+simply set to the values 4 and 8, respectively.  These choices are
+not standardized by Fortran-90, and the values given here may
+have to be adjusted for some systems.  Anyway, once a proper
+value of \cword{kr} has been provided, variables, arrays, and
+constants can be typed using statements like
+
+\small
+\begin{ccode}
+
+    real(kr)::za
+    real(kr)::elast(20)
+    real(kr),dimension(:),allocatable::enode
+    real(kr),parameter::therm=.0253e0_kr
+
+\end{ccode}
+\normalsize
+
+\paragraph{Module ``version''}
+\index{modules!version@{\ty version}}
+
+This module provides public version and date strings to any of the
+other NJOY modules.  The initial values are \cword{vers='2016.0'} and
+\cword{vday='xxdec16'}.  It is an important part of the NJOY QA procedure
+to keep these values up to date as changes are made to the code.
+
+\paragraph{Module ``mainio''}
+\index{modules!mainio@{\ty mainio}}
+
+This module provides public values for the system I/O units, namely,
+\cword{nsysi}, \cword{nsyso}, and \cword{nsyse}.
+In the past we
+assigned fixed numeric values to these variables based upon legacy
+fortran definitions.  We now use the \cword{iso\_fortran\_env} package
+to define these units, thereby providing greater portability over
+multiple computing platforms.  Specifically, \cword{nsysi}, used in
+``READ(nsysi,...'' statements was set equal to 5 in the past and is
+now set to \cword{INPUT\_UNIT}.  \cword{nsyso}, used in
+``WRITE(nsyso,...'' statements was set equal to 7 previously and is
+now given by \cword{ERROR\_UNIT}.  Finally, \cword{nsyse}, used
+in ``WRITE(nsyse,...'' statements directed to the terminal, was
+set equal to 6 previously and is now given by
+\cword{OUTPUT\_UNIT}.  As used by NJOY the ``ERROR\_UNIT'' and
+``OUTPUT\_UNIT'' names are counter-intuitive since
+\cword{write(nsyse, ...)} goes to the terminal while
+\cword{write(nsyso, ...)} goes to a file called ``output'', a file that is
+opened in the main NJOY program.  As noted elsewhere, NJOY uses
+unit numbers between 10 and 19 for scratch files, and allows
+users to specify unit numbers from 20 and above for file i/o
+between NJOY modules.  If users encounter conflicts on their local
+platforms with the values in \cword{iso\_fortran\_env} we recommend
+they revert to the legacy definitions noted above.
+
+
+\paragraph{Module ``physics''}
+\index{modules!physics@{\ty physics}}
+
+Because NJOY is divided into a number of separate modules, it is
+important to provide a common set of physical constants to ensure
+consistency.  These constants are as follows:
+
+\begin{description}
+\begin{singlespace}
+\item[pi --] a high precision of 15 digits is provided.
+
+\item[bk --] Boltzmann's constant.
+
+\item[amassn --] the mass of the neutron in AMU.
+
+\item[amu --] the value of the AMU.
+
+\item[hbar --] Planck's constant divided by 2$\pi$.
+
+\item[ev --] the value of the electron volt.
+
+\item[clight --] the velocity of light.
+\end{singlespace}
+\end{description}
+
+\noindent
+These numbers were obtained from the CODATA'89 set as published by
+the National Institute of Standards and Technology (NIST).  Other
+NJOY modules can access these values by including the statement
+``\cword{use physics}.''  We have taken pains in NJOY to compute
+values that can be derived from these standards from these values
+rather than multiplying the number of physical constants used in the
+program.
+
+\paragraph{Module ``util''}
+\index{modules!util@{\ty util}}
+
+As outlined above, module \cword{util} makes the following routines
+public:
+
+\begin{description}
+\begin{singlespace}
+\item[error --] fatal error routine
+
+\item[mess --] warning message routine
+
+\item[timer --] CPU elapsed time routine
+
+\item[dater --] returns a date string
+
+\item[wclock --] returns a wall-clock time string
+
+\item[repoz --] repositions a file to the beginning
+
+\item[skiprz --] skips records in a file forward and back
+
+\item[openz --] opens a new or exiting file
+
+\item[closz --] closes a file
+
+\item[loada/finda --] a buffered storage system
+
+\item[scana --] search in a loada/finda system
+
+\item[sigfig --] truncate numbers to a given significance
+
+\item[a10 --] print real numbers compactly
+\end{singlespace}
+\end{description}
+
+\noindent
+There are no private subroutines or variables in this module.
+
+\index{error@{\ty error}}
+\index{mess@{\ty mess}}
+The default versions of \cword{error} and \cword{mess} simply write
+the one or two lines of message characters to the appropriate units.
+The Fortran-90 \cword{len\_trim} function is used to measure the real
+length of a character string by removing trailing blanks.  By
+changing \cword{nsyse}, messages can be directed to the user's
+terminal, to a standard error unit, or left to appear on the output
+file only.  The default fatal error exit ``\cword{stop 77}'' can be
+sometimes be changed to cause a ``traceback'' to the subroutine that
+called \cword{error}, and backward through the stack of subroutines that
+called it.  Also, some systems can cause a drop file or ``core'' file to
+be generated for post-mortem analysis with a debugging program.
+
+Subroutines \cword{timer}, \cword{dater}, and \cword{wclock}
+provide standard interfaces to system routines that sometimes have
+different names and return different kinds of answers on different
+computer systems.  This is less of a problem with Fortran-90 than
+it was with previous compilers.  The date and wall-clock strings
+are easy to construct using the standard \cword{date\_and\_time} call,
+which is portable to all systems.   Some system have an analogous
+\cword{cpu\_time} call, but it is not standard.  For other systems,
+it is necessary to use machine-dependent calls. Some examples of
+implementing this function on various computer systems are included
+as UPD machine-dependent idents in the NJOY distribution.
+\index{timer@{\ty timer}}
+\index{dater@{\ty dater}}
+\index{wclock@{\ty wclock}}
+
+The next four routines in NJOY provide a uniform way of handling
+input and output files.  The unit numbers obey the following
+convention: zero means do nothing, negative means a binary unit,
+and positive means a coded unit (ASCII for modern systems.).
+Unit numbers between 10 and 19 are scratch files, which will be
+automatically destroyed at the end of the job.  Therefore,
+\cword{repoz} simply takes the absolute value of the unit number
+and calls rewind if it is nonzero.  Similarly, \cword{closz}
+takes the absolute value of the unit number and closes it if
+nonzero and not a scratch file.  Subroutine \cword{skiprz} skips
+forward with dummy reads of the correct type for the sign of the
+unit, and it skips backward with backspace.  Note that this can
+be very inefficient for some systems.  For example, the VAX
+executes backspace by first rewinding and then skipping forward
+by $n{-1}$ records.  Making successive calls to backspace, as done
+in this routine, would be very expensive.  It is better to rewind
+before calling \cword{skiprz}; then only forward skips would be
+required to get to the desired record.  Finally, subroutine
+\cword{openz} is used to open files with the desired characteristics
+(that is, binary or formatted, new or old, scratch or permanent).
+Standard Fortran-90 statements are used.  Note that the file names
+are constructed to have the forms \cword{tape20}, \cword{tape21},
+{\it etc.}  Scratch files will have whatever names are standard
+for the system being used.
+\index{openz@{\ty openz}}
+\index{closz@{\ty closz}}
+\index{repoz@{\ty repoz}}
+\index{skiprz@{\ty skiprz}}
+
+The \cword{loada/finda} system was discussed in
+Section\ref{ssNJOY_ScratchStor}.
+The data representation consists of a fairly large buffer array
+\cword{buf} of length \cword{nbuf}.  This buffer contains a
+number of component blocks, each of length \cword{na}.
+Therefore, it is easy to compute the location of any block using
+modular arithmetic on the block index \cword{i}.  If the location
+is currently in the buffer array, the block can be read or
+written.  Otherwise, the associated scratch file \cword{ntape}
+must be repositioned before being read or written.  The files
+\cword{ntape} have to be written sequentially, but they can be
+searched in any order.  Subroutine \cword{scana} takes advantage
+of this to locate the block whose first element is closest to the
+input parameter \cword{e}.
+\index{loada/finda@{\ty loada/finda}}
+\index{scana@{\ty scana}}
+
+Subroutine \cword{sigfig} is used to control the precision of
+numbers in several NJOY modules.  This is a difficult problem
+because the true representation of numbers in the machine is as
+non-terminating binary fractions.  In addition, different
+representations for floating-point numbers are used in different
+computer systems, and significant-figure truncation can be
+machine-dependent.  The version of \cword{sigfig} used in NJOY2016
+seems to be very portable.\index{sigfig@{\ty sigfig}}
+
+Subroutine \cword{a10} is used to make the printing of real numbers
+on NJOY output listings more compact by stripping off excess
+characters in the exponent field.  It converts the input real
+number into a 10-character string with the following forms:
++1.23456+6, +1.2345-38 and -1.234+308.
+This subroutine is closely related to the private subroutine
+\cword{a11} in the \cword{endf} module, except for forcing a
+10-character field rather than an 11-character field.
+\index{a10@{\ty a10}}
+
+\paragraph{Module ``endf''}
+\index{modules!endf@{\ty endf}}
+
+As discussed in Section \ref{ssNJOY_ENDF_IO} of this chapter, NJOY uses
+files in ENDF-like formats for most communications between modules.
+Subroutines are provided in module \cword{endf} to work with the various
+ENDF record types.  The routines that are public for this module are
+as follows:
+
+\begin{description}
+\begin{singlespace}
+\item[contio --] to read or write CONT records
+
+\item[listio --] to read or write LIST records
+
+\item[tab1io --] to read or write TAB1 records
+
+\item[moreio --] to read or write continuation records
+
+\item[tab2io --] to read or write TAB2 records
+
+\item[tpidio --] to read or write TAPEID records
+
+\item[hdatio --] to read or write character-string records
+
+\item[intgio --] to read or write INTG reconrds
+
+\item[dictio --] to read or write ``dictionary'' records
+
+\item[tosend --] to read or write to the next SEND record
+
+\item[tofend --] to read or write to the next FEND record
+
+\item[tomend --] to read or write to the next MEND record
+
+\item[totend --] to read or write to the next TEND record
+
+\item[asend --] to write SEND record
+
+\item[afend --] to write FEND record
+
+\item[amend --] to write MEND record
+
+\item[atend --] to write TEND record
+\end{singlespace}
+\end{description}
+\noindent
+In addition, the following data words are public for this module:
+\begin{description}
+\begin{singlespace}
+\item[c1h --] ENDF C1 field
+
+\item[c2h --] ENDF C2 field
+
+\item[l1h --] ENDF L1 field
+
+\item[l2h --] ENDF L2 field
+
+\item[n1h --] ENDF N1 field
+
+\item[n2h --] ENDF N2 field
+
+\item[math --] ENDF MAT field
+
+\item[mf --] ENDF MF field
+
+\item[mt --] ENDF MT field
+
+\item[nsh --] NS card number (input file)
+
+\item[nsp --] NS card number (output file)
+
+\item[nsc --] NS card number (scratch file)
+
+\item[thr6 --] threshold energy for interpolation law 6
+\end{singlespace}
+\end{description}
+
+\noindent
+There are additional private routines and global variables used
+inside the module.
+
+Subroutines \cword{contio}, \cword{listio}, \cword{tab1io},
+\cword{tab2io}, \cword{moreio}, \cword{tpidio}, \cword{hdatio},
+\cword{intgio}, and \cword{dictio} are used to read, write, copy,
+or convert the mode of binary or formatted records on these
+interface files.  They all have similar structures.  First,
+records are read using binary or coded commands, depending on
+the sign of the unit number.  Then the records are written back
+out, once again using a mode that depends on the sign of the
+unit number.  Unit numbers can be zero, in which case that unit
+is not used.  When these numbers are read, they are converted
+into integers for the \cword{l1h}, \cword{l2h}, \cword{n1h}, and
+\cword{n2h} fields using the Fortran nearest-integer function,
+\cword{nint}.  If programmers choose to use a number in the array
+\cword{a} directly, they should be careful to make the same
+conversion.  Private subroutine \cword{lineio} is used by several
+of these routines to read or write a line of floating-point
+numbers.  It has two special features.  First, any empty fields
+at the end of a line are filled in with blanks.  The second
+feature is the construction of floating-point numbers without
+the normal Fortran ``E'' using subroutine \cword{a11}.  Private
+subroutine \cword{tablio} is used by \cword{tab1io} and \cword{tab2io}
+to read and write ENDF-style interpolation tables.  Subroutine
+\cword{hollio} is used to read or write lines of Hollerith information.
+Note that Hollerith data are represented using 17 fields per card, but
+all other ENDF data uses 6 fields per card.
+
+Subroutine \cword{a11} simply breaks up the real-number \cword{x}
+into a fraction part \cword{f}, a sign part \cword{S}, and an exponent
+part \cword{n}.  The number of digits in the fraction part depends on
+the number of digits in the exponent part in order to maximize the
+precision of the formatted representation of \cword{x}.  It then
+constructs a string containing the real number without the normal
+Fortran ``E'' and omitting leading zeros in the exponent.  If the
+number being represented has more significant digits than can be
+represented with the ``E'' formats, the subroutine automatically
+shifts to an appropriate ``F'' format ({\it e.g.,} F11.8, F11.7,
+{|it etc.}) depending on the size of the number.  This feature is
+sometimes needed for the fine texture of resonance data.
+\index{a11@{\ty a11}}
+
+As discussed above, ENDF tapes are divided into materials, files, and
+sections by special end cards with names like MEND, FEND, SEND, and
+TEND.  The subroutines \cword{tosend}, \cword{tofend}, \cword{tomend},
+and \cword{totend} can be used to move from the current location to
+one of these end cards, optionally copying the records as they go.
+Since these routines do not know the actual structure of the records,
+they cannot change the mode of the data while copying.  They simply
+read in a record, write it out again if desired, and watch for the
+specified end card.
+\index{tosend@{\ty tosend}}
+\index{tofend@{\ty tofend}}
+\index{tomend@{\ty tomend}}
+\index{totend@{\ty totend}}
+
+The parallel set of routines \cword{asend}, \cword{afend},
+\cword{amend}, and \cword{atend} write one of the requested end cards
+to one or two different output files using the mode defined by the
+sign of the unit number.  The NJOY convention is to use blanks for
+the first 66 columns of formatted end cards in order to make them easy
+to see on ENDF listings.  The tapes as received from the National
+Nuclear Data Center (NNDC) of the Brookhaven National Laboratory
+may have these fields filled in with numerical values of zero.
+The \hyperlink{sMODERhy}{MODER} module automatically changes
+ENDF tapes from the BNL convention to the NJOY one.
+\index{asend@{\ty asend}}
+\index{afend@{\ty afend}}
+\index{amend@{\ty amend}}
+\index{atend@{\ty atend}}
+
+Subroutine \cword{findf} is used very frequently in NJOY modules
+to search through an ENDF-type tape for a desired section
+(\cword{mat}, \cword{mf}, \cword{mt}).  Since the three numbers
+that describe sections are always arranged in order, it is possible
+to search both up and down.  On entry, the routine reads the first
+card and decides if it has to read up or down to find the desired
+section.  It then continues by reading records in the proper direction
+until it comes to the desired section.  It then backs up by one record
+so that the next read after the call to \cword{findf} will read the
+first record of the desired section.  If the desired section is not
+found, a fatal error message will be issued.  Subroutine \cword{findf}
+can go into an infinite loop if the MAT number requested is smaller
+than the number for the first material on the tape (thus \cword{findf}
+is moving backwards) and the number in the MAT field on the tape
+identification record is larger than the material number for the first
+material.  Some systems have an ``IF (BOI)'' function that can be used
+to detect when the tape is at the ``beginning of information.''
+\index{findf@{\ty findf}}
+
+Subroutine \cword{terp1} is used to interpolate between two points
+\cword{x1,y1} and \cword{x2,y2} using ENDF interpolation law \cword{i}.
+The results for \cword{y} at \cword{x} are given by simple formulas.
+No tests are made for values that give illegal arguments for the Fortran
+log and exponent functions.  Therefore, fatal arithmetic errors from
+\cword{terp1} are fairly common.  Going slightly out of order,
+\cword{gral} is a routine that computes integrals inside the endpoints
+of a segment represented using the ENDF interpolation laws.  Once again,
+simple formulas are used, and it is also possible to get arithmetic
+errors from the log and exponent functions with this routine.
+\index{terp1@{\ty terp1}}
+\index{gral@{\ty gral}}
+
+It is usually necessary to interpolate or integrate functions that
+involve more than one panel of ENDF interpolated data.  Most commonly,
+this occurs for data in TAB1 format.  If the TAB1 record is small enough
+so that it can fit into an array \cword{a} in memory, subroutine
+\cword{terpa} can be used to search for the panel that contains
+\cword{x}, and to interpolate for \cword{y} at \cword{x}.  Similarly,
+\cword{intega} can be used to compute the integral from \cword{x1} to
+\cword{x2} by integrating over all the panels and parts of panels within
+these limits.  Subroutine \cword{terpa} uses \cword{terp1}, and
+subroutine \cword{intega} uses \cword{gral}.
+\index{terpa@{\ty terpa}}
+\index{intega@{\ty intega}}
+
+NJOY works with some very large TAB1 records that cannot fit into
+memory.  For these cases, \cword{gety1} and \cword{gety2} can be used
+to interpolate for \cword{y} at \cword{x}.  Array \cword{a} only has
+to be big enough for one page of data (plus a little extra space for
+parameters like \cword{c1h}, \cword{n2h}, and TAB1 interpolation
+tables).  If the desired \cword{x} is not in memory, new pages of
+data are read from \cword{itape} until the desired value is found.
+The subroutine then uses \cword{terp1} to compute \cword{y}.  Note
+that zero is returned if \cword{x} is outside the range of the table,
+and \cword{xnext}=1.e12 when the last point is returned.  Subroutines
+\cword{gety1} and \cword{gety2} are almost identical so that numbers
+can be retrieved independently from two different input tapes at the
+same time.
+\index{gety1@{\ty gety1}}
+\index{gety2@{\ty gety2}}
+
+\paragraph{Module ``mathm''}
+\index{modules!mathm@{\ty mathm}}
+
+There are several math routines that are needed in various NJOY
+modules that are provided in this module:
+
+\begin{description}
+\begin{singlespace}
+\item[legndr --] provides Legendre polynomials
+
+\item[e1 --] provides the first-order exponential integral function.
+
+\item[gami --] provides the incomplete gamma function.
+
+\item[erfc --] provides the complementary error function.
+\end{singlespace}
+\end{description}
+
+\noindent
+The last three of these were taken from the SLATEC library, which
+was developed by the Los Alamos National Laboratory, the Sandia
+National Laboratory, and the Stanford Linear Accelerator Laboratory.
+These routines produce very high-precision results as compared to
+other publicly available routines.  They were converted to NJOY
+conventions and Fortran-90 style for NJOY.  This module also
+contains a large number of private routines that are used in the
+course of computing the numbers returned by the public routines.
+Subroutine \cword{legndr} is used to compute Legendre
+polynomials by recursion.  The formulas are as follows:
+\begin{eqnarray}
+   P_0(x) & = &  1.\,\,, \\
+   P_1(x) & = &  x \,\,,\\
+   P_{\ell+1)}(x) & = & \frac{(2\ell-1)xP_\ell(x)-(\ell-1)P_{\ell-2}}
+       {\ell} \,\,,
+\end{eqnarray}
+where $P_0$ is stored in \cword{p(1)}, $P_1$ is stored in
+\cword{p(2)}, and so on.
+\index{legndr@{\ty legndr}}
+
+\cleardoublepage
+

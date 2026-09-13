@@ -1,0 +1,24 @@
+stages:
+  - Build
+
+default:
+  tags:
+    - podman
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+# build gfortran-based NJOY image
+Build Container:
+  stage: Build
+  image:
+    name: quay.io/buildah/stable:v1.41.4
+    pull_policy: if-not-present
+  script:
+    - if [ ${CI_COMMIT_BRANCH} == "nea" ]; then export DOCKER_TAG="latest"; else export DOCKER_TAG="${CI_COMMIT_BRANCH}"; fi
+    - sed -i 's/^driver = .*/driver = "vfs"/' /etc/containers/storage.conf
+    - buildah login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} docker.oecd-nea.org
+    - cd .nea
+    - buildah build --file Containerfile --tag ${CI_REGISTRY_IMAGE}/njoy:${DOCKER_TAG} ..
+    - buildah push ${CI_REGISTRY_IMAGE}/njoy:${DOCKER_TAG}

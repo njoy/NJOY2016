@@ -1,0 +1,310 @@
+\section{MODER}
+\label{sMODER}
+
+\hypertarget{sMODERhy}{The}
+MODER\index{MODER|textbf} module is used to convert ENDF\index{ENDF},
+PENDF\index{PENDF}, and GENDF\index{GENDF} tapes from the
+NJOY blocked-binary mode\index{blocked binary} to formatted mode
+(ASCII on modern computers), and {\it vice versa}. It can
+also be used to copy data from one logical unit to another without
+change of mode, or to make a new tape containing selected materials
+from one or more  ENDF, PENDF, or GENDF tapes.  MODER handles
+ENDF-4 through ENDF-6 formats, plus special-purpose formats developed
+for NJOY, such as the
+\hyperlink{sGROUPRhy}{GROUPR}\index{GROUPR} and
+\hyperlink{sERRORRhy}{ERRORR}\index{ERRORR}
+output formats.
+
+This chapter describes the MODER module in NJOY2016.0.
+
+\subsection{Code Description}
+\label{ssMODER_description}
+
+The main subroutine \cword{moder} is exported by the
+module \cword{modem}\index{modules!modem@{\ty modem}}.
+At the beginning of execution, MODER rewinds the output tape \cword{nout}.
+Additionally, each time a new input tape \cword{nin} is specified,
+that unit is rewound.  MODER then processes \cword{nin} one file at a time,
+either for all materials on \cword{nin}, or optionally (see following
+section) for a single specified material. As each file is identified,
+the main program calls a subroutine dedicated to that file.  Each
+subroutine makes the series of calls to \cword{contio}, \cword{listio},
+etc., that is appropriate to that file.
+
+If \cword{nin} and \cword{nout} are of opposite sign, then mode conversion
+is performed automatically by the utility I/O subroutines.  If
+\cword{nin} and \cword{nout} have the same sign, then no mode conversion
+is performed; runs of this type can be used simply to make an extra copy
+of the input tape or to retrieve selected materials without mode change.
+Only a little more than one page of scratch storage is needed, so there
+are no limitations on which tapes can be processed.
+
+\subsection{Input Instructions}
+\label{ssMODER_inp}
+
+As an aid to discussions of the user input to MODER, the input
+instructions that appear as comment cards at the beginning of the
+current version of this module are listed below.  Since code changes
+are possible, it is always advisable to consult the comment-card
+instructions contained in the version of the code actually being
+used before proceeding with an actual calculation.
+\index{MODER!MODER input}
+\index{input!MODER}
+
+\newpage
+\small
+\begin{ccode}
+
+   !---input specifications (free format)---------------------------
+   !
+   ! card 1       unit numbers
+   !      nin     input unit
+   !      nout    output unit
+   !
+   !  a positive unit is coded (mode 3).
+   !  a negative unit is blocked binary (njoy mode).
+   !
+   !  note: abs(nin) ge 1 and le 19 is a flag to select various
+   !        materials from one or more input tapes, with or
+   !        without mode conversion.  the kind of data to be
+   !        processed is keyed to nin as follows:
+   !             nin=1, for endf or pendf input and output,
+   !                 2, for gendf input and output,
+   !                 3, for errorr-format input and output.
+   !
+   !      cards 2 and 3 for abs (nin) ge 1 and le 19 only.
+   !
+   ! card 2
+   !      tpid    tapeid for nout.  66 characters allowed
+   !              (delimited with ', ended with /)
+   ! card 3
+   !      nin     input unit
+   !              terminate moder by setting nin=0
+   !      matd    material on this tape to add to nout
+   !-------------------------------------------------------------------
+
+\end{ccode}
+\normalsize
+
+\noindent
+The contents of \cword{nin} and \cword{nout} are positive or negative
+logical unit numbers, with absolute magnitudes normally in the
+range 20-99, inclusive.  Positive unit numbers refer to formatted tapes,
+and negative unit numbers refer to blocked-binary tapes.  No other
+input is required to copy or convert the entire contents of the data
+file on unit \cword{nin}, writing the results to unit \cword{nout}.
+
+A positive value of \cword{nin} in the range 1-3 is used as a
+trigger to specify that the data to be copied or converted are not
+the contents of a single tape, but, instead, they are selected materials
+from one or more input tapes.  The type of data to be processed
+(ENDF/PENDF {\it vs.} GENDF {\it vs.}
+\hyperlink{sERRORRhy}{ERRORR}-format) is keyed to the value of
+\cword{nin}, as detailed in the instructions above.  If \cword{nin}
+is in the range 1-3, and only in this case, additional input is
+supplied to specify (on card 2) the tape-identification information
+to be written on the first record of the output tape and to specify
+(on card 3) both the \cword{mat}-numbers of the materials to be included and
+the logical units where each of the desired materials are to
+be found.  Note that the slash terminating the Hollerith information
+on card 2 is required. In the case of GENDF processing of a material
+\cword{matd}, which is present on the specified input tape at a series of
+temperatures, a single card 3
+causes the retrieval of all temperatures.
+Card 3 is repeated as many times as needed, and input is terminated
+with a card containing 0/.
+
+\subsection{Sample Input}
+\label{ssMODER_sampleinp}
+
+It is good practice to convert the mode of the ENDF/B tape before
+proceding with any NJOY run.  The time spent in MODER is normally
+much less than the time saved by the subsequent modules.  The required
+input for this is extremely simple.  In this first example, an ENDF-formatted
+file, designated ``tape20" is copied to a binary-formatted file designated
+``tape21".  This file is subsequently used as input to
+\hyperlink{sRECONRhy}{RECONR}.
+
+\small
+\begin{ccode}
+
+   moder
+   20 -21/
+   reconr
+   -21 -22/
+   ...
+
+\end{ccode}
+\normalsize
+
+For older versions of ENDF/B, the released ``tapes'' usually
+contained multiple materials.  In the following example we specify
+that a single material, 1305, be extracted from ``tape20" and
+written to ``tape21".  Subsequent use of ``tape21" will be more
+efficient since only the material of interest is on that tape.
+
+\small
+\begin{ccode}
+
+   moder
+   1 -21/
+   'B-10'/
+   20 1305/
+   0/
+   reconr
+   -21 -22/
+   ...
+
+\end{ccode}
+\normalsize
+
+The final example (taken from one of the standard sample problems)
+shows the use of MODER to prepare a special multimaterial ENDF tape
+for a covariance calculation involving the 5 primary fissionable isotopes.
+Since, in this particular example problem, the resonance region is of
+no interest, a copy of the ENDF serves as the PENDF for later modules.
+Mount ENDF Tape 515, 516, and 555 on units 20, 21, and 22.
+
+\small
+\begin{ccode}
+
+   moder
+   1 -23/
+   'endf/b-v nubar covariance materials'/
+   20 1380/
+   20 1381/
+   21 1390/
+   22 1395/
+   22 1398/
+   20 1399/
+   0/
+   moder
+   -23 -24/
+   group
+   -23 -24 0 25/
+   ...
+
+\end{ccode}
+\normalsize
+
+\noindent
+The second moder run copies the ENDF file to use as a PENDF file
+for \hyperlink{sGROUPRhy}{GROUPR}.
+
+\subsection{Error Messages}
+\label{ssMODER_msg}
+
+\begin{description}
+\begin{singlespace}
+
+\item[\cword{error in moder***endf materials must be in ascending order}] ~\par
+  This is a problem with the material ordering for the input tape.
+
+\item[\cword{message from moder---mat nnnn not found on gendf tape}] ~\par
+  Check the \cword{matd} value on input card 3 and make sure that
+  the correct input tape was mounted.
+
+\item[\cword{error in moder***this material is not a gendf material}] ~\par
+  Input file contains an illegal mixture of data,
+  namely, an initial GENDF
+  material, followed by the indicated non-GENDF \cword{mat}.
+
+\item[\cword{error in moder***input is not an errorr output tape}] ~\par
+  User has requested \hyperlink{sERRORRhy}{ERRORR}-format
+  processing, but input data file is not a
+  \hyperlink{sERRORRhy}{ERRORR}-format tape.
+
+\item[\cword{error in moder***input is not an endf or pendf tape}] ~\par
+  User has specified \cword{nin}=1 on card 1, thereby requesting selective
+  multitape ENDF or PENDF processing, but input data file on the unit
+  \cword{nin} specified on card 3 is not an ENDF/PENDF file.
+
+\item[\cword{error in moder***input is not an endf tape}] ~\par
+  See comments above.
+
+\item[\cword{error in moder***input is not a gendf tape}] ~\par
+  User has requested GENDF processing, but input data file is not a
+  GENDF tape.
+
+\item[\cword{error in moder***conversion not coded for mf=nn}] ~\par
+  There is an illegal or unrecognizable \cword{mf} value on \cword{nin}.
+
+\item[\cword{error in moder***should have found send card}] ~\par
+  MODER expected the end of a section but found actual data.
+  The listed data display the contents of the last card
+  read.  Input data file may be bad or may use a format not yet implemented.
+
+\item[\cword{error in moder***illegal covariance mf=nn}] ~\par
+  ERRORR-format file is missing the required \cword{mf}=3.
+  ENDF and PENDF tapes must be \cword{mat} ordered.
+
+\item[\cword{error in file1***bad LFC in mt=458.}] ~\par
+  There is a bad value for the \cword{LFC} value in \cword{mf}=1 \cword{mt}=458.
+  Only 0 or 1 are allowed.
+
+\item[\cword{error in file1***bad LO in mt=460.}] ~\par
+  There is a bad value for the \cword{LO} value in \cword{mf}=1 \cword{mt}=460.
+  Only 0 or 1 are allowed.
+
+\item[\cword{error in file1***illegal mt}] ~\par
+  Only the standard \cword{mt}=451 to 458 and 460 are allowed in File 1.
+
+\item[\cword{error in file2***illegal mt}] ~\par
+  Only the standard \cword{mt}=151 and the NJOY special values of \cword{mt}=152
+  and 153 are allowed in File 2.
+
+\item[\cword{error in file5***illegal lf}] ~\par
+  The File 5 \cword{lf} value is outside the legal range 1-12.
+
+\item[\cword{error in file6***illegal ltt}] ~\par
+  This message comes from the branch used for ENDF-5 format
+  or for thermal data generated by the
+  \hyperlink{sTHERMRhy}{THERMR} module.
+  Check the format of the File 6 sections.
+
+\item[\cword{error in file6***illegal endf6 law}] ~\par
+  This message comes from the branch used for ENDF-6 tapes.
+  Check the values for the law parameter in the sections of File 6.
+  Only law values 0 to 7 are allowed. In the case of fission, negative law values
+  are also allowed.
+
+\item[\cword{error in file6***illegal endf6 law for mt=nnn}] ~\par
+  This message comes from the branch used for ENDF-6 tapes.
+  Check the values for the law parameter in the corresponding section of File 6.
+  Negative law values are only allowed for fission (mt=18).
+
+\item[\cword{error in file7***bad NS in mt4.}] ~\par
+  The number of non-principal scattering atom types NS cannot be larger than 3.
+
+\item[\cword{error in file7***illegal mt=nnn}] ~\par
+  Only \cword{mt}=2 and \cword{mt}=4 are allowed in File 7 for the ENDF-6
+  format.
+
+\item[\cword{error in file7***illegal value of lthr=n}] ~\par
+  Only values of 1 or 2 are allowed for \cword{lthr} in ENDF-6.
+
+\item[\cword{error in file12***bad LO in mt=460.}] ~\par
+  There is a bad value for the \cword{LO} value in \cword{mf}=1 \cword{mt}=460.
+  Only 0, 1 or 2 are allowed.
+
+\item[\cword{error in file15***illegal lf}] ~\par
+  Only \cword{lf}=1 and the special lanl format \cword{lf}=2 are allowed
+
+\item[\cword{error in file32***illegal value of ndigit}] ~\par
+  There is a bad value for the \cword{NDIGIT} value in \cword{mf}=32.
+  Only 0 or 2 to 6 are allowed.
+
+\item[\cword{error in file32***illegal value of lcomp}] ~\par
+  There is a bad value for the \cword{LCOMP} value in \cword{mf}=32.
+  Only 0, 1 or 2 are allowed.
+
+% The following error messages are in the source code but ISR is no longer referenced
+% the ENDF manual. These might be obsolete.
+% \item[\cword{error in file32***unknown isr}] ~\par
+% \item[\cword{error in file32***isr>0 not supported for lrf=7}] ~\par
+
+\end{singlespace}
+\end{description}
+
+\cleardoublepage
+
