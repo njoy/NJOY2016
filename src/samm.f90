@@ -4892,7 +4892,7 @@ contains
    do k=1,100
       if (sum+a*b.eq.sum) go to 20
       sum=sum+a*b
-      b=b+1/(k+1)
+      b=b+1./(k+1)
       a=a*q/(k+1)**2
    enddo
    call error('bigeta','K0 sum failed',' ')
@@ -4920,7 +4920,7 @@ contains
       if (sum-a*(b+c).eq.sum) go to 40
       sum=sum-a*(b+c)
       c=half/(k+2)
-      b=b+1/(k+1)
+      b=b+1./(k+1)
       a=a*q/((k+1)*(k+2))
    enddo
    call error('bigeta','K1 sum failed',' ')

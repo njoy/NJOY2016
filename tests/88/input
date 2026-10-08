@@ -1,0 +1,12 @@
+-- n-020_Ca_040 CWF correction
+moder
+ 20 -21
+reconr
+ -21 -22/
+ 'reconr/pendf tape for ENDF80 Ca40'/
+ 2025 0/
+ .001/
+ 0 /
+moder
+ -22 50
+stop
