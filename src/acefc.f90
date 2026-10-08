@@ -7156,7 +7156,7 @@ contains
    integer::last,nx,ix
    integer::jp,jpn,jpp
    real(kr)::test,eemx,yield,xnext,xx,yy,y,xn,eyl,gyl,en
-   real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee
+   real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee,eout1
    real(kr)::ep,e,bzro,sfe,sfo,bbi,fbarcm,delfcm,akal,rkal
    real(kr)::emu1,emu2,fbl,ffl,fbcm,ffcm,akak,del,av,renorm
    real(kr)::zap,aa,test1,test2,test3,ex,fx,cx,cxx,val
@@ -7544,14 +7544,16 @@ contains
             ncyc=na+2
             nx=nint(scr(5))
             n=nint(scr(6))
+            eout1=scr(7)/emev ! First tabulated outgoing energy (in MeV) at incident energy ee
             if (next+5*n.gt.nxss) call error('acelf6',&
               'insufficient storage for energy distributions.',' ')
 
             ! extend low histogram bins as sqrt(e) using log energy scale
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
+            ! only do this if the first tabulated outgoing energy is zero
             if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                lep.eq.1.and.zap.eq.1.and.nd.eq.0) then
+                lep.eq.1.and.zap.eq.1.and.nd.eq.0.and.eout1.eq.0) then
                fx=.8409
                ex=40
                cx=scr(7+ncyc)*scr(8)
@@ -7590,8 +7592,9 @@ contains
             ! extend to lower energy as sqrt(e) using linear interpol
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
+            ! only do this if the first tabulated outgoing energy is zero
             else if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                     lep.eq.2.and.zap.eq.1.and.n.gt.3.and.nd.eq.0) then
+                     lep.eq.2.and.zap.eq.1.and.n.gt.3.and.nd.eq.0.and.eout1.eq.0) then
                ex=40
                fx=0.50
                nn=0
