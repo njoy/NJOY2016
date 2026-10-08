@@ -59,5 +59,26 @@ add_executable( njoy_executable
              "${CMAKE_CURRENT_SOURCE_DIR}/src/wimsr.f90" )
 set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
 
+set( CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}/fortran_modules" CACHE PATH "directory for fortran modules" )
+
+install( TARGETS njoy_executable
+         RUNTIME DESTINATION bin
+         LIBRARY DESTINATION lib
+         ARCHIVE DESTINATION lib
+         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+                     GROUP_EXECUTE GROUP_READ
+                     WORLD_EXECUTE WORLD_READ )
+
+file( RELATIVE_PATH relative_fortran_module_files_path
+      "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_Fortran_MODULE_DIRECTORY}" )
+file( GLOB fortran_module_files
+      RELATIVE "${relative_fortran_module_files_path}"
+      *.mod )
+install( FILES ${fortran_module_files}
+         DESTINATION include
+         PERMISSIONS OWNER_READ OWNER_WRITE
+                     GROUP_READ
+                     WORLD_READ )
+
 enable_testing()
 add_subdirectory( tests )
