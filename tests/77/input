@@ -1,0 +1,50 @@
+ 'moder'
+ 20  -21
+ 'reconr'
+ -21 -22
+ 'pendf tape for  U235'/
+ 9228 3 0
+ .0005 /
+ 'U 235'/
+ 'processed by the njoy nuclear data processing system'/
+ 'see original file for details of evaluation'/
+ 0/
+ 'broadr'
+ -21 -22 -23
+ 9228  2 0 0 0
+ .0005 1.e6 /
+ 300. 900.
+ 0/
+ 'unresr'
+ -21 -23 -24
+ 9228    2 19 1
+ 300. 900.
+ 1.e+10 1.e8 1.e6 5.5e5 1.e5 6.e4 3.e4 1.e4 6.e3 3.e3 1.e3 600. 300. 100. 60. 30. 10. 1. 1.e-3
+ 0/
+'groupr'
+ -21 -24 0 25
+ 9228  9 0 5 5 2 19 1 1
+ 'U 235'/
+ 300. 900.
+ 1.e10 1.e8 1.e6 5.5e5 1.e5 6.e4 3.e4 1.e4 6.e3 3.e3 1.e3 600. 300. 100. 60. 30. 10. 1. 1.e-3 /
+ 3 /
+ 5 18 'chi ' /
+ 5 455 'chid' /
+ 6 /
+ 0/
+ 3 /
+ 6 /
+ 0/
+ 0/
+'matxsr'
+ 25  0 +26/
+ 1 'NJOY 2016 CI'/
+ 1 1  1 1
+ '69  group neutron interaction library'/
+ 'n'
+ 69
+ 'nscat'
+ 1
+ 1
+ 'U 235'  9228  /
+'stop'
