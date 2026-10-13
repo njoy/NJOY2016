@@ -1,6 +1,10 @@
 # Release Notes&mdash;NJOY2016
 Given here are some release notes for NJOY2016. Each release is made through a formal [Pull Request](https://github.com/njoy/NJOY2016/pulls) made on GitHub. There are links in this document that point to each of those Pull Requests, where you can see in great details the changes that were made. Often the Pull Requests are made in response to an [issue](https://github.com/njoy/NJOY2016/issues). In such cases, links to those issues are also given.
 
+## [NJOY2016.81](https://github.com/njoy/NJOY2016/pull/xxx)
+This update fixes the following issues:
+  - RECONR now properly adds all user defined energy points and the second point in the discontinuity at the end of the resonance range. Test 89 was added to verify the user defined energy points.
+
 ## [NJOY2016.80](https://github.com/njoy/NJOY2016/pull/418)
 This update fixes the following issues:
   - The ismooth option in ACER assumes that the first outgoing energy in a distribution is always 0, which can lead to outgoing energies out of order and other issues. We now ensure ismooth does not perform its smoothing operation when the first ougoing energy value is not zero.
