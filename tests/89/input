@@ -1,0 +1,25 @@
+-- no resonance user defined grid
+moder
+ 20 -21
+reconr
+ -21 -22/
+ 'reconr/pendf tape for ENDF80 H1'/
+ 125 0 2 /
+ .001 /
+ 1.23 2.34567e+6 /
+ 0 /
+moder
+ -22 30
+-- resonance user defined grid
+moder
+ 50 -51
+reconr
+ -51 -52/
+ 'reconr/pendf tape for ENDF80 H1'/
+ 1828 0 2 /
+ .001 /
+ 1.23 2.34567e+6 /
+ 0 /
+moder
+ -52 60
+stop
