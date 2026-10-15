@@ -2364,10 +2364,10 @@ contains
    nwd=6-nwh
    if (nwd.le.0) go to 120
    if (nx.ne.0) write(hfmt,&
-     &'(''('',i2,''a4,'',i2,''x,1p'',i1,''e11.0)'')')&
+     &'(''('',i2,''a4,'',i2,''x,'',i1,''e11.0)'')')&
      ntw,nx,nwd
    if (nx.eq.0) write(hfmt,&
-     '(''('',i2,''a4,'',''1p'',i1,''e11.0)'')')&
+     '(''('',i2,''a4,'',i1,''e11.0)'')')&
      ntw,nwd
    read(nin,hfmt) (tz(i),i=1,ntw),(a(i+nw1+ntw),i=1,nwd)
    do i=1,ntw
