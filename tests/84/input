@@ -1,0 +1,8 @@
+-- read tape20 and reconstruct
+reconr
+20 100
+'reconstructed data' /
+128 /
+0.001 /
+0 /
+stop

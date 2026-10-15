@@ -129,7 +129,7 @@ with open('input', 'r') as i, \
         exit(child.poll())
 
     for reference_tape in reference_tapes:
-        trial_tape = 'tape' + reference_tape[-2:]
+        trial_tape = 'tape' + reference_tape[13:]
         if not filecmp.cmp(reference_tape, trial_tape):
             with open(reference_tape, 'r') as reference_file, \
                  open(trial_tape, 'r') as trial_file, \

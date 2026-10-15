@@ -17,7 +17,7 @@ module acefc
    real(kr)::aw0,tz
 
    ! parameters for continuous nxs block
-   integer::len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,nxsd(8)
+   integer::len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,nxsd(5)
 
    ! parameters for continuous jxs block
    integer::esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
@@ -44,6 +44,9 @@ module acefc
    integer::mt5n,mt5p,mt5d,mt5t,mt5he3,mt5a
    integer::mt103,mt104,mt105,mt106,mt107
    integer::mpmin,mpmax,mdmin,mdmax,mtmin,mtmax,m3min,m3max,m4min,m4max
+
+   !-- adding variables to hold the library and version
+   integer::nlib,lrel,nver
 
    ! record parameters for Type-2 binary files
    integer::ner,nbw
@@ -85,7 +88,7 @@ module acefc
 contains
 
    subroutine acetop(nendf,npend,ngend,nace,ndir,iprint,itype,mcnpx,&
-     suff,hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin)
+     suff,hk,izn,awn,matd,tempd,newfor,iopp,ismooth,thin,izaoption)
    !--------------------------------------------------------------------
    ! Prepare an ACE fast continuous file.
    !--------------------------------------------------------------------
@@ -94,7 +97,7 @@ contains
    use endf   ! provides endf routines and variables
    ! externals
    integer::nendf,npend,ngend,nace,ndir,iprint,itype,matd,newfor,iopp,ismooth,i
-   integer::mcnpx
+   integer::mcnpx,izaoption
    real(kr)::suff
    character(70)::hk
    integer::izn(16)
@@ -152,6 +155,9 @@ contains
    call repoz(nendf)
    call tpidio(nendf,0,0,b,nb,nw)
    call contio(nendf,0,0,b,nb,nw)
+   !-- get library 
+   nlib = n1h
+
    call contio(nendf,0,0,b,nb,nw)
    if (n1h.ne.0) then
       iverf=4
@@ -161,6 +167,11 @@ contains
       iverf=6
    endif
    write(nsyso,'(/'' using endf-'',i1,'' format'')') iverf
+
+   !-- get library release 
+   call contio(nendf,0,0,b,nb,nw)
+   lrel = l1h
+   nver=n2h
 
    !--assign scratch files
    mscr=10
@@ -205,7 +216,7 @@ contains
    call atend(mscr,0)
 
    !--load ace data into memory.
-   call acelod(mscr,suff,matd,tempd,newfor,mcnpx,ismooth)
+   call acelod(mscr,suff,matd,tempd,newfor,mcnpx,ismooth,izaoption)
 
    !--print ace file.
    if (iprint.gt.0) call aceprt(hk)
@@ -286,17 +297,25 @@ contains
       call contio(npend,0,0,scr,nb,nw)
       if (math.ne.matd)&
         call error('first','desired temperature not found.',' ')
-      za=scr(1)
-      za=nint(za)
+      za=nint(scr(1))
       awr=scr(2)
       nxp=n2h
       jscr=7
-      if (iverf.ge.5) call contio(npend,0,0,scr(jscr),nb,nw)
-      if (iverf.ge.5) jscr=jscr+6
-      if (iverf.eq.6) call contio(npend,0,0,scr(jscr),nb,nw)
-      if (iverf.eq.6) jscr=jscr+6
+      is=0
+      if (iverf.ge.5) then
+         call contio(npend,0,0,scr(jscr),nb,nw)
+         jscr=jscr+6
+         is=nint(scr(10)) ! endf-5 and endf-6 both store liso
+      endif
+      if (iverf.eq.6) then
+         call contio(npend,0,0,scr(jscr),nb,nw)
+         jscr=jscr+6
+      endif
       awi=1
       izai=1
+      izaid=nint(scr(1))
+      ia=mod(izaid,1000)
+      iz=(izaid-ia)/1000
       if (iverf.eq.6) then
          awi=scr(13)
          nlib=nint(scr(17))
@@ -4879,7 +4898,7 @@ contains
    return
    end subroutine gamout
 
-   subroutine acelod(nin,suff,matd,tempd,newfor,mcnpx,ismooth)
+   subroutine acelod(nin,suff,matd,tempd,newfor,mcnpx,ismooth,izaoption)
    !-------------------------------------------------------------------
    ! Load data in ace format from the input file.
    !-------------------------------------------------------------------
@@ -4888,7 +4907,7 @@ contains
    use util ! repoz,dater,error,skiprz,sigfig
    use endf ! provides endf routines and variables
    ! externals
-   integer::nin,matd,newfor,mcnpx,ismooth
+   integer::nin,matd,newfor,mcnpx,ismooth,izaoption
    real(kr)::suff,tempd
    ! internals
    integer::nwscr,nnu,nnup,kfis,mtnr,mtntr,i,nnud,nnf
@@ -4918,18 +4937,28 @@ contains
    nnex=0
    nwscr=1000000
    allocate(scr(nwscr))
-   do i=1,8
+   do i=1,5
       nxsd(i)=0
    enddo
    do i=1,2
       jxsd(i)=0
    enddo
    call repoz(nin)
-   iza=nint(za)
+   iza=izaid
    aw0=awr
    write(hm,'(''   mat'',i4)') matd
    tz=tempd*bk/emev
-   zaid=iza+suff
+   zaid=izaid+suff
+   if (izaoption.eq.1.and.is.gt.0) then
+      zaid=izaid+300+100*is+suff
+   endif
+   if (izaoption.eq.1.and.izaid.eq.95242) then
+      if (is.eq.0) then
+         zaid=izaid+400+suff
+      elseif (is.eq.1) then
+         zaid=izaid+suff
+      endif
+   endif
    if (mcnpx.eq.0) then
       if (izai.eq.1) then
          write(hz,'(f9.2,''c'')') zaid
@@ -4968,7 +4997,6 @@ contains
       endif
    endif
    ntrp=ntrpp
-   izaid=nint(za)
    call dater(hdt)
    hd='  '//hdt
 
@@ -7128,7 +7156,7 @@ contains
    integer::last,nx,ix
    integer::jp,jpn,jpp
    real(kr)::test,eemx,yield,xnext,xx,yy,y,xn,eyl,gyl,en
-   real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee
+   real(kr)::apsx,step1,step2,xl,pl,yn,pn,rn,sum,ee,eout1
    real(kr)::ep,e,bzro,sfe,sfo,bbi,fbarcm,delfcm,akal,rkal
    real(kr)::emu1,emu2,fbl,ffl,fbcm,ffcm,akak,del,av,renorm
    real(kr)::zap,aa,test1,test2,test3,ex,fx,cx,cxx,val
@@ -7516,14 +7544,16 @@ contains
             ncyc=na+2
             nx=nint(scr(5))
             n=nint(scr(6))
+            eout1=scr(7)/emev ! First tabulated outgoing energy (in MeV) at incident energy ee
             if (next+5*n.gt.nxss) call error('acelf6',&
               'insufficient storage for energy distributions.',' ')
 
             ! extend low histogram bins as sqrt(e) using log energy scale
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
+            ! only do this if the first tabulated outgoing energy is zero
             if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                lep.eq.1.and.zap.eq.1.and.nd.eq.0) then
+                lep.eq.1.and.zap.eq.1.and.nd.eq.0.and.eout1.eq.0) then
                fx=.8409
                ex=40
                cx=scr(7+ncyc)*scr(8)
@@ -7562,8 +7592,9 @@ contains
             ! extend to lower energy as sqrt(e) using linear interpol
             ! only do this for outgoing neutrons with law=1, lang=2
             ! only do this if there are no discrete data
+            ! only do this if the first tabulated outgoing energy is zero
             else if (ismooth.gt.0.and.law.eq.1.and.lang.eq.2.and.&
-                     lep.eq.2.and.zap.eq.1.and.n.gt.3.and.nd.eq.0) then
+                     lep.eq.2.and.zap.eq.1.and.n.gt.3.and.nd.eq.0.and.eout1.eq.0) then
                ex=40
                fx=0.50
                nn=0
@@ -8652,6 +8683,25 @@ contains
                                  'reset to 1.e-5 eV')
                         ep=1.e-5_kr
                      endif
+                     !-- ENDF-8.1 formats primary gamma energy as the outgoing
+                     !-- energy at each incident energy. JENDL (and JEFF) format
+                     !-- them as the binding energy. NJOY expects the binding 
+                     !-- energy so this logic changes the value if the evaluation
+                     !-- is from ENDF-8.1. This will hopefully be resolved before
+                     !-- the next ENDF release. 
+                     if (law.eq.1.and.ep.lt.zero) then 
+                        if (nlib.eq.0.and.nver.eq.8.and.lrel.eq.1) then
+                            !-- convert to the (negated) binding energy value
+                            ep=ep+ei*awr/(awr+1)
+                            call mess('acelpp',&
+                                      'Handling MF6 ENDF-8.1 discrete primary gamma ',&
+                                      'format by converting to JENDL format')
+                        else 
+                             call mess('acelpp',&
+                                      'Handling MF6 discrete primary gammas by ',&
+                                      'assuming the JENDL-5.0 format.')
+                        endif
+                     endif
                      if (law.eq.2) ep=ep-awr*ei/(awr+1)
                      dise(ki)=ep
                      if (ki.gt.1) then
@@ -8674,6 +8724,18 @@ contains
                                  'reset to 1.e-5 eV')
                         ep=1.e-5_kr
                      endif
+                     !-- ENDF-8.1 formats primary gamma energy as the outgoing
+                     !-- energy at each incident energy. JENDL (and JEFF) format
+                     !-- them as the binding energy. NJOY expects the binding 
+                     !-- energy so this logic changes the value if the evaluation
+                     !-- is from ENDF-8.1. This will hopefully be resolved before
+                     !-- the next ENDF release 
+                     if (law.eq.1.and.ep.lt.zero) then 
+                        if (nlib.eq.0.and.nver.eq.8.and.lrel.eq.1) then
+                            !-- convert to the (negated) binding energy value
+                            ep=ep+ei*awr/(awr+1)
+                        endif
+                     endif
                      if (law.eq.2) ep=ep-awr*ei/(awr+1)
                      if (ki.gt.1.) then
                         if (ep.eq.scr(5+2*(ki-1)))&
@@ -8686,7 +8748,7 @@ contains
                      !--found a new discrete energy.  insert it into
                      !--the existing dise array, making sure to
                      !--maintain a highest to lowest energy order.
-                     if (abs(scr(5+2*ki)).gt.abs(dise(1))) then
+                     if (abs(ep).gt.abs(dise(1))) then
                         do m=nd0,1,-1
                            dise(m+1)=dise(m)
                         enddo
@@ -8810,8 +8872,15 @@ contains
             !--photon.
             if (nd0.ne.0.and.nd.eq.nd0) then
                do nn=1,nd
-                  if (law.eq.1.and.scr(5+2*nn).lt.zero)&
-                               scr(5+2*nn)=-scr(5+2*nn)+ei*awr/(awr+1)
+                  if (law.eq.1.and.scr(5+2*nn).lt.zero) then
+                     !-- if ENDF8.1, don't need to convert to gamma energy
+                     !-- from binding energy - just negate
+                     if (nlib.eq.0.and.nver.eq.8.and.lrel.eq.1) then
+                        scr(5+2*nn)=-scr(5+2*nn)
+                     else
+                        scr(5+2*nn)=-scr(5+2*nn)+ei*awr/(awr+1)
+                     endif
+                  endif
                enddo
             elseif (nd0.ne.0.and.nd.ne.nd0) then
                !--if nd=0 then must insert all discrete photons
@@ -8848,7 +8917,15 @@ contains
                   !--to account for the incident neutron energy.
                   do m=nd0,1,-1
                      ep=dise(m)
-                     if (law.eq.1.and.ep.lt.zero)ep=-ep+ei*awr/(awr+1)
+                     if (law.eq.1.and.ep.lt.zero) then 
+                        !-- if ENDF8.1, don't need to convert to gamma energy
+                        !-- from binding energy - just negate
+                        if (nlib.eq.0.and.nver.eq.8.and.lrel.eq.1) then
+                           ep=-ep
+                        else
+                           ep=-ep+ei*awr/(awr+1)
+                        endif
+                     endif
                      if (law.eq.2)ep=ep+ei*awr/(awr+1)
                      scr(5+2*m)=ep
                      scr(6+2*m)=zero
@@ -9568,15 +9645,15 @@ contains
                next=next+5
                do ie=1,2
                   xss(next)=2
-                  xss(next+1)=3
-                  xss(next+2)=-1
-                     xss(next+5)=0
-                  xss(next+8)=0
+                  xss(next+1)=3            ! three points in the cosine grid
+                  xss(next+2)=-1           ! three cosine values
                   xss(next+3)=one-one/100
-                  xss(next+6)=0
-                  xss(next+9)=0
                   xss(next+4)=1
+                  xss(next+5)=0            ! three pdf values
+                  xss(next+6)=0
                   xss(next+7)=200
+                  xss(next+8)=0            ! three cdf values
+                  xss(next+9)=0
                   xss(next+10)=1
                   next=next+11
                enddo
@@ -11076,9 +11153,10 @@ contains
      &6x,''*                     *'',9x,''ntrp'',i10/&
      &6x,''*     processed by    *'',8x,''ntype'',i10/&
      &6x,''*                     *'',9x,''ndnf'',i10/&
-     &6x,''*        njoy         *'',10x,''esz'',i10/&
-     &6x,''*                     *'',11x,''nu'',i10/&
-     &6x,''***********************'',10x,''mtr'',i10/&
+     &6x,''*        njoy         *'',12x,''z'',i10/&
+     &6x,''*                     *'',12x,''a'',i10/&
+     &6x,''***********************'',12x,''s'',i10/&
+     &39x,''esz'',i10/40x,''nu'',i10/39x,''mtr'',i10/&
      &39x,''lqr'',i10/39x,''tyr'',i10/38x,''lsig'',i10/&
      &39x,''sig'',i10/38x,''land'',i10/39x,''and'',i10/&
      &38x,''ldlw'',i10//39x,''dlw'',i10/39x,''gpd'',i10/&
@@ -11089,7 +11167,7 @@ contains
      &37x,''dndat'',i10/38x,''ldnd'',i10/39x,''dnd'',i10/&
      &37x,''ptype'',i10/38x,''ntro'',i10/37x,''ploct'',i10///&
      &6x,''hk---'',a70)')&
-     hz,aw0,tz,hd,hm,len2,nes,ntr,nr,ntrp,ntype,ndnf,esz,&
+     hz,aw0,tz,hd,hm,len2,nes,ntr,nr,ntrp,ntype,ndnf,iz,ia,is,esz,&
      nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,gpd,mtrp,lsigp,&
      sigp,landp,andp,ldlwp,dlwp,yp,fis,end,iurpt,nud,dndat,ldnd,&
      dnd,ptype,ntro,ploct,hk
@@ -12938,7 +13016,7 @@ contains
       endif
       write(nout,'(4(i7,f11.0))') (izn(i),awn(i),i=1,16)
       write(nout,'(8i9)')&
-        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
         esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
         gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
         iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
@@ -12956,14 +13034,14 @@ contains
       if (mcnpx.eq.0) then
          write(nout) hz(1:10),aw0,tz,hd,hk,hm,&
            (izn(i),awn(i),i=1,16),&
-           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
            esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
            gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
            iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
       else
          write(nout) hz(1:13),aw0,tz,hd,hk,hm,&
            (izn(i),awn(i),i=1,16),&
-           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+           len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
            esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
            gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
            iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
@@ -13926,7 +14004,7 @@ contains
       endif
       read (nin,'(4(i7,f11.0))') (izo(i),awo(i),i=1,16)
       read (nin,'(8i9)')&
-        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+        len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
         esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
         gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
         iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
@@ -14004,13 +14082,13 @@ contains
    else if (itype.eq.2) then
       if (mcnpx.eq.0) then
         read(nin) hz(1:10),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
           esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
           gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
           iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct
       else
         read(nin) hz(1:13),aw0,tz,hd,hko,hm,(izo(i),awo(i),i=1,16),&
-          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,(nxsd(i),i=1,8),&
+          len2,izaid,nes,ntr,nr,ntrp,ntype,ndnf,is,iz,ia,(nxsd(i),i=1,5),&
           esz,nu,mtr,lqr,tyr,lsig,sig,land,and,ldlw,dlw,&
           gpd,mtrp,lsigp,sigp,landp,andp,ldlwp,dlwp,yp,fis,end,&
           iurpt,nud,dndat,ldnd,dnd,(jxsd(i),i=1,2),ptype,ntro,ploct

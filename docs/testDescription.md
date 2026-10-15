@@ -381,3 +381,33 @@ Tests 75 was added to track an issue found in ACER when multiple temperatures we
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/76/input)]
 
 Tests 76 was added to track a few CCCCR issues. Unfortunately, these issues were related to a binary file so we cannot verify the content of the file just yet. At the very least, we now have a test to verify if CCCCR actually runs (there was previously a crash on this input).
+
+## Test Problem 78
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/78/input)]
+
+Tests 78 was added to track an ACER issue for heating numbers in photonuclear file. When calculating heating numbers based on ENDF LAW=2, ACER assumed that the yield of the secondary particle is always 1, which is correct in all cases except when MT5 is used as a lumped reaction.
+
+## Test Problem 79
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/79/input)]
+
+Tests 79 was added to track an issue in HEATR when calculating the average outgoing energy from a distribution that uses multiple interpolation ranges in TAB1 records. Mainly nuclides using MF5 instead of MF6 are impacted by this change (e.g. Sn119 and Sn122 from ENDF/B-VIII.0).
+
+## Test Problem 80
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/80/input)]
+
+Tests 80 was added to track an issue in LEAPR that caused an inifite loop to occur when the beta grid contains very small values.
+
+## Test Problem 81
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/81/input)]
+
+Tests 81 was added as a test for background R-matrix elements that were added to the ENDF/B-VIII.1 Sr88 evaluation.
+
+## Test Problem 82
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/82/input)]
+
+Tests 82 was added to track the new ZAID options in ACER added in NJOY2016.75.

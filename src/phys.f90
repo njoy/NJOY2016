@@ -18,7 +18,7 @@ module physics
 !    the fine structure constant.
 !  - other values are given in terms of the above.
    real(kr),parameter,public::pi=3.141592653589793238e0_kr     !
-   real(kr),parameter,public::euler=0.55721566490153286e0_kr !
+   real(kr),parameter,public::euler=0.57721566490153286e0_kr !
    real(kr),parameter,public::bk=8.617333262e-5_kr         !eV/degK
    real(kr),parameter,public::ev=1.602176634e-12_kr     !erg/eV
    real(kr),parameter,public::clight=2.99792458e10_kr   !cm/s
