@@ -411,3 +411,9 @@ Tests 81 was added as a test for background R-matrix elements that were added to
 [[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/82/input)]
 
 Tests 82 was added to track the new ZAID options in ACER added in NJOY2016.75.
+
+## Test Problem 89
+
+[[input](https://raw.githubusercontent.com/njoy/NJOY2016/master/tests/89/input)]
+
+Tests 82 was added to test user defined energy grid points.
