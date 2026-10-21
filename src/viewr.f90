@@ -339,8 +339,8 @@ contains
    real(kr)::factx,facty
    real(kr)::xx,yy,zz
    character(80)::text
-   integer,parameter::mmax=20000   !same in plotr and viewr
-   integer,parameter::maxaa=500000
+   integer,parameter::mmax=50000   !same in plotr and viewr
+   integer,parameter::maxaa=5000000
    real(kr),dimension(15)::z
    real(kr),dimension(maxaa)::aa
    real(kr),dimension(mmax)::x,y,b,dxm,dxp,dym,dyp
@@ -689,7 +689,7 @@ contains
                      idone=1
                   else
                      if (iskip.eq.0) then
-                       if (l+5000.ge.maxaa) then
+                       if (l+mmax.ge.maxaa) then
                            call mess('viewr','too much 3d data',&
                              'data truncated')
                            iskip=1
@@ -1270,16 +1270,17 @@ contains
    real(kr)::xyz(nxyz)
    ! internals
    integer,parameter::length=2000
+   integer,parameter::lenxyz=10000
    integer::i,j,nn,k,ncurv,major,minor,itop,ibot,l,n
    real(kr)::wt,xlo,xhi,ylo,yhi,zlo,zhi,xn,yn,zn,yy
    real(kr)::top,bot,xop,yop,zop
    integer::lll(length)
-   real(kr)::x(2000),y(2000),z(2000)
+   real(kr)::x(lenxyz),y(lenxyz),z(lenxyz)
    real(kr),parameter::big=1.e10_kr
    real(kr),parameter::d0=.001e0_kr
    real(kr),parameter::d3=.301e0_kr
    real(kr),parameter::d7=.699e0_kr
-   integer::kmax=1999
+   integer::kmax=lenxyz-1  !  x(:),y(:),z(:) arrays  dimension - 1
    real(kr),parameter::zero=0
    real(kr),parameter::one=1
    real(kr),parameter::ten=10

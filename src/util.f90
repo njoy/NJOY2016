@@ -193,6 +193,8 @@ contains
    if (nun.ge.10.and.nun.le.19) then
       ! scratch units
       age='scratch'
+      inquire(nun,opened=there)
+      if (there) close (nun)
       open(nun,form=for,status=age)
    else
       ! regular units
@@ -377,6 +379,7 @@ contains
    if (x.ne.zero) then
       aa=log10(abs(x))
       ipwr=int(aa)
+      if ((ndig.eq.9).and.(aa.gt.zero).and.(aa-ipwr.lt.1.0e-6_kr)) ipwr=ipwr-1
       if (aa.lt.zero) ipwr=ipwr-1
       ipwr=ndig-1-ipwr
       ii=nint(x*ten**ipwr+ten**(ndig-11))
