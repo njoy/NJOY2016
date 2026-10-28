@@ -30,7 +30,10 @@ module wimsm
    integer,parameter::nymax=100
    real(kr)::yield(nymax)
    integer::ifisp(nymax)
-   integer::ifiss,nfiss
+   ! ifissr: fission flag of the resonance tables (WIMSD-5 library
+   ! conventions of the IAEA WIMS-D Library Update Project, WLUP)
+   ! (IAEA, D. Lopez Aldama, dlopezaldama@gmail.com)
+   integer::ifiss,ifissr,nfiss
    integer::isg
    integer::ixs
    real(kr),dimension(:),allocatable::snu
@@ -434,7 +437,7 @@ contains
    integer::i,jg,is,jtemp,jfiss,nl,nz,ntw,l,ig,kg,lim,iadd
    integer::loca,jz,loc,locn,jtem,iterm,ioff,it,index
    integer::indexl,iz
-   real(kr)::xid,siglam,sigb,siga,sig
+   real(kr)::xid,siglam,sigb,siga,sigs,sig
    real(kr),dimension(:),allocatable::sabs
    real(kr),dimension(:),allocatable::snux
    real(kr),dimension(:),allocatable::snsf
@@ -447,6 +450,7 @@ contains
    real(kr),parameter::zero=0
 
    !--allocate storage.
+   ifissr=0
    if (ires.eq.0) go to 510
    write(nsyso,'(/'' ***resonance integrals***'')')
    ntsr=ires*nsigz*nrg
@@ -519,6 +523,7 @@ contains
    if (mfh.ne.3) go to 300
    if (mth.eq.1) go to 162
    if (mth.eq.2) go to 162
+   if ((mth.gt.50).and.(mth.le.91)) go to 162
    if (mth.lt.18.or.mth.gt.150) go to 300
    if (mth.gt.21.and.mth.lt.102.and.mth.ne.38) go to 300
   162 continue
@@ -537,7 +542,8 @@ contains
    jg=kg-nfg
    lim=nsigz
    if (nsigz.gt.nz) lim=nz
-   if (mth.ne.1.and.mth.ne.2.and.mth.ne.18.and.mth.ne.102) go to 300
+   if (mth.ne.1.and.mth.ne.2.and.mth.ne.18.and.mth.ne.102 &
+        .and.((mth.le.50).or.(mth.gt.91))) go to 300
 
    !--absorption
    if (mth.eq.102) then
@@ -578,8 +584,10 @@ contains
          sabs(iadd-jz+1)=sabs(iadd-jz+1)+scr(nl*jz+loca)
       enddo
 
-   !--elastic
-   else if (mth.eq.2) then
+   !--elastic or inelastic scattering: the discrete inelastic levels
+   !--(mt51-91) are added to the resonance scattering, as in the
+   !--WLUP libraries (DLA, IAEA)
+   else if ((mth.eq.2).or.((mth.gt.50).and.(mth.le.91))) then
       iadd=nsigz+nsigz*(jtemp-1+ires*(jg-1))
       loca=l+lz+nl*(nz-1)
       do jz=1,lim
@@ -661,13 +669,17 @@ contains
             sigb=sigz(iz)+siglam
             siga=sabs(loc+iz-1)
             sig=snux(loc+iz-1)
+            sigs=elas(loc+iz-1)
             sabs(loc+iz-1)=sigb*siga/(sigb+siga)
             snux(loc+iz-1)=sigb*sig/(sigb+siga)
+            ! wims-e/wimsd-5: scattering resonance integral too (DLA, IAEA)
+            if (iverw.ne.4) elas(loc+iz-1)=sigb*sigs/(sigb+siga)
          enddo
       enddo
    enddo
 
    !--write out results
+   ifissr=jfiss
    call rsiout(xid,jfiss,fa,sabs,snux,flxr,sigz,elas)
 
    !--resint is finished.
@@ -929,6 +941,9 @@ contains
    call tpidio(ngendf,0,0,scr,nb,nw)
    isg=0
    if (sgref.lt.dilinf) isg=1
+   ! wims-e/wimsd-5: data taken at the reference dilution sgref
+   ! also when sgref is infinite (DLA, IAEA)
+   if (iverw.eq.5) isg=1
    jtemp=0
    i318=0
    jfisd=0
@@ -944,8 +959,7 @@ contains
    xxi=1+log(alf)*alf/(1-alf)
 
    !--loop over temperatures
-   ! snu, abs1, ab0, xtr and sdp were not initialized (IAEA,
-   ! D. Lopez Aldama, dlopezaldama@gmail.com)
+   ! snu, abs1, ab0, xtr and sdp were not initialized (DLA, IAEA)
    do i=1,ngnd
       snu(i)=0
    enddo
@@ -2049,6 +2063,8 @@ contains
 
    !--write material identifier data
    awt=awr*amassn
+   ! no fission in the resonance tables: ifis=2 (DLA, IAEA)
+   if((ifis.eq.3).and.(ifissr.ne.3)) ifis=2
    write(nout,'(i6,1p,e15.8,5i6)')&
      ident,awt,iznum,ifis,ntemp,nrestb,isof
 
