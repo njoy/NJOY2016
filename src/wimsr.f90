@@ -944,11 +944,17 @@ contains
    xxi=1+log(alf)*alf/(1-alf)
 
    !--loop over temperatures
+   ! snu, abs1, ab0, xtr and sdp were not initialized (IAEA,
+   ! D. Lopez Aldama, dlopezaldama@gmail.com)
+   do i=1,ngnd
+      snu(i)=0
+   enddo
   140 continue
    do i=1,ngnd
       csp1(i)=0
       spot(i)=sigp
       xi(i)=xxi
+      abs1(i)=0
       abs2(i)=0
       sf0(i)=0
       sfi(i)=0
@@ -957,6 +963,9 @@ contains
       chi(i)=0
       scat(i)=0
       sn2n(i)=0
+      ab0(i)=0
+      xtr(i)=0
+      sdp(i)=0
       l1e(i)=ngnd
       l2e(i)=1
       l1(i)=ngnd
