@@ -378,7 +378,8 @@ contains
    logical::need_name
 
    !--initialize
-   nwscr=10000
+   ! modified (IAEA, D. Lopez Aldama, dlopezaldama@gmail.com)
+   nwscr=20000
    nfscr=10
    nflx=11
    nend2=12
@@ -634,6 +635,20 @@ contains
    if (mfd.gt.36.and.mfd.lt.10000000) go to 381
    if (mfd.ge.12.and.mfd.le.18.and.igg.eq.0)&
      call error('groupr','photons not allowed with igg=0.',' ')
+   if ((mfd.eq.26.and.mtdp.eq.18) .or. &
+       (mfd.eq.26.and.mtdp.eq.19) .or. &
+       (mfd.eq.26.and.mtdp.eq.20) .or. &
+       (mfd.eq.26.and.mtdp.eq.21) .or. &
+       (mfd.eq.26.and.mtdp.eq.38) .or. &
+       (mfd.eq.36.and.mtdp.eq.18) .or. &
+       (mfd.eq.36.and.mtdp.eq.19) .or. &
+       (mfd.eq.36.and.mtdp.eq.20) .or. &
+       (mfd.eq.36.and.mtdp.eq.21) .or. &
+       (mfd.eq.36.and.mtdp.eq.38)) then
+       call mess('groupr','no heavy residual with fission',&
+                          'skipping this input request')
+       go to 365
+   endif
    if (mfd.eq.0) go to 590
    if (mfd.eq.-1) go to 383
    if (mtdp.eq.-1000) go to 382
@@ -1007,6 +1022,7 @@ contains
    deallocate(egn)
    deallocate(egg)
    deallocate(wtbuf)
+   deallocate(scr)
    if (allocated(wght)) deallocate(wght)
    if (allocated(temp)) deallocate(temp)
    if (allocated(sigz)) deallocate(sigz)
@@ -7540,7 +7556,7 @@ contains
    integer::mfn,nb,nw,lct3,ik,nne,ne,int,nss
    integer::ie,ilo,jlo,jhi,ii,nn,nnn,langn,lepn,idis,jzap
    integer::nk,jzad,lang,lep,i,npsx,irr,npp,nmu,l1
-   integer::j,iss,ip,ir,jgmax,jj,jg,ndlo,nplo,nclo,nphi,nchi
+   integer::j,iss,ip,ir,jgmax,jj,jg,ndlo,nplo,nclo,nphi,nchi,ndx
    integer::llo,lhi,iz,l,iy,max,nc,lf
    real(kr)::zad,elo,ehi,apsx,enow,eihi,ep,epnext,en
    real(kr)::pspmax,yldd,el,eh,e0,g0,e1,e2,test,pe,disc102
@@ -7563,6 +7579,7 @@ contains
    real(kr),parameter::eps=0.02e0_kr
    real(kr),parameter::zero=0
    real(kr),parameter::alight=5
+   real(kr),parameter::emin=1.e-5_kr
    integer,parameter::ntmp=2000000
    save nne,ne,int
    save jlo,elo,jhi,ehi,terml
@@ -7719,13 +7736,21 @@ contains
                  &1p,e10.3)')tmp(ilo+1)
             endif
          endif
-         if (ismooth.gt.0.and.jzap.eq.1.and.lep.eq.1) then
+         ncyc=nint(tmp(ilo+3))+2
+         ndx=nint(tmp(ilo+2))
+         nx=nint(tmp(ilo+4))
+         n=nint(tmp(ilo+5))
+         ex=40
+         ! sqrt(e) extension of the low-energy neutron spectra: same
+         ! conditions as ACER (acelf6) of NJOY2016.80: no discrete
+         ! lines, first tabulated outgoing energy zero; lin-lin (lep=2)
+         ! also n>3 (DLA, IAEA, 13 Oct 2026; NJOY2016.80 groupr checked only lep and
+         ! zap, so it also smoothed discrete lines and zeroed the first
+         ! point of spectra not starting at zero)
+         if (ismooth.gt.0.and.jzap.eq.1.and.lep.eq.1.and.&
+             ndx.eq.0.and.tmp(ilo+6).eq.zero) then
             fx=.8409
-            ex=40
-            ncyc=nint(tmp(ilo+3))+2
             cx=tmp(ilo+6+ncyc)*tmp(ilo+7)
-            nx=nint(tmp(ilo+4))
-            n=nint(tmp(ilo+5))
             do while (n.gt.2)
                cxx=cx+tmp(ilo+7+ncyc)*(tmp(ilo+6+2*ncyc)-tmp(ilo+6+ncyc))
                if (abs(cxx/tmp(ilo+6+2*ncyc)**1.5&
@@ -7762,14 +7787,11 @@ contains
                tmp(ilo+5)=n
             enddo
             l=ilo+6+nx
-         else if (ismooth.gt.0.and.jzap.eq.1.and.lep.eq.2) then
-             ncyc=nint(tmp(ilo+3))+2
-             nx=nint(tmp(ilo+4))
-             n=nint(tmp(ilo+5))
+         else if (ismooth.gt.0.and.jzap.eq.1.and.lep.eq.2.and.n.gt.3.and.&
+                  ndx.eq.0.and.tmp(ilo+6).eq.zero) then
              write(nsyso,'('' extending lin-lin as sqrt(E) below'',&
                &1p,e10.2,'' eV for E='',e10.2,'' eV'')')&
                tmp(ilo+6+ncyc),tmp(ilo+1)
-             ex=40
              fx=0.50
              nn=0
              cx=(tmp(ilo+6+ncyc)-tmp(ilo+6))*(tmp(ilo+7+ncyc)+tmp(ilo+7))/2
@@ -9693,7 +9715,8 @@ contains
    character(60)::strng
    integer,parameter::mxlg=65
    real(kr)::flo(mxlg),fhi(mxlg)
-   integer,parameter::ncmax=1000
+   ! modified (DLA, IAEA)
+   integer,parameter::ncmax=7000
    real(kr)::fls(ncmax)
    real(kr),parameter::emax=1.e10_kr
    real(kr),parameter::small=1.e-10_kr
@@ -10321,7 +10344,8 @@ contains
    li=nint(b(3))
    ltt=nint(b(4))
    ni=nint(b(6))
-   ntmp=10000
+   ! modified (DLA, IAEA)
+   ntmp=20000
    allocate(tmp(ntmp))
    enext=emax
 
@@ -11134,7 +11158,9 @@ contains
       if (irr26.ne.1) then
          if (mth.le.iabs(mf4r(6,irr26-1))+1) itest=1
       endif
-      if (mth.ne.18) then ! exclude fission for residual production
+      ! modified (DLA, IAEA)
+      if (mth.ne.18.and.mth.ne.19.and.mth.ne.20.and.&
+          mth.ne.21.and.mth.ne.38) then ! exclude fission for residual production
          if (itest.eq.1) then
             if (mf4r(6,irr26-1).lt.0) irr26=irr26-1
             mf4r(6,irr26)=-mth
@@ -11717,7 +11743,7 @@ contains
    go to 790
   755 continue
    if (imf26.eq.1) go to 756
-   if (mth.eq.18) go to 790 ! skip fission in a>4 production
+   if (mth.eq.18.or.mth.eq.19.or.mth.eq.20.or.mth.eq.21.or.mth.eq.38) go to 790 ! skip fission in a>4 production
    if (mth.eq.iabs(mf6p(6,imf26-1))) go to 790
    if (mth.gt.iabs(mf6p(6,imf26-1))+1) go to 756
    if (mf6p(6,imf26-1).lt.0) imf26=imf26-1
@@ -11823,6 +11849,7 @@ contains
    mf4r(4,irr24)=0
    mf4r(5,irr25)=0
    mf4r(6,irr26)=0
+   deallocate(scr)
    return
    end subroutine conver
 
@@ -11913,6 +11940,9 @@ contains
                   call moreio(nin,0,0,tmp(l),nb,nw)
                   l=l+nw
                enddo
+               ! modified (DLA, IAEA)
+               if (l.gt.ntmp) call error('getsed',&
+                   'exceeded tmp storage',' ')
                do ip=2,np
                   delta=abs(tmp(ln+2*ip)-tmp(ln+2*ip-2))
                   if (delta.ge.eps*tmp(ln+2*ip-2)) then
@@ -11932,6 +11962,8 @@ contains
                      call moreio(nin,0,0,tmp(l),nb,nw)
                      l=l+nw
                   enddo
+                  if (l.gt.ntmp) call error('getsed',&
+                      'exceeded tmp storage',' ')
                   !extend lowest delayed bin using sqrt(e) shape
                   if (ismooth.gt.0.and.mtd.eq.455.and.&
                     nint(tmp(l1+7)).eq.1) then
