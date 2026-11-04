@@ -46,7 +46,7 @@ module reconm
 
    !--option for sammy method
    !integer::isammy=0  ! no sammy calculation
-   integer::isammy=1  ! sammy calculation
+   integer::isammy=1  ! sammy calculation - for RM only
 
 contains
 
@@ -2611,19 +2611,19 @@ contains
             if (mode.eq.0) then
                ! no res parameters
                call csnorp(e,sigp)
-            else if (mode.eq.1.and.nmtres.eq.0) then
+            else if (mode.eq.1) then
                ! single level breit-wigner
                call csslbw(e,sigp)
-            else if (mode.eq.2.and.tempr.eq.zero.and.nmtres.eq.0) then
+            else if (mode.eq.2.and.tempr.eq.zero) then
                ! multilevel breit-wigner
                call csmlbw(e,sigp)
-            else if (mode.eq.2.and.tempr.gt.zero.and.nmtres.eq.0) then
+            else if (mode.eq.2.and.tempr.gt.zero) then
                ! multilevel breit-wigner using g/h method
                call csmlbw2(e,sigp)
             else if (mode.eq.3.and.(isammy.eq.0.or.nmtres.eq.0)) then
                ! multi-level reich-moore (r-matrix)
                call csrmat(e,sigp)
-            else if (mode.le.3.and.isammy.eq.1.and.nmtres.gt.0) then
+            else if (mode.eq.3.and.isammy.eq.1.and.nmtres.gt.0) then
                ! sammy calculation
                call cssammy(e,sigp,siga,sigx,mmtres,nmtres,ncoef,nresp,i)
             else if (mode.eq.4) then

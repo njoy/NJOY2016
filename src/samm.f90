@@ -1284,7 +1284,7 @@ contains
    if (imf2.eq.1) then
 
       write(nsyse,*)
-      write(nsyse,*) "Coverted RRR parameters:"
+      write(nsyse,*) "Converted RRR parameters:"
       write(nsyse,*)
 
 
