@@ -148,7 +148,6 @@ contains
    !--set samrml options
    Want_Partial_Derivs=.false.
    Want_Angular_Dist=.false.
-   Want_SAMRML_BW=.false.
    Want_SAMRML_RM=.false.
 
    !--define local i/o units

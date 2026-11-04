@@ -17,7 +17,6 @@ module samm
    logical,public::Want_Partial_Derivs
    logical,public::Want_Angular_Dist
    logical,public::Want_SAMRML_RM
-   logical,public::Want_SAMRML_BW
 
    !--Global variables
 
@@ -382,8 +381,8 @@ contains
                nmtres=4
             endif
 
-            !--turn off samrml processing of bw formats if desired
-            if (.not.Want_SAMRML_BW) nmtres=0
+            !-- samrml processing is not supported for bw
+            nmtres=0
 
          else if (mode.eq.3) then  ! scanning RM format
 

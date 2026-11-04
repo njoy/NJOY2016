@@ -391,7 +391,6 @@ contains
    !--set samrml options
    Want_Partial_Derivs=.true.
    Want_Angular_Dist=.false.
-   Want_SAMRML_BW=.false.
    Want_SAMRML_RM=.false.
 
    cwaven=sqrt(2*amassn*amu*ev)*1.e-12_kr/hbar
