@@ -554,6 +554,10 @@ contains
    real(kr)::c(50)
    character(60)::strng
    real(kr),dimension(:),allocatable::scr
+   ! File 6 yield buffer: 5248 words needed for the ENDF/B-VIII.1,
+   ! JEFF-4.0, JENDL-5 and FENDL-3.2 evaluations
+   ! (DLA, IAEA, 5 Nov 2026)
+   integer,parameter::nwscr6=15000
    real(kr),dimension(:),allocatable::bufo
    real(kr),parameter::fact=.99999e0_kr
    real(kr),parameter::rup=1.000000001e0_kr
@@ -889,6 +893,15 @@ contains
    !--prepare a scratch tape for file 6
    !--check for missing recoil subsections
    !--and check for photon data
+   ! the File 6 records (TAB1 of the yields with moreio) are read
+   ! whole into scr: scr sized for long yield tables (NJOY2016.80:
+   ! scr of the dictionary size, overflow with more than ~300 points)
+   ! (DLA, IAEA, 4 Nov 2026)
+   if (size(scr).lt.nwscr6) then
+      deallocate(scr)
+      allocate(scr(nwscr6))
+      scr=0 ! (DLA, IAEA, 5 Nov 2026)
+   endif
    i6p=0
    mt6yp=0
    if (i6.gt.0) then
@@ -950,6 +963,12 @@ contains
                l=1
                call tab1io(nendf,nend6,0,scr(l),nb,nw)
                l=l+nw
+               ! the whole yield TAB1 must fit in scr (DLA, IAEA, 5 Nov 2026)
+               if (6+2*nint(scr(5))+2*nint(scr(6)).gt.size(scr)) then
+                  write(strng,'(''mf6 mt'',i3,'' yield'',i7,'' words >'',&
+                    &i7)') mth,6+2*nint(scr(5))+2*nint(scr(6)),size(scr)
+                  call error('hinit',strng,'increase nwscr6')
+               endif
                do while (nb.ne.0)
                   call moreio(nendf,nend6,0,scr(l),nb,nw)
                   l=l+nw
@@ -7289,6 +7308,18 @@ contains
    integer::lt6,it6,nsb,isb
    real(kr)::xa,ya,xb,yb,sa,sb,fa,fb
    real(kr)::x(10),y(10,2)
+   integer::ig7
+   real(kr)::xg7,fg7,eg7,wg7
+   real(kr),dimension(8),parameter::gx7=(/&
+     -0.9602898564975363e0_kr,-0.7966664774136267e0_kr,&
+     -0.5255324099163290e0_kr,-0.1834346424956498e0_kr,&
+      0.1834346424956498e0_kr, 0.5255324099163290e0_kr,&
+      0.7966664774136267e0_kr, 0.9602898564975363e0_kr/)
+   real(kr),dimension(8),parameter::gw7=(/&
+      0.1012285362903763e0_kr, 0.2223810344533745e0_kr,&
+      0.3137066458778873e0_kr, 0.3626837833783620e0_kr,&
+      0.3626837833783620e0_kr, 0.3137066458778873e0_kr,&
+      0.2223810344533745e0_kr, 0.1012285362903763e0_kr/)
    real(kr)::term(2)
    real(kr)::p(65)
    integer,parameter::nq=64
@@ -7526,6 +7557,11 @@ contains
       else
          if (lep.eq.1) t1=x2*yl+el
          if (lep.gt.1) t1=en+el
+         ! lin-lin f (lep=2), emitted particle: exact integral of
+         ! e'*f, (b-a)*(fa*(2a+b)+fb*(a+2b))/6, instead of the trapezoid
+         ! of e'*f (DLA, IAEA, 2 Nov 2026)
+         if (lep.gt.1.and.irec.eq.0)&
+           t1=(yl*(2*xl+xx)+yy*(xl+2*xx))/3
          h=h+(xx-xl)*t1/2
          if (lep.eq.1) t2=f2*yl+fl
          if (lep.gt.1) t2=f+fl
@@ -7673,6 +7709,18 @@ contains
    !--trapazoidal integration over energy for each angle
    !--then trapazoidal integration over angle
   510 continue
+   ! law 7 (lab angle-energy): integral over e' of each cosine table
+   ! with the interpolation law of the table, 8-point Gauss-Legendre in
+   ! every e' interval: exact for the heating of the emitted particle
+   ! (histogram or linear f times e'); damage and the one-particle
+   ! recoil energy (irec>0) evaluated at the Gauss points.  NJOY2016.80
+   ! used the energy of the left end of each interval for
+   ! histograms and the trapezoid of e'*f for lin-lin data, which
+   ! underestimated the mean energies of the mt5 particles: FENDL-3.2d
+   ! Mo-92 at 150 MeV p 22.63 instead of 23.87 MeV (-5.2 %), alpha
+   ! -7.2 %; JENDL-5 Ru-96 at 200 MeV p -6.0 % (lin-lin), so that
+   ! mt443 was below the charged-particle heating of the acer
+   ! production blocks. (DLA, IAEA, 2 Nov 2026)
    ebar=0
    dame=0
    dl=0
@@ -7689,36 +7737,28 @@ contains
       ibase=l+5+2*nr
       h=0
       d=0
-      do i=1,np
+      do i=2,np
+         xl=c(ibase+2*i-3)
+         yl=c(ibase+2*i-2)
          xx=c(ibase+2*i-1)
          yy=c(ibase+2*i)
-         ! NJOY2016.80 overwrote xx with the recoil energy,
-         ! so the energy integration used recoil-energy intervals and
-         ! the heating used the particle energy (DLA, IAEA, Oct 2026)
-         if (irec.gt.0) then ! recoil energy
-            xxe=(e-2*sqrt(e*awp*xx)*u+awp*xx)/(awrt+1-awp)
-         else
-            xxe=xx
-         endif
-         en=yy*xxe
-         if (i.gt.1) then
+         if (xx.le.xl) cycle
+         do ig7=1,8
+            xg7=(xl+xx)/2+gx7(ig7)*(xx-xl)/2
+            wg7=gw7(ig7)*(xx-xl)/2
             if (iint.eq.1) then
-               h=h+(xx-xl)*el
+               fg7=yl
             else
-               h=h+(xx-xl)*(en+el)/2
+               fg7=yl+(yy-yl)*(xg7-xl)/(xx-xl)
             endif
-         endif
-         f=yy*df(xxe,zp,ap,zt,at)
-         if (i.gt.1) then
-            if (iint.eq.1) then
-               d=d+(xx-xl)*fl
+            if (irec.gt.0) then ! recoil energy
+               eg7=(e-2*sqrt(e*awp*xg7)*u+awp*xg7)/(awrt+1-awp)
             else
-               d=d+(xx-xl)*(f+fl)/2
+               eg7=xg7
             endif
-         endif
-         xl=xx
-         el=en
-         fl=f
+            h=h+wg7*fg7*eg7
+            d=d+wg7*fg7*df(eg7,zp,ap,zt,at)
+         enddo
       enddo
       l=next
       if (imu.gt.1) ebar=ebar+(u-ul)*(h+hl)/2
@@ -9137,6 +9177,12 @@ contains
    real(kr)::eeq(nqmx)
    real(kr),dimension(:),allocatable::scr
    real(kr),dimension(:),allocatable::e,eg,es,y,aa,r
+   ! lo=2 cascade: transition probabilities TP kept for the propagation
+   ! of the level populations (DLA, IAEA, 3 Nov 2026)
+   real(kr),dimension(:),allocatable::tpr
+   integer::nmiss3,iq3,kq3,ngpb3
+   real(kr)::emiss3,gpb3
+   character(66)::strng3
    real(kr),dimension(:),allocatable::nu,tmpnu
    real(kr),parameter::zero=0
 
@@ -9304,6 +9350,8 @@ contains
       allocate(es(lmax))
       allocate(y(lmax))
       allocate(aa(imax2))
+      allocate(tpr(imax2))
+      tpr=0
       allocate(r(imax2))
       e(1)=0
       do i=1,imax2
@@ -9374,6 +9422,8 @@ contains
    e(j)=scr(1)
    n=n2h
    jm1=j-1
+   ngpb3=0
+   gpb3=0
    do kk=1,jm1
       k=jm1-kk+1
       ii=0
@@ -9390,22 +9440,63 @@ contains
       enddo
       if (idone.eq.0) then
          aa((k-1)*imax+j)=0
+         tpr((k-1)*imax+j)=0
          r((k-1)*imax+j)=0
       else
          p=scr(7+(lg+1)*i-lg)
          g=1
          if (lg.eq.2) g=scr(6+(lg+1)*i)
+         ! GP outside [0,1]: evaluation error, used as given, warning
+         ! (DLA, IAEA, 3 Nov 2026)
+         if (g.lt.zero.or.g.gt.1) then
+            ngpb3=ngpb3+1
+            gpb3=g
+         endif
          aa((k-1)*imax+j)=p*g
+         tpr((k-1)*imax+j)=p
          r((k-1)*imax+j)=p
       endif
       if (k.ne.jm1) then
          kp1=k+1
          do ii=kp1,jm1
+            ! the population of level k reached through level ii is
+            ! propagated with the transition probability TP(ii->k),
+            ! photon or conversion (ENDF-102 12.2.2); NJOY2016.80 used
+            ! TP*GP, which loses the cascade below converted
+            ! transitions when LG=2 (DLA, IAEA, 3 Nov 2026)
             r((k-1)*imax+j)=r((k-1)*imax+j)&
-              +r((ii-1)*imax+j)*aa((k-1)*imax+ii)
+              +r((ii-1)*imax+j)*tpr((k-1)*imax+ii)
          enddo
       endif
    enddo
+   ! transitions to levels not found among the levels of this
+   ! reaction: ignored, with a warning (DLA, IAEA, 3 Nov 2026)
+   nmiss3=0
+   emiss3=0
+   do iq3=1,n
+      ei=scr(6+(lg+1)*iq3-lg)
+      idone=0
+      do kq3=1,jm1
+         if (ei.eq.zero.and.e(kq3).eq.zero) idone=1
+         if (ei.ne.zero) then
+            if (abs(ei-e(kq3))/ei.le.0.0001_kr) idone=1
+         endif
+      enddo
+      if (idone.eq.0) then
+         nmiss3=nmiss3+1
+         emiss3=ei
+      endif
+   enddo
+   if (ngpb3.gt.0) then
+      write(strng3,'(''mf12 mt'',i3,'':'',i3,'' gp outside [0,1], e.g.'',&
+        &1p,e10.3)') mth,ngpb3,gpb3
+      call mess('hconvr',strng3,'evaluation error: used as given (lo=2)')
+   endif
+   if (nmiss3.gt.0) then
+      write(strng3,'(''mf12 mt'',i3,'':'',i3,'' transitions to unknown'',&
+        &'' level es='',1p,e10.3)') mth,nmiss3,emiss3
+      call mess('hconvr',strng3,'transition ignored (lo=2)')
+   endif
    l=0
    ysum=0
    do i=2,j
@@ -9605,6 +9696,7 @@ contains
       deallocate(es)
       deallocate(y)
       deallocate(aa)
+      deallocate(tpr)
       deallocate(r)
    endif
    deallocate(scr)
