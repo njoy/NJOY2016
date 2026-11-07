@@ -10972,6 +10972,12 @@ contains
    real(kr)::eeth(mxnnth)
    real(kr),dimension(:),allocatable::scr
    real(kr),dimension(:),allocatable::e,eg,es,y,aa,r
+   ! lo=2 cascade: transition probabilities TP kept for the propagation
+   ! of the level populations (DLA, IAEA, 3 Nov 2026)
+   real(kr),dimension(:),allocatable::tpr
+   integer::nmiss3,iq3,kq3,ngpb3
+   real(kr)::emiss3,gpb3
+   character(66)::strng3
    real(kr),dimension(:),allocatable::nu
    real(kr),parameter::zero=0
 
@@ -11237,6 +11243,8 @@ contains
       allocate(es(lmax))
       allocate(y(lmax))
       allocate(aa(imax2))
+      allocate(tpr(imax2))
+      tpr=0
       allocate(r(imax2))
       e(1)=0
       do i=1,imax2
@@ -11335,6 +11343,8 @@ contains
    e(j)=scr(1)
    n=n2h
    jm1=j-1
+   ngpb3=0
+   gpb3=0
    do kk=1,jm1
       k=jm1-kk+1
       ii=0
@@ -11350,22 +11360,63 @@ contains
       enddo
       if (idone.eq.0) then
          aa((k-1)*imax+j)=0
+         tpr((k-1)*imax+j)=0
          r((k-1)*imax+j)=0
       else
          p=scr(7+(lg+1)*i-lg)
          g=1
          if (lg.eq.2) g=scr(6+(lg+1)*i)
+         ! GP outside [0,1]: evaluation error, used as given, warning
+         ! (DLA, IAEA, 3 Nov 2026)
+         if (g.lt.zero.or.g.gt.1) then
+            ngpb3=ngpb3+1
+            gpb3=g
+         endif
          aa((k-1)*imax+j)=p*g
+         tpr((k-1)*imax+j)=p
          r((k-1)*imax+j)=p
       endif
       if (k.ne.jm1) then
          kp1=k+1
          do ii=kp1,jm1
+            ! the population of level k reached through level ii is
+            ! propagated with the transition probability TP(ii->k),
+            ! photon or conversion (ENDF-102 12.2.2); NJOY2016.80 used
+            ! TP*GP, which loses the cascade below converted
+            ! transitions when LG=2 (DLA, IAEA, 3 Nov 2026)
             r((k-1)*imax+j)=r((k-1)*imax+j)&
-              +r((ii-1)*imax+j)*aa((k-1)*imax+ii)
+              +r((ii-1)*imax+j)*tpr((k-1)*imax+ii)
          enddo
       endif
    enddo
+   ! transitions to levels not found among the levels of this
+   ! reaction: ignored, with a warning (DLA, IAEA, 3 Nov 2026)
+   nmiss3=0
+   emiss3=0
+   do iq3=1,n
+      ei=scr(6+(lg+1)*iq3-lg)
+      idone=0
+      do kq3=1,jm1
+         if (ei.eq.zero.and.e(kq3).eq.zero) idone=1
+         if (ei.ne.zero) then
+            if (abs(ei-e(kq3))/ei.lt.0.0001) idone=1
+         endif
+      enddo
+      if (idone.eq.0) then
+         nmiss3=nmiss3+1
+         emiss3=ei
+      endif
+   enddo
+   if (ngpb3.gt.0) then
+      write(strng3,'(''mf12 mt'',i3,'':'',i3,'' gp outside [0,1], e.g.'',&
+        &1p,e10.3)') mth,ngpb3,gpb3
+      call mess('conver',strng3,'evaluation error: used as given (lo=2)')
+   endif
+   if (nmiss3.gt.0) then
+      write(strng3,'(''mf12 mt'',i3,'':'',i3,'' transitions to unknown'',&
+        &'' level es='',1p,e10.3)') mth,nmiss3,emiss3
+      call mess('conver',strng3,'transition ignored (lo=2)')
+   endif
    l=0
    ysum=0
    do i=2,j
@@ -11806,6 +11857,7 @@ contains
       deallocate(es)
       deallocate(y)
       deallocate(aa)
+      deallocate(tpr)
       deallocate(r)
    endif
    if (imf4.gt.maxr1) call error('conver','imf4 too big',' ')
