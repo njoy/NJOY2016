@@ -278,6 +278,11 @@ contains
    ! internals
    integer::nwscr,nb,nw,nxp,jscr,itab,nlib,nbt,nwt,nwd,nx
    integer::ncds,i,mfd,mtd,iflag,nprod3,nprodt,n
+   ! MT201-207 rule: light particles given in MF6/MF4 of other reactions
+   ! (DLA, IAEA, 4 Nov 2026)
+   character(60)::strng20
+   integer::have20x(6),k20x
+   integer,dimension(6),parameter::zap20x=(/1,1001,1002,1003,2003,2004/)
    integer::mf,mt,izr,ln,mtt,nc2,jethr,isix,nk,ik
    integer::izap,law,ll,nn,jj,ii,j,isort1,isort2,isave1
    integer::isave2,isave3,isave4,idis
@@ -701,6 +706,14 @@ contains
 
       !--check particle productions in mf6.
       nprod3=nprod
+      ! light particles produced by the reactions (MF4 two-body above, MF6
+      ! of MTs other than 201-207 below) (DLA, IAEA, 4 Nov 2026)
+      have20x=0
+      do i=1,nprod
+         do k20x=1,6
+            if (iprod(i).eq.zap20x(k20x)) have20x(k20x)=1
+         enddo
+      enddo
       if (nsix.gt.0) then
          call findf(matd,6,0,nendf)
          isix=0
@@ -711,6 +724,12 @@ contains
             nk=n1h
             do ik=1,nk
                call tab1io(nendf,0,0,scr,nb,nw)
+               if (mth.lt.201.or.mth.gt.207) then
+                  do k20x=1,6
+                     if (nint(c1h).eq.zap20x(k20x).and.&
+                       nint(c1h).ne.izai) have20x(k20x)=1
+                  enddo
+               endif
                if (mth.eq.5) then
                   !--test for light particle production; 0=yes
                   if (abs(c1h-1).lt.0.0001) mt5n=0
@@ -766,6 +785,33 @@ contains
             if (jj.gt.1) jj=jj-1
             if (nprod+6.gt.maxpr) call error('first',&
               'too many production items',' ')
+            ! MT201-207 are derived production cross sections (ENDF-6,
+            ! ENDF-102 App. B: "redundant; use in derived files only").
+            ! A light particle also given in MF6/MF4 of the reactions:
+            ! its MF6 MT201-207 subsection is not used (the production
+            ! and heating were counted twice: ENDF/B-VIII.1 Mo-94/96/98,
+            ! Yb-170..174, Hf-181/182; FENDL-3.2 Zr-90 above 20 MeV).
+            ! Otherwise it is used as before, with a warning: the result
+            ! is not guaranteed (JENDL-5 MT103-107 given in MF3 only)
+            ! (DLA, IAEA, 4 Nov 2026)
+            if (mth.ge.201.and.mth.le.207) then
+               do k20x=1,6
+                  if (izap.eq.zap20x(k20x).and.izap.ne.izai) then
+                     if (have20x(k20x).ne.0) then
+                        write(strng20,'(''MF6 MT'',i3,'' ZAP'',i5,&
+                          &'' NOT USED (DOUBLE COUNTING)'')') mth,izap
+                        call mess('first',strng20,&
+                          'PARTICLE GIVEN IN THE REACTIONS; ENDF-6 MT20X')
+                        izap=-1
+                     else
+                        write(strng20,'(''MF6 MT'',i3,'' ZAP'',i5,&
+                          &'' USED: ENDF-6 VIOLATION'')') mth,izap
+                        call mess('first',strng20,&
+                          'MT201-207 DERIVED ONLY; RESULT NOT GUARANTEED')
+                     endif
+                  endif
+               enddo
+            endif
             if (izap.eq.1.and.izai.ne.1) then
                e201=scr(7+2*jj)
                if (xsthr.gt.e201) e201=xsthr
@@ -4364,6 +4410,12 @@ contains
    character(60)::strng
    equivalence(t(1),gamid(1))
    real(kr),dimension(:),allocatable::ee,eg,es,yy,aa,rr
+   ! lo=2 cascade: transition probabilities TP kept for the propagation
+   ! of the level populations (DLA, IAEA, 3 Nov 2026)
+   real(kr),dimension(:),allocatable::tpr
+   integer::nmiss3,iq3,kq3,ngpb3
+   real(kr)::emiss3,gpb3
+   character(66)::strng3
    real(kr),dimension(:),allocatable::tot
    ! modified (DLA, IAEA)
    integer,parameter::nwtot=100000 !Needed for D1SUNED library generation
@@ -4391,6 +4443,8 @@ contains
    allocate(es(lmax))
    allocate(yy(lmax))
    allocate(aa(imaxsq))
+   allocate(tpr(imaxsq))
+   tpr=0
    allocate(rr(imaxsq))
    nwscr=npage+50
    allocate(scr(nwscr))
@@ -4695,6 +4749,8 @@ contains
    ee(j)=scr(1)
    n=nint(scr(6))
    jm1=j-1
+   ngpb3=0
+   gpb3=0
    do kk=1,jm1
       k=jm1-kk+1
       idone=0
@@ -4710,22 +4766,63 @@ contains
       enddo
       if (idone.eq.0) then
          aa((k-1)*imax+j)=0
+         tpr((k-1)*imax+j)=0
          rr((k-1)*imax+j)=0
       else
          p=scr(7+(lg+1)*i-lg)
          g=1
          if (lg.eq.2) g=scr(6+(lg+1)*i)
+         ! GP outside [0,1]: evaluation error, used as given, warning
+         ! (DLA, IAEA, 3 Nov 2026)
+         if (g.lt.zero.or.g.gt.1) then
+            ngpb3=ngpb3+1
+            gpb3=g
+         endif
          aa((k-1)*imax+j)=p*g
+         tpr((k-1)*imax+j)=p
          rr((k-1)*imax+j)=p
       endif
       if (k.ne.jm1) then
          kp1=k+1
          do ii=kp1,jm1
+            ! the population of level k reached through level ii is
+            ! propagated with the transition probability TP(ii->k),
+            ! photon or conversion (ENDF-102 12.2.2); NJOY2016.80 used
+            ! TP*GP, which loses the cascade below converted
+            ! transitions when LG=2 (DLA, IAEA, 3 Nov 2026)
             rr((k-1)*imax+j)=rr((k-1)*imax+j)&
-              +rr((ii-1)*imax+j)*aa((k-1)*imax+ii)
+              +rr((ii-1)*imax+j)*tpr((k-1)*imax+ii)
          enddo
       endif
    enddo
+   ! transitions to levels not found among the levels of this
+   ! reaction: ignored, with a warning (DLA, IAEA, 3 Nov 2026)
+   nmiss3=0
+   emiss3=0
+   do iq3=1,n
+      ei=scr(6+(lg+1)*iq3-lg)
+      idone=0
+      do kq3=1,jm1
+         if (ei.eq.zero.and.ee(kq3).eq.zero) idone=1
+         if (ei.ne.zero) then
+            if (abs(ei-ee(kq3))/ei.lt.0.0001) idone=1
+         endif
+      enddo
+      if (idone.eq.0) then
+         nmiss3=nmiss3+1
+         emiss3=ei
+      endif
+   enddo
+   if (ngpb3.gt.0) then
+      write(strng3,'(''mf12 mt'',i3,'':'',i3,'' gp outside [0,1], e.g.'',&
+        &1p,e10.3)') mth,ngpb3,gpb3
+      call mess('convr',strng3,'evaluation error: used as given (lo=2)')
+   endif
+   if (nmiss3.gt.0) then
+      write(strng3,'(''mf12 mt'',i3,'':'',i3,'' transitions to unknown'',&
+        &'' level es='',1p,e10.3)') mth,nmiss3,emiss3
+      call mess('convr',strng3,'transition ignored (lo=2)')
+   endif
    l=0
    ysum=0
    do i=2,j
@@ -4976,6 +5073,7 @@ contains
    deallocate(scr)
    deallocate(rr)
    deallocate(aa)
+   deallocate(tpr)
    deallocate(yy)
    deallocate(es)
    deallocate(eg)
@@ -8161,7 +8259,12 @@ contains
          xx=xnext
          yy=0
          xnext=etop
-         ishift=500
+         ! generalized yield (several neutron subsections): temporary
+         ! storage above next enlarged; NJOY2016.80 500 (about 250 points
+         ! of the summed yield); 5280 words needed for the ENDF/B-VIII.1,
+         ! JEFF-4.0, JENDL-5 and FENDL-3.2 evaluations
+         ! (DLA, IAEA, 4-5 Nov 2026)
+         ishift=15000
          do j=1,ik
             ii=loc(j)
             ip=2
@@ -8175,10 +8278,14 @@ contains
             endif
          enddo
          if (k.gt.0) then
+            if (2*k+2.ge.ishift) call error('acelf6',&
+              'storage exceeded for generalized yield',&
+              'more than 7499 points: increase ishift')
+            if (next+2*k+1+ishift.gt.nxss) call error('acelf6',&
+              'storage exceeded for generalized yield',&
+              'xss full (nxss)')
             xss(next+2*k+ishift)=xx
             xss(next+2*k+1+ishift)=sigfig(yy,7,0)
-            if (2*k+2.ge.ishift) call error('acelf6',&
-              'storage exceeded for generalized yield',' ')
          endif
       enddo
       xss(next)=0
@@ -8187,6 +8294,11 @@ contains
          eyl=xss(next+2*j+ishift)
          xss(next+1+j)=sigfig(eyl/emev,7,0)
          xss(next+1+k+j)=sigfig(xss(next+2*j+1+ishift),7,0)
+      enddo
+      ! clear the temporary storage: later blocks (photon laws, LNW)
+      ! rely on unwritten xss words being zero (DLA, IAEA, 5 Nov 2026)
+      do j=2,2*k+1
+         xss(next+j+ishift)=0
       enddo
       next=next+2*k+2
    endif
