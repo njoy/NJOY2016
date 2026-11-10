@@ -5389,8 +5389,10 @@ contains
    ! yield 1,  Z_eff = Z - sum y_i z_i,  M_eff = awr + 1 - sum y_i awp_i,
    ! is used, only when the yields are balanced (charge and nucleons
    ! within 5 % where residuals are given), it is a nucleus heavier
-   ! than the light particles (nearest Z_eff > 2, A_eff > 4) and no
-   ! residual yield of the section is negative at that energy;
+   ! than the light particles (nearest Z_eff > 2, A_eff > 4) or one
+   ! bound light particle not given (p, d, t, he3, he4, integer within
+   ! 0.05) and no residual yield of the section is negative at that
+   ! energy;
    ! otherwise the deficit is an
    ! inconsistency of the light-particle yields (light targets, or
    ! the first table at the threshold of a high-energy extension,
@@ -5436,6 +5438,12 @@ contains
    real(kr)::ycheck,qa,devamax,dva
    real(kr),parameter::tolb5=0.05e0_kr
    logical::lbal5
+   ! LAW=0 products as residuals and light-particle deficit
+   ! (DLA, IAEA, 10 Nov 2026)
+   logical::light5
+   integer::izr5,iar5,nlit5
+   real(kr)::fz5
+   real(kr),parameter::tolf5=0.05e0_kr
    real(kr),parameter::ymin5=0.01e0_kr
    character(60)::strng,strng2
    real(kr),parameter::zero=0
@@ -5468,7 +5476,13 @@ contains
       law=nint(b(4))
       nr=nint(b(5))
       i=0
-      if (izap.gt.0.and.izap.le.2004) then
+      ! light particles with moments: n, p, d, t, he3, he4 not given
+      ! with LAW=0; a product given with LAW=0 (unknown distribution)
+      ! is a residual whatever its zap, e.g. H-4 to H-7 in JENDL-5
+      ! Be-7 and Be-10 (DLA, IAEA, 10 Nov 2026)
+      light5=izap.eq.1.or.((izap.eq.1001.or.izap.eq.1002.or.&
+        izap.eq.1003.or.izap.eq.2003.or.izap.eq.2004).and.law.ne.0)
+      if (light5) then
          if (np.ge.npm) call error('mt5tab','too many light particles',' ')
          np=np+1
          i=np
@@ -5494,7 +5508,7 @@ contains
             call mess('mt5tab',strng,&
               'moments not computed (LAW=1 or 7 only)')
          endif
-      else if (izap.gt.2004) then
+      else if (izap.gt.1000) then
          if (nres.ge.nrsm) call error('mt5tab','too many residuals',' ')
          nres=nres+1
          lawr(nres)=law
@@ -5729,6 +5743,7 @@ contains
       nlite=0
       nnegy=0
       nunbal=0
+      nlit5=0
       do iu=1,nu
          e=eu(iu)
          p0=sqrt(2*e)
@@ -5789,14 +5804,32 @@ contains
                   nunbal=nunbal+1
                else if (ycheck.lt.zero) then
                   nnegy=nnegy+1
-               else if (nint(zeff).le.2.or.nint(aeff).le.4) then
-                  ! deficit not a residual nucleus (DLA, IAEA, 10 Nov 2026)
-                  if (zeff.gt.zero.or.aeff.gt.zero) nlite=nlite+1
-               else if (zeff.ge.1.and.aeff.ge.1) then
-                  if (idame.gt.0) dsum=dnc(aeff,zeff)
-                  hsum=pr2/(2*aeff)
-                  yres=1
-                  neff=neff+1
+               else
+                  ! the deficit is a residual nucleus (z>2, a>4; a
+                  ! fractional value is a mean residual) or one bound
+                  ! light particle (p, d, t, he3, he4; integer within
+                  ! 0.05) not given in File 6; otherwise (neutron,
+                  ! unbound or fractional light deficit) no recoil
+                  ! (DLA, IAEA, 10 Nov 2026)
+                  izr5=nint(zeff)
+                  iar5=nint(aeff)
+                  fz5=max(abs(zeff-izr5),abs(aeff-iar5))
+                  if (izr5.gt.2.and.iar5.gt.4) then
+                     if (idame.gt.0) dsum=dnc(aeff,zeff)
+                     hsum=pr2/(2*aeff)
+                     yres=1
+                     neff=neff+1
+                  else if (fz5.le.tolf5.and.((izr5.eq.1.and.iar5.ge.1.and.&
+                    iar5.le.3).or.(izr5.eq.2.and.(iar5.eq.3.or.&
+                    iar5.eq.4)))) then
+                     if (idame.gt.0) dsum=dnc(aeff,zeff)
+                     hsum=pr2/(2*aeff)
+                     yres=1
+                     neff=neff+1
+                     nlit5=nlit5+1
+                  else
+                     if (zeff.gt.zero.or.aeff.gt.zero) nlite=nlite+1
+                  endif
                endif
             endif
          endif
@@ -5823,7 +5856,13 @@ contains
          write(strng,'(''mt5 charge/mass deficit at'',i5,&
            &'' energies is not a nucleus'')') nlite
          call mess('mt5tab',strng,&
-           '(z<=2 or a<=4): yields inconsistent, no recoil added')
+           'nor a bound light particle: no recoil added')
+      endif
+      if (nlit5.gt.0) then
+         write(strng,'(''mt5 deficit is a light particle at'',i5,&
+           &'' energies'')') nlit5
+         call mess('mt5tab',strng,&
+           '(p,d,t,he3,he4 not given): effective residual')
       endif
       if (nadd0.eq.0.and.neff.eq.0) then
          n5t=0
