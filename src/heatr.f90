@@ -5387,7 +5387,16 @@ contains
    ! where the section gives no residual (sum of residual yields below
    ! 0.01, or no residual subsection), one effective residual with
    ! yield 1,  Z_eff = Z - sum y_i z_i,  M_eff = awr + 1 - sum y_i awp_i,
-   ! is used.  Moments of the light particles: LAW=1 (all LANG, as in
+   ! is used, only when the yields are balanced (charge and nucleons
+   ! within 5 % where residuals are given), it is a nucleus heavier
+   ! than the light particles (nearest Z_eff > 2, A_eff > 4) and no
+   ! residual yield of the section is negative at that energy;
+   ! otherwise the deficit is an
+   ! inconsistency of the light-particle yields (light targets, or
+   ! the first table at the threshold of a high-energy extension,
+   ! e.g. TENDL-2010 Li-6 and Li-7 in FENDL-3.2) and no recoil is
+   ! added (DLA, IAEA, 10 Nov 2026).
+   ! Moments of the light particles: LAW=1 (all LANG, as in
    ! oprtab, frame from LCT) and LAW=7 (laboratory; 4-point Gauss rule
    ! in each E' panel, linear in mu).  The table (e5t,d5t,h5t) is built
    ! on the incident energies of the light particles; n5t=0 when no
@@ -5422,6 +5431,11 @@ contains
    real(kr)::g0p,g1p,gsp,hd(6),ylight,yall
    real(kr),allocatable::b(:),pool(:),eu(:),yt(:)
    integer::nadd0,neff
+   ! effective residual checks and energy cap (DLA, IAEA, 10 Nov 2026)
+   integer::nlite,nnegy,nunbal
+   real(kr)::ycheck,qa,devamax,dva
+   real(kr),parameter::tolb5=0.05e0_kr
+   logical::lbal5
    real(kr),parameter::ymin5=0.01e0_kr
    character(60)::strng,strng2
    real(kr),parameter::zero=0
@@ -5658,22 +5672,27 @@ contains
 
    ! charge balance of all products, at energies above the threshold
    ! where residual yields are given (sum of residual yields >= 0.01)
+   ! nucleon balance as well (DLA, IAEA, 10 Nov 2026)
    devmax=0
+   devamax=0
    edev=0
    do iu=1,nu
       e=eu(iu)
       if (e.lt.thr) cycle
       qz=0
+      qa=0
       ylight=0
       do i=1,np
          y=yint(i,e)
          qz=qz+y*zp(i)
+         qa=qa+y*ap(i)
          ylight=ylight+y
       enddo
       yall=0
       do k=1,nres
          yr=yres5(k,e)
          qz=qz+yr*zr5(k)
+         qa=qa+yr*ar5(k)
          yall=yall+yr
       enddo
       if (ylight.gt.zero.and.yall.ge.ymin5) then
@@ -5682,8 +5701,14 @@ contains
             devmax=dev
             edev=e
          endif
+         dva=(qa-(awr+1))/(awr+1)
+         if (abs(dva).gt.abs(devamax)) devamax=dva
       endif
    enddo
+   ! the effective residual (deficit of charge and mass) is used only
+   ! when the yields are balanced where residuals are given (tol=0.05)
+   ! (DLA, IAEA, 10 Nov 2026)
+   lbal5=abs(devmax).le.tolb5.and.abs(devamax).le.tolb5
    if (abs(devmax).gt.0.05_kr) then
       write(strng,'(''mt5 charge balance off by'',1p,e10.2,''%'')')&
         100*devmax
@@ -5701,6 +5726,9 @@ contains
       allocate(yt(nu))
       nadd0=0
       neff=0
+      nlite=0
+      nnegy=0
+      nunbal=0
       do iu=1,nu
          e=eu(iu)
          p0=sqrt(2*e)
@@ -5751,7 +5779,20 @@ contains
             else
                zeff=zt-yz
                aeff=awr+1-ym
-               if (zeff.ge.1.and.aeff.ge.1) then
+               ! negative residual yield: inconsistent table, no
+               ! effective residual (DLA, IAEA, 10 Nov 2026)
+               ycheck=0
+               do k=1,nres
+                  ycheck=min(ycheck,yres5(k,e))
+               enddo
+               if (.not.lbal5) then
+                  nunbal=nunbal+1
+               else if (ycheck.lt.zero) then
+                  nnegy=nnegy+1
+               else if (nint(zeff).le.2.or.nint(aeff).le.4) then
+                  ! deficit not a residual nucleus (DLA, IAEA, 10 Nov 2026)
+                  if (zeff.gt.zero.or.aeff.gt.zero) nlite=nlite+1
+               else if (zeff.ge.1.and.aeff.ge.1) then
                   if (idame.gt.0) dsum=dnc(aeff,zeff)
                   hsum=pr2/(2*aeff)
                   yres=1
@@ -5765,6 +5806,25 @@ contains
          h5t(n5t)=hsum
          yt(n5t)=yres
       enddo
+      if (nunbal.gt.0) then
+         write(strng,'(''mt5 yields not balanced: no residual at'',&
+           &i5,'' en.'')') nunbal
+         write(strng2,'(''charge'',f7.1,''%, nucleons'',f7.1,&
+           &''%: no effective residual'')') 100*devmax,100*devamax
+         call mess('mt5tab',strng,strng2)
+      endif
+      if (nnegy.gt.0) then
+         write(strng,'(''mt5 negative residual yield at'',i5,&
+           &'' energies'')') nnegy
+         call mess('mt5tab',strng,&
+           'inconsistent yields: no effective residual there')
+      endif
+      if (nlite.gt.0) then
+         write(strng,'(''mt5 charge/mass deficit at'',i5,&
+           &'' energies is not a nucleus'')') nlite
+         call mess('mt5tab',strng,&
+           '(z<=2 or a<=4): yields inconsistent, no recoil added')
+      endif
       if (nadd0.eq.0.and.neff.eq.0) then
          n5t=0
       else
