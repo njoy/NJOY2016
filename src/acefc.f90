@@ -7397,8 +7397,15 @@ contains
       xss(next)=ngyl
       do j=1,ngyl
          eyl=xss(igyl+1+j)*emev
-         if (j.eq.1) eyl=up*eyl
-         if (j.eq.ngyl) eyl=eyl/up
+         ! the probability at the first (last) point is evaluated just
+         ! above (below) it; the shift must stay inside the first
+         ! (last) interval, otherwise the summed yield gyl is
+         ! extrapolated and p is wrong (p = raw yield when gyl=0, e.g.
+         ! ENDF/B-VIII.1 Si-29 MT5: first yield energies 19.99999, 20 MeV)
+         if (j.eq.1.and.ngyl.gt.1) eyl=min(up*eyl,&
+           (xss(igyl+2)+xss(igyl+3))*emev/2)
+         if (j.eq.ngyl.and.ngyl.gt.1) eyl=max(eyl/up,&
+           (xss(igyl+ngyl)+xss(igyl+1+ngyl))*emev/2)
          gyl=xss(igyl+1+ngyl+j)
          lgyl=igyl+2
          if (j.eq.1) call terp1(xss(lgyl),xss(lgyl+ngyl),&
@@ -7409,9 +7416,7 @@ contains
          ir=1
          ip=2
          call terpa(y,eyl,en,idis,scr,ip,ir)
-         if (j.eq.1) eyl=eyl/up
-         if (j.eq.ngyl) eyl=up*eyl
-         xss(next+j)=sigfig(eyl/emev,7,0)
+         xss(next+j)=xss(igyl+1+j)
          yy=y
          if (gyl.gt.0) yy=yy/gyl
          xss(next+ngyl+j)=sigfig(yy,7,0)
