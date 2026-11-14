@@ -1034,10 +1034,13 @@ contains
       start=itce
       middle=itca
       nea=ncl+1
+      ! modified (IAEA, D. Lopez Aldama, dlopezaldama@gmail.com)
+      ne=nee
       if (idpnc.eq.5) then
          start=itcei
          middle=itcai
          nea=ncli+1
+         ne=neei
       endif
       write(nsyso,'(''1''/&
         &'' incoherent elastic data - equally probable angles''/&
@@ -1051,7 +1054,7 @@ contains
       if (nea.gt.8) lim=8
       lim1=lim+1
       loc=middle-1
-      do i=1,neei
+      do i=1,ne
          if ((lines+nln).gt.58) then
             write(nsyso,'(''1'')')
             write(nsyso,'(/&
@@ -1060,7 +1063,7 @@ contains
             lines=4
          endif
          write(nsyso,'(/2x,i3,1x,1p,e12.4,3x,e12.4,3x,0p,8f10.4)')&
-           i,xss(start+i),xss(start+neei+i),(xss(loc+j),j=1,lim)
+           i,xss(start+i),xss(start+ne+i),(xss(loc+j),j=1,lim)
          if (nea.gt.8) write(nsyso,'(36x,8f10.4)')&
            (xss(loc+j),j=lim1,nea)
          loc=loc+nea
@@ -1257,13 +1260,15 @@ contains
       i=0
       idone=0
       e=0
-      do while (idone.eq.0.and.i.lt.nee)
+      ! modified (DLA, IAEA)
+      do while (idone.eq.0.and.i.lt.nie)
          i=i+1
          e=xss(itie+i)
          if (e.ge.xss(itce+1)) then
             idone=1
          else
             xn=xss(itie+nie+i)
+            xielas=0
             if (idpnc.eq.5) then
                j=0
                do while (j.lt.neei)

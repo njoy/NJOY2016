@@ -48,11 +48,11 @@ contains
    integer::nneut,nphot,nprot,ndeut,ntrit,nhe3,nhe4
    integer::k,ib,iaa,nk,ik,lly,izai,izap,law,jscr,nrr,npp
    integer::ll,lll,lep,ne,llh,lld,ie,np,ip,mtt,lct,ii
-   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang
+   integer::icapt,jj,itype,it,jp,nr,il,llht,iie,lang,nlin
    integer::iint,nn,kk,m,intt,last,lf,jnt,ja,jb,ipp,irr
    integer::lee,lle,nd,na,ncyc,ng,ig,nnr,nnp,mf,mt
    integer::ipt,ntrp,pxs,phn,mtrp,tyrp,lsigp,sigp,landp,andp,ldlwp,dlwp
-   integer::izarec,nl,iil,nexn,nexd,ki,ilaw2mt5
+   integer::izarec,nl,iil,nexn,nexd,ki,ilaw2mt5,nw2,llm
    integer::nle
    integer::imu,intmu,nmu
    real(kr)::emc2,e,enext,s,y,ynext,heat,en,ep,g,h,epl
@@ -773,42 +773,47 @@ contains
                        xss(thn+j-1)=xss(thn+j-1)&
                        +ss*(e/emev+q)/xss(tot+j-1)
                   enddo
-                  nr=nint(fnubar(5))
-                  ne=nint(fnubar(6))
-                  xss(nex)=12
-                  xss(nex+1)=mt
-                  xss(nex+2)=0
-                  xss(nex+3)=ne
-                  do j=1,ne
-                     xss(nex+3+j)=sigfig(fnubar(5+2*nr+2*j)/emev,7,0)
-                     xss(nex+3+ne+j)=sigfig(fnubar(6+2*nr+2*j),7,0)
-                  enddo
-                  nex=nex+4+2*ne
+                  ! store nubar with its interpolation table
+                  ! (single lin-lin region as NR=0)
+                  ! (IAEA, D. Lopez Aldama, dlopezaldama@gmail.com, Oct 2026)
+                  call stoyld(fnubar,12,mt,nex,nlin)
+                  if (nlin.eq.1) then
+                     write(text,'(''nubar for mt='',i3,'' with'',i3,&
+                       &'' interpolation regions'')') mt,nint(fnubar(5))
+                     call mess('acephn',text,&
+                       'interpolation table kept in the ace yield')
+                  endif
                else
+                  ! get the yield: number of neutrons emitted (ENDF-102
+                  ! mt definitions; mt 180-199 corrected 9 Oct 2026)
                   y=1
-                  if (mth.eq.11.or.mth.eq.16.or.mth.eq.24.or.&
-                      mth.eq.30.or.mth.eq.41.or.mth.eq.154.or.&
-                      mth.eq.159.or.mth.eq.176.or.mth.eq.190.or.&
-                      (mth.ge.875.and.mth.le.891)) then
-                     y=2
-                  elseif (mth.eq.17.or.mth.eq.25.or.mth.eq.42.or.&
-                          mth.eq.157.or.mth.eq.172.or.mth.eq.177.or.&
-                          mth.eq.179.or.(mth.ge.181.and.mth.le.199)) then
-                     y=3
-                  elseif (mth.eq.37.or.mth.eq.156.or.mth.eq.165.or.&
-                          mth.eq.169.or.mth.eq.173.or.mth.eq.178.or.&
-                          (mth.ge.194.and.mth.le.196)) then
-                     y=4
-                  elseif (mth.eq.152.or.mth.eq.162.or.mth.eq.166.or.&
-                          mth.eq.170.or.mth.eq.174.or.mth.eq.200) then
-                     y=5
-                  elseif (mth.eq.153.or.mth.eq.163.or.mth.eq.167.or.&
-                          mth.eq.171.or.mth.eq.175) then
-                     y=6
-                  elseif (mth.eq.160.or.mth.eq.164.or.mth.eq.168) then
-                     y=7
-                  elseif (mth.eq.161) then
-                     y=8
+                  if (mt.eq.11.or.mt.eq.16.or.mt.eq.24.or.mt.eq.30.or.&
+                      mt.eq.41.or.mt.eq.154.or.mt.eq.159.or.&
+                      mt.eq.176.or.mt.eq.190.or.&
+                      (mt.ge.875.and.mt.le.891)) then
+                    y=2
+                  elseif (mt.eq.17.or.mt.eq.25.or.mt.eq.42.or.&
+                          mt.eq.157.or.mt.eq.172.or.mt.eq.177.or.&
+                          mt.eq.179.or.mt.eq.180.or.mt.eq.181.or.&
+                          mt.eq.199) then
+                    y=3
+                  elseif (mt.eq.37.or.mt.eq.156.or.mt.eq.165.or.&
+                          mt.eq.169.or.mt.eq.173.or.mt.eq.178.or.&
+                          (mt.ge.194.and.mt.le.196)) then
+                    y=4
+                  elseif (mt.eq.152.or.mt.eq.162.or.mt.eq.166.or.&
+                          mt.eq.170.or.mt.eq.174.or.mt.eq.200) then
+                    y=5
+                  elseif (mt.eq.153.or.mt.eq.163.or.mt.eq.167.or.&
+                          mt.eq.171.or.mt.eq.175) then
+                    y=6
+                  elseif (mt.eq.160.or.mt.eq.164.or.mt.eq.168) then
+                    y=7
+                  elseif (mt.eq.161) then
+                    y=8
+                  elseif (mt.eq.182.or.(mt.ge.191.and.mt.le.193).or.&
+                          mt.eq.197) then
+                    y=0
                   endif
                   do j=iaa,nes
                      e=xss(esz+j-1)
@@ -894,26 +899,20 @@ contains
                         xss(pxs+2+i-it)=sigfig(tt,7,0)
                      enddo
 
-                     ! the next piece of code assumes the yield is given
-                     ! using one lin-lin interpolation region
-                     ! for now: error out and wait for this to come up to actually implement it
-                     nr=nint(scr(5))
-                     if (nr.gt.1.and.nint(scr(8)).ne.2) then
-                        write(text,'(''no linearised multiplicity for izap='',i4,'' in mf=6/mt='',i3,''.'')')izap,mth
-                        call mess('acephn',text,'this is currently unsupported for photonuclear ACE files.')
+                     !--store the yield with its interpolation table
+                     !--(MCNP ACE format, photonuclear SIGP block:
+                     !--MFTYPE, MTMULT, NR, NBT, INT, NE, E, Y; a single
+                     !--lin-lin region is written with NR=0; until Oct
+                     !--2026 the table was dropped and the points were
+                     !--interpolated lin-lin) (DLA, IAEA, Oct 2026)
+                     call stoyld(scr,6,mth,nex,nlin)
+                     if (nlin.eq.1) then
+                        write(text,'(''yield of izap='',i6,'' in mf6/mt='',&
+                          &i3,'' with'',i3,'' interp. regions'')')&
+                          izap,mth,nint(scr(5))
+                        call mess('acephn',text,&
+                          'interpolation table kept in the ace yield')
                      endif
-
-                     !--store the yield
-                     xss(nex)=6
-                     xss(nex+1)=mth
-                     xss(nex+2)=0
-                     ne=nint(scr(6))
-                     xss(nex+3)=ne
-                     do i=1,ne
-                        xss(nex+3+i)=sigfig(scr(7+2*i)/emev,7,0)
-                        xss(nex+3+i+ne)=sigfig(scr(8+2*i),7,0)
-                     enddo
-                     nex=nex+4+2*ne
                   endif
                   call skip6(nin,0,0,scr,law)
                enddo
@@ -1026,6 +1025,14 @@ contains
                      do iie=1,ne
                         ll=lld
                         call listio(nin,0,0,scr(ll),nb,nw)
+                        ! read the whole list (long tabulated distributions)
+                        ! (DLA, IAEA, 19 Oct 2026)
+                        llm=ll+nw
+                        do while (nb.ne.0)
+                           call moreio(nin,0,0,scr(llm),nb,nw2)
+                           llm=llm+nw2
+                           nw=nw+nw2
+                        enddo
                         lang=nint(scr(lld+2))
                         if (lang.eq.0) then
                            if (izarec.ne.-1) then
@@ -1040,6 +1047,11 @@ contains
                         else
                            iint=lang-10
                            nn=nint(scr(lld+5))
+                           ! two-body recoil (law 4): tabulated law 2 of the
+                           ! emitted particle mirrored, f_R(mu)=f_p(-mu), as
+                           ! the legendre coefficients above (DLA, IAEA,
+                           ! 19 Oct 2026)
+                           if (izarec.ne.-1) call mir2t(scr(lld+6),nn,lang)
                            do kk=1,nw-4
                               scr(lld+2+nw-kk)=scr(lld+nw-kk)
                            enddo
@@ -1076,10 +1088,11 @@ contains
                                 +xss(nex+1+n+ii-1)&
                                 *(xss(nex+1+ii)-xss(nex+1+ii-1))
                               xss(nex+1+2*n+ii)=sum             ! CDF(ii)
+                              ! "*" (was "+") as in acelcp (DLA, IAEA, 19 Oct 2026)
                               ubar=ubar&
                                 +xss(nex+1+n+ii-1)&
                                 *(xss(nex+1+ii)-xss(nex+1+ii-1))&
-                                +(xss(nex+1+ii)+xss(nex+1+ii-1))/2
+                                *(xss(nex+1+ii)+xss(nex+1+ii-1))/2
                            endif
                            if (ii.gt.1.and.intt.eq.2) then
                               sum=xss(nex+1+2*n+ii-1)&
@@ -1201,7 +1214,7 @@ contains
             ! neglecting photon momentum.
             do j=iaa,nes
                e=xss(esz+j-1)/emev
-               ebar=awr*(e-abs(q))/(1+awr)
+               ebar=(awr-awp)*(e-abs(q))/awr
                hh=ebar*xss(2+k+j-iaa)
                xss(phn+2+j-it)=xss(phn+2+j-it)+hh
                hh=(e-abs(q))*xss(2+k+j-iaa)-hh
@@ -1451,11 +1464,14 @@ contains
                do while (ik.lt.nk)
                   ik=ik+1
                   ! read the multiplicity
+                  lly=1
                   call tab1io(nin,0,0,scr,nb,nw)
                   jscr=1+nw
                   do while (nb.ne.0)
                      call moreio(nin,0,0,scr(jscr),nb,nw)
                      jscr=jscr+nw
+                     if (jscr.gt.nwscr) call error('acephn',&
+                         'scr array overflow in file 6 tab1',' ')
                   enddo
                   ! retrieve izap, awp and the law
                   izap=nint(scr(1))
@@ -1622,9 +1638,18 @@ contains
                               endif
                               if (lang.eq.2) then
                                  ! kalbach-mann
-                                 rkal=scr(lld+8+ncyc*(ig-1))
-                                 ep=xss(nex+1+ig)
-                                 akal=bachaa(izai,izap,za,ee,ep)
+                                 if (na.gt.0) then
+                                   rkal=scr(lld+8+ncyc*(ig-1))
+                                   if (na.eq.1) then
+                                     ep=xss(nex+1+ig)
+                                     akal=bachaa(izai,izap,za,ee,ep)
+                                   elseif (na.eq.2) then
+                                     akal=scr(lld+9+ncyc*(ig-1))
+                                   endif
+                                 else
+                                   rkal=0.0d0
+                                   akal=1.0d-20
+                                 endif
                                  xss(nex+1+ig+3*ng)=sigfig(rkal,7,0) ! r
                                  xss(nex+1+ig+4*ng)=sigfig(akal,7,0) ! a
                               else
@@ -1703,11 +1728,11 @@ contains
                                 sigfig(renorm*xss(nex+1+2*ng+ig),9,0)
                            enddo
                            scr(llh+6+2*ie)=ee
-                           scr(llh+7+2*ie)=avlab
+                           scr(llh+7+2*ie)=avlab*renorm
                            if(lang.eq.1)then
                               nex=nexc
                            else
-                              nex=nex+2+(2*na+3)*ng
+                              nex=nex+2+5*ng
                            endif
                         enddo  !end of loop over incident energies
 
@@ -1972,7 +1997,8 @@ contains
    integer::m,ii,imt,naa,ie,mt,l1,l2,ne,ll,nbina,nbin1
    integer::intt,np,ln,law,l3,loci,nn,nd
    integer::ipt,ntrp,pxs,phn,mtrp,tyrp,lsigp,sigp,landp,andp,ldlwp,dlwp
-   integer::ip,locj,intmu,nmu,imu
+   ! modified (DLA, IAEA)
+   integer::ip,locj,intmu,nmu,imu,nr
    real(kr)::e,xs,heat,e2
    integer::imn(8),imx(8),loc(8)
    character(10)::name,title(16)
@@ -2172,6 +2198,15 @@ contains
            &'' ------->'')') mt
          l1=nint(xss(lsigp+imt-1))
          l2=sigp+l1-1
+         nr=nint(xss(l2+2))
+         if (nr.gt.0) then
+            write(nsyso,'(/''   yield interpolation: nr ='',i4)') nr
+            write(nsyso,'(12x,''nbt(i=1,nr) = '',20i5)')&
+              (nint(xss(l2+2+ii)),ii=1,nr)
+            write(nsyso,'(12x,''int(i=1,nr) = '',20i5)')&
+              (nint(xss(l2+2+nr+ii)),ii=1,nr)
+         endif
+         l2=l2+2*nr
          ne=nint(xss(l2+3))
          write(nsyso,'(/''   yields:''//&
            &''              energy         yield''/&
@@ -2328,7 +2363,7 @@ contains
                           xss(j+2*nn+loci)
                      endif
                   enddo
-                  l=l+3*nn
+                  l=l+3*nn+2
                enddo
                l2=l
 
@@ -2353,7 +2388,7 @@ contains
                     e2,intt,nd,nn,(xss(j+loci),xss(j+nn+loci),&
                     xss(j+2*nn+loci),xss(j+3*nn+loci),&
                     xss(j+4*nn+loci),j=1,nn)
-                  l=l+4*nn
+                  l=l+5*nn+2
                enddo
                l2=l
 
@@ -2368,6 +2403,7 @@ contains
                   nd=nint(xss(loci)/10)
                   nn=nint(xss(loci+1))
                   loci=loci+1
+                  l=l+4*nn+2
                   write(nsyso,'(/6x,'' incident energy = '',1p,e14.6,&
                     &''   intt ='',i2,''    nd = '',i4,''    np = '',&
                     &i4)') e2,intt,nd,nn
@@ -2402,11 +2438,11 @@ contains
                                 xss(locj+1+2*nmu+imu+1)
                            endif
                         enddo
+                        l=l+3*nmu+2
                       else
                         write(nsyso,'('' angular distribution is isotropic'')')
                       endif
                   enddo
-                  l=l+4*nn
                enddo
                l2=l
 
@@ -3291,7 +3327,8 @@ contains
          mt=nint(xss(mtrp+imt-1))
          l1=nint(xss(lsigp+imt-1))
          l2=sigp+l1-1
-         ne=nint(xss(l2+3))
+         ! modified (DLA, IAEA)
+         ne=nint(xss(l2+3+2*nint(xss(l2+2))))
          na=nint(xss(landp+imt-1))
          l1=nint(xss(ldlwp+imt-1))
          l2=dlwp+l1-1
@@ -3782,5 +3819,48 @@ contains
 
    return
    end subroutine copynubar
+
+   subroutine stoyld(a,mftype,mt,nex,nlin)
+   !-------------------------------------------------------------------
+   ! Store a yield given as an ENDF TAB1 record packed in a (C1, C2,
+   ! L1, L2, NR, NP, NBT/INT pairs, x/y pairs) in the SIGP block at
+   ! xss(nex): MFTYPE, MTMULT, NR, NBT(NR), INT(NR), NE, E(NE), Y(NE)
+   ! (MCNP ACE format, photonuclear reaction multiplicity).  A single
+   ! lin-lin region is written with NR=0 (as before); otherwise the
+   ! ENDF interpolation table is kept and nlin=1.  On return nex points
+   ! to the next free word.  (DLA, IAEA, Oct 2026)
+   !-------------------------------------------------------------------
+   use util ! provides sigfig
+   ! externals
+   real(kr)::a(*)
+   integer::mftype,mt,nex,nlin
+   ! internals
+   integer::nr,ne,nrw,i,l
+   real(kr),parameter::emev=1.e6_kr
+
+   nr=nint(a(5))
+   ne=nint(a(6))
+   nlin=0
+   do i=1,nr
+      if (nint(a(6+2*i)).ne.2) nlin=1
+   enddo
+   nrw=0
+   if (nlin.eq.1) nrw=nr
+   xss(nex)=mftype
+   xss(nex+1)=mt
+   xss(nex+2)=nrw
+   do i=1,nrw
+      xss(nex+2+i)=nint(a(5+2*i))
+      xss(nex+2+nrw+i)=nint(a(6+2*i))
+   enddo
+   l=nex+3+2*nrw
+   xss(l)=ne
+   do i=1,ne
+      xss(l+i)=sigfig(a(5+2*nr+2*i)/emev,7,0)
+      xss(l+ne+i)=sigfig(a(6+2*nr+2*i),7,0)
+   enddo
+   nex=l+1+2*ne
+   return
+   end subroutine stoyld
 
 end module acepn
