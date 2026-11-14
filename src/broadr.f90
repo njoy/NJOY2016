@@ -661,10 +661,13 @@ contains
                scr(i+4)=3+int((n2out+2)/3)
             endif
             if (mt.eq.4.and.mt4br.ne.0) then
+               mt4i=0
                do j=1,nreac
                   jjj=mti(j)
                   if (jjj.gt.1) jjj=jjj-1
-                  if (mtr(j).eq.51) mt4i=jjj
+                  if (mtr(j).ge.51.and.mtr(j).le.91) then
+                     if (mt4i.eq.0.or.jjj.lt.mt4i) mt4i=jjj
+                  endif
                enddo
                scr(i+4)=3+int((n2out-mt4i+3)/3)
             endif
@@ -905,12 +908,16 @@ contains
   275 continue
    ee=0
    call gety1(ee,enext,idis,sig,nscr1,b)
-   jjj=1
+   ! mt4 starts where the first of the broadened mt51-91 starts
+   ! (mt51 can start at the first point, e.g., for isomeric targets)
+   jjj=0
    do j=1,nreac
       if (mth.eq.mtr(j)) jjj=mti(j)
-      if (mth.eq.4.and.mtr(j).eq.51) jjj=mti(j)
-      if (mth.eq.4.and.jjj.eq.1.and.mtr(j).eq.91) jjj=mti(j)
+      if (mth.eq.4.and.mtr(j).ge.51.and.mtr(j).le.91) then
+         if (jjj.eq.0.or.mti(j).lt.jjj) jjj=mti(j)
+      endif
    enddo
+   if (jjj.eq.0) jjj=1
    if (jjj.gt.1) jjj=jjj-1
    nnn=n2out-jjj+1
    scr(1)=c1h
