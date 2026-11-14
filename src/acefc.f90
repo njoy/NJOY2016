@@ -7621,7 +7621,12 @@ contains
       signi=xss(esz+3*nes+j)
       xss(esz+nes+j)=xss(esz+nes+j)-signi
       jj=1
-      do while (xxs(jj+1).lt.e.and.jj.lt.ne)
+      !--two tables at the same energy (change of representation,
+      !--e.g. JENDL-5 p+Li-7 LTP=1 and LTP=12 at 10 MeV): the
+      !--union-grid point at that energy takes the right-hand table,
+      !--the shaded point below it the left-hand one (step kept);
+      !--jj also kept <= ne-1 (DLA, IAEA)
+      do while (xxs(jj+1).le.e.and.jj.lt.ne-1)
          jj=jj+1
       enddo
       call terp1(xxs(jj),yys(jj),xxs(jj+1),yys(jj+1),e,signow,5)
