@@ -5433,6 +5433,11 @@ contains
    real(kr)::g0p,g1p,gsp,hd(6),ylight,yall
    real(kr),allocatable::b(:),pool(:),eu(:),yt(:)
    integer::nadd0,neff
+   ! sum of the residual yields where LAW=0 residuals are used: a
+   ! value far from 1 (one residual per event) scales the recoil;
+   ! message only, the evaluated yields are kept (DLA, IAEA, 15 Nov 2026)
+   integer::nysum
+   real(kr)::ysmin,ysmax
    ! effective residual checks and energy cap (DLA, IAEA, 10 Nov 2026)
    integer::nlite,nnegy,nunbal
    real(kr)::ycheck,qa,devamax,dva
@@ -5741,6 +5746,9 @@ contains
       nadd0=0
       neff=0
       nlite=0
+      nysum=0
+      ysmin=1.e30_kr
+      ysmax=0
       nnegy=0
       nunbal=0
       nlit5=0
@@ -5790,7 +5798,12 @@ contains
                   hsum=hsum+yr*pr2/(2*ar5(k))
                   yres=yres+yr
                enddo
-               if (yres.gt.zero) nadd0=nadd0+1
+               if (yres.gt.zero) then
+                  nadd0=nadd0+1
+                  ysmin=min(ysmin,yall)
+                  ysmax=max(ysmax,yall)
+                  if (abs(yall-1).gt.tolb5) nysum=nysum+1
+               endif
             else
                zeff=zt-yz
                aeff=awr+1-ym
@@ -5863,6 +5876,13 @@ contains
            &'' energies'')') nlit5
          call mess('mt5tab',strng,&
            '(p,d,t,he3,he4 not given): effective residual')
+      endif
+      if (nysum.gt.0) then
+         write(strng,'(''mt5 residual yields sum to'',f7.3,'' -'',f8.3,&
+           &'' per event'')') ysmin,ysmax
+         write(strng2,'(''at'',i5,'' energies: recoil and damage with '',&
+           &''evaluated yields'')') nysum
+         call mess('mt5tab',strng,strng2)
       endif
       if (nadd0.eq.0.and.neff.eq.0) then
          n5t=0
