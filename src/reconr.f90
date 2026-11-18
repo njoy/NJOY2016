@@ -2214,6 +2214,11 @@ contains
    ! section by more than tkeep (relative); a top within tkeep (point
    ! shifted up at a discontinuity at the common end energy) is cut as
    ! before, and so are points above EMAX (FENDL-3.2 W-184 MF10/MT18).
+   ! The panel loop leaves en=0 when the last point of the section was
+   ! already taken as enl (er read past the section, JEFF-4.0 Mo-100
+   ! MF3/MT102 ending at 30 MeV): the section then ends at enl
+   ! (DLA, IAEA, 18 Nov 2026).
+   if (abs(en).lt.abs(enl)) en=enl
    in=in+1
    aa(1)=en
    nkeep=0
