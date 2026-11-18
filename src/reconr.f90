@@ -479,6 +479,7 @@ contains
       write(nsyso,'(3x,1p,6e12.5)') (enode(i),i=1,ngrid)
    endif
    nodes=ngrid
+   call order(enode,nodes)
 
    !--construct w table if needed for psi-chi.
    if (tempr.gt.zero) then
@@ -1552,7 +1553,7 @@ contains
    real(kr)::tsave
    real(kr),parameter::small=1.e-10_kr
 
-   if (n.le.2) return
+   if (n.le.1) return
    m=n
    i=0
    do while (i.lt.m-1)
@@ -1569,10 +1570,6 @@ contains
       if (i.gt.1) then
          if (abs(x(i)-x(i-1)).le.small*x(i)) then
             m=m-1
-            if (i.ge.m) then
-               n=m
-               return
-            endif
             do k=i,m
                x(k)=x(k+1)
             enddo
@@ -2036,13 +2033,14 @@ contains
    !--determine upper limit of this panel
   240 continue
    if (lr+ir.gt.n2h) go to 350
-   if (ig.ge.ngo) go to 250
+   if (ig.gt.ngo) go to 250
    if (abs(eg).ge.er*(1-small)) go to 250
    en=abs(eg)
    call terp1(abs(erl),srl,er,sr,en,sn,inta)
    if (eg.lt.zero) en=-en
    intn=inta
    ig=ig+1
+   if (ig.gt.ngo) go to 300
    call finda(ig,aa,1,iold,bufo,nbuf)
    eg=aa(1)
    go to 300
