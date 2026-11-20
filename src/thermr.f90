@@ -1961,7 +1961,12 @@ contains
    ncds=ncds+2
    cliq=0
    if (iinc.eq.1) go to 305
-   if (sab(1,1).gt.sab(2,1))&
+   ! the small-alpha extrapolation in sig assumes s(alpha,beta) also
+   ! decays with beta at alpha(1); a law violating that (e.g. coherent
+   ! one-phonon for crystalline powders) would make cliq negative and
+   ! the extrapolation grow without bound.  require decay along both
+   ! axes before activating cliq.
+   if (sab(1,1).gt.sab(2,1).and.sab(1,1).gt.sab(1,2))&
      cliq=(sab(1,1)-sab(1,2))*alpha(1)/beta(2)**2
 
    !--loop over given incident energy grid.
@@ -2283,7 +2288,9 @@ contains
    ncds=ncds+2
    cliq=0
    if (iinc.eq.1) go to 515
-   if (sab(1,1).gt.sab(2,1))&
+   ! require decay along both axes (see the note at the first cliq
+   ! site) so cliq cannot go negative.
+   if (sab(1,1).gt.sab(2,1).and.sab(1,1).gt.sab(1,2))&
      cliq=(sab(1,1)-sab(1,2))*alpha(1)/beta(2)**2
 
    !--loop over given incident energy grid.
