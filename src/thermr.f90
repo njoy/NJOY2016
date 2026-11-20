@@ -2492,7 +2492,7 @@ contains
    real(kr)::e,ep,u,tev,bbm
    real(kr)::alpha(nalpha),beta(nbeta),sab(nalpha,nbeta)
    ! internals
-   integer::nb1,na1,i,ib,ia
+   integer::nb1,na1,i,ib,ia,ihi,imid
    real(kr)::rtev,bb,a,sigc,b,c,bbb,s,s1,s2,s3,arg
    real(kr)::tfff,tfff2
    real(kr),parameter::sigmin=1.e-10_kr
@@ -2528,13 +2528,28 @@ contains
    na1=nalpha-1
    bbb=b
    if (lasym.eq.1.and.bb.lt.zero) bbb=-b
-   do i=1,nb1
-      ib=i
-      if (bbb.lt.beta(i+1)) exit
+   ! binary search for the bracketing intervals; selects exactly the
+   ! same (ia,ib) as a linear scan (first i with value < grid(i+1),
+   ! saturating at n-1) at O(log n) cost.
+   ib=1
+   ihi=nb1
+   do while (ihi.gt.ib)
+      imid=(ib+ihi)/2
+      if (bbb.lt.beta(imid+1)) then
+         ihi=imid
+      else
+         ib=imid+1
+      endif
    enddo
-   do i=1,na1
-      ia=i
-      if (a.lt.alpha(i+1)) exit
+   ia=1
+   ihi=na1
+   do while (ihi.gt.ia)
+      imid=(ia+ihi)/2
+      if (a.lt.alpha(imid+1)) then
+         ihi=imid
+      else
+         ia=imid+1
+      endif
    enddo
    if (cliq.eq.zero.or.a.ge.alpha(1)) go to 150
    if (lasym.eq.1) go to 150
