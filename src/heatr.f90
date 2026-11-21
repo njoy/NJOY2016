@@ -2359,7 +2359,7 @@ contains
        al = al_new
        jloop_al = jloop_al + 1
        if ( jloop_al .le. 1) write (6,3034) al
- 3034  format (1x, 'Lattice atomic mass replaced with ', g14.7 ' nmass')
+ 3034  format (1x, 'Lattice atomic mass replaced with ', g14.7, ' nmass')
    endif
    if ( zl_new .gt. 0.0) then
        zl = zl_new
