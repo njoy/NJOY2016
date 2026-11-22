@@ -59,5 +59,13 @@ add_executable( njoy_executable
              "${CMAKE_CURRENT_SOURCE_DIR}/src/wimsr.f90" )
 set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
 
+# Record the compiler command line (including the optimisation level) in the
+# executable so the build configuration can be inspected afterwards, for example
+# with `readelf -p .GCC.command.line njoy`. This makes it possible to detect an
+# accidental unoptimised build. Only supported by GNU Fortran; a no-op elsewhere.
+if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
+  target_compile_options( njoy_executable PRIVATE -frecord-gcc-switches )
+endif()
+
 enable_testing()
 add_subdirectory( tests )
