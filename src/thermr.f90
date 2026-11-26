@@ -485,8 +485,8 @@ contains
    integer::lthr,nin,nwds,indexc,indexi
    real(kr)::temp
    ! internals
-   integer::l,np,nr,lt,nb,nw,k,i,j,ifound
-   real(kr)::tnow
+   integer::l,np,nr,lt,nb,nw,k,i,j
+   real(kr)::tnow,tbest
    real(kr),dimension(:),allocatable::a
    integer,parameter::na=1000000
 
@@ -494,7 +494,6 @@ contains
    allocate(a(na))
 
    !--initialise
-   ifound=0
    indexc=-1
    indexi=-1
 
@@ -527,6 +526,7 @@ contains
 
       !--current temperature
       tnow=a(1)
+      tbest=tnow
 
       !--loop over the available temperatures and find the one we need
       do j=1,lt
@@ -540,10 +540,10 @@ contains
             l=l+nw
          enddo
 
-         !--verify if this is the one we need and store S(E) if it is
+         !--store S(E) if this temperature is nearer than the current one
          tnow=a(nwds+1)
-         if (abs(tnow-temp).lt.temp/1000+5) then
-            ifound=1
+         if (abs(tnow-temp).lt.abs(tbest-temp)) then
+            tbest=tnow
             l=nwds+6
             k=6+2*nr
             do i=1,np
@@ -553,6 +553,10 @@ contains
             enddo
          endif
       enddo
+
+      !--check that the nearest temperature is acceptable
+      if (abs(tbest-temp).ge.temp/1000+5) call error('rdelas',&
+        'desired temperature not found.',' ')
    endif
 
    !--set index for incoherent only
