@@ -13,6 +13,14 @@ module purm
    integer::nunr,lssf,iinel,iabso
    integer::iprint,nermax,nladr,nmode
 
+   ! protections against inconsistent evaluations (IAEA, D. Lopez
+   ! Aldama, dlopezaldama@gmail.com, 14 Oct 2026): number of energies
+   ! with negative capture/fission samples raised to 1e-6 b (ngbkf),
+   ! with the total background raised to the sum of the partial
+   ! backgrounds (ngbkx), with unshielded heating (nghfb) or heating
+   ! set to 1e-6 (nghz)
+   integer::ngbkf,ngbkx,nghfb,nghz
+
    ! arrays for the w function
    real(kr)::tr(41,27),ti(41,27),trs(41,27),tis(41,27)
 
@@ -113,6 +121,8 @@ contains
    real(kr)::time,za,awr,ez,sigx,temz,h
    real(kr)::bkgz(4)
    character(60)::strng1,strng2
+   logical::lhneg
+   real(kr),parameter::hmin6=1.e-6_kr
    real(kr),dimension(:),allocatable::a
    real(kr),dimension(:,:,:),allocatable::tabl
    real(kr),dimension(:,:),allocatable::tval
@@ -147,7 +157,7 @@ contains
    call openz(nout,1)
    nscr=10
    call openz(-nscr,1)
-   maxscr=20000
+   maxscr=50000 ! (DLA, IAEA)
    allocate(a(maxscr))
    iscr=1
    write(nsyso,'(&
@@ -174,6 +184,10 @@ contains
    nsigz=1
    init=0
    read(nsysi,*) matd,ntemp,nsigz,nbin,nladr,iprint,nunx
+   ngbkf=0
+   ngbkx=0
+   nghfb=0
+   nghz=0
    if (matd.eq.0) go to 400
    call repoz(-nscr)
    if (allocated(temp)) then
@@ -312,6 +326,17 @@ contains
       write(nscr) (((tabl(i,j,k),i=1,nbin),j=1,5),k=1,ntemp)
       write(nscr) (((sigu(i,j,k),i=1,5),j=1,nsigz),k=1,ntemp)
    enddo
+   ! protections against inconsistent evaluations (DLA, IAEA)
+   if (ngbkf.gt.0) then
+      write(strng1,'(''negative capt/fiss samples at'',i5,'' of'',&
+        &i5,'' e'')') ngbkf,nunx
+      call mess('purr',strng1,'raised to 1e-6 b (negative mf3 background)')
+   endif
+   if (ngbkx.gt.0) then
+      write(strng1,'(''total background < sum of partials at'',i5,&
+        &'' of'',i5,'' e'')') ngbkx,nunx
+      call mess('purr',strng1,'raised to the sum of the partials')
+   endif
 
    !--check for previous mt152 and mt153
    new152=1
@@ -557,6 +582,33 @@ contains
             if (lssf.eq.1) a(l)=a(l)/heat(1,ie,it)
          endif
       enddo
+      !--heating column never negative (DLA, IAEA, 14 Oct 2026):
+      !--mt301<=0: heating 1e-6 (positive minimum for log-log
+      !--interpolation, as the elastic limit); a negative bin (partial
+      !--kermas not consistent with mt301): unshielded heating at this
+      !--energy (all bins = mt301/sigma_t,inf, or factor 1 with
+      !--lssf=1), which keeps the average
+      if (ihave.ge.1) then
+         lhneg=.false.
+         do j=1,nbin
+            if (a(n1+j+5*nbin).lt.zero) lhneg=.true.
+         enddo
+         if (heat(1,ie,it).le.zero) then
+            if (heat(1,ie,it).lt.zero) nghz=nghz+1
+            do j=1,nbin
+               a(n1+j+5*nbin)=hmin6
+            enddo
+         else if (lhneg) then
+            nghfb=nghfb+1
+            do j=1,nbin
+               if (lssf.eq.1) then
+                  a(n1+j+5*nbin)=1
+               else
+                  a(n1+j+5*nbin)=heat(1,ie,it)/sigu(1,1,1)
+               endif
+            enddo
+         endif
+      endif
    enddo
    call contio(0,nout,0,a(iscr),nb,nw)
    lstart=iscr+6
@@ -579,6 +631,17 @@ contains
    ! copy rest of material to output tape
    call contio(nin,nout,0,a(iscr),nb,nw)
    call tomend(nin,nout,0,a(iscr))
+   ! heating column (DLA, IAEA, 14 Oct 2026)
+   if (nghz.gt.0) then
+      write(strng1,'(''mt301<0 at'',i5,'' energies: ur heating set'',&
+        &'' to 1e-6'')') nghz
+      call mess('purr',strng1,'check the heatr input/evaluation')
+   endif
+   if (nghfb.gt.0) then
+      write(strng1,'(''negative heating bin at'',i5,'' energies'')')&
+        nghfb
+      call mess('purr',strng1,'heating not self-shielded there')
+   endif
   350 continue
 
    !--write report of calculation
@@ -1838,6 +1901,8 @@ contains
    real(kr),parameter::break2=3.9e0_kr
    real(kr),parameter::tref=300.e0_kr
    real(kr),parameter::big=1.e6_kr
+   real(kr),parameter::bkgtol=1.e-6_kr
+   logical::lclip
    real(kr),parameter::zero=0
    save navoid,binmin,elow
    rpi=sqrt(pi)
@@ -1879,6 +1944,13 @@ contains
       call error('unrest','bad value for nres or emin>emax, increase dmin','')
    endif
    dbart=1/dbarin
+   !--lssf=0: a total background below the sum of the partial ones
+   !--(negative "other" part) is raised to that sum (DLA, IAEA,
+   !--14 Oct 2026)
+   if (lssf.eq.0.and.bkg(1)-bkg(2)-bkg(3)-bkg(4).lt.-bkgtol) then
+      bkg(1)=bkg(2)+bkg(3)+bkg(4)
+      ngbkx=ngbkx+1
+   endif
    sigx=bkg(1)-bkg(2)-bkg(3)-bkg(4)
    do itemp=1,ntemp
       do i=nsig0,1,-1
@@ -2209,11 +2281,26 @@ contains
   170 continue
 
    !--eliminate negative elastic cross sections; reset to 1 microbarn
+   !--lssf=0: capture and fission samples made negative by a negative
+   !--file-3 background are raised to 1 microbarn as the elastic
+   !--(e.g. Cd-106 FENDL-3.2) (DLA, IAEA, 14 Oct 2026)
+   lclip=.false.
    do itemp=1,ntemp
       do ie=1,ne
          if (els(itemp,ie).lt.-bkg(2)) els(itemp,ie)=-bkg(2)+1/big
+         if (lssf.eq.0) then
+            if (fis(itemp,ie).lt.-bkg(3)) then
+               fis(itemp,ie)=-bkg(3)+1/big
+               lclip=.true.
+            endif
+            if (cap(itemp,ie).lt.-bkg(4)) then
+               cap(itemp,ie)=-bkg(4)+1/big
+               lclip=.true.
+            endif
+         endif
       enddo
    enddo
+   if (lclip) ngbkf=ngbkf+1
 
    !--compute infinitely-dilute cross sections
    if (iladr.eq.1) then
@@ -2302,6 +2389,12 @@ contains
             ibin=nsamp
          endif
          tval(i,itemp)=es(ibin)
+         ! samples tied at the minimum total (e.g. resonance terms
+         ! clipped to zero) belong to the first bin; with tval(1)=es(1)
+         ! the first bin was empty (zero probability, JEFF-4.0 Cs-134,
+         ! Sm-150) (DLA, IAEA, 17 Oct 2026)
+         if (i.eq.1.and.tval(1,itemp).le.es(1))&
+           tval(1,itemp)=es(1)*(1+1.e-6_kr)
          if (i.gt.1) then
             if (tval(i,itemp).le.tval(i-1,itemp))&
               tval(i,itemp)=tval(i-1,itemp)+tval(i-1,itemp)/20
