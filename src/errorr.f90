@@ -3488,6 +3488,10 @@ contains
       l3=lptr
       call contio(nendf,0,0,a(l3),nb,nw)
       nx=l1h
+      if (npar.ne.l2h) then
+        call error('rpxsam','number of resonance parameters not equal to correlation matrix order',&
+                   &'check the evaluation')
+      endif
       if (nx.eq.0) nx=2
       nnn=l2h
       nm=n1h
