@@ -3334,8 +3334,10 @@ contains
       enddo
    enddo
 
+   !--initialise psmall to -1 so we can detect later that we are
+   !--in small penetrability regime
    do i=1,nchan
-      psmall(i,ier)=0
+      psmall(i,ier)=-1
    enddo
 
    ii=0
@@ -6517,7 +6519,9 @@ contains
          ik=ijkl(i,k)
          xqr(k,i,ier)=plri*yinv(1,ik,ier)-plii*yinv(2,ik,ier)
          xqi(k,i,ier)=plri*yinv(2,ik,ier)+plii*yinv(1,ik,ier)
-         if (psmall(k,ier).ne.zero) then
+         !--we are in small penetrability regime if psmall has been set
+         !--to 0 or higher (it is initialised to -1)
+         if (psmall(k,ier).ge.zero) then
             xqr(k,i,ier)=xqr(k,i,ier)*psmall(k,ier)
             xqi(k,i,ier)=xqi(k,i,ier)*psmall(k,ier)
          endif
