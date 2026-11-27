@@ -3467,7 +3467,7 @@ contains
          call listio(nendf,0,0,a(l1),nb,nw)
          nch=n2h
          call listio(nendf,0,0,a(l1),nb,nw)
-         nx=n2h
+         nx=l2h
          do while (nb.ne.0)
             l1=l1+nw
             if (l1.gt.nwscr) call error('rpxsam','storage exceeded','in a')
