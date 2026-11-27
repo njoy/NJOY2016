@@ -46,12 +46,20 @@ contains
    !  The pointwise scattering cross sections and distributions are
    !  added to an existing PENDF tape.  Cross sections are added in
    !  MF3 and distributions are written in MF6, both using mtref for
-   !  inelastic and mtref+1 for elastic (if any).
+   !  inelastic and mtref+1 for elastic (if any).  For mixed elastic
+   !  scattering (ENDF-6 LTHR=3, coherent and incoherent) the coherent
+   !  part uses mtref+1 and the incoherent part mtref+2, i.e. three
+   !  consecutive mt numbers.  Without inelastic data (iinc=0) the
+   !  elastic data start at mtref.  The mt numbers used are listed
+   !  in the output (D. L. Aldama, IAEA, dlopezaldama@gmail.com,
+   !  19 Oct 2026).
    !
    !  Multiple scattering types (i.e., H free and H in H2O) can be
    !  written on one PENDF tape by using different values of mtref
    !  for each thermr run.  If data for one mtref is already on the
-   !  tape, it will be replaced with the new cross sections.
+   !  tape, it will be replaced with the new cross sections (a warning
+   !  is given; leave enough free mt numbers between the mtref values
+   !  of different runs, two after mtref for mixed elastic).
    !
    !  The energy grid for coherent scattering is determined
    !  adaptively so as to represent the sharp Bragg edges to a
@@ -125,6 +133,9 @@ contains
    !                  1      E-mu-E' ordering (MF6/Law7)
    !     natom      number of principal atoms
    !     mtref      mt for inelastic reaction (221-250 only)
+   !                (elastic: mtref+1; mixed elastic: coherent
+   !                mtref+1 and incoherent mtref+2; the last mt used
+   !                must not exceed 250)
    !     iprint     print option (0=minimum, 1=maximum,
    !                2=max. normal + intermediate results)
    !                (default=0)
@@ -413,6 +424,9 @@ contains
          call rdelas(temp,lthr,nendf,nwb,indexc,indexi)
       endif
    endif
+
+   !--mt numbers written by this run (DLA, IAEA, 19 Oct 2026)
+   if (itemp.eq.1) call thrmts(iinc,icoh,mtref)
 
    !--compute incoherent cross sections
    if (iinc.ne.0) then
@@ -2995,6 +3009,48 @@ contains
    return
    end subroutine sigu
 
+   subroutine thrmts(iinc,icoh,mtref)
+   !-------------------------------------------------------------------
+   ! List the mt numbers written by this thermr run (same order as
+   ! tpend: inelastic, coherent elastic, incoherent elastic, starting
+   ! at mtref) and stop if the last one exceeds 250 (mt 251-253 are
+   ! mubar, xi and gamma).  (D. L. Aldama, IAEA, 19 Oct 2026)
+   !-------------------------------------------------------------------
+   use mainio ! provides nsyso
+   use util   ! provides error
+   ! externals
+   integer::iinc,icoh,mtref
+   ! internals
+   integer::n,i
+   character(18)::lab(3)
+   character(60)::strng
+
+   n=0
+   if (iinc.ne.0) then
+      n=n+1
+      lab(n)='inelastic'
+   endif
+   if ((icoh.gt.0.and.icoh.le.10).or.icoh.gt.20) then
+      n=n+1
+      lab(n)='coherent elastic'
+   endif
+   if (icoh.gt.10) then
+      n=n+1
+      lab(n)='incoherent elastic'
+   endif
+   if (n.eq.0) return
+   write(nsyso,'(/'' mt numbers written by this run:'')')
+   do i=1,n
+      write(nsyso,'(4x,''mt'',i4,2x,a)') mtref+i-1,trim(lab(i))
+   enddo
+   if (mtref+n-1.gt.250) then
+      write(strng,'(''mtref='',i3,'' needs mt up to'',i4,&
+        &'' (max 250)'')') mtref,mtref+n-1
+      call error('thrmts',strng,'use a smaller mtref')
+   endif
+   return
+   end subroutine thrmts
+
    subroutine tpend(iold,itemp,ne,nex,icoh,icopy,mtref)
    !-------------------------------------------------------------------
    ! Write the output pendf tape.
@@ -3009,6 +3065,7 @@ contains
    integer::lim,ix,j,mti,mfi,mf,mt,mfn,mtn,mat
    integer::istart,iend,k,ib,ifend,ie,ltt
    integer::nb,nw,indx,nx,nc,nxn,nne,nl1,nmu,imu
+   character(60)::strng
    real(kr)::temp,rxsec,yy,sec
    real(kr)::ex(20)
    real(kr),dimension(:),allocatable::dico,dicn,sav
@@ -3076,6 +3133,19 @@ contains
    allocate(sav(6))
    nc=nx
    call dictio(nin,0,0,dico,nb,nc)
+   ! warn if thermal data of this run replace sections already on the
+   ! input pendf (e.g. another scattering law) (DLA, IAEA, 19 Oct 2026)
+   if (itemp.eq.1) then
+      do i=0,6*(nx-1),6
+         mfi=nint(dico(i+3))
+         mti=nint(dico(i+4))
+         if (mfi.eq.3.and.mti.ge.mtref.and.mti.le.mtref+nex-3) then
+            write(strng,'(''mf3/mt'',i3,'' already on input pendf'',&
+              &'' for mat'',i5)') mti,matd
+            call mess('tpend',strng,'it will be replaced')
+         endif
+      enddo
+   endif
    do i=1,nw
       dicn(i)=0
    enddo
