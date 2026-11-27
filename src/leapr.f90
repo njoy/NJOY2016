@@ -521,8 +521,10 @@ contains
    endif
    if (maxn.gt.maxnphon) then
       call timer(time)
+      ! no comma before the output list (non-standard) (IAEA,
+      ! D. Lopez Aldama, dlopezaldama@gmail.com)
       write(nsyse,'(/'' performing phonon expansion sum'',&
-            &37x,f8.1,''s'')'),time
+            &37x,f8.1,''s'')')time
    endif
    do n=2,maxn
       npn=np+npl-1
@@ -559,7 +561,7 @@ contains
    if (maxn.gt.maxnphon) then
       call timer(time)
       write(nsyse,'(/'' done with phonon expansion sum'',&
-            &38x,f8.1,''s'')'),time
+            &38x,f8.1,''s'')')time
    endif
 
    !--print out start of sct range for each beta
@@ -1139,6 +1141,8 @@ contains
    terps=0
    if (be.gt.delta*nsd) return
    i=int(be/delta)
+   ! negative index: out of the table (DLA, IAEA)
+   if (i.lt.0) return
    if (i.lt.nsd-1) then
       bt=i*delta
       btp=bt+delta

@@ -23,7 +23,8 @@ module acepa
    integer::eszg,jinc,jcoh,jflo,lhnm,jxsd(27)
 
    ! parameter for scratch array
-   integer,parameter::nwscr=50000
+   ! modified (IAEA, D. Lopez Aldama, dlopezaldama@gmail.com)
+   integer,parameter::nwscr=250000
 
 contains
 

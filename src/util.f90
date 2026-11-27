@@ -193,6 +193,11 @@ contains
    if (nun.ge.10.and.nun.le.19) then
       ! scratch units
       age='scratch'
+      ! a scratch unit still open from a previous module is closed
+      ! before it is opened again (IAEA, D. Lopez Aldama,
+      ! dlopezaldama@gmail.com)
+      inquire(nun,opened=there)
+      if (there) close (nun)
       open(nun,form=for,status=age)
    else
       ! regular units
