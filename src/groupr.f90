@@ -10233,8 +10233,18 @@ contains
    endif
    aed(1,ig)=1
    enext=egn(ig+1)
+
+   !--end the panel at the next bragg edge inside the group
+   if (jbrag.ne.0) then
+      if (ib.le.jbrag) then
+         if (aes(ib).lt.enext) enext=aes(ib)
+      endif
+   endif
    idis=1
-   nq=0
+
+   !--the legendre coefficients vary as p(1-2*ebrag/e) between
+   !--edges: use the 10-point lobatto rule in panel
+   nq=8
    return
    end subroutine getaed
 
