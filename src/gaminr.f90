@@ -51,9 +51,13 @@ contains
    ! card3
    !    title   run label up to 80 characters (delimited by ',
    !            ended with /)
-   ! card4      (igg=1 only)
+   !
+   !          if ign=1, read neutron group structure (4a and 4b)
+   ! card4a
    !    ngg     number of groups
-   !    egg     ngg+1 group bounds (ev)
+   ! card4b
+   !    egg     ngg+1 group breaks (ev)
+   !
    ! card5      (iwt=1 only)
    !    wght    weight function as tab1 record
    ! card6
