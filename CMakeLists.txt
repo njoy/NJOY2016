@@ -59,5 +59,10 @@ add_executable( njoy_executable
              "${CMAKE_CURRENT_SOURCE_DIR}/src/wimsr.f90" )
 set_target_properties( njoy_executable PROPERTIES OUTPUT_NAME njoy )
 
-enable_testing()
-add_subdirectory( tests )
+if( SKBUILD )
+  # pip install: put the executable in the environment's bin directory
+  install( TARGETS njoy_executable DESTINATION "${SKBUILD_SCRIPTS_DIR}" )
+else()
+  enable_testing()
+  add_subdirectory( tests )
+endif()
