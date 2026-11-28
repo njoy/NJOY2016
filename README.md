@@ -47,6 +47,13 @@ git pull
 make -j8
 ```
 
+### Installing with pip:
+
+NJOY2016 can also be compiled and installed with pip, which places the `njoy` executable in the active Python environment (a Fortran compiler is still required):
+```
+pip install git+https://github.com/njoy/NJOY2016
+```
+
 ## Module overview
 +  `NJOY` directs the flow of data through the other modules and contains a library of common functions and subroutines used by the other modules.
 +  `RECONR` reconstructs pointwise (energy-dependent) cross sections from ENDF resonance parameters and interpolation schemes.
